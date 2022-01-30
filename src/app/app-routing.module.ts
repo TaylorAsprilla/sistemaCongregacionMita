@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
 import { CamposComponent } from './pages/administracion/campos/campos.component';
 import { CongregacionesComponent } from './pages/administracion/congregaciones/congregaciones.component';
 import { MinisterioComponent } from './pages/administracion/ministerio/ministerio.component';
@@ -9,12 +8,43 @@ import { UsuariosComponent } from './pages/administracion/usuarios/usuarios.comp
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
 import { HomeComponent } from './pages/home/home.component';
+import { RegisterUserComponent } from './pages/registro/register-user/register-user.component';
+import { RegisterCongComponent } from './pages/registro/register-cong/register-cong.component';
+import { RegisterCampoComponent } from './pages/registro/register-campo/register-campo.component';
+import { RegisterComponent } from './pages/registro/register/register.component';
+import { RegisterMinisterioComponent } from './pages/registro/register-ministerio/register-ministerio.component';
 
 const routes: Routes = [
   {
 path:'',
 component: HomeComponent,
 children:[ 
+  {
+    path: 'register',
+    component: RegisterComponent,
+    children: [
+      { 
+      path: '', 
+      redirectTo: '/register/user', 
+      pathMatch: 'full' },
+      {
+        path: 'user',
+        component: RegisterUserComponent
+      },
+      {
+        path: 'congregacion',
+        component: RegisterCongComponent
+      },
+      {
+        path: 'campo',
+        component: RegisterCampoComponent
+      },
+      {
+        path: 'ministerio',
+        component: RegisterMinisterioComponent
+      }
+    ]
+  },
   {
   path: 'dashboard',
   component: DashboardComponent,
@@ -42,19 +72,14 @@ children:[
     component: LoginComponent,
   },
   {
-    path: 'register',
-    component: RegisterComponent,
+    path: '',
+    redirectTo: '/dashboard',
+    pathMatch: 'full',
   },
-  
-  // {
-  //   path: '',
-  //   redirectTo: '/dashboard',
-  //   pathMatch: 'full',
-  // },
-  // {
-  //   path: '**',
-  //   component: NopagefoundComponent,
-  // },
+  {
+    path: '**',
+    component: NopagefoundComponent,
+  },
 ];
 
 @NgModule({
