@@ -8,11 +8,34 @@ import { MinisterioComponent } from './pages/administracion/ministerio/ministeri
 import { UsuariosComponent } from './pages/administracion/usuarios/usuarios.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   {
-    path: 'dashboard',
-    component: DashboardComponent,
+path:'',
+component: HomeComponent,
+children:[ 
+  {
+  path: 'dashboard',
+  component: DashboardComponent,
+},
+{
+  path: 'usuarios',
+  component: UsuariosComponent,
+},
+{
+  path: 'congregaciones',
+  component: CongregacionesComponent,
+},
+{
+  path: 'campos',
+  component: CamposComponent,
+},
+{
+  path: 'ministerios',
+  component: MinisterioComponent,
+},
+]
   },
   {
     path: 'login',
@@ -22,31 +45,16 @@ const routes: Routes = [
     path: 'register',
     component: RegisterComponent,
   },
-  {
-    path: 'usuarios',
-    component: UsuariosComponent,
-  },
-  {
-    path: 'congregaciones',
-    component: CongregacionesComponent,
-  },
-  {
-    path: 'campos',
-    component: CamposComponent,
-  },
-  {
-    path: 'ministerios',
-    component: MinisterioComponent,
-  },
-  {
-    path: '',
-    redirectTo: '/dashboard',
-    pathMatch: 'full',
-  },
-  {
-    path: '**',
-    component: NopagefoundComponent,
-  },
+  
+  // {
+  //   path: '',
+  //   redirectTo: '/dashboard',
+  //   pathMatch: 'full',
+  // },
+  // {
+  //   path: '**',
+  //   component: NopagefoundComponent,
+  // },
 ];
 
 @NgModule({

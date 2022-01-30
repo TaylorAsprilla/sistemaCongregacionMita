@@ -15,6 +15,8 @@ import { MinisterioComponent } from './pages/administracion/ministerio/ministeri
 import { CongregacionesComponent } from './pages/administracion/congregaciones/congregaciones.component';
 import { CamposComponent } from './pages/administracion/campos/campos.component';
 import { AppRoutingModule } from './app-routing.module';
+import { HomeComponent } from './pages/home/home.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -31,8 +33,9 @@ import { AppRoutingModule } from './app-routing.module';
     MinisterioComponent,
     CongregacionesComponent,
     CamposComponent,
+    HomeComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
