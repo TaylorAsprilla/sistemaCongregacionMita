@@ -1,0 +1,32 @@
+.tab{
+    background-color: #0b65c2 ;
+    border-style: none;
+}
+
+.activeBox{
+    background-color: #0b65c2;
+    color: white;
+    border-bottom: #0b65c2;
+    border-color: #0b65c2;
+    border-top-left-radius: 10px;
+}
+
+li{
+    background-color: white;
+    color: #0b65c2;
+    border-style: solid;
+    border-bottom: white;
+    border-color: whitesmoke;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 3vh;
+    text-decoration: none; /* no underline */
+
+}
+
+a {
+    color: inherit; /* blue colors for links too */
+    text-decoration: inherit; /* no underline */
+  }
