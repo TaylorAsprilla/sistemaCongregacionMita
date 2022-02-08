@@ -1,0 +1,21 @@
+<h2>Registro:</h2>                 
+
+
+<span>
+    <ul class="nav nav-tabs">
+        <li routerLinkActive="activeBox">
+            <a routerLink="/register/user" routerLinkActive="active" [routerLinkActiveOptions]={exact:true}>Usuario</a>
+    </li>
+        <li routerLinkActive="activeBox">
+            <a routerLink="/register/congregacion" routerLinkActive="active">Congregación</a>
+    </li>
+        <li routerLinkActive="activeBox">
+            <a routerLink="/register/campo" routerLinkActive="active">Campo</a>
+    </li> 
+    <li routerLinkActive="activeBox">
+        <a routerLink="/register/ministerio" routerLinkActive="active">Ministerio</a>
+</li>
+    </ul>
+</span>
+<br>
+<router-outlet></router-outlet>
