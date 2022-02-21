@@ -11,6 +11,9 @@ $themecolor-dark: #028ee1;
 $topbar: #1976d2;
 $topbar-alt: #ffffff;
 $themecolor-alt: #26c6da;
+
+.blue {
+
 /*******************
 /*Top bar
 *******************/
@@ -126,20 +129,14 @@ a.link {
     background:$themecolor; 
 }
 
-.sidebar-nav>ul>li.active>a {
-    color: $themecolor;
-    border-color: $themecolor;
-    i {
-       color: $themecolor; 
-    }
-}
-
 .sidebar-nav ul li a {
-    &.active,
+    &.router-link-active,
     &:hover {
       color: $themecolor;
       i {
         color: $themecolor;
       }    
     }
+}
+
 }

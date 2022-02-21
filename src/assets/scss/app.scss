@@ -26,6 +26,7 @@ Global Styles
 
 * {
     outline: none;
+    
 }
 
 body {
@@ -1679,7 +1680,6 @@ Buttons
 }
 
 
-
 .btn-label {
     background: rgba(0, 0, 0, 0.05);
     display: inline-block;
@@ -1751,11 +1751,6 @@ Buttons
     color: $white;
     background-color: #171515;
 }
-
-
-
-
-
 
 /*******************
 Notify
@@ -1841,11 +1836,13 @@ Notify
     }
 }
 
-
-
-
-
-
+// Left-sidebar line
+.nav-devider{
+    height: 1px;
+    background: rgba(120, 130, 140, 0.13);
+    display: block;
+    margin: 15px 0;
+}
 
 /*******************
 File Upload 
@@ -1867,21 +1864,19 @@ File Upload
     }
 }
 
-
-
-
-
 /*******************
 Megamenu
 ******************/
 
 .mega-dropdown {
-    position: static;
+    position: static!important;
     width: 100%;
+    
     .dropdown-menu {
         width: 100%;
         padding: 30px;
         margin-top: 0px;
+        transform:translate(0px, 58px)!important;
     }
     ul {
         padding: 0px;
@@ -1910,10 +1905,6 @@ Megamenu
     }
 }
 
-
-
-
-
 /*******************
 List-style-none
 ******************/
@@ -1935,10 +1926,6 @@ ul.list-style-none {
     }
 }
 
-
-
-
-
 /*******************
 dropdown-item
 ******************/
@@ -1948,10 +1935,6 @@ dropdown-item
     color: $bodytext;
 }
 
-
-
-
-
 /*******************
 Custom-select
 ******************/
@@ -1960,10 +1943,6 @@ Custom-select
     background: url(../../assets/images/custom-select.png) right .75rem center no-repeat;
 }
 
-
-
-
-
 /*******************
 textarea
 ******************/
@@ -1971,10 +1950,6 @@ textarea
 textarea {
     resize: none;
 }
-
-
-
-
 
 /*******************
 Form-control
@@ -2025,13 +2000,9 @@ form label {
 }
 
 
-
-
-
 /*******************
 Layouts
-******************/
-
+*****************/
 
 /*Card-noborders*/
 
@@ -2065,17 +2036,8 @@ Layouts
     overflow: auto;
 }
 
-
-
-
-
-
 /*******************/
-
-
 /*widgets -app*/
-
-
 /*******************/
 
 .css-bar:after {
@@ -2086,16 +2048,8 @@ Layouts
     z-index: 10;
 }
 
-
-
-
-
 /*******************/
-
-
 /*single column*/
-
-
 /*******************/
 
 .single-column {
@@ -2113,16 +2067,8 @@ Layouts
     margin: 0 auto;
 }
 
-
-
-
-
 /*******************/
-
-
 /*card-default*/
-
-
 /*******************/
 
 .card-default {
@@ -2132,13 +2078,42 @@ Layouts
     }
 }
 
+/*******************/
+/*pace-js*/
+/*******************/
 
-/***********************
- 13/02/2018 (New Update)
-***********************/
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: $danger;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 2px;
+}
+
 .progress{
     height:auto;
+    min-height:6px;
 }
-.card-group{
-    margin-bottom: 30px;
+
+.no-control-indicator {
+    .carousel-indicators,
+    .carousel-control-prev,
+    .carousel-control-next {
+        display: none;
+    }
 }
