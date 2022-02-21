@@ -21,7 +21,7 @@ export class PagesComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.router.url === '/') {
-      this.router.navigate(['/dashboard/dashboard1']);
+      this.router.navigate(['/sistema/dashboard']);
     }
     this.handleLayout();
   }

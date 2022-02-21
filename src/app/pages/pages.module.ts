@@ -9,6 +9,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PagesComponent } from './pages.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { DashboardComponentsModule } from '../components/dashboard-components/dashboard-components.module';
+import { ProfileComponent } from '../components/dashboard-components/profile/profile.component';
 
 @NgModule({
   declarations: [NopagefoundComponent, DashboardComponent, PagesComponent],
@@ -22,6 +24,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
     FormsModule,
     ReactiveFormsModule,
     PerfectScrollbarModule,
+    DashboardComponentsModule,
   ],
 })
 export class PagesModule {}

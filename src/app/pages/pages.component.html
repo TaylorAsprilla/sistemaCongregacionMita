@@ -1,4 +1,13 @@
-<div id="main-wrapper">
+<div
+  id="main-wrapper"
+  [ngClass]="{
+    blue: color == 'blue',
+
+    'mini-sidebar': showMinisidebar,
+    'dark-theme': showDarktheme,
+    'rtl-theme': showRtl
+  }"
+>
   <app-header class="w-100" (toggleSidebar)="toggleSidebar()"></app-header>
   <aside class="left-sidebar">
     <!-- Sidebar scroll-->
