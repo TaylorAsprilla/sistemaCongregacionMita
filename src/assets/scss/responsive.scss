@@ -12,9 +12,7 @@ File: scss
     .widget-app-columns {
       column-count:3; 
     } 
-    .campaign{
-        height: 365px!important;
-    }
+    
 }
 /*============================================================== 
  For Laptop & above all (1370px) 
@@ -32,29 +30,17 @@ File: scss
  ============================================================== */
 
 @media(min-width:1024px) {
-   .page-wrapper{
-        margin-left:240px;
-        
+    .page-wrapper{
+        margin-left:240px;    
     }  
-   .footer{
-            left: 240px;
-      } 
-    
+    .footer{
+        left: 240px;
+    }     
 }
 
 @media(max-width:1023px) {
-   .page-wrapper{
-        margin-left:60px;
-        transition: 0.2s ease-in;
-    }  
-   .footer{
-            left: 60px;
-      }
     .widget-app-columns {
         column-count:1;
-    }
-    .inbox-center a {
-        width: 200px;
     }
 }
 
@@ -89,17 +75,16 @@ File: scss
     }
    .mini-sidebar {
         .page-wrapper{
-            margin-left:60px;
+            margin-left:70px;
         }
         .footer{
-            left: 60px;
+            left: 70px;
         }
     }
     .flex-wrap{
         flex-wrap:nowrap!important;
         -webkit-flex-wrap:nowrap!important;
     }
-
 }
 
 
@@ -111,7 +96,7 @@ File: scss
     
     /*Header*/
     .topbar {
-        position: fixed;
+        
         width: 100%;
         .top-navbar {
             padding-right: 15px;
@@ -124,6 +109,12 @@ File: scss
                 display: flex;
                 width: 100%;
             }
+            .navbar-header{ 
+                width: 70px;
+            }
+            .navbar-brand span{
+                display: none;
+            }
             .navbar-nav {
                 flex-direction: row;
                 > .nav-item.show {
@@ -131,6 +122,8 @@ File: scss
                     .dropdown-menu {
                         width: 100%;
                         margin-top: 0px;
+                        left:0!important;
+                        right:0!important;
                     }
                 }
                 > .nav-item > .nav-link {
@@ -153,7 +146,7 @@ File: scss
     /*Sidebar and wrapper*/
     .mini-sidebar .page-wrapper{
         margin-left:0px;
-        padding-top: 60px;
+        
     }
     .comment-text{
         .comment-footer{
@@ -164,9 +157,6 @@ File: scss
         }
     }
     
-    .vtabs .tabs-vertical {
-        width: auto;
-    }
     /*Footer*/
     .footer{
             left: 0px;
@@ -208,23 +198,7 @@ File: scss
         }
     }
     
-    /*This is for chat page*/
-    .chat-main-box .chat-left-aside {
-        left: -250px;
-        position: absolute;
-        
-        transition: 0.5s ease-in;
-        background: $white;
-        &.open-pnl {
-            left: 0px;
-        }
-        .open-panel {
-            display: block;
-        }
-    }
-    .chat-main-box .chat-right-aside {
-        width: 100%;
-    }
+    
     /*Timeline*/
     ul.timeline:before {
         left: 40px;
@@ -253,29 +227,5 @@ File: scss
         border-left-width: 0;
     }
     
-    /*Contact app page*/
-    .left-aside{
-        width: 100%;
-        position: relative;
-        border:0px;
-    }
-    .right-aside{
-        margin-left: 0px;
-    }
-    .flex-wrap{
-        flex-wrap:wrap!important;
-        -webkit-flex-wrap:wrap!important;
-    }
-    .chat-list li .chat-content{
-        width: calc(100% - 80px);
-    }
-
-    .dataTables_wrapper {
-        .dataTables_paginate {
-            width: 100%;
-            .paginate_button {
-                    padding: 0.5rem 0.6rem;
-            }
-        }
-    }
+    
 }
