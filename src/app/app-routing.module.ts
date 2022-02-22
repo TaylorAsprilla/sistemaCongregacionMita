@@ -14,54 +14,6 @@ const routes: Routes = [
     path: '**',
     component: NopagefoundComponent,
   },
-  // {
-  //   path: '',
-  //   redirectTo: '/dashboard',
-  //   pathMatch: 'full',
-  //   children: [
-  //     {
-  //       path: 'register',
-  //       component: RegisterComponent,
-  //       children: [
-  //         {
-  //           path: '',
-  //           redirectTo: '/register/user',
-  //           pathMatch: 'full',
-  //         },
-  //         {
-  //           path: 'user',
-  //           component: RegisterUserComponent,
-  //         },
-  //         {
-  //           path: 'congregacion',
-  //           component: RegisterCongregacionComponent,
-  //         },
-  //         {
-  //           path: 'campo',
-  //           component: RegisterCampoComponent,
-  //         },
-  //         {
-  //           path: 'ministerio',
-  //           component: RegisterMinisterioComponent,
-  //         },
-  //       ],
-  //     },
-
-  //   ],
-  // },
-  // {
-  //   path: 'login',
-  //   component: LoginComponent,
-  // },
-  // {
-  //   path: '',
-  //   redirectTo: '/dashboard',
-  //   pathMatch: 'full',
-  // },
-  // {
-  //   path: '**',
-  //   component: NopagefoundComponent,
-  // },
 ];
 
 @NgModule({

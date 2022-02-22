@@ -9,12 +9,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PagesComponent } from './pages.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { DashboardComponentsModule } from '../components/dashboard-components/dashboard-components.module';
-import { ProfileComponent } from '../components/dashboard-components/profile/profile.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 @NgModule({
-  declarations: [NopagefoundComponent, DashboardComponent, PagesComponent],
-  exports: [NopagefoundComponent, DashboardComponent, PagesComponent],
+  declarations: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
+  exports: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -24,7 +23,6 @@ import { ProfileComponent } from '../components/dashboard-components/profile/pro
     FormsModule,
     ReactiveFormsModule,
     PerfectScrollbarModule,
-    DashboardComponentsModule,
   ],
 })
 export class PagesModule {}

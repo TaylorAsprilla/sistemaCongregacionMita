@@ -4,7 +4,7 @@ import { CamposComponent } from '../administracion/campos/campos.component';
 import { CongregacionesComponent } from '../administracion/congregaciones/congregaciones.component';
 import { MinisteriosComponent } from '../administracion/ministerios/ministerios.component';
 import { UsuariosComponent } from '../administracion/usuarios/usuarios.component';
-import { DashboardComponent } from '../dashboard/dashboard.component';
+import { InicioComponent } from '../inicio/inicio.component';
 import { RegisterCampoComponent } from '../registro/register-campo/register-campo.component';
 import { RegisterCongregacionComponent } from '../registro/register-congregacion/register-congregacion.component';
 import { RegisterMinisterioComponent } from '../registro/register-ministerio/register-ministerio.component';
@@ -13,8 +13,8 @@ import { RegisterUserComponent } from '../registro/register-user/register-user.c
 const childRoutes: Routes = [
   {
     path: '',
-    component: DashboardComponent,
-    data: { titulo: 'Dashboard' },
+    component: InicioComponent,
+    data: { titulo: 'Inicio' },
   },
 
   // Administración
@@ -45,7 +45,7 @@ const childRoutes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'user',
+    path: 'registrarUsuario',
     component: RegisterUserComponent,
   },
   {
