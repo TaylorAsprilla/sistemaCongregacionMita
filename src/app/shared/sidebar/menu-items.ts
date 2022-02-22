@@ -58,17 +58,16 @@ export const ROUTES: RouteInfo[] = [
         class: '',
 
         extralink: false,
-        submenu: [
-          {
-            path: 'campo',
-            title: 'Campos',
-            icon: '',
-            class: '',
+        submenu: [],
+      },
+      {
+        path: 'campo',
+        title: 'Campos',
+        icon: '',
+        class: '',
 
-            extralink: false,
-            submenu: [],
-          },
-        ],
+        extralink: false,
+        submenu: [],
       },
       {
         path: '',
