@@ -10,9 +10,10 @@ import { SharedModule } from '../shared/shared.module';
 import { PagesComponent } from './pages.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InicioComponent } from './inicio/inicio.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 @NgModule({
-  declarations: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
+  declarations: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent, PerfilComponent],
   exports: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
   imports: [
     CommonModule,

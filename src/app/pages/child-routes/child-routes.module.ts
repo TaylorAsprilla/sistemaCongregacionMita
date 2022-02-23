@@ -5,6 +5,7 @@ import { CongregacionesComponent } from '../administracion/congregaciones/congre
 import { MinisteriosComponent } from '../administracion/ministerios/ministerios.component';
 import { UsuariosComponent } from '../administracion/usuarios/usuarios.component';
 import { InicioComponent } from '../inicio/inicio.component';
+import { PerfilComponent } from '../perfil/perfil.component';
 import { RegisterCampoComponent } from '../registro/register-campo/register-campo.component';
 import { RegisterCongregacionComponent } from '../registro/register-congregacion/register-congregacion.component';
 import { RegisterMinisterioComponent } from '../registro/register-ministerio/register-ministerio.component';
@@ -59,6 +60,10 @@ const childRoutes: Routes = [
   {
     path: 'ministerio',
     component: RegisterMinisterioComponent,
+  },
+  {
+    path: 'perfil',
+    component: PerfilComponent,
   },
 ];
 
