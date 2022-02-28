@@ -19,22 +19,13 @@
       </div>
     </td>
     <td class="info">
-      <div class="editDiv">
-        <button class="btn btn-lg btn-primary edit" type="submit">Editar</button>
-      </div>
-
-      <div class="palabras">
-        <p>Primer Nombre:</p>
-        <p>Segundo Nombre:</p>
-        <p>Primer Apellido:</p>
-        <p>Segundo Apellido:</p>
-        <p>Nacionalidad:</p>
-        <p>Email:</p>
-        <p>Número de Celular:</p>
-        <p>Foto:</p>
-        <p>Género:</p>
-        <p>País:</p> 
-      </div>
+      <div *ngIf="!isEdit">
+     <app-info-perfil (toggleEdit)="toggleEdit()"></app-info-perfil>
+    </div>
+    <div *ngIf="isEdit">
+      <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
+     </div>
+     
     </td>
   </tr>
 </table>

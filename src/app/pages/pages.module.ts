@@ -11,10 +11,12 @@ import { PagesComponent } from './pages.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InicioComponent } from './inicio/inicio.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { EditPerfilComponent } from './perfil/edit-perfil/edit-perfil.component';
+import { InfoPerfilComponent } from './perfil/info-perfil/info-perfil.component';
 
 @NgModule({
-  declarations: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent, PerfilComponent],
-  exports: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
+  declarations: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent, PerfilComponent, EditPerfilComponent, InfoPerfilComponent],
+  exports: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent, InfoPerfilComponent, EditPerfilComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -23,7 +25,7 @@ import { PerfilComponent } from './perfil/perfil.component';
     RegisterModule,
     FormsModule,
     ReactiveFormsModule,
-    PerfectScrollbarModule,
+    PerfectScrollbarModule
   ],
 })
 export class PagesModule {}

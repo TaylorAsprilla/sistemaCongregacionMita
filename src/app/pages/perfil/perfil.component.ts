@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PerfilComponent implements OnInit {
 
+   isEdit: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  toggleEdit(){
+    this.isEdit = !this.isEdit;
+    console.log(this.isEdit)
   }
 
 }
