@@ -1,11 +1,15 @@
-<table class="tabla">
-  <tr>
-    <td class="foto">
-      <div class="marco">
-        <div class="container">
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="foto">
+        <div class="marco">
           <div class="image-stack">
             <div class="image-stack__item image-stack__item--top pfp">
-              <img class=" pfp mat-elevation-z8" src="https://upload.wikimedia.org/wikipedia/commons/5/57/Cumulus_Clouds_over_Yellow_Prairie2.jpg" alt="" />
+              <img
+                class="pfp mat-elevation-z8"
+                src="https://upload.wikimedia.org/wikipedia/commons/5/57/Cumulus_Clouds_over_Yellow_Prairie2.jpg"
+                alt=""
+              />
             </div>
             <div class="image-stack__item image-stack__item--bottom">
               <img
@@ -17,15 +21,16 @@
           </div>
         </div>
       </div>
-    </td>
-    <td class="info">
-      <div *ngIf="!isEdit">
-     <app-info-perfil (toggleEdit)="toggleEdit()"></app-info-perfil>
     </div>
-    <div *ngIf="isEdit">
-      <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
-     </div>
-     
-    </td>
-  </tr>
-</table>
+    <div class="col-md-6">
+      <div class="info">
+        <div *ngIf="!isEdit">
+          <app-info-perfil (toggleEdit)="toggleEdit()"></app-info-perfil>
+        </div>
+        <div *ngIf="isEdit">
+          <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
