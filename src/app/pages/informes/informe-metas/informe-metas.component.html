@@ -1,0 +1,60 @@
+<div class="form">
+  <h2>Informe Metas</h2>
+  <form class="form-signin">
+    <table>
+      <tr>
+        <td>
+          <label>Meta</label>
+        </td>
+        <td>
+          <input type="text" ngModel class="form-control" id="" name="" placeholder="" required />
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label>Fecha</label>
+        </td>
+        <td>
+          <input type="date" ngModel class="form-control" id="" name="" placeholder="" required />
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label>Acción a Tomar</label>
+        </td>
+        <td>
+          <input type="text" ngModel class="form-control" id="" name="" placeholder="" required />
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label>Comentarios/Acuerdos Generales</label>
+        </td>
+        <td>
+          <textarea id="" name="" ngModel class="form-control" rows="5"></textarea>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label>Estatus</label>
+        </td>
+        <td>
+          <select class="form-control" name="estatus" id="estatus" required>
+            <option value="vigente">Vigente</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="activo" selected>Activo</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+
+    <br />
+    <div class="button">
+      <button class="w-100 btn btn-lg btn-primary submit" type="submit">Guardar</button>
+    </div>
+  </form>
+</div>

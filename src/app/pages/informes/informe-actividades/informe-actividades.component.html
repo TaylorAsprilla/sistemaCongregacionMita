@@ -1,0 +1,69 @@
+<div class="form">
+    <h2>Informe Actividades</h2>
+  <form class="form-signin">
+      <table>
+          <tr>
+              <td>
+            <label>Fecha</label>
+        </td>
+        <td>
+            <input type="date" ngModel class="form-control" id="" name="" placeholder="" required>
+        </td>
+          </tr>
+
+          <tr>
+            <td>
+          <label>Cantidad Recaudada</label>
+      </td>
+      <td>
+          <input type="number" step="any" ngModel class="form-control" id="" name="" placeholder="$" >
+      </td>
+        </tr>
+
+        <tr>
+          <td>
+        <label>Responsable</label>
+    </td>
+    <td>
+        <input type="text" ngModel class="form-control" id="" name="" placeholder="" >
+    </td>
+      </tr>
+
+      <tr>
+        <td>
+      <label>Asistencia</label>
+  </td>
+  <td>
+      <input type="number" min="1" ngModel class="form-control" id="" name="" placeholder="" required>
+  </td>
+    </tr>
+
+    <tr>
+      <td>
+    <label>Tipo de actividad</label>
+</td>
+<td>
+  <select class="form-control" name="tipo" id="tipo" required>
+    <option value="venta">evento deportivo</option>
+    <option value="oracion">venta</option>
+    <option value="concierto" selected>concierto</option>
+  </select>
+</td>
+  </tr>
+<tr>
+  <td>
+    <label>Observaciones</label>
+</td>
+<td>
+    
+    <textarea id="" name="" ngModel class="form-control" rows="5"></textarea>
+</td>
+</tr>
+      </table>
+
+      <br>
+      <div class="button">
+    <button class="w-100 btn btn-lg btn-primary submit" type="submit">Guardar</button>
+</div>
+  </form>
+</div>

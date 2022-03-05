@@ -4,6 +4,14 @@ import { CamposComponent } from '../administracion/campos/campos.component';
 import { CongregacionesComponent } from '../administracion/congregaciones/congregaciones.component';
 import { MinisteriosComponent } from '../administracion/ministerios/ministerios.component';
 import { UsuariosComponent } from '../administracion/usuarios/usuarios.component';
+import { CrearActividadComponent } from '../informes/crear-actividad/crear-actividad.component';
+import { CrearStatusComponent } from '../informes/crear-status/crear-status.component';
+import { InformeActividadesComponent } from '../informes/informe-actividades/informe-actividades.component';
+import { InformeContablesComponent } from '../informes/informe-contables/informe-contables.component';
+import { InformeLogrosComponent } from '../informes/informe-logros/informe-logros.component';
+import { InformeMetasComponent } from '../informes/informe-metas/informe-metas.component';
+import { InformeVisitasComponent } from '../informes/informe-visitas/informe-visitas.component';
+import { SituacionVisitaComponent } from '../informes/situacion-visita/situacion-visita.component';
 import { InicioComponent } from '../inicio/inicio.component';
 import { PerfilComponent } from '../perfil/perfil.component';
 import { RegisterCampoComponent } from '../registro/register-campo/register-campo.component';
@@ -61,9 +69,43 @@ const childRoutes: Routes = [
     path: 'ministerio',
     component: RegisterMinisterioComponent,
   },
+  // Perfil
   {
     path: 'perfil',
     component: PerfilComponent,
+  },
+  // Informes
+  {
+    path: 'crearActividad',
+    component: CrearActividadComponent,
+  },
+  {
+    path: 'crearStatus',
+    component: CrearStatusComponent,
+  },
+  {
+    path: 'informeActividades',
+    component: InformeActividadesComponent,
+  },
+  {
+    path: 'informeContables',
+    component: InformeContablesComponent,
+  },
+  {
+    path: 'informeLogros',
+    component: InformeLogrosComponent,
+  },
+  {
+    path: 'informeMetas',
+    component: InformeMetasComponent,
+  },
+  {
+    path: 'informeVisitas',
+    component: InformeVisitasComponent,
+  },
+  {
+    path: 'situacionVisita',
+    component: SituacionVisitaComponent,
   },
 ];
 
