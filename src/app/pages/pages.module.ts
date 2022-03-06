@@ -9,32 +9,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PagesComponent } from './pages.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { CrearActividadComponent } from './informes/crear-actividad/crear-actividad.component';
-import { InformeActividadesComponent } from './informes/informe-actividades/informe-actividades.component';
-import { InformeContablesComponent } from './informes/informe-contables/informe-contables.component';
-import { InformeLogrosComponent } from './informes/informe-logros/informe-logros.component';
-import { InformeMetasComponent } from './informes/informe-metas/informe-metas.component';
-import { CrearStatusComponent } from './informes/crear-status/crear-status.component';
-import { InformeVisitasComponent } from './informes/informe-visitas/informe-visitas.component';
-import { SituacionVisitaComponent } from './informes/situacion-visita/situacion-visita.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { PerfilModule } from './perfil/perfil.module';
+import { InformesModule } from './informes/informes.module';
 
 @NgModule({
-  declarations: [
-    NopagefoundComponent,
-    DashboardComponent,
-    PagesComponent,
-    InicioComponent,
-    CrearActividadComponent,
-    InformeActividadesComponent,
-    InformeContablesComponent,
-    InformeLogrosComponent,
-    InformeMetasComponent,
-    CrearStatusComponent,
-    InformeVisitasComponent,
-    SituacionVisitaComponent,
-  ],
+  declarations: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
   exports: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
   imports: [
     CommonModule,
@@ -46,6 +26,7 @@ import { PerfilModule } from './perfil/perfil.module';
     ReactiveFormsModule,
     PerfectScrollbarModule,
     PerfilModule,
+    InformesModule,
   ],
 })
 export class PagesModule {}
