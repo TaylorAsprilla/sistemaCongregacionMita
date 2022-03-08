@@ -18,7 +18,7 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     submenu: [
       {
-        path: '',
+        path: '/sistema/perfil',
         title: 'Perfil',
         icon: '',
         class: '',
@@ -26,7 +26,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: '',
+        path: '/sistema/informe',
         title: 'Informes',
         icon: '',
         class: '',

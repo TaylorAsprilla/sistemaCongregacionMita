@@ -1,0 +1,20 @@
+<div class="shadow p-3 mb-5 bg-white rounded seccion">
+  <a class="enlace" routerLink="{{ path }}">
+    <table class="parte">
+      <tr class="fila">
+        <td class="around">
+          <img class="icono" src="{{ image }}" alt="" />
+        </td>
+        <td class="nombre">{{ name }}</td>
+        <td class="status">
+          <span class="badge badge-warning">{{ status }}</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="descripcion" colspan="3">
+          {{ description }}
+        </td>
+      </tr>
+    </table>
+  </a>
+</div>

@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-auto">
       <div class="foto">
         <div class="marco">
           <div class="image-stack">
@@ -22,13 +22,15 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="info">
-        <div *ngIf="!isEdit">
-          <app-info-perfil (toggleEdit)="toggleEdit()"></app-info-perfil>
-        </div>
-        <div *ngIf="isEdit">
-          <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
+    <div class="col-md-8">
+      <div class="space">
+        <div class="info">
+          <div *ngIf="!isEdit">
+            <app-info-perfil (toggleEdit)="toggleEdit()"></app-info-perfil>
+          </div>
+          <div *ngIf="isEdit">
+            <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
+          </div>
         </div>
       </div>
     </div>

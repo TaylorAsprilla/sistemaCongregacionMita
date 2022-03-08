@@ -9,6 +9,8 @@ import { InformeLogrosComponent } from './informe-logros/informe-logros.componen
 import { InformeMetasComponent } from './informe-metas/informe-metas.component';
 import { InformeVisitasComponent } from './informe-visitas/informe-visitas.component';
 import { SituacionVisitaComponent } from './situacion-visita/situacion-visita.component';
+import { InformeComponent } from './informe/informe.component';
+import { SeccionComponent } from './seccion/seccion.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { SituacionVisitaComponent } from './situacion-visita/situacion-visita.co
     InformeMetasComponent,
     InformeVisitasComponent,
     SituacionVisitaComponent,
+    InformeComponent,
+    SeccionComponent,
   ],
   imports: [CommonModule, AppRoutingModule],
   exports: [
