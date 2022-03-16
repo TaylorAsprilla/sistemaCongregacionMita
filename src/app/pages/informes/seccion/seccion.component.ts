@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
   selector: 'app-seccion',
   templateUrl: './seccion.component.html',
-  styleUrls: ['../informes.css'],
+  styleUrls: ['/seccion.component.css'],
 })
 export class SeccionComponent implements OnInit {
   @Input('nombre') name: string = '';

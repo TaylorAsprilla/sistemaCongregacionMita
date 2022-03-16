@@ -16,23 +16,23 @@ File: scss
  *	7. Widgets
  *	8. Custom Templates
  */
- 
-@import 'variable'; 
-@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+@import 'variable';
+@import '../../../node_modules/bootstrap/scss/bootstrap';
 @import 'app';
 @import 'pages';
 @import 'sidebar';
 @import '../scss/icons/font-awesome/css/font-awesome.min.css';
 @import '../scss/icons/simple-line-icons/css/simple-line-icons.css';
-@import '../scss/icons/themify-icons/themify-icons.css'; 
-@import "../scss/icons/material-design-iconic-font/css/materialdesignicons.min.css";
-@import "rtl/rtl";
+@import '../scss/icons/themify-icons/themify-icons.css';
+@import '../scss/icons/material-design-iconic-font/css/materialdesignicons.min.css';
+@import 'rtl/rtl';
 @import 'widgets';
 @import 'grid';
-@import 'responsive';  
-@import 'spinners.scss'; 
-@import 'animate.css';       
-@import 'theme-settings.scss';   
+@import 'responsive';
+@import 'spinners.scss';
+@import 'animate.css';
+@import 'theme-settings.scss';
 
 // color css
 

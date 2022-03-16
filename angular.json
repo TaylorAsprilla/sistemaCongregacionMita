@@ -44,10 +44,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.css",
               "node_modules/angular-calendar/css/angular-calendar.css",
@@ -127,10 +124,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.css",
               "node_modules/angular-calendar/css/angular-calendar.css",
@@ -143,49 +137,40 @@
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/pace-js/pace.min.js",
               "src/assets/js/jquery.sparkline.min.js"
-
             ]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
-      }
-    }
-  },"admin-angular-e2e": {
-    "root": "",
-    "sourceRoot": "",
-    "projectType": "application",
-    "architect": {
-      "e2e": {
-        "builder": "@angular-devkit/build-angular:protractor",
-        "options": {
-          "protractorConfig": "./protractor.conf.js",
-          "devServerTarget": "admin-angular:serve"
         }
-      },
-      "lint": {
-        "builder": "@angular-devkit/build-angular:tslint",
-        "options": {
-          "tsConfig": [
-            "e2e/tsconfig.e2e.json"
-          ],
-          "exclude": [
-            "**/node_modules/**"
-          ]
+      }
+    },
+    "admin-angular-e2e": {
+      "root": "",
+      "sourceRoot": "",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "admin-angular:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**"]
+          }
         }
       }
     }
-  }
-},
+  },
   "defaultProject": "sistemacmi",
   "schematics": {
     "@schematics/angular:component": {

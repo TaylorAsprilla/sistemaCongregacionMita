@@ -1,20 +1,31 @@
-<div class="shadow p-3 mb-5 bg-white rounded seccion">
-  <a class="enlace" routerLink="{{ path }}">
-    <table class="parte">
-      <tr class="fila">
-        <td class="around">
-          <img class="icono" src="{{ image }}" alt="" />
-        </td>
-        <td class="nombre">{{ name }}</td>
-        <td class="status">
-          <span class="badge badge-warning">{{ status }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="descripcion" colspan="3">
-          {{ description }}
-        </td>
-      </tr>
-    </table>
-  </a>
+<div class="buffer">
+  <div class="shadow p-3 mb-5 bg-white rounded seccion">
+    <div class="ribbon-wrapper tweak">
+      <div class="ribbon bg-primary">{{ status }}</div>
+    </div>
+    <a class="enlace" routerLink="{{ path }}">
+      <table class="parte">
+        <tr class="fila">
+          <td class="around">
+            <img class="icono" src="{{ image }}" alt="" />
+          </td>
+          <td class="nombre">{{ name }}</td>
+        </tr>
+        <tr>
+          <td class="descripcion" colspan="3">
+            {{ description }}
+          </td>
+          <td class="status"></td>
+        </tr>
+      </table>
+    </a>
+  </div>
 </div>
+
+<!-- <div class="position-relative p-3 bg-gray" style="height: 180px">
+  <div class="ribbon-wrapper">
+    <div class="ribbon bg-primary">Ribbon</div>
+  </div>
+  Ribbon Default <br />
+  <small>.ribbon-wrapper.ribbon-lg .ribbon</small>
+</div> -->
