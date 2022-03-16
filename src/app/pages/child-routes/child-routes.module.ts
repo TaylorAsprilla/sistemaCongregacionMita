@@ -11,6 +11,7 @@ import { InformeContablesComponent } from '../informes/informe-contables/informe
 import { InformeLogrosComponent } from '../informes/informe-logros/informe-logros.component';
 import { InformeMetasComponent } from '../informes/informe-metas/informe-metas.component';
 import { InformeVisitasComponent } from '../informes/informe-visitas/informe-visitas.component';
+import { InformeComponent } from '../informes/informe/informe.component';
 import { SituacionVisitaComponent } from '../informes/situacion-visita/situacion-visita.component';
 import { InicioComponent } from '../inicio/inicio.component';
 import { PerfilComponent } from '../perfil/perfil.component';
@@ -106,6 +107,11 @@ const childRoutes: Routes = [
   {
     path: 'situacionVisita',
     component: SituacionVisitaComponent,
+  },
+  // informes pagina principal
+  {
+    path: 'informe',
+    component: InformeComponent,
   },
 ];
 

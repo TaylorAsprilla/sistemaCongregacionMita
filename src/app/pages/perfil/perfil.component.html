@@ -1,34 +1,53 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-6">
+  <div class="row fila">
+    <div class="col-md-auto espacio">
       <div class="foto">
-        <div class="marco">
-          <div class="image-stack">
-            <div class="image-stack__item image-stack__item--top pfp">
+        <div class="image-stack">
+          <div class="image-stack__item image-stack__item--top pfp">
+            <img
+              class="pfp mat-elevation-z8"
+              src="https://upload.wikimedia.org/wikipedia/commons/5/57/Cumulus_Clouds_over_Yellow_Prairie2.jpg"
+              alt=""
+            />
+          </div>
+
+          <div *ngIf="isEdit" class="image-stack__item camaraZ hover">
+            <div *ngIf="isEdit" class="image-stack__item camaraZ camaraDiv">
               <img
-                class="pfp mat-elevation-z8"
-                src="https://upload.wikimedia.org/wikipedia/commons/5/57/Cumulus_Clouds_over_Yellow_Prairie2.jpg"
-                alt=""
-              />
-            </div>
-            <div class="image-stack__item image-stack__item--bottom">
-              <img
-                class="country"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Colombia.svg/2560px-Flag_of_Colombia.svg.png"
+                class="mat-elevation-z8 camara"
+                src="https://webstockreview.net/images/camera-png-icon-1.png"
                 alt=""
               />
             </div>
           </div>
+          <!-- click para cambiar foto -->
+          <div *ngIf="isEdit" class="image-stack__item clickZ click image-upload">
+            <label for="file-input">
+              <span class="span"></span>
+            </label>
+            <input id="file-input" type="file" />
+          </div>
+          <!-- click para cambiar foto -->
+
+          <div class="image-stack__item image-stack__item--bottom">
+            <img
+              class="country"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Colombia.svg/2560px-Flag_of_Colombia.svg.png"
+              alt=""
+            />
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="info">
-        <div *ngIf="!isEdit">
-          <app-info-perfil (toggleEdit)="toggleEdit()"></app-info-perfil>
-        </div>
-        <div *ngIf="isEdit">
-          <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
+    <div class="col-md-8 col-md-auto">
+      <div class="space width">
+        <div class="info space width">
+          <div *ngIf="!isEdit">
+            <app-info-perfil (toggleEdit)="toggleEdit()"></app-info-perfil>
+          </div>
+          <div *ngIf="isEdit">
+            <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
+          </div>
         </div>
       </div>
     </div>
