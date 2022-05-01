@@ -6,6 +6,7 @@ import { RegisterCongregacionComponent } from './register-congregacion/register-
 import { RegisterMinisterioComponent } from './register-ministerio/register-ministerio.component';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,6 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
     RegisterMinisterioComponent,
     RegisterUserComponent,
   ],
-  imports: [CommonModule, AppRoutingModule],
+  imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
 })
 export class RegisterModule {}

@@ -1,6 +1,21 @@
 @import '~perfect-scrollbar/css/perfect-scrollbar.css';
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+placeholder {
+  color: #939ba2;
+  opacity: 1;
+}
 
 .ps .ps__scrollbar-y-rail {
   left: 3px;
   right: auto;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.avatar {
+  border-radius: 100%;
+  width: 50px;
 }

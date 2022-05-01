@@ -12,6 +12,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InicioComponent } from './inicio/inicio.component';
 import { PerfilModule } from './perfil/perfil.module';
 import { InformesModule } from './informes/informes.module';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
   declarations: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
@@ -27,6 +28,7 @@ import { InformesModule } from './informes/informes.module';
     PerfectScrollbarModule,
     PerfilModule,
     InformesModule,
+    PipesModule,
   ],
 })
 export class PagesModule {}

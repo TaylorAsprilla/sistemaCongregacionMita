@@ -18,6 +18,14 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     submenu: [
       {
+        path: '/sistema',
+        title: 'Home',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+      {
         path: '/sistema/perfil',
         title: 'Perfil',
         icon: '',
@@ -26,8 +34,8 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: '/sistema/informe',
-        title: 'Informes',
+        path: '/sistema/usuarios',
+        title: 'Usuarios',
         icon: '',
         class: '',
         extralink: false,
@@ -36,6 +44,14 @@ export const ROUTES: RouteInfo[] = [
       {
         path: 'registrarUsuario',
         title: 'Registrar Usuarios',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+      {
+        path: '/sistema/informe',
+        title: 'Informes',
         icon: '',
         class: '',
         extralink: false,
@@ -69,15 +85,6 @@ export const ROUTES: RouteInfo[] = [
         extralink: false,
         submenu: [],
       },
-      {
-        path: '',
-        title: 'Usuarios',
-        icon: '',
-        class: '',
-
-        extralink: false,
-        submenu: [],
-      },
     ],
   },
   {
@@ -98,8 +105,8 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     submenu: [
       {
-        path: '',
-        title: 'Parte Uno',
+        path: '/sistema/informe',
+        title: 'Generar Informe',
         icon: '',
         class: '',
         extralink: false,
@@ -107,15 +114,7 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         path: '',
-        title: 'Parte Dos',
-        icon: '',
-        class: '',
-        extralink: false,
-        submenu: [],
-      },
-      {
-        path: '',
-        title: 'Parte Tres',
+        title: 'Ver Informes',
         icon: '',
         class: '',
         extralink: false,
