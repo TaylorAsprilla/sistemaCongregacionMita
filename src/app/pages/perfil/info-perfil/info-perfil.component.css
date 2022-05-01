@@ -1,18 +1,23 @@
+.palabras {
+  font-size: 1.5em;
+  padding-left: 10px;
+}
 
-  .palabras {
-    font-size: 1.5em;
-    padding-left: 10px;
-  }
+.edit {
+  background-color: #0b65c2;
+  border-radius: 5px;
+  border-style: none;
+  width: 100px;
+  height: 50px;
+}
 
-  .edit {
-    background-color: #0b65c2;
-    border-radius: 5px;
-    border-style: none;
-    width: 100px;
-    height: 50px;
-  }
-  
-  .editDiv {
-    padding: 20px;
-    text-align: right;
-  }
+.editDiv {
+  padding: 20px;
+  text-align: right;
+}
+
+.titulo {
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #1976d2;
+}

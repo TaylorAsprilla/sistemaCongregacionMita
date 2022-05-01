@@ -4,11 +4,7 @@
       <div class="foto">
         <div class="image-stack">
           <div class="image-stack__item image-stack__item--top pfp">
-            <img
-              class="pfp mat-elevation-z8"
-              src="https://upload.wikimedia.org/wikipedia/commons/5/57/Cumulus_Clouds_over_Yellow_Prairie2.jpg"
-              alt=""
-            />
+            <img class="pfp mat-elevation-z8" src="assets/images/users/perfil.png" alt="" />
           </div>
 
           <div *ngIf="isEdit" class="image-stack__item camaraZ hover">
@@ -43,7 +39,7 @@
       <div class="space width">
         <div class="info space width">
           <div *ngIf="!isEdit">
-            <app-info-perfil (toggleEdit)="toggleEdit()"></app-info-perfil>
+            <app-info-perfil [usuario]="usuario" (toggleEdit)="toggleEdit()"></app-info-perfil>
           </div>
           <div *ngIf="isEdit">
             <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
