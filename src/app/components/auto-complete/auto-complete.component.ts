@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, observable } from 'rxjs';
 import { map, startWith, debounceTime } from 'rxjs/operators';
@@ -7,25 +7,25 @@ import { map, startWith, debounceTime } from 'rxjs/operators';
   selector: 'app-auto-complete',
   templateUrl: './auto-complete.component.html',
   styleUrls: ['./auto-complete.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class AutoCompleteComponent implements OnInit {
-  countries: string[] = ['Puerto Rico', 'Canada', 'Colombia', 'Estados Unidos'];
+  title = 'testAutoComplete';
+  options: string[] = ['Puerto Rico', 'Canada', 'Colombia', 'Estados Unidos'];
 
-  control = new FormControl();
-  filCountries: Observable<String[]>;
+  myControl = new FormControl();
+  filteredOptions!: Observable<string[]>;
 
-  constructor() {}
-
-  ngOnInit(): void {
-    this.filCountries = this.control.valueChanges.pipe(
+  ngOnInit() {
+    this.filteredOptions = this.myControl.valueChanges.pipe(
       debounceTime(500),
       startWith(''),
-      map((val) => this._filter(val))
+      map((value) => this._filter(value))
     );
   }
 
-  private _filter(val: string): string[] {
-    const formatVal = val.toLocaleLowerCase();
-    return this.countries.filter((country) => country.toLocaleLowerCase().indexOf(formatVal) === 0);
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter((option) => option.toLocaleLowerCase().indexOf(filterValue) === 0);
   }
 }
