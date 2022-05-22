@@ -1,0 +1,11 @@
+<form>
+  <mat-form-field>
+    <!-- <mat-label> Paises </mat-label> -->
+
+    <input type="text" matInput [formControl]="control" [matAutocomplete]="auto" />
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"> </mat-autocomplete>
+    <mat-option *ngFor="let country of filCountries | async" [value]="country">
+      {{ country }}
+    </mat-option>
+  </mat-form-field>
+</form>

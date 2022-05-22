@@ -17,6 +17,7 @@
 
 .parte {
   height: 100%;
+  width: 100%;
 }
 
 .icono {
@@ -57,9 +58,13 @@
 
 .status {
   text-align: right;
-  font-size: 25px;
+  /* font-size: 25px; */
   width: 25%;
-  justify-content: right;
+  justify-content: center;
+}
+
+.right {
+  text-align: right;
 }
 
 .red {

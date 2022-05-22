@@ -54,16 +54,55 @@
             />
           </div>
 
+          <div class="input-group mb-3">
+            <label class="space">Inicial:</label>
+            <select class="form-control" formControlName="inicial">
+              <option value="Sr">Sr</option>
+              <option value="Sra">Sra</option>
+              <option value="Srta">Srta</option>
+            </select>
+          </div>
+
+          <div class="input-group mb-3">
+            <label class="space">Estado Civil:</label>
+            <select class="form-control" formControlName="EstadoCivil">
+              <option value="Casadx">Casadx</option>
+              <option value="Solterx">Solterx</option>
+            </select>
+          </div>
+
+          <div class="input-group mb-3">
+            <label class="space">Rol en casa:</label>
+            <select class="form-control" formControlName="Rol">
+              <option value="PadreEncargado">Padre/Madre/Encargado</option>
+              <option value="Hijx">Hijx</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Ministerio:</label>
+
+            <app-select-multiple></app-select-multiple>
+          </div>
+
           <div class="form-group">
             <label>Nacionalidad:</label>
 
-            <input
+            <!-- <input
               type="text"
               formControlName="nacionalidad"
               class="form-control"
               inputmode="text"
               placeholder="Nacionalidad"
-            />
+            /> -->
+
+            <app-auto-complete></app-auto-complete>
+          </div>
+
+          <div class="form-group">
+            <label>Congregación:</label>
+
+            <app-auto-complete></app-auto-complete>
           </div>
 
           <!-- <div class="form-group">
@@ -110,6 +149,18 @@
           </div>
 
           <div class="form-group">
+            <label>Dirección:</label>
+
+            <input type="text" class="form-control" formControlName="Direccion" placeholder="Dirección" />
+          </div>
+
+          <div class="form-group">
+            <label>Código Postal:</label>
+
+            <input type="number" class="form-control" formControlName="CodigoPostal" placeholder="Código Postal" />
+          </div>
+
+          <div class="form-group">
             <label>Correo Electrónico:</label>
 
             <input
@@ -122,9 +173,65 @@
           </div>
 
           <div class="form-group">
+            <label>Teléfono en casa:</label>
+
+            <table>
+              <tr>
+                <td class="indicativo">
+                  <select class="form-control" formControlName="indicativo">
+                    <option value="1">+1 (Estados Unidos)</option>
+                    <option value="57">+57 (Colombia)</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="telefonoEnCasa"
+                    class="form-control"
+                    placeholder="Teléfono en Casa"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="form-group">
             <label>Celular:</label>
 
-            <input type="number" formControlName="celular" class="form-control" placeholder="Celular" />
+            <table>
+              <tr>
+                <td class="indicativo">
+                  <select class="form-control" formControlName="indicativo">
+                    <option value="1">+1 (Estados Unidos)</option>
+                    <option value="57">+57 (Colombia)</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" formControlName="celular" class="form-control" placeholder="Celular" />
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="input-group mb-3">
+            <label class="space">Vacuna:</label>
+            <select class="form-control" formControlName="vacuna">
+              <option value="Jensen">Jensen</option>
+              <option value="Pfizer">Pfizer</option>
+              <option value="Moderna">Moderna</option>
+              <option value="n/a">n/a</option>
+            </select>
+          </div>
+
+          <div class="input-group mb-3">
+            <label class="space">Dosis:</label>
+            <select class="form-control" formControlName="dosis">
+              <option value="n/a">n/a</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
           </div>
 
           <!-- <div class="form-group">
@@ -137,7 +244,7 @@
     </div> -->
 
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary" (click)="subirImagen()">
+            <button type="submit" class="submit btn btn-primary" (click)="subirImagen()">
               <i class="fa fa-save"></i> Registro
             </button>
           </div>
@@ -164,7 +271,7 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-primary" (click)="subirImagen()">
+        <button type="submit" class="submit btn btn-primary" (click)="subirImagen()">
           <i class="fa fa-save"></i> Subir Carnet
         </button>
       </div>

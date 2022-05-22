@@ -1,21 +1,38 @@
-.form{
-    width: 80%;
-    text-align: center;
+.form {
+  width: 80%;
+  text-align: center;
 }
 
 table {
-    table-layout: fixed ;
-    width: 100% ;
-  }
-  td {
-    width: 50% ;
-    padding-top: 10px;
-  }
+  table-layout: fixed;
+  width: 100%;
+}
+td {
+  width: 50%;
+  padding-top: 10px;
+}
 
-  .submit{
-    background-color: #0b65c2 ;
-    border-radius: 25px;
-    border-style: none;
-  }
+.submit {
+  background-color: #0b65c2;
+  border-radius: 25px;
+  border-style: none;
+}
 
+.space {
+  width: 100%;
+}
 
+.auto {
+  border: 10px;
+  border-width: 20px;
+  border-color: gray;
+  background-color: red;
+}
+
+.indicativo {
+  width: 20%;
+}
+
+.espacio {
+  height: 500px;
+}

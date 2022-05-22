@@ -18,6 +18,12 @@ td {
   border-style: none;
 }
 
+.descargar {
+  background-color: #0b65c2;
+  border-radius: 5px;
+  border-style: none;
+}
+
 .button {
   width: 125px;
   text-align: right;
