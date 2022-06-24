@@ -61,6 +61,23 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
+    title: 'Censo',
+    icon: 'fa fa-users',
+    class: 'has-arrow',
+    extralink: false,
+    submenu: [
+      {
+        path: 'registrarUsuario',
+        title: 'Registrar Hermanos',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+    ],
+  },
+  {
+    path: '',
     title: 'Congregaciones',
     icon: 'mdi mdi-apps',
     class: 'has-arrow',

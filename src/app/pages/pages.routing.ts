@@ -9,7 +9,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     component: PagesComponent,
-    loadChildren: () => import('./child-routes/child-routes.module').then((m) => m.ChildRoutesModule),
+    loadChildren: () => import('../routes/child-routes/child-routes.module').then((m) => m.ChildRoutesModule),
   },
 ];
 

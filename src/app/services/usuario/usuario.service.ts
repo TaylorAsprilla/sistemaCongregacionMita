@@ -23,8 +23,8 @@ export class UsuarioService {
     return localStorage.getItem('token') || '';
   }
 
-  get usuarioId(): string {
-    return this.usuario.id || '';
+  get usuarioId(): number {
+    return this.usuario.id || null;
   }
 
   get headers() {
@@ -49,7 +49,6 @@ export class UsuarioService {
       })
       .pipe(
         map((respuesta: any) => {
-          console.log(respuesta);
           const {
             id,
             primerNombre,
@@ -94,14 +93,13 @@ export class UsuarioService {
         }),
 
         catchError((error) => {
-          console.log(error);
           return of(false);
         })
       );
   }
 
   crearUsuario(formData: RegisterForm) {
-    return this.httpClient.post(`${base_url}/usuarios`, formData).pipe(
+    return this.httpClient.post(`${base_url}/usuarios`, formData, this.headers).pipe(
       tap((resp: any) => {
         resp;
       })
@@ -133,13 +131,20 @@ export class UsuarioService {
               usuario.estado,
               usuario.genero_id,
               usuario.pais_id,
+              usuario.estadoCivil_id,
+              usuario.vacuna_id,
+              usuario.dosis_id,
               usuario.segundoNombre,
               usuario.segundoApellido,
               usuario.numeroDocumento,
+              usuario.telefonoCasa,
+              usuario.direccion,
+              usuario.zipCode,
               usuario.login,
               usuario.password,
               usuario.foto,
-              usuario.tipoDocumento_id
+              usuario.tipoDocumento_id,
+              usuario.rolCasa_id
             )
         );
         return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
@@ -148,7 +153,7 @@ export class UsuarioService {
   }
 
   listarTodosLosUsuarios() {
-    return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios/todos`, this.headers).pipe(
+    return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios`, this.headers).pipe(
       map((usuariosRespuesta) => {
         const usuarios = usuariosRespuesta.usuarios.map(
           (usuario) =>
@@ -163,13 +168,20 @@ export class UsuarioService {
               usuario.estado,
               usuario.genero_id,
               usuario.pais_id,
+              usuario.estadoCivil_id,
+              usuario.vacuna_id,
+              usuario.dosis_id,
               usuario.segundoNombre,
               usuario.segundoApellido,
               usuario.numeroDocumento,
+              usuario.telefonoCasa,
+              usuario.direccion,
+              usuario.zipCode,
               usuario.login,
               usuario.password,
               usuario.foto,
-              usuario.tipoDocumento_id
+              usuario.tipoDocumento_id,
+              usuario.rolCasa_id
             )
         );
         return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
@@ -188,7 +200,6 @@ export class UsuarioService {
   }
 
   actualizarUsuario(usuario: UsuarioModel, id: string) {
-    console.log('email', usuario);
     return this.httpClient.put(`${base_url}/usuarios/${id}`, usuario, this.headers);
   }
 }

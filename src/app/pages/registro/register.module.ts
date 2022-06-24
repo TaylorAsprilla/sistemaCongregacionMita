@@ -4,7 +4,7 @@ import { RegisterComponent } from './register/register.component';
 import { RegisterCampoComponent } from './register-campo/register-campo.component';
 import { RegisterCongregacionComponent } from './register-congregacion/register-congregacion.component';
 import { RegisterMinisterioComponent } from './register-ministerio/register-ministerio.component';
-import { RegisterUserComponent } from './register-user/register-user.component';
+
 import { AppRoutingModule } from 'src/app/app-routing.module';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,6 +22,7 @@ import { SelectMultipleComponent } from 'src/app/components/select-multiple/sele
 import { BrowserModule } from '@angular/platform-browser';
 
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { RegistrarUsuarioComponent } from './registrar-usuario/registrar-usuario.component';
 
 // import { mainModule } from 'process';
 
@@ -31,7 +32,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     RegisterCampoComponent,
     RegisterCongregacionComponent,
     RegisterMinisterioComponent,
-    RegisterUserComponent,
+    RegistrarUsuarioComponent,
     AutoCompleteComponent,
     SelectMultipleComponent,
   ],

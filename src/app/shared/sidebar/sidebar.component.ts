@@ -1,10 +1,10 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ROUTES } from './menu-items';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/models/usuario.model';
+import { ROUTES } from 'src/app/routes/menu-items';
 
 declare var $: any;
 
