@@ -19,23 +19,18 @@ import { RegisterCampoComponent } from 'src/app/pages/registro/register-campo/re
 import { RegisterCongregacionComponent } from 'src/app/pages/registro/register-congregacion/register-congregacion.component';
 import { RegisterMinisterioComponent } from 'src/app/pages/registro/register-ministerio/register-ministerio.component';
 import { RegistrarUsuarioComponent } from 'src/app/pages/registro/registrar-usuario/registrar-usuario.component';
+import { Rutas } from '../menu-items';
 
 const childRoutes: Routes = [
   {
-    path: '',
-    component: InicioComponent,
-    data: { titulo: 'Inicio oooo' },
-  },
-
-  {
-    path: '',
+    path: 'inicio',
     component: InicioComponent,
     data: { titulo: 'Censo' },
   },
 
   // Administración
   {
-    path: 'usuarios',
+    path: Rutas.USUARIOS,
     component: UsuariosComponent,
     data: { titulo: 'Usuarios Registrados' },
   },
@@ -45,12 +40,12 @@ const childRoutes: Routes = [
     data: { titulo: 'Ministerios' },
   },
   {
-    path: 'congregaciones',
+    path: Rutas.CONGREGACION,
     component: CongregacionesComponent,
     data: { titulo: 'Congregaciones' },
   },
   {
-    path: 'campos',
+    path: Rutas.CAMPO,
     component: CamposComponent,
     data: { titulo: 'Campos' },
   },
@@ -61,15 +56,15 @@ const childRoutes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'registrarUsuario',
+    path: Rutas.REGISTRAR_USUARIO,
     component: RegistrarUsuarioComponent,
   },
   {
-    path: 'congregacion',
+    path: Rutas.CONGREGACION,
     component: RegisterCongregacionComponent,
   },
   {
-    path: 'campo',
+    path: Rutas.CAMPO,
     component: RegisterCampoComponent,
   },
   {
@@ -83,23 +78,23 @@ const childRoutes: Routes = [
   },
   // Informes
   {
-    path: 'crearActividad',
+    path: Rutas.CREAR_ACTIVIDAD,
     component: CrearActividadComponent,
   },
   {
-    path: 'crearStatus',
+    path: Rutas.CREAR_ESTATUS,
     component: CrearStatusComponent,
   },
   {
-    path: 'informeActividades',
+    path: Rutas.INFORME_ACTIVIDADES,
     component: InformeActividadesComponent,
   },
   {
-    path: 'informeContables',
+    path: Rutas.INFORME_CONTABLE,
     component: InformeContablesComponent,
   },
   {
-    path: 'informeLogros',
+    path: Rutas.INFORME_LOGROS,
     component: InformeLogrosComponent,
   },
   {
@@ -107,16 +102,16 @@ const childRoutes: Routes = [
     component: InformeMetasComponent,
   },
   {
-    path: 'informeVisitas',
+    path: Rutas.INFORME_VISITAS,
     component: InformeVisitasComponent,
   },
   {
-    path: 'situacionVisita',
+    path: Rutas.SITUACION_VISITA,
     component: SituacionVisitaComponent,
   },
   // informes pagina principal
   {
-    path: 'informe',
+    path: Rutas.INFORME,
     component: InformeComponent,
   },
 ];

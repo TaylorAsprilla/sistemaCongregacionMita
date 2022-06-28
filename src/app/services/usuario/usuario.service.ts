@@ -59,6 +59,9 @@ export class UsuarioService {
             nacionalidad,
             email,
             numeroCelular,
+            telefonoCasa,
+            direccion,
+            zipCode,
             fechaNacimiento,
             login,
             password,
@@ -67,6 +70,10 @@ export class UsuarioService {
             genero_id,
             tipoDocumento_id,
             pais_id,
+            estadoCivil_id,
+            rolCasa_id,
+            vacuna_id,
+            dosis_id,
           } = respuesta.usuario;
 
           this.usuario = new UsuarioModel(
@@ -80,19 +87,27 @@ export class UsuarioService {
             estado,
             genero_id,
             pais_id,
+            estadoCivil_id,
+            vacuna_id,
+            dosis_id,
             segundoNombre,
             segundoApellido,
             numeroDocumento,
+            telefonoCasa,
+            direccion,
+            zipCode,
             login,
             password,
             foto,
-            tipoDocumento_id
+            tipoDocumento_id,
+            rolCasa_id
           );
           localStorage.setItem('token', respuesta.token);
           return true;
         }),
 
         catchError((error) => {
+          console.log(error);
           return of(false);
         })
       );

@@ -12,6 +12,7 @@ import { RolCasaModel } from 'src/app/models/rol-casa.model';
 import { TipoDocumentoModel } from 'src/app/models/tipo-documento.model';
 import { UsuarioModel } from 'src/app/models/usuario.model';
 import { VacunaModel } from 'src/app/models/vacuna.model';
+import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { DosisService } from 'src/app/services/dosis/dosis.service';
@@ -162,10 +163,28 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   guardarUsuario() {
     const usuarioNuevo = this.usuarioForm.value;
     console.log(usuarioNuevo);
-    this.usuarioService.crearUsuario(usuarioNuevo).subscribe((usuarioCreado: any) => {
-      Swal.fire('Usuario creado', 'correctamente`', 'success');
-      this.router.navigateByUrl(`/sistema/usuario/${usuarioCreado}`);
-    });
+    this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
+      (usuarioCreado: any) => {
+        console.log(usuarioCreado);
+        Swal.fire('Usuario creado', 'correctamente', 'success');
+        this.router.navigateByUrl(Rutas.USUARIOS);
+      },
+      (error) => {
+        let errores = error.error.errors;
+        let listaErrores = [];
+
+        Object.entries(errores).forEach(([key, value]) => {
+          listaErrores.push('° ' + value['msg'] + '<br>');
+        });
+
+        Swal.fire({
+          title: 'Usuario creado',
+          icon: 'error',
+          html: `${listaErrores.join('')}`,
+        });
+        this.router.navigateByUrl(Rutas.INICIO);
+      }
+    );
   }
 
   subirImagen() {}
