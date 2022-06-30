@@ -1,74 +1,84 @@
-<div class="form">
-  <h2>Informe Contables</h2>
-  <form class="form-signin">
-    <table>
-      <tr>
-        <td>
-          <label>Fecha</label>
-        </td>
-        <td>
-          <input type="date" ngModel class="form-control" id="" name="" placeholder="" required />
-        </td>
-      </tr>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Informe Contable</h3>
+      </div>
+      <div class="card-body px-5">
+        <div class="form mx-auto">
+          <form class="form-signin" autocomplete="off" [formGroup]="contabilidadForm">
+            <div class="form-group row">
+              <label for="inputSobres" class="col-sm-2 col-form-label">Sobres</label>
+              <div class="col-sm-10">
+                <input
+                  type="number"
+                  formControlName="sobres"
+                  class="form-control"
+                  id="inputSobres"
+                  placeholder="Cantidad de sobres"
+                />
+              </div>
+            </div>
 
-      <tr>
-        <td>
-          <label>Diezmos Recogidos</label>
-        </td>
-        <td>
-          <input type="number" step="any" ngModel class="form-control" id="" name="" placeholder="$" required />
-        </td>
-      </tr>
+            <div class="form-group row">
+              <label for="inputTransferencia" class="col-sm-2 col-form-label">Transferencia</label>
+              <div class="col-sm-10">
+                <input
+                  type="number"
+                  formControlName="transferencia"
+                  class="form-control"
+                  id="inputTransferencia"
+                  placeholder="$ 0.00"
+                />
+              </div>
+            </div>
 
-      <tr>
-        <td>
-          <label>Transferencias</label>
-        </td>
-        <td>
-          <input type="number" step="any" ngModel class="form-control" id="" name="" placeholder="$" required />
-        </td>
-      </tr>
+            <div class="form-group row">
+              <label for="inputRestrictos" class="col-sm-2 col-form-label">Restrictos</label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="restrictos"
+                  class="form-control"
+                  id="inputRestrictos"
+                  placeholder="Restrictos"
+                />
+              </div>
+            </div>
 
-      <tr>
-        <td>
-          <label>Restrictos</label>
-        </td>
-        <td>
-          <input type="number" step="any" ngModel class="form-control" id="" name="" placeholder="$" required />
-        </td>
-      </tr>
+            <div class="form-group row">
+              <label for="inputNoRestrictos" class="col-sm-2 col-form-label">No Restrictos</label>
+              <div class="col-sm-10">
+                <input
+                  type="number"
+                  formControlName="noRestrictos"
+                  class="form-control"
+                  id="inputNoRestrictos"
+                  placeholder="No Restrictos"
+                />
+              </div>
+            </div>
 
-      <tr>
-        <td>
-          <label>No Restrictos</label>
-        </td>
-        <td>
-          <input type="number" step="any" ngModel class="form-control" id="" name="" placeholder="$" required />
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <label>Depositos de Actividades</label>
-        </td>
-        <td>
-          <input type="number" step="any" ngModel class="form-control" id="" name="" placeholder="$" required />
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <label>Observaciones</label>
-        </td>
-        <td>
-          <textarea id="" name="" ngModel class="form-control" rows="5"></textarea>
-        </td>
-      </tr>
-    </table>
-
-    <br />
-    <div class="button">
-      <button class="w-100 btn btn-lg btn-primary submit" type="submit">Guardar</button>
+            <div class="form-group row">
+              <label for="inputDepositoActividades" class="col-sm-2 col-form-label">Depósito de Actividades</label>
+              <div class="col-sm-10">
+                <input
+                  type="number"
+                  formControlName="depositoActividades"
+                  class="form-control"
+                  id="inputDepositoActividades"
+                  placeholder="Déposito de actividades"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary" (click)="guardarInformeContable()">
+          <i class="fa fa-save"></i> Guardar
+        </button>
+      </div>
     </div>
-  </form>
+  </div>
 </div>

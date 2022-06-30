@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { EstatusModel } from 'src/app/models/estatus.model';
+import { VisitaModel } from 'src/app/models/visita.model';
 import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
@@ -9,7 +9,7 @@ const base_url = environment.base_url;
 @Injectable({
   providedIn: 'root',
 })
-export class EstatusService {
+export class VisitaService {
   constructor(private httpClient: HttpClient) {}
 
   get token(): string {
@@ -24,17 +24,17 @@ export class EstatusService {
     };
   }
 
-  getEstatus() {
+  getVisita() {
     return this.httpClient
-      .get(`${base_url}/tipostatus/`, this.headers)
-      .pipe(map((tipostatus: { ok: boolean; tipoStatus: EstatusModel[] }) => tipostatus.tipoStatus));
+      .get(`${base_url}/visita/`, this.headers)
+      .pipe(map((visita: { ok: boolean; visitas: VisitaModel[] }) => visita.visitas));
   }
 
-  crearEstatus(estatus: EstatusModel) {
-    return this.httpClient.post(`${base_url}/tipostatus`, estatus, this.headers);
+  crearVisita(visita: VisitaModel) {
+    return this.httpClient.post(`${base_url}/visita`, visita, this.headers);
   }
 
-  actualizarEstatus(estatus: EstatusModel) {
-    return this.httpClient.put(`${base_url}/tipostatus/${estatus.id}`, this.headers);
+  actualizarVisita(visita: VisitaModel) {
+    return this.httpClient.put(`${base_url}/visita/${visita.id}`, this.headers);
   }
 }

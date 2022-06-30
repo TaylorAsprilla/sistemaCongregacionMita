@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { EstatusModel } from 'src/app/models/estatus.model';
+import { MetaModel } from 'src/app/models/meta.model';
 import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
@@ -9,7 +9,7 @@ const base_url = environment.base_url;
 @Injectable({
   providedIn: 'root',
 })
-export class EstatusService {
+export class MetaService {
   constructor(private httpClient: HttpClient) {}
 
   get token(): string {
@@ -24,17 +24,17 @@ export class EstatusService {
     };
   }
 
-  getEstatus() {
+  getMeta() {
     return this.httpClient
-      .get(`${base_url}/tipostatus/`, this.headers)
-      .pipe(map((tipostatus: { ok: boolean; tipoStatus: EstatusModel[] }) => tipostatus.tipoStatus));
+      .get(`${base_url}/meta/`, this.headers)
+      .pipe(map((meta: { ok: boolean; meta: MetaModel[] }) => meta.meta));
   }
 
-  crearEstatus(estatus: EstatusModel) {
-    return this.httpClient.post(`${base_url}/tipostatus`, estatus, this.headers);
+  crearMeta(meta: MetaModel) {
+    return this.httpClient.post(`${base_url}/meta`, meta, this.headers);
   }
 
-  actualizarEstatus(estatus: EstatusModel) {
-    return this.httpClient.put(`${base_url}/tipostatus/${estatus.id}`, this.headers);
+  actualizarMeta(meta: MetaModel) {
+    return this.httpClient.put(`${base_url}/meta/${meta.id}`, this.headers);
   }
 }

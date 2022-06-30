@@ -162,7 +162,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   guardarUsuario() {
     const usuarioNuevo = this.usuarioForm.value;
-    console.log(usuarioNuevo);
+
     this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
       (usuarioCreado: any) => {
         console.log(usuarioCreado);

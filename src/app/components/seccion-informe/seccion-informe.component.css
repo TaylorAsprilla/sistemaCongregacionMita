@@ -100,6 +100,7 @@
 .ribbon-wrapper.ribbon-lg {
   height: 120px;
   width: 120px;
+  color: #ffffff;
 }
 .ribbon-wrapper.ribbon-lg .ribbon {
   right: 0;
