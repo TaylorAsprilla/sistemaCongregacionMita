@@ -1,81 +1,127 @@
-<div class="form">
-    <h2>Informe Visitas</h2>
-    <form class="form-signin">
-      <table>
-  
-        <tr>
-          <td>
-            <label>Fecha</label>
-          </td>
-          <td>
-            <input type="date" ngModel class="form-control" id="" name="" placeholder="" required />
-          </td>
-        </tr>
-  
-        <tr>
-          <td>
-            <label>Nombre de Feligrés</label>
-          </td>
-          <td>
-            <input type="text" ngModel class="form-control" id="" name="" placeholder="" required />
-          </td>
-        </tr>
-  
-        <tr>
-          <td>
-            <label>Situación</label>
-          </td>
-          <td>
-            <input type="text" ngModel class="form-control" id="" name="" placeholder="" />
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <label>Intervención</label>
-          </td>
-          <td>
-            <input type="text" ngModel class="form-control" id="" name="" placeholder="" />
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <label>Seguimiento</label>
-          </td>
-          <td>
-            <input type="text" ngModel class="form-control" id="" name="" placeholder="" />
-          </td>
-        </tr>
-  
-        <tr>
-          <td>
-            <label>Visita Realizada</label>
-          </td>
-          <td>
-            <select class="form-control" name="estatus" id="estatus" required>
-              <option value="vigente">opcion 1</option>
-              <option value="pendiente">opcion 1</option>
-              <option value="activo" selected>opcion 1</option>
-            </select>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <label>Observaciones</label>
-          </td>
-          <td>
-            <textarea id="" name="" ngModel class="form-control" rows="5"></textarea>
-          </td>
-        </tr>
-
-      </table>
-  
-      <br />
-      <div class="button">
-        <button class="w-100 btn btn-lg btn-primary submit" type="submit">Guardar</button>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Informe de visitas</h3>
       </div>
-    </form>
+      <div class="card-body px-5">
+        <div class="form mx-auto">
+          <form class="form-signin" autocomplete="off" [formGroup]="visitaForm">
+            <div class="form-group row">
+              <label for="inputFecha" class="col-sm-4 col-form-label">Seleccione el mes de las visitas</label>
+              <div class="col-sm-8">
+                <input
+                  type="month"
+                  formControlName="fecha"
+                  class="form-control"
+                  id="inputFecha"
+                  placeholder="Dígite la fecha de la actividad"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputVisitasHogares" class="col-sm-4 col-form-label">Visitas hogares</label>
+              <div class="col-sm-8">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="visitasHogares"
+                  id="inputVisitasHogares"
+                  rows="5"
+                  cols="30"
+                  placeholder="Número de visitas realizadas a los hogares"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputCantidad" class="col-sm-4 col-form-label">Cantidad de visitas realizasa en el mes</label>
+              <div class="col-sm-8">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="cantidad"
+                  id="inputCantidad"
+                  rows="5"
+                  cols="30"
+                  placeholder="Número de visitas realizadas en el mes"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputEfectivo" class="col-sm-4 col-form-label">Cantidad en efectivo</label>
+              <div class="col-sm-8">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="efectivo"
+                  id="inputEfectivo"
+                  placeholder="Cantidad en efectivo"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputReferidasOots" class="col-sm-4 col-form-label">Referidas a la OOTS</label>
+              <div class="col-sm-8">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="referidasOots"
+                  id="inputReferidasOots"
+                  placeholder="Situaciónes de la visita refereidas a la OOTS"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputVisitaHospital" class="col-sm-4 col-form-label">Visitas a Hospitales</label>
+              <div class="col-sm-8">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="visitaHospital"
+                  id="inputVisitaHospital"
+                  placeholder="Número de visitas realizadas en los hospitales"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputObservaciones" class="col-sm-4 col-form-label">Observaciones</label>
+              <div class="col-sm-8">
+                <textarea
+                  class="form-control"
+                  formControlName="observaciones"
+                  id="inputObservaciones"
+                  rows="5"
+                  cols="30"
+                >
+                </textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary" (click)="guardarVisita()">
+          <i class="fa fa-save"></i> Guardar
+        </button>
+      </div>
+    </div>
   </div>
-  
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Resumen de visitas</h3>
+      </div>
+      <div class="card-body px-5">
+        <div *ngFor="let visita of visitas">
+          <li>{{ visita.fecha }} - {{ visita.observaciones }}</li>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

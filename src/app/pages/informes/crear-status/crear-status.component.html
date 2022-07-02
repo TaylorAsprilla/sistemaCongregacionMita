@@ -1,21 +1,43 @@
-<div class="form">
-    <h2>Nuevo Estatus</h2>
-    <form class="form-signin">
-      <table>
-        <tr>
-          <td>
-            <label>Nombre</label>
-          </td>
-          <td>
-            <input type="text" ngModel class="form-control" id="" name="" placeholder="" required />
-          </td>
-        </tr>
-      </table>
-  
-      <br />
-      <div class="button">
-        <button class="w-100 btn btn-lg btn-primary submit" type="submit">Guardar</button>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Nueva Estatus</h3>
       </div>
-    </form>
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="estatusForm">
+          <div class="form-group">
+            <label>Tipo de Actividad:</label>
+            <input type="text" formControlName="status" class="form-control" placeholder="Dígite el nuevo estatus" />
+          </div>
+
+          <div class="card">
+            <button
+              type="submit"
+              class="submit btn btn-primary"
+              (click)="crearEstatus()"
+              [disabled]="estatusForm.invalid"
+            >
+              <i class="fa fa-save"></i> Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-  
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Listado de Actividades</h3>
+      </div>
+      <div class="card-body">
+        <div *ngFor="let estatus of estatus">
+          <li>
+            {{ estatus.status }}
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

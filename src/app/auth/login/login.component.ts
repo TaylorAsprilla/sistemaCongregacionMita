@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { LoginForm } from 'src/app/interfaces/login-form.interface';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -34,7 +35,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.usuarioService.login(this.loginForm.value).subscribe(
-      (loginUsuario) => {
+      (loginUsuario: LoginForm) => {
         if (this.loginForm.get('remember').value) {
           localStorage.setItem('login', this.loginForm.get('login').value);
         } else {
@@ -46,11 +47,12 @@ export class LoginComponent implements OnInit {
           showConfirmButton: false,
           timer: 1500,
         });
+
         // Navegar al Dashboard
         this.router.navigateByUrl('/');
       },
       (err) => {
-        Swal.fire({ icon: 'error', html: err.error.msg });
+        Swal.fire({ icon: 'error', html: 'Usuario y/o contraseña inválida' });
       }
     );
   }

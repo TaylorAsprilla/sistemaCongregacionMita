@@ -7,7 +7,7 @@ import { PagesRoutingModule } from './pages/pages.routing';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/sistema',
+    redirectTo: '/sistema/inicio',
     pathMatch: 'full',
   },
   {

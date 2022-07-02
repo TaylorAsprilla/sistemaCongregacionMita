@@ -1,0 +1,25 @@
+<div class="container buffer">
+  <div class="row">
+    <div class="position-relative shadow p-3 mb-5 bg-white rounded seccion">
+      <a class="enlace" [routerLink]="ruta">
+        <div class="container parte">
+          <div class="row">
+            <div class="around col-md-2">
+              <img class="img-fluid" src="{{ imagen }}" alt="oops" />
+            </div>
+            <div class="nombre col-md-9 mt-3">{{ nombre }}</div>
+
+            <div class="ribbon-wrapper ribbon-lg">
+              <div class="ribbon text-xl bg-primary">{{ estatus }}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 my-5 descripcion">
+              {{ descripcion }}
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

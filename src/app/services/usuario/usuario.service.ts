@@ -23,8 +23,8 @@ export class UsuarioService {
     return localStorage.getItem('token') || '';
   }
 
-  get usuarioId(): string {
-    return this.usuario.id || '';
+  get usuarioId(): number {
+    return this.usuario.id || null;
   }
 
   get headers() {
@@ -49,7 +49,6 @@ export class UsuarioService {
       })
       .pipe(
         map((respuesta: any) => {
-          console.log(respuesta);
           const {
             id,
             primerNombre,
@@ -60,6 +59,9 @@ export class UsuarioService {
             nacionalidad,
             email,
             numeroCelular,
+            telefonoCasa,
+            direccion,
+            zipCode,
             fechaNacimiento,
             login,
             password,
@@ -68,6 +70,10 @@ export class UsuarioService {
             genero_id,
             tipoDocumento_id,
             pais_id,
+            estadoCivil_id,
+            rolCasa_id,
+            vacuna_id,
+            dosis_id,
           } = respuesta.usuario;
 
           this.usuario = new UsuarioModel(
@@ -81,13 +87,20 @@ export class UsuarioService {
             estado,
             genero_id,
             pais_id,
+            estadoCivil_id,
+            vacuna_id,
+            dosis_id,
             segundoNombre,
             segundoApellido,
             numeroDocumento,
+            telefonoCasa,
+            direccion,
+            zipCode,
             login,
             password,
             foto,
-            tipoDocumento_id
+            tipoDocumento_id,
+            rolCasa_id
           );
           localStorage.setItem('token', respuesta.token);
           return true;
@@ -101,7 +114,7 @@ export class UsuarioService {
   }
 
   crearUsuario(formData: RegisterForm) {
-    return this.httpClient.post(`${base_url}/usuarios`, formData).pipe(
+    return this.httpClient.post(`${base_url}/usuarios`, formData, this.headers).pipe(
       tap((resp: any) => {
         resp;
       })
@@ -133,13 +146,20 @@ export class UsuarioService {
               usuario.estado,
               usuario.genero_id,
               usuario.pais_id,
+              usuario.estadoCivil_id,
+              usuario.vacuna_id,
+              usuario.dosis_id,
               usuario.segundoNombre,
               usuario.segundoApellido,
               usuario.numeroDocumento,
+              usuario.telefonoCasa,
+              usuario.direccion,
+              usuario.zipCode,
               usuario.login,
               usuario.password,
               usuario.foto,
-              usuario.tipoDocumento_id
+              usuario.tipoDocumento_id,
+              usuario.rolCasa_id
             )
         );
         return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
@@ -148,7 +168,7 @@ export class UsuarioService {
   }
 
   listarTodosLosUsuarios() {
-    return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios/todos`, this.headers).pipe(
+    return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios`, this.headers).pipe(
       map((usuariosRespuesta) => {
         const usuarios = usuariosRespuesta.usuarios.map(
           (usuario) =>
@@ -163,13 +183,20 @@ export class UsuarioService {
               usuario.estado,
               usuario.genero_id,
               usuario.pais_id,
+              usuario.estadoCivil_id,
+              usuario.vacuna_id,
+              usuario.dosis_id,
               usuario.segundoNombre,
               usuario.segundoApellido,
               usuario.numeroDocumento,
+              usuario.telefonoCasa,
+              usuario.direccion,
+              usuario.zipCode,
               usuario.login,
               usuario.password,
               usuario.foto,
-              usuario.tipoDocumento_id
+              usuario.tipoDocumento_id,
+              usuario.rolCasa_id
             )
         );
         return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
@@ -188,7 +215,6 @@ export class UsuarioService {
   }
 
   actualizarUsuario(usuario: UsuarioModel, id: string) {
-    console.log('email', usuario);
     return this.httpClient.put(`${base_url}/usuarios/${id}`, usuario, this.headers);
   }
 }
