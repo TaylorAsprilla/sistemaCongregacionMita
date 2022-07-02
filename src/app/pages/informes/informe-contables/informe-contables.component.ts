@@ -26,6 +26,7 @@ export class InformeContablesComponent implements OnInit {
       restrictos: ['', [Validators.required]],
       noRestrictos: ['', [Validators.required]],
       depositoActividades: ['', [Validators.required]],
+      informe_id: ['1', [Validators.required]],
     });
   }
 
@@ -36,7 +37,6 @@ export class InformeContablesComponent implements OnInit {
 
     this.contabilidadService.crearContabilidad(informeContabilidad).subscribe(
       (conbailidadCreada: any) => {
-        console.log(conbailidadCreada);
         Swal.fire('Informe Contable', 'Se registró el informe contable correctamente', 'success');
         this.router.navigateByUrl(Rutas.INFORME);
       },

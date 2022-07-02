@@ -5,7 +5,7 @@ import { Rutas } from 'src/app/routes/menu-items';
 @Component({
   selector: 'app-informe',
   templateUrl: './informe.component.html',
-  styleUrls: ['../informes.css'],
+  // styleUrls: ['../informes.css'],
 })
 export class InformeComponent implements OnInit {
   get Rutas() {
@@ -16,7 +16,5 @@ export class InformeComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    console.log('Informes', this.generarSeccioninforme);
-  }
+  ngOnInit(): void {}
 }

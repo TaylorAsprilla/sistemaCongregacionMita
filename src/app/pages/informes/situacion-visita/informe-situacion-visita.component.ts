@@ -34,14 +34,13 @@ export class InformeSituacionVisitaComponent implements OnInit {
       intervencion: ['', []],
       seguimiento: ['', []],
       observaciones: ['', []],
-      informe_id: ['', [Validators.required]],
+      informe_id: ['1', [Validators.required]],
     });
 
     this.situacionVisitaSubscription = this.situacionVisitaService
       .getSituacionVisita()
       .subscribe((situacionVisita: SituacionVisitaModel[]) => {
         this.situacionVisitas = situacionVisita;
-        console.log(this.situacionVisitas);
       });
   }
 

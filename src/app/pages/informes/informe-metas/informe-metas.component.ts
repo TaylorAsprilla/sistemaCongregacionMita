@@ -36,7 +36,7 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
       fecha: ['', [Validators.required]],
       accion: ['', []],
       comentarios: ['', []],
-      informe_id: ['', [Validators.required]],
+      informe_id: ['1', [Validators.required]],
       tipoStatus_id: ['', [Validators.required]],
     });
 

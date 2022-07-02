@@ -36,8 +36,6 @@ export class CrearStatusComponent implements OnInit {
   }
 
   crearEstatus() {
-    console.log('Imprime formulario');
-
     const estatusNuevo = this.estatusForm.value;
 
     this.estatusService.crearEstatus(estatusNuevo).subscribe(

@@ -34,6 +34,7 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
       asistencia: ['', [Validators.required]],
       tipoActividad_id: ['', [Validators.required]],
       observaciones: ['', []],
+      informe_id: ['1', [Validators.required]],
     });
 
     this.tipoActividadSubscription = this.tipoActividadService.getTipoActividad().subscribe((tipoActividad) => {

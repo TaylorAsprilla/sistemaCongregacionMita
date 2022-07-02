@@ -50,4 +50,20 @@ export const generarSeccioninforme: Seccion[] = [
     estatus: 'N / A',
     color: 'crimson',
   },
+  {
+    nombre: 'Logros obtenidos',
+    ruta: `../${Rutas.INFORME_LOGROS}`,
+    imagen: '../assets/images/iconSeccionInforme.jpeg',
+    descripcion: 'Logros obtenidos durante el trimestre',
+    estatus: 'N / A',
+    color: 'crimson',
+  },
+  {
+    nombre: 'Asunto pendiente',
+    ruta: `../${Rutas.INFORME}`,
+    imagen: '../assets/images/iconSeccionInforme.jpeg',
+    descripcion: 'Logros obtenidos durante el trimestre',
+    estatus: 'N / A',
+    color: 'crimson',
+  },
 ];

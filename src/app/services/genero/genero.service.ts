@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { GeneroModel } from 'src/app/models/genero.model';
 import { environment } from 'src/environments/environment';

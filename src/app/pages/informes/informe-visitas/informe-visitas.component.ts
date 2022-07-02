@@ -31,7 +31,7 @@ export class InformeVisitasComponent implements OnInit, OnDestroy {
       referidasOots: ['', []],
       visitaHospital: ['', []],
       observaciones: ['', []],
-      informe_id: ['', [Validators.required]],
+      informe_id: ['1', [Validators.required]],
     });
 
     this.visitaSubscription = this.visitaService.getVisita().subscribe((visita: VisitaModel[]) => {

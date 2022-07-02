@@ -17,6 +17,7 @@ export enum Rutas {
   REGISTRAR_USUARIO = 'registrar-usuario',
   SISTEMA = 'sistema',
   SITUACION_VISITA = 'situacion-visita',
+  RUTA_NUEVA = 'ruta-nueva',
 }
 
 export const ROUTES: RouteInfo[] = [

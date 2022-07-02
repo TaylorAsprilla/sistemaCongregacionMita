@@ -42,14 +42,10 @@ export class CrearActividadComponent implements OnInit {
   }
 
   crearTipoActividad() {
-    console.log('Imprime formulario');
-
     const tipoActividadNueva = this.tipoActividadForm.value;
 
     this.tipoActividadService.crearTipoActividad(tipoActividadNueva).subscribe(
       (actividadCreada: any) => {
-        console.log(actividadCreada);
-
         Swal.fire('Tipo de actividad creada', `${actividadCreada.tipoActividadCreado.nombre}`, 'success');
         this.resetFormulario();
         this.cargarTipoActividades();
