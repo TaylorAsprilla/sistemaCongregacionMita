@@ -12,6 +12,9 @@ import { InformeSituacionVisitaComponent } from './situacion-visita/informe-situ
 import { InformeComponent } from './informe/informe.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CrearCongregacionComponent } from './crear-congregacion/crear-congregacion.component';
+import { CrearPaisComponent } from './crear-pais/crear-pais.component';
+import { CrearCampoComponent } from './crear-campo/crear-campo.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +27,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     InformeVisitasComponent,
     InformeSituacionVisitaComponent,
     InformeComponent,
+    CrearCongregacionComponent,
+    CrearPaisComponent,
+    CrearCampoComponent,
   ],
   imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, ComponentsModule],
   exports: [
