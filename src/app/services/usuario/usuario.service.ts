@@ -38,6 +38,7 @@ export class UsuarioService {
   logout() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/login');
+    sessionStorage.clear();
   }
 
   validarToken(): Observable<boolean> {
@@ -124,6 +125,11 @@ export class UsuarioService {
   login(formData: LoginForm) {
     return this.httpClient.post(`${base_url}/login`, formData).pipe(
       tap((resp: any) => {
+        sessionStorage.setItem('primerNombre', resp.usuario.primerNombre);
+        sessionStorage.setItem('segundoNombre', resp.usuario.segundoNombre);
+        sessionStorage.setItem('primerApellido', resp.usuario.primerApellido);
+        sessionStorage.setItem('segundoApellido', resp.usuario.segundoApellido);
+
         localStorage.setItem('token', resp.token);
         this.idUsuario = resp.usuario.id;
       })

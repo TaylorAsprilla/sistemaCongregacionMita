@@ -1,0 +1,34 @@
+<div class="titulo">
+  <h1>Informe:</h1>
+  <h4>2do Trimestre del año</h4>
+
+  <hr />
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <input type="date" #fecha name="fecha" class="form-control" placeholder="Fecha del trimestre" />
+      </div>
+
+      <hr />
+    </div>
+    <div class="col-md-6">
+      <select #obrero name="obrero" class="form-control">
+        <option value="Obrero no seleccionado">Seleccione el obrero</option>
+        <option value="Luis Daniel">Luis Daniel</option>
+        <option value="Oscar Rodríguez">Oscar Rodríguez</option>
+        <option value="Liomar Sinisterra">Liomar Sinisterra</option>
+        <option value="Nevardo Cifuentes">Nevardo Cifuentes</option>
+      </select>
+    </div>
+    <div class="ml-5">
+      <button (click)="makePDF(obrero.value, fecha.value)" class="btn btn-primary descargar">Descargar Informe</button>
+    </div>
+  </div>
+</div>
+
+<div id="content" #content>
+  <h1>Congregación Mita Inc.</h1>
+
+  <p>Informe generado por: {{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundApellido }}</p>
+  <p>Fecha Actual: {{ fechaActual }}</p>
+</div>
