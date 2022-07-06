@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Rutas } from 'src/app/routes/menu-items';
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
   templateUrl: './informe-contables.component.html',
   styleUrls: ['./informe-contables.component.scss'],
 })
-export class InformeContablesComponent implements OnInit {
+export class InformeContablesComponent implements OnInit, OnDestroy {
   public contabilidadForm: FormGroup;
 
   constructor(

@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Informe asuntos pendientes</h3>
+      </div>
+      <div class="card-body px-5">
+        <div class="form mx-auto">
+          <form class="form-signin" autocomplete="off" [formGroup]="asuntoPendienteForm">
+            <div class="form-group row">
+              <label for="inputAsunto" class="col-sm-2 col-form-label">Asunto</label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="asunto"
+                  class="form-control"
+                  id="inputAsunto"
+                  placeholder="Asunto pendiente"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputResponsable" class="col-sm-2 col-form-label">Persona a Cargo</label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="responsable"
+                  class="form-control"
+                  id="inputResponsable"
+                  placeholder="Persona a cargo"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputObservaciones" class="col-sm-2 col-form-label">Observaciones</label>
+              <div class="col-sm-10">
+                <textarea
+                  class="form-control"
+                  formControlName="observaciones"
+                  id="inputObservaciones"
+                  rows="5"
+                  cols="30"
+                >
+                </textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary" (click)="guardarInformeAsuntoPendiete()">
+          <i class="fa fa-save"></i> Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Resumen Asuntos pendientes</h3>
+      </div>
+      <div class="card-body px-5">
+        <div *ngFor="let asuntoPendiente of asuntosPendientes">
+          <li>{{ asuntoPendiente.asunto }}</li>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
