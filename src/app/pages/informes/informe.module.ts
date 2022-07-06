@@ -8,10 +8,11 @@ import { InformeContablesComponent } from './informe-contables/informe-contables
 import { InformeLogrosComponent } from './informe-logros/informe-logros.component';
 import { InformeMetasComponent } from './informe-metas/informe-metas.component';
 import { InformeVisitasComponent } from './informe-visitas/informe-visitas.component';
-import { InformeSituacionVisitaComponent } from './situacion-visita/informe-situacion-visita.component';
+import { InformeSituacionVisitaComponent } from './informe-situacion-visita/informe-situacion-visita.component';
 import { InformeComponent } from './informe/informe.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InformeAsuntoPendienteComponent } from './informe-asunto-pendiente/informe-asunto-pendiente.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     InformeVisitasComponent,
     InformeSituacionVisitaComponent,
     InformeComponent,
+    InformeAsuntoPendienteComponent,
   ],
   imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, ComponentsModule],
   exports: [
@@ -37,4 +39,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     InformeSituacionVisitaComponent,
   ],
 })
-export class InformesModule {}
+export class InformeModule {}

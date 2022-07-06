@@ -1,6 +1,7 @@
 import { RouteInfo } from 'src/app/interfaces/route-info.interfase';
 
 export enum Rutas {
+  ASUNTO_PENDIENTE = 'asunto-pendiente',
   CAMPO = 'campo',
   CONGREGACION = 'congregacion',
   CREAR_ACTIVIDAD = 'crear-actividad',

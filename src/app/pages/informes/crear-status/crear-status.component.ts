@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-crear-status',
   templateUrl: './crear-status.component.html',
-  styleUrls: ['../informes.css'],
+  styleUrls: ['./crear-status.component.scss'],
 })
 export class CrearStatusComponent implements OnInit {
   public estatusForm: FormGroup;

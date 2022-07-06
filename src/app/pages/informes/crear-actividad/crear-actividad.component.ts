@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-crear-actividad',
   templateUrl: './crear-actividad.component.html',
-  styleUrls: ['../informes.css'],
+  styleUrls: ['./crear-actividad.component.scss'],
 })
 export class CrearActividadComponent implements OnInit {
   public tipoActividadForm: FormGroup;

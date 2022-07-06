@@ -11,7 +11,7 @@ import { PagesComponent } from './pages.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InicioComponent } from './inicio/inicio.component';
 import { PerfilModule } from './perfil/perfil.module';
-import { InformesModule } from './informes/informes.module';
+import { InformeModule } from './informes/informe.module';
 import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
@@ -27,7 +27,7 @@ import { PipesModule } from '../pipes/pipes.module';
     ReactiveFormsModule,
     PerfectScrollbarModule,
     PerfilModule,
-    InformesModule,
+    InformeModule,
     PipesModule,
   ],
 })

@@ -10,6 +10,7 @@ const base_url = environment.base_url;
 })
 export class CongregacionService {
   constructor(private httpClient: HttpClient) {}
+
   get token(): string {
     return localStorage.getItem('token') || '';
   }

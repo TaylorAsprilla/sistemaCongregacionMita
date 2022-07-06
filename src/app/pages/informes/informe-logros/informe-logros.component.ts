@@ -24,6 +24,7 @@ export class InformeLogrosComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.logroForm = this.formBuilder.group({
       logro: ['', [Validators.required]],
+      responsable: ['', [Validators.required]],
       comentarios: ['', []],
       informe_id: ['1', [Validators.required]],
     });

@@ -60,7 +60,7 @@ export const generarSeccioninforme: Seccion[] = [
   },
   {
     nombre: 'Asunto pendiente',
-    ruta: `../${Rutas.INFORME}`,
+    ruta: `../${Rutas.ASUNTO_PENDIENTE}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Logros obtenidos durante el trimestre',
     estatus: 'N / A',
