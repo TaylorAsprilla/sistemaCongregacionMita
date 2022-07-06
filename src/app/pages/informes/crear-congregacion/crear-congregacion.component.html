@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Nueva Congregación</h3>
+      </div>
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="congregacionForm">
+          <div class="form-group">
+            <label>Congregación:</label>
+            <input type="text" formControlName="congregacion" class="form-control" placeholder="Congregación" />
+          </div>
+
+          <div class="form-group row">
+            <label for="inputPais" class="col-sm-6 col-md-4 col-form-label">País</label>
+            <div class="col-sm-6 col-md-8">
+              <select class="form-control" id="inputPais" formControlName="pais_id">
+                <option value="" disabled>Seleccione país</option>
+                <option *ngFor="let pais of paises" [value]="pais.id">
+                  {{ pais.pais }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card">
+            <button
+              type="submit"
+              class="submit btn btn-primary"
+              (click)="crearCongregacion()"
+              [disabled]="congregacionForm.invalid"
+            >
+              <i class="fa fa-save"></i> Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Listado de Congregaciones</h3>
+      </div>
+      <div class="card-body">
+        <div *ngFor="let congregacion of congregaciones">
+          <li>
+            {{ congregacion.congregacion }}
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
