@@ -18,6 +18,7 @@ import { InformeMetasComponent } from 'src/app/pages/informes/informe-metas/info
 import { InformeVisitasComponent } from 'src/app/pages/informes/informe-visitas/informe-visitas.component';
 import { InformeComponent } from 'src/app/pages/informes/informe/informe.component';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/situacion-visita/informe-situacion-visita.component';
+import { VerInformeComponent } from 'src/app/pages/informes/ver-informe/ver-informe.component';
 import { InicioComponent } from 'src/app/pages/inicio/inicio.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 import { RegisterCampoComponent } from 'src/app/pages/registro/register-campo/register-campo.component';
@@ -130,6 +131,10 @@ const childRoutes: Routes = [
   {
     path: Rutas.INFORME,
     component: InformeComponent,
+  },
+  {
+    path: Rutas.VER_INFORME,
+    component: VerInformeComponent,
   },
 ];
 

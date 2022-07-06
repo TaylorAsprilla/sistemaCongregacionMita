@@ -1,1 +1,50 @@
-<p>crear-pais works!</p>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Nuevo País</h3>
+      </div>
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="paisForm">
+          <div class="form-group">
+            <label>País:</label>
+            <input type="text" formControlName="pais" class="form-control" placeholder="Pais" />
+          </div>
+
+          <div class="form-group row">
+            <label for="inputDivisa" lass="col-sm-6 col-md-4 col-form-label">Moneda</label>
+            <div class="col-sm-6 col-md-8">
+              <select class="form-control" id="inputDivisa" formControlName="idDivisa">
+                <option value="" disabled>Seleccione Moneda</option>
+                <option *ngFor="let divisa of divisas" [value]="divisa.id">
+                  {{ divisa.divisa }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card">
+            <button type="submit" class="submit btn btn-primary" (click)="crearPais()" [disabled]="paisForm.invalid">
+              <i class="fa fa-save"></i> Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Listado de Paises</h3>
+      </div>
+      <div class="card-body">
+        <div *ngFor="let pais of paises">
+          <li>
+            {{ pais.pais }}
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CrearCongregacionComponent } from './crear-congregacion/crear-congregacion.component';
 import { CrearPaisComponent } from './crear-pais/crear-pais.component';
 import { CrearCampoComponent } from './crear-campo/crear-campo.component';
+import { VerInformeComponent } from './ver-informe/ver-informe.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { CrearCampoComponent } from './crear-campo/crear-campo.component';
     CrearCongregacionComponent,
     CrearPaisComponent,
     CrearCampoComponent,
+    VerInformeComponent,
   ],
   imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, ComponentsModule],
   exports: [

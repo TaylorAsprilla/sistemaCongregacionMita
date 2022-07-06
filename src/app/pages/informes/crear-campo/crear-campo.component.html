@@ -12,9 +12,9 @@
           </div>
 
           <div class="form-group row">
-            <label for="inputTipoActividad" class="col-sm-2 col-form-label">Congregación</label>
-            <div class="col-sm-10">
-              <select class="form-control" formControlName="congregacion_id">
+            <label for="inputCongregacion" class="col-sm-6 col-md-4 col-form-label">Congregación</label>
+            <div class="col-sm-6 col-md-8">
+              <select class="form-control" id="inputCongregacion" formControlName="congregacion_id">
                 <option value="" disabled>Seleccione congregación</option>
                 <option *ngFor="let congregacion of congregaciones" [value]="congregacion.id">
                   {{ congregacion.congregacion }}

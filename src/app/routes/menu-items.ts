@@ -21,6 +21,7 @@ export enum Rutas {
   SISTEMA = 'sistema',
   SITUACION_VISITA = 'situacion-visita',
   RUTA_NUEVA = 'ruta-nueva',
+  VER_INFORME = 'ver-informe',
 }
 
 export const ROUTES: RouteInfo[] = [
@@ -146,14 +147,6 @@ export const ROUTES: RouteInfo[] = [
         extralink: false,
         submenu: [],
       },
-      {
-        path: Rutas.INFORME_ACTIVIDADES,
-        title: 'Informe de actividades',
-        icon: '',
-        class: '',
-        extralink: false,
-        submenu: [],
-      },
     ],
   },
   {
@@ -210,8 +203,8 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: '',
-        title: 'Ver Informes',
+        path: Rutas.VER_INFORME,
+        title: 'Ver Informe',
         icon: '',
         class: '',
         extralink: false,

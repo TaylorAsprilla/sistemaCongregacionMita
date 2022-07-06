@@ -34,7 +34,6 @@ export class CrearCampoComponent implements OnInit {
     this.campoForm = this.formBuilder.group({
       campo: ['', [Validators.required, Validators.minLength(3)]],
       congregacion_id: ['', [Validators.required]],
-      //  constructor(public id: number, public campo: string, public estado: boolean, public congregacion_id: number) {}
     });
 
     this.congregacionSubscription = this.congregacionService.listarCongregacion().subscribe((congregacion) => {
@@ -42,6 +41,11 @@ export class CrearCampoComponent implements OnInit {
     });
 
     this.cargarCampos();
+  }
+
+  ngOnDestroy(): void {
+    this.campoSubscription?.unsubscribe();
+    this.congregacionSubscription?.unsubscribe();
   }
 
   cargarCampos() {
@@ -53,12 +57,9 @@ export class CrearCampoComponent implements OnInit {
   crearCampo() {
     const campoNuevo = this.campoForm.value;
 
-    console.log(campoNuevo);
-
     this.campoService.crearCampo(campoNuevo).subscribe(
       (campoCreado: any) => {
-        // Swal.fire('Tipo de actividad creada', `${actividadCreada.tipoActividadCreado.nombre}`, 'success');
-        Swal.fire('Campo creado', `${campoCreado.campo}`, 'success');
+        Swal.fire('Campo creado', `${campoCreado.campo.campo}`, 'success');
         this.resetFormulario();
         this.cargarCampos();
       },
