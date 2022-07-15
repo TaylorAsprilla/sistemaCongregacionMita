@@ -6,29 +6,85 @@
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <input type="date" #fecha name="fecha" class="form-control" placeholder="Fecha del trimestre" />
+        <input
+          type="date"
+          (change)="seleccionarTrimestre()"
+          [(ngModel)]="fechaSeleccionada"
+          class="form-control"
+          placeholder="Fecha del trimestre"
+        />
       </div>
 
       <hr />
     </div>
     <div class="col-md-6">
-      <select #obrero name="obrero" class="form-control">
+      <!-- <select [(ngModel)]="obreroSeleccionado" class="form-control">
         <option value="Obrero no seleccionado">Seleccione el obrero</option>
         <option value="Luis Daniel">Luis Daniel</option>
         <option value="Oscar Rodríguez">Oscar Rodríguez</option>
         <option value="Liomar Sinisterra">Liomar Sinisterra</option>
         <option value="Nevardo Cifuentes">Nevardo Cifuentes</option>
+      </select> -->
+      <select [(ngModel)]="obreroSeleccionado" class="form-control" (change)="seleccionarObrero(obreroSeleccionado)">
+        <option value="" disabled>Obrero no seleccionado</option>
+        <option *ngFor="let usuario of usuarios" [ngValue]="usuario">
+          {{ usuario.primerNombre + ' ' + usuario.primerApellido }}
+        </option>
       </select>
     </div>
     <div class="ml-5">
-      <button (click)="makePDF(obrero.value, fecha.value)" class="btn btn-primary descargar">Descargar Informe</button>
+      <button (click)="makePDF()" class="btn btn-primary descargar">Descargar Informe</button>
     </div>
   </div>
 </div>
 
-<div id="content" #content>
-  <h1>Congregación Mita Inc.</h1>
+<div id="content" class="fontColor" #content>
+  <div class="header">
+    <p class="title">Congregación Mita Inc.</p>
+    <p>({{ paisSeleccionado }})</p>
 
-  <p>Informe generado por: {{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundApellido }}</p>
-  <p>Fecha Actual: {{ fechaActual }}</p>
+    <p class="heading">Informe Trimestral</p>
+    <table class="tableCenter">
+      <tr>
+        <td>
+          <p class="heading">Trimestre {{ fechaSeleccionada.slice(0, 4) }} :</p>
+        </td>
+        <td class="info">{{ trimestre }}</td>
+      </tr>
+      <tr>
+        <td>
+          <p class="heading">Obrero/a:</p>
+        </td>
+        <td class="info">
+          {{ obreroSeleccionado['primerNombre'] + ' ' + obreroSeleccionado['primerApellido'] }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="heading">Fecha de Informe:</p>
+        </td>
+        <td class="info">{{ fechaActual.toString().slice(0, 15) }}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="body">
+    <p class="heading">A. RESUMEN DE SERVICIOS, ORACIONES Y VIGILIAS REALIZADAS: - Actividades</p>
+    <p class="heading">B. RESUMEN DE VISITAS REALIZADAS A LOS/AS FELIGRESES: Visitas</p>
+    <p class="heading">C. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS: SituacionVisita</p>
+    <p class="heading">D. ACTIVIDADES ESPECIALES REALIZADAS: Actividades</p>
+    <p class="heading">E. ACTIVIDADES RELACIONADAS AL ASPECTO ESPIRITUAL: Actividades</p>
+    <p class="heading">F. REUNIONES: Actividades</p>
+    <p class="heading">G. ASPECTOS CONTABLES: Aspectos Contables</p>
+    <p class="heading">H. LOGROS OBTENIDOS: Logro</p>
+    <p class="heading">I. ASUNTOS PENDIENTES (ADMINISTRATIVOS, CONSTRUCCIÓN, ACTIVIDADES, ECLESIÁSTICOS):</p>
+    <p class="heading">J. METAS PARA EL PRÓXIMO TRIMESTRE: Metas</p>
+
+    <div *ngFor="let item of items">
+      {{ item }}
+    </div>
+    <div class="">
+      <p>Informe generado por: {{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundApellido }}</p>
+      <p>Fecha Actual: {{ fechaActual }}</p>
+    </div>
+  </div>
 </div>

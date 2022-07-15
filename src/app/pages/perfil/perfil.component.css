@@ -144,3 +144,12 @@
 .blue {
   background-color: blue;
 }
+
+.editDiv {
+  padding-left: 10%;
+}
+
+.btn {
+  background-color: #0d64c2;
+  border-color: #0d64c2;
+}
