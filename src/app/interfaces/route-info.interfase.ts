@@ -1,3 +1,5 @@
+import { ROLES } from '../enum/roles.enum';
+
 // Sidebar route metadata
 export interface RouteInfo {
   path: string;
@@ -5,6 +7,6 @@ export interface RouteInfo {
   icon?: string;
   class?: string;
   extralink?: boolean;
-  role?: string;
+  role?: ROLES[];
   submenu?: RouteInfo[];
 }

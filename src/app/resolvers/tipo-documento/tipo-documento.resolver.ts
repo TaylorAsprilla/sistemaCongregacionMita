@@ -1,0 +1,20 @@
+import { Injectable } from '@angular/core';
+import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TipoDocumentoResolver implements Resolve<boolean> {
+  constructor(private tipoDocumentoService: TipoDocumentoService) {}
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+    return this.tipoDocumentoService.listarTipoDocumentos().pipe(
+      catchError((error) => {
+        return of('No data');
+      })
+    );
+  }
+}

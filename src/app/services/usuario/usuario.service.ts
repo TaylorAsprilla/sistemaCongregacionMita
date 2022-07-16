@@ -220,7 +220,7 @@ export class UsuarioService {
     return this.httpClient.delete(`${base_url}/usuarios/${usuario.id}`, this.headers);
   }
 
-  actualizarUsuario(usuario: UsuarioModel, id: string) {
+  actualizarUsuario(usuario: UsuarioModel, id: number) {
     return this.httpClient.put(`${base_url}/usuarios/${id}`, usuario, this.headers);
   }
 }
