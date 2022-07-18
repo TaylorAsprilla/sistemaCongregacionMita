@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Agregar Congregación</h3>
+      </div>
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="congregacionForm">
+          <div class="form-group">
+            <label for="inputCongregacion" class="col-form-label">Congregación:</label>
+            <input
+              type="text"
+              formControlName="congregacion"
+              class="form-control"
+              placeholder="Dígite el nombre de la Congregación"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="inputPais" class="col-form-label">País</label>
+            <select class="form-control" id="inputPais" formControlName="pais_id">
+              <option value="" disabled>Seleccione el país</option>
+              <option *ngFor="let pais of paises" [value]="pais.id">
+                {{ pais.pais }}
+              </option>
+            </select>
+          </div>
+
+          <div class="card">
+            <button
+              type="submit"
+              class="submit btn btn-primary"
+              (click)="crearCongregacion()"
+              [disabled]="congregacionForm.invalid"
+            >
+              <i class="fa fa-save"></i> Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Listado de Congregaciones</h3>
+      </div>
+      <div class="card-body">
+        <div *ngFor="let congregacion of congregaciones">
+          <a class="pointer">
+            <li (click)="buscarCongregacion(congregacion.id.toString())">
+              <span class="font-medium">{{ congregacion.congregacion }}</span>
+            </li></a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

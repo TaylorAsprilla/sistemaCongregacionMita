@@ -129,7 +129,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
 
     this.congregacionSubscription = this.congregacionService
-      .listarCongregacion()
+      .getCongregaciones()
       .subscribe((congregacion: CongregacionModel[]) => {
         this.congregaciones = congregacion;
       });
