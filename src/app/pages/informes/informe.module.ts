@@ -13,7 +13,6 @@ import { InformeComponent } from './informe/informe.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InformeAsuntoPendienteComponent } from './informe-asunto-pendiente/informe-asunto-pendiente.component';
-import { CrearCongregacionComponent } from './crear-congregacion/crear-congregacion.component';
 import { CrearPaisComponent } from './crear-pais/crear-pais.component';
 import { CrearCampoComponent } from './crear-campo/crear-campo.component';
 import { VerInformeComponent } from './ver-informe/ver-informe.component';
@@ -30,7 +29,6 @@ import { VerInformeComponent } from './ver-informe/ver-informe.component';
     InformeSituacionVisitaComponent,
     InformeComponent,
     InformeAsuntoPendienteComponent,
-    CrearCongregacionComponent,
     CrearPaisComponent,
     CrearCampoComponent,
     VerInformeComponent,
