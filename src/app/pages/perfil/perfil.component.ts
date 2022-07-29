@@ -101,7 +101,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
       dosis_id: [this.usuario?.dosis_id, [Validators.required]],
     });
 
-    console.log('usuario', this.usuario);
     this.tipoDocumentoSubscription = this.tipoDocumentoService
       .listarTipoDocumentos()
       .subscribe((tipoDocumento: TipoDocumentoModel[]) => {
@@ -134,7 +133,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
       this.rolCasa = rolCasa;
     });
 
-    this.paisSubscription = this.paisService.listarPais().subscribe((pais: PaisModel[]) => {
+    this.paisSubscription = this.paisService.getPaises().subscribe((pais: PaisModel[]) => {
       this.paises = pais;
     });
 

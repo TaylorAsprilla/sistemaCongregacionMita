@@ -124,7 +124,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       this.rolCasa = rolCasa;
     });
 
-    this.paisSubscription = this.paisService.listarPais().subscribe((pais: PaisModel[]) => {
+    this.paisSubscription = this.paisService.getPaises().subscribe((pais: PaisModel[]) => {
       this.paises = pais;
     });
 
