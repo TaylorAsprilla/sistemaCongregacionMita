@@ -44,7 +44,7 @@ export class CrearCongregacionComponent implements OnInit {
       pais_id: ['', [Validators.required]],
     });
 
-    this.paisSubscription = this.paisService.listarPais().subscribe((pais) => {
+    this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
       this.paises = pais.filter((pais: PaisModel) => pais.estado === true);
     });
 
@@ -80,16 +80,20 @@ export class CrearCongregacionComponent implements OnInit {
           html: `La congregación ${congregacion.congregacionActualizada.congregacion} se actualizó correctamente`,
         });
       });
+      this.resetFormulario();
+      this.cargarCongregaciones();
+      this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
     } else {
       this.congregacionService.crearCongregacion(congregacionNueva).subscribe(
         (congregacionCreado: any) => {
           Swal.fire({
             title: 'Congregación creada',
-            html: `${congregacionCreado.congregacion.congregacion}`,
+            html: `La congregación ${congregacionCreado.congregacion.congregacion} de creó correctamente`,
             icon: 'success',
           });
           this.resetFormulario();
           this.cargarCongregaciones();
+          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
         },
         (error) => {
           let errores = error.error.errors;
@@ -104,7 +108,7 @@ export class CrearCongregacionComponent implements OnInit {
             icon: 'error',
             html: `${listaErrores.join('')}`,
           });
-          this.router.navigateByUrl(Rutas.INICIO);
+          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
         }
       );
     }
@@ -116,11 +120,10 @@ export class CrearCongregacionComponent implements OnInit {
         .getCongregacion(id)
         .pipe(delay(100))
         .subscribe(
-          (congregacionActualizada: CongregacionModel) => {
-            console.log('congregacionActualizada', congregacionActualizada);
-            const { congregacion, pais_id } = congregacionActualizada;
-            this.congregacionSeleccionada = congregacionActualizada;
-            console.log('this.congregacionSeleccionada', this.congregacionSeleccionada);
+          (congregacionEncontrada: CongregacionModel) => {
+            const { congregacion, pais_id } = congregacionEncontrada;
+            this.congregacionSeleccionada = congregacionEncontrada;
+
             this.congregacionForm.setValue({ congregacion, pais_id });
           },
           (error) => {

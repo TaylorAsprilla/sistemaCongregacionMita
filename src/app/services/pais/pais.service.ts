@@ -23,10 +23,16 @@ export class PaisService {
     };
   }
 
-  listarPais() {
+  getPaises() {
     return this.httpClient
       .get(`${base_url}/pais`, this.headers)
       .pipe(map((pais: { ok: boolean; pais: PaisModel[] }) => pais.pais));
+  }
+
+  getPais(id: string) {
+    return this.httpClient
+      .get(`${base_url}/pais/${id}`, this.headers)
+      .pipe(map((pais: { ok: boolean; pais: PaisModel; id: number }) => pais.pais));
   }
 
   crearPais(pais: PaisModel) {
@@ -35,5 +41,13 @@ export class PaisService {
 
   actualizarPais(pais: PaisModel) {
     return this.httpClient.put(`${base_url}/pais/${pais.id}`, pais, this.headers);
+  }
+
+  eliminarPais(pais: PaisModel) {
+    return this.httpClient.delete(`${base_url}/pais/${pais.id}`, this.headers);
+  }
+
+  activarPais(pais: PaisModel) {
+    return this.httpClient.put(`${base_url}/pais/activar/${pais.id}`, pais, this.headers);
   }
 }

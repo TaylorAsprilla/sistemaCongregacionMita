@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CongregacionModel } from 'src/app/models/congregacion.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
@@ -10,9 +11,12 @@ import Swal from 'sweetalert2';
   templateUrl: './congregaciones.component.html',
   styleUrls: ['./congregaciones.component.css'],
 })
-export class CongregacionesComponent implements OnInit {
+export class CongregacionesComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
   public congregaciones: CongregacionModel[] = [];
+
+  // Subscription
+  public congregacionSubscription: Subscription;
 
   constructor(private router: Router, private congregacionServices: CongregacionService) {}
 
@@ -20,12 +24,18 @@ export class CongregacionesComponent implements OnInit {
     this.cargarCongregaciones();
   }
 
+  ngOnDestroy(): void {
+    this.congregacionSubscription?.unsubscribe();
+  }
+
   cargarCongregaciones() {
     this.cargando = true;
-    this.congregacionServices.getCongregaciones().subscribe((congregaciones: CongregacionModel[]) => {
-      this.congregaciones = congregaciones;
-      this.cargando = false;
-    });
+    this.congregacionSubscription = this.congregacionServices
+      .getCongregaciones()
+      .subscribe((congregaciones: CongregacionModel[]) => {
+        this.congregaciones = congregaciones;
+        this.cargando = false;
+      });
   }
 
   borrarCongregacion(congregacion: CongregacionModel) {

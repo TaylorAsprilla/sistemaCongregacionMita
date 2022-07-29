@@ -8,19 +8,17 @@
         <form class="form-signin" autocomplete="off" [formGroup]="paisForm">
           <div class="form-group">
             <label>País:</label>
-            <input type="text" formControlName="pais" class="form-control" placeholder="Pais" />
+            <input type="text" formControlName="pais" class="form-control" placeholder="Dígite un país nuevo" />
           </div>
 
-          <div class="form-group row">
-            <label for="inputDivisa" lass="col-sm-6 col-md-4 col-form-label">Moneda</label>
-            <div class="col-sm-6 col-md-8">
-              <select class="form-control" id="inputDivisa" formControlName="idDivisa">
-                <option value="" disabled>Seleccione Moneda</option>
-                <option *ngFor="let divisa of divisas" [value]="divisa.id">
-                  {{ divisa.divisa }}
-                </option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label for="inputDivisa" class="col-form-label">Moneda</label>
+            <select class="form-control" id="inputDivisa" formControlName="idDivisa">
+              <option value="" disabled>Seleccione Moneda</option>
+              <option *ngFor="let divisa of divisas" [value]="divisa.id">
+                {{ divisa.divisa }}
+              </option>
+            </select>
           </div>
 
           <div class="card">
@@ -40,9 +38,11 @@
       </div>
       <div class="card-body">
         <div *ngFor="let pais of paises">
-          <li>
-            {{ pais.pais }}
-          </li>
+          <a class="pointer">
+            <li (click)="buscarPais(pais.id.toString())">
+              <span class="font-medium">{{ pais.pais }}</span>
+            </li>
+          </a>
         </div>
       </div>
     </div>

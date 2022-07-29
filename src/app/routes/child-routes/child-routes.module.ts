@@ -7,7 +7,7 @@ import { UsuariosComponent } from 'src/app/pages/administracion/usuarios/usuario
 import { CrearActividadComponent } from 'src/app/pages/informes/crear-actividad/crear-actividad.component';
 
 import { CrearCampoComponent } from 'src/app/pages/informes/crear-campo/crear-campo.component';
-import { CrearPaisComponent } from 'src/app/pages/informes/crear-pais/crear-pais.component';
+import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais/crear-pais.component';
 
 import { CrearStatusComponent } from 'src/app/pages/informes/crear-status/crear-status.component';
 import { InformeActividadesComponent } from 'src/app/pages/informes/informe-actividades/informe-actividades.component';
@@ -20,7 +20,6 @@ import { VerInformeComponent } from 'src/app/pages/informes/ver-informe/ver-info
 import { InicioComponent } from 'src/app/pages/inicio/inicio.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 import { RegisterCampoComponent } from 'src/app/pages/registro/register-campo/register-campo.component';
-import { RegisterCongregacionComponent } from 'src/app/pages/registro/register-congregacion/register-congregacion.component';
 import { RegisterMinisterioComponent } from 'src/app/pages/registro/register-ministerio/register-ministerio.component';
 import { RegistrarUsuarioComponent } from 'src/app/pages/registro/registrar-usuario/registrar-usuario.component';
 import { Rutas } from '../menu-items';
@@ -28,6 +27,7 @@ import { InformeAsuntoPendienteComponent } from 'src/app/pages/informes/informe-
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
 import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
 import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
+import { PaisesComponent } from 'src/app/pages/administracion/pais/paises/paises.component';
 
 const childRoutes: Routes = [
   {
@@ -46,6 +46,16 @@ const childRoutes: Routes = [
     path: 'ministerios',
     component: MinisteriosComponent,
     data: { titulo: 'Ministerios' },
+  },
+  {
+    path: Rutas.PAISES,
+    component: PaisesComponent,
+    data: { titulo: 'Paises' },
+  },
+  {
+    path: `${Rutas.PAISES}/:id`,
+    component: CrearPaisComponent,
+    data: { titulo: 'Crear Pais' },
   },
   {
     path: Rutas.CONGREGACIONES,

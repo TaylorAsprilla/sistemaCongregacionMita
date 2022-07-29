@@ -8,14 +8,18 @@ import { CrearCongregacionComponent } from './congregacion/crear-congregacion/cr
 import { ComponentsModule } from 'src/app/components/components.module';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CrearPaisComponent } from './pais/crear-pais/crear-pais.component';
+import { PaisesComponent } from './pais/paises/paises.component';
 
 @NgModule({
   declarations: [
     CamposComponent,
     CongregacionesComponent,
+    CrearPaisComponent,
     MinisteriosComponent,
     UsuariosComponent,
     CrearCongregacionComponent,
+    PaisesComponent,
   ],
   imports: [CommonModule, ComponentsModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -24,6 +28,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MinisteriosComponent,
     UsuariosComponent,
     CrearCongregacionComponent,
+    CrearPaisComponent,
   ],
 })
 export class AdministracionModule {}
