@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { ActividadModel } from 'src/app/models/actividad.model';
 import { InformeModel } from 'src/app/models/informe.model';
 import { environment } from 'src/environments/environment';
 
@@ -31,10 +32,10 @@ export class InformeService {
       .pipe(map((informe: { ok: boolean; informes: InformeModel[] }) => informe.informes));
   }
 
-  getInforme() {
+  getInforme(id: number) {
     return this.httpClient
-      .get(`${base_url}/informe`, this.headers)
-      .pipe(map((informe: { ok: boolean; informes: InformeModel[] }) => informe.informes));
+      .get(`${base_url}/informe/${id}`, this.headers)
+      .pipe(map((informe: { ok: boolean; informe: any[] }) => informe.informe));
   }
 
   crearInforme(informe: InformeModel) {

@@ -52,7 +52,7 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
     this.actividadService.crearActividad(informeActividad).subscribe(
       (actividadCreada: any) => {
         Swal.fire('Informe de actividades', 'Se registró el informe de actividades correctamente', 'success');
-        this.router.navigateByUrl(Rutas.INFORME);
+        this.navegarAlInforme();
       },
       (error) => {
         let errores = error.error.errors;
@@ -67,8 +67,12 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
           icon: 'error',
           html: `${listaErrores.join('')}`,
         });
-        this.router.navigateByUrl(Rutas.INICIO);
+        this.navegarAlInforme();
       }
     );
+  }
+
+  navegarAlInforme() {
+    return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
   }
 }
