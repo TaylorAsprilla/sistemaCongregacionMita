@@ -54,7 +54,7 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
     this.metaService.crearMeta(informeMeta).subscribe(
       (metaCreada: any) => {
         Swal.fire('Informe de metas', 'Se registró la meta correctamente', 'success');
-        this.router.navigateByUrl(Rutas.INFORME);
+        this.navegarAlInforme();
       },
       (error) => {
         let errores = error.error.errors;
@@ -69,8 +69,12 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
           icon: 'error',
           html: `Error al guardar el informe de metas <p> ${listaErrores.join('')}`,
         });
-        this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
+        this.navegarAlInforme();
       }
     );
+  }
+
+  navegarAlInforme() {
+    return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
   }
 }

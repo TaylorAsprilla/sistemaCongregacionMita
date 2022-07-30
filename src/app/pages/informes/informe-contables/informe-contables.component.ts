@@ -38,7 +38,7 @@ export class InformeContablesComponent implements OnInit, OnDestroy {
     this.contabilidadService.crearContabilidad(informeContabilidad).subscribe(
       (conbailidadCreada: any) => {
         Swal.fire('Informe Contable', 'Se registró el informe contable correctamente', 'success');
-        this.router.navigateByUrl(Rutas.INFORME);
+        this.navegarAlInforme();
       },
       (error) => {
         let errores = error.error.errors;
@@ -53,8 +53,12 @@ export class InformeContablesComponent implements OnInit, OnDestroy {
           icon: 'error',
           html: `${listaErrores.join('')}`,
         });
-        this.router.navigateByUrl(Rutas.INICIO);
+        this.navegarAlInforme();
       }
     );
+  }
+
+  navegarAlInforme() {
+    return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
   }
 }

@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { jsPDF } from 'jspdf';
+import { Subscription } from 'rxjs';
+import { InformeService } from 'src/app/services/informe/informe.service';
 
 @Component({
   selector: 'app-ver-informe',
@@ -14,14 +16,25 @@ export class VerInformeComponent implements OnInit {
   primerApellido: string;
   segundApellido: string;
   fechaActual: Date;
-  constructor() {}
+
+  informe: any[];
+
+  informeSubscription: Subscription;
+
+  constructor(private informeService: InformeService) {}
 
   ngOnInit(): void {
+    let idInforme = 1;
     this.primerNombre = sessionStorage.getItem('primerNombre');
     this.segundoNombre = sessionStorage.getItem('segundoNombre');
     this.primerApellido = sessionStorage.getItem('primerApellido');
     this.segundApellido = sessionStorage.getItem('segundoApellido');
     this.fechaActual = new Date();
+
+    this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
+      this.informe = respuesta;
+      console.log(this.informe);
+    });
   }
 
   makePDF(obrero: string, fecha: string) {
