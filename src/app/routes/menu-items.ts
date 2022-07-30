@@ -2,7 +2,8 @@ import { RouteInfo } from 'src/app/interfaces/route-info.interfase';
 
 export enum Rutas {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
-  CAMPO = 'campo',
+
+  CAMPOS = 'campos',
   CONGREGACION = 'congregacion',
   CONGREGACIONES = 'congregaciones',
   CREAR_ACTIVIDAD = 'crear-actividad',
@@ -178,7 +179,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.CAMPO,
+        path: Rutas.CAMPOS,
         title: 'Campos',
         icon: '',
         class: '',
