@@ -13,8 +13,8 @@ import { InformeComponent } from './informe/informe.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InformeAsuntoPendienteComponent } from './informe-asunto-pendiente/informe-asunto-pendiente.component';
-import { CrearPaisComponent } from '../administracion/pais/crear-pais/crear-pais.component';
-import { CrearCampoComponent } from './crear-campo/crear-campo.component';
+
+import { CrearCampoComponent } from '../administracion/campo/crear-campo/crear-campo.component';
 import { VerInformeComponent } from './ver-informe/ver-informe.component';
 
 @NgModule({

@@ -29,11 +29,33 @@ export class CampoService {
       .pipe(map((campo: { ok: boolean; campo: CampoModel[] }) => campo.campo));
   }
 
+  getCampo(id: string) {
+    return this.httpClient
+      .get(`${base_url}/campo/${id}`, this.headers)
+      .pipe(map((campo: { ok: boolean; campo: CampoModel; id: number }) => campo.campo));
+  }
+
+  // getCongregacion(id: string) {
+  //   return this.httpClient
+  //     .get(`${base_url}/congregacion/${id}`, this.headers)
+  //     .pipe(
+  //       map((congregacion: { ok: boolean; congregacion: CongregacionModel; id: number }) => congregacion.congregacion)
+  //     );
+  // }
+
   crearCampo(campo: CampoModel) {
     return this.httpClient.post(`${base_url}/campo`, campo, this.headers);
   }
 
   actualizarCampo(campo: CampoModel) {
     return this.httpClient.put(`${base_url}/campo/${campo.id}`, campo, this.headers);
+  }
+
+  eliminarCampo(campo: CampoModel) {
+    return this.httpClient.delete(`${base_url}/campo/${campo.id}`, this.headers);
+  }
+
+  activarCampo(campo: CampoModel) {
+    return this.httpClient.put(`${base_url}/campo/activar/${campo.id}`, campo, this.headers);
   }
 }

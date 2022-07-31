@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CamposComponent } from './campos/campos.component';
+import { CamposComponent } from './campo/campos/campos.component';
 import { CongregacionesComponent } from './congregacion/congregaciones/congregaciones.component';
 import { MinisteriosComponent } from './ministerios/ministerios.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';

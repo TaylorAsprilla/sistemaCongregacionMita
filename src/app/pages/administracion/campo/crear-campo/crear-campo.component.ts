@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { CampoModel } from 'src/app/models/campo.model';
 import { CongregacionModel } from 'src/app/models/congregacion.model';
 import { Rutas } from 'src/app/routes/menu-items';
@@ -12,7 +13,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-crear-campo',
   templateUrl: './crear-campo.component.html',
-  styleUrls: ['./crear-campo.component.css'],
+  styleUrls: ['./crear-campo.component.scss'],
 })
 export class CrearCampoComponent implements OnInit {
   public campoForm: FormGroup;
@@ -22,6 +23,8 @@ export class CrearCampoComponent implements OnInit {
   // Subscription
   public campoSubscription: Subscription;
   public congregacionSubscription: Subscription;
+
+  public campoSeleccionado: CampoModel;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -79,6 +82,40 @@ export class CrearCampoComponent implements OnInit {
         this.router.navigateByUrl(Rutas.INICIO);
       }
     );
+  }
+
+  buscarCampo(id: string) {
+    if (id !== 'nuevo') {
+      this.campoService
+        .getCampo(id)
+        .pipe(delay(100))
+        .subscribe(
+          (campoActualizado: CampoModel) => {
+            console.log('campoActualizado', campoActualizado);
+            const { campo, congregacion_id } = campoActualizado;
+            console.log(campo);
+            this.campoSeleccionado = campoActualizado;
+            console.log('this.campoSeleccionado', this.campoSeleccionado);
+            this.campoForm.setValue({ campo, congregacion_id });
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Campo',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+
+            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}`);
+          }
+        );
+    }
   }
 
   resetFormulario() {

@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CamposComponent } from 'src/app/pages/administracion/campos/campos.component';
+import { CamposComponent } from 'src/app/pages/administracion/campo/campos/campos.component';
 import { CongregacionesComponent } from 'src/app/pages/administracion/congregacion/congregaciones/congregaciones.component';
 import { MinisteriosComponent } from 'src/app/pages/administracion/ministerios/ministerios.component';
 import { UsuariosComponent } from 'src/app/pages/administracion/usuarios/usuarios.component';
 import { CrearActividadComponent } from 'src/app/pages/informes/crear-actividad/crear-actividad.component';
 
-import { CrearCampoComponent } from 'src/app/pages/informes/crear-campo/crear-campo.component';
-import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais/crear-pais.component';
+import { CrearCampoComponent } from 'src/app/pages/administracion/campo/crear-campo/crear-campo.component';
 
 import { CrearStatusComponent } from 'src/app/pages/informes/crear-status/crear-status.component';
 import { InformeActividadesComponent } from 'src/app/pages/informes/informe-actividades/informe-actividades.component';
@@ -28,6 +27,7 @@ import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-
 import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
 import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
 import { PaisesComponent } from 'src/app/pages/administracion/pais/paises/paises.component';
+import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais/crear-pais.component';
 
 const childRoutes: Routes = [
   {
@@ -67,9 +67,13 @@ const childRoutes: Routes = [
     component: CrearCongregacionComponent,
   },
   {
-    path: Rutas.CAMPO,
+    path: Rutas.CAMPOS,
     component: CamposComponent,
     data: { titulo: 'Campos' },
+  },
+  {
+    path: `${Rutas.CAMPOS}/:id`,
+    component: CrearCampoComponent,
   },
 
   {
@@ -83,7 +87,7 @@ const childRoutes: Routes = [
   },
 
   {
-    path: Rutas.CAMPO,
+    path: Rutas.CAMPOS,
     component: RegisterCampoComponent,
   },
   {
