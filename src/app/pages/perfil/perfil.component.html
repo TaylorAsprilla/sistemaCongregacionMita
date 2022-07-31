@@ -1,38 +1,217 @@
-<div class="container">
-  <div class="row fila">
-    <div class="col-md-auto espacio">
-      <div class="foto">
-        <div class="image-stack">
-          <div class="image-stack__item image-stack__item--top pfp">
-            <img class="pfp mat-elevation-z8" src="assets/images/users/perfil.png" alt="" />
-          </div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Actualizar Perfil</h3>
+      </div>
 
-          <div *ngIf="isEdit" class="image-stack__item camaraZ hover">
-            <div *ngIf="isEdit" class="image-stack__item camaraZ camaraDiv">
-              <img
-                class="mat-elevation-z8 camara"
-                src="https://webstockreview.net/images/camera-png-icon-1.png"
-                alt=""
-              />
-            </div>
-          </div>
-          <!-- click para cambiar foto -->
-          <div *ngIf="isEdit" class="image-stack__item clickZ click image-upload">
-            <label for="file-input">
-              <span class="span"></span>
-            </label>
-            <input id="file-input" type="file" />
-          </div>
-          <!-- click para cambiar foto -->
-
-          <div class="image-stack__item image-stack__item--bottom">
-            <img
-              class="country"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Colombia.svg/2560px-Flag_of_Colombia.svg.png"
-              alt=""
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="perfilForm">
+          <div class="form-group">
+            <label>Fecha de Nacimiento:</label>
+            <input
+              type="date"
+              formControlName="fechaNacimiento"
+              class="form-control"
+              placeholder="Fecha de Nacimiento"
             />
           </div>
-        </div>
+
+          <div class="form-group">
+            <label>Primer Nombre:</label>
+            <input type="text" formControlName="primerNombre" class="form-control" placeholder="Primer Nombre" />
+          </div>
+
+          <div class="form-group">
+            <label>Segundo Nombre:</label>
+            <input type="text" formControlName="segundoNombre" class="form-control" placeholder="Segundo Nombre" />
+          </div>
+
+          <div class="form-group">
+            <label>Primer Apellido:</label>
+            <input type="text" formControlName="primerApellido" class="form-control" placeholder="Primer Apellido" />
+          </div>
+
+          <div class="form-group">
+            <label>Segundo Apellido:</label>
+            <input type="text" formControlName="segundoApellido" class="form-control" placeholder="Segundo Apellido" />
+          </div>
+
+          <div class="form-group">
+            <label>Genero:</label>
+            <select class="form-control" formControlName="genero_id">
+              <option value="" disabled>Seleccione el genero</option>
+              <option *ngFor="let genero of generos" [value]="genero.id">
+                {{ genero.genero }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Email:</label>
+            <input type="email" formControlName="email" class="form-control" inputmode="text" placeholder="Email" />
+          </div>
+
+          <div class="form-group">
+            <label>Estado Civil:</label>
+            <select class="form-control" formControlName="estadoCivil_id">
+              <option value="" disabled>Seleccione el Estado Civil</option>
+              <option *ngFor="let estadoCivil of estadoCivil" [value]="estadoCivil.id">
+                {{ estadoCivil.estadoCivil }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Rol en casa:</label>
+            <select class="form-control" formControlName="rolCasa_id">
+              <option value="" disabled>Seleccione el Rol en la Casa</option>
+              <option *ngFor="let rolCasa of rolCasa" [value]="rolCasa.id">
+                {{ rolCasa.rolCasa }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Nacionalidad :</label>
+            <input type="text" formControlName="nacionalidad" class="form-control" placeholder="Nacionalidad" />
+          </div>
+
+          <div class="form-group">
+            <label>País de Residencia: </label>
+            <select class="form-control" formControlName="pais_id">
+              <option value="" disabled>Seleccione el País de Residencia</option>
+              <option *ngFor="let pais of paises" [value]="pais.id">
+                {{ pais.pais }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Congregación: </label>
+            <select class="form-control" formControlName="congregacion_id">
+              <option value="" disabled>Seleccione la congregación a la que pertenece</option>
+              <option *ngFor="let congregacion of congregaciones" [value]="congregacion.id">
+                {{ congregacion.congregacion }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Campo: </label>
+            <select class="form-control" formControlName="campo_id">
+              <option value="" disabled>Seleccione el campo al que pertenece</option>
+              <option *ngFor="let campo of campos" [value]="campo.id">
+                {{ campo.campo }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Dirección:</label>
+            <input type="text" class="form-control" formControlName="direccion" placeholder="Dirección" />
+          </div>
+
+          <div class="form-group">
+            <label>Código Postal:</label>
+            <input type="number" class="form-control" formControlName="zipCode" placeholder="Código Postal" />
+          </div>
+
+          <div class="form-group">
+            <label>Teléfono en casa:</label>
+            <table>
+              <tr>
+                <td class="indicativo">
+                  <select class="form-control" formControlName="telefonoCasa">
+                    <option value="1">+1 (Estados Unidos)</option>
+                    <option value="57">+57 (Colombia)</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    formControlName="telefonoCasa"
+                    class="form-control"
+                    placeholder="Teléfono en Casa"
+                  />
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="form-group">
+            <label>Celular:</label>
+            <table>
+              <tr>
+                <td class="indicativo">
+                  <select class="form-control" formControlName="numeroCelular">
+                    <option value="1">+1 (Estados Unidos)</option>
+                    <option value="57">+57 (Colombia)</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" formControlName="numeroCelular" class="form-control" placeholder="Celular" />
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo Documento:</label>
+            <select class="form-control" formControlName="tipoDocumento_id">
+              <option value="" disabled>Seleccione el tipo de documento</option>
+              <option *ngFor="let tipoDocumento of tipoDocumentos" [value]="tipoDocumento.id">
+                {{ tipoDocumento.documento }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Número de Documento:</label>
+            <input
+              type="text"
+              formControlName="numeroDocumento"
+              class="form-control"
+              placeholder="Número de documento"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Vacuna:</label>
+            <select class="form-control" formControlName="vacuna_id">
+              <option [value]="">Seleccione la vacuna</option>
+              <option *ngFor="let vacuna of vacunas" [value]="vacuna.id">
+                {{ vacuna.vacuna }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Dosis:</label>
+            <select class="form-control" formControlName="dosis_id">
+              <option value="" disabled>Seleccione la dosis</option>
+              <option *ngFor="let dosis of dosis" [value]="dosis.id">
+                {{ dosis.dosis }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Login:</label>
+            <input type="text" class="form-control" formControlName="login" placeholder="Login" />
+          </div>
+
+          <div class="form-group">
+            <label>Contraseña:</label>
+            <input type="password" class="form-control" formControlName="password" placeholder="Contraseña" />
+          </div>
+
+          <div class="card">
+            <button type="submit" class="submit btn btn-primary" (click)="actualizarPerfil()">
+              <i class="fa fa-save"></i> Actualizar Perfil
+            </button>
+          </div>
+        </form>
       </div>
     </div>
     <div class="col-md-8 col-md-auto">
@@ -209,6 +388,29 @@
             </div>
             <!-- /.card-body -->
           </form>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Foto de Perfil</h3>
+            </div>
+
+            <div class="card-body">
+              <div class="text-center">
+                <!-- <img *ngIf="!imagenTemporal" [src]="imagenCarnet" class="img-thumbnail" />
+        <img *ngIf="imagenTemporal" [src]="imagenTemporal" class="img-thumbnail" /> -->
+                <img src="./assets/images/users/perfil.png" class="img-thumbnail" />
+              </div>
+
+              <div class="mt-4">
+                <!-- <input type="file" (change)="cambiarImagen($event.target.files[0])" /> -->
+                <br />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="submit btn btn-primary"><i class="fa fa-save"></i> Actualizar Foto</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { PaisModel } from 'src/app/models/pais.model';
 import { UsuarioModel } from 'src/app/models/usuario.model';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { InformeService } from 'src/app/services/informe/informe.service';
 
 @Component({
   selector: 'app-ver-informe',
@@ -34,17 +35,28 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   public cargando: boolean = true;
 
-  constructor(private usuarioService: UsuarioService, private paisService: PaisService) {}
+  informe: any[];
+
+  informeSubscription: Subscription;
+
+  constructor(
+    private usuarioService: UsuarioService,
+    private paisService: PaisService,
+    private informeService: InformeService
+  ) {}
 
   ngOnInit(): void {
+    let idInforme = 1;
     this.primerNombre = sessionStorage.getItem('primerNombre');
     this.segundoNombre = sessionStorage.getItem('segundoNombre');
     this.primerApellido = sessionStorage.getItem('primerApellido');
     this.segundApellido = sessionStorage.getItem('segundoApellido');
     this.fechaActual = new Date();
-    this.trimestre = '';
-    this.cargarUsuarios();
-    this.cargarPaises();
+
+    this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
+      this.informe = respuesta;
+      console.log(this.informe);
+    });
   }
 
   ngOnDestroy(): void {
@@ -67,7 +79,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   }
 
   cargarPaises() {
-    this.paisSubscription = this.paisService.listarPais().subscribe((pais) => {
+    this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
       this.paises = pais.filter((pais: PaisModel) => pais.estado === true);
     });
   }

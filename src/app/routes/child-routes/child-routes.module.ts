@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CamposComponent } from 'src/app/pages/administracion/campos/campos.component';
-import { CongregacionesComponent } from 'src/app/pages/administracion/congregaciones/congregaciones.component';
+import { CongregacionesComponent } from 'src/app/pages/administracion/congregacion/congregaciones/congregaciones.component';
 import { MinisteriosComponent } from 'src/app/pages/administracion/ministerios/ministerios.component';
 import { UsuariosComponent } from 'src/app/pages/administracion/usuarios/usuarios.component';
 import { CrearActividadComponent } from 'src/app/pages/informes/crear-actividad/crear-actividad.component';
 
 import { CrearCampoComponent } from 'src/app/pages/informes/crear-campo/crear-campo.component';
-import { CrearCongregacionComponent } from 'src/app/pages/informes/crear-congregacion/crear-congregacion.component';
-import { CrearPaisComponent } from 'src/app/pages/informes/crear-pais/crear-pais.component';
+import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais/crear-pais.component';
 
 import { CrearStatusComponent } from 'src/app/pages/informes/crear-status/crear-status.component';
 import { InformeActividadesComponent } from 'src/app/pages/informes/informe-actividades/informe-actividades.component';
@@ -21,13 +20,14 @@ import { VerInformeComponent } from 'src/app/pages/informes/ver-informe/ver-info
 import { InicioComponent } from 'src/app/pages/inicio/inicio.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 import { RegisterCampoComponent } from 'src/app/pages/registro/register-campo/register-campo.component';
-import { RegisterCongregacionComponent } from 'src/app/pages/registro/register-congregacion/register-congregacion.component';
 import { RegisterMinisterioComponent } from 'src/app/pages/registro/register-ministerio/register-ministerio.component';
 import { RegistrarUsuarioComponent } from 'src/app/pages/registro/registrar-usuario/registrar-usuario.component';
 import { Rutas } from '../menu-items';
 import { InformeAsuntoPendienteComponent } from 'src/app/pages/informes/informe-asunto-pendiente/informe-asunto-pendiente.component';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
 import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
+import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
+import { PaisesComponent } from 'src/app/pages/administracion/pais/paises/paises.component';
 
 const childRoutes: Routes = [
   {
@@ -48,9 +48,23 @@ const childRoutes: Routes = [
     data: { titulo: 'Ministerios' },
   },
   {
-    path: Rutas.CONGREGACION,
+    path: Rutas.PAISES,
+    component: PaisesComponent,
+    data: { titulo: 'Paises' },
+  },
+  {
+    path: `${Rutas.PAISES}/:id`,
+    component: CrearPaisComponent,
+    data: { titulo: 'Crear Pais' },
+  },
+  {
+    path: Rutas.CONGREGACIONES,
     component: CongregacionesComponent,
     data: { titulo: 'Congregaciones' },
+  },
+  {
+    path: `${Rutas.CONGREGACIONES}/:id`,
+    component: CrearCongregacionComponent,
   },
   {
     path: Rutas.CAMPO,
@@ -67,10 +81,7 @@ const childRoutes: Routes = [
     path: Rutas.REGISTRAR_USUARIO,
     component: RegistrarUsuarioComponent,
   },
-  {
-    path: Rutas.CONGREGACION,
-    component: RegisterCongregacionComponent,
-  },
+
   {
     path: Rutas.CAMPO,
     component: RegisterCampoComponent,
@@ -93,10 +104,7 @@ const childRoutes: Routes = [
     path: Rutas.CREAR_CAMPO,
     component: CrearCampoComponent,
   },
-  {
-    path: Rutas.CREAR_CONGREGACION,
-    component: CrearCongregacionComponent,
-  },
+
   {
     path: Rutas.CREAR_PAIS,
     component: CrearPaisComponent,

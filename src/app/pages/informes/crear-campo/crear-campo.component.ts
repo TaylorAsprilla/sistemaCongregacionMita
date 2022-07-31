@@ -36,7 +36,7 @@ export class CrearCampoComponent implements OnInit {
       congregacion_id: ['', [Validators.required]],
     });
 
-    this.congregacionSubscription = this.congregacionService.listarCongregacion().subscribe((congregacion) => {
+    this.congregacionSubscription = this.congregacionService.getCongregaciones().subscribe((congregacion) => {
       this.congregaciones = congregacion.filter((congregacion: CongregacionModel) => congregacion.estado === true);
     });
 
