@@ -55,7 +55,8 @@
               "src/assets/scss/style.scss",
               "node_modules/@swimlane/ngx-datatable/index.css",
               "node_modules/@swimlane/ngx-datatable/themes/material.css",
-              "node_modules/@swimlane/ngx-datatable/assets/icons.css"
+              "node_modules/@swimlane/ngx-datatable/assets/icons.css",
+              "node_modules/animate.css/animate.css"
             ],
             "scripts": []
           },
@@ -131,7 +132,8 @@
               "node_modules/chartist/dist/chartist.css",
               "node_modules/quill/dist/quill.snow.css",
               "node_modules/dragula/dist/dragula.css",
-              "src/assets/scss/style.scss"
+              "src/assets/scss/style.scss",
+              "node_modules/animate.css/animate.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
