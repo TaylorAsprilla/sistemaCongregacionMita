@@ -80,6 +80,7 @@ export class CrearCongregacionComponent implements OnInit {
           html: `La congregación ${congregacion.congregacionActualizada.congregacion} se actualizó correctamente`,
         });
       });
+
       this.resetFormulario();
       this.cargarCongregaciones();
       this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
@@ -91,6 +92,7 @@ export class CrearCongregacionComponent implements OnInit {
             html: `La congregación ${congregacionCreado.congregacion.congregacion} de creó correctamente`,
             icon: 'success',
           });
+
           this.resetFormulario();
           this.cargarCongregaciones();
           this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
