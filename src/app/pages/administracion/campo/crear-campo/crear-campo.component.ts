@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { CampoModel } from 'src/app/models/campo.model';
@@ -30,10 +30,15 @@ export class CrearCampoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private campoService: CampoService,
-    private congregacionService: CongregacionService
+    private congregacionService: CongregacionService,
+    private activateRouter: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.activateRouter.params.subscribe(({ id }) => {
+      this.buscarCampo(id);
+    });
+
     this.campoForm = this.formBuilder.group({
       campo: ['', [Validators.required, Validators.minLength(3)]],
       congregacion_id: ['', [Validators.required]],
@@ -93,7 +98,6 @@ export class CrearCampoComponent implements OnInit {
           (campoActualizado: CampoModel) => {
             console.log('campoActualizado', campoActualizado);
             const { campo, congregacion_id } = campoActualizado;
-            console.log(campo);
             this.campoSeleccionado = campoActualizado;
             console.log('this.campoSeleccionado', this.campoSeleccionado);
             this.campoForm.setValue({ campo, congregacion_id });

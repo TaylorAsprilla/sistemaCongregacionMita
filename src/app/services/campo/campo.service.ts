@@ -32,7 +32,7 @@ export class CampoService {
   getCampo(id: string) {
     return this.httpClient
       .get(`${base_url}/campo/${id}`, this.headers)
-      .pipe(map((campo: { ok: boolean; campo: CampoModel; id: number }) => campo.campo));
+      .pipe(map((campo: { ok: boolean; pais: CampoModel; id: number }) => campo.pais)); // ajustar a campo
   }
 
   // getCongregacion(id: string) {

@@ -214,204 +214,27 @@
         </form>
       </div>
     </div>
-    <div class="col-md-8 col-md-auto">
-      <div class="space width">
-        <div class="info space width">
-          <!-- <div *ngIf="!isEdit">
-            <app-info-perfil [usuario]="usuario" (toggleEdit)="toggleEdit()"></app-info-perfil>
-          </div>
-          <div *ngIf="isEdit">
-            <app-edit-perfil (toggleEdit)="toggleEdit()"></app-edit-perfil>
-          </div> -->
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Foto de Perfil</h3>
+      </div>
 
-          <div class="row">
-            <!-- <div class="col-md-6">
-              <div class="p-4">
-                <p class="titulo">Actualizar perfil</p>
-              </div>
-            </div> -->
-
-            <div *ngIf="!isEdit" class="col-md-6">
-              <div class="editDiv">
-                <button class="btn-lg btn-primary btn" type="submit" (click)="toggleEdit()">Editar</button>
-              </div>
-            </div>
-          </div>
-
-          <form [formGroup]="perfilForm">
-            <div class="card-body">
-              <div class="form-group">
-                <label for="primer_nombre">Primer Nombre</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="primerNombre"
-                  formControlName="primerNombre"
-                  placeholder="Primer Nombre"
-                  [attr.disabled]="!isEdit || null"
-                />
-              </div>
-              <div class="form-group">
-                <label for="segundoNombre">Segundo Nombre</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="segundoNombre"
-                  formControlName="segundoNombre"
-                  placeholder="Segundo Nombre"
-                  [attr.disabled]="!isEdit || null"
-                />
-              </div>
-              <div class="form-group">
-                <label for="primerApellido">Primer Apellido</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="primerApellido"
-                  formControlName="primerApellido"
-                  placeholder="Primer Apellido"
-                  [attr.disabled]="!isEdit || null"
-                />
-              </div>
-              <div class="form-group">
-                <label for="segundoApellido">Segundo Apellido</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="segundoApellido"
-                  formControlName="segundoApellido"
-                  placeholder="Segundo Apellido"
-                  [attr.disabled]="!isEdit || null"
-                />
-              </div>
-              <div class="form-group">
-                <label for="id_tipoDocumento">Tipo de Documento</label>
-                <div class="input-group mb-3">
-                  <select class="form-control" formControlName="id_tipoDocumento" [attr.disabled]="!isEdit || null">
-                    <option value="" disabled>Seleccione un tipo de documento</option>
-                    <option value="Cédula de ciudadania"></option>
-                    <option value="Pasaporte"></option>
-                    <option value="DNI"></option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="numeroDocumento">Número de Documento</label>
-                <div class="input-group mb-3">
-                  <input
-                    type="number"
-                    class="form-control"
-                    formControlName="numeroDocumento"
-                    placeholder="Número de Documento"
-                    required
-                    [attr.disabled]="!isEdit || null"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="nacionalidad">Nacionalidad</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="nacionalidad"
-                  formControlName="nacionalidad"
-                  placeholder="Nacionalidad"
-                  [attr.disabled]="!isEdit || null"
-                />
-              </div>
-              <div class="form-group">
-                <label for="email">Correo Electrónico</label>
-                <div class="input-group mb-3">
-                  <input
-                    type="email"
-                    class="form-control"
-                    formControlName="email"
-                    placeholder="Correo Electrónico"
-                    required
-                    [attr.disabled]="!isEdit || null"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="numeroCelular">Número de Celular</label>
-
-                <div class="input-group mb-3">
-                  <input
-                    type="number"
-                    class="form-control"
-                    formControlName="numeroCelular"
-                    placeholder="Número de Celular"
-                    [attr.disabled]="!isEdit || null"
-                  />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-
-                <div class="input-group mb-3">
-                  <input
-                    type="date"
-                    class="form-control"
-                    formControlName="fechaNacimiento"
-                    placeholder="Fecha de Nacimiento"
-                    required
-                    [attr.disabled]="!isEdit || null"
-                  />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="login">Login</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="login"
-                  formControlName="login"
-                  placeholder="Usuario"
-                  [attr.disabled]="!isEdit || null"
-                />
-              </div>
-
-              <div class="form-group">
-                <label for="login">Contraseña</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  formControlName="password"
-                  placeholder="Contraseña"
-                  [attr.disabled]="!isEdit || null"
-                />
-              </div>
-              <button class="btn-lg btn-primary btn" type="submit" (click)="submit()">Guardar</button>
-            </div>
-            <!-- /.card-body -->
-          </form>
-        </div>
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">Foto de Perfil</h3>
-            </div>
-
-            <div class="card-body">
-              <div class="text-center">
-                <!-- <img *ngIf="!imagenTemporal" [src]="imagenCarnet" class="img-thumbnail" />
+      <div class="card-body">
+        <div class="text-center">
+          <!-- <img *ngIf="!imagenTemporal" [src]="imagenCarnet" class="img-thumbnail" />
         <img *ngIf="imagenTemporal" [src]="imagenTemporal" class="img-thumbnail" /> -->
-                <img src="./assets/images/users/perfil.png" class="img-thumbnail" />
-              </div>
-
-              <div class="mt-4">
-                <!-- <input type="file" (change)="cambiarImagen($event.target.files[0])" /> -->
-                <br />
-              </div>
-            </div>
-            <div class="card-footer">
-              <button type="submit" class="submit btn btn-primary"><i class="fa fa-save"></i> Actualizar Foto</button>
-            </div>
-          </div>
+          <img src="./assets/images/users/perfil.png" class="img-thumbnail" />
         </div>
+
+        <div class="mt-4">
+          <!-- <input type="file" (change)="cambiarImagen($event.target.files[0])" /> -->
+          <br />
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="submit btn btn-primary"><i class="fa fa-save"></i> Actualizar Foto</button>
       </div>
     </div>
   </div>

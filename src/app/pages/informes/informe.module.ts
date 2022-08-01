@@ -17,6 +17,8 @@ import { InformeAsuntoPendienteComponent } from './informe-asunto-pendiente/info
 import { CrearCampoComponent } from '../administracion/campo/crear-campo/crear-campo.component';
 import { VerInformeComponent } from './ver-informe/ver-informe.component';
 
+import { KeysPipe } from './ver-informe/keys.pipe';
+
 @NgModule({
   declarations: [
     CrearActividadComponent,
@@ -31,6 +33,7 @@ import { VerInformeComponent } from './ver-informe/ver-informe.component';
     InformeAsuntoPendienteComponent,
     CrearCampoComponent,
     VerInformeComponent,
+    KeysPipe,
   ],
   imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, ComponentsModule],
   exports: [
@@ -42,6 +45,7 @@ import { VerInformeComponent } from './ver-informe/ver-informe.component';
     InformeMetasComponent,
     InformeVisitasComponent,
     InformeSituacionVisitaComponent,
+    KeysPipe,
   ],
 })
 export class InformeModule {}

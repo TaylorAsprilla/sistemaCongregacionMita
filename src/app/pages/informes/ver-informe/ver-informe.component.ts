@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgModule, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
 import { PaisModel } from 'src/app/models/pais.model';
@@ -25,7 +25,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public obreroSeleccionado = Object;
   public paisSeleccionado: string;
 
-  items = [1, 2, 3];
+  items = [
+    { name: 'jean', surname: 'kruger' },
+    { name: 'bobby', surname: 'marais' },
+  ];
 
   public usuarios: UsuarioModel[] = [];
   public usuarioSubscription: Subscription;
@@ -35,7 +38,16 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   public cargando: boolean = true;
 
+  // desglosar informacion de informe
   informe: any[];
+  actividades: any[];
+  aspectoContable: any[];
+  asuntoPendiente: any[];
+  informacionInforme: any[];
+  logros: any[];
+  metas: any[];
+  situacionVisita: any[];
+  visitas: any[];
 
   informeSubscription: Subscription;
 
@@ -53,10 +65,9 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.segundApellido = sessionStorage.getItem('segundoApellido');
     this.fechaActual = new Date();
 
-    this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
-      this.informe = respuesta;
-      console.log(this.informe);
-    });
+    this.cargarInforme(idInforme);
+    this.cargarUsuarios();
+    this.cargarPaises();
   }
 
   ngOnDestroy(): void {
@@ -64,18 +75,25 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.paisSubscription?.unsubscribe();
   }
 
+  cargarInforme(idInforme) {
+    this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
+      this.informe = respuesta;
+      console.log(this.informe);
+      this.actividades = this.informe['actividades'];
+      this.aspectoContable = this.informe['aspectoContable'];
+      this.asuntoPendiente = this.informe['asuntoPendiente'];
+      this.informacionInforme = this.informe['informacioninforme'];
+      this.logros = this.informe['logros'];
+      this.metas = this.informe['metas'];
+      this.situacionVisita = this.informe['situacionVisita'];
+      this.visitas = this.informe['visitas'];
+    });
+  }
+
   cargarUsuarios() {
     this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
       this.usuarios = usuarios;
     });
-
-    // this.usuarioServices.listarUsuarios(this.paginaDesde).subscribe(({ totalUsuarios, usuarios }) => {
-    //   this.totalUsuarios = totalUsuarios;
-    //   this.usuarios = usuarios;
-    //   this.usuariosTemporales = usuarios;
-    //   this.cargando = false;
-    //   this.totalPaginas = Math.ceil(totalUsuarios / 5);
-    // });
   }
 
   cargarPaises() {

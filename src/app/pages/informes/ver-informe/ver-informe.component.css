@@ -32,3 +32,17 @@
   vertical-align: top;
   padding-top: 6px;
 }
+
+table.tabla th,
+table.tabla td {
+  border-collapse: collapse;
+  border: 1px solid;
+  text-align: center;
+  padding: 10px;
+}
+
+table.tabla {
+  margin-bottom: 8px;
+  margin-left: auto;
+  margin-right: auto;
+}

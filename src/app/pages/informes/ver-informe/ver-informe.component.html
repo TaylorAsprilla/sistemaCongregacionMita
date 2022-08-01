@@ -18,13 +18,6 @@
       <hr />
     </div>
     <div class="col-md-6">
-      <!-- <select [(ngModel)]="obreroSeleccionado" class="form-control">
-        <option value="Obrero no seleccionado">Seleccione el obrero</option>
-        <option value="Luis Daniel">Luis Daniel</option>
-        <option value="Oscar Rodríguez">Oscar Rodríguez</option>
-        <option value="Liomar Sinisterra">Liomar Sinisterra</option>
-        <option value="Nevardo Cifuentes">Nevardo Cifuentes</option>
-      </select> -->
       <select [(ngModel)]="obreroSeleccionado" class="form-control" (change)="seleccionarObrero(obreroSeleccionado)">
         <option value="" disabled>Obrero no seleccionado</option>
         <option *ngFor="let usuario of usuarios" [ngValue]="usuario">
@@ -69,19 +62,122 @@
   </div>
   <div class="body">
     <p class="heading">A. RESUMEN DE SERVICIOS, ORACIONES Y VIGILIAS REALIZADAS: - Actividades</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of actividades[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let actividad of actividades">
+          <td *ngFor="let list of actividad | keys">{{ actividad[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
     <p class="heading">B. RESUMEN DE VISITAS REALIZADAS A LOS/AS FELIGRESES: Visitas</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of visitas[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let visita of visitas">
+          <td *ngFor="let list of visita | keys">{{ visita[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
     <p class="heading">C. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS: SituacionVisita</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of situacionVisita[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of situacionVisita">
+          <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
     <p class="heading">D. ACTIVIDADES ESPECIALES REALIZADAS: Actividades</p>
+
+    <!-- pendiente -->
+
     <p class="heading">E. ACTIVIDADES RELACIONADAS AL ASPECTO ESPIRITUAL: Actividades</p>
+
+    <!-- pendiente -->
+
     <p class="heading">F. REUNIONES: Actividades</p>
+
+    <!-- pendiente -->
+
     <p class="heading">G. ASPECTOS CONTABLES: Aspectos Contables</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of aspectoContable[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ac of aspectoContable">
+          <td *ngFor="let list of ac | keys">{{ ac[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
     <p class="heading">H. LOGROS OBTENIDOS: Logro</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of logros[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let logro of logros">
+          <td *ngFor="let list of logro | keys">{{ logro[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
     <p class="heading">I. ASUNTOS PENDIENTES (ADMINISTRATIVOS, CONSTRUCCIÓN, ACTIVIDADES, ECLESIÁSTICOS):</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of asuntoPendiente[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ap of asuntoPendiente">
+          <td *ngFor="let list of ap | keys">{{ ap[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
     <p class="heading">J. METAS PARA EL PRÓXIMO TRIMESTRE: Metas</p>
 
-    <div *ngFor="let item of items">
-      {{ item }}
-    </div>
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of metas[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let meta of metas">
+          <td *ngFor="let list of meta | keys">{{ meta[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
     <div class="">
       <p>Informe generado por: {{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundApellido }}</p>
       <p>Fecha Actual: {{ fechaActual }}</p>
