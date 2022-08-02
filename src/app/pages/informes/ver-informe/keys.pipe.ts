@@ -1,7 +1,7 @@
 import { PipeTransform, Pipe } from '@angular/core';
 
-const excluded = ['createdAt', 'updatedAt', 'informe_id', 'id', 'tipoActividad_id', 'estado', 'tipoStatus_id'];
-
+const excluded = ['createdAt', 'updatedAt', 'informe_id', 'id', 'estado', 'tipoStatus_id'];
+//'tipoActividad_id'
 @Pipe({ name: 'keys' })
 export class KeysPipe implements PipeTransform {
   transform(value): any {

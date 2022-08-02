@@ -6,6 +6,9 @@ import { UsuarioModel } from 'src/app/models/usuario.model';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
+import { ActividadService } from 'src/app/services/actividad/actividad.service';
+import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
+import { TipoActividadModel } from 'src/app/models/tipo-actividad.model';
 
 @Component({
   selector: 'app-ver-informe',
@@ -36,6 +39,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public paises: PaisModel[] = [];
   public paisSubscription: Subscription;
 
+  public actividadSubcription: Subscription;
+  public tipoActividadSubcription: Subscription;
+  public tipoActividades: TipoActividadModel[] = [];
+
   public cargando: boolean = true;
 
   // desglosar informacion de informe
@@ -54,7 +61,9 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   constructor(
     private usuarioService: UsuarioService,
     private paisService: PaisService,
-    private informeService: InformeService
+    private informeService: InformeService,
+    private actividadService: ActividadService,
+    private tipoActividadService: TipoActividadService
   ) {}
 
   ngOnInit(): void {
@@ -66,13 +75,17 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.fechaActual = new Date();
 
     this.cargarInforme(idInforme);
+
     this.cargarUsuarios();
     this.cargarPaises();
+    this.cargarTipoActividad();
   }
 
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
     this.paisSubscription?.unsubscribe();
+    this.actividadSubcription?.unsubscribe();
+    this.tipoActividadSubcription?.unsubscribe();
   }
 
   cargarInforme(idInforme) {
@@ -87,7 +100,38 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.metas = this.informe['metas'];
       this.situacionVisita = this.informe['situacionVisita'];
       this.visitas = this.informe['visitas'];
+      this.translateActividad();
     });
+  }
+
+  cargarTipoActividad() {
+    this.tipoActividadSubcription = this.tipoActividadService.getTipoActividad().subscribe((nombre) => {
+      this.tipoActividades = nombre;
+    });
+  }
+
+  translateActividad() {
+    console.log('hollaaaa');
+    console.log(this.actividades);
+    console.log(this.tipoActividades);
+    this.actividades.forEach((actividad) => {
+      let id = actividad['tipoActividad_id'];
+      console.log(id);
+      let nombre = this.getTipoActividadName(id);
+      console.log(nombre);
+      // sustituir
+      actividad['tipoActividad_id'] = nombre;
+    });
+  }
+
+  getTipoActividadName(id) {
+    console.log('hi');
+    try {
+      return this.tipoActividades[id]['nombre'];
+    } catch (exception_var) {
+      ('cant find name with that id');
+    }
+    return id;
   }
 
   cargarUsuarios() {
