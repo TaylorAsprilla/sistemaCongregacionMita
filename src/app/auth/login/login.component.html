@@ -1,7 +1,7 @@
 <section class="vh-100">
   <div class="container-fluid h-custom">
     <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-md-9 col-lg-6 col-xl-5">
+      <div class="col-md-9 col-lg-6 col-xl-5 d-none d-sm-none d-md-block">
         <img
           src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
           class="img-fluid animate__animated animate__fadeIn animate__slow"
@@ -9,8 +9,17 @@
         />
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <div class="text-center">
+          <img
+            src="assets/images/escudo-congregacion-mita.png"
+            width="30%"
+            alt="Congregación Mita INC"
+            class="img-fluid animate__animated animate__fadeIn animate__slow"
+          />
+        </div>
+
         <form [formGroup]="loginForm" autocomplete="off" class="form-signin">
-          <h1 class="mb-3 titlelogin">Iniciar Sesión</h1>
+          <h1 class="mb-3 text-center">Iniciar Sesión</h1>
 
           <div class="form-outline mb-4">
             <input type="text" formControlName="login" class="form-control form-control-lg" placeholder="Usuario" />
@@ -34,15 +43,13 @@
           </div>
 
           <div class="text-lg-start mt-4 pt-2">
-            <button type="button" class="btn btn-primary btn-lg" (click)="login()">Iniciar Sesión</button>
+            <button type="submit" class="btn btn-primary btn-lg" (click)="login()">Iniciar Sesión</button>
           </div>
         </form>
       </div>
     </div>
   </div>
-  <div
-    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary"
-  >
+  <div class="text-center py-4 px-4 px-xl-5 bg-primary">
     <div class="text-white mb-3 mb-md-0"><app-footer></app-footer></div>
   </div>
 </section>

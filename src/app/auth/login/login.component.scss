@@ -5,15 +5,29 @@ flex: 1;
 height: 1px;
 background: #eee;
 }
+
 .h-custom {
 height: calc(100% - 73px);
+background-color: aliceblue;
 }
+
+@media (max-width: 850px) {
+  .h-custom {
+   height: auto;
+  }
+}
+
 @media (max-width: 450px) {
-.h-custom {
-height: 100%;
-}
+  .h-custom {
+   height: 100%;
+  }
 }
 
 .btn{
   padding-left: 2.5rem; padding-right: 2.5rem
+}
+
+.logo{
+  width: 50%;
+  text-align: center;
 }

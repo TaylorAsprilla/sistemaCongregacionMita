@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdministracionModule } from './administracion/administracion.module';
 import { RegisterModule } from './registro/register.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,8 +14,8 @@ import { InformeModule } from './informes/informe.module';
 import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
-  declarations: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
-  exports: [NopagefoundComponent, DashboardComponent, PagesComponent, InicioComponent],
+  declarations: [NopagefoundComponent, PagesComponent, InicioComponent],
+  exports: [NopagefoundComponent, PagesComponent, InicioComponent],
   imports: [
     CommonModule,
     RouterModule,
