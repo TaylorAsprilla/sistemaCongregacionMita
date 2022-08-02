@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/models/usuario.model';
-import { ROUTES } from 'src/app/routes/menu-items';
+import { ROUTES, Rutas } from 'src/app/routes/menu-items';
 
 declare var $: any;
 
@@ -20,6 +20,11 @@ export class SidebarComponent implements OnInit {
   showMenu = '';
   showSubMenu = '';
   public sidebarnavItems: any[] = [];
+
+  get Rutas() {
+    return Rutas;
+  }
+
   // this is for the open close
   addExpandClass(element: any) {
     if (element === this.showMenu) {

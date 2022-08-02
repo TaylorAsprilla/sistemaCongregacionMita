@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/models/usuario.model';
+import { Rutas } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -23,10 +25,11 @@ export class UsuariosComponent implements OnInit {
 
   public usuarioSubscription: Subscription;
 
-  constructor(private usuarioServices: UsuarioService) {}
+  constructor(private usuarioServices: UsuarioService, private router: Router) {}
 
   ngOnInit(): void {
     this.cargarUsuarios();
+    // console.log(this.usuario);
   }
 
   cargarUsuarios() {
@@ -82,5 +85,34 @@ export class UsuariosComponent implements OnInit {
       }
     });
     return usuario;
+  }
+
+  activarUsuario(usuario: UsuarioModel) {
+    Swal.fire({
+      title: 'Activar Congregación',
+      text: `Esta seguro de activar el usuario ${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, activar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.usuarioServices.activarUsuario(usuario).subscribe((usuarioActivo: any) => {
+          console.log('Usuario Activo', usuarioActivo);
+          Swal.fire(
+            '¡Activado!',
+            `El usuario ${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido} fue activado correctamente`,
+            'success'
+          );
+          this.cargarUsuarios();
+        });
+      }
+    });
+  }
+
+  actualizarUsuario(id: number) {
+    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}/${id}`);
   }
 }

@@ -1,9 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RegisterComponent } from './register/register.component';
-import { RegisterCampoComponent } from './register-campo/register-campo.component';
-import { RegisterCongregacionComponent } from './register-congregacion/register-congregacion.component';
-import { RegisterMinisterioComponent } from './register-ministerio/register-ministerio.component';
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
 
@@ -22,20 +18,11 @@ import { SelectMultipleComponent } from 'src/app/components/select-multiple/sele
 import { BrowserModule } from '@angular/platform-browser';
 
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { RegistrarUsuarioComponent } from './registrar-usuario/registrar-usuario.component';
 
 // import { mainModule } from 'process';
 
 @NgModule({
-  declarations: [
-    RegisterComponent,
-    RegisterCampoComponent,
-    RegisterCongregacionComponent,
-    RegisterMinisterioComponent,
-    RegistrarUsuarioComponent,
-    AutoCompleteComponent,
-    SelectMultipleComponent,
-  ],
+  declarations: [AutoCompleteComponent, SelectMultipleComponent],
   imports: [
     CommonModule,
     AppRoutingModule,

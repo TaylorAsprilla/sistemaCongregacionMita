@@ -73,6 +73,11 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.activateRouter.params.subscribe(({ id }) => {
+      console.log('Este es el ID', id);
+      // this.buscarCongregacion(id);
+    });
+
     this.usuarioForm = this.formBuilder.group({
       primerNombre: ['', [Validators.required, Validators.minLength(3)]],
       segundoNombre: ['', [Validators.minLength(3)]],

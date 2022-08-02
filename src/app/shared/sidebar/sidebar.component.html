@@ -2,14 +2,16 @@
 <div class="user-profile mt-4">
   <!-- User profile image -->
   <div class="profile-img">
-    <a routerLink="/sistema/perfil"><img src="assets/images/users/perfil.png" alt="user" /></a>
+    <a [routerLink]="Rutas.PERFIL"><img src="assets/images/users/perfil.png" alt="user" /></a>
   </div>
   <!-- User profile text-->
   <div class="profile-text">
     <h5>{{ usuario.primerNombre }} {{ usuario.primerApellido }}</h5>
 
     <div>
-      <a routerLink="./perfil" class="" data-toggle="tooltip" title="Email"> <i class="fa fa-user"></i> Mi Perfil </a>
+      <a [routerLink]="Rutas.PERFIL" class="" data-toggle="tooltip" title="Email">
+        <i class="fa fa-user"></i> Mi Perfil
+      </a>
     </div>
     <div>
       <a (click)="logout()" class="pointer" data-toggle="tooltip" title="Logout">

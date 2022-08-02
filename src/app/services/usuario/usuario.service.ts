@@ -223,4 +223,8 @@ export class UsuarioService {
   actualizarUsuario(usuario: UsuarioModel, id: number) {
     return this.httpClient.put(`${base_url}/usuarios/${id}`, usuario, this.headers);
   }
+
+  activarUsuario(usuario: UsuarioModel) {
+    return this.httpClient.put(`${base_url}/usuarios/activar/${usuario.id}`, usuario, this.headers);
+  }
 }
