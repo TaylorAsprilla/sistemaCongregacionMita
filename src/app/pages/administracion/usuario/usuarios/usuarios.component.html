@@ -2,7 +2,14 @@
 
 <div class="card animate__animated animate__fadeIn" *ngIf="!cargando">
   <div class="card-header">
-    <h3 class="card-title">Total de usuarios registrados: {{ totalUsuarios }}</h3>
+    <h3 class="card-title float-left">Total de usuarios registrados: {{ totalUsuarios }}</h3>
+
+    <div class="col">
+      <div class="text-right mb-4">
+        <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Usuario Nuevo </a>
+      </div>
+    </div>
+
     <div class="float-right">
       <span class="font-weight-bold">Página:</span> {{ pagina }} de {{ totalPaginas }} -
       <span class="font-weight-bold">Cantidad: </span>{{ paginaDesde + 5 }}

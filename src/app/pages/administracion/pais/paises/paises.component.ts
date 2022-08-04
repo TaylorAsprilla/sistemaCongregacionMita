@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DivisaModel } from 'src/app/models/divisa.model';
 import { PaisModel } from 'src/app/models/pais.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { PaisService } from 'src/app/services/pais/pais.service';
@@ -14,13 +15,19 @@ import Swal from 'sweetalert2';
 export class PaisesComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
   public paises: PaisModel[] = [];
+  public divisas: DivisaModel[] = [];
 
   // Subscription
   public paisSubscription: Subscription;
+  public divisaSubscription: Subscription;
 
-  constructor(private router: Router, private paisService: PaisService) {}
+  constructor(private router: Router, private paisService: PaisService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe((data: { divisas: DivisaModel[] }) => {
+      this.divisas = data.divisas;
+    });
+
     this.cargarPaises();
   }
 
@@ -85,5 +92,15 @@ export class PaisesComponent implements OnInit, OnDestroy {
   crearPais() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.PAISES}/${nuevo}`);
+  }
+
+  buscarDivisa(idDivisa: number): string {
+    const nombreDivisa = this.divisas.find((divisa) => divisa.id === idDivisa)?.divisa;
+
+    if (nombreDivisa !== undefined) {
+      return nombreDivisa;
+    } else {
+      return 'No tiene divisa asignada';
+    }
   }
 }

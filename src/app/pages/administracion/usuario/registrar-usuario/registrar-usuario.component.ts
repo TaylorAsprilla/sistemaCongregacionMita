@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { CampoModel } from 'src/app/models/campo.model';
 import { CongregacionModel } from 'src/app/models/congregacion.model';
 import { DosisModel } from 'src/app/models/dosis.model';
@@ -44,6 +45,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public vacunas: VacunaModel[] = [];
   public dosis: DosisModel[] = [];
 
+  public usuarioSeleccionado: UsuarioModel;
+
   // Subscription
   public usuarioSubscription: Subscription;
   public tipoDocumentoSubscription: Subscription;
@@ -74,8 +77,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activateRouter.params.subscribe(({ id }) => {
-      console.log('Este es el ID', id);
-      // this.buscarCongregacion(id);
+      this.buscarUsuario(id);
     });
 
     this.usuarioForm = this.formBuilder.group({
@@ -95,7 +97,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       genero_id: ['', [Validators.required]],
       tipoDocumento_id: ['', [Validators.required]],
       pais_id: ['', [Validators.required]],
-      congregacion_id: ['', [Validators.required]],
+      congregacion_id: ['1', [Validators.required]],
       campo_id: ['', [Validators.required]],
       estadoCivil_id: ['', [Validators.required]],
       rolCasa_id: ['', [Validators.required]],
@@ -189,6 +191,90 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl(Rutas.INICIO);
       }
     );
+  }
+
+  buscarUsuario(id: string) {
+    if (id !== 'nuevo') {
+      this.usuarioService
+        .getUsuario(id)
+        .pipe(delay(100))
+        .subscribe(
+          (usuarioEncontrado: UsuarioModel) => {
+            const {
+              primerNombre,
+              primerApellido,
+              nacionalidad,
+              email,
+              numeroCelular,
+              fechaNacimiento,
+              genero_id,
+              pais_id,
+              estadoCivil_id,
+              vacuna_id,
+              dosis_id,
+              segundoNombre,
+              segundoApellido,
+              numeroDocumento,
+              telefonoCasa,
+              direccion,
+              zipCode,
+              login,
+              password,
+              foto,
+              tipoDocumento_id,
+              rolCasa_id,
+            } = usuarioEncontrado;
+            this.usuarioSeleccionado = usuarioEncontrado;
+
+            this.usuarioForm.setValue({
+              primerNombre,
+              primerApellido,
+              nacionalidad,
+              email,
+              numeroCelular,
+              fechaNacimiento,
+              genero_id,
+              pais_id,
+              congregacion_id: '1',
+              campo_id: '1',
+              estadoCivil_id,
+              vacuna_id,
+              dosis_id,
+              segundoNombre,
+              segundoApellido,
+              numeroDocumento,
+              telefonoCasa,
+              direccion,
+              zipCode,
+              login,
+              password,
+              foto,
+              tipoDocumento_id,
+              rolCasa_id,
+            });
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Congregacion',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+
+            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
+          }
+        );
+    }
+  }
+
+  resetFormulario() {
+    this.usuarioForm.reset();
   }
 
   subirImagen() {}

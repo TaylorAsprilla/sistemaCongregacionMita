@@ -29,7 +29,6 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarUsuarios();
-    // console.log(this.usuario);
   }
 
   cargarUsuarios() {
@@ -100,7 +99,6 @@ export class UsuariosComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.usuarioServices.activarUsuario(usuario).subscribe((usuarioActivo: any) => {
-          console.log('Usuario Activo', usuarioActivo);
           Swal.fire(
             '¡Activado!',
             `El usuario ${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido} fue activado correctamente`,
@@ -114,5 +112,10 @@ export class UsuariosComponent implements OnInit {
 
   actualizarUsuario(id: number) {
     this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}/${id}`);
+  }
+
+  crearUsuario() {
+    const nuevo = 'nuevo';
+    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}/${nuevo}`);
   }
 }
