@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { ListarUsuario, UsuarioInterface } from 'src/app/interfaces/usuario.interface';
+import { ListarUsuario } from 'src/app/interfaces/usuario.interface';
 import { LoginForm } from 'src/app/interfaces/login-form.interface';
 import { RegisterForm } from 'src/app/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/models/usuario.model';
@@ -212,8 +212,8 @@ export class UsuarioService {
 
   getUsuario(id: string) {
     return this.httpClient
-      .get<UsuarioInterface>(`${base_url}/usuarios/${id}`, this.headers)
-      .pipe(map((usuario: UsuarioInterface) => usuario));
+      .get(`${base_url}/usuarios/${id}`, this.headers)
+      .pipe(map((usuario: { ok: boolean; usuario: UsuarioModel }) => usuario.usuario));
   }
 
   eliminarUsuario(usuario: UsuarioModel) {

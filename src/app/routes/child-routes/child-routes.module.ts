@@ -28,6 +28,7 @@ import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-
 import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
 import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
 import { PaisesComponent } from 'src/app/pages/administracion/pais/paises/paises.component';
+import { DivisasResolver } from 'src/app/resolvers/divisas/divisas.resolver';
 
 const childRoutes: Routes = [
   {
@@ -56,6 +57,7 @@ const childRoutes: Routes = [
     path: Rutas.PAISES,
     component: PaisesComponent,
     data: { titulo: 'Paises' },
+    resolve: { divisas: DivisasResolver },
   },
   {
     path: `${Rutas.PAISES}/:id`,
