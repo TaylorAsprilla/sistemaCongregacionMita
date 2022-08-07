@@ -1,14 +1,16 @@
-import { Component, ElementRef, NgModule, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
-import { PaisModel } from 'src/app/models/pais.model';
-import { UsuarioModel } from 'src/app/models/usuario.model';
-import { PaisService } from 'src/app/services/pais/pais.service';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { SeccionInformeModel } from 'src/app/models/seccion-informe.model';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import { TipoActividadModel } from 'src/app/models/tipo-actividad.model';
+import { UsuarioModel } from 'src/app/models/usuario.model';
+import { PaisModel } from 'src/app/models/pais.model';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { PaisService } from 'src/app/services/pais/pais.service';
 
 @Component({
   selector: 'app-ver-informe',
@@ -61,6 +63,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   espirituales: any[];
   reuniones: any[];
 
+  public seccionesInformes: SeccionInformeModel[];
+
   informeSubscription: Subscription;
 
   constructor(
@@ -68,10 +72,16 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     private paisService: PaisService,
     private informeService: InformeService,
     private actividadService: ActividadService,
-    private tipoActividadService: TipoActividadService
+    private tipoActividadService: TipoActividadService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
+      this.seccionesInformes = data.seccionInforme;
+      console.log('this.seccionesInformes ', this.seccionesInformes);
+    });
+
     let idInforme = 1;
     this.primerNombre = sessionStorage.getItem('primerNombre');
     this.segundoNombre = sessionStorage.getItem('segundoNombre');

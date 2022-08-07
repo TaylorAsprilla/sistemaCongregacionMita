@@ -160,6 +160,7 @@ const childRoutes: Routes = [
   {
     path: Rutas.VER_INFORME,
     component: VerInformeComponent,
+    resolve: { seccionInforme: SeccionInformeResolver },
   },
 ];
 
