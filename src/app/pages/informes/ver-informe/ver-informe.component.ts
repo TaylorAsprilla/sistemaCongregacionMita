@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
+import { SeccionInformeModel } from 'src/app/models/seccion-informe.model';
 import { InformeService } from 'src/app/services/informe/informe.service';
 
 @Component({
@@ -19,11 +21,18 @@ export class VerInformeComponent implements OnInit {
 
   informe: any[];
 
+  public seccionesInformes: SeccionInformeModel[];
+
   informeSubscription: Subscription;
 
-  constructor(private informeService: InformeService) {}
+  constructor(private informeService: InformeService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
+      this.seccionesInformes = data.seccionInforme;
+      console.log('this.seccionesInformes', this.seccionesInformes);
+    });
+
     let idInforme = 1;
     this.primerNombre = sessionStorage.getItem('primerNombre');
     this.segundoNombre = sessionStorage.getItem('segundoNombre');
