@@ -8,8 +8,8 @@ File: scss
 @import 'variable';
 
 
-/*============================================================== 
- For all pages 
+/*==============================================================
+ For all pages
  ============================================================== */
 
 #main-wrapper {
@@ -32,7 +32,7 @@ File: scss
 .page-wrapper {
   background: $bodycolor;
   padding-bottom: 60px;
-  height: calc(100vh - 64px); 
+  height: calc(100vh - 64px);
   position: relative;
     overflow: auto;
 }
@@ -83,7 +83,7 @@ File: scss
     }
   }
   .profile-pic {
-    width: 30px;
+    width: 50px;
     border-radius: 100%;
   }
   .dropdown-menu {
@@ -232,7 +232,7 @@ File: scss
 
 .right-side-toggle {
   position: relative;
-     
+
 }
 .btn-circle.right-side-toggle{
   position:fixed;
@@ -248,7 +248,7 @@ File: scss
   -moz-transition-duration: 1s;
   transition-property: transform;
   transition-duration: 1s;
-  
+
   position: absolute;
   top: 16px;
   left: 16px;
@@ -286,7 +286,7 @@ File: scss
     height:100%;
     position: absolute;
     width: 100%;
-    padding-bottom: 40px;  
+    padding-bottom: 40px;
     ul {
       margin: 0px;
       padding: 0px 20px;
@@ -386,7 +386,7 @@ html body .card{
   border-color: $megna;
 }
 }
-/*============================================================== 
+/*==============================================================
  Cards page
  ============================================================== */
 
@@ -471,7 +471,7 @@ html body .card{
   }
 }
 
-/*============================================================== 
+/*==============================================================
  Buttons page
  ============================================================== */
 
@@ -502,7 +502,7 @@ html body .card{
 }
 
 
-/*============================================================== 
+/*==============================================================
 Breadcrumb
  ============================================================== */
 
@@ -525,7 +525,7 @@ Breadcrumb
 
 
 
-/*============================================================== 
+/*==============================================================
  Ui-bootstrap
  ============================================================== */
 
@@ -576,7 +576,7 @@ html body .accordion {
 
 
 
-/*============================================================== 
+/*==============================================================
  sparkline chart
  ============================================================== */
 html body {
@@ -601,7 +601,7 @@ body .jqstooltip {
 
 
 
-/*============================================================== 
+/*==============================================================
 Dashboard1 chart
  ============================================================== */
 
@@ -1413,15 +1413,15 @@ Smart table
 .ng2-smart-action-add-add{
    color:$white!important;
    background: $themecolor;
-   padding: 8px 15px;    
-   border-radius: $radius;    
+   padding: 8px 15px;
+   border-radius: $radius;
 }
 .ng2-smart-pagination-nav{
     margin-left: auto;
 }
 .ng2-smart-pagination-nav .pagination > li > a {
     line-height: 1rem;
-} 
+}
 
 /*******************
 NGX Data table

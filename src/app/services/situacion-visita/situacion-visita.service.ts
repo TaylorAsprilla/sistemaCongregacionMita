@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { SituacionVisitaModel } from 'src/app/models/situacionVisita.model';
+import { SituacionVisitaModel } from 'src/app/models/situacion-visita.model';
 import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;

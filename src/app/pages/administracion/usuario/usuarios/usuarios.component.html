@@ -1,6 +1,15 @@
-<div class="card animate__animated animate__fadeIn animate__slow" *ngIf="!cargando">
+<app-cargando-informacion *ngIf="!!cargando"></app-cargando-informacion>
+
+<div class="card animate__animated animate__fadeIn" *ngIf="!cargando">
   <div class="card-header">
-    <h3 class="card-title">Total de usuarios registrados: {{ totalUsuarios }}</h3>
+    <h3 class="card-title float-left">Total de usuarios registrados: {{ totalUsuarios }}</h3>
+
+    <div class="col">
+      <div class="text-right mb-4">
+        <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Usuario Nuevo </a>
+      </div>
+    </div>
+
     <div class="float-right">
       <span class="font-weight-bold">Página:</span> {{ pagina }} de {{ totalPaginas }} -
       <span class="font-weight-bold">Cantidad: </span>{{ paginaDesde + 5 }}
@@ -17,10 +26,11 @@
             <th>Correo</th>
             <th class="w100">Fecha de Nacimiento</th>
             <th>Celular</th>
+            <th>Pais</th>
             <th class="w100">Congregación</th>
             <th>Nacionalidad</th>
             <th class="w100">Estado</th>
-            <th class="w100">Acciones</th>
+            <th class="w200">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -39,6 +49,8 @@
 
             <td>{{ usuario.numeroCelular }}</td>
 
+            <td>{{ usuario.pais_id }}</td>
+
             <td>
               <span class="badge badge-primary"> Bogotá </span>
             </td>
@@ -51,15 +63,30 @@
               <span *ngIf="usuario.estado" class="badge badge-primary">Activo</span>
               <span *ngIf="!usuario.estado" class="badge badge-danger">Deshabilitado</span>
             </td>
-            <td class="text-center">
-              <a data-toggle="tooltip" data-original-title="Editar" class="btn bg-info"><i class="fa fa-pencil"></i></a>
-
+            <td>
               <a
+                *ngIf="!!usuario.estado"
+                data-toggle="tooltip"
+                data-original-title="Editar"
+                class="btn bg-info"
+                (click)="actualizarUsuario(usuario.id)"
+                ><i class="fas fa-pencil-alt ml-1"></i
+              ></a>
+              <a
+                *ngIf="!!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Borrar"
-                class="btn bg-danger"
+                class="btn bg-danger ml-1"
                 (click)="borrarUsuario(usuario)"
-                ><i class="fa fa-trash"></i
+                ><i class="fas fa-trash-alt"></i
+              ></a>
+              <a
+                *ngIf="!usuario.estado"
+                data-toggle="tooltip"
+                data-original-title="Activar"
+                class="btn bg-secondary ml-1"
+                (click)="activarUsuario(usuario)"
+                ><i class="fas fa-check-square"></i
               ></a>
             </td>
           </tr>
@@ -70,6 +97,7 @@
           <th>Correo</th>
           <th class="w100">Fecha de Nacimiento</th>
           <th>Celular</th>
+          <th>Pais</th>
           <th class="w100">Congregación</th>
           <th>Nacionalidad</th>
           <th class="w100">Estado</th>

@@ -33,7 +33,7 @@
             <td>{{ pais.id }}</td>
             <td>{{ pais.pais }}</td>
 
-            <td>{{ pais.idDivisa }}</td>
+            <td>{{ buscarDivisa(pais.idDivisa) }}</td>
 
             <td>
               <span *ngIf="pais.estado" class="badge badge-primary">Activo</span>
