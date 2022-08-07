@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { SeccionInformeModel } from 'src/app/models/seccion-informe.model';
 import { TipoActividadModel } from 'src/app/models/tipo-actividad.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
@@ -16,18 +17,25 @@ export class CrearActividadComponent implements OnInit {
   public tipoActividadForm: FormGroup;
 
   public tiposActividad: TipoActividadModel[] = [];
+  public seccionesInformes: SeccionInformeModel[] = [];
   // Subscription
   public tipoActividadSubscription: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private tipoActividadService: TipoActividadService
+    private tipoActividadService: TipoActividadService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
+      this.seccionesInformes = data.seccionInforme;
+    });
+
     this.tipoActividadForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
+      idSeccion: ['', [Validators.required]],
     });
 
     this.cargarTipoActividades();

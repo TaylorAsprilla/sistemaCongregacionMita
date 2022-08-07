@@ -29,6 +29,7 @@ import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
 import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
 import { PaisesComponent } from 'src/app/pages/administracion/pais/paises/paises.component';
 import { DivisasResolver } from 'src/app/resolvers/divisas/divisas.resolver';
+import { SeccionInformeResolver } from 'src/app/resolvers/seccion-informe/seccion-informe.resolver';
 
 const childRoutes: Routes = [
   {
@@ -101,8 +102,9 @@ const childRoutes: Routes = [
   },
   // Informes
   {
-    path: Rutas.CREAR_ACTIVIDAD,
+    path: Rutas.CREAR_TIPO_ACTIVIDAD,
     component: CrearActividadComponent,
+    resolve: { seccionInforme: SeccionInformeResolver },
   },
   {
     path: Rutas.CREAR_CAMPO,
