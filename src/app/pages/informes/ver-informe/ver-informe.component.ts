@@ -56,6 +56,11 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   situacionVisita: any[];
   visitas: any[];
 
+  servicios: any[];
+  especiales: any[];
+  espirituales: any[];
+  reuniones: any[];
+
   informeSubscription: Subscription;
 
   constructor(
@@ -100,20 +105,18 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.metas = this.informe['metas'];
       this.situacionVisita = this.informe['situacionVisita'];
       this.visitas = this.informe['visitas'];
-      this.translateActividad();
+      // this.translateActividad();
     });
   }
 
   cargarTipoActividad() {
     this.tipoActividadSubcription = this.tipoActividadService.getTipoActividad().subscribe((nombre) => {
       this.tipoActividades = nombre;
+      console.log(this.tipoActividades);
     });
   }
 
   translateActividad() {
-    console.log('hollaaaa');
-    console.log(this.actividades);
-    console.log(this.tipoActividades);
     this.actividades.forEach((actividad) => {
       let id = actividad['tipoActividad_id'];
       console.log(id);
@@ -121,6 +124,20 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       console.log(nombre);
       // sustituir
       actividad['tipoActividad_id'] = nombre;
+    });
+  }
+
+  clasificarActividad() {
+    this.actividades.forEach((actividad) => {
+      let idAct = actividad['tipoActividad_id'];
+      this.tipoActividades.forEach((tipoActividad) => {
+        let idTipo = tipoActividad['id'];
+        let idSec = tipoActividad['idSeccion'];
+        if (idAct == idTipo) {
+        }
+      });
+      let seccion = this.tipoActividades[0]['idSeccion'];
+      console.log(seccion);
     });
   }
 
