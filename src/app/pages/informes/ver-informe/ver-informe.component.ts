@@ -30,7 +30,7 @@ export class VerInformeComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
       this.seccionesInformes = data.seccionInforme;
-      console.log('this.seccionesInformes', this.seccionesInformes);
+      console.log('this.seccionesInformes ', this.seccionesInformes);
     });
 
     let idInforme = 1;
