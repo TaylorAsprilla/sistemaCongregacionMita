@@ -5,7 +5,7 @@ export enum Rutas {
   CAMPO = 'campo',
   CONGREGACION = 'congregacion',
   CONGREGACIONES = 'congregaciones',
-  CREAR_ACTIVIDAD = 'crear-actividad',
+  CREAR_TIPO_ACTIVIDAD = 'crear-tipo-actividad',
   CREAR_CAMPO = 'crear-campo',
   CREAR_CONGREGACION = 'crear-congregacion',
   CREAR_PAIS = 'crear-pais',
@@ -111,7 +111,7 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     submenu: [
       {
-        path: Rutas.CREAR_ACTIVIDAD,
+        path: Rutas.CREAR_TIPO_ACTIVIDAD,
         title: 'Crear Actividad',
         icon: '',
         class: '',

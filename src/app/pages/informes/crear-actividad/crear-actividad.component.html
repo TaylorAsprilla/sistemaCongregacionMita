@@ -11,6 +11,16 @@
             <input type="text" formControlName="nombre" class="form-control" placeholder="Actividad" />
           </div>
 
+          <div class="form-group">
+            <label class="col-form-label">Sección del Informe</label>
+            <select class="form-control" formControlName="idSeccion">
+              <option value="" disabled>Seleccione la sección del informe</option>
+              <option *ngFor="let seccioneInforme of seccionesInformes" [value]="seccioneInforme.id">
+                {{ seccioneInforme.seccion }}
+              </option>
+            </select>
+          </div>
+
           <div class="card">
             <button
               type="submit"
