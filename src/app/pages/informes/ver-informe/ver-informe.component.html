@@ -1,4 +1,3 @@
-<button (click)="clasificarActividad()">hola</button>
 <div class="titulo">
   <h1>Informe:</h1>
   <h4>2do Trimestre del año</h4>
@@ -67,11 +66,11 @@
     <table class="tabla">
       <thead>
         <tr>
-          <th *ngFor="let head of actividades[0] | keys">{{ head }}</th>
+          <th *ngFor="let head of servicios[0] | keys">{{ head }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let actividad of actividades">
+        <tr *ngFor="let actividad of servicios">
           <td *ngFor="let list of actividad | keys">{{ actividad[list] }}</td>
         </tr>
       </tbody>
@@ -109,15 +108,48 @@
 
     <p class="heading">D. ACTIVIDADES ESPECIALES REALIZADAS: Actividades</p>
 
-    <!-- pendiente -->
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of especiales[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of especiales">
+          <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
 
     <p class="heading">E. ACTIVIDADES RELACIONADAS AL ASPECTO ESPIRITUAL: Actividades</p>
 
-    <!-- pendiente -->
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of espirituales[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of espirituales">
+          <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
 
     <p class="heading">F. REUNIONES: Actividades</p>
 
-    <!-- pendiente -->
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of reuniones[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of reuniones">
+          <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
 
     <p class="heading">G. ASPECTOS CONTABLES: Aspectos Contables</p>
 

@@ -50,18 +50,20 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   // desglosar informacion de informe
   informe: any[];
   actividades: any[];
+
+  // 9 secciones diferentes
+  servicios: any[] = [];
+  especiales: any[] = [];
+  espirituales: any[] = [];
+  reuniones: any[] = [];
+
   aspectoContable: any[];
   asuntoPendiente: any[];
-  informacionInforme: any[];
+  informacionInforme: any[]; // no se que es esto
   logros: any[];
-  metas: any[];
+  metas: any[]; // missing
   situacionVisita: any[];
   visitas: any[];
-
-  servicios: any[];
-  especiales: any[];
-  espirituales: any[];
-  reuniones: any[];
 
   public seccionesInformes: SeccionInformeModel[];
 
@@ -77,6 +79,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // traer secciones
     this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
       this.seccionesInformes = data.seccionInforme;
       console.log('this.seccionesInformes ', this.seccionesInformes);
@@ -107,7 +110,9 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
       this.informe = respuesta;
       console.log(this.informe);
+      // eliminar y sustituir this.clasificar
       this.actividades = this.informe['actividades'];
+
       this.aspectoContable = this.informe['aspectoContable'];
       this.asuntoPendiente = this.informe['asuntoPendiente'];
       this.informacionInforme = this.informe['informacioninforme'];
@@ -116,6 +121,11 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.situacionVisita = this.informe['situacionVisita'];
       this.visitas = this.informe['visitas'];
       // this.translateActividad();
+      this.servicios;
+      this.clasificarActividad(this.actividades);
+      console.log('test here');
+      console.log(this.servicios);
+      console.log('test here');
     });
   }
 
@@ -137,17 +147,54 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     });
   }
 
-  clasificarActividad() {
-    this.actividades.forEach((actividad) => {
-      let idAct = actividad['tipoActividad_id'];
-      this.tipoActividades.forEach((tipoActividad) => {
-        let idTipo = tipoActividad['id'];
-        let idSec = tipoActividad['idSeccion'];
-        if (idAct == idTipo) {
+  clasificarActividad(conjunto) {
+    conjunto.forEach((actividad) => {
+      //console.log(actividad);
+      let idTipoAct = actividad.tipoActividad_id;
+      console.log(idTipoAct);
+      //tipoAct.seccionID
+      let idSec = this.tipoActividades.find((item) => item.id === idTipoAct).idSeccion;
+
+      console.log(idSec);
+      // validar que existe seccion de la actividad/tipoActividad/idSeccion
+      this.seccionesInformes.forEach((seccion) => {
+        if (seccion.id === idSec) {
+          console.log('id de seccion existe');
+          // colocar array de seccion segun id
+          switch (idSec) {
+            case 1:
+              this.servicios.push(actividad);
+              break;
+            case 2:
+              console.log('aqui iria visitas');
+              break;
+            case 3:
+              console.log('aqui iria situaciones');
+              break;
+            case 4:
+              this.especiales.push(actividad);
+              break;
+            case 5:
+              this.espirituales.push(actividad);
+              break;
+            case 6:
+              this.reuniones.push(actividad);
+              break;
+            case 7:
+              console.log('aqui iria aspectos contables');
+              break;
+            case 8:
+              console.log('aqui iria logros');
+              break;
+            case 9:
+              console.log('aqui iria pendientes');
+              break;
+            case 10:
+              console.log('aqui iria metas');
+              break;
+          }
         }
       });
-      let seccion = this.tipoActividades[0]['idSeccion'];
-      console.log(seccion);
     });
   }
 
