@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/models/congregacion.model';
-import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
 @Injectable({

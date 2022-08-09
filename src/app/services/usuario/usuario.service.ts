@@ -7,7 +7,7 @@ import { ListarUsuario } from 'src/app/interfaces/usuario.interface';
 import { LoginForm } from 'src/app/interfaces/login-form.interface';
 import { RegisterForm } from 'src/app/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/models/usuario.model';
-import { environment } from 'src/environments/environment';
+import { environment } from 'environment';
 
 const base_url = environment.base_url;
 @Injectable({
