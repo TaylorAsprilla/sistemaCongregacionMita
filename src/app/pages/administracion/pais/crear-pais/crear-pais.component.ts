@@ -3,11 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { ListarUsuario } from 'src/app/interfaces/usuario.interface';
 import { DivisaModel } from 'src/app/models/divisa.model';
 import { PaisModel } from 'src/app/models/pais.model';
+import { UsuarioModel } from 'src/app/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { DivisaService } from 'src/app/services/divisa/divisa.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,27 +23,36 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
 
   public paises: PaisModel[] = [];
   public divisas: DivisaModel[] = [];
+  public usuarios: UsuarioModel[] = [];
+
   public paisSeleccionado: PaisModel;
 
   // Subscription
   public paisSubscription: Subscription;
   public divisaSubscription: Subscription;
+  public usuariosSubscription: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private paisService: PaisService,
-    private divisaService: DivisaService
+    private divisaService: DivisaService,
+    private usuariosService: UsuarioService
   ) {}
 
   ngOnInit(): void {
     this.paisForm = this.formBuilder.group({
       pais: ['', [Validators.required, Validators.minLength(3)]],
       idDivisa: ['', [Validators.required]],
+      idObreroEncargado: ['', [Validators.required]],
     });
 
     this.divisaSubscription = this.divisaService.listarDivisa().subscribe((divisa) => {
       this.divisas = divisa;
+    });
+
+    this.usuariosSubscription = this.usuariosService.listarTodosLosUsuarios().subscribe((usuarios: ListarUsuario) => {
+      this.usuarios = usuarios.usuarios;
     });
 
     this.cargarPaises();
@@ -49,6 +61,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.divisaSubscription?.unsubscribe();
     this.paisSubscription?.unsubscribe();
+    this.usuariosSubscription?.unsubscribe();
   }
 
   cargarPaises() {
@@ -105,7 +118,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   buscarPais(id: string) {
     if (id !== 'nuevo') {
       this.paisService
-        .getPais(id)
+        .getPais(Number(id))
         .pipe(delay(100))
         .subscribe(
           (paisEncontrado: PaisModel) => {

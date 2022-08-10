@@ -3,11 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { UsuarioInterface } from 'src/app/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/models/campo.model';
 import { CongregacionModel } from 'src/app/models/congregacion.model';
 import { DosisModel } from 'src/app/models/dosis.model';
 import { EstadoCivilModel } from 'src/app/models/estado-civil.model';
 import { GeneroModel } from 'src/app/models/genero.model';
+import { NacionalidadModel } from 'src/app/models/nacionalidad.model';
 import { PaisModel } from 'src/app/models/pais.model';
 import { RolCasaModel } from 'src/app/models/rol-casa.model';
 import { TipoDocumentoModel } from 'src/app/models/tipo-documento.model';
@@ -44,6 +46,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public campos: CampoModel[] = [];
   public vacunas: VacunaModel[] = [];
   public dosis: DosisModel[] = [];
+  public nacionalidades: NacionalidadModel[] = [];
+  public congregacionesFiltradas: CongregacionModel[] = [];
+  public camposFiltrados: CampoModel[] = [];
 
   public usuarioSeleccionado: UsuarioModel;
 
@@ -72,12 +77,16 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     private vacunaService: VacunaService,
     private dosisService: DosisService,
     private router: Router,
-    private activateRouter: ActivatedRoute
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.activateRouter.params.subscribe(({ id }) => {
+    this.activatedRoute.params.subscribe(({ id }) => {
       this.buscarUsuario(id);
+    });
+
+    this.activatedRoute.data.subscribe((data: { nacionalidad: NacionalidadModel[] }) => {
+      this.nacionalidades = data.nacionalidad;
     });
 
     this.usuarioForm = this.formBuilder.group({
@@ -86,12 +95,13 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       primerApellido: ['', [Validators.required, Validators.minLength(3)]],
       segundoApellido: ['', [Validators.minLength(3)]],
       numeroDocumento: ['', [Validators.minLength(3)]],
-      nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
       fechaNacimiento: ['', [Validators.required]],
       email: ['', [Validators.email]],
-      numeroCelular: ['', [Validators.minLength(3)]],
+      indicativoCasa: ['', [Validators.minLength(3)]],
       telefonoCasa: ['', [Validators.minLength(3)]],
-      direccion: ['', [Validators.minLength(3)]],
+      indicativoCelular: ['', [Validators.minLength(7)]],
+      numeroCelular: ['', [Validators.minLength(7)]],
+      direccion: ['', [Validators.required, Validators.minLength(5)]],
       zipCode: ['', [Validators.minLength(3)]],
       foto: ['', []],
       genero_id: ['', [Validators.required]],
@@ -103,6 +113,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       rolCasa_id: ['', [Validators.required]],
       vacuna_id: ['', [Validators.required]],
       dosis_id: ['', [Validators.required]],
+      nacionalidad_id: ['', [Validators.required]],
       login: ['', []],
       password: ['', []],
     });
@@ -137,12 +148,12 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
     this.congregacionSubscription = this.congregacionService
       .getCongregaciones()
-      .subscribe((congregacion: CongregacionModel[]) => {
-        this.congregaciones = congregacion;
+      .subscribe((congregaciones: CongregacionModel[]) => {
+        this.congregaciones = congregaciones.filter((congregacion) => congregacion.estado === true);
       });
 
-    this.campoSubscription = this.campoService.listarCampo().subscribe((campo: CampoModel[]) => {
-      this.campos = campo;
+    this.campoSubscription = this.campoService.listarCampo().subscribe((campos: CampoModel[]) => {
+      this.campos = campos.filter((campo) => campo.estado === true);
     });
 
     this.vacunaSubscription = this.vacunaService.listarVacuna().subscribe((vacuna: VacunaModel[]) => {
@@ -173,7 +184,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
       (usuarioCreado: any) => {
         Swal.fire('Usuario creado', 'correctamente', 'success');
-        this.router.navigateByUrl(Rutas.USUARIOS);
+        this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}`);
       },
       (error) => {
         let errores = error.error.errors;
@@ -188,7 +199,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
           icon: 'error',
           html: `${listaErrores.join('')}`,
         });
-        this.router.navigateByUrl(Rutas.INICIO);
       }
     );
   }
@@ -196,19 +206,18 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   buscarUsuario(id: string) {
     if (id !== 'nuevo') {
       this.usuarioService
-        .getUsuario(id)
+        .getUsuario(Number(id))
         .pipe(delay(100))
         .subscribe(
-          (usuarioEncontrado: UsuarioModel) => {
+          (usuarioEncontrado: UsuarioInterface) => {
+            console.info(usuarioEncontrado);
             const {
               primerNombre,
               primerApellido,
-              nacionalidad,
               email,
               numeroCelular,
               fechaNacimiento,
               genero_id,
-              pais_id,
               estadoCivil_id,
               vacuna_id,
               dosis_id,
@@ -223,20 +232,25 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
               foto,
               tipoDocumento_id,
               rolCasa_id,
-            } = usuarioEncontrado;
-            this.usuarioSeleccionado = usuarioEncontrado;
+              nacionalidad_id,
+              indicativoCasa,
+              indicativoCelular,
+            } = usuarioEncontrado.usuario;
+            this.usuarioSeleccionado = usuarioEncontrado.usuario;
+
+            const { pais_id, congregacion_id, campo_id } = usuarioEncontrado.usuarioCongregacion;
+            console.log(pais_id, congregacion_id, campo_id);
 
             this.usuarioForm.setValue({
               primerNombre,
               primerApellido,
-              nacionalidad,
               email,
               numeroCelular,
               fechaNacimiento,
               genero_id,
               pais_id,
-              congregacion_id: '1',
-              campo_id: '1',
+              congregacion_id,
+              campo_id,
               estadoCivil_id,
               vacuna_id,
               dosis_id,
@@ -251,6 +265,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
               foto,
               tipoDocumento_id,
               rolCasa_id,
+              nacionalidad_id,
+              indicativoCasa,
+              indicativoCelular,
             });
           },
           (error) => {
@@ -262,12 +279,12 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
             });
 
             Swal.fire({
-              title: 'Congregacion',
+              title: 'Usuario',
               icon: 'error',
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
+            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}`);
           }
         );
     }
@@ -277,5 +294,15 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.usuarioForm.reset();
   }
 
-  subirImagen() {}
+  listarCongregaciones(pais: string) {
+    this.congregacionesFiltradas = this.congregaciones.filter(
+      (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
+    );
+  }
+
+  listarCampos(congregacion: string) {
+    this.camposFiltrados = this.campos.filter(
+      (campoABuscar) => campoABuscar.congregacion_id === parseInt(congregacion)
+    );
+  }
 }

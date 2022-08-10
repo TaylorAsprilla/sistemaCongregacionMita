@@ -2,7 +2,8 @@ import { RouteInfo } from 'src/app/interfaces/route-info.interfase';
 
 export enum Rutas {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
-  CAMPO = 'campo',
+
+  CAMPOS = 'campos',
   CONGREGACION = 'congregacion',
   CONGREGACIONES = 'congregaciones',
   CREAR_TIPO_ACTIVIDAD = 'crear-tipo-actividad',
@@ -69,14 +70,6 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.REGISTRAR_USUARIO,
-        title: 'Registrar Usuarios',
-        icon: '',
-        class: '',
-        extralink: false,
-        submenu: [],
-      },
-      {
         path: Rutas.INFORME,
         title: 'Informes',
         icon: '',
@@ -94,8 +87,8 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     submenu: [
       {
-        path: Rutas.REGISTRAR_USUARIO,
-        title: 'Registrar Hermanos',
+        path: Rutas.USUARIOS,
+        title: 'Usuarios',
         icon: '',
         class: '',
         extralink: false,
@@ -155,7 +148,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.CAMPO,
+        path: Rutas.CAMPOS,
         title: 'Campos',
         icon: '',
         class: '',

@@ -25,6 +25,7 @@
             <th>Nombre</th>
             <th>Correo</th>
             <th class="w100">Fecha de Nacimiento</th>
+            <th>Teléfono Casa</th>
             <th>Celular</th>
             <th>Pais</th>
             <th class="w100">Congregación</th>
@@ -36,8 +37,6 @@
         <tbody>
           <tr *ngFor="let usuario of usuarios">
             <td class="text-center">
-              <!-- <img [src]="usuario.fotoUrl" alt="{{ usuario.primerNombre }}" /> -->
-
               <img src="assets/images/users/perfil.png" alt="user" class="avatar pointer" />
             </td>
             <td>
@@ -47,16 +46,19 @@
             <td>{{ usuario.email }}</td>
             <td>{{ usuario.fechaNacimiento }}</td>
 
+            <td>{{ usuario.telefonoCasa }}</td>
+
             <td>{{ usuario.numeroCelular }}</td>
 
-            <td>{{ usuario.pais_id }}</td>
+            <td>Colombia</td>
 
             <td>
               <span class="badge badge-primary"> Bogotá </span>
+              <span class="badge badge-primary"> Campo </span>
             </td>
 
             <td>
-              {{ usuario.nacionalidad }}
+              {{ usuario.nacionalidad_id }}
             </td>
 
             <td>
@@ -96,12 +98,13 @@
           <th>Nombre</th>
           <th>Correo</th>
           <th class="w100">Fecha de Nacimiento</th>
+          <th>Teléfono Casa</th>
           <th>Celular</th>
           <th>Pais</th>
           <th class="w100">Congregación</th>
           <th>Nacionalidad</th>
           <th class="w100">Estado</th>
-          <th class="w100">Acciones</th>
+          <th class="w200">Acciones</th>
         </tfoot>
       </table>
     </div>

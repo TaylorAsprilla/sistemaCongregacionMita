@@ -40,9 +40,11 @@
       </div>
       <div class="card-body">
         <div *ngFor="let campo of campos">
-          <li>
-            {{ campo.campo }}
-          </li>
+          <a class="pointer">
+            <li (click)="buscarCampo(campo.id.toString())">
+              <span class="font-medium">{{ campo.campo }}</span>
+            </li></a
+          >
         </div>
       </div>
     </div>

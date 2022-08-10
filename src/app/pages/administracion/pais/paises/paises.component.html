@@ -23,15 +23,18 @@
           <tr>
             <th class="w100">item</th>
             <th class="w1200">Nombre</th>
+            <th>Obrero Encargado</th>
             <th class="w1200">Divisa</th>
             <th class="w200">Estado</th>
             <th class="w200">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let pais of paises">
-            <td>{{ pais.id }}</td>
+          <tr *ngFor="let pais of paises; index as i">
+            <td>{{ i + 1 }}</td>
             <td>{{ pais.pais }}</td>
+
+            <td>{{ pais.idObreroEncargado }}</td>
 
             <td>{{ buscarDivisa(pais.idDivisa) }}</td>
 
@@ -72,6 +75,7 @@
           <tr>
             <th class="w100">item</th>
             <th class="w1200">Nombre</th>
+            <th>Obrero Encargado</th>
             <th class="w1200">Divisa</th>
             <th class="w200">Estado</th>
             <th class="w200">Acciones</th>

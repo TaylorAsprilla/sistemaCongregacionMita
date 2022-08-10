@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { PaisModel } from 'src/app/models/pais.model';
-import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -29,7 +29,7 @@ export class PaisService {
       .pipe(map((pais: { ok: boolean; pais: PaisModel[] }) => pais.pais));
   }
 
-  getPais(id: string) {
+  getPais(id: number) {
     return this.httpClient
       .get(`${base_url}/pais/${id}`, this.headers)
       .pipe(map((pais: { ok: boolean; pais: PaisModel; id: number }) => pais.pais));

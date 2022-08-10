@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { ListarUsuario } from 'src/app/interfaces/usuario.interface';
+import { ListarUsuario, UsuarioInterface } from 'src/app/interfaces/usuario.interface';
 import { LoginForm } from 'src/app/interfaces/login-form.interface';
 import { RegisterForm } from 'src/app/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/models/usuario.model';
-import { environment } from 'src/environments/environment';
+import { environment } from 'environment';
+import { UsuarioCongregacionModel } from 'src/app/models/usuarioCongregacion.model';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -57,7 +58,6 @@ export class UsuarioService {
             primerApellido,
             segundoApellido,
             numeroDocumento,
-            nacionalidad,
             email,
             numeroCelular,
             telefonoCasa,
@@ -75,19 +75,20 @@ export class UsuarioService {
             rolCasa_id,
             vacuna_id,
             dosis_id,
+            nacionalidad_id,
+            indicativoCasa,
+            indicativoCelular,
           } = respuesta.usuario;
 
           this.usuario = new UsuarioModel(
             id,
             primerNombre,
             primerApellido,
-            nacionalidad,
             email,
             numeroCelular,
             fechaNacimiento,
             estado,
             genero_id,
-            pais_id,
             estadoCivil_id,
             vacuna_id,
             dosis_id,
@@ -101,7 +102,10 @@ export class UsuarioService {
             password,
             foto,
             tipoDocumento_id,
-            rolCasa_id
+            rolCasa_id,
+            nacionalidad_id,
+            indicativoCasa,
+            indicativoCelular
           );
           localStorage.setItem('token', respuesta.token);
           return true;
@@ -145,13 +149,11 @@ export class UsuarioService {
               usuario.id,
               usuario.primerNombre,
               usuario.primerApellido,
-              usuario.nacionalidad,
               usuario.email,
               usuario.numeroCelular,
               usuario.fechaNacimiento,
               usuario.estado,
               usuario.genero_id,
-              usuario.pais_id,
               usuario.estadoCivil_id,
               usuario.vacuna_id,
               usuario.dosis_id,
@@ -165,7 +167,10 @@ export class UsuarioService {
               usuario.password,
               usuario.foto,
               usuario.tipoDocumento_id,
-              usuario.rolCasa_id
+              usuario.rolCasa_id,
+              usuario.nacionalidad_id,
+              usuario.indicativoCasa,
+              usuario.indicativoCelular
             )
         );
         return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
@@ -182,13 +187,11 @@ export class UsuarioService {
               usuario.id,
               usuario.primerNombre,
               usuario.primerApellido,
-              usuario.nacionalidad,
               usuario.email,
               usuario.numeroCelular,
               usuario.fechaNacimiento,
               usuario.estado,
               usuario.genero_id,
-              usuario.pais_id,
               usuario.estadoCivil_id,
               usuario.vacuna_id,
               usuario.dosis_id,
@@ -202,18 +205,25 @@ export class UsuarioService {
               usuario.password,
               usuario.foto,
               usuario.tipoDocumento_id,
-              usuario.rolCasa_id
+              usuario.rolCasa_id,
+              usuario.nacionalidad_id,
+              usuario.indicativoCasa,
+              usuario.indicativoCelular
             )
         );
-        return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
+        return {
+          totalUsuarios: usuariosRespuesta.totalUsuarios,
+          usuarios,
+          usuarioCongregacion: usuariosRespuesta.usuarioCongregacion,
+        };
       })
     );
   }
 
-  getUsuario(id: string) {
+  getUsuario(id: number) {
     return this.httpClient
-      .get(`${base_url}/usuarios/${id}`, this.headers)
-      .pipe(map((usuario: { ok: boolean; usuario: UsuarioModel }) => usuario.usuario));
+      .get<UsuarioInterface>(`${base_url}/usuarios/${id}`, this.headers)
+      .pipe(map((usuario) => usuario));
   }
 
   eliminarUsuario(usuario: UsuarioModel) {
