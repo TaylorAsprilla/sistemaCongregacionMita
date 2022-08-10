@@ -69,14 +69,6 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.REGISTRAR_USUARIO,
-        title: 'Registrar Usuarios',
-        icon: '',
-        class: '',
-        extralink: false,
-        submenu: [],
-      },
-      {
         path: Rutas.INFORME,
         title: 'Informes',
         icon: '',
@@ -94,8 +86,8 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     submenu: [
       {
-        path: Rutas.REGISTRAR_USUARIO,
-        title: 'Registrar Hermanos',
+        path: Rutas.USUARIOS,
+        title: 'Usuarios',
         icon: '',
         class: '',
         extralink: false,

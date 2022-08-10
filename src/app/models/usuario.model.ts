@@ -7,13 +7,11 @@ export class UsuarioModel {
     public id: number,
     public primerNombre: string,
     public primerApellido: string,
-    public nacionalidad: string,
     public email: string,
     public numeroCelular: string,
     public fechaNacimiento: Date,
     public estado: boolean,
     public genero_id: number,
-    public pais_id: number,
     public estadoCivil_id: number,
     public vacuna_id: number,
     public dosis_id: number,
@@ -27,7 +25,10 @@ export class UsuarioModel {
     public password?: string,
     public foto?: string,
     public tipoDocumento_id?: number,
-    public rolCasa_id?: number
+    public rolCasa_id?: number,
+    public nacionalidad_id?: number,
+    public indicativoCasa?: number,
+    public indicativoCelular?: number
   ) {}
 
   get fotoUrl() {
