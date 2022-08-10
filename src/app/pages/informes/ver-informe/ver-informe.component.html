@@ -34,7 +34,7 @@
 <div id="content" class="fontColor" #content>
   <div class="header">
     <p class="title">Congregación Mita Inc.</p>
-    <p>({{ paisSeleccionado }})</p>
+    <p>({{ paisObrero }})</p>
 
     <p class="heading">Informe Trimestral</p>
     <table class="tableCenter">
@@ -48,9 +48,7 @@
         <td>
           <p class="heading">Obrero/a:</p>
         </td>
-        <td class="info">
-          {{ obreroSeleccionado['primerNombre'] + ' ' + obreroSeleccionado['primerApellido'] }}
-        </td>
+        <td class="info">{{ obreroSeleccionado?.primerNombre }} {{ obreroSeleccionado?.primerApellido }}</td>
       </tr>
       <tr>
         <td>

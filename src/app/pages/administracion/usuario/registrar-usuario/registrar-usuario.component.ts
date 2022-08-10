@@ -206,7 +206,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   buscarUsuario(id: string) {
     if (id !== 'nuevo') {
       this.usuarioService
-        .getUsuario(id)
+        .getUsuario(Number(id))
         .pipe(delay(100))
         .subscribe(
           (usuarioEncontrado: UsuarioInterface) => {

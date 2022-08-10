@@ -12,6 +12,7 @@ import { PaisModel } from 'src/app/models/pais.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioInterface } from 'src/app/interfaces/usuario.interface';
+import { UsuarioCongregacionModel } from 'src/app/models/usuarioCongregacion.model';
 
 @Component({
   selector: 'app-ver-informe',
@@ -29,8 +30,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   trimestre: string;
   idInforme = 1;
   public fechaSeleccionada = '';
-  public obreroSeleccionado = Object;
-  public paisSeleccionado: string;
+  public obreroSeleccionado: UsuarioModel;
+  public paisObrero: string;
 
   items = [
     { name: 'jean', surname: 'kruger' },
@@ -225,23 +226,14 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     });
   }
 
-  async seleccionarObrero(obreroSeleccionado) {
-    let obreroInforme: UsuarioInterface;
+  seleccionarObrero(obreroSeleccionado: UsuarioModel) {
+    let obreroInforme: UsuarioCongregacionModel;
+
     this.usuarioService.getUsuario(obreroSeleccionado.id).subscribe((obrero: UsuarioInterface) => {
-      // console.log('obrero obrero ' + obrero);
-      // obreroInforme = obrero.usuarioCongregacion;
-      // console.log('obrero Informe ' + obreroInforme);
-      // let paisNum = obreroInforme.pais;
-      // console.log(paisNum);
+      obreroInforme = obrero.usuarioCongregacion;
+
+      this.paisObrero = this.paises.find((pais: PaisModel) => pais.id === obreroInforme?.pais_id)?.pais;
     });
-
-    //console.log(obreroSeleccionado);
-    this.obreroSeleccionado = obreroSeleccionado;
-    console.log(obreroInforme);
-
-    // let paisObject = this.paises.filter((pais: PaisModel) => pais.id === paisNum)[0];
-    // this.paisSeleccionado = paisObject['pais_id'];
-    console.log(this.obreroSeleccionado);
   }
 
   seleccionarTrimestre() {
