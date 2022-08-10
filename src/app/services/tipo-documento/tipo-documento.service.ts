@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { TipoDocumentoModel } from 'src/app/models/tipo-documento.model';
-import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
 

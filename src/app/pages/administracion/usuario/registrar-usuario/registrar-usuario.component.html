@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-12">
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Usuario</h3>
@@ -15,26 +15,76 @@
               class="form-control"
               placeholder="Fecha de Nacimiento"
             />
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                usuarioForm.get('fechaNacimiento').hasError('required') && usuarioForm.get('fechaNacimiento').touched
+              "
+            >
+              La fecha de nacimiento del usuario es requerida.
+            </small>
           </div>
 
           <div class="form-group">
             <label>Primer Nombre:</label>
             <input type="text" formControlName="primerNombre" class="form-control" placeholder="Primer Nombre" />
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('primerNombre').hasError('required') && usuarioForm.get('primerNombre').touched"
+            >
+              La primer nombre del usuario es requerido.
+            </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('primerNombre').hasError('minlength') && usuarioForm.get('primerNombre').touched"
+            >
+              El primer nombre del usuario no tiene la longitud mínima permitida.
+            </small>
           </div>
 
           <div class="form-group">
             <label>Segundo Nombre:</label>
             <input type="text" formControlName="segundoNombre" class="form-control" placeholder="Segundo Nombre" />
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('segundoNombre').hasError('minlength') && usuarioForm.get('segundoNombre').touched"
+            >
+              El segundo nombre del usuario no tiene la longitud mínima permitida.
+            </small>
           </div>
 
           <div class="form-group">
             <label>Primer Apellido:</label>
             <input type="text" formControlName="primerApellido" class="form-control" placeholder="Primer Apellido" />
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                usuarioForm.get('primerApellido').hasError('required') && usuarioForm.get('primerApellido').touched
+              "
+            >
+              La primer apellido del usuario es requerido.
+            </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                usuarioForm.get('primerApellido').hasError('minlength') && usuarioForm.get('primerApellido').touched
+              "
+            >
+              El primer apellido del usuario no tiene la longitud mínima permitida.
+            </small>
           </div>
 
           <div class="form-group">
             <label>Segundo Apellido:</label>
             <input type="text" formControlName="segundoApellido" class="form-control" placeholder="Segundo Apellido" />
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                usuarioForm.get('segundoApellido').hasError('minlength') && usuarioForm.get('segundoApellido').touched
+              "
+            >
+              El segundo apellido del usuario no tiene la longitud mínima permitida.
+            </small>
           </div>
 
           <div class="input-group mb-3">
@@ -45,11 +95,29 @@
                 {{ genero.genero }}
               </option>
             </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('genero_id').hasError('required') && usuarioForm.get('genero_id').touched"
+            >
+              El género del usuario es requerido.
+            </small>
           </div>
 
           <div class="form-group">
             <label>Email:</label>
             <input type="email" formControlName="email" class="form-control" inputmode="text" placeholder="Email" />
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('email').hasError('required') && usuarioForm.get('email').touched"
+            >
+              El correo electrónico es requerido.
+            </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('email').hasError('email') && usuarioForm.get('email').touched"
+            >
+              El valor ingresado no corresponde a un correo electrónico.
+            </small>
           </div>
 
           <div class="input-group mb-3">
@@ -60,6 +128,14 @@
                 {{ estadoCivil.estadoCivil }}
               </option>
             </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                usuarioForm.get('estadoCivil_id').hasError('required') && usuarioForm.get('estadoCivil_id').touched
+              "
+            >
+              El estado civil del usuario es requerido.
+            </small>
           </div>
 
           <div class="input-group mb-3">
@@ -70,38 +146,81 @@
                 {{ rolCasa.rolCasa }}
               </option>
             </select>
-          </div>
-
-          <div class="form-group">
-            <label>Nacionalidad :</label>
-            <input type="text" formControlName="nacionalidad" class="form-control" placeholder="Nacionalidad" />
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('rolCasa_id').hasError('required') && usuarioForm.get('rolCasa_id').touched"
+            >
+              El rol de la casa del usuario es requerido.
+            </small>
           </div>
 
           <div class="input-group mb-3">
-            <label class="space">País de Recidencia: </label>
-            <select class="form-control" formControlName="pais_id">
-              <option value="" disabled>Seleccione el País de Recidencia</option>
+            <label class="space">Nacionalidad: </label>
+            <select class="form-control" formControlName="nacionalidad_id">
+              <option value="" disabled>Seleccione la nacionalidad</option>
+              <option *ngFor="let nacionalidad of nacionalidades" [value]="nacionalidad.id">
+                {{ nacionalidad.nombre }}
+              </option>
+            </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                usuarioForm.get('nacionalidad_id').hasError('required') && usuarioForm.get('nacionalidad_id').touched
+              "
+            >
+              La nacionalidad del usuario es requerida.
+            </small>
+          </div>
+
+          <div class="input-group mb-3">
+            <label class="space">País de Residencia: </label>
+            <select
+              class="form-control"
+              formControlName="pais_id"
+              (change)="listarCongregaciones(txtPais.value)"
+              #txtPais
+            >
+              <option value="" disabled>Seleccione el País de Residencia</option>
               <option *ngFor="let pais of paises" [value]="pais.id">
                 {{ pais.pais }}
               </option>
             </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('pais_id').hasError('required') && usuarioForm.get('pais_id').touched"
+            >
+              El país de residencia del usuario es requerida.
+            </small>
           </div>
 
           <div class="input-group mb-3">
             <label class="space">Congregación: </label>
-            <select class="form-control" formControlName="congregacion_id">
+            <select
+              class="form-control"
+              formControlName="congregacion_id"
+              (change)="listarCampos(txtCongregacion.value)"
+              #txtCongregacion
+            >
               <option value="" disabled>Seleccione la congregación a la que pertenece</option>
-              <option *ngFor="let congregacion of congregaciones" [value]="congregacion.id">
+              <option *ngFor="let congregacion of congregacionesFiltradas" [value]="congregacion.id">
                 {{ congregacion.congregacion }}
               </option>
             </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                usuarioForm.get('congregacion_id').hasError('required') && usuarioForm.get('congregacion_id').touched
+              "
+            >
+              La congregación del usuario es requerida.
+            </small>
           </div>
 
           <div class="input-group mb-3">
             <label class="space">Campo: </label>
             <select class="form-control" formControlName="campo_id">
               <option value="" disabled>Seleccione el campo al que pertenece</option>
-              <option *ngFor="let campo of campos" [value]="campo.id">
+              <option *ngFor="let campo of camposFiltrados" [value]="campo.id">
                 {{ campo.campo }}
               </option>
             </select>
@@ -110,6 +229,18 @@
           <div class="form-group">
             <label>Dirección:</label>
             <input type="text" class="form-control" formControlName="direccion" placeholder="Dirección" />
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('direccion').hasError('required') && usuarioForm.get('direccion').touched"
+            >
+              La dirección del usuario es requerido.
+            </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('direccion').hasError('minlength') && usuarioForm.get('direccion').touched"
+            >
+              La dirección del usuario no tiene la longitud mínima permitida.
+            </small>
           </div>
 
           <div class="form-group">
@@ -117,43 +248,64 @@
             <input type="number" class="form-control" formControlName="zipCode" placeholder="Código Postal" />
           </div>
 
-          <div class="form-group">
-            <label>Teléfono en casa:</label>
-            <table>
-              <tr>
-                <td class="indicativo">
-                  <select class="form-control" formControlName="telefonoCasa">
-                    <option value="1">+1 (Estados Unidos)</option>
-                    <option value="57">+57 (Colombia)</option>
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    formControlName="telefonoCasa"
-                    class="form-control"
-                    placeholder="Teléfono en Casa"
-                  />
-                </td>
-              </tr>
-            </table>
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <label for="indicativo">Indicativo</label>
+              <select class="form-control" formControlName="indicativoCasa" id="indicativo">
+                <option value="" disabled>Indicativo</option>
+                <option *ngFor="let nacionalidad of this.nacionalidades" [value]="nacionalidad.telefonoCode">
+                  +{{ nacionalidad.telefonoCode }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-10">
+              <label for="telefonoCasa">Teléfono de la Casa:</label>
+              <input
+                type="number"
+                formControlName="telefonoCasa"
+                class="form-control"
+                placeholder="Teléfono en Casa"
+                id="telefonoCasa"
+              />
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>Celular:</label>
-            <table>
-              <tr>
-                <td class="indicativo">
-                  <select class="form-control" formControlName="numeroCelular">
-                    <option value="1">+1 (Estados Unidos)</option>
-                    <option value="57">+57 (Colombia)</option>
-                  </select>
-                </td>
-                <td>
-                  <input type="number" formControlName="numeroCelular" class="form-control" placeholder="Celular" />
-                </td>
-              </tr>
-            </table>
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <label for="indicativo">Indicativo</label>
+              <select class="form-control" formControlName="indicativoCelular" id="indicativo">
+                <option value="" disabled>Indicativo</option>
+                <option *ngFor="let nacionalidad of this.nacionalidades" [value]="nacionalidad.telefonoCode">
+                  +{{ nacionalidad.telefonoCode }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-10">
+              <label for="celular">Celular</label>
+              <input
+                type="number"
+                formControlName="numeroCelular"
+                class="form-control"
+                placeholder="Celular"
+                id="celular"
+              />
+              <small
+                class="form-text text-muted"
+                *ngIf="
+                  usuarioForm.get('numeroCelular').hasError('required') && usuarioForm.get('numeroCelular').touched
+                "
+              >
+                El número de celular del usuario es requerido.
+              </small>
+              <small
+                class="form-text text-muted"
+                *ngIf="
+                  usuarioForm.get('numeroCelular').hasError('minlength') && usuarioForm.get('numeroCelular').touched
+                "
+              >
+                El número de celular del usuario no tiene la longitud mínima permitida.
+              </small>
+            </div>
           </div>
 
           <div class="input-group mb-3">
@@ -184,6 +336,12 @@
                 {{ vacuna.vacuna }}
               </option>
             </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('vacuna_id').hasError('required') && usuarioForm.get('vacuna_id').touched"
+            >
+              La vanuna del usuario es requerida.
+            </small>
           </div>
 
           <div class="input-group mb-3">
@@ -194,6 +352,12 @@
                 {{ dosis.dosis }}
               </option>
             </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('dosis_id').hasError('required') && usuarioForm.get('dosis_id').touched"
+            >
+              Las dosis del usuario es requerida.
+            </small>
           </div>
 
           <div class="card">
@@ -202,31 +366,6 @@
             </button>
           </div>
         </form>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Carnet de Vacunación</h3>
-      </div>
-
-      <div class="card-body">
-        <div class="text-center">
-          <!-- <img *ngIf="!imagenTemporal" [src]="imagenCarnet" class="img-thumbnail" />
-        <img *ngIf="imagenTemporal" [src]="imagenTemporal" class="img-thumbnail" /> -->
-          <img src="./assets/images/users/perfil.png" class="img-thumbnail" />
-        </div>
-
-        <div class="mt-4">
-          <!-- <input type="file" (change)="cambiarImagen($event.target.files[0])" /> -->
-          <br />
-        </div>
-      </div>
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary" (click)="subirImagen()">
-          <i class="fa fa-save"></i> Subir Carnet
-        </button>
       </div>
     </div>
   </div>

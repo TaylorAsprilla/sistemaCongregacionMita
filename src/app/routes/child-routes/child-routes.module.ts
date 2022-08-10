@@ -30,6 +30,7 @@ import { PaisesComponent } from 'src/app/pages/administracion/pais/paises/paises
 import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais/crear-pais.component';
 import { DivisasResolver } from 'src/app/resolvers/divisas/divisas.resolver';
 import { SeccionInformeResolver } from 'src/app/resolvers/seccion-informe/seccion-informe.resolver';
+import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
 
 const childRoutes: Routes = [
   {
@@ -43,17 +44,21 @@ const childRoutes: Routes = [
     path: Rutas.USUARIOS,
     component: UsuariosComponent,
     data: { titulo: 'Usuarios Registrados' },
+    resolve: { nacionalidad: NacionalidadResolver },
   },
 
   {
     path: `${Rutas.USUARIOS}/:id`,
     component: RegistrarUsuarioComponent,
+    resolve: { nacionalidad: NacionalidadResolver },
   },
-  // {
-  //   path: 'ministerios',
-  //   component: MinisteriosComponent,
-  //   data: { titulo: 'Ministerios' },
-  // },
+
+  {
+    path: Rutas.REGISTRAR_USUARIO,
+    component: RegistrarUsuarioComponent,
+    resolve: { nacionalidad: NacionalidadResolver },
+  },
+
   {
     path: Rutas.PAISES,
     component: PaisesComponent,
@@ -82,16 +87,6 @@ const childRoutes: Routes = [
   {
     path: `${Rutas.CAMPOS}/:id`,
     component: CrearCampoComponent,
-  },
-
-  // {
-  //   path: 'register/user',
-  //   redirectTo: '/register/user',
-  //   pathMatch: 'full',
-  // },
-  {
-    path: Rutas.REGISTRAR_USUARIO,
-    component: RegistrarUsuarioComponent,
   },
 
   {

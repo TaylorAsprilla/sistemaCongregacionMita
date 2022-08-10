@@ -12,10 +12,11 @@ import { InicioComponent } from './inicio/inicio.component';
 import { PerfilModule } from './perfil/perfil.module';
 import { InformeModule } from './informes/informe.module';
 import { PipesModule } from '../pipes/pipes.module';
+import { NopagefoundModule } from './nopagefound/nopagefound.module';
 
 @NgModule({
-  declarations: [NopagefoundComponent, PagesComponent, InicioComponent],
-  exports: [NopagefoundComponent, PagesComponent, InicioComponent],
+  declarations: [PagesComponent, InicioComponent],
+  exports: [PagesComponent, InicioComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -28,6 +29,7 @@ import { PipesModule } from '../pipes/pipes.module';
     PerfilModule,
     InformeModule,
     PipesModule,
+    NopagefoundModule,
   ],
 })
 export class PagesModule {}

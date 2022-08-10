@@ -1,4 +1,5 @@
 import { UsuarioModel } from '../models/usuario.model';
+import { UsuarioCongregacionModel } from '../models/usuarioCongregacion.model';
 
 export interface ListarUsuario {
   totalUsuarios: number;
@@ -7,5 +8,6 @@ export interface ListarUsuario {
 
 export interface UsuarioInterface {
   ok: boolean;
-  usuarios: UsuarioModel[];
+  usuario: UsuarioModel;
+  usuarioCongregacion: UsuarioCongregacionModel;
 }
