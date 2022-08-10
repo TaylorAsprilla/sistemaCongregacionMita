@@ -70,8 +70,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let actividad of servicios">
-          <td *ngFor="let list of actividad | keys">{{ actividad[list] }}</td>
+        <tr (change)="seleccionarTrimestre()" *ngFor="let actividad of servicios">
+          <td (change)="seleccionarTrimestre()" *ngFor="let list of actividad | keys">{{ actividad[list] }}</td>
         </tr>
       </tbody>
     </table>

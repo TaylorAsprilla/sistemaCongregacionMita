@@ -26,6 +26,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   segundApellido: string;
   fechaActual: Date;
   trimestre: string;
+  idInforme = 1;
   public fechaSeleccionada = '';
   public obreroSeleccionado = Object;
   public paisSeleccionado: string;
@@ -85,14 +86,13 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       console.log('this.seccionesInformes ', this.seccionesInformes);
     });
 
-    let idInforme = 1;
     this.primerNombre = sessionStorage.getItem('primerNombre');
     this.segundoNombre = sessionStorage.getItem('segundoNombre');
     this.primerApellido = sessionStorage.getItem('primerApellido');
     this.segundApellido = sessionStorage.getItem('segundoApellido');
     this.fechaActual = new Date();
 
-    this.cargarInforme(idInforme);
+    this.cargarInforme(this.idInforme);
 
     this.cargarUsuarios();
     this.cargarPaises();
@@ -121,12 +121,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.situacionVisita = this.informe['situacionVisita'];
       this.visitas = this.informe['visitas'];
       // this.translateActividad();
-      this.servicios;
-      this.clasificarActividad(this.actividades);
-      console.log('test here');
-      console.log(this.servicios);
-      console.log('test here');
     });
+    return true;
   }
 
   cargarTipoActividad() {
@@ -151,25 +147,19 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     conjunto.forEach((actividad) => {
       //console.log(actividad);
       let idTipoAct = actividad.tipoActividad_id;
-      console.log(idTipoAct);
+      //console.log(idTipoAct);
       //tipoAct.seccionID
       let idSec = this.tipoActividades.find((item) => item.id === idTipoAct).idSeccion;
 
-      console.log(idSec);
+      //console.log(idSec);
       // validar que existe seccion de la actividad/tipoActividad/idSeccion
       this.seccionesInformes.forEach((seccion) => {
         if (seccion.id === idSec) {
-          console.log('id de seccion existe');
+          // console.log('id de seccion existe');
           // colocar array de seccion segun id
           switch (idSec) {
             case 1:
               this.servicios.push(actividad);
-              break;
-            case 2:
-              console.log('aqui iria visitas');
-              break;
-            case 3:
-              console.log('aqui iria situaciones');
               break;
             case 4:
               this.especiales.push(actividad);
@@ -180,22 +170,36 @@ export class VerInformeComponent implements OnInit, OnDestroy {
             case 6:
               this.reuniones.push(actividad);
               break;
-            case 7:
-              console.log('aqui iria aspectos contables');
-              break;
-            case 8:
-              console.log('aqui iria logros');
-              break;
-            case 9:
-              console.log('aqui iria pendientes');
-              break;
-            case 10:
-              console.log('aqui iria metas');
-              break;
           }
+          // console.log(this.servicios);
         }
       });
     });
+  }
+
+  filtrarFecha(conjunto) {
+    let result: any[] = [];
+    let yearSelect = this.fechaSeleccionada.slice(0, 4);
+    let monthSelect = this.fechaSeleccionada.slice(5, 7);
+    let monthSelectNum = Number(monthSelect);
+    let daySelect = this.fechaSeleccionada.slice(8, 10);
+    conjunto.forEach((actividad) => {
+      let fecha = actividad.fecha;
+      console.log(fecha);
+      let year = fecha.slice(0, 4);
+      let month = fecha.slice(5, 7);
+      let monthNum = Number(month);
+      let day = fecha.slice(8, 10);
+      if (yearSelect == year) {
+        console.log('select: ' + monthSelect + ' actividad month: ' + month);
+        if (monthSelectNum >= monthNum && monthSelectNum <= monthNum) {
+          result.push(actividad);
+        }
+      }
+    });
+    console.log('fecha seleccionada ' + this.fechaSeleccionada);
+
+    return result;
   }
 
   getTipoActividadName(id) {
@@ -225,6 +229,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     let paisNum = obreroSeleccionado['pais_id'];
     let paisObject = this.paises.filter((pais: PaisModel) => pais.id === paisNum)[0];
     this.paisSeleccionado = paisObject['pais'];
+    console.log(this.obreroSeleccionado);
   }
 
   seleccionarTrimestre() {
@@ -243,6 +248,17 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     if (mes >= 10 && mes <= 12) {
       this.trimestre = 'octubre, noviembre y diciembre';
     }
+    if (!!this.cargarInforme(this.idInforme)) {
+      this.clasificarActividad(this.actividades);
+      this.servicios = this.filtrarFecha(this.servicios);
+      this.especiales = this.filtrarFecha(this.especiales);
+      this.espirituales = this.filtrarFecha(this.espirituales);
+      this.reuniones = this.filtrarFecha(this.reuniones);
+    } else {
+      this.servicios = [];
+    }
+
+    // this.cargarInforme(1);
   }
 
   makePDF() {
