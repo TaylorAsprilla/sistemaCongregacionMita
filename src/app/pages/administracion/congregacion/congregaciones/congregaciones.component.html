@@ -26,15 +26,18 @@
           <tr>
             <th class="w100">item</th>
             <th class="w1200">Nombre</th>
+            <th>Obrero Encargado</th>
             <th class="w1200">Pais</th>
             <th class="w200">Estado</th>
             <th class="w200">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let congregacion of congregaciones">
-            <td>{{ congregacion.id }}</td>
+          <tr *ngFor="let congregacion of congregaciones; index as i">
+            <td>{{ i + 1 }}</td>
             <td>{{ congregacion.congregacion }}</td>
+
+            <td>{{ congregacion.idObreroEncargado }}</td>
 
             <td>{{ congregacion.pais_id }}</td>
 
@@ -75,6 +78,7 @@
           <tr>
             <th class="w100">item</th>
             <th>Nombre</th>
+            <th>Obrero Encargado</th>
             <th class="w100">Estado</th>
             <th class="w100">Acciones</th>
           </tr>

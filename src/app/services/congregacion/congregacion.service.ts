@@ -29,7 +29,7 @@ export class CongregacionService {
       .pipe(map((congregacion: { ok: boolean; congregacion: CongregacionModel[] }) => congregacion.congregacion));
   }
 
-  getCongregacion(id: string) {
+  getCongregacion(id: number) {
     return this.httpClient
       .get(`${base_url}/congregacion/${id}`, this.headers)
       .pipe(

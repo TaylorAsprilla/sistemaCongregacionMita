@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { UsuarioInterface } from 'src/app/interfaces/usuario.interface';
+import { CampoModel } from 'src/app/models/campo.model';
+import { CongregacionModel } from 'src/app/models/congregacion.model';
+import { PaisModel } from 'src/app/models/pais.model';
 import { UsuarioModel } from 'src/app/models/usuario.model';
+import { UsuarioCongregacionModel } from 'src/app/models/usuarioCongregacion.model';
 import { Rutas } from 'src/app/routes/menu-items';
+import { CampoService } from 'src/app/services/campo/campo.service';
+import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
+import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -23,9 +31,19 @@ export class UsuariosComponent implements OnInit {
 
   public cargando: boolean = true;
 
+  // Subscription
   public usuarioSubscription: Subscription;
+  public paisSubscription: Subscription;
+  public congregacionSubscription: Subscription;
+  public campoSubscription: Subscription;
 
-  constructor(private usuarioServices: UsuarioService, private router: Router) {}
+  constructor(
+    private router: Router,
+    private usuarioService: UsuarioService,
+    private paisService: PaisService,
+    private congregacion: CongregacionService,
+    private campoServise: CampoService
+  ) {}
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -33,7 +51,7 @@ export class UsuariosComponent implements OnInit {
 
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioServices.listarUsuarios(this.paginaDesde).subscribe(({ totalUsuarios, usuarios }) => {
+    this.usuarioService.listarUsuarios(this.paginaDesde).subscribe(({ totalUsuarios, usuarios }) => {
       this.totalUsuarios = totalUsuarios;
       this.usuarios = usuarios;
       this.usuariosTemporales = usuarios;
@@ -58,7 +76,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   borrarUsuario(usuario: UsuarioModel) {
-    if (usuario.id === this.usuarioServices.usuarioId) {
+    if (usuario.id === this.usuarioService.usuarioId) {
       return Swal.fire('Error', 'No puede borrarse a si mismo', 'error');
     }
     Swal.fire({
@@ -72,7 +90,7 @@ export class UsuariosComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.usuarioServices.eliminarUsuario(usuario).subscribe((usuarioEliminado) => {
+        this.usuarioService.eliminarUsuario(usuario).subscribe((usuarioEliminado) => {
           Swal.fire(
             '¡Deshabilitado!',
             `${usuario.primerNombre} ${usuario.primerApellido} fue deshabilitado correctamente`,
@@ -98,7 +116,7 @@ export class UsuariosComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.usuarioServices.activarUsuario(usuario).subscribe((usuarioActivo: any) => {
+        this.usuarioService.activarUsuario(usuario).subscribe((usuarioActivo: any) => {
           Swal.fire(
             '¡Activado!',
             `El usuario ${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido} fue activado correctamente`,
@@ -117,5 +135,55 @@ export class UsuariosComponent implements OnInit {
   crearUsuario() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}/${nuevo}`);
+  }
+
+  congregacionUsuario(idUsuario: number) {
+    let usuario: UsuarioCongregacionModel;
+    let pais: PaisModel;
+    let congregacion: CongregacionModel;
+    let campo: CampoModel;
+
+    console.log(idUsuario);
+
+    // this.usuarioService.getUsuario(idUsuario).subscribe((usuarioEncontrado: UsuarioInterface) => {
+    //   usuario = usuarioEncontrado.usuarioCongregacion;
+
+    //   console.log(usuario);
+
+    //   // pais = this.buscarPais(usuario?.pais_id);
+    //   // console.info(pais);
+    //   // debugger;
+    //   // congregacion = this.buscarCongregacion(usuario.congregacion_id);
+    //   // campo = this.buscarCampo(usuario.campo_id);
+    // });
+
+    // console.log(usuario, pais, campo);
+
+    return { usuario, pais, campo };
+  }
+
+  buscarPais(idPais: number): PaisModel {
+    let pais: PaisModel;
+    this.paisService.getPais(idPais).subscribe((paisEncontrado) => {
+      pais = paisEncontrado;
+      console.log(pais);
+    });
+    return pais;
+  }
+
+  buscarCongregacion(idCongregacion: number): CongregacionModel {
+    let congregacion: CongregacionModel;
+    this.congregacion.getCongregacion(idCongregacion).subscribe((congregacionEncontrada) => {
+      congregacion = congregacionEncontrada;
+    });
+    return congregacion;
+  }
+
+  buscarCampo(idCampo: number): CampoModel {
+    let campo: CampoModel;
+    this.campoServise.getCampo(idCampo).subscribe((campoEncontrado) => {
+      campo = campoEncontrado;
+    });
+    return campo;
   }
 }

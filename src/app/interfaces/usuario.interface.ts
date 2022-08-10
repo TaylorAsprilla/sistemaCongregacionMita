@@ -4,6 +4,7 @@ import { UsuarioCongregacionModel } from '../models/usuarioCongregacion.model';
 export interface ListarUsuario {
   totalUsuarios: number;
   usuarios: UsuarioModel[];
+  usuarioCongregacion: UsuarioCongregacionModel[];
 }
 
 export interface UsuarioInterface {
