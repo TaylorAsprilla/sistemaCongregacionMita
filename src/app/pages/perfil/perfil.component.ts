@@ -31,6 +31,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./perfil.component.css'],
 })
 export class PerfilComponent implements OnInit, OnDestroy {
+  isEdit: boolean = false;
+
   //Subscription
   public usuarioSubscription: Subscription;
   public tipoDocumentoSubscription: Subscription;
@@ -207,5 +209,14 @@ export class PerfilComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  toggleEdit() {
+    this.isEdit = !this.isEdit;
+    console.log(this.isEdit);
+  }
+
+  submit() {
+    this.toggleEdit();
   }
 }

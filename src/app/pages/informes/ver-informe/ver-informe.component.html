@@ -6,29 +6,212 @@
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <input type="date" #fecha name="fecha" class="form-control" placeholder="Fecha del trimestre" />
+        <input
+          type="date"
+          (change)="seleccionarTrimestre()"
+          [(ngModel)]="fechaSeleccionada"
+          class="form-control"
+          placeholder="Fecha del trimestre"
+        />
       </div>
 
       <hr />
     </div>
     <div class="col-md-6">
-      <select #obrero name="obrero" class="form-control">
-        <option value="Obrero no seleccionado">Seleccione el obrero</option>
-        <option value="Luis Daniel">Luis Daniel</option>
-        <option value="Oscar Rodríguez">Oscar Rodríguez</option>
-        <option value="Liomar Sinisterra">Liomar Sinisterra</option>
-        <option value="Nevardo Cifuentes">Nevardo Cifuentes</option>
+      <select [(ngModel)]="obreroSeleccionado" class="form-control" (change)="seleccionarObrero(obreroSeleccionado)">
+        <option value="" disabled>Obrero no seleccionado</option>
+        <option *ngFor="let usuario of usuarios" [ngValue]="usuario">
+          {{ usuario.primerNombre + ' ' + usuario.primerApellido }}
+        </option>
       </select>
     </div>
     <div class="ml-5">
-      <button (click)="makePDF(obrero.value, fecha.value)" class="btn btn-primary descargar">Descargar Informe</button>
+      <button (click)="makePDF()" class="btn btn-primary descargar">Descargar Informe</button>
     </div>
   </div>
 </div>
 
-<div id="content" #content>
-  <h1>Congregación Mita Inc.</h1>
+<div id="content" class="fontColor" #content>
+  <div class="header">
+    <p class="title">Congregación Mita Inc.</p>
+    <p>({{ paisObrero }})</p>
 
-  <p>Informe generado por: {{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundApellido }}</p>
-  <p>Fecha Actual: {{ fechaActual }}</p>
+    <p class="heading">Informe Trimestral</p>
+    <table class="tableCenter">
+      <tr>
+        <td>
+          <p class="heading">Trimestre {{ fechaSeleccionada.slice(0, 4) }} :</p>
+        </td>
+        <td class="info">{{ trimestre }}</td>
+      </tr>
+      <tr>
+        <td>
+          <p class="heading">Obrero/a:</p>
+        </td>
+        <td class="info">{{ obreroSeleccionado?.primerNombre }} {{ obreroSeleccionado?.primerApellido }}</td>
+      </tr>
+      <tr>
+        <td>
+          <p class="heading">Fecha de Informe:</p>
+        </td>
+        <td class="info">{{ fechaActual.toString().slice(0, 15) }}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="body">
+    <p class="heading">A. RESUMEN DE SERVICIOS, ORACIONES Y VIGILIAS REALIZADAS: - Actividades</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of servicios[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr (change)="seleccionarTrimestre()" *ngFor="let actividad of servicios">
+          <td (change)="seleccionarTrimestre()" *ngFor="let list of actividad | keys">{{ actividad[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">B. RESUMEN DE VISITAS REALIZADAS A LOS/AS FELIGRESES: Visitas</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of visitas[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let visita of visitas">
+          <td *ngFor="let list of visita | keys">{{ visita[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">C. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS: SituacionVisita</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of situacionVisita[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of situacionVisita">
+          <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">D. ACTIVIDADES ESPECIALES REALIZADAS: Actividades</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of especiales[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of especiales">
+          <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">E. ACTIVIDADES RELACIONADAS AL ASPECTO ESPIRITUAL: Actividades</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of espirituales[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of espirituales">
+          <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">F. REUNIONES: Actividades</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of reuniones[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sv of reuniones">
+          <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">G. ASPECTOS CONTABLES: Aspectos Contables</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of aspectoContable[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ac of aspectoContable">
+          <td *ngFor="let list of ac | keys">{{ ac[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">H. LOGROS OBTENIDOS: Logro</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of logros[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let logro of logros">
+          <td *ngFor="let list of logro | keys">{{ logro[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">I. ASUNTOS PENDIENTES (ADMINISTRATIVOS, CONSTRUCCIÓN, ACTIVIDADES, ECLESIÁSTICOS):</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of asuntoPendiente[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ap of asuntoPendiente">
+          <td *ngFor="let list of ap | keys">{{ ap[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="heading">J. METAS PARA EL PRÓXIMO TRIMESTRE: Metas</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th *ngFor="let head of metas[0] | keys">{{ head }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let meta of metas">
+          <td *ngFor="let list of meta | keys">{{ meta[list] }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+    <div class="">
+      <p>Informe generado por: {{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundApellido }}</p>
+      <p>Fecha Actual: {{ fechaActual }}</p>
+    </div>
+  </div>
 </div>

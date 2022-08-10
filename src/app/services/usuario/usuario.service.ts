@@ -216,10 +216,10 @@ export class UsuarioService {
     );
   }
 
-  getUsuario(id: string) {
+  getUsuario(id: number) {
     return this.httpClient
-      .get(`${base_url}/usuarios/${id}`, this.headers)
-      .pipe(map((usuario: UsuarioInterface) => usuario));
+      .get<UsuarioInterface>(`${base_url}/usuarios/${id}`, this.headers)
+      .pipe(map((usuario) => usuario));
   }
 
   eliminarUsuario(usuario: UsuarioModel) {
