@@ -65,7 +65,7 @@
           },
           "configurations": {
             "production": {
-              "optimization": false,
+              "optimization": true,
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
@@ -75,15 +75,16 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "30mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "50kb",
+                  "maximumError": "200kb"
                 }
               ],
+              "index": "src/prod/index.html",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
