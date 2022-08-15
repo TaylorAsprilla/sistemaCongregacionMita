@@ -154,14 +154,21 @@
             </small>
           </div>
 
-          <div class="input-group mb-3">
-            <label class="space">Nacionalidad: </label>
-            <select class="form-control" formControlName="nacionalidad_id">
-              <option value="" disabled>Seleccione la nacionalidad</option>
-              <option *ngFor="let nacionalidad of nacionalidades" [value]="nacionalidad.id">
-                {{ nacionalidad.nombre }}
-              </option>
-            </select>
+          <div class="form-group">
+            <label>Nacionalidad: </label>
+            <input
+              type="text"
+              placeholder="Buscar la nacionalidad"
+              [formControl]="myControl"
+              [matAutocomplete]="auto"
+              class="form-control"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
+                {{ item.nombre }}
+              </mat-option>
+            </mat-autocomplete>
+
             <small
               class="form-text text-muted"
               *ngIf="
@@ -248,64 +255,58 @@
             <input type="number" class="form-control" formControlName="zipCode" placeholder="Código Postal" />
           </div>
 
-          <div class="form-row">
-            <div class="form-group col-md-2">
-              <label for="indicativo">Indicativo</label>
-              <select class="form-control" formControlName="indicativoCasa" id="indicativo">
-                <option value="" disabled>Indicativo</option>
-                <option *ngFor="let nacionalidad of this.nacionalidades" [value]="nacionalidad.telefonoCode">
-                  +{{ nacionalidad.telefonoCode }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group col-md-10">
-              <label for="telefonoCasa">Teléfono de la Casa:</label>
-              <input
-                type="number"
-                formControlName="telefonoCasa"
-                class="form-control"
-                placeholder="Teléfono en Casa"
-                id="telefonoCasa"
-              />
-            </div>
+          <div class="form-group">
+            <label for="telefonoCasa">Teléfono de la Casa:</label>
+            <ngx-intl-tel-input
+              [cssClass]="'form-control'"
+              [preferredCountries]="preferredCountries"
+              [enableAutoCountrySelect]="true"
+              [enablePlaceholder]="true"
+              [searchCountryFlag]="true"
+              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+              [selectFirstCountry]="false"
+              [selectedCountryISO]="CountryISO.PuertoRico"
+              [maxLength]="15"
+              [phoneValidation]="true"
+              [separateDialCode]="separateDialCode"
+              [numberFormat]="PhoneNumberFormat.National"
+              name="telefonoCasa"
+              formControlName="telefonoCasa"
+            >
+            </ngx-intl-tel-input>
           </div>
 
-          <div class="form-row">
-            <div class="form-group col-md-2">
-              <label for="indicativo">Indicativo</label>
-              <select class="form-control" formControlName="indicativoCelular" id="indicativo">
-                <option value="" disabled>Indicativo</option>
-                <option *ngFor="let nacionalidad of this.nacionalidades" [value]="nacionalidad.telefonoCode">
-                  +{{ nacionalidad.telefonoCode }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group col-md-10">
-              <label for="celular">Celular</label>
-              <input
-                type="number"
-                formControlName="numeroCelular"
-                class="form-control"
-                placeholder="Celular"
-                id="celular"
-              />
-              <small
-                class="form-text text-muted"
-                *ngIf="
-                  usuarioForm.get('numeroCelular').hasError('required') && usuarioForm.get('numeroCelular').touched
-                "
-              >
-                El número de celular del usuario es requerido.
-              </small>
-              <small
-                class="form-text text-muted"
-                *ngIf="
-                  usuarioForm.get('numeroCelular').hasError('minlength') && usuarioForm.get('numeroCelular').touched
-                "
-              >
-                El número de celular del usuario no tiene la longitud mínima permitida.
-              </small>
-            </div>
+          <div class="form-group">
+            <label for="celular">Celular</label>
+            <ngx-intl-tel-input
+              [cssClass]="'form-control'"
+              [preferredCountries]="preferredCountries"
+              [enableAutoCountrySelect]="true"
+              [enablePlaceholder]="true"
+              [searchCountryFlag]="true"
+              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+              [selectFirstCountry]="false"
+              [selectedCountryISO]="CountryISO.PuertoRico"
+              [maxLength]="15"
+              [phoneValidation]="true"
+              [separateDialCode]="separateDialCode"
+              [numberFormat]="PhoneNumberFormat.International"
+              name="numeroCelular"
+              formControlName="numeroCelular"
+            >
+            </ngx-intl-tel-input>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('numeroCelular').hasError('required') && usuarioForm.get('numeroCelular').touched"
+            >
+              El número de celular del usuario es requerido.
+            </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="usuarioForm.get('numeroCelular').hasError('minlength') && usuarioForm.get('numeroCelular').touched"
+            >
+              El número de celular del usuario no tiene la longitud mínima permitida.
+            </small>
           </div>
 
           <div class="input-group mb-3">
