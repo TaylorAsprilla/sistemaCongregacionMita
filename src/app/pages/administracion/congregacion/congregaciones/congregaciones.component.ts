@@ -18,7 +18,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
   // Subscription
   public congregacionSubscription: Subscription;
 
-  constructor(private router: Router, private congregacionServices: CongregacionService) {}
+  constructor(private router: Router, private congregacionService: CongregacionService) {}
 
   ngOnInit(): void {
     this.cargarCongregaciones();
@@ -30,7 +30,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
 
   cargarCongregaciones() {
     this.cargando = true;
-    this.congregacionSubscription = this.congregacionServices
+    this.congregacionSubscription = this.congregacionService
       .getCongregaciones()
       .subscribe((congregaciones: CongregacionModel[]) => {
         this.congregaciones = congregaciones;
@@ -50,7 +50,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.congregacionServices.eliminarCongregacion(congregacion).subscribe((congregacionEliminado) => {
+        this.congregacionService.eliminarCongregacion(congregacion).subscribe((congregacionEliminado) => {
           Swal.fire(
             '¡Deshabilitado!',
             `La congregación ${congregacion.congregacion} fue deshabilitada correctamente`,
@@ -75,7 +75,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.congregacionServices.activarCongregacion(congregacion).subscribe((congregacionActiva) => {
+        this.congregacionService.activarCongregacion(congregacion).subscribe((congregacionActiva) => {
           Swal.fire('¡Activado!', `La congregación ${congregacion.congregacion} fue activada correctamente`, 'success');
 
           this.cargarCongregaciones();

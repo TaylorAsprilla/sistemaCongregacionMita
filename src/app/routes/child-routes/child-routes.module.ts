@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CamposComponent } from 'src/app/pages/administracion/campo/campos/campos.component';
 import { CongregacionesComponent } from 'src/app/pages/administracion/congregacion/congregaciones/congregaciones.component';
-import { MinisteriosComponent } from 'src/app/pages/administracion/ministerios/ministerios.component';
+import { MinisteriosComponent } from 'src/app/pages/administracion/ministerios/ministerios/ministerios.component';
 import { UsuariosComponent } from 'src/app/pages/administracion/usuario/usuarios/usuarios.component';
 import { CrearActividadComponent } from 'src/app/pages/informes/crear-actividad/crear-actividad.component';
 
@@ -57,6 +57,11 @@ const childRoutes: Routes = [
     path: Rutas.REGISTRAR_USUARIO,
     component: RegistrarUsuarioComponent,
     resolve: { nacionalidad: NacionalidadResolver },
+  },
+  {
+    path: Rutas.MINISTERIOS,
+    component: MinisteriosComponent,
+    // resolve: { nacionalidad: NacionalidadResolver },
   },
 
   {
