@@ -1,0 +1,84 @@
+<section class="content">
+  <!-- Cargado información -->
+  <app-cargando-informacion *ngIf="cargando"></app-cargando-informacion>
+
+  <div class="card animate__animated animate__fadeIn animate__slow" *ngIf="!cargando">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-8">
+          <h3 class="card-title">Total de Ministerios ({{ ministerios.length }})</h3>
+          <p>Ministerios registradas en la aplicación</p>
+        </div>
+        <div class="col">
+          <div class="text-right">
+            <a class="btn btn-primary" (click)="crearMinisterio()"> <i class="fas fa-plus"></i> Crear Ministerio </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table class="table table-bordered table-striped table-responsive">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th class="w1200">Nombre</th>
+            <th class="w200">Estado</th>
+            <th class="w200">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ministerio of ministerios; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ ministerio.ministerio }}</td>
+
+            <td>
+              <span *ngIf="ministerio.estado" class="badge badge-primary">Activo</span>
+              <span *ngIf="!ministerio.estado" class="badge badge-danger">Deshabilitado</span>
+            </td>
+
+            <td>
+              <a
+                *ngIf="!!ministerio.estado"
+                data-toggle="tooltip"
+                data-original-title="Editar"
+                class="btn bg-info"
+                (click)="actualizarMinisterio(ministerio.id)"
+                ><i class="fas fa-pencil-alt ml-1"></i
+              ></a>
+              <a
+                *ngIf="!!ministerio.estado"
+                data-toggle="tooltip"
+                data-original-title="Borrar"
+                class="btn bg-danger ml-1"
+                (click)="borrarMinisterio(ministerio)"
+                ><i class="fas fa-trash-alt"></i
+              ></a>
+              <a
+                *ngIf="!ministerio.estado"
+                data-toggle="tooltip"
+                data-original-title="Activar"
+                class="btn bg-secondary ml-1"
+                (click)="activarMinisterio(ministerio)"
+                ><i class="fas fa-check-square"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Item</th>
+            <th>Nombre</th>
+            <th class="w100">Estado</th>
+            <th class="w100">Acciones</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="md-4 py-2 pl-4">
+      <button class="btn btn-secondary">Siguiente</button> &nbsp;
+      <button class="btn btn-secondary">Anterior</button>
+    </div>
+  </div>
+</section>

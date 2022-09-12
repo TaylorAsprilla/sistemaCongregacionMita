@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
+import { Observable, Subscription } from 'rxjs';
+import { delay, map, startWith } from 'rxjs/operators';
 import { UsuarioInterface } from 'src/app/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/models/campo.model';
 import { CongregacionModel } from 'src/app/models/congregacion.model';
@@ -64,6 +65,23 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public vacunaSubscription: Subscription;
   public dosisSubscription: Subscription;
 
+  separateDialCode = false;
+  SearchCountryField = SearchCountryField;
+  CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+  preferredCountries: CountryISO[] = [
+    CountryISO.PuertoRico,
+    CountryISO.Colombia,
+    CountryISO.DominicanRepublic,
+    CountryISO.Ecuador,
+    CountryISO.Mexico,
+    CountryISO.UnitedStates,
+    CountryISO.Venezuela,
+  ];
+
+  filteredOptions: Observable<NacionalidadModel[]>;
+  myControl = new FormControl('');
+
   constructor(
     private formBuilder: FormBuilder,
     private usuarioService: UsuarioService,
@@ -97,9 +115,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       numeroDocumento: ['', [Validators.minLength(3)]],
       fechaNacimiento: ['', [Validators.required]],
       email: ['', [Validators.email]],
-      indicativoCasa: ['', [Validators.minLength(3)]],
       telefonoCasa: ['', [Validators.minLength(3)]],
-      indicativoCelular: ['', [Validators.minLength(7)]],
       numeroCelular: ['', [Validators.minLength(7)]],
       direccion: ['', [Validators.required, Validators.minLength(5)]],
       zipCode: ['', [Validators.minLength(3)]],
@@ -163,6 +179,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.dosisSubscription = this.dosisService.listarDosis().subscribe((dosis: DosisModel[]) => {
       this.dosis = dosis;
     });
+
+    this.buscarNacionalidad();
   }
 
   ngOnDestroy(): void {
@@ -239,7 +257,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
             this.usuarioSeleccionado = usuarioEncontrado.usuario;
 
             const { pais_id, congregacion_id, campo_id } = usuarioEncontrado.usuarioCongregacion;
-            console.log(pais_id, congregacion_id, campo_id);
 
             this.usuarioForm.setValue({
               primerNombre,
@@ -303,6 +320,21 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   listarCampos(congregacion: string) {
     this.camposFiltrados = this.campos.filter(
       (campoABuscar) => campoABuscar.congregacion_id === parseInt(congregacion)
+    );
+  }
+
+  buscarNacionalidad() {
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map((valor) => this.filtrar(valor || ''))
+    );
+  }
+
+  private filtrar(valor: string): NacionalidadModel[] {
+    const filtrarValores = valor.toLowerCase();
+
+    return this.nacionalidades.filter((nacionalidad: NacionalidadModel) =>
+      nacionalidad.nombre.toLowerCase().includes(filtrarValores)
     );
   }
 }

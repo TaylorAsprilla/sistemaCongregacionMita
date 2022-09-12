@@ -1,0 +1,95 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { MinisterioModel } from 'src/app/models/ministerio.model';
+import { Rutas } from 'src/app/routes/menu-items';
+import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
+import Swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-ministerios',
+  templateUrl: './ministerios.component.html',
+  styleUrls: ['./ministerios.component.css'],
+})
+export class MinisteriosComponent implements OnInit, OnDestroy {
+  public cargando: boolean = true;
+  public ministerios: MinisterioModel[] = [];
+
+  // Subscription
+  public ministerioSubscription: Subscription;
+
+  constructor(private router: Router, private ministerioService: MinisterioService) {}
+
+  ngOnInit(): void {
+    this.cargarMinisterios();
+  }
+
+  ngOnDestroy(): void {
+    this.ministerioSubscription?.unsubscribe();
+  }
+
+  cargarMinisterios() {
+    this.cargando = true;
+    this.ministerioSubscription = this.ministerioService
+      .getMinisterios()
+      .subscribe((ministerios: MinisterioModel[]) => {
+        this.ministerios = ministerios;
+        this.cargando = false;
+      });
+  }
+
+  borrarMinisterio(ministerio: MinisterioModel) {
+    Swal.fire({
+      title: '¿Borrar Ministerio?',
+      text: `Esta seguro de borrar el ministerio ${ministerio.ministerio}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, borrar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ministerioService.eliminarMinisterio(ministerio).subscribe((ministerioEliminado) => {
+          Swal.fire(
+            '¡Deshabilitado!',
+            `El ministerio ${ministerio.ministerio} fue deshabilitado correctamente`,
+            'success'
+          );
+
+          this.cargarMinisterios();
+        });
+      }
+    });
+  }
+
+  activarMinisterio(ministerio: MinisterioModel) {
+    Swal.fire({
+      title: 'Activar Ministerio',
+      text: `Esta seguro de activar el ministerio ${ministerio.ministerio}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, activar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ministerioService.activarministerio(ministerio).subscribe((ministerioActivo) => {
+          Swal.fire('¡Activado!', `El ministerio ${ministerio.ministerio} fue activado correctamente`, 'success');
+
+          this.cargarMinisterios();
+        });
+      }
+    });
+  }
+
+  actualizarMinisterio(id: number) {
+    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.MINISTERIOS}/${id}`);
+  }
+
+  crearMinisterio() {
+    const nuevo = 'nuevo';
+    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.MINISTERIOS}/${nuevo}`);
+  }
+}
