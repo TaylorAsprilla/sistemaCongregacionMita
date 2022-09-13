@@ -29,7 +29,7 @@ export class PaisService {
       .pipe(map((pais: { ok: boolean; pais: PaisModel[] }) => pais.pais));
   }
 
-  getPais(id: string) {
+  getPais(id: number) {
     return this.httpClient
       .get(`${base_url}/pais/${id}`, this.headers)
       .pipe(map((pais: { ok: boolean; pais: PaisModel; id: number }) => pais.pais));

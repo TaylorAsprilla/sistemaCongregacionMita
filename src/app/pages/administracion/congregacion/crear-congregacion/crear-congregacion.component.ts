@@ -3,11 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { ListarUsuario } from 'src/app/interfaces/usuario.interface';
 import { CongregacionModel } from 'src/app/models/congregacion.model';
 import { PaisModel } from 'src/app/models/pais.model';
+import { UsuarioModel } from 'src/app/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,18 +23,22 @@ export class CrearCongregacionComponent implements OnInit {
 
   public congregaciones: CongregacionModel[] = [];
   public paises: PaisModel[] = [];
+  public usuarios: UsuarioModel[] = [];
+
   public congregacionSeleccionada: CongregacionModel;
 
   // Subscription
   public congregacionSubscription: Subscription;
   public paisSubscription: Subscription;
+  public usuariosSubscription: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private activateRouter: ActivatedRoute,
     private congregacionService: CongregacionService,
-    private paisService: PaisService
+    private paisService: PaisService,
+    private usuariosService: UsuarioService
   ) {}
 
   ngOnInit(): void {
@@ -42,10 +49,15 @@ export class CrearCongregacionComponent implements OnInit {
     this.congregacionForm = this.formBuilder.group({
       congregacion: ['', [Validators.required, Validators.minLength(3)]],
       pais_id: ['', [Validators.required]],
+      idObreroEncargado: ['', [Validators.required]],
     });
 
     this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
       this.paises = pais.filter((pais: PaisModel) => pais.estado === true);
+    });
+
+    this.usuariosSubscription = this.usuariosService.listarTodosLosUsuarios().subscribe((usuarios: ListarUsuario) => {
+      this.usuarios = usuarios.usuarios;
     });
 
     this.cargarCongregaciones();
@@ -54,6 +66,7 @@ export class CrearCongregacionComponent implements OnInit {
   ngOnDestroy(): void {
     this.paisSubscription?.unsubscribe();
     this.congregacionSubscription?.unsubscribe();
+    this.usuariosSubscription?.unsubscribe();
   }
 
   cargarCongregaciones() {
@@ -119,7 +132,7 @@ export class CrearCongregacionComponent implements OnInit {
   buscarCongregacion(id: string) {
     if (id !== 'nuevo') {
       this.congregacionService
-        .getCongregacion(id)
+        .getCongregacion(Number(id))
         .pipe(delay(100))
         .subscribe(
           (congregacionEncontrada: CongregacionModel) => {

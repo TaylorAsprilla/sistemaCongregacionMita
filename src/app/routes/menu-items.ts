@@ -18,6 +18,7 @@ export enum Rutas {
   INFORME_LOGROS = 'informe-logros',
   INFORME_VISITAS = 'informe-visitas',
   METAS = 'metas',
+  MINISTERIOS = 'ministerios',
   PAISES = 'paises',
   PERFIL = 'perfil',
   USUARIOS = 'usuarios',
@@ -64,6 +65,14 @@ export const ROUTES: RouteInfo[] = [
       {
         path: Rutas.USUARIOS,
         title: 'Usuarios',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+      {
+        path: Rutas.MINISTERIOS,
+        title: 'Ministerios',
         icon: '',
         class: '',
         extralink: false,

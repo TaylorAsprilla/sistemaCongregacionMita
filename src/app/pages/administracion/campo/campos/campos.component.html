@@ -22,14 +22,16 @@
           <tr>
             <th class="w100">item</th>
             <th class="w1200">Nombre</th>
+            <th>Obrero Encargado</th>
             <th class="w200">Estado</th>
             <th class="w200">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let campo of campos">
-            <td>{{ campo.id }}</td>
+          <tr *ngFor="let campo of campos; index as i">
+            <td>{{ i + 1 }}</td>
             <td>{{ campo.campo }}</td>
+            <td>{{ campo.idObreroEncargado }}</td>
 
             <td>
               <span *ngIf="campo.estado" class="badge badge-primary">Activo</span>
@@ -68,6 +70,7 @@
           <tr>
             <th class="w100">item</th>
             <th>Nombre</th>
+            <th>Obrero Encargado</th>
             <th class="w100">Estado</th>
             <th class="w100">Acciones</th>
           </tr>

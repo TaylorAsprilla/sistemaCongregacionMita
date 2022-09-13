@@ -211,7 +211,11 @@ export class UsuarioService {
               usuario.indicativoCelular
             )
         );
-        return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
+        return {
+          totalUsuarios: usuariosRespuesta.totalUsuarios,
+          usuarios,
+          usuarioCongregacion: usuariosRespuesta.usuarioCongregacion,
+        };
       })
     );
   }

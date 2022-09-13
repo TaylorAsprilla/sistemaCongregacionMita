@@ -3,11 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { ListarUsuario } from 'src/app/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/models/campo.model';
 import { CongregacionModel } from 'src/app/models/congregacion.model';
+import { UsuarioModel } from 'src/app/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,9 +23,12 @@ export class CrearCampoComponent implements OnInit {
 
   public campos: CampoModel[] = [];
   public congregaciones: CongregacionModel[] = [];
+  public usuarios: UsuarioModel[] = [];
+
   // Subscription
   public campoSubscription: Subscription;
   public congregacionSubscription: Subscription;
+  public usuariosSubscription: Subscription;
 
   public campoSeleccionado: CampoModel;
 
@@ -31,7 +37,8 @@ export class CrearCampoComponent implements OnInit {
     private router: Router,
     private campoService: CampoService,
     private congregacionService: CongregacionService,
-    private activateRouter: ActivatedRoute
+    private activateRouter: ActivatedRoute,
+    private usuariosService: UsuarioService
   ) {}
 
   ngOnInit(): void {
@@ -48,12 +55,17 @@ export class CrearCampoComponent implements OnInit {
       this.congregaciones = congregacion.filter((congregacion: CongregacionModel) => congregacion.estado === true);
     });
 
+    this.usuariosSubscription = this.usuariosService.listarTodosLosUsuarios().subscribe((usuarios: ListarUsuario) => {
+      this.usuarios = usuarios.usuarios;
+    });
+
     this.cargarCampos();
   }
 
   ngOnDestroy(): void {
     this.campoSubscription?.unsubscribe();
     this.congregacionSubscription?.unsubscribe();
+    this.usuariosSubscription?.unsubscribe();
   }
 
   cargarCampos() {
@@ -92,14 +104,13 @@ export class CrearCampoComponent implements OnInit {
   buscarCampo(id: string) {
     if (id !== 'nuevo') {
       this.campoService
-        .getCampo(id)
+        .getCampo(Number(id))
         .pipe(delay(100))
         .subscribe(
           (campoActualizado: CampoModel) => {
-            console.log('campoActualizado', campoActualizado);
             const { campo, congregacion_id } = campoActualizado;
             this.campoSeleccionado = campoActualizado;
-            console.log('this.campoSeleccionado', this.campoSeleccionado);
+
             this.campoForm.setValue({ campo, congregacion_id });
           },
           (error) => {

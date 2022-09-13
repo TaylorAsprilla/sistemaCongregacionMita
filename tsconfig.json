@@ -6,7 +6,7 @@
     "paths": {
       "environment": ["src/environments/environment"]
     },
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist/informescma",
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "noImplicitOverride": true,
