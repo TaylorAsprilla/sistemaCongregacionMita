@@ -60,13 +60,13 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   espirituales: any[] = [];
   reuniones: any[] = [];
 
-  aspectoContable: any[];
-  asuntoPendiente: any[];
+  aspectoContable: any[] = [];
+  asuntoPendiente: any[] = [];
   informacionInforme: any[]; // no se que es esto
-  logros: any[];
-  metas: any[]; // missing
-  situacionVisita: any[];
-  visitas: any[];
+  logros: any[] = [];
+  metas: any[] = [];
+  situacionVisita: any[] = [];
+  visitas: any[] = [];
 
   public seccionesInformes: SeccionInformeModel[];
 
@@ -187,22 +187,48 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     let daySelect = this.fechaSeleccionada.slice(8, 10);
     conjunto.forEach((actividad) => {
       let fecha = actividad.fecha;
-      console.log(fecha);
+      //console.log(fecha);
       let year = fecha.slice(0, 4);
       let month = fecha.slice(5, 7);
       let monthNum = Number(month);
       let day = fecha.slice(8, 10);
       if (yearSelect == year) {
-        console.log('select: ' + monthSelect + ' actividad month: ' + month);
+        //console.log('select: ' + monthSelect + ' actividad month: ' + month);
         if (monthSelectNum >= monthNum && monthSelectNum <= monthNum) {
           result.push(actividad);
         }
       }
     });
-    console.log('fecha seleccionada ' + this.fechaSeleccionada);
+    //console.log('fecha seleccionada ' + this.fechaSeleccionada);
 
     return result;
   }
+
+  filtrarFechaCreatedAt(conjunto) {
+    let result: any[] = [];
+    let yearSelect = this.fechaSeleccionada.slice(0, 4);
+    let monthSelect = this.fechaSeleccionada.slice(5, 7);
+    let monthSelectNum = Number(monthSelect);
+    conjunto.forEach((actividad) => {
+      let fecha = actividad.createdAt;
+      console.log(fecha);
+      let year = fecha.slice(0, 4);
+      let month = fecha.slice(5, 7);
+      let monthNum = Number(month);
+      if (yearSelect == year) {
+        console.log('select: ' + monthSelect + ' actividad month: ' + month);
+        if (monthSelectNum >= monthNum && monthSelectNum <= monthNum) {
+          console.log('pushed!: ' + actividad);
+          result.push(actividad);
+        }
+      }
+    });
+    console.log('fecha seleccionada ' + this.fechaSeleccionada);
+    console.log(result);
+    return result;
+  }
+
+  filtrarCongre(conjunto) {}
 
   getTipoActividadName(id) {
     console.log('hi');
@@ -258,6 +284,20 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.especiales = this.filtrarFecha(this.especiales);
       this.espirituales = this.filtrarFecha(this.espirituales);
       this.reuniones = this.filtrarFecha(this.reuniones);
+
+      // no hace update en html
+      this.visitas = this.filtrarFecha(this.visitas);
+      //console.log(this.visitas);
+      this.situacionVisita = this.filtrarFecha(this.situacionVisita);
+      //console.log(this.situacionVisita);
+      this.aspectoContable = this.filtrarFechaCreatedAt(this.aspectoContable);
+      //console.log(this.aspectoContable);
+
+      this.asuntoPendiente = this.filtrarFechaCreatedAt(this.asuntoPendiente);
+      console.log(this.asuntoPendiente);
+
+      this.metas = this.filtrarFecha(this.metas);
+      console.log(this.metas);
     } else {
       this.servicios = [];
     }
