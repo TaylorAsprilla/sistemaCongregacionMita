@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 import { AdministracionModule } from './administracion/administracion.module';
-import { RegisterModule } from './registro/register.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PagesComponent } from './pages.component';
@@ -22,7 +20,6 @@ import { NopagefoundModule } from './nopagefound/nopagefound.module';
     RouterModule,
     SharedModule,
     AdministracionModule,
-    RegisterModule,
     FormsModule,
     ReactiveFormsModule,
     PerfectScrollbarModule,

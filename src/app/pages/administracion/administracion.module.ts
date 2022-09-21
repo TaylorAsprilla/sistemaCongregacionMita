@@ -18,6 +18,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CrearMinisterioComponent } from './ministerios/crear-ministerio/crear-ministerio.component';
+import { CargandoInformacionModule } from 'src/app/components/cargando-informacion/cargando-informacion.module';
 
 @NgModule({
   declarations: [
@@ -33,9 +34,9 @@ import { CrearMinisterioComponent } from './ministerios/crear-ministerio/crear-m
   ],
   imports: [
     CommonModule,
-    ComponentsModule,
     AppRoutingModule,
     FormsModule,
+    CargandoInformacionModule,
     ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,

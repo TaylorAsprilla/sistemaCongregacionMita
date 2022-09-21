@@ -92,8 +92,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
       email: [this.usuario?.email, [Validators.required, Validators.email]],
       numeroCelular: [this.usuario?.numeroCelular, [Validators.minLength(3)]],
       telefonoCasa: [this.usuario?.telefonoCasa, [Validators.minLength(3)]],
-      direccion: [this.usuario?.direccion, [Validators.minLength(3)]],
-      zipCode: [this.usuario?.zipCode, [Validators.minLength(3)]],
       login: [this.usuario?.login, []],
       password: ['', [Validators.required]],
       foto: [this.usuario?.fotoUrl, []],

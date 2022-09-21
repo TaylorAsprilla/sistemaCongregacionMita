@@ -243,16 +243,13 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
               segundoApellido,
               numeroDocumento,
               telefonoCasa,
-              direccion,
-              zipCode,
+
               login,
               password,
               foto,
               tipoDocumento_id,
               rolCasa_id,
               nacionalidad_id,
-              indicativoCasa,
-              indicativoCelular,
             } = usuarioEncontrado.usuario;
             this.usuarioSeleccionado = usuarioEncontrado.usuario;
 
@@ -275,16 +272,13 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
               segundoApellido,
               numeroDocumento,
               telefonoCasa,
-              direccion,
-              zipCode,
+
               login,
               password,
               foto,
               tipoDocumento_id,
               rolCasa_id,
               nacionalidad_id,
-              indicativoCasa,
-              indicativoCelular,
             });
           },
           (error) => {

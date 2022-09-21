@@ -18,7 +18,6 @@ import { InformeComponent } from 'src/app/pages/informes/informe/informe.compone
 import { VerInformeComponent } from 'src/app/pages/informes/ver-informe/ver-informe.component';
 import { InicioComponent } from 'src/app/pages/inicio/inicio.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
-import { RegisterCampoComponent } from 'src/app/pages/registro/register-campo/register-campo.component';
 
 import { RegistrarUsuarioComponent } from 'src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component';
 import { Rutas } from '../menu-items';
@@ -92,11 +91,6 @@ const childRoutes: Routes = [
   {
     path: `${Rutas.CAMPOS}/:id`,
     component: CrearCampoComponent,
-  },
-
-  {
-    path: Rutas.CAMPOS,
-    component: RegisterCampoComponent,
   },
 
   // Perfil

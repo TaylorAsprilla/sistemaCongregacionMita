@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppRoutingModule } from '../app-routing.module';
-import { SeccionInformeComponent } from './seccion-informe/seccion-informe.component';
+import { SeccionInformeComponent } from './seccion-informe.component';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 @NgModule({
   declarations: [SeccionInformeComponent],
   imports: [CommonModule, AppRoutingModule],
   exports: [SeccionInformeComponent],
 })
-export class ComponentsModule {}
+export class SeccionInformeModule {}
