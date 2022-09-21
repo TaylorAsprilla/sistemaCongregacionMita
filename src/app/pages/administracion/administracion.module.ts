@@ -5,7 +5,6 @@ import { CongregacionesComponent } from './congregacion/congregaciones/congregac
 import { MinisteriosComponent } from './ministerios/ministerios/ministerios.component';
 import { UsuariosComponent } from './usuario/usuarios/usuarios.component';
 import { CrearCongregacionComponent } from './congregacion/crear-congregacion/crear-congregacion.component';
-import { ComponentsModule } from 'src/app/components/components.module';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CrearPaisComponent } from './pais/crear-pais/crear-pais.component';
