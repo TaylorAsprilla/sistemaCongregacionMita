@@ -10,13 +10,18 @@ export class UsuarioModel {
     public email: string,
     public numeroCelular: string,
     public fechaNacimiento: Date,
+    public esJoven: boolean,
     public estado: boolean,
     public genero_id: number,
     public estadoCivil_id: number,
     public vacuna_id: number,
     public dosis_id: number,
+    public tipoMiembreo_id: number,
     public segundoNombre?: string,
     public segundoApellido?: string,
+    public apodo?: string,
+    public ingresoMensual?: string,
+    public especializacionEmpleo?: string,
     public numeroDocumento?: string,
     public telefonoCasa?: string,
     public direccion?: string,
@@ -27,8 +32,8 @@ export class UsuarioModel {
     public tipoDocumento_id?: number,
     public rolCasa_id?: number,
     public nacionalidad_id?: number,
-    public indicativoCasa?: number,
-    public indicativoCelular?: number
+    public gradoAcademico_id?: number,
+    public tipoEmpleo_id?: number
   ) {}
 
   get fotoUrl() {
