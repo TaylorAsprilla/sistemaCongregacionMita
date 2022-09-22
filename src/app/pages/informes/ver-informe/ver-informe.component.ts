@@ -214,8 +214,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  filtrarCongre(conjunto) {}
-
   getTipoActividadName(id) {
     try {
       return this.tipoActividades[id]['nombre'];
