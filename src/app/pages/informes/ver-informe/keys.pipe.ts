@@ -1,7 +1,7 @@
 import { PipeTransform, Pipe } from '@angular/core';
 
 const excluded = [
-  'createdAt',
+  // 'createdAt',
   'updatedAt',
   'informe_id',
   'id',
