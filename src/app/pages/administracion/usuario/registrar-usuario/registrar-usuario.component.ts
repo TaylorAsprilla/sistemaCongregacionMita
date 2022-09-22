@@ -28,14 +28,25 @@ import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-docum
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { VacunaService } from 'src/app/services/vacuna/vacuna.service';
 import Swal from 'sweetalert2';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-registrar-usuario',
   templateUrl: './registrar-usuario.component.html',
-  styleUrls: ['./registrar-usuario.component.css'],
+  styleUrls: ['./registrar-usuario.component.scss'],
 })
 export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public usuarioForm: FormGroup;
+  public registroUnoForm!: FormGroup;
+  public registroDosForm!: FormGroup;
+  public registroTresForm!: FormGroup;
+
+  public registroUno_step = false;
+  public registroDos_step = false;
+  public registroTres_step = false;
+  public step = 1;
+
+  currentDate = moment();
 
   public usuarios: UsuarioModel[] = [];
   public tipoDocumentos: TipoDocumentoModel[] = [];
@@ -106,6 +117,32 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.activatedRoute.data.subscribe((data: { nacionalidad: NacionalidadModel[] }) => {
       this.nacionalidades = data.nacionalidad;
     });
+
+    this.registroUnoForm = this.formBuilder.group({
+      fechaNacimiento: ['2022-07-27', [Validators.required]],
+      primerNombre: ['Taylor', [Validators.required, Validators.minLength(3)]],
+      segundoNombre: ['Alirio', [Validators.minLength(3)]],
+      primerApellido: ['Asprilla', [Validators.required, Validators.minLength(3)]],
+      segundoApellido: ['Bohórquez', [Validators.minLength(3)]],
+      apodo: ['Tay', [Validators.minLength(3)]],
+      email: ['taylor.asprilla@gmail.com', [Validators.email]],
+      genero_id: ['1', [Validators.required]],
+      estadoCivil_id: ['1', [Validators.required]],
+    });
+
+    this.registroDosForm = this.formBuilder.group({
+      nacionalidad_id: ['Colombia', [Validators.required]],
+      rolCasa_id: ['1', [Validators.required]],
+      numeroCelular: [{}, [Validators.minLength(7)]],
+      telefonoCasa: [{}, [Validators.minLength(3)]],
+      direccion: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(5)]],
+      ciudad: ['Bogotá', [Validators.required, Validators.minLength(5)]],
+      departamento: ['Cundinamarca', [Validators.minLength(5)]],
+      codigoPostal: ['', [Validators.minLength(3)]],
+      pais_id: ['Colombia', [Validators.required]],
+    });
+
+    this.registroTresForm = this.formBuilder.group({});
 
     this.usuarioForm = this.formBuilder.group({
       primerNombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -330,5 +367,36 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     return this.nacionalidades.filter((nacionalidad: NacionalidadModel) =>
       nacionalidad.nombre.toLowerCase().includes(filtrarValores)
     );
+  }
+
+  next() {
+    console.log('Entró');
+    if (this.step == 1) {
+      this.registroUno_step = true;
+      if (this.registroUnoForm.invalid) {
+        return;
+      }
+      this.step++;
+      return;
+    }
+    if (this.step == 2) {
+      console.log('this.step ', this.step);
+      this.registroDos_step = true;
+      if (this.registroDosForm.invalid) {
+        console.log('this.registroDosForm', this.registroDosForm);
+        return;
+      }
+      this.step++;
+    }
+  }
+
+  previous() {
+    this.step--;
+    if (this.step == 1) {
+      this.registroUno_step = false;
+    }
+    if (this.step == 2) {
+      this.registroDos_step = false;
+    }
   }
 }
