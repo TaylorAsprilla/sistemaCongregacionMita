@@ -23,7 +23,7 @@ export class EstadoCivilService {
     };
   }
 
-  listarEstadoCivil() {
+  getEstadoCivil() {
     return this.httpClient
       .get(`${base_url}/estadocivil`, this.headers)
       .pipe(map((estadoCivil: { ok: boolean; estadoCivil: EstadoCivilModel[] }) => estadoCivil.estadoCivil));

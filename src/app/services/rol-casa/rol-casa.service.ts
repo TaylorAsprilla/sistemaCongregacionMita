@@ -22,7 +22,7 @@ export class RolCasaService {
       },
     };
   }
-  listarRolCasa() {
+  getRolCasa() {
     return this.httpClient
       .get(`${base_url}/rolcasa`, this.headers)
       .pipe(map((rolCasa: { ok: boolean; rolCasa: RolCasaModel[] }) => rolCasa.rolCasa));

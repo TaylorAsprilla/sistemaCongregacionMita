@@ -196,13 +196,14 @@
             <input
               type="text"
               placeholder="Buscar la nacionalidad"
-              [formControl]="myControl"
+              [formControl]="inputNacionalidad"
               formControlName="nacionalidad_id"
-              [matAutocomplete]="auto"
+              [matAutocomplete]="nacionalidad"
+              matInput
               class="form-control"
             />
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
+            <mat-autocomplete #nacionalidad="matAutocomplete">
+              <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
                 {{ item.nombre }}
               </mat-option>
             </mat-autocomplete>
@@ -242,17 +243,17 @@
             <label for="celular">Celular</label>
             <ngx-intl-tel-input
               [cssClass]="'form-control'"
-              [preferredCountries]="preferredCountries"
+              [preferredCountries]="paisesPreferidos"
               [enableAutoCountrySelect]="true"
               [enablePlaceholder]="true"
               [searchCountryFlag]="true"
-              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+              [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
               [selectFirstCountry]="false"
-              [selectedCountryISO]="CountryISO.PuertoRico"
+              [selectedCountryISO]="paisISO.PuertoRico"
               [maxLength]="15"
               [phoneValidation]="true"
-              [separateDialCode]="separateDialCode"
-              [numberFormat]="PhoneNumberFormat.International"
+              [separateDialCode]="codigoDeMarcadoSeparado"
+              [numberFormat]="formatoNumeroTelefonico.International"
               name="numeroCelular"
               formControlName="numeroCelular"
             >
@@ -281,17 +282,17 @@
             <label for="telefonoCasa">Teléfono de la Casa:</label>
             <ngx-intl-tel-input
               [cssClass]="'form-control'"
-              [preferredCountries]="preferredCountries"
+              [preferredCountries]="paisesPreferidos"
               [enableAutoCountrySelect]="true"
               [enablePlaceholder]="true"
               [searchCountryFlag]="true"
-              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+              [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
               [selectFirstCountry]="false"
-              [selectedCountryISO]="CountryISO.PuertoRico"
+              [selectedCountryISO]="paisISO.PuertoRico"
               [maxLength]="15"
               [phoneValidation]="true"
-              [separateDialCode]="separateDialCode"
-              [numberFormat]="PhoneNumberFormat.National"
+              [separateDialCode]="codigoDeMarcadoSeparado"
+              [numberFormat]="formatoNumeroTelefonico.National"
               name="telefonoCasa"
               formControlName="telefonoCasa"
             >
@@ -356,19 +357,19 @@
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
             <label>Pais: </label>
-            <input
+            <!-- <input
               type="text"
               placeholder="Pais de Residencia"
               [formControl]="myControl"
               formControlName="pais_id"
               [matAutocomplete]="auto"
               class="form-control"
-            />
-            <mat-autocomplete #auto="matAutocomplete">
+            /> -->
+            <!-- <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
                 {{ item.nombre }}
               </mat-option>
-            </mat-autocomplete>
+            </mat-autocomplete> -->
 
             <small
               class="form-text text-muted"
@@ -435,19 +436,19 @@
 
         <div class="form-group col-md-6 col-sm-12">
           <label>Pais: </label>
-          <input
+          <!-- <input
             type="text"
             placeholder="Pais de Residencia"
             [formControl]="myControl"
             formControlName="pais_id"
             [matAutocomplete]="auto"
             class="form-control"
-          />
-          <mat-autocomplete #auto="matAutocomplete">
+          /> -->
+          <!-- <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
               {{ item.nombre }}
             </mat-option>
-          </mat-autocomplete>
+          </mat-autocomplete> -->
 
           <small
             class="form-text text-muted"

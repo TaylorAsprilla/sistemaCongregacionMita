@@ -32,6 +32,9 @@ import { SeccionInformeResolver } from 'src/app/resolvers/seccion-informe/seccio
 import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
 import { CrearSolicitudMultimediaComponent } from 'src/app/pages/multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
 import { AccesoMultimediaComponent } from 'src/app/pages/multimedia/acceso-multimedia/acceso-multimedia.component';
+import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil.resolver';
+import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
+import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
 
 const childRoutes: Routes = [
   {
@@ -51,7 +54,12 @@ const childRoutes: Routes = [
   {
     path: `${Rutas.USUARIOS}/:id`,
     component: RegistrarUsuarioComponent,
-    resolve: { nacionalidad: NacionalidadResolver },
+    resolve: {
+      nacionalidad: NacionalidadResolver,
+      estadoCivil: EstadoCivilResolver,
+      genero: GeneroResolver,
+      rolCasa: RolCasaResolver,
+    },
   },
 
   {

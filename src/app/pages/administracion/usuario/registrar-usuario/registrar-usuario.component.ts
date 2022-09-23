@@ -20,10 +20,7 @@ import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { DosisService } from 'src/app/services/dosis/dosis.service';
-import { EstadoCivilService } from 'src/app/services/estado-civil/estado-civil.service';
-import { GeneroService } from 'src/app/services/genero/genero.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
-import { RolCasaService } from 'src/app/services/rol-casa/rol-casa.service';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { VacunaService } from 'src/app/services/vacuna/vacuna.service';
@@ -45,7 +42,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public registroUno_step = false;
   public registroDos_step = false;
   public registroTres_step = false;
-  public step = 1;
+  public step: number = 1;
 
   currentDate = moment();
 
@@ -68,39 +65,42 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   // Subscription
   public usuarioSubscription: Subscription;
   public tipoDocumentoSubscription: Subscription;
-  public generoSubscription: Subscription;
-  public estadoCivilSubscription: Subscription;
-  public rolCasaSubscription: Subscription;
   public paisSubscription: Subscription;
   public congregacionSubscription: Subscription;
   public campoSubscription: Subscription;
   public vacunaSubscription: Subscription;
   public dosisSubscription: Subscription;
 
-  separateDialCode = false;
-  SearchCountryField = SearchCountryField;
-  CountryISO = CountryISO;
-  PhoneNumberFormat = PhoneNumberFormat;
-  preferredCountries: CountryISO[] = [
+  codigoDeMarcadoSeparado = false;
+  buscarPais = SearchCountryField;
+  paisISO = CountryISO;
+  formatoNumeroTelefonico = PhoneNumberFormat;
+  paisesPreferidos: CountryISO[] = [
     CountryISO.PuertoRico,
+    CountryISO.Canada,
+    CountryISO.Chile,
     CountryISO.Colombia,
-    CountryISO.DominicanRepublic,
+    CountryISO.CostaRica,
     CountryISO.Ecuador,
-    CountryISO.Mexico,
+    CountryISO.ElSalvador,
+    CountryISO.Spain,
     CountryISO.UnitedStates,
+    CountryISO.Italy,
+    CountryISO.Mexico,
+    CountryISO.Panama,
+    CountryISO.Peru,
+    CountryISO.DominicanRepublic,
     CountryISO.Venezuela,
   ];
 
-  filteredOptions: Observable<NacionalidadModel[]>;
+  letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
+  inputNacionalidad = new FormControl('');
   myControl = new FormControl('');
 
   constructor(
     private formBuilder: FormBuilder,
     private usuarioService: UsuarioService,
     private tipoDocumentoService: TipoDocumentoService,
-    private generoService: GeneroService,
-    private estadoCivilService: EstadoCivilService,
-    private rolCasaService: RolCasaService,
     private paisService: PaisService,
     private congregacionService: CongregacionService,
     private campoService: CampoService,
@@ -115,9 +115,20 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       this.buscarUsuario(id);
     });
 
-    this.activatedRoute.data.subscribe((data: { nacionalidad: NacionalidadModel[] }) => {
-      this.nacionalidades = data.nacionalidad;
-    });
+    this.activatedRoute.data.subscribe(
+      (data: {
+        nacionalidad: NacionalidadModel[];
+        estadoCivil: EstadoCivilModel[];
+        rolCasa: RolCasaModel[];
+        genero: GeneroModel[];
+      }) => {
+        this.nacionalidades = data.nacionalidad;
+        this.estadoCivil = data.estadoCivil;
+        this.rolCasa = data.rolCasa;
+        this.generos = data.genero;
+      }
+    );
+    console.log(this.estadoCivil);
 
     this.registroUnoForm = this.formBuilder.group({
       fechaNacimiento: ['2022-07-27', [Validators.required]],
@@ -132,7 +143,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
 
     this.registroDosForm = this.formBuilder.group({
-      nacionalidad_id: ['Colombia', [Validators.required]],
+      nacionalidad_id: ['', [Validators.required]],
       rolCasa_id: ['1', [Validators.required]],
       numeroCelular: [{}, [Validators.minLength(7)]],
       telefonoCasa: [{}, [Validators.minLength(3)]],
@@ -195,20 +206,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.tipoDocumentos = tipoDocumento;
       });
 
-    this.generoSubscription = this.generoService.listarGeneros().subscribe((genero: GeneroModel[]) => {
-      this.generos = genero;
-    });
-
-    this.estadoCivilSubscription = this.estadoCivilService
-      .listarEstadoCivil()
-      .subscribe((estadoCivil: EstadoCivilModel[]) => {
-        this.estadoCivil = estadoCivil;
-      });
-
-    this.rolCasaSubscription = this.rolCasaService.listarRolCasa().subscribe((rolCasa: RolCasaModel[]) => {
-      this.rolCasa = rolCasa;
-    });
-
     this.paisSubscription = this.paisService.getPaises().subscribe((pais: PaisModel[]) => {
       this.paises = pais;
     });
@@ -237,9 +234,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
     this.tipoDocumentoSubscription?.unsubscribe();
-    this.generoSubscription?.unsubscribe();
-    this.estadoCivilSubscription?.unsubscribe();
-    this.rolCasaSubscription?.unsubscribe();
     this.paisSubscription?.unsubscribe();
     this.congregacionSubscription?.unsubscribe();
     this.campoSubscription?.unsubscribe();
@@ -369,7 +363,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   buscarNacionalidad() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+    console.log('this.inputNacionalidad.valueChanges', this.inputNacionalidad.valueChanges);
+    this.letrasFiltrarNacionalidad = this.inputNacionalidad.valueChanges.pipe(
       startWith(''),
       map((valor) => this.filtrar(valor || ''))
     );
@@ -377,6 +372,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   private filtrar(valor: string): NacionalidadModel[] {
     const filtrarValores = valor.toLowerCase();
+    console.log(filtrarValores);
 
     return this.nacionalidades.filter((nacionalidad: NacionalidadModel) =>
       nacionalidad.nombre.toLowerCase().includes(filtrarValores)

@@ -124,17 +124,17 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.tipoDocumentos = tipoDocumento;
       });
 
-    this.generoSubscription = this.generoService.listarGeneros().subscribe((genero: GeneroModel[]) => {
+    this.generoSubscription = this.generoService.getGeneros().subscribe((genero: GeneroModel[]) => {
       this.generos = genero;
     });
 
     this.estadoCivilSubscription = this.estadoCivilService
-      .listarEstadoCivil()
+      .getEstadoCivil()
       .subscribe((estadoCivil: EstadoCivilModel[]) => {
         this.estadoCivil = estadoCivil;
       });
 
-    this.rolCasaSubscription = this.rolCasaService.listarRolCasa().subscribe((rolCasa: RolCasaModel[]) => {
+    this.rolCasaSubscription = this.rolCasaService.getRolCasa().subscribe((rolCasa: RolCasaModel[]) => {
       this.rolCasa = rolCasa;
     });
 

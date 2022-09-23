@@ -23,7 +23,7 @@ export class GeneroService {
     };
   }
 
-  listarGeneros() {
+  getGeneros() {
     return this.httpClient
       .get(`${base_url}/genero`, this.headers)
       .pipe(map((genero: { ok: boolean; genero: GeneroModel[] }) => genero.genero));
