@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AccesoMultimediaModel } from 'src/app/models/acceso-multimedia.model';
+import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { VisitaModel } from 'src/app/models/visita.model';
+import { VisitaModel } from 'src/app/core/models/visita.model';
 
 const base_url = environment.base_url;
 

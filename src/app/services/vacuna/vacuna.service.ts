@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { VacunaModel } from 'src/app/models/vacuna.model';
+import { VacunaModel } from 'src/app/core/models/vacuna.model';
 
 const base_url = environment.base_url;
 @Injectable({

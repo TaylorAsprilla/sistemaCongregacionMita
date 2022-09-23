@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CongregacionModel } from 'src/app/models/congregacion.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import Swal from 'sweetalert2';

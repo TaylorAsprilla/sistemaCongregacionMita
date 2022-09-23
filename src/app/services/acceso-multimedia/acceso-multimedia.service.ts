@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { AccesoMultimediaModel } from 'src/app/models/acceso-multimedia.model';
+import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 
 const base_url = environment.base_url;
 

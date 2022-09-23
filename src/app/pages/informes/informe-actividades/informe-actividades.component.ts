@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TipoActividadModel } from 'src/app/models/tipo-actividad.model';
+import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';

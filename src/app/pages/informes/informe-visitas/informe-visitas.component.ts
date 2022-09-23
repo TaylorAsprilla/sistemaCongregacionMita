@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { VisitaModel } from 'src/app/models/visita.model';
+import { VisitaModel } from 'src/app/core/models/visita.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { VisitaService } from 'src/app/services/visita/visita.service';
 import Swal from 'sweetalert2';

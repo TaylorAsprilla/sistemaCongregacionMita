@@ -1,4 +1,4 @@
-import { RouteInfo } from 'src/app/interfaces/route-info.interfase';
+import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 
 export enum Rutas {
   ASUNTO_PENDIENTE = 'asunto-pendiente',

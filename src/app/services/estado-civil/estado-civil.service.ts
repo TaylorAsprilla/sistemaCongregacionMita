@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { EstadoCivilModel } from 'src/app/models/estado-civil.model';
+import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
 
 const base_url = environment.base_url;
 @Injectable({

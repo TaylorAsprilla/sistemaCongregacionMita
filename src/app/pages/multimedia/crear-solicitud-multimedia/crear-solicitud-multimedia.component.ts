@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { CongregacionModel } from 'src/app/models/congregacion.model';
-import { NacionalidadModel } from 'src/app/models/nacionalidad.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 

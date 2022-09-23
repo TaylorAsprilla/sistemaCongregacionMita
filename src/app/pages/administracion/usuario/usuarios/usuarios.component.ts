@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { UsuarioInterface } from 'src/app/interfaces/usuario.interface';
-import { CampoModel } from 'src/app/models/campo.model';
-import { CongregacionModel } from 'src/app/models/congregacion.model';
-import { PaisModel } from 'src/app/models/pais.model';
-import { UsuarioModel } from 'src/app/models/usuario.model';
-import { UsuarioCongregacionModel } from 'src/app/models/usuarioCongregacion.model';
+import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { CampoModel } from 'src/app/core/models/campo.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { PaisModel } from 'src/app/core/models/pais.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';

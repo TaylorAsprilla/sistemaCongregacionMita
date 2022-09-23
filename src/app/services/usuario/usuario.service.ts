@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { ListarUsuario, UsuarioInterface } from 'src/app/interfaces/usuario.interface';
-import { LoginForm } from 'src/app/interfaces/login-form.interface';
-import { RegisterForm } from 'src/app/interfaces/register-form.interface';
-import { UsuarioModel } from 'src/app/models/usuario.model';
+import { ListarUsuario, UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
+import { RegisterForm } from 'src/app/core/interfaces/register-form.interface';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
-import { UsuarioCongregacionModel } from 'src/app/models/usuarioCongregacion.model';
+import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
 
 const base_url = environment.base_url;
 @Injectable({

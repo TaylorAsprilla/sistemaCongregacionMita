@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { EstatusModel } from 'src/app/models/estatus.model';
+import { EstatusModel } from 'src/app/core/models/estatus.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import Swal from 'sweetalert2';

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { ContabilidadModel } from 'src/app/models/contabilidad.model';
+import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
 
 const base_url = environment.base_url;
 

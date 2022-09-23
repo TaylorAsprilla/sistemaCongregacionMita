@@ -1,4 +1,4 @@
-import { Rutas } from '../routes/menu-items';
+import { Rutas } from '../../routes/menu-items';
 
 export interface Seccion {
   nombre: string;
