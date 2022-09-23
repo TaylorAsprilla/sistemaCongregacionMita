@@ -12,8 +12,15 @@ import { InformeModule } from './informes/informe.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { NopagefoundModule } from './nopagefound/nopagefound.module';
 
+import { AccesoMultimediaComponent } from './multimedia/acceso-multimedia/acceso-multimedia.component';
+import { CrearSolicitudMultimediaComponent } from './multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
+import { CargandoInformacionModule } from '../components/cargando-informacion/cargando-informacion.module';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
-  declarations: [PagesComponent, InicioComponent],
+  declarations: [PagesComponent, InicioComponent, AccesoMultimediaComponent, CrearSolicitudMultimediaComponent],
   exports: [PagesComponent, InicioComponent],
   imports: [
     CommonModule,
@@ -27,6 +34,10 @@ import { NopagefoundModule } from './nopagefound/nopagefound.module';
     InformeModule,
     PipesModule,
     NopagefoundModule,
+    CargandoInformacionModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
 })
 export class PagesModule {}

@@ -1,0 +1,195 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Crear Solicitud</h3>
+      </div>
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="solicitudForm">
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputNombre" class="col-form-label">Nombre:</label>
+              <input type="text" formControlName="nombre" class="form-control" placeholder="Nombre Completo" />
+            </div>
+
+            <div class="form-group col-md-6 col-sm-12">
+              <label>Nacionalidad: </label>
+              <input
+                type="text"
+                placeholder="Buscar la nacionalidad"
+                [formControl]="myControl"
+                formControlName="nacionalidad_id"
+                [matAutocomplete]="auto"
+                class="form-control"
+              />
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
+                  {{ item.nombre }}
+                </mat-option>
+              </mat-autocomplete>
+
+              <small
+                class="form-text text-muted"
+                *ngIf="
+                  solicitudForm.get('nacionalidad_id').hasError('required') &&
+                  solicitudForm.get('nacionalidad_id').touched
+                "
+              >
+                La nacionalidad del usuario es requerida.
+              </small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputDireccion" class="col-form-label">Dirección:</label>
+              <input type="text" formControlName="direccion" class="form-control" placeholder="Dirección" />
+            </div>
+
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputCiudad" class="col-form-label">Ciudad:</label>
+              <input type="text" formControlName="ciudad" class="form-control" placeholder="Ciudad" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputDepartamento" class="col-form-label">Departamento:</label>
+              <input type="text" formControlName="departamento" class="form-control" placeholder="Departamento" />
+            </div>
+
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputCodigoPostal" class="col-form-label">Código Postal (Si aplica):</label>
+              <input type="text" formControlName="codigoPostal" class="form-control" placeholder="Código Postal" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label>País: </label>
+              <input
+                type="text"
+                placeholder="Buscar la nacionalidad"
+                [formControl]="myControl"
+                formControlName="nacionalidad_id"
+                [matAutocomplete]="auto"
+                class="form-control"
+              />
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
+                  {{ item.nombre }}
+                </mat-option>
+              </mat-autocomplete>
+
+              <small
+                class="form-text text-muted"
+                *ngIf="
+                  solicitudForm.get('nacionalidad_id').hasError('required') &&
+                  solicitudForm.get('nacionalidad_id').touched
+                "
+              >
+                El país de la dirección es requerida.
+              </small>
+            </div>
+
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputTelefono" class="col-form-label">Teléfono Hogar (Opcional):</label>
+              <input type="number" formControlName="telefono" class="form-control" placeholder="Teléfono Hogar" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputCelular" class="col-form-label">Celular:</label>
+              <input type="number" formControlName="telefono" class="form-control" placeholder="Celular" />
+            </div>
+
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputEmail" class="col-form-label">Correo Electrónico:</label>
+              <input type="email" formControlName="email" class="form-control" placeholder="Correo Electrónico" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputEsmiembro" class="col-form-label">¿Eres miembro de la Congregación?</label>
+              <select class="form-control" id="inputinputEsmiembro" formControlName="miembroCongregacion">
+                <option value="" disabled>Seleccione una opción</option>
+                <option [value]="0">No</option>
+                <option [value]="1">Sí</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputDistancia" class="col-form-label">¿Estás cerca a alguna congregación?:</label>
+              <input type="number" formControlName="telefono" class="form-control" placeholder="Celular" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label class="space">Congregación: </label>
+              <select class="form-control" formControlName="congregacion_id">
+                <option value="" disabled>Seleccione la congregación más cercana</option>
+                <option *ngFor="let congregacion of congregaciones" [value]="congregacion.id">
+                  {{ congregacion.congregacion }}
+                </option>
+              </select>
+              <small
+                class="form-text text-muted"
+                *ngIf="
+                  solicitudForm.get('congregacion_id').hasError('required') &&
+                  solicitudForm.get('congregacion_id').touched
+                "
+              >
+                La congregación del usuario es requerida.
+              </small>
+            </div>
+
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputDistancia" class="col-form-label"
+                >¿A cuánta distancia? (Tiempo en horas y minutos):</label
+              >
+              <input type="time" formControlName="" class="form-control" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="" class="col-form-label">¿Tiene familiares en Puerto Rico?</label>
+              <select class="form-control" id="" formControlName="">
+                <option value="" disabled>Seleccione una opción</option>
+                <option [value]="0">No</option>
+                <option [value]="1">Sí</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="" class="col-form-label"
+                >Especifique la razón por la cual desea ver los servicio por internet:</label
+              >
+              <select class="form-control" id="" formControlName="">
+                <option value="" disabled>Seleccione una opción</option>
+                <option [value]="1">Distancia al templo más cercano</option>
+                <option [value]="2">Persona Encamada</option>
+                <option [value]="3">Estudiante</option>
+                <option [value]="4">Fuerzas Armadas</option>
+                <option [value]="5">Otra</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6 col col-sm-12">
+              <label for="inputDistancia" class="col-form-label">Específique la razón</label>
+              <input type="tetx" formControlName="" class="form-control" />
+            </div>
+          </div>
+
+          <button type="submit" class="submit btn btn-primary" [disabled]="solicitudForm.invalid">
+            <i class="fa fa-save"></i> Crear Solicitud
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

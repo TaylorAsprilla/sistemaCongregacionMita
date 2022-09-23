@@ -6,16 +6,11 @@
   text-align: center;
 }
 
-
 .submit {
   background-color: #0b65c2;
   border-radius: 25px;
   border-style: none;
 }
-
-// .space {
-//   width: 100%;
-// }
 
 .auto {
   border: 10px;
@@ -41,8 +36,8 @@
   box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
   padding: 20px 30px;
   box-sizing: border-box;
-  width: 80%;
-  margin: 0 10%;
+  width: 90%;
+  margin: 0 5%;
 
   /*stacking fieldsets above each other*/
   position: relative;
@@ -156,9 +151,9 @@
 #progressbar li {
   list-style-type: none;
   color: rgb(0, 0, 0);
-  text-transform: uppercase;
-  font-size: 9px;
-  width: 33.33%;
+  text-transform: capitalize;
+  font-size: 14px;
+  width: 25%;
   float: left;
   position: relative;
   letter-spacing: 1px;
@@ -263,6 +258,18 @@
   .login-box,
   .register-box {
     width: 100%;
+  }
+
+  #progressbar li {
+    list-style-type: none;
+    color: black;
+    text-transform: capitalize;
+    font-size: 10px;
+    width: 50%;
+    margin-bottom: 4%;
+    float: left;
+    position: relative;
+    letter-spacing: 1px;
   }
 }
 

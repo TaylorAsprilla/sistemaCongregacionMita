@@ -40,6 +40,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public registroUnoForm!: FormGroup;
   public registroDosForm!: FormGroup;
   public registroTresForm!: FormGroup;
+  public registroCuatroForm!: FormGroup;
 
   public registroUno_step = false;
   public registroDos_step = false;
@@ -142,7 +143,20 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       pais_id: ['Colombia', [Validators.required]],
     });
 
-    this.registroTresForm = this.formBuilder.group({});
+    this.registroTresForm = this.formBuilder.group({
+      fuenteIngresos: ['1', [Validators.required]],
+      ingresoMensual: ['1250000', []],
+      gradoAcademico_id: ['2', []],
+      tipoEmpleo_id: ['11', []],
+      especializacionEmpleo: ['Ingeniero', []],
+    });
+
+    this.registroCuatroForm = this.formBuilder.group({
+      tipomiembreo_id: ['1', [Validators.required]],
+      esJoven: ['1250000', []],
+      ministerio: ['2', []],
+      voluntario: ['11', []],
+    });
 
     this.usuarioForm = this.formBuilder.group({
       primerNombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -387,6 +401,16 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         return;
       }
       this.step++;
+      return;
+    }
+    if (this.step == 3) {
+      console.log('this.step ', this.step);
+      this.registroTres_step = true;
+      if (this.registroTresForm.invalid) {
+        console.log('this.registroDosForm', this.registroDosForm);
+        return;
+      }
+      this.step++;
     }
   }
 
@@ -397,6 +421,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     }
     if (this.step == 2) {
       this.registroDos_step = false;
+    }
+    if (this.step == 3) {
+      this.registroTres_step = false;
     }
   }
 }

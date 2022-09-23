@@ -30,6 +30,8 @@ import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais
 import { DivisasResolver } from 'src/app/resolvers/divisas/divisas.resolver';
 import { SeccionInformeResolver } from 'src/app/resolvers/seccion-informe/seccion-informe.resolver';
 import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
+import { CrearSolicitudMultimediaComponent } from 'src/app/pages/multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
+import { AccesoMultimediaComponent } from 'src/app/pages/multimedia/acceso-multimedia/acceso-multimedia.component';
 
 const childRoutes: Routes = [
   {
@@ -155,6 +157,16 @@ const childRoutes: Routes = [
     path: Rutas.VER_INFORME,
     component: VerInformeComponent,
     resolve: { seccionInforme: SeccionInformeResolver },
+  },
+  {
+    path: Rutas.CREAR_SOLICITUD_MULTIMEDIA,
+    component: CrearSolicitudMultimediaComponent,
+    resolve: { nacionalidad: NacionalidadResolver },
+  },
+  {
+    path: Rutas.ACCESO_MULTIMEDIA,
+    component: AccesoMultimediaComponent,
+    resolve: { nacionalidad: NacionalidadResolver },
   },
 ];
 
