@@ -124,6 +124,14 @@
   box-shadow: 0 0 0 2px white, 0 0 0 3px #c5c5f1;
 }
 
+.form-check{
+  text-align: left;
+}
+
+input.form-check-input{
+  width: auto !important;
+}
+
 /*headings*/
 .fs-title {
   font-size: 18px;

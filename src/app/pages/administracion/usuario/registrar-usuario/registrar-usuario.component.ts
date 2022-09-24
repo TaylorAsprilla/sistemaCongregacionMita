@@ -26,6 +26,9 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { VacunaService } from 'src/app/services/vacuna/vacuna.service';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
+import { FuenteIngresoModel } from 'src/app/core/models/fuente-ingreso.model';
+import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
+import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -57,6 +60,10 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public vacunas: VacunaModel[] = [];
   public dosis: DosisModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
+  public fuenteDeIngresos: FuenteIngresoModel[] = [];
+  public gradosAcademicos: GradoAcademicoModel[] = [];
+  public tiposEmpleos: TipoEmpleoModel[] = [];
+
   public congregacionesFiltradas: CongregacionModel[] = [];
   public camposFiltrados: CampoModel[] = [];
 
@@ -94,8 +101,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   ];
 
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
-  inputNacionalidad = new FormControl('');
-  myControl = new FormControl('');
+  // letrasFiltrarPaisResidencia: Observable
 
   constructor(
     private formBuilder: FormBuilder,
@@ -121,14 +127,19 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         estadoCivil: EstadoCivilModel[];
         rolCasa: RolCasaModel[];
         genero: GeneroModel[];
+        fuenteDeIngreso: FuenteIngresoModel[];
+        gradoAcademico: GradoAcademicoModel[];
+        tipoEmpleo: TipoEmpleoModel[];
       }) => {
         this.nacionalidades = data.nacionalidad;
         this.estadoCivil = data.estadoCivil;
         this.rolCasa = data.rolCasa;
         this.generos = data.genero;
+        this.fuenteDeIngresos = data.fuenteDeIngreso;
+        this.gradosAcademicos = data.gradoAcademico;
+        this.tiposEmpleos = data.tipoEmpleo;
       }
     );
-    console.log(this.estadoCivil);
 
     this.registroUnoForm = this.formBuilder.group({
       fechaNacimiento: ['2022-07-27', [Validators.required]],
@@ -143,22 +154,27 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
 
     this.registroDosForm = this.formBuilder.group({
-      nacionalidad_id: ['', [Validators.required]],
+      nacionalidad: ['Colombia', [Validators.required]],
       rolCasa_id: ['1', [Validators.required]],
-      numeroCelular: [{}, [Validators.minLength(7)]],
-      telefonoCasa: [{}, [Validators.minLength(3)]],
-      direccion: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(5)]],
-      ciudad: ['Bogotá', [Validators.required, Validators.minLength(5)]],
-      departamento: ['Cundinamarca', [Validators.minLength(5)]],
-      codigoPostal: ['', [Validators.minLength(3)]],
-      pais_id: ['Colombia', [Validators.required]],
+      numeroCelular: ['+573118873332', [Validators.required]],
+      telefonoCasa: ['+17879343120', []],
+      direccionResidencia: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(5)]],
+      ciudadResidencia: ['Bogotá', [Validators.required, Validators.minLength(5)]],
+      departamentoResidencia: ['Cundinamarca', [Validators.minLength(5)]],
+      codigoPostalResidencia: ['100123', [Validators.minLength(3)]],
+      paisResidencia: ['Puerto Rico', [Validators.required]],
+      direccionPostal: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(5)]],
+      ciudadPostal: ['Bogotá', [Validators.required, Validators.minLength(5)]],
+      departamentoPostal: ['Cundinamarca', [Validators.minLength(5)]],
+      codigoPostal: ['12300', [Validators.minLength(3)]],
+      paisPostal: ['Colombia', [Validators.required]],
     });
 
     this.registroTresForm = this.formBuilder.group({
       fuenteIngresos: ['1', [Validators.required]],
       ingresoMensual: ['1250000', []],
       gradoAcademico_id: ['2', []],
-      tipoEmpleo_id: ['11', []],
+      tipoEmpleo_id: ['2', []],
       especializacionEmpleo: ['Ingeniero', []],
     });
 
@@ -228,7 +244,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       this.dosis = dosis;
     });
 
-    this.buscarNacionalidad();
+    // this.buscarNacionalidad();
   }
 
   ngOnDestroy(): void {
@@ -362,9 +378,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     );
   }
 
-  buscarNacionalidad() {
-    console.log('this.inputNacionalidad.valueChanges', this.inputNacionalidad.valueChanges);
-    this.letrasFiltrarNacionalidad = this.inputNacionalidad.valueChanges.pipe(
+  buscarNacionalidad(formControlName: string = null) {
+    console.log('Ingresa...');
+    this.letrasFiltrarNacionalidad = this.registroDosForm.get(formControlName.toString()).valueChanges.pipe(
       startWith(''),
       map((valor) => this.filtrar(valor || ''))
     );
@@ -372,7 +388,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   private filtrar(valor: string): NacionalidadModel[] {
     const filtrarValores = valor.toLowerCase();
-    console.log(filtrarValores);
 
     return this.nacionalidades.filter((nacionalidad: NacionalidadModel) =>
       nacionalidad.nombre.toLowerCase().includes(filtrarValores)
@@ -380,7 +395,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   next() {
-    console.log('Entró');
     if (this.step == 1) {
       this.registroUno_step = true;
       if (this.registroUnoForm.invalid) {
@@ -390,20 +404,17 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.step == 2) {
-      console.log('this.step ', this.step);
       this.registroDos_step = true;
+      console.log('Información formulario', this.registroDosForm);
       if (this.registroDosForm.invalid) {
-        console.log('this.registroDosForm', this.registroDosForm);
         return;
       }
       this.step++;
       return;
     }
     if (this.step == 3) {
-      console.log('this.step ', this.step);
       this.registroTres_step = true;
       if (this.registroTresForm.invalid) {
-        console.log('this.registroDosForm', this.registroDosForm);
         return;
       }
       this.step++;

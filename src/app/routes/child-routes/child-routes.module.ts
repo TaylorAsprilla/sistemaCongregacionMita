@@ -35,6 +35,9 @@ import { AccesoMultimediaComponent } from 'src/app/pages/multimedia/acceso-multi
 import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil.resolver';
 import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
 import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
+import { FuenteIngresoResolver } from 'src/app/resolvers/fuente-ingreso/fuente-ingreso.resolver';
+import { GradoAcademicoResolver } from 'src/app/resolvers/grado-academico/grado-academico.resolver';
+import { TipoEmpleoResolver } from 'src/app/resolvers/tipo-empleo/tipo-empleo.resolver';
 
 const childRoutes: Routes = [
   {
@@ -59,6 +62,9 @@ const childRoutes: Routes = [
       estadoCivil: EstadoCivilResolver,
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
+      fuenteDeIngreso: FuenteIngresoResolver,
+      gradoAcademico: GradoAcademicoResolver,
+      tipoEmpleo: TipoEmpleoResolver,
     },
   },
 

@@ -189,16 +189,15 @@
     <form [formGroup]="registroDosForm" id="msform">
       <fieldset *ngIf="step == 2">
         <h2 class="fs-title">Información de Locación</h2>
-
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label>Nacionalidad: </label>
+            <label class="input-group">Nacionalidad: </label>
             <input
               type="text"
               placeholder="Buscar la nacionalidad"
-              [formControl]="inputNacionalidad"
-              formControlName="nacionalidad_id"
+              formControlName="nacionalidad"
               [matAutocomplete]="nacionalidad"
+              (keypress)="buscarNacionalidad('nacionalidad')"
               matInput
               class="form-control"
             />
@@ -211,8 +210,7 @@
             <small
               class="form-text text-muted"
               *ngIf="
-                registroDosForm.get('nacionalidad_id').hasError('required') &&
-                registroDosForm.get('nacionalidad_id').touched
+                registroDosForm.get('nacionalidad').hasError('required') && registroDosForm.get('nacionalidad').touched
               "
             >
               La nacionalidad del usuario es requerida.
@@ -220,7 +218,7 @@
           </div>
 
           <div class="form-group col-md-6 col-sm-12">
-            <label>Rol en casa:</label>
+            <label class="input-group">Rol en casa:</label>
             <select class="form-control" formControlName="rolCasa_id">
               <option value="" disabled>Seleccione el Rol en la Casa</option>
               <option *ngFor="let rolCasa of rolCasa" [value]="rolCasa.id">
@@ -240,7 +238,7 @@
 
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label for="celular">Celular</label>
+            <label class="input-group">Celular:</label>
             <ngx-intl-tel-input
               [cssClass]="'form-control'"
               [preferredCountries]="paisesPreferidos"
@@ -279,7 +277,7 @@
           </div>
 
           <div class="form-group col-md-6 col-sm-12">
-            <label for="telefonoCasa">Teléfono de la Casa:</label>
+            <label class="input-group">Teléfono de la Casa:</label>
             <ngx-intl-tel-input
               [cssClass]="'form-control'"
               [preferredCountries]="paisesPreferidos"
@@ -300,167 +298,224 @@
           </div>
         </div>
 
-        <div class="row">
-          <legend>Dirección de Residencia:</legend>
-          <div class="form-group col-md-4 col-sm-12">
-            <label>Dirección:</label>
-            <input type="text" class="form-control" formControlName="direccion" placeholder="Dirección" />
-            <small
-              class="form-text text-muted"
-              *ngIf="registroDosForm.get('direccion').hasError('required') && registroDosForm.get('direccion').touched"
-            >
-              La dirección del usuario es requerido.
-            </small>
-            <small
-              class="form-text text-muted"
-              *ngIf="registroDosForm.get('direccion').hasError('minlength') && registroDosForm.get('direccion').touched"
-            >
-              La dirección del usuario no tiene la longitud mínima permitida.
-            </small>
-          </div>
-
-          <div class="form-group col-md-3 col-sm-12">
-            <label>Ciudad:</label>
-            <input type="text" formControlName="ciudad" class="form-control" placeholder="Ciudad" />
-            <small
-              class="form-text text-muted"
-              *ngIf="registroDosForm.get('ciudad').hasError('required') && registroDosForm.get('ciudad').touched"
-            >
-              La ciudad es requerida.
-            </small>
-            <small
-              class="form-text text-muted"
-              *ngIf="registroDosForm.get('ciudad').hasError('minlength') && registroDosForm.get('ciudad').touched"
-            >
-              El campo ciudad no tiene la longitud mínima permitida.
-            </small>
-          </div>
-
-          <div class="form-group col-md-3 col-sm-12">
-            <label>Departamento:</label>
-            <input type="text" formControlName="departamento" class="form-control" placeholder="Departamento" />
-
-            <small
-              class="form-text text-muted"
-              *ngIf="registroDosForm.get('ciudad').hasError('minlength') && registroDosForm.get('ciudad').touched"
-            >
-              El campo departamento no tiene la longitud mínima permitida.
-            </small>
-          </div>
-
-          <div class="form-group col-md-2 col-sm-12">
-            <label>Código Postal:</label>
-            <input type="number" class="form-control" formControlName="codigoPostal" placeholder="Código Postal" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="form-group col-md-6 col-sm-12">
-            <label>Pais: </label>
-            <!-- <input
+        <div class="row border p-4 rounded bg-light shadow">
+          <legend class="fw-semibold fs-title">Dirección de Residencia</legend>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Dirección:</label>
+            <input
               type="text"
-              placeholder="Pais de Residencia"
-              [formControl]="myControl"
-              formControlName="pais_id"
-              [matAutocomplete]="auto"
               class="form-control"
-            /> -->
-            <!-- <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
-                {{ item.nombre }}
-              </mat-option>
-            </mat-autocomplete> -->
-
+              formControlName="direccionResidencia"
+              placeholder="Dirección de la residencia"
+            />
             <small
               class="form-text text-muted"
-              *ngIf="registroDosForm.get('pais_id').hasError('required') && registroDosForm.get('pais_id').touched"
-            >
-              La nacionalidad del usuario es requerida.
-            </small>
-          </div>
-        </div>
-
-        <div class="row">
-          <legend>Dirección postal:</legend>
-          <div class="form-group col-md-4 col-sm-12">
-            <label>Dirección:</label>
-            <input type="text" class="form-control" formControlName="direccion" placeholder="Dirección" />
-            <small
-              class="form-text text-muted"
-              *ngIf="registroDosForm.get('direccion').hasError('required') && registroDosForm.get('direccion').touched"
+              *ngIf="
+                registroDosForm.get('direccionResidencia').hasError('required') &&
+                registroDosForm.get('direccionResidencia').touched
+              "
             >
               La dirección del usuario es requerido.
             </small>
             <small
               class="form-text text-muted"
-              *ngIf="registroDosForm.get('direccion').hasError('minlength') && registroDosForm.get('direccion').touched"
+              *ngIf="
+                registroDosForm.get('direccionResidencia').hasError('minlength') &&
+                registroDosForm.get('direccionResidencia').touched
+              "
             >
               La dirección del usuario no tiene la longitud mínima permitida.
             </small>
           </div>
 
-          <div class="form-group col-md-3 col-sm-12">
-            <label>Ciudad:</label>
-            <input type="text" formControlName="ciudad" class="form-control" placeholder="Ciudad" />
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Ciudad:</label>
+            <input type="text" formControlName="ciudadResidencia" class="form-control" placeholder="Ciudad" />
             <small
               class="form-text text-muted"
-              *ngIf="registroDosForm.get('ciudad').hasError('required') && registroDosForm.get('ciudad').touched"
+              *ngIf="
+                registroDosForm.get('ciudadResidencia').hasError('required') &&
+                registroDosForm.get('ciudadResidencia').touched
+              "
             >
               La ciudad es requerida.
             </small>
             <small
               class="form-text text-muted"
-              *ngIf="registroDosForm.get('ciudad').hasError('minlength') && registroDosForm.get('ciudad').touched"
+              *ngIf="
+                registroDosForm.get('ciudadResidencia').hasError('minlength') &&
+                registroDosForm.get('ciudadResidencia').touched
+              "
             >
               El campo ciudad no tiene la longitud mínima permitida.
             </small>
           </div>
 
-          <div class="form-group col-md-3 col-sm-12">
-            <label>Departamento:</label>
-            <input type="text" formControlName="departamento" class="form-control" placeholder="Departamento" />
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Departamento:</label>
+            <input
+              type="text"
+              formControlName="departamentoResidencia"
+              class="form-control"
+              placeholder="Departamento"
+            />
 
             <small
               class="form-text text-muted"
-              *ngIf="registroDosForm.get('ciudad').hasError('minlength') && registroDosForm.get('ciudad').touched"
+              *ngIf="
+                registroDosForm.get('departamentoResidencia').hasError('minlength') &&
+                registroDosForm.get('departamentoResidencia').touched
+              "
             >
               El campo departamento no tiene la longitud mínima permitida.
             </small>
           </div>
 
-          <div class="form-group col-md-2 col-sm-12">
-            <label>Código Postal:</label>
-            <input type="number" class="form-control" formControlName="codigoPostal" placeholder="Código Postal" />
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Código Postal:</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="codigoPostalResidencia"
+              placeholder="Código Postal"
+            />
           </div>
-        </div>
-
-        <div class="form-group col-md-6 col-sm-12">
-          <label>Pais: </label>
-          <!-- <input
-            type="text"
-            placeholder="Pais de Residencia"
-            [formControl]="myControl"
-            formControlName="pais_id"
-            [matAutocomplete]="auto"
-            class="form-control"
-          /> -->
-          <!-- <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
-              {{ item.nombre }}
-            </mat-option>
-          </mat-autocomplete> -->
-
           <small
             class="form-text text-muted"
-            *ngIf="registroDosForm.get('pais_id').hasError('required') && registroDosForm.get('pais_id').touched"
+            *ngIf="
+              registroDosForm.get('codigoPostalResidencia').hasError('minlength') &&
+              registroDosForm.get('codigoPostalResidencia').touched
+            "
           >
-            La nacionalidad del usuario es requerida.
+            El código postal no tiene la longitud mínima permitida.
           </small>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Pais: </label>
+            <input
+              type="text"
+              placeholder="Pais de Residencia"
+              formControlName="paisResidencia"
+              class="form-control"
+              [matAutocomplete]="auto"
+              (keypress)="buscarNacionalidad('paisResidencia')"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let pais of letrasFiltrarNacionalidad | async" [value]="pais.nombre">
+                {{ pais.nombre }}
+              </mat-option>
+            </mat-autocomplete>
+
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('paisResidencia').hasError('required') &&
+                registroDosForm.get('paisResidencia').touched
+              "
+            >
+              El pais de la dirección de residencia es requerida.
+            </small>
+          </div>
+        </div>
+
+        <div class="row border mt-4 mb-4 p-4 rounded bg-light shadow">
+          <legend class="fw-semibold fs-title">Dirección postal</legend>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Dirección:</label>
+            <input type="text" class="form-control" formControlName="direccionPostal" placeholder="Dirección" />
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('direccionPostal').hasError('required') &&
+                registroDosForm.get('direccionPostal').touched
+              "
+            >
+              La dirección postal es requerida.
+            </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('direccionPostal').hasError('minlength') &&
+                registroDosForm.get('direccionPostal').touched
+              "
+            >
+              La dirección postal no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Ciudad:</label>
+            <input type="text" formControlName="ciudadPostal" class="form-control" placeholder="Ciudad" />
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('ciudadPostal').hasError('required') && registroDosForm.get('ciudadPostal').touched
+              "
+            >
+              La ciudad de la dirección postal es requerida.
+            </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('ciudadPostal').hasError('minlength') && registroDosForm.get('ciudadPostal').touched
+              "
+            >
+              El campo ciudad de la dirección postal no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Departamento:</label>
+            <input type="text" formControlName="departamentoPostal" class="form-control" placeholder="Departamento" />
+
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('departamentoPostal').hasError('minlength') &&
+                registroDosForm.get('departamentoPostal').touched
+              "
+            >
+              El campo departamento de la dirección postal no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Código Postal:</label>
+            <input type="number" class="form-control" formControlName="codigoPostal" placeholder="Código Postal" />
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Pais: </label>
+            <input
+              type="text"
+              placeholder="Pais de la dirección postal"
+              formControlName="paisPostal"
+              [matAutocomplete]="auto"
+              class="form-control"
+              (keypress)="buscarNacionalidad('paisPostal')"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
+                {{ item.nombre }}
+              </mat-option>
+            </mat-autocomplete>
+
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('paisPostal').hasError('required') && registroDosForm.get('paisPostal').touched
+              "
+            >
+              El país de la dirección postal es requerido.
+            </small>
+          </div>
         </div>
 
         <button (click)="previous()" type="button" name="next" class="btn btn-primary mr-3">Anterior</button>
 
-        <button (click)="next()" type="button" name="next" class="btn btn-primary">Siguiente</button>
+        <button (click)="next()" [disabled]="registroDosForm.invalid" type="button" name="next" class="btn btn-primary">
+          Siguiente
+          <!-- Siguiente " -->
+        </button>
       </fieldset>
     </form>
 
@@ -471,39 +526,85 @@
     <form [formGroup]="registroTresForm" id="msform">
       <fieldset *ngIf="step == 3">
         <h2 class="fs-title">Información Laboral</h2>
-        <label class="space">¿Cuales son sus fuentes de ingresos mensual?</label>
-        <!-- TODO fuente de ingresos -->
+
         <div class="row">
-          <!-- <div class="col-md-1" *ngFor="let pais of paises"><input type="checkbox" /> {{ pais.pais }}</div> -->
+          <div class="form-group col-sm-12 col-md-6 col-lg-4 px-5">
+            <label class="input-group">¿Cuáles son sus fuentes de ingresos mensual?</label>
+
+            <div class="form-check pl-5" *ngFor="let fuenteDeIngreso of fuenteDeIngresos">
+              <input type="checkbox" class="form-check-input" [value]="fuenteDeIngreso.id" />
+              <label class="form-check-label"> {{ fuenteDeIngreso.fuenteIngreso }}</label>
+            </div>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-8">
+            <label class="input-group">Aproximadamente ¿cuál es su ingreso mensual?</label>
+            <p class="input-group">Por favor incluya las iniciales de la moneda de su país (ej. USD, CAD)</p>
+            <input type="text" formControlName="ingresoMensual" class="form-control" placeholder="Ingreso Mensual" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">¿Cuál es el grado académico más alto alcanzado? </label>
+            <select class="form-control" formControlName="gradoAcademico_id">
+              <option value="" disabled>Seleccione un grado académico</option>
+              <option *ngFor="let gradoAcademico of gradosAcademicos" [value]="gradoAcademico.id">
+                {{ gradoAcademico.gradoAcademico }}
+              </option>
+            </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroTresForm.get('gradoAcademico_id').hasError('required') &&
+                registroTresForm.get('gradoAcademico_id').touched
+              "
+            >
+              Seleccione un grado académico.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">¿A qué se dedica? </label>
+            <select class="form-control" formControlName="tipoEmpleo_id">
+              <option value="" disabled>Seleccione un tipo de empleo</option>
+              <option *ngFor="let empleo of tiposEmpleos" [value]="empleo.id">
+                {{ empleo.nombreEmpleo }}
+              </option>
+            </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroTresForm.get('tipoEmpleo_id').hasError('required') &&
+                registroTresForm.get('tipoEmpleo_id').touched
+              "
+            >
+              Seleccione un grado académico.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Especialización de empleo </label>
+            <span></span>
+            <input
+              type="text"
+              formControlName="especializacionEmpleo"
+              class="form-control"
+              placeholder="(Ejemplo: Cirujano, Mecánico de equipo pesado)"
+            />
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Aproximadamente ¿cuál es su ingreso mensual?</label>
-          <p>Por favor incluya las iniciales de la moneda de su país (ej. USD, CAD)</p>
-          <input type="text" formControlName="ingresoMensual" class="form-control" placeholder="Ingreso Mensual" />
-        </div>
+        <button (click)="previous()" type="button" name="previous" class="next btn btn-primary mr-3">Anterior</button>
 
-        <div class="form-group">
-          <label>¿Cuál es el grado académico más alto alcanzado?</label>
-          <input type="text" formControlName="gradoAcademico_id" class="form-control" placeholder="Grado Académico" />
-        </div>
-
-        <div class="form-group">
-          <label>¿A qué se dedica?</label>
-          <input type="text" formControlName="tipoEmpleo_id" class="form-control" placeholder="Tipo de Empleo" />
-        </div>
-
-        <div class="form-group">
-          <label>Especialización de empleo</label>
-          <p>(ej. Cirujano, Mecánico de equipo pesado)</p>
-          <input type="text" formControlName="tipoEmpleo_id" class="form-control" placeholder="Tipo de Empleo" />
-        </div>
-
-        <button (click)="previous()" type="button" name="previous" class="next btn btn-primary botonPrincipal mr-3">
-          Anterior
+        <button
+          (click)="next()"
+          [disabled]="registroTresForm.invalid"
+          type="button"
+          name="next"
+          class="btn btn-primary"
+        >
+          Siguiente
         </button>
-
-        <button (click)="next()" type="button" name="next" class="btn btn-primary">Siguiente</button>
       </fieldset>
     </form>
 
