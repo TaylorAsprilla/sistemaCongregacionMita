@@ -23,7 +23,7 @@ export class CampoService {
     };
   }
 
-  listarCampo() {
+  getCampos() {
     return this.httpClient
       .get(`${base_url}/campo`, this.headers)
       .pipe(map((campo: { ok: boolean; campo: CampoModel[] }) => campo.campo));

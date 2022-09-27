@@ -69,7 +69,7 @@ export class CrearCampoComponent implements OnInit {
   }
 
   cargarCampos() {
-    this.campoSubscription = this.campoService.listarCampo().subscribe((campo: CampoModel[]) => {
+    this.campoSubscription = this.campoService.getCampos().subscribe((campo: CampoModel[]) => {
       this.campos = campo.filter((campo) => campo.estado === true);
     });
   }

@@ -532,7 +532,12 @@
             <label class="input-group">¿Cuáles son sus fuentes de ingresos mensual?</label>
 
             <div class="form-check pl-5" *ngFor="let fuenteDeIngreso of fuenteDeIngresos">
-              <input type="checkbox" class="form-check-input" [value]="fuenteDeIngreso.id" />
+              <input
+                type="checkbox"
+                formControlName="fuenteIngresos"
+                class="form-check-input"
+                [value]="fuenteDeIngreso.id"
+              />
               <label class="form-check-label"> {{ fuenteDeIngreso.fuenteIngreso }}</label>
             </div>
           </div>
@@ -616,119 +621,204 @@
       <fieldset *ngIf="step == 4">
         <h2 class="fs-title">Información de Eclesiástica</h2>
         <div class="row">
-          <label>
-            ¿Es usted un miembro nuevo (MN),miembro activo (MA), miembro no activo (MNA) o miembro enfermo (ME)?</label
-          >
-          <!-- <div class="col-md-1" *ngFor="let pais of paises">
-            <input [value]="pais.id" type="radio" name="pais" formControlName="tipomiembreo_id" />
-            {{ pais.pais }}
-          </div> -->
-        </div>
-
-        <!-- <div class="row">
-          <label> ¿Eres miembro de la Juventud?</label>
-          <div class="col-md-6">
-            <input [value]="1" type="radio" formControlName="esJoven" />
-            Sí
-
-            <input [value]="0" type="radio" formControlName="esJoven" />
-            No
-          </div>
-
-          <div class="col-md-6">
-            <label class="space">¿A cuál de los cuerpos ministeriales pertenece?</label>
-
-            <div class="row">
-              <div class="col-md-1" *ngFor="let pais of paises">
-                <input type="checkbox" formControlName="ministerio" /> {{ pais.pais }}
-              </div>
+          <div class="form-group col-sm-12 col-md-12 col-lg-12">
+            <label class="input-group">
+              ¿Es usted un miembro nuevo <b>(MN)</b>,miembro activo <b>(MA)</b>, miembro no activo <b>(MNA)</b> o
+              miembro enfermo <b>(ME)</b>?</label
+            >
+            <div class="form-check pl-5 mt-2" *ngFor="let tipoMiembro of tipoMiembros">
+              <input
+                [value]="tipoMiembro.id"
+                class="form-check-input"
+                type="radio"
+                name="tipoMiembro_id"
+                formControlName="tipoMiembro_id"
+              />
+              <label class="form-check-label">
+                {{ tipoMiembro.miembro }}
+              </label>
             </div>
           </div>
         </div>
 
-        <div>
-          <label class="space">¿Qué tipo de labor voluntaria/ministerial realiza?</label>
-
-          <div class="row">
-            <div class="col-md-1" *ngFor="let pais of paises">
-              <input type="checkbox" formControlName="voluntario" /> {{ pais.pais }}
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group"> ¿Eres miembro de la Juventud?</label>
+            <div class="form-check pl-5 mt-2">
+              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="1" />
+              <label class="form-check-label">Sí</label>
+            </div>
+            <div class="form-check pl-5 mt-2">
+              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="0" />
+              <label class="form-check-label">No</label>
             </div>
           </div>
-        </div> -->
 
-        <div class="input-group mb-3">
-          <label class="space">Congregación: </label>
-          <select
-            class="form-control"
-            formControlName="congregacion_id"
-            (change)="listarCampos(txtCongregacion.value)"
-            #txtCongregacion
-          >
-            <option value="" disabled>Seleccione la congregación a la que pertenece</option>
-            <option *ngFor="let congregacion of congregacionesFiltradas" [value]="congregacion.id">
-              {{ congregacion.congregacion }}
-            </option>
-          </select>
-          <small
-            class="form-text text-muted"
-            *ngIf="
-              usuarioForm.get('congregacion_id').hasError('required') && usuarioForm.get('congregacion_id').touched
-            "
-          >
-            La congregación del usuario es requerida.
-          </small>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group"> ¿Ejerce algún ministerio en la Congregación?</label>
+            <div class="form-check pl-5 mt-2">
+              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="1" />
+              <label class="form-check-label">Sí</label>
+            </div>
+            <div class="form-check pl-5 mt-2">
+              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="0" />
+              <label class="form-check-label">No</label>
+            </div>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group"> ¿Realiza labor voluntaria/ministerial?</label>
+            <div class="form-check pl-5 mt-2">
+              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="1" />
+              <label class="form-check-label">Sí</label>
+            </div>
+            <div class="form-check pl-5 mt-2">
+              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="0" />
+              <label class="form-check-label">No</label>
+            </div>
+          </div>
         </div>
 
-        <div class="input-group mb-3">
-          <label class="space">Campo: </label>
-          <select class="form-control" formControlName="campo_id">
-            <option value="" disabled>Seleccione el campo al que pertenece</option>
-            <option *ngFor="let campo of camposFiltrados" [value]="campo.id">
-              {{ campo.campo }}
-            </option>
-          </select>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">¿A cuál de los cuerpos ministeriales pertenece?</label>
+
+            <div class="form-check pl-5" *ngFor="let ministerio of ministerios">
+              <input type="checkbox" class="form-check-input" formControlName="ministerio" [value]="ministerio.id" />
+              <label class="form-check-label"> {{ ministerio.ministerio }}</label>
+            </div>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">¿Qué tipo de labor voluntaria/ministerial realiza?</label>
+
+            <div class="form-check pl-5" *ngFor="let voluntariado of voluntariados">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                formControlName="voluntariado"
+                [value]="voluntariado.id"
+              />
+              <label class="form-check-label"> {{ voluntariado.nombreVoluntariado }}</label>
+            </div>
+          </div>
         </div>
 
-        <div class="input-group mb-3">
-          <label class="space">Tipo Documento:</label>
-          <select class="form-control" formControlName="tipoDocumento_id">
-            <option value="" disabled>Seleccione el tipo de documento</option>
-            <option *ngFor="let tipoDocumento of tipoDocumentos" [value]="tipoDocumento.id">
-              {{ tipoDocumento.documento }}
-            </option>
-          </select>
-        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Congregación - Pais: </label>
+            <select
+              class="form-control"
+              formControlName="pais_id"
+              (change)="listarCongregaciones(txtPaisCongregacion.value)"
+              #txtPaisCongregacion
+            >
+              <option value="" disabled>Seleccione el pais de la congregación a la que pertenece</option>
+              <option *ngFor="let pais of paises" [value]="pais.id">
+                {{ pais.pais }}
+              </option>
+            </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroCuatroForm.get('pais_id').hasError('required') && registroCuatroForm.get('pais_id').touched
+              "
+            >
+              La congregación del usuario es requerida.
+            </small>
+          </div>
 
-        <div class="input-group mb-3">
-          <label class="space">Vacuna:</label>
-          <select class="form-control" formControlName="vacuna_id">
-            <option value="" disabled>Seleccione la vacuna</option>
-            <option *ngFor="let vacuna of vacunas" [value]="vacuna.id">
-              {{ vacuna.vacuna }}
-            </option>
-          </select>
-          <small
-            class="form-text text-muted"
-            *ngIf="usuarioForm.get('vacuna_id').hasError('required') && usuarioForm.get('vacuna_id').touched"
-          >
-            La vanuna del usuario es requerida.
-          </small>
-        </div>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Congregación: </label>
+            <select
+              class="form-control"
+              formControlName="congregacion_id"
+              (change)="listarCampos(txtCongregacion.value)"
+              #txtCongregacion
+            >
+              <option value="" disabled>Seleccione la congregación a la que pertenece</option>
+              <option *ngFor="let congregacion of congregacionesFiltradas" [value]="congregacion.id">
+                {{ congregacion.congregacion }}
+              </option>
+            </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroCuatroForm.get('congregacion_id').hasError('required') &&
+                registroCuatroForm.get('congregacion_id').touched
+              "
+            >
+              La congregación del usuario es requerida.
+            </small>
+          </div>
 
-        <div class="input-group mb-3">
-          <label class="space">Dosis:</label>
-          <select class="form-control" formControlName="dosis_id">
-            <option value="" disabled>Seleccione la dosis</option>
-            <option *ngFor="let dosis of dosis" [value]="dosis.id">
-              {{ dosis.dosis }}
-            </option>
-          </select>
-          <small
-            class="form-text text-muted"
-            *ngIf="usuarioForm.get('dosis_id').hasError('required') && usuarioForm.get('dosis_id').touched"
-          >
-            Las dosis del usuario es requerida.
-          </small>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Campo: </label>
+            <select class="form-control" formControlName="campo_id">
+              <option value="" disabled>Seleccione el campo al que pertenece</option>
+              <option *ngFor="let campo of camposFiltrados" [value]="campo.id">
+                {{ campo.campo }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-6">
+            <label class="input-group">Tipo Documento:</label>
+            <select class="form-control" formControlName="tipoDocumento_id">
+              <option value="" disabled>Seleccione el tipo de documento</option>
+              <option *ngFor="let tipoDocumento of tipoDocumentos" [value]="tipoDocumento.id">
+                {{ tipoDocumento.documento }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-6">
+            <label class="input-group">Número de Documento:</label>
+            <input
+              type="number"
+              formControlName="numeroDocumento"
+              class="form-control"
+              placeholder="Número de Documento"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Vacuna:</label>
+            <select class="form-control" formControlName="vacuna_id">
+              <option value="" disabled>Seleccione la vacuna</option>
+              <option *ngFor="let vacuna of vacunas" [value]="vacuna.id">
+                {{ vacuna.vacuna }}
+              </option>
+            </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroCuatroForm.get('vacuna_id').hasError('required') && registroCuatroForm.get('vacuna_id').touched
+              "
+            >
+              La vanuna del usuario es requerida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Dosis:</label>
+            <select class="form-control" formControlName="dosis_id">
+              <option value="" disabled>Seleccione la dosis</option>
+              <option *ngFor="let dosis of dosis" [value]="dosis.id">
+                {{ dosis.dosis }}
+              </option>
+            </select>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroCuatroForm.get('dosis_id').hasError('required') && registroCuatroForm.get('dosis_id').touched
+              "
+            >
+              Las dosis del usuario es requerida.
+            </small>
+          </div>
         </div>
 
         <button (click)="previous()" type="button" name="previous" class="next btn btn-primary botonPrincipal mr-3">

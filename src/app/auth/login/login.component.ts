@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
         }
       },
       (err) => {
-        Swal.fire({ icon: 'error', html: 'Usuario y/o contraseña inválida' });
+        Swal.fire({ icon: 'error', html: `${err.error.msg}` });
       }
     );
   }

@@ -29,6 +29,9 @@ import * as moment from 'moment';
 import { FuenteIngresoModel } from 'src/app/core/models/fuente-ingreso.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
+import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
+import { MinisterioModel } from 'src/app/core/models/ministerio.model';
+import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -63,6 +66,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public fuenteDeIngresos: FuenteIngresoModel[] = [];
   public gradosAcademicos: GradoAcademicoModel[] = [];
   public tiposEmpleos: TipoEmpleoModel[] = [];
+  public tipoMiembros: TipoMiembroModel[] = [];
+  public ministerios: MinisterioModel[] = [];
+  public voluntariados: VoluntariadoModel[] = [];
 
   public congregacionesFiltradas: CongregacionModel[] = [];
   public camposFiltrados: CampoModel[] = [];
@@ -71,12 +77,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   // Subscription
   public usuarioSubscription: Subscription;
-  public tipoDocumentoSubscription: Subscription;
-  public paisSubscription: Subscription;
-  public congregacionSubscription: Subscription;
-  public campoSubscription: Subscription;
-  public vacunaSubscription: Subscription;
-  public dosisSubscription: Subscription;
 
   codigoDeMarcadoSeparado = false;
   buscarPais = SearchCountryField;
@@ -106,12 +106,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private usuarioService: UsuarioService,
-    private tipoDocumentoService: TipoDocumentoService,
-    private paisService: PaisService,
-    private congregacionService: CongregacionService,
-    private campoService: CampoService,
-    private vacunaService: VacunaService,
-    private dosisService: DosisService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {}
@@ -130,6 +124,15 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         fuenteDeIngreso: FuenteIngresoModel[];
         gradoAcademico: GradoAcademicoModel[];
         tipoEmpleo: TipoEmpleoModel[];
+        congregacion: CongregacionModel[];
+        tipoMiembro: TipoMiembroModel[];
+        ministerio: MinisterioModel[];
+        voluntariado: VoluntariadoModel[];
+        pais: PaisModel[];
+        campo: CampoModel[];
+        tipoDocumento: TipoDocumentoModel[];
+        vacuna: VacunaModel[];
+        dosis: DosisModel[];
       }) => {
         this.nacionalidades = data.nacionalidad;
         this.estadoCivil = data.estadoCivil;
@@ -138,6 +141,14 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.fuenteDeIngresos = data.fuenteDeIngreso;
         this.gradosAcademicos = data.gradoAcademico;
         this.tiposEmpleos = data.tipoEmpleo;
+        this.tipoMiembros = data.tipoMiembro;
+        this.congregaciones = data.congregacion.filter((congregacion) => congregacion.estado === true);
+        this.ministerios = data.ministerio;
+        this.voluntariados = data.voluntariado;
+        this.paises = data.pais.filter((pais) => pais.estado === true);
+        this.campos = data.campo.filter((campo) => campo.estado === true);
+        this.vacunas = data.vacuna;
+        this.dosis = data.dosis;
       }
     );
 
@@ -179,82 +190,28 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
 
     this.registroCuatroForm = this.formBuilder.group({
-      tipomiembreo_id: ['1', [Validators.required]],
-      esJoven: ['1250000', []],
-      ministerio: ['2', []],
-      voluntario: ['11', []],
-    });
-
-    this.usuarioForm = this.formBuilder.group({
-      primerNombre: ['', [Validators.required, Validators.minLength(3)]],
-      segundoNombre: ['', [Validators.minLength(3)]],
-      primerApellido: ['', [Validators.required, Validators.minLength(3)]],
-      segundoApellido: ['', [Validators.minLength(3)]],
-      numeroDocumento: ['', [Validators.minLength(3)]],
-      fechaNacimiento: ['', [Validators.required]],
-      email: ['', [Validators.email]],
-      telefonoCasa: ['', [Validators.minLength(3)]],
-      numeroCelular: ['', [Validators.minLength(7)]],
-      direccion: ['', [Validators.required, Validators.minLength(5)]],
-      zipCode: ['', [Validators.minLength(3)]],
-      foto: ['', []],
-      genero_id: ['', [Validators.required]],
-      tipoDocumento_id: ['', [Validators.required]],
-      pais_id: ['', [Validators.required]],
+      tipoMiembro_id: ['2', []],
       congregacion_id: ['1', [Validators.required]],
-      campo_id: ['', [Validators.required]],
-      estadoCivil_id: ['', [Validators.required]],
-      rolCasa_id: ['', [Validators.required]],
+      campo_id: ['1', [Validators.required]],
+      esJoven: ['1', [Validators.required]],
+      ejerceMinisterio: ['1', [Validators.required]],
+      esVoluntario: ['1', [Validators.required]],
+      ministerio: ['2', []],
+      voluntariado: ['11', []],
+      pais_id: ['', [Validators.required]],
+      tipoDocumento_id: ['', [Validators.required]],
       vacuna_id: ['', [Validators.required]],
       dosis_id: ['', [Validators.required]],
-      nacionalidad_id: ['', [Validators.required]],
-      login: ['', []],
-      password: ['', []],
+      numeroDocumento: ['', [Validators.required]],
     });
 
     this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
       this.usuarios = usuarios;
     });
-
-    this.tipoDocumentoSubscription = this.tipoDocumentoService
-      .listarTipoDocumentos()
-      .subscribe((tipoDocumento: TipoDocumentoModel[]) => {
-        this.tipoDocumentos = tipoDocumento;
-      });
-
-    this.paisSubscription = this.paisService.getPaises().subscribe((pais: PaisModel[]) => {
-      this.paises = pais;
-    });
-
-    this.congregacionSubscription = this.congregacionService
-      .getCongregaciones()
-      .subscribe((congregaciones: CongregacionModel[]) => {
-        this.congregaciones = congregaciones.filter((congregacion) => congregacion.estado === true);
-      });
-
-    this.campoSubscription = this.campoService.listarCampo().subscribe((campos: CampoModel[]) => {
-      this.campos = campos.filter((campo) => campo.estado === true);
-    });
-
-    this.vacunaSubscription = this.vacunaService.listarVacuna().subscribe((vacuna: VacunaModel[]) => {
-      this.vacunas = vacuna;
-    });
-
-    this.dosisSubscription = this.dosisService.listarDosis().subscribe((dosis: DosisModel[]) => {
-      this.dosis = dosis;
-    });
-
-    // this.buscarNacionalidad();
   }
 
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
-    this.tipoDocumentoSubscription?.unsubscribe();
-    this.paisSubscription?.unsubscribe();
-    this.congregacionSubscription?.unsubscribe();
-    this.campoSubscription?.unsubscribe();
-    this.vacunaSubscription?.unsubscribe();
-    this.dosisSubscription?.unsubscribe();
   }
 
   guardarUsuario() {
@@ -378,7 +335,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     );
   }
 
-  buscarNacionalidad(formControlName: string = null) {
+  buscarNacionalidad(formControlName: string) {
     console.log('Ingresa...');
     this.letrasFiltrarNacionalidad = this.registroDosForm.get(formControlName.toString()).valueChanges.pipe(
       startWith(''),

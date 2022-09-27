@@ -148,15 +148,15 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.congregaciones = congregacion;
       });
 
-    this.campoSubscription = this.campoService.listarCampo().subscribe((campo: CampoModel[]) => {
+    this.campoSubscription = this.campoService.getCampos().subscribe((campo: CampoModel[]) => {
       this.campos = campo;
     });
 
-    this.vacunaSubscription = this.vacunaService.listarVacuna().subscribe((vacuna: VacunaModel[]) => {
+    this.vacunaSubscription = this.vacunaService.getVacunas().subscribe((vacuna: VacunaModel[]) => {
       this.vacunas = vacuna;
     });
 
-    this.dosisSubscription = this.dosisService.listarDosis().subscribe((dosis: DosisModel[]) => {
+    this.dosisSubscription = this.dosisService.getDosis().subscribe((dosis: DosisModel[]) => {
       this.dosis = dosis;
     });
 

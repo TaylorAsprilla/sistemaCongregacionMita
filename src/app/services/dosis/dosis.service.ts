@@ -23,7 +23,7 @@ export class DosisService {
     };
   }
 
-  listarDosis() {
+  getDosis() {
     return this.httpClient
       .get(`${base_url}/dosis`, this.headers)
       .pipe(map((dosis: { ok: boolean; dosis: DosisModel[] }) => dosis.dosis));

@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { DivisaService } from 'src/app/services/divisa/divisa.service';
+import { MinisterioModel } from 'src/app/core/models/ministerio.model';
+import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DivisasResolver implements Resolve<any> {
-  constructor(private divisasServise: DivisaService) {}
+export class MinisterioResolver implements Resolve<boolean> {
+  constructor(private ministerioService: MinisterioService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    return this.divisasServise.listarDivisa().pipe(
+    return this.ministerioService.getMinisterios().pipe(
       catchError((error) => {
         return of('No dara');
       })

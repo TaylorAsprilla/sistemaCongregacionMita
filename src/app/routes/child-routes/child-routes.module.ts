@@ -38,6 +38,15 @@ import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
 import { FuenteIngresoResolver } from 'src/app/resolvers/fuente-ingreso/fuente-ingreso.resolver';
 import { GradoAcademicoResolver } from 'src/app/resolvers/grado-academico/grado-academico.resolver';
 import { TipoEmpleoResolver } from 'src/app/resolvers/tipo-empleo/tipo-empleo.resolver';
+import { CongregacionResolver } from 'src/app/resolvers/congregacion/congregacion.resolver';
+import { TipoMiembroResolver } from 'src/app/resolvers/tipo-miembro/tipo-miembro.resolver';
+import { MinisterioResolver } from 'src/app/resolvers/ministerio/ministerio.resolver';
+import { VoluntariadoResolver } from 'src/app/resolvers/voluntariado/voluntariado.resolver';
+import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
+import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
+import { TipoDocumentoResolver } from 'src/app/resolvers/tipo-documento/tipo-documento.resolver';
+import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
+import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
 
 const childRoutes: Routes = [
   {
@@ -65,6 +74,15 @@ const childRoutes: Routes = [
       fuenteDeIngreso: FuenteIngresoResolver,
       gradoAcademico: GradoAcademicoResolver,
       tipoEmpleo: TipoEmpleoResolver,
+      congregacion: CongregacionResolver,
+      tipoMiembro: TipoMiembroResolver,
+      ministerio: MinisterioResolver,
+      voluntariado: VoluntariadoResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
+      tipoDocumento: TipoDocumentoResolver,
+      vacuna: VacunaResolver,
+      dosis: DosisResolver,
     },
   },
 

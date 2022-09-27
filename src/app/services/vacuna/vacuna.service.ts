@@ -22,7 +22,7 @@ export class VacunaService {
     };
   }
 
-  listarVacuna() {
+  getVacunas() {
     return this.httpClient
       .get(`${base_url}/vacuna`, this.headers)
       .pipe(map((vacuna: { ok: boolean; vacuna: VacunaModel[] }) => vacuna.vacuna));

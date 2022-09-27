@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { DivisaService } from 'src/app/services/divisa/divisa.service';
+import { DosisService } from 'src/app/services/dosis/dosis.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DivisasResolver implements Resolve<any> {
-  constructor(private divisasServise: DivisaService) {}
+export class DosisResolver implements Resolve<boolean> {
+  constructor(private dosisService: DosisService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    return this.divisasServise.listarDivisa().pipe(
+    return this.dosisService.getDosis().pipe(
       catchError((error) => {
         return of('No dara');
       })

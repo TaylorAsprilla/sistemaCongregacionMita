@@ -22,7 +22,7 @@ export class CamposComponent implements OnInit {
 
   cargarCampos() {
     this.cargando = true;
-    this.campoService.listarCampo().subscribe((campos: CampoModel[]) => {
+    this.campoService.getCampos().subscribe((campos: CampoModel[]) => {
       this.campos = campos;
       this.cargando = false;
     });
