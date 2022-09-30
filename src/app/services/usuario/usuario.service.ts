@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ListarUsuario, UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
-import { RegisterForm } from 'src/app/core/interfaces/register-form.interface';
+import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
 import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
@@ -118,7 +118,7 @@ export class UsuarioService {
       );
   }
 
-  crearUsuario(formData: RegisterForm) {
+  crearUsuario(formData: RegisterFormInterface) {
     return this.httpClient.post(`${base_url}/usuarios`, formData, this.headers).pipe(
       tap((resp: any) => {
         resp;

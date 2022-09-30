@@ -709,7 +709,7 @@
             <label class="input-group">Congregación - Pais: </label>
             <select
               class="form-control"
-              formControlName="pais_id"
+              formControlName="congregacionPais_id"
               (change)="listarCongregaciones(txtPaisCongregacion.value)"
               #txtPaisCongregacion
             >
@@ -721,7 +721,8 @@
             <small
               class="form-text text-muted"
               *ngIf="
-                registroCuatroForm.get('pais_id').hasError('required') && registroCuatroForm.get('pais_id').touched
+                registroCuatroForm.get('congregacionPais_id').hasError('required') &&
+                registroCuatroForm.get('congregacionPais_id').touched
               "
             >
               La congregación del usuario es requerida.
