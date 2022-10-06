@@ -274,11 +274,11 @@
               [numberFormat]="formatoNumeroTelefonico.International"
               name="numeroCelular"
               formControlName="numeroCelular"
-              (ngModelChange)="buscarCelular(registroDosForm.get('numeroCelular').value.internationalNumber)"
+              (ngModelChange)="buscarCelular(registroDosForm.get('numeroCelular')?.value?.internationalNumber)"
               #txtNumeroCelular
             >
             </ngx-intl-tel-input>
-            {{ registroDosForm.get('numeroCelular').value.internationalNumber }}
+
             <small
               class="form-text text-muted"
               *ngIf="
@@ -689,6 +689,15 @@
                 {{ tipoMiembro.miembro }}
               </label>
             </div>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroCuatroForm.get('tipoMiembro_id').hasError('tipoMiembro_id') &&
+                registroCuatroForm.get('tipoMiembro_id').touched
+              "
+            >
+              Selecciones que tipo de miembro es
+            </small>
           </div>
         </div>
 
@@ -703,6 +712,13 @@
               <input type="radio" class="form-check-input" formControlName="esJoven" [value]="0" />
               <label class="form-check-label">No</label>
             </div>
+
+            <small
+              class="form-text text-muted"
+              *ngIf="registroCuatroForm.get('esJoven').hasError('esJoven') && registroCuatroForm.get('esJoven').touched"
+            >
+              Selecciones si es o no Joven
+            </small>
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
@@ -715,6 +731,15 @@
               <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="false" />
               <label class="form-check-label">No</label>
             </div>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroCuatroForm.get('ejerceMinisterio').hasError('ejerceMinisterio') &&
+                registroCuatroForm.get('ejerceMinisterio').touched
+              "
+            >
+              ¿Ejerce algún ministerio?
+            </small>
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
@@ -727,6 +752,15 @@
               <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="false" />
               <label class="form-check-label">No</label>
             </div>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroCuatroForm.get('esVoluntario').hasError('esVoluntario') &&
+                registroCuatroForm.get('esVoluntario').touched
+              "
+            >
+              ¿Realiza labor voluntaria/ministerial?
+            </small>
           </div>
         </div>
 
@@ -796,6 +830,7 @@
               #txtCongregacion
             >
               <option value="" disabled>Seleccione la congregación a la que pertenece</option>
+              <option [value]="sinCongregacion">Sin Congregación</option>
               <option *ngFor="let congregacion of congregacionesFiltradas" [value]="congregacion.id">
                 {{ congregacion.congregacion }}
               </option>

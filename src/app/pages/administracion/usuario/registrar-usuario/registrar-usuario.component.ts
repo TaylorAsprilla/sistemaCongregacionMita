@@ -29,6 +29,7 @@ import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RegisterFormInterface, TIPO_DIRECCION } from 'src/app/core/interfaces/register-form.interface';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import { BuscarCelularService } from 'src/app/services/buscar-celular/buscar-celular.service';
+import config from 'src/environments/config/config';
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -74,6 +75,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   public mensajeBuscarCorreo: string = '';
   public mensajeBuscarNumeroCelular: string = '';
+  public sinCongregacion: number;
+  public sinCampo: number;
 
   // Subscription
   public usuarioSubscription: Subscription;
@@ -114,6 +117,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.sinCongregacion = config.sinCongregacion;
+
     this.activatedRoute.params.subscribe(({ id }) => {
       this.buscarUsuario(id);
     });
@@ -209,8 +214,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
     this.registroCuatroForm = this.formBuilder.group({
       tipoMiembro_id: ['2', [Validators.required]],
-      congregacion_id: ['1', [Validators.required]],
-      campo_id: ['1', []],
+      congregacion_id: ['', [Validators.required]],
+      campo_id: ['', []],
       esJoven: ['1', [Validators.required]],
       ejerceMinisterio: [, [Validators.required]],
       esVoluntario: [, [Validators.required]],
@@ -488,15 +493,17 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
   }
 
-  buscarCelular(numeroCelular: string) {
-    let numero = numeroCelular.slice(1);
+  buscarCelular(numeroCelular: string = null) {
+    if (!!numeroCelular) {
+      let numero = numeroCelular.slice(1);
 
-    this.mensajeBuscarNumeroCelular = '';
-    this.buscarCelularSubscription = this.buscarCelularService.buscarcelular(numero).subscribe((respuesta: any) => {
-      if (!respuesta.ok) {
-        this.mensajeBuscarNumeroCelular = respuesta.msg;
-      }
-    });
+      this.mensajeBuscarNumeroCelular = '';
+      this.buscarCelularSubscription = this.buscarCelularService.buscarcelular(numero).subscribe((respuesta: any) => {
+        if (!respuesta.ok) {
+          this.mensajeBuscarNumeroCelular = respuesta.msg;
+        }
+      });
+    }
   }
 
   next() {
@@ -510,6 +517,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     }
     if (this.step == 2) {
       this.registroDos_step = true;
+      console.log('this.registroDosForm', this.registroDosForm);
       if (this.registroDosForm.invalid) {
         return;
       }
