@@ -173,9 +173,22 @@ export class UsuarioService {
               usuario.rolCasa_id,
               usuario.nacionalidad_id,
               usuario.gradoAcademico_id,
-              usuario.tipoEmpleo_id
+              usuario.tipoEmpleo_id,
+              usuario.tipoDocumento,
+              usuario.genero,
+              usuario.estadoCivil,
+              usuario.rolCasa,
+              usuario.vacuna,
+              usuario.dosis,
+              usuario.nacionalidad,
+              usuario.gradoAcademico,
+              usuario.tipoEmpleo,
+              usuario.tipoMiembro,
+              usuario.direcciones,
+              usuario.usuarioCongregacion
             )
         );
+
         return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
       })
     );
@@ -220,7 +233,6 @@ export class UsuarioService {
         return {
           totalUsuarios: usuariosRespuesta.totalUsuarios,
           usuarios,
-          usuarioCongregacion: usuariosRespuesta.usuarioCongregacion,
         };
       })
     );

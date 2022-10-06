@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
-import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
 import { Rutas } from 'src/app/routes/menu-items';
-import { CampoService } from 'src/app/services/campo/campo.service';
-import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
-import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -24,6 +18,8 @@ export class UsuariosComponent implements OnInit {
   public usuarios: UsuarioModel[] = [];
 
   public usuariosTemporales: UsuarioModel[] = [];
+  public campos: CampoModel[] = [];
+  public paises: PaisModel[] = [];
 
   public paginaDesde: number = 0;
   public pagina: number = 1;
@@ -37,15 +33,13 @@ export class UsuariosComponent implements OnInit {
   public congregacionSubscription: Subscription;
   public campoSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private usuarioService: UsuarioService,
-    private paisService: PaisService,
-    private congregacion: CongregacionService,
-    private campoServise: CampoService
-  ) {}
+  constructor(private router: Router, private usuarioService: UsuarioService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe((data: { pais: PaisModel[]; campo: CampoModel[] }) => {
+      this.paises = data.pais.filter((pais) => pais.estado === true);
+      this.campos = data.campo.filter((campo) => campo.estado === true);
+    });
     this.cargarUsuarios();
   }
 
@@ -137,53 +131,11 @@ export class UsuariosComponent implements OnInit {
     this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}/${nuevo}`);
   }
 
-  congregacionUsuario(idUsuario: number) {
-    let usuario: UsuarioCongregacionModel;
-    let pais: PaisModel;
-    let congregacion: CongregacionModel;
-    let campo: CampoModel;
-
-    console.log(idUsuario);
-
-    // this.usuarioService.getUsuario(idUsuario).subscribe((usuarioEncontrado: UsuarioInterface) => {
-    //   usuario = usuarioEncontrado.usuarioCongregacion;
-
-    //   console.log(usuario);
-
-    //   // pais = this.buscarPais(usuario?.pais_id);
-    //   // console.info(pais);
-    //   // debugger;
-    //   // congregacion = this.buscarCongregacion(usuario.congregacion_id);
-    //   // campo = this.buscarCampo(usuario.campo_id);
-    // });
-
-    // console.log(usuario, pais, campo);
-
-    return { usuario, pais, campo };
+  buscarPais(idPais: number): string {
+    return this.paises.find((pais) => pais.id === idPais)?.pais;
   }
 
-  buscarPais(idPais: number): PaisModel {
-    let pais: PaisModel;
-    this.paisService.getPais(idPais).subscribe((paisEncontrado) => {
-      pais = paisEncontrado;
-      console.log(pais);
-    });
-    return pais;
-  }
-
-  buscarCongregacion(idCongregacion: number): CongregacionModel {
-    let congregacion: CongregacionModel;
-    this.congregacion.getCongregacion(idCongregacion).subscribe((congregacionEncontrada) => {
-      congregacion = congregacionEncontrada;
-    });
-    return congregacion;
-  }
-
-  buscarCampo(idCampo: number): CampoModel {
-    let campo: CampoModel;
-    this.campoServise.getCampo(idCampo).subscribe((campoEncontrado) => {
-      campo = campoEncontrado;
-    });
-    return campo;
+  buscarCampo(idCampo: number): string {
+    return this.campos.find((campo) => campo.id === idCampo)?.campo;
   }
 }

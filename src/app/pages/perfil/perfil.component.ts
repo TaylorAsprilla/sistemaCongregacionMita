@@ -222,7 +222,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   toggleEdit() {
     this.isEdit = !this.isEdit;
-    console.log(this.isEdit);
   }
 
   submit() {

@@ -118,7 +118,15 @@
 
           <div class="form-group col-md-6 col-sm-12">
             <label class="input-group">Email:</label>
-            <input type="email" formControlName="email" class="form-control" inputmode="text" placeholder="Email" />
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control"
+              inputmode="text"
+              placeholder="Email"
+              (blur)="buscarCorreo(txtEmail.value)"
+              #txtEmail
+            />
             <small
               class="form-text text-muted"
               *ngIf="registroUnoForm.get('email').hasError('required') && registroUnoForm.get('email').touched"
@@ -130,6 +138,10 @@
               *ngIf="registroUnoForm.get('email').hasError('email') && registroUnoForm.get('email').touched"
             >
               El valor ingresado no corresponde a un correo electrónico.
+            </small>
+
+            <small class="form-text text-muted" *ngIf="!!mensajeBuscarCorreo">
+              {{ mensajeBuscarCorreo }}
             </small>
           </div>
         </div>
@@ -215,6 +227,14 @@
             >
               La nacionalidad del usuario es requerida.
             </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('nacionalidad').hasError('minlength') && registroDosForm.get('nacionalidad').touched
+              "
+            >
+              La nacionalidad del usuario no tiene la longitud mínima permitida.
+            </small>
           </div>
 
           <div class="form-group col-md-6 col-sm-12">
@@ -254,8 +274,11 @@
               [numberFormat]="formatoNumeroTelefonico.International"
               name="numeroCelular"
               formControlName="numeroCelular"
+              (ngModelChange)="buscarCelular(registroDosForm.get('numeroCelular').value.internationalNumber)"
+              #txtNumeroCelular
             >
             </ngx-intl-tel-input>
+            {{ registroDosForm.get('numeroCelular').value.internationalNumber }}
             <small
               class="form-text text-muted"
               *ngIf="
@@ -273,6 +296,9 @@
               "
             >
               El número de celular del usuario no tiene la longitud mínima permitida.
+            </small>
+            <small class="form-text text-muted" *ngIf="!!mensajeBuscarNumeroCelular">
+              {{ mensajeBuscarNumeroCelular }}
             </small>
           </div>
 
@@ -296,6 +322,14 @@
             >
             </ngx-intl-tel-input>
           </div>
+          <small
+            class="form-text text-muted"
+            *ngIf="
+              registroDosForm.get('telefonoCasa').hasError('minlength') && registroDosForm.get('telefonoCasa').touched
+            "
+          >
+            El número de teléfono de la casa del usuario no tiene la longitud mínima permitida.
+          </small>
         </div>
 
         <div class="row border p-4 rounded bg-light shadow">
@@ -329,7 +363,7 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group">Ciudad:</label>
+            <label class="input-group">Ciudad / Localidad:</label>
             <input type="text" formControlName="ciudadResidencia" class="form-control" placeholder="Ciudad" />
             <small
               class="form-text text-muted"
@@ -338,7 +372,7 @@
                 registroDosForm.get('ciudadResidencia').touched
               "
             >
-              La ciudad es requerida.
+              El campo ciudad / localidad es requerido.
             </small>
             <small
               class="form-text text-muted"
@@ -347,12 +381,12 @@
                 registroDosForm.get('ciudadResidencia').touched
               "
             >
-              El campo ciudad no tiene la longitud mínima permitida.
+              El campo ciudad / localidad no tiene la longitud mínima permitida.
             </small>
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group">Departamento:</label>
+            <label class="input-group">Estado / Provincia / Departamento:</label>
             <input
               type="text"
               formControlName="departamentoResidencia"
@@ -367,7 +401,7 @@
                 registroDosForm.get('departamentoResidencia').touched
               "
             >
-              El campo departamento no tiene la longitud mínima permitida.
+              El campo estado / provincia / departamento no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -404,7 +438,6 @@
                 {{ pais.nombre }}
               </mat-option>
             </mat-autocomplete>
-
             <small
               class="form-text text-muted"
               *ngIf="
@@ -413,6 +446,15 @@
               "
             >
               El pais de la dirección de residencia es requerida.
+            </small>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                registroDosForm.get('paisResidencia').hasError('minlength') &&
+                registroDosForm.get('paisResidencia').touched
+              "
+            >
+              El pais de la dirección de residencia no tiene la longitud mínima permitida.
             </small>
           </div>
         </div>
@@ -443,7 +485,7 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group">Ciudad:</label>
+            <label class="input-group">Ciudad / Localidad :</label>
             <input type="text" formControlName="ciudadPostal" class="form-control" placeholder="Ciudad" />
             <small
               class="form-text text-muted"
@@ -451,7 +493,7 @@
                 registroDosForm.get('ciudadPostal').hasError('required') && registroDosForm.get('ciudadPostal').touched
               "
             >
-              La ciudad de la dirección postal es requerida.
+              El campo ciudad / localidad de la dirección postal es requerida.
             </small>
             <small
               class="form-text text-muted"
@@ -459,12 +501,12 @@
                 registroDosForm.get('ciudadPostal').hasError('minlength') && registroDosForm.get('ciudadPostal').touched
               "
             >
-              El campo ciudad de la dirección postal no tiene la longitud mínima permitida.
+              El campo ciudad / localidad de la dirección postal no tiene la longitud mínima permitida.
             </small>
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group">Departamento:</label>
+            <label class="input-group">Estado / Provincia / Departamento:</label>
             <input type="text" formControlName="departamentoPostal" class="form-control" placeholder="Departamento" />
 
             <small
@@ -474,7 +516,7 @@
                 registroDosForm.get('departamentoPostal').touched
               "
             >
-              El campo departamento de la dirección postal no tiene la longitud mínima permitida.
+              El campo estado / provincia / departamento de la dirección postal no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -514,7 +556,6 @@
 
         <button (click)="next()" [disabled]="registroDosForm.invalid" type="button" name="next" class="btn btn-primary">
           Siguiente
-          <!-- Siguiente " -->
         </button>
       </fieldset>
     </form>
@@ -531,12 +572,13 @@
           <div class="form-group col-sm-12 col-md-6 col-lg-4 px-5">
             <label class="input-group">¿Cuáles son sus fuentes de ingresos mensual?</label>
 
-            <div class="form-check pl-5" *ngFor="let fuenteDeIngreso of fuenteDeIngresos">
+            <div class="form-check pl-5" *ngFor="let fuenteDeIngreso of fuenteDeIngresos; let i = index">
               <input
                 type="checkbox"
-                formControlName="fuenteIngresos"
+                formArrayName="fuenteIngresos"
                 class="form-check-input"
                 [value]="fuenteDeIngreso.id"
+                (change)="onCheckboxFuenteDeIngresosChange($event)"
               />
               <label class="form-check-label"> {{ fuenteDeIngreso.fuenteIngreso }}</label>
             </div>
@@ -571,7 +613,7 @@
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group">¿A qué se dedica? </label>
             <select class="form-control" formControlName="tipoEmpleo_id">
-              <option value="" disabled>Seleccione un tipo de empleo</option>
+              <option value="0" selected>Seleccione un tipo de empleo</option>
               <option *ngFor="let empleo of tiposEmpleos" [value]="empleo.id">
                 {{ empleo.nombreEmpleo }}
               </option>
@@ -583,7 +625,7 @@
                 registroTresForm.get('tipoEmpleo_id').touched
               "
             >
-              Seleccione un grado académico.
+              Seleccione ua opción.
             </small>
           </div>
 
@@ -597,6 +639,15 @@
               placeholder="(Ejemplo: Cirujano, Mecánico de equipo pesado)"
             />
           </div>
+          <small
+            class="form-text text-muted"
+            *ngIf="
+              registroTresForm.get('especializacionEmpleo').hasError('minlength') &&
+              registroTresForm.get('especializacionEmpleo').touched
+            "
+          >
+            El campo especialización de empleo no tiene la longitud mínima permitida.
+          </small>
         </div>
 
         <button (click)="previous()" type="button" name="previous" class="next btn btn-primary mr-3">Anterior</button>
@@ -657,11 +708,11 @@
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group"> ¿Ejerce algún ministerio en la Congregación?</label>
             <div class="form-check pl-5 mt-2">
-              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="1" />
+              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="true" />
               <label class="form-check-label">Sí</label>
             </div>
             <div class="form-check pl-5 mt-2">
-              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="0" />
+              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="false" />
               <label class="form-check-label">No</label>
             </div>
           </div>
@@ -669,35 +720,42 @@
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group"> ¿Realiza labor voluntaria/ministerial?</label>
             <div class="form-check pl-5 mt-2">
-              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="1" />
+              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="true" />
               <label class="form-check-label">Sí</label>
             </div>
             <div class="form-check pl-5 mt-2">
-              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="0" />
+              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="false" />
               <label class="form-check-label">No</label>
             </div>
           </div>
         </div>
 
-        <div class="row">
-          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+        <div *ngIf="!!ejerceAlgunMinisterio() || !!esVoluntario()" class="row border p-4 mb-5 rounded bg-light shadow">
+          <div *ngIf="!!ejerceAlgunMinisterio()" class="form-group col-sm-12 col-md-6 col-lg-6">
             <label class="input-group">¿A cuál de los cuerpos ministeriales pertenece?</label>
 
-            <div class="form-check pl-5" *ngFor="let ministerio of ministerios">
-              <input type="checkbox" class="form-check-input" formControlName="ministerio" [value]="ministerio.id" />
+            <div class="form-check pl-5" *ngFor="let ministerio of ministerios; let i = index">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                formArrayName="ministerio"
+                [value]="ministerio.id"
+                (change)="onCheckboxMinisteriosChange($event)"
+              />
               <label class="form-check-label"> {{ ministerio.ministerio }}</label>
             </div>
           </div>
 
-          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+          <div *ngIf="!!esVoluntario()" class="form-group col-sm-12 col-md-6 col-lg-6">
             <label class="input-group">¿Qué tipo de labor voluntaria/ministerial realiza?</label>
 
-            <div class="form-check pl-5" *ngFor="let voluntariado of voluntariados">
+            <div class="form-check pl-5" *ngFor="let voluntariado of voluntariados; let i = index">
               <input
                 type="checkbox"
                 class="form-check-input"
-                formControlName="voluntariado"
+                formArrayName="voluntariado"
                 [value]="voluntariado.id"
+                (change)="onCheckboxVoluntariadosChange($event)"
               />
               <label class="form-check-label"> {{ voluntariado.nombreVoluntariado }}</label>
             </div>

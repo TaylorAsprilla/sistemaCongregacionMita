@@ -7,3 +7,10 @@ export class UsuarioCongregacionModel {
     public campo_id: number
   ) {}
 }
+
+export interface CongregacionInterface {
+  UsuarioCongregacion: UsuarioCongregacionModel;
+  congregacion: string;
+  idObreroEncargado: string;
+  pais_id: number;
+}

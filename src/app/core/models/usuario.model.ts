@@ -1,4 +1,16 @@
 import { environment } from 'environment';
+import { DireccionInterface } from '../interfaces/register-form.interface';
+import { DosisModel } from './dosis.model';
+import { EstadoCivilModel } from './estado-civil.model';
+import { GeneroModel } from './genero.model';
+import { GradoAcademicoModel } from './grado-academico.model';
+import { NacionalidadModel } from './nacionalidad.model';
+import { RolCasaModel } from './rol-casa.model';
+import { TipoDocumentoModel } from './tipo-documento.model';
+import { TipoEmpleoModel } from './tipo-empleo.model';
+import { TipoMiembroModel } from './tipo.miembro.model';
+import { CongregacionInterface, UsuarioCongregacionModel } from './usuarioCongregacion.model';
+import { VacunaModel } from './vacuna.model';
 
 const base_url = environment.base_url;
 
@@ -31,7 +43,19 @@ export class UsuarioModel {
     public rolCasa_id?: number,
     public nacionalidad_id?: number,
     public gradoAcademico_id?: number,
-    public tipoEmpleo_id?: number
+    public tipoEmpleo_id?: number,
+    public tipoDocumento?: TipoDocumentoModel,
+    public genero?: GeneroModel,
+    public estadoCivil?: EstadoCivilModel,
+    public rolCasa?: RolCasaModel,
+    public vacuna?: VacunaModel,
+    public dosis?: DosisModel,
+    public nacionalidad?: NacionalidadModel,
+    public gradoAcademico?: GradoAcademicoModel,
+    public tipoEmpleo?: TipoEmpleoModel,
+    public tipoMiembro?: TipoMiembroModel,
+    public direcciones?: DireccionInterface[],
+    public usuarioCongregacion?: CongregacionInterface
   ) {}
 
   get fotoUrl() {
@@ -42,5 +66,17 @@ export class UsuarioModel {
     } else {
       return `${base_url}/uploads/usuarios/no-image.jpg`;
     }
+  }
+
+  get nombreCongregacion() {
+    return this.usuarioCongregacion[0]?.congregacion;
+  }
+
+  get campoId() {
+    return this.usuarioCongregacion[0]?.UsuarioCongregacion.campo_id;
+  }
+
+  get paisId() {
+    return this.usuarioCongregacion[0]?.UsuarioCongregacion.pais_id;
   }
 }

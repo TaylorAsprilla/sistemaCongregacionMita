@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
@@ -27,6 +27,8 @@ import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RegisterFormInterface, TIPO_DIRECCION } from 'src/app/core/interfaces/register-form.interface';
+import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
+import { BuscarCelularService } from 'src/app/services/buscar-celular/buscar-celular.service';
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -70,8 +72,13 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   public usuarioSeleccionado: UsuarioModel;
 
+  public mensajeBuscarCorreo: string = '';
+  public mensajeBuscarNumeroCelular: string = '';
+
   // Subscription
   public usuarioSubscription: Subscription;
+  public buscarCorreoSubscription: Subscription;
+  public buscarCelularSubscription: Subscription;
 
   codigoDeMarcadoSeparado = false;
   buscarPais = SearchCountryField;
@@ -96,13 +103,14 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   ];
 
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
-  // letrasFiltrarPaisResidencia: Observable
 
   constructor(
     private formBuilder: FormBuilder,
     private usuarioService: UsuarioService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private buscarCorreoService: BuscarCorreoService,
+    private buscarCelularService: BuscarCelularService
   ) {}
 
   ngOnInit(): void {
@@ -157,6 +165,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
+    this.buscarCelularSubscription?.unsubscribe();
+    this.buscarCorreoSubscription?.unsubscribe();
   }
 
   crearFormularios() {
@@ -173,45 +183,83 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
 
     this.registroDosForm = this.formBuilder.group({
-      nacionalidad: ['Colombia', [Validators.required]],
+      nacionalidad: ['Colombia', [Validators.required, Validators.minLength(3)]],
       rolCasa_id: ['1', [Validators.required]],
-      numeroCelular: ['+573118873332', [Validators.required]],
-      telefonoCasa: ['+17879343120', []],
-      direccionResidencia: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(5)]],
-      ciudadResidencia: ['Bogotá', [Validators.required, Validators.minLength(5)]],
+      numeroCelular: ['+573118873332', [Validators.required, Validators.minLength(3)]],
+      telefonoCasa: ['+17879343120', [Validators.minLength(3)]],
+      direccionResidencia: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(3)]],
+      ciudadResidencia: ['Bogotá', [Validators.required, Validators.minLength(3)]],
       departamentoResidencia: ['Cundinamarca', [Validators.minLength(5)]],
       codigoPostalResidencia: ['100123', [Validators.minLength(3)]],
-      paisResidencia: ['Puerto Rico', [Validators.required]],
+      paisResidencia: ['Puerto Rico', [Validators.required, Validators.minLength(3)]],
       direccionPostal: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(5)]],
-      ciudadPostal: ['Bogotá', [Validators.required, Validators.minLength(5)]],
-      departamentoPostal: ['Cundinamarca', [Validators.minLength(5)]],
+      ciudadPostal: ['Bogotá', [Validators.required, Validators.minLength(3)]],
+      departamentoPostal: ['Cundinamarca', [Validators.minLength(3)]],
       codigoPostal: ['12300', [Validators.minLength(3)]],
-      paisPostal: ['Colombia', [Validators.required]],
+      paisPostal: ['Colombia', [Validators.required, Validators.minLength(3)]],
     });
 
     this.registroTresForm = this.formBuilder.group({
-      fuenteIngresos: ['1', [Validators.required]],
+      fuenteIngresos: new FormArray([]),
       ingresoMensual: ['1250000', []],
-      gradoAcademico_id: ['2', []],
-      tipoEmpleo_id: ['2', []],
-      especializacionEmpleo: ['Ingeniero', []],
+      gradoAcademico_id: ['2', [Validators.required]],
+      tipoEmpleo_id: ['2', [Validators.required]],
+      especializacionEmpleo: ['Ingeniero', [Validators.minLength(3)]],
     });
 
     this.registroCuatroForm = this.formBuilder.group({
-      tipoMiembro_id: ['2', []],
+      tipoMiembro_id: ['2', [Validators.required]],
       congregacion_id: ['1', [Validators.required]],
-      campo_id: ['1', [Validators.required]],
+      campo_id: ['1', []],
       esJoven: ['1', [Validators.required]],
-      ejerceMinisterio: ['1', [Validators.required]],
-      esVoluntario: ['1', [Validators.required]],
-      ministerio: ['2', []],
-      voluntariado: ['11', []],
+      ejerceMinisterio: [, [Validators.required]],
+      esVoluntario: [, [Validators.required]],
+      ministerio: new FormArray([]),
+      voluntariado: new FormArray([]),
       congregacionPais_id: ['', [Validators.required]],
-      tipoDocumento_id: ['', [Validators.required]],
+      tipoDocumento_id: ['', []],
       vacuna_id: ['', [Validators.required]],
       dosis_id: ['', [Validators.required]],
-      numeroDocumento: ['', [Validators.required]],
+      numeroDocumento: ['', [Validators.minLength(4)]],
     });
+  }
+
+  onCheckboxFuenteDeIngresosChange(event: any) {
+    const selectedFuenteDeIngresos = this.registroTresForm.controls['fuenteIngresos'] as FormArray;
+    if (event.target.checked) {
+      selectedFuenteDeIngresos.push(new FormControl(event.target.value));
+    } else {
+      const index = selectedFuenteDeIngresos.controls.findIndex((x) => x.value === event.target.value);
+      selectedFuenteDeIngresos.removeAt(index);
+    }
+  }
+
+  onCheckboxMinisteriosChange(event: any) {
+    const selectedMinisterios = this.registroCuatroForm.controls['ministerio'] as FormArray;
+    if (event.target.checked) {
+      selectedMinisterios.push(new FormControl(event.target.value));
+    } else {
+      const index = selectedMinisterios.controls.findIndex((x) => x.value === event.target.value);
+      selectedMinisterios.removeAt(index);
+    }
+  }
+
+  onCheckboxVoluntariadosChange(event: any) {
+    const selectedVoluntariados = this.registroCuatroForm.controls['voluntariado'] as FormArray;
+    if (event.target.checked) {
+      selectedVoluntariados.push(new FormControl(event.target.value));
+    } else {
+      const index = selectedVoluntariados.controls.findIndex((x) => x.value === event.target.value);
+      selectedVoluntariados.removeAt(index);
+    }
+  }
+
+  ejerceAlgunMinisterio() {
+    return this.registroCuatroForm.controls['ejerceMinisterio'].value || false;
+  }
+
+  esVoluntario() {
+    return this.registroCuatroForm.controls['esVoluntario'].value || false;
   }
 
   resetFormulario() {
@@ -252,31 +300,33 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         estadoCivil_id: informacionFormulario.estadoCivil_id,
         vacuna_id: informacionFormulario.vacuna_id,
         dosis_id: informacionFormulario.dosis_id,
-        direccionResidencial: {
-          direccion: informacionFormulario.direccionResidencia,
-          ciudad: informacionFormulario.ciudadResidencia,
-          departamento: informacionFormulario.departamentoResidencia,
-          pais: informacionFormulario.paisResidencia,
-          codigoPostal: informacionFormulario.codigoPostalResidencia,
-          tipoDireccion_id: TIPO_DIRECCION.DIRECCION_RESIDENCIAL,
-        },
-        direccionPostal: {
-          direccion: informacionFormulario.direccionPostal,
-          ciudad: informacionFormulario.ciudadPostal,
-          departamento: informacionFormulario.departamentoPostal,
-          pais: informacionFormulario.paisPostal,
-          codigoPostal: informacionFormulario.codigoPostal,
-          tipoDireccion_id: TIPO_DIRECCION.DIRECCION_POSTAL,
-        },
-        fuenteIngreso: informacionFormulario.fuenteDeIngreso,
+        direcciones: [
+          {
+            direccion: informacionFormulario.direccionResidencia,
+            ciudad: informacionFormulario.ciudadResidencia,
+            departamento: informacionFormulario.departamentoResidencia,
+            pais: informacionFormulario.paisResidencia,
+            codigoPostal: informacionFormulario.codigoPostalResidencia,
+            tipoDireccion_id: TIPO_DIRECCION.DIRECCION_RESIDENCIAL,
+          },
+          {
+            direccion: informacionFormulario.direccionPostal,
+            ciudad: informacionFormulario.ciudadPostal,
+            departamento: informacionFormulario.departamentoPostal,
+            pais: informacionFormulario.paisPostal,
+            codigoPostal: informacionFormulario.codigoPostal,
+            tipoDireccion_id: TIPO_DIRECCION.DIRECCION_POSTAL,
+          },
+        ],
+        fuentesDeIngreso: informacionFormulario.fuenteIngresos,
         ingresoMensual: informacionFormulario.ingresoMensual,
         gradoAcademico_id: informacionFormulario.gradoAcademico_id,
         tipoEmpleo_id: informacionFormulario.tipoMiembro_id,
         especializacionEmpleo: informacionFormulario.especializacionEmpleo,
         tipoMiembro_id: informacionFormulario.tipoEmpleo_id,
         esJoven: informacionFormulario.esJoven,
-        ministerio: informacionFormulario.ministerio,
-        voluntariado: informacionFormulario.voluntariado,
+        ministerios: informacionFormulario.ministerio,
+        voluntariados: informacionFormulario.voluntariado,
         congregacion: {
           pais_id: informacionFormulario.congregacionPais_id,
           congregacion_id: informacionFormulario.congregacion_id,
@@ -286,7 +336,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         rolCasa_id: informacionFormulario.rolCasa_id,
         tipoDocumento_id: informacionFormulario.tipoDocumento_id ? informacionFormulario.tipoDocumento_id : '',
       };
-      console.log('usuarioNuevo', usuarioNuevo);
 
       this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
         (usuarioCreado: any) => {
@@ -297,17 +346,25 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
           let errores = error.error.errors;
           let listaErrores = [];
 
-          Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
-          });
+          if (!!errores) {
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+          }
 
           Swal.fire({
-            title: 'Usuario creado',
+            title: 'El usuario NO ha sido creado',
             icon: 'error',
-            html: `${listaErrores.join('')}`,
+            html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
           });
         }
       );
+    } else {
+      Swal.fire({
+        title: 'El usuario NO ha sido creado',
+        icon: 'error',
+        html: 'Existen campos obligatorios sin llenar',
+      });
     }
   }
 
@@ -404,7 +461,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   buscarNacionalidad(formControlName: string) {
-    console.log('Ingresa...');
     this.letrasFiltrarNacionalidad = this.registroDosForm.get(formControlName.toString()).valueChanges.pipe(
       startWith(''),
       map((valor) => this.filtrar(valor || ''))
@@ -421,6 +477,26 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   buscarIDNacionalidad(nacionalidad: string): number {
     return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre == nacionalidad).id;
+  }
+
+  buscarCorreo(email: string) {
+    this.mensajeBuscarCorreo = '';
+    this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreo(email).subscribe((respuesta: any) => {
+      if (!respuesta.ok) {
+        this.mensajeBuscarCorreo = respuesta.msg;
+      }
+    });
+  }
+
+  buscarCelular(numeroCelular: string) {
+    let numero = numeroCelular.slice(1);
+
+    this.mensajeBuscarNumeroCelular = '';
+    this.buscarCelularSubscription = this.buscarCelularService.buscarcelular(numero).subscribe((respuesta: any) => {
+      if (!respuesta.ok) {
+        this.mensajeBuscarNumeroCelular = respuesta.msg;
+      }
+    });
   }
 
   next() {

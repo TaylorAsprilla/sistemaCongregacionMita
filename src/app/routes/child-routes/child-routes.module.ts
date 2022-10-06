@@ -60,7 +60,7 @@ const childRoutes: Routes = [
     path: Rutas.USUARIOS,
     component: UsuariosComponent,
     data: { titulo: 'Usuarios Registrados' },
-    resolve: { nacionalidad: NacionalidadResolver },
+    resolve: { nacionalidad: NacionalidadResolver, pais: PaisResolver, campo: CampoResolver },
   },
 
   {
