@@ -1,4 +1,4 @@
-export class AccesoMultimediaModel {
+export class SolicitudMultimediaModel {
   constructor(
     public id: number,
     public nombre: string,

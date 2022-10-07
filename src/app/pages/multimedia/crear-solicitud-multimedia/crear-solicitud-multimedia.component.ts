@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
-import { PaisService } from 'src/app/services/pais/pais.service';
+import { PaisModel } from 'src/app/core/models/pais.model';
 
 @Component({
   selector: 'app-crear-solicitud-multimedia',
@@ -16,69 +16,75 @@ import { PaisService } from 'src/app/services/pais/pais.service';
 export class CrearSolicitudMultimediaComponent implements OnInit {
   public solicitudForm: FormGroup;
 
-  // public congregaciones: CongregacionModel[] = [];
+  public paises: PaisModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
   public congregaciones: CongregacionModel[] = [];
 
   // Subscription
   public solicitadSubscription: Subscription;
-  public congregacionSubscription: Subscription;
 
-  filteredOptions: Observable<NacionalidadModel[]>;
-  myControl = new FormControl('');
+  codigoDeMarcadoSeparado = false;
+  buscarPais = SearchCountryField;
+  paisISO = CountryISO;
+  formatoNumeroTelefonico = PhoneNumberFormat;
+  paisesPreferidos: CountryISO[] = [
+    CountryISO.PuertoRico,
+    CountryISO.Canada,
+    CountryISO.Chile,
+    CountryISO.Colombia,
+    CountryISO.CostaRica,
+    CountryISO.Ecuador,
+    CountryISO.ElSalvador,
+    CountryISO.Spain,
+    CountryISO.UnitedStates,
+    CountryISO.Italy,
+    CountryISO.Mexico,
+    CountryISO.Panama,
+    CountryISO.Peru,
+    CountryISO.DominicanRepublic,
+    CountryISO.Venezuela,
+  ];
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private paisService: PaisService,
-    private congregacionService: CongregacionService
-  ) {}
+  letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
+  letrasFiltrarCongregacion: Observable<CongregacionModel[]>;
+
+  constructor(private formBuilder: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     //   this.activateRouter.params.subscribe(({ id }) => {
     //     this.buscarCongregacion(id);
     // }
-    this.activatedRoute.data.subscribe((data: { nacionalidad: NacionalidadModel[] }) => {
-      this.nacionalidades = data.nacionalidad;
-    });
+    this.activatedRoute.data.subscribe(
+      (data: { nacionalidad: NacionalidadModel[]; congregacion: CongregacionModel[]; pais: PaisModel[] }) => {
+        this.nacionalidades = data.nacionalidad;
+        this.congregaciones = data.congregacion;
+        this.paises = data.pais;
+      }
+    );
 
     this.solicitudForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
-      direccion: ['', [Validators.required]],
-      ciudad: ['', [Validators.required]],
-      departamento: ['', []],
-      codigoPostal: ['', []],
-      telefono: ['', []],
-      celular: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      direccion: ['', [Validators.required, Validators.minLength(3)]],
+      ciudad: ['', [Validators.required, Validators.minLength(3)]],
+      departamento: ['', [Validators.minLength(3)]],
+      codigoPostal: ['', [Validators.minLength(3)]],
+      pais: ['', [Validators.required, Validators.minLength(3)]],
+      telefono: ['', [Validators.minLength(3)]],
+      celular: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.minLength(3), Validators.email]],
       miembroCongregacion: ['', [Validators.required]],
-      distancia: ['', []],
-      familiaEnPR: ['', []],
-      login: ['', []],
-      pais_id: ['', [Validators.required]],
-      familia_id: ['', []],
-      aprobacion_id: ['', []],
+      congregacionCercana: ['', [Validators.minLength(3)]],
+      distancia: ['', [Validators.minLength(3)]],
+      familiaEnPR: ['', [Validators.required]],
       razonSolicitud_id: ['', [Validators.required]],
-      congregacion_id: ['', [Validators.required]],
-      congregacionCercana_id: ['', [Validators.required]],
-      nacionalidad_id: ['', [Validators.required]],
+      nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
     });
-
-    this.congregacionSubscription = this.congregacionService
-      .getCongregaciones()
-      .subscribe((congregaciones: CongregacionModel[]) => {
-        this.congregaciones = congregaciones.filter((congregacion) => congregacion.estado === true);
-      });
-    this.buscarNacionalidad();
   }
 
-  ngOnDestroy(): void {
-    this.congregacionSubscription?.unsubscribe();
-  }
+  ngOnDestroy(): void {}
 
-  buscarNacionalidad() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
+  buscarNacionalidad(formControlName: string) {
+    this.letrasFiltrarNacionalidad = this.solicitudForm.get(formControlName.toString()).valueChanges.pipe(
       startWith(''),
       map((valor) => this.filtrar(valor || ''))
     );
@@ -89,6 +95,21 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
 
     return this.nacionalidades.filter((nacionalidad: NacionalidadModel) =>
       nacionalidad.nombre.toLowerCase().includes(filtrarValores)
+    );
+  }
+
+  buscarCongregacion(formControlName: string) {
+    this.letrasFiltrarCongregacion = this.solicitudForm.get(formControlName.toString()).valueChanges.pipe(
+      startWith(''),
+      map((valor) => this.filtrarCongrergacion(valor || ''))
+    );
+  }
+
+  private filtrarCongrergacion(valor: string): CongregacionModel[] {
+    const filtrarValores = valor.toLowerCase();
+
+    return this.congregaciones.filter((congregacion: CongregacionModel) =>
+      congregacion.congregacion.toLowerCase().includes(filtrarValores)
     );
   }
 }

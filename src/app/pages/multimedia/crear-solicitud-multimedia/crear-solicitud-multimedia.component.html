@@ -17,13 +17,13 @@
               <input
                 type="text"
                 placeholder="Buscar la nacionalidad"
-                [formControl]="myControl"
-                formControlName="nacionalidad_id"
+                formControlName="nacionalidad"
                 [matAutocomplete]="auto"
                 class="form-control"
+                (keypress)="buscarNacionalidad('nacionalidad')"
               />
               <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
+                <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
                   {{ item.nombre }}
                 </mat-option>
               </mat-autocomplete>
@@ -31,8 +31,7 @@
               <small
                 class="form-text text-muted"
                 *ngIf="
-                  solicitudForm.get('nacionalidad_id').hasError('required') &&
-                  solicitudForm.get('nacionalidad_id').touched
+                  solicitudForm.get('nacionalidad').hasError('required') && solicitudForm.get('nacionalidad').touched
                 "
               >
                 La nacionalidad del usuario es requerida.
@@ -53,58 +52,104 @@
           </div>
 
           <div class="row">
-            <div class="form-group col-md-6 col col-sm-12">
+            <div class="form-group col-md-6 col col-sm-12 col-lg-4">
               <label for="inputDepartamento" class="col-form-label">Departamento:</label>
               <input type="text" formControlName="departamento" class="form-control" placeholder="Departamento" />
             </div>
 
-            <div class="form-group col-md-6 col col-sm-12">
+            <div class="form-group col-md-6 col col-sm-12 col-lg-4">
               <label for="inputCodigoPostal" class="col-form-label">Código Postal (Si aplica):</label>
               <input type="text" formControlName="codigoPostal" class="form-control" placeholder="Código Postal" />
             </div>
-          </div>
 
-          <div class="row">
-            <div class="form-group col-md-6 col col-sm-12">
+            <div class="form-group col-md-6 col col-sm-12 col-lg-4">
               <label>País: </label>
               <input
                 type="text"
-                placeholder="Buscar la nacionalidad"
-                [formControl]="myControl"
-                formControlName="nacionalidad_id"
+                placeholder="Buscar el pais de residencia"
+                formControlName="pais"
                 [matAutocomplete]="auto"
                 class="form-control"
+                (keypress)="buscarNacionalidad('pais')"
               />
               <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let item of filteredOptions | async" [value]="item.nombre">
-                  {{ item.nombre }}
+                <mat-option *ngFor="let pais of letrasFiltrarNacionalidad | async" [value]="pais.nombre">
+                  {{ pais.nombre }}
                 </mat-option>
               </mat-autocomplete>
 
               <small
                 class="form-text text-muted"
-                *ngIf="
-                  solicitudForm.get('nacionalidad_id').hasError('required') &&
-                  solicitudForm.get('nacionalidad_id').touched
-                "
+                *ngIf="solicitudForm.get('pais').hasError('required') && solicitudForm.get('pais').touched"
               >
                 El país de la dirección es requerida.
               </small>
             </div>
-
-            <div class="form-group col-md-6 col col-sm-12">
-              <label for="inputTelefono" class="col-form-label">Teléfono Hogar (Opcional):</label>
-              <input type="number" formControlName="telefono" class="form-control" placeholder="Teléfono Hogar" />
-            </div>
           </div>
 
           <div class="row">
-            <div class="form-group col-md-6 col col-sm-12">
-              <label for="inputCelular" class="col-form-label">Celular:</label>
-              <input type="number" formControlName="telefono" class="form-control" placeholder="Celular" />
+            <div class="form-group col-md-6 col-sm-12 col-lg-4">
+              <label class="input-group">Celular:</label>
+              <ngx-intl-tel-input
+                [cssClass]="'form-control'"
+                [preferredCountries]="paisesPreferidos"
+                [enableAutoCountrySelect]="true"
+                [enablePlaceholder]="true"
+                [searchCountryFlag]="true"
+                [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+                [selectFirstCountry]="false"
+                [selectedCountryISO]="paisISO.PuertoRico"
+                [maxLength]="15"
+                [phoneValidation]="true"
+                [separateDialCode]="codigoDeMarcadoSeparado"
+                [numberFormat]="formatoNumeroTelefonico.International"
+                name="celular"
+                formControlName="celular"
+              >
+              </ngx-intl-tel-input>
+
+              <small
+                class="form-text text-muted"
+                *ngIf="solicitudForm.get('celular').hasError('required') && solicitudForm.get('celular').touched"
+              >
+                El número de celular del usuario es requerido.
+              </small>
+              <small
+                class="form-text text-muted"
+                *ngIf="solicitudForm.get('celular').hasError('minlength') && solicitudForm.get('celular').touched"
+              >
+                El número de celular del usuario no tiene la longitud mínima permitida.
+              </small>
             </div>
 
-            <div class="form-group col-md-6 col col-sm-12">
+            <div class="form-group col-md-6 col-sm-12 col-lg-4">
+              <label class="input-group">Teléfono de la Casa:</label>
+              <ngx-intl-tel-input
+                [cssClass]="'form-control'"
+                [preferredCountries]="paisesPreferidos"
+                [enableAutoCountrySelect]="true"
+                [enablePlaceholder]="true"
+                [searchCountryFlag]="true"
+                [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+                [selectFirstCountry]="false"
+                [selectedCountryISO]="paisISO.PuertoRico"
+                [maxLength]="15"
+                [phoneValidation]="true"
+                [separateDialCode]="codigoDeMarcadoSeparado"
+                [numberFormat]="formatoNumeroTelefonico.National"
+                name="telefono"
+                formControlName="telefono"
+              >
+              </ngx-intl-tel-input>
+            </div>
+            <small
+              class="form-text text-muted"
+              *ngIf="solicitudForm.get('telefono').hasError('minlength') && solicitudForm.get('telefono').touched"
+            >
+              El número de teléfono de la casa del usuario no tiene la longitud mínima permitida.
+            </small>
+
+            <div class="form-group col-md-6 col col-sm-12 col-lg-4">
               <label for="inputEmail" class="col-form-label">Correo Electrónico:</label>
               <input type="email" formControlName="email" class="form-control" placeholder="Correo Electrónico" />
             </div>
@@ -121,43 +166,57 @@
             </div>
 
             <div class="form-group col-md-6 col col-sm-12">
-              <label for="inputDistancia" class="col-form-label">¿Estás cerca a alguna congregación?:</label>
-              <input type="number" formControlName="telefono" class="form-control" placeholder="Celular" />
+              <label for="inputEsmiembro" class="col-form-label">¿Estás cerca a alguna congregación?:</label>
+              <select class="form-control" id="inputinputEsmiembro">
+                <option value="" disabled>Seleccione una opción</option>
+                <option [value]="0">No</option>
+                <option [value]="1">Sí</option>
+              </select>
             </div>
           </div>
 
           <div class="row">
-            <div class="form-group col-md-6 col col-sm-12">
-              <label class="space">Congregación: </label>
-              <select class="form-control" formControlName="congregacion_id">
-                <option value="" disabled>Seleccione la congregación más cercana</option>
-                <option *ngFor="let congregacion of congregaciones" [value]="congregacion.id">
+            <div class="form-group col-md-6 col-sm-12">
+              <label>Congregación cercana: </label>
+              <input
+                type="text"
+                placeholder="Buscar la congregación más cercana"
+                formControlName="congregacionCercana"
+                [matAutocomplete]="auto"
+                class="form-control"
+                (keypress)="buscarCongregacion('congregacionCercana')"
+              />
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option
+                  *ngFor="let congregacion of letrasFiltrarCongregacion | async"
+                  [value]="congregacion.congregacion"
+                >
                   {{ congregacion.congregacion }}
-                </option>
-              </select>
-              <small
-                class="form-text text-muted"
-                *ngIf="
-                  solicitudForm.get('congregacion_id').hasError('required') &&
-                  solicitudForm.get('congregacion_id').touched
-                "
-              >
-                La congregación del usuario es requerida.
-              </small>
+                </mat-option>
+              </mat-autocomplete>
             </div>
+            <small
+              class="form-text text-muted"
+              *ngIf="
+                solicitudForm.get('congregacionCercana').hasError('minlength') &&
+                solicitudForm.get('congregacionCercana').touched
+              "
+            >
+              La congregación del usuario es requerida.
+            </small>
 
             <div class="form-group col-md-6 col col-sm-12">
               <label for="inputDistancia" class="col-form-label"
                 >¿A cuánta distancia? (Tiempo en horas y minutos):</label
               >
-              <input type="time" formControlName="" class="form-control" />
+              <input type="time" formControlName="distancia" class="form-control" />
             </div>
           </div>
 
           <div class="row">
             <div class="form-group col-md-6 col col-sm-12">
               <label for="" class="col-form-label">¿Tiene familiares en Puerto Rico?</label>
-              <select class="form-control" id="" formControlName="">
+              <select class="form-control" id="" formControlName="familiaEnPR">
                 <option value="" disabled>Seleccione una opción</option>
                 <option [value]="0">No</option>
                 <option [value]="1">Sí</option>
@@ -168,7 +227,8 @@
               <label for="" class="col-form-label"
                 >Especifique la razón por la cual desea ver los servicio por internet:</label
               >
-              <select class="form-control" id="" formControlName="">
+
+              <select class="form-control" id="" formControlName="razonSolicitud_id">
                 <option value="" disabled>Seleccione una opción</option>
                 <option [value]="1">Distancia al templo más cercano</option>
                 <option [value]="2">Persona Encamada</option>
@@ -181,7 +241,7 @@
           <div class="row">
             <div class="form-group col-md-6 col col-sm-12">
               <label for="inputDistancia" class="col-form-label">Específique la razón</label>
-              <input type="tetx" formControlName="" class="form-control" />
+              <input type="tetx" class="form-control" />
             </div>
           </div>
 

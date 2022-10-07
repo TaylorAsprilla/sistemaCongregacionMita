@@ -31,7 +31,7 @@ import { DivisasResolver } from 'src/app/resolvers/divisas/divisas.resolver';
 import { SeccionInformeResolver } from 'src/app/resolvers/seccion-informe/seccion-informe.resolver';
 import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
 import { CrearSolicitudMultimediaComponent } from 'src/app/pages/multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
-import { AccesoMultimediaComponent } from 'src/app/pages/multimedia/acceso-multimedia/acceso-multimedia.component';
+import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitud-multimedia/solicitud-multimedia.component';
 import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil.resolver';
 import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
 import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
@@ -197,8 +197,8 @@ const childRoutes: Routes = [
   },
   {
     path: Rutas.ACCESO_MULTIMEDIA,
-    component: AccesoMultimediaComponent,
-    resolve: { nacionalidad: NacionalidadResolver },
+    component: SolicitudMultimediaComponent,
+    resolve: { nacionalidad: NacionalidadResolver, congregacion: CongregacionResolver, pais: PaisResolver },
   },
 ];
 

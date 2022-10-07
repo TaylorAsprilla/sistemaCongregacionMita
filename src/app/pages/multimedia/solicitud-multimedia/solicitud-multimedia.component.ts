@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
+import { SolicitudMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 import { Rutas } from 'src/app/routes/menu-items';
-import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
+import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 
 @Component({
-  selector: 'app-acceso-multimedia',
-  templateUrl: './acceso-multimedia.component.html',
-  styleUrls: ['./acceso-multimedia.component.scss'],
+  selector: 'app-solicitud-multimedia',
+  templateUrl: './solicitud-multimedia.component.html',
+  styleUrls: ['./solicitud-multimedia.component.scss'],
 })
-export class AccesoMultimediaComponent implements OnInit {
-  solicitudesDeAccesos: AccesoMultimediaModel[] = [];
+export class SolicitudMultimediaComponent implements OnInit {
+  solicitudesDeAccesos: SolicitudMultimediaModel[] = [];
 
   cargando: boolean = false;
 
   // Subscription
   public solicitudAccesoSubscription: Subscription;
-  constructor(private router: Router, private accesoMultimediaServices: AccesoMultimediaService) {}
+  constructor(private router: Router, private accesoMultimediaServices: SolicitudMultimediaService) {}
 
   ngOnInit(): void {
     this.cargarSolicitudDeAccesos();
@@ -25,7 +25,7 @@ export class AccesoMultimediaComponent implements OnInit {
 
   cargarSolicitudDeAccesos() {
     this.cargando = true;
-    this.accesoMultimediaServices.getAccesosMultimedia().subscribe((solicitudesDeAcceso) => {
+    this.accesoMultimediaServices.getSolicitudes().subscribe((solicitudesDeAcceso) => {
       this.solicitudesDeAccesos = solicitudesDeAcceso;
       this.cargando = false;
     });
