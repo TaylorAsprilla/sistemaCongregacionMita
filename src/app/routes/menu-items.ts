@@ -2,7 +2,6 @@ import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 
 export enum Rutas {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
-  ACCESO_MULTIMEDIA = 'acceso-multimedia',
   CAMPOS = 'campos',
   CONGREGACION = 'congregacion',
   CONGREGACIONES = 'congregaciones',
@@ -11,7 +10,6 @@ export enum Rutas {
   CREAR_CONGREGACION = 'crear-congregacion',
   CREAR_PAIS = 'crear-pais',
   CREAR_ESTATUS = 'crear-estatus',
-  CREAR_SOLICITUD_MULTIMEDIA = 'crear-solicitud-multimedia',
   INICIO = 'inicio',
   INFORME = 'informe',
   INFORME_ACTIVIDADES = 'informe-actividades',
@@ -26,6 +24,8 @@ export enum Rutas {
   REGISTRAR_USUARIO = 'registrar-usuario',
   SISTEMA = 'sistema',
   SITUACION_VISITA = 'situacion-visita',
+  SOLICITUD_MULTIMEDIA = 'solicitud-multimedia',
+  SOLICITUDES_MULTIMEDIA = 'solicitudes-multimedia',
   RUTA_NUEVA = 'ruta-nueva',
   VER_INFORME = 'ver-informe',
 }
@@ -114,7 +114,7 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     submenu: [
       {
-        path: Rutas.ACCESO_MULTIMEDIA,
+        path: Rutas.SOLICITUDES_MULTIMEDIA,
         title: 'Solicitud de Acceso',
         icon: '',
         class: '',
@@ -122,7 +122,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.CREAR_SOLICITUD_MULTIMEDIA,
+        path: `${Rutas.SOLICITUD_MULTIMEDIA}/nuevo`,
         title: 'Nueva Solicitud',
         icon: '',
         class: '',

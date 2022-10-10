@@ -4,23 +4,18 @@ export class SolicitudMultimediaModel {
     public nombre: string,
     public direccion: string,
     public ciudad: string,
+    public celular: string,
+    public pais: string,
     public email: string,
     public miembroCongregacion: boolean,
+    public congregacionCercana: string,
     public familiaEnPR: boolean,
     public estado: boolean,
-    public pais_id: number,
     public razonSolicitud_id: number,
-    public congregacion_id: number,
-    public congregacionCercana_id: number,
     public nacionacilidad_id: number,
     public distancia?: string,
     public departamento?: string,
     public codigoPostal?: string,
-    public telefono?: string,
-    public celular?: string,
-    public login?: string,
-    public password?: string,
-    public familia_id?: number,
-    public aprobacion_id?: number
+    public telefono?: string
   ) {}
 }

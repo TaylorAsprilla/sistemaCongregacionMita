@@ -33,6 +33,6 @@ export class SolicitudMultimediaComponent implements OnInit {
 
   crearSolicitud() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CREAR_SOLICITUD_MULTIMEDIA}/${nuevo}`);
+    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.SOLICITUD_MULTIMEDIA}/${nuevo}`);
   }
 }

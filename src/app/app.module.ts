@@ -36,7 +36,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    AppRoutingModule,
     PagesModule,
     AuthModule,
     PerfectScrollbarModule,

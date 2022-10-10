@@ -190,7 +190,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.registroDosForm = this.formBuilder.group({
       nacionalidad: ['Colombia', [Validators.required, Validators.minLength(3)]],
       rolCasa_id: ['1', [Validators.required]],
-      numeroCelular: ['+573118873332', [Validators.required, Validators.minLength(3)]],
+      numeroCelular: ['+573118873332', { updateOn: 'blur' }, [Validators.required, Validators.minLength(3)]],
       telefonoCasa: ['+17879343120', [Validators.minLength(3)]],
       direccionResidencia: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(3)]],
       ciudadResidencia: ['Bogotá', [Validators.required, Validators.minLength(3)]],
@@ -517,7 +517,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     }
     if (this.step == 2) {
       this.registroDos_step = true;
-      console.log('this.registroDosForm', this.registroDosForm);
       if (this.registroDosForm.invalid) {
         return;
       }

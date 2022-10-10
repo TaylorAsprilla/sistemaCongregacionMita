@@ -28,11 +28,11 @@ export class RolCasaService {
       .pipe(map((rolCasa: { ok: boolean; rolCasa: RolCasaModel[] }) => rolCasa.rolCasa));
   }
 
-  crearGenero(rolCasa: RolCasaModel) {
+  crearRolCasa(rolCasa: RolCasaModel) {
     return this.httpClient.post(`${base_url}/rolcasa`, rolCasa, this.headers);
   }
 
-  actualizarGenero(rolCasa: RolCasaModel) {
+  actualizarRolCasa(rolCasa: RolCasaModel) {
     return this.httpClient.put(`${base_url}/rolcasa/${rolCasa.id}`, rolCasa, this.headers);
   }
 }

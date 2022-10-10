@@ -47,6 +47,8 @@ import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
 import { TipoDocumentoResolver } from 'src/app/resolvers/tipo-documento/tipo-documento.resolver';
 import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
 import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
+import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
+import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
 
 const childRoutes: Routes = [
   {
@@ -191,14 +193,26 @@ const childRoutes: Routes = [
     resolve: { seccionInforme: SeccionInformeResolver },
   },
   {
-    path: Rutas.CREAR_SOLICITUD_MULTIMEDIA,
+    path: `${Rutas.SOLICITUD_MULTIMEDIA}/:id`,
     component: CrearSolicitudMultimediaComponent,
-    resolve: { nacionalidad: NacionalidadResolver },
+    resolve: {
+      nacionalidad: NacionalidadResolver,
+      congregacion: CongregacionResolver,
+      pais: PaisResolver,
+      razonSolicitud: RazonSolicitudResolver,
+      parentesco: ParentescoResolver,
+    },
   },
   {
-    path: Rutas.ACCESO_MULTIMEDIA,
+    path: Rutas.SOLICITUDES_MULTIMEDIA,
     component: SolicitudMultimediaComponent,
-    resolve: { nacionalidad: NacionalidadResolver, congregacion: CongregacionResolver, pais: PaisResolver },
+    resolve: {
+      nacionalidad: NacionalidadResolver,
+      congregacion: CongregacionResolver,
+      pais: PaisResolver,
+      razonSolicitud: RazonSolicitudResolver,
+      parentesco: ParentescoResolver,
+    },
   },
 ];
 
