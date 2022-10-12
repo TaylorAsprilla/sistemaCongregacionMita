@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { FamiliarModel } from 'src/app/core/models/familiar.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
 
@@ -16,9 +17,10 @@ export class FormularioFamiliaresComponent implements OnInit {
   @Input() paisesPreferidos: CountryISO[];
   @Input() nacionalidades: NacionalidadModel[] = [];
 
+  @Output() valoresFormulario = new EventEmitter<FamiliarModel[]>();
+
   public familiaresForm: FormGroup;
 
-  public formulario: FormGroup;
   codigoDeMarcadoSeparado = false;
   buscarPais = SearchCountryField;
   paisISO = CountryISO;
@@ -26,33 +28,30 @@ export class FormularioFamiliaresComponent implements OnInit {
 
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
 
-  controles: any;
-
-  numeroFormularios = [1, 2, 3, 4, 5, 6];
-
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    // this.crearFormularioDeFamiliares();
-
     this.familiaresForm = this.formBuilder.group({
       familiares: this.formBuilder.array([
         this.formBuilder.group({
-          nombre: ['', [Validators.required, Validators.minLength(3)]],
-          parentesco: ['', [Validators.required]],
-          celular: ['', [Validators.required, Validators.minLength(3)]],
-          pais: ['', [Validators.required, Validators.minLength(3)]],
+          nombre: ['Familiar Uno', [Validators.required, Validators.minLength(3)]],
+          parentesco: ['2', [Validators.required]],
+          email: ['familia@hotmail.com', [Validators.minLength(3), Validators.email]],
+          telefono: ['+57 6012035614', [Validators.minLength(3)]],
+          celular: ['+57 3118873332', [Validators.required, Validators.minLength(3)]],
+          pais: ['Puerto Rico', [Validators.required, Validators.minLength(3)]],
         }),
       ]),
     });
   }
-
   get getFamiliares() {
     return this.familiaresForm.get('familiares') as FormArray;
   }
 
-  buscarNacionalidad(formControlName: string) {
-    this.letrasFiltrarNacionalidad = this.familiaresForm.get(formControlName.toString()).valueChanges.pipe(
+  buscarNacionalidad(formControlName: string, index: number) {
+    const control = this.getFamiliares.controls[index].get(formControlName).valueChanges;
+
+    this.letrasFiltrarNacionalidad = control.pipe(
       startWith(''),
       map((valor) => this.filtrar(valor || ''))
     );
@@ -68,7 +67,16 @@ export class FormularioFamiliaresComponent implements OnInit {
 
   agregarFamiliar() {
     const control = <FormArray>this.familiaresForm.controls['familiares'];
-    control.push(this.formBuilder.group({ nombre: [], parentesco: [], celular: [], pais: [] }));
+    control.push(
+      this.formBuilder.group({
+        nombre: ['Familiar 2', [Validators.required, Validators.minLength(3)]],
+        parentesco: ['2', [Validators.required]],
+        email: ['familiar@yahoo.es', [Validators.minLength(3), Validators.email]],
+        telefono: ['+576012035647', [Validators.minLength(3)]],
+        celular: ['+57 311887332', [Validators.required, Validators.minLength(3)]],
+        pais: ['Singapur', [Validators.required, Validators.minLength(3)]],
+      })
+    );
   }
 
   eliminarFamiliar(index: number) {
@@ -76,5 +84,9 @@ export class FormularioFamiliaresComponent implements OnInit {
     control.removeAt(index);
   }
 
-  crearSolicitud() {}
+  crearSolicitud() {
+    const value = this.familiaresForm.value;
+    console.log('Familiares', value);
+    this.valoresFormulario.emit(value);
+  }
 }

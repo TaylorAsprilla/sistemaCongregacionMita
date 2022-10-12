@@ -48,4 +48,8 @@ export class SolicitudMultimediaService {
   crearSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaModel) {
     return this.httpClient.post(`${base_url}/solicitud`, solicitudDeacceso, this.headers);
   }
+
+  validarEmail(id: number) {
+    return this.httpClient.put(`${base_url}/solicitud/validaremail/${id}`, null);
+  }
 }

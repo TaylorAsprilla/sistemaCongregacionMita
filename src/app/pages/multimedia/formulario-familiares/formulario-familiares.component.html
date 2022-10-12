@@ -1,4 +1,4 @@
-<form id="msform" autocomplete="off" [formGroup]="familiaresForm" (submit)="crearSolicitud()">
+<form id="msform" autocomplete="off" [formGroup]="familiaresForm">
   <div class="form-group">
     <div formArrayName="familiares">
       <div
@@ -8,14 +8,16 @@
       >
         <legend class="fw-semibold fs-title">
           Familiar # {{ i + 1 }}
-          <button
-            *ngIf="i > 0"
-            type="button"
-            class="btn btn-danger waves-effect waves-light float-right"
-            (click)="eliminarFamiliar(i)"
-          >
-            <i class="mdi mdi-close"></i>
-          </button>
+          <div class="col-12">
+            <button
+              *ngIf="i > 0"
+              type="button"
+              class="btn btn-danger waves-effect waves-light float-right"
+              (click)="eliminarFamiliar(i)"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
         </legend>
 
         <div class="form-group col-sm-12 col-md-6 col-lg-6">
@@ -85,6 +87,39 @@
           </small>
         </div>
 
+        <div class="form-group col-md-6 col-sm-12 col-lg-6">
+          <label class="input-group">Teléfono</label>
+          <ngx-intl-tel-input
+            [cssClass]="'form-control'"
+            [preferredCountries]="paisesPreferidos"
+            [enableAutoCountrySelect]="true"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="paisISO.PuertoRico"
+            [maxLength]="15"
+            [phoneValidation]="true"
+            [separateDialCode]="codigoDeMarcadoSeparado"
+            [numberFormat]="formatoNumeroTelefonico.International"
+            name="telefono"
+            formControlName="telefono"
+          >
+          </ngx-intl-tel-input>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+          <label class="input-group">Correo electrónico del familiar</label>
+          <input type="text" class="form-control" formControlName="email" />
+
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('email').hasError('minlength') && familiar.get('email').touched"
+          >
+            El nombre del familiar no tiene la longitud mínima permitida.
+          </small>
+        </div>
+
         <div class="form-group col-sm-12 col-md-6 col col-lg-6">
           <label class="input-group">Pais de residencia </label>
           <input
@@ -93,7 +128,7 @@
             formControlName="pais"
             [matAutocomplete]="autoPais"
             class="form-control"
-            (keypress)="buscarNacionalidad('pais')"
+            (keypress)="buscarNacionalidad('pais', i)"
           />
           <mat-autocomplete #autoPais="matAutocomplete">
             <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
@@ -113,8 +148,23 @@
             El país del familiar no tiene la longitud mínima permitida.
           </small>
         </div>
+        <div class="col-12">
+          <button
+            type="button"
+            class="btn btn-outline-primary waves-effect waves-light float-right"
+            (click)="agregarFamiliar()"
+          >
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+        <div class="col-12">
+          <span class="float-right mt-2 txtAgregarFamiliar">Agregar un familiar</span>
+        </div>
       </div>
-      <button class="btn btn-outline-primary float-right mt-4" (click)="agregarFamiliar()">Agregar Familiar</button>
+
+      <button type="submit" class="submit btn btn-primary mt-4 float-left" (click)="crearSolicitud()">
+        <i class="fa fa-save"></i> Crear Solicitud
+      </button>
     </div>
   </div>
 </form>

@@ -26,7 +26,7 @@ export class RazonSolicitudService {
 
   getRazonsolicitud() {
     return this.httpClient
-      .get(`${base_url}/razonsolicitud`, this.headers)
+      .get(`${base_url}/razonsolicitud`)
       .pipe(map((respuesta: { ok: boolean; razonSolicitud: RazonSolicitudModel[] }) => respuesta.razonSolicitud));
   }
 

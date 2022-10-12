@@ -13,11 +13,17 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { FormularioFamiliaresComponent } from './formulario-familiares/formulario-familiares.component';
+import { ValidarEmailComponent } from './validar-email/validar-email.component';
 
 const lang = 'en-US';
 
 @NgModule({
-  declarations: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, FormularioFamiliaresComponent],
+  declarations: [
+    SolicitudMultimediaComponent,
+    CrearSolicitudMultimediaComponent,
+    FormularioFamiliaresComponent,
+    ValidarEmailComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule,
@@ -32,6 +38,6 @@ const lang = 'en-US';
     CargandoInformacionModule,
     NgxMaterialTimepickerModule,
   ],
-  exports: [[SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent]],
+  exports: [[SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent]],
 })
 export class MultimediaModule {}

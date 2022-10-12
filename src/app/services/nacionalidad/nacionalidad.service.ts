@@ -26,7 +26,7 @@ export class NacionalidadService {
 
   getNacionalidades() {
     return this.httpClient
-      .get(`${base_url}/nacionalidad`, this.headers)
+      .get(`${base_url}/nacionalidad`)
       .pipe(map((nacionalidad: { ok: boolean; nacionalidades: NacionalidadModel[] }) => nacionalidad.nacionalidades));
   }
 

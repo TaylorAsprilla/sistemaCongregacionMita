@@ -1,3 +1,5 @@
+import { FamiliarInteface } from '../interfaces/familiar.interface';
+
 export class SolicitudMultimediaModel {
   constructor(
     public id: number,
@@ -11,11 +13,13 @@ export class SolicitudMultimediaModel {
     public congregacionCercana: string,
     public familiaEnPR: boolean,
     public estado: boolean,
+    public status: boolean,
     public razonSolicitud_id: number,
-    public nacionacilidad_id: number,
-    public distancia?: string,
-    public departamento?: string,
-    public codigoPostal?: string,
-    public telefono?: string
+    public nacionalidad_id: number,
+    public distancia: string,
+    public departamento: string,
+    public codigoPostal: string,
+    public telefono: string,
+    public familiares: FamiliarInteface
   ) {}
 }
