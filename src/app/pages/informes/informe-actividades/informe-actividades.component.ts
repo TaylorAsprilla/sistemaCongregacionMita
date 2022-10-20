@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
@@ -14,13 +14,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./informe-actividades.component.scss'],
 })
 export class InformeActividadesComponent implements OnInit, OnDestroy {
-  public actividadForm: FormGroup;
+  public actividadForm: UntypedFormGroup;
 
   public tipoActividades: TipoActividadModel[] = [];
   // Subscription
   public tipoActividadSubscription: Subscription;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private tipoActividadService: TipoActividadService,
     private actividadService: ActividadService

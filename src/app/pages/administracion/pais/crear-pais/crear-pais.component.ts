@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./crear-pais.component.scss'],
 })
 export class CrearPaisComponent implements OnInit, OnDestroy {
-  public paisForm: FormGroup;
+  public paisForm: UntypedFormGroup;
 
   public paises: PaisModel[] = [];
   public divisas: DivisaModel[] = [];
@@ -33,7 +33,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   public usuariosSubscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private paisService: PaisService,
     private divisaService: DivisaService,

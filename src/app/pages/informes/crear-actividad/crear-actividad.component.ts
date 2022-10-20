@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./crear-actividad.component.scss'],
 })
 export class CrearActividadComponent implements OnInit {
-  public tipoActividadForm: FormGroup;
+  public tipoActividadForm: UntypedFormGroup;
 
   public tiposActividad: TipoActividadModel[] = [];
   public seccionesInformes: SeccionInformeModel[] = [];
@@ -22,7 +22,7 @@ export class CrearActividadComponent implements OnInit {
   public tipoActividadSubscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private tipoActividadService: TipoActividadService,
     private activatedRoute: ActivatedRoute
