@@ -52,6 +52,7 @@
               "src/styles.css",
               "node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/angular-calendar/css/angular-calendar.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/chartist/dist/chartist.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/quill/dist/quill.snow.css",
