@@ -5,7 +5,6 @@ import { CongregacionesComponent } from './congregacion/congregaciones/congregac
 import { MinisteriosComponent } from './ministerios/ministerios/ministerios.component';
 import { UsuariosComponent } from './usuario/usuarios/usuarios.component';
 import { CrearCongregacionComponent } from './congregacion/crear-congregacion/crear-congregacion.component';
-import { ComponentsModule } from 'src/app/components/components.module';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CrearPaisComponent } from './pais/crear-pais/crear-pais.component';
@@ -18,6 +17,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CrearMinisterioComponent } from './ministerios/crear-ministerio/crear-ministerio.component';
+import { CargandoInformacionModule } from 'src/app/components/cargando-informacion/cargando-informacion.module';
 
 @NgModule({
   declarations: [
@@ -33,9 +33,9 @@ import { CrearMinisterioComponent } from './ministerios/crear-ministerio/crear-m
   ],
   imports: [
     CommonModule,
-    ComponentsModule,
     AppRoutingModule,
     FormsModule,
+    CargandoInformacionModule,
     ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,

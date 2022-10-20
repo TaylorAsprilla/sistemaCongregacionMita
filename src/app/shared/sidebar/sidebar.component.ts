@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import { UsuarioModel } from 'src/app/models/usuario.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROUTES, Rutas } from 'src/app/routes/menu-items';
 
 declare var $: any;

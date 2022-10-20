@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { LogroModel } from 'src/app/models/logro.model';
+import { LogroModel } from 'src/app/core/models/logro.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import Swal from 'sweetalert2';

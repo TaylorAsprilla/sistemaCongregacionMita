@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { CongregacionModel } from 'src/app/models/congregacion.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 
 const base_url = environment.base_url;
 @Injectable({

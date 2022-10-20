@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { SituacionVisitaModel } from 'src/app/models/situacion-visita.model';
+import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { SituacionVisitaService } from 'src/app/services/situacion-visita/situacion-visita.service';
 import Swal from 'sweetalert2';

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { NgbModal, ModalDismissReasons, NgbPanelChangeEvent, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { UsuarioModel } from 'src/app/models/usuario.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 declare var $: any;

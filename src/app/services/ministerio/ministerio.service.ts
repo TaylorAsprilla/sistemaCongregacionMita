@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { MinisterioModel } from 'src/app/models/ministerio.model';
+import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 
 const base_url = environment.base_url;
 @Injectable({

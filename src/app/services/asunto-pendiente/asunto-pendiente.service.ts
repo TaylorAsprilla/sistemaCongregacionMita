@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { AsuntoPendienteModel } from 'src/app/models/asunto-pendiente.model';
+import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
 
 const base_url = environment.base_url;
 

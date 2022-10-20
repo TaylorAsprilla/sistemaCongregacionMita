@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { generarSeccioninforme, Seccion } from 'src/app/interfaces/seccion.interface';
-import { InformeModel } from 'src/app/models/informe.model';
+import { generarSeccioninforme, Seccion } from 'src/app/core/interfaces/seccion.interface';
+import { InformeModel } from 'src/app/core/models/informe.model';
 import { Rutas } from 'src/app/routes/menu-items';
 
 @Component({

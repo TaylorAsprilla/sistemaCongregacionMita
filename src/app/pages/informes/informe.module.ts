@@ -10,14 +10,12 @@ import { InformeMetasComponent } from './informe-metas/informe-metas.component';
 import { InformeVisitasComponent } from './informe-visitas/informe-visitas.component';
 import { InformeSituacionVisitaComponent } from './informe-situacion-visita/informe-situacion-visita.component';
 import { InformeComponent } from './informe/informe.component';
-import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InformeAsuntoPendienteComponent } from './informe-asunto-pendiente/informe-asunto-pendiente.component';
-
 import { CrearCampoComponent } from '../administracion/campo/crear-campo/crear-campo.component';
 import { VerInformeComponent } from './ver-informe/ver-informe.component';
-
 import { KeysPipe } from './ver-informe/keys.pipe';
+import { SeccionInformeModule } from 'src/app/components/seccion-informe/seccion-informe.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +33,7 @@ import { KeysPipe } from './ver-informe/keys.pipe';
     VerInformeComponent,
     KeysPipe,
   ],
-  imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, ComponentsModule],
+  imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, SeccionInformeModule],
   exports: [
     CrearActividadComponent,
     CrearStatusComponent,

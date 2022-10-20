@@ -27,11 +27,10 @@
             <th class="w100">Fecha de Nacimiento</th>
             <th>Teléfono Casa</th>
             <th>Celular</th>
-            <th>Pais</th>
             <th class="w100">Congregación</th>
             <th>Nacionalidad</th>
             <th class="w100">Estado</th>
-            <th class="w200">Acciones</th>
+            <th class="w100">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -50,15 +49,16 @@
 
             <td>{{ usuario.numeroCelular }}</td>
 
-            <td>Colombia</td>
-
             <td>
-              <span class="badge badge-primary"> Bogotá </span>
-              <span class="badge badge-primary"> Campo </span>
+              <span *ngIf="!!usuario.paisId" class="badge badge-primary"> {{ buscarPais(usuario.paisId) }} </span>
+              <span *ngIf="!!usuario.nombreCongregacion" class="badge badge-danger">
+                {{ usuario.nombreCongregacion }}</span
+              >
+              <span *ngIf="!!usuario.campoId" class="badge badge-success"> {{ buscarCampo(usuario.campoId) }} </span>
             </td>
 
             <td>
-              {{ usuario.nacionalidad_id }}
+              {{ usuario.nacionalidad.nombre }}
             </td>
 
             <td>
@@ -100,7 +100,6 @@
           <th class="w100">Fecha de Nacimiento</th>
           <th>Teléfono Casa</th>
           <th>Celular</th>
-          <th>Pais</th>
           <th class="w100">Congregación</th>
           <th>Nacionalidad</th>
           <th class="w100">Estado</th>

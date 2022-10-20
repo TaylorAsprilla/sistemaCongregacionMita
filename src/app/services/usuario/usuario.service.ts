@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { ListarUsuario, UsuarioInterface } from 'src/app/interfaces/usuario.interface';
-import { LoginForm } from 'src/app/interfaces/login-form.interface';
-import { RegisterForm } from 'src/app/interfaces/register-form.interface';
-import { UsuarioModel } from 'src/app/models/usuario.model';
+import { ListarUsuario, UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
+import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
-import { UsuarioCongregacionModel } from 'src/app/models/usuarioCongregacion.model';
+import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -118,7 +118,7 @@ export class UsuarioService {
       );
   }
 
-  crearUsuario(formData: RegisterForm) {
+  crearUsuario(formData: RegisterFormInterface) {
     return this.httpClient.post(`${base_url}/usuarios`, formData, this.headers).pipe(
       tap((resp: any) => {
         resp;
@@ -152,27 +152,43 @@ export class UsuarioService {
               usuario.email,
               usuario.numeroCelular,
               usuario.fechaNacimiento,
+              usuario.esJoven,
               usuario.estado,
               usuario.genero_id,
               usuario.estadoCivil_id,
               usuario.vacuna_id,
               usuario.dosis_id,
+              usuario.tipoMiembro_id,
               usuario.segundoNombre,
               usuario.segundoApellido,
+              usuario.apodo,
+              usuario.ingresoMensual,
+              usuario.especializacionEmpleo,
               usuario.numeroDocumento,
               usuario.telefonoCasa,
-              usuario.direccion,
-              usuario.zipCode,
               usuario.login,
               usuario.password,
               usuario.foto,
               usuario.tipoDocumento_id,
               usuario.rolCasa_id,
               usuario.nacionalidad_id,
-              usuario.indicativoCasa,
-              usuario.indicativoCelular
+              usuario.gradoAcademico_id,
+              usuario.tipoEmpleo_id,
+              usuario.tipoDocumento,
+              usuario.genero,
+              usuario.estadoCivil,
+              usuario.rolCasa,
+              usuario.vacuna,
+              usuario.dosis,
+              usuario.nacionalidad,
+              usuario.gradoAcademico,
+              usuario.tipoEmpleo,
+              usuario.tipoMiembro,
+              usuario.direcciones,
+              usuario.usuarioCongregacion
             )
         );
+
         return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
       })
     );
@@ -190,31 +206,33 @@ export class UsuarioService {
               usuario.email,
               usuario.numeroCelular,
               usuario.fechaNacimiento,
+              usuario.esJoven,
               usuario.estado,
               usuario.genero_id,
               usuario.estadoCivil_id,
               usuario.vacuna_id,
               usuario.dosis_id,
+              usuario.tipoMiembro_id,
               usuario.segundoNombre,
               usuario.segundoApellido,
+              usuario.apodo,
+              usuario.ingresoMensual,
+              usuario.especializacionEmpleo,
               usuario.numeroDocumento,
               usuario.telefonoCasa,
-              usuario.direccion,
-              usuario.zipCode,
               usuario.login,
               usuario.password,
               usuario.foto,
               usuario.tipoDocumento_id,
               usuario.rolCasa_id,
               usuario.nacionalidad_id,
-              usuario.indicativoCasa,
-              usuario.indicativoCelular
+              usuario.gradoAcademico_id,
+              usuario.tipoEmpleo_id
             )
         );
         return {
           totalUsuarios: usuariosRespuesta.totalUsuarios,
           usuarios,
-          usuarioCongregacion: usuariosRespuesta.usuarioCongregacion,
         };
       })
     );

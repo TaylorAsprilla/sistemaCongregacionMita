@@ -1,0 +1,170 @@
+<form id="msform" autocomplete="off" [formGroup]="familiaresForm">
+  <div class="form-group">
+    <div formArrayName="familiares">
+      <div
+        class="row border p-4 rounded bg-light shadow mb-4"
+        *ngFor="let familiar of getFamiliares.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <legend class="fw-semibold fs-title">
+          Familiar # {{ i + 1 }}
+          <div class="col-12">
+            <button
+              *ngIf="i > 0"
+              type="button"
+              class="btn btn-danger waves-effect waves-light float-right"
+              (click)="eliminarFamiliar(i)"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </legend>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+          <label class="input-group">Nombre familiar</label>
+          <input type="text" class="form-control" formControlName="nombre" />
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('nombre').hasError('required') && familiar.get('nombre').touched"
+          >
+            El nombre del familiar es requerido.
+          </small>
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('nombre').hasError('minlength') && familiar.get('nombre').touched"
+          >
+            El nombre del familiar no tiene la longitud mínima permitida.
+          </small>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+          <label class="input-group">Parentesco</label>
+          <select class="form-control" formControlName="parentesco">
+            <option value="" disabled>Seleccione una opción</option>
+            <option *ngFor="let parentesco of parentescos" [value]="parentesco.id">
+              {{ parentesco.parentesco }}
+            </option>
+          </select>
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('parentesco').hasError('required') && familiar.get('parentesco').touched"
+          >
+            Seleccione el parentesco del familiar.
+          </small>
+        </div>
+
+        <div class="form-group col-md-6 col-sm-12 col-lg-6">
+          <label class="input-group">Celular</label>
+          <ngx-intl-tel-input
+            [cssClass]="'form-control'"
+            [preferredCountries]="paisesPreferidos"
+            [enableAutoCountrySelect]="true"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="paisISO.PuertoRico"
+            [maxLength]="15"
+            [phoneValidation]="true"
+            [separateDialCode]="codigoDeMarcadoSeparado"
+            [numberFormat]="formatoNumeroTelefonico.International"
+            name="celular"
+            formControlName="celular"
+          >
+          </ngx-intl-tel-input>
+
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('celular').hasError('required') && familiar.get('celular').touched"
+          >
+            El número de celular del usuario es requerido.
+          </small>
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('celular').hasError('minlength') && familiar.get('celular').touched"
+          >
+            El número de celular del usuario no tiene la longitud mínima permitida.
+          </small>
+        </div>
+
+        <div class="form-group col-md-6 col-sm-12 col-lg-6">
+          <label class="input-group">Teléfono</label>
+          <ngx-intl-tel-input
+            [cssClass]="'form-control'"
+            [preferredCountries]="paisesPreferidos"
+            [enableAutoCountrySelect]="true"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="paisISO.PuertoRico"
+            [maxLength]="15"
+            [phoneValidation]="true"
+            [separateDialCode]="codigoDeMarcadoSeparado"
+            [numberFormat]="formatoNumeroTelefonico.International"
+            name="telefono"
+            formControlName="telefono"
+          >
+          </ngx-intl-tel-input>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+          <label class="input-group">Correo electrónico del familiar</label>
+          <input type="text" class="form-control" formControlName="email" />
+
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('email').hasError('minlength') && familiar.get('email').touched"
+          >
+            El nombre del familiar no tiene la longitud mínima permitida.
+          </small>
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6 col col-lg-6">
+          <label class="input-group">Pais de residencia </label>
+          <input
+            type="text"
+            placeholder="Buscar el país de residencia del familiar"
+            formControlName="pais"
+            [matAutocomplete]="autoPais"
+            class="form-control"
+            (keypress)="buscarNacionalidad('pais', i)"
+          />
+          <mat-autocomplete #autoPais="matAutocomplete">
+            <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
+              {{ item.nombre }}
+            </mat-option>
+          </mat-autocomplete>
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('pais').hasError('required') && familiar.get('pais').touched"
+          >
+            El país del familiar es requerido.
+          </small>
+          <small
+            class="form-text text-muted"
+            *ngIf="familiar.get('pais').hasError('minlength') && familiar.get('pais').touched"
+          >
+            El país del familiar no tiene la longitud mínima permitida.
+          </small>
+        </div>
+        <div class="col-12">
+          <button
+            type="button"
+            class="btn btn-outline-primary waves-effect waves-light float-right"
+            (click)="agregarFamiliar()"
+          >
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+        <div class="col-12">
+          <span class="float-right mt-2 txtAgregarFamiliar">Agregar un familiar</span>
+        </div>
+      </div>
+
+      <button type="submit" class="submit btn btn-primary mt-4 float-left" (click)="crearSolicitud()">
+        <i class="fa fa-save"></i> Crear Solicitud
+      </button>
+    </div>
+  </div>
+</form>

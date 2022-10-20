@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AsuntoPendienteModel } from 'src/app/models/asunto-pendiente.model';
+import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { AsuntoPendienteService } from 'src/app/services/asunto-pendiente/asunto-pendiente.service';
 import Swal from 'sweetalert2';

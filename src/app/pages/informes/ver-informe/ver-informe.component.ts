@@ -2,17 +2,26 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
-import { SeccionInformeModel } from 'src/app/models/seccion-informe.model';
+import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
-import { TipoActividadModel } from 'src/app/models/tipo-actividad.model';
-import { UsuarioModel } from 'src/app/models/usuario.model';
-import { PaisModel } from 'src/app/models/pais.model';
+import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
-import { UsuarioInterface } from 'src/app/interfaces/usuario.interface';
-import { UsuarioCongregacionModel } from 'src/app/models/usuarioCongregacion.model';
+import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
+import { data } from 'jquery';
+import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
+import { VisitaModel } from 'src/app/core/models/visita.model';
+import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
+import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
+import { LogroModel } from 'src/app/core/models/logro.model';
+import { MetaModel } from 'src/app/core/models/meta.model';
+import { ActividadModel } from 'src/app/core/models/actividad.model';
+import { InformeModel } from 'src/app/core/models/informe.model';
 
 @Component({
   selector: 'app-ver-informe',
@@ -28,6 +37,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   segundApellido: string;
   fechaActual: Date;
   trimestre: string;
+  fraccion: string;
   idInforme = 1;
   public fechaSeleccionada = '';
   public obreroSeleccionado: UsuarioModel;
@@ -51,25 +61,30 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
 
   // desglosar informacion de informe
-  informe: any[];
-  actividades: any[];
+  informe: InformeModel[];
+  actividades: ActividadModel[];
 
-  // 9 secciones diferentes
-  servicios: any[] = [];
-  especiales: any[] = [];
-  espirituales: any[] = [];
-  reuniones: any[] = [];
+  servicios: ActividadModel[] = [];
+  especiales: ActividadModel[] = [];
+  espirituales: ActividadModel[] = [];
+  reuniones: ActividadModel[] = [];
 
-  aspectoContable: any[];
-  asuntoPendiente: any[];
-  informacionInforme: any[]; // no se que es esto
-  logros: any[];
-  metas: any[]; // missing
-  situacionVisita: any[];
-  visitas: any[];
+  aspectoContable: ContabilidadModel[] = [];
+  asuntoPendiente: AsuntoPendienteModel[] = [];
+  informacionInforme: InformeModel[];
+  logros: LogroModel[] = [];
+  metas: MetaModel[] = [];
+  situacionVisita: SituacionVisitaModel[] = [];
+  visitas: VisitaModel[] = [];
+
+  dataVisitas: VisitaModel[] = [];
+  dataSituacionVisitas: SituacionVisitaModel[] = [];
+  dataLogros: LogroModel[] = [];
+  dataMetas: MetaModel[] = [];
+  dataAspectoContable: ContabilidadModel[] = [];
+  dataAsuntoPendiente: AsuntoPendienteModel[] = [];
 
   public seccionesInformes: SeccionInformeModel[];
-
   informeSubscription: Subscription;
 
   constructor(
@@ -85,7 +100,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     // traer secciones
     this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
       this.seccionesInformes = data.seccionInforme;
-      console.log('this.seccionesInformes ', this.seccionesInformes);
     });
 
     this.primerNombre = sessionStorage.getItem('primerNombre');
@@ -94,8 +108,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.segundApellido = sessionStorage.getItem('segundoApellido');
     this.fechaActual = new Date();
 
-    this.cargarInforme(this.idInforme);
-
+    this.filtrarInformacionInforme();
     this.cargarUsuarios();
     this.cargarPaises();
     this.cargarTipoActividad();
@@ -106,23 +119,22 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.paisSubscription?.unsubscribe();
     this.actividadSubcription?.unsubscribe();
     this.tipoActividadSubcription?.unsubscribe();
+    this.informeSubscription?.unsubscribe();
   }
 
   cargarInforme(idInforme) {
     this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
       this.informe = respuesta;
-      console.log(this.informe);
-      // eliminar y sustituir this.clasificar
       this.actividades = this.informe['actividades'];
-
-      this.aspectoContable = this.informe['aspectoContable'];
-      this.asuntoPendiente = this.informe['asuntoPendiente'];
+      /// data var
       this.informacionInforme = this.informe['informacioninforme'];
-      this.logros = this.informe['logros'];
-      this.metas = this.informe['metas'];
-      this.situacionVisita = this.informe['situacionVisita'];
-      this.visitas = this.informe['visitas'];
-      // this.translateActividad();
+
+      this.dataVisitas = this.informe['visitas'];
+      this.dataSituacionVisitas = this.informe['situacionVisita'];
+      this.dataLogros = this.informe['logros'];
+      this.dataMetas = this.informe['metas'];
+      this.dataAspectoContable = this.informe['aspectoContable'];
+      this.dataAsuntoPendiente = this.informe['asuntoPendiente'];
     });
     return true;
   }
@@ -130,53 +142,36 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   cargarTipoActividad() {
     this.tipoActividadSubcription = this.tipoActividadService.getTipoActividad().subscribe((nombre) => {
       this.tipoActividades = nombre;
-      console.log(this.tipoActividades);
-    });
-  }
-
-  translateActividad() {
-    this.actividades.forEach((actividad) => {
-      let id = actividad['tipoActividad_id'];
-      console.log(id);
-      let nombre = this.getTipoActividadName(id);
-      console.log(nombre);
-      // sustituir
-      actividad['tipoActividad_id'] = nombre;
     });
   }
 
   clasificarActividad(conjunto) {
-    conjunto.forEach((actividad) => {
-      //console.log(actividad);
-      let idTipoAct = actividad.tipoActividad_id;
-      //console.log(idTipoAct);
-      //tipoAct.seccionID
-      let idSec = this.tipoActividades.find((item) => item.id === idTipoAct).idSeccion;
-
-      //console.log(idSec);
-      // validar que existe seccion de la actividad/tipoActividad/idSeccion
-      this.seccionesInformes.forEach((seccion) => {
-        if (seccion.id === idSec) {
-          // console.log('id de seccion existe');
-          // colocar array de seccion segun id
-          switch (idSec) {
-            case 1:
-              this.servicios.push(actividad);
-              break;
-            case 4:
-              this.especiales.push(actividad);
-              break;
-            case 5:
-              this.espirituales.push(actividad);
-              break;
-            case 6:
-              this.reuniones.push(actividad);
-              break;
+    if (conjunto) {
+      conjunto.forEach((actividad) => {
+        let idTipoAct = actividad.tipoActividad_id;
+        let idSec = this.tipoActividades.find((item) => item.id === idTipoAct).idSeccion;
+        // validar que existe seccion de la actividad/tipoActividad/idSeccion
+        this.seccionesInformes.forEach((seccion) => {
+          if (seccion.id === idSec) {
+            // colocar array de seccion segun id
+            switch (idSec) {
+              case 1:
+                this.servicios.push(actividad);
+                break;
+              case 4:
+                this.especiales.push(actividad);
+                break;
+              case 5:
+                this.espirituales.push(actividad);
+                break;
+              case 6:
+                this.reuniones.push(actividad);
+                break;
+            }
           }
-          // console.log(this.servicios);
-        }
+        });
       });
-    });
+    }
   }
 
   filtrarFecha(conjunto) {
@@ -187,25 +182,39 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     let daySelect = this.fechaSeleccionada.slice(8, 10);
     conjunto.forEach((actividad) => {
       let fecha = actividad.fecha;
-      console.log(fecha);
       let year = fecha.slice(0, 4);
       let month = fecha.slice(5, 7);
       let monthNum = Number(month);
       let day = fecha.slice(8, 10);
       if (yearSelect == year) {
-        console.log('select: ' + monthSelect + ' actividad month: ' + month);
         if (monthSelectNum >= monthNum && monthSelectNum <= monthNum) {
           result.push(actividad);
         }
       }
     });
-    console.log('fecha seleccionada ' + this.fechaSeleccionada);
+    return result;
+  }
 
+  filtrarFechaCreatedAt(conjunto) {
+    let result: any[] = [];
+    let yearSelect = this.fechaSeleccionada.slice(0, 4);
+    let monthSelect = this.fechaSeleccionada.slice(5, 7);
+    let monthSelectNum = Number(monthSelect);
+    conjunto.forEach((actividad) => {
+      let fecha = actividad.createdAt;
+      let year = fecha.slice(0, 4);
+      let month = fecha.slice(5, 7);
+      let monthNum = Number(month);
+      if (yearSelect == year) {
+        if (monthSelectNum >= monthNum && monthSelectNum <= monthNum) {
+          result.push(actividad);
+        }
+      }
+    });
     return result;
   }
 
   getTipoActividadName(id) {
-    console.log('hi');
     try {
       return this.tipoActividades[id]['nombre'];
     } catch (exception_var) {
@@ -242,27 +251,38 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
     if (mes >= 1 && mes <= 3) {
       this.trimestre = 'enero, febrero y marzo';
+      this.fraccion = '1er Trimestre del año';
     }
     if (mes >= 4 && mes <= 6) {
       this.trimestre = 'abril, mayo y junio';
+      this.fraccion = '2do Trimestre del año';
     }
     if (mes >= 7 && mes <= 9) {
       this.trimestre = 'julio, agosto y septiembre';
+      this.fraccion = '3er Trimestre del año';
     }
     if (mes >= 10 && mes <= 12) {
       this.trimestre = 'octubre, noviembre y diciembre';
+      this.fraccion = '4to Trimestre del año';
     }
+    this.filtrarInformacionInforme();
+  }
+
+  filtrarInformacionInforme() {
     if (!!this.cargarInforme(this.idInforme)) {
       this.clasificarActividad(this.actividades);
       this.servicios = this.filtrarFecha(this.servicios);
       this.especiales = this.filtrarFecha(this.especiales);
       this.espirituales = this.filtrarFecha(this.espirituales);
       this.reuniones = this.filtrarFecha(this.reuniones);
-    } else {
-      this.servicios = [];
-    }
 
-    // this.cargarInforme(1);
+      this.visitas = this.filtrarFecha(this.dataVisitas);
+      this.situacionVisita = this.filtrarFecha(this.dataSituacionVisitas);
+      this.aspectoContable = this.filtrarFechaCreatedAt(this.dataAspectoContable);
+      this.metas = this.filtrarFecha(this.dataMetas);
+      this.logros = this.filtrarFechaCreatedAt(this.dataLogros);
+      this.asuntoPendiente = this.filtrarFechaCreatedAt(this.dataAsuntoPendiente);
+    }
   }
 
   makePDF() {
