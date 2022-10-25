@@ -5,7 +5,9 @@ import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalida
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
+import { Rutas } from 'src/app/routes/menu-items';
 import { CrearSolicitudMultimediaComponent } from './crear-solicitud-multimedia/crear-solicitud-multimedia.component';
+import { ServiciosYVigiliasComponent } from './servicios-y-vigilias/servicios-y-vigilias.component';
 import { ValidarEmailComponent } from './validar-email/validar-email.component';
 
 const routes: Routes = [
@@ -23,6 +25,10 @@ const routes: Routes = [
   {
     path: 'validaremail/:id',
     component: ValidarEmailComponent,
+  },
+  {
+    path: Rutas.SERVICIOS_Y_VIGILIAS,
+    component: ServiciosYVigiliasComponent,
   },
 ];
 

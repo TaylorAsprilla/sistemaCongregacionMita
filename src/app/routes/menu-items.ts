@@ -3,6 +3,7 @@ import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 export enum Rutas {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
   CAMPOS = 'campos',
+  CONFIGURAR_SERVICIOS_Y_VIGILIAS = 'configurar-servicios-y-vigilias',
   CONGREGACION = 'congregacion',
   CONGREGACIONES = 'congregaciones',
   CREAR_TIPO_ACTIVIDAD = 'crear-tipo-actividad',
@@ -22,6 +23,7 @@ export enum Rutas {
   PERFIL = 'perfil',
   USUARIOS = 'usuarios',
   REGISTRAR_USUARIO = 'registrar-usuario',
+  SERVICIOS_Y_VIGILIAS = 'servicios-y-vigilias',
   SISTEMA = 'sistema',
   SITUACION_VISITA = 'situacion-visita',
   SOLICITUD_MULTIMEDIA = 'solicitud-multimedia',
@@ -113,6 +115,14 @@ export const ROUTES: RouteInfo[] = [
     class: 'has-arrow',
     extralink: false,
     submenu: [
+      {
+        path: Rutas.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
+        title: 'Configurar Servicios y Vigilias',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
       {
         path: Rutas.SOLICITUDES_MULTIMEDIA,
         title: 'Solicitud de Acceso',
@@ -221,6 +231,32 @@ export const ROUTES: RouteInfo[] = [
       {
         path: Rutas.VER_INFORME,
         title: 'Ver Informe',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+    ],
+  },
+  {
+    path: '',
+    title: 'Live',
+    icon: '',
+    class: 'nav-small-cap',
+
+    extralink: true,
+    submenu: [],
+  },
+  {
+    path: '',
+    title: 'Multimedia LIVE',
+    icon: 'fa fa-tv',
+    class: 'has-arrow',
+    extralink: false,
+    submenu: [
+      {
+        path: Rutas.SERVICIOS_Y_VIGILIAS,
+        title: 'Servicios y Vigilias',
         icon: '',
         class: '',
         extralink: false,

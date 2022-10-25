@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { LogroModel } from 'src/app/core/models/logro.model';
+import { LinkEventoModel } from 'src/app/core/models/link-evento.model';
 
 const base_url = environment.base_url;
 
 @Injectable({
   providedIn: 'root',
 })
-export class LogroService {
+export class LinkEventosService {
   constructor(private httpClient: HttpClient) {}
 
   get token(): string {
@@ -24,17 +24,13 @@ export class LogroService {
     };
   }
 
-  getLogros() {
+  getLinkEventos() {
     return this.httpClient
-      .get(`${base_url}/logro`, this.headers)
-      .pipe(map((logros: { ok: boolean; logros: LogroModel[] }) => logros.logros));
+      .get(`${base_url}/evento`, this.headers)
+      .pipe(map((links: { ok: boolean; linkEvento: LinkEventoModel[] }) => links.linkEvento));
   }
 
-  crearLogro(logro: LogroModel) {
-    return this.httpClient.post(`${base_url}/logro`, logro, this.headers);
-  }
-
-  actualizarLogro(logro: LogroModel) {
-    return this.httpClient.put(`${base_url}/logro/${logro.id}`, logro, this.headers);
+  crearEvento(evento: LinkEventoModel) {
+    return this.httpClient.post(`${base_url}/evento`, evento, this.headers);
   }
 }

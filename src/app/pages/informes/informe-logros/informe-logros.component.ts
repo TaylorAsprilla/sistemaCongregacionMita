@@ -29,7 +29,7 @@ export class InformeLogrosComponent implements OnInit, OnDestroy {
       informe_id: ['1', [Validators.required]],
     });
 
-    this.logroSubscription = this.logroService.listarLogros().subscribe((logro: LogroModel[]) => {
+    this.logroSubscription = this.logroService.getLogros().subscribe((logro: LogroModel[]) => {
       this.logros = logro;
     });
   }

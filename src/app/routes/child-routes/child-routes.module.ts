@@ -49,6 +49,9 @@ import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
 import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
+import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
+import { ConfigurarServiciosYVigiliasComponent } from 'src/app/pages/multimedia/configurar-servicios-y-vigilias/configurar-servicios-y-vigilias.component';
+import { LinkEventosResolver } from 'src/app/resolvers/link-eventos/link-eventos.resolver';
 
 const childRoutes: Routes = [
   {
@@ -213,6 +216,17 @@ const childRoutes: Routes = [
       razonSolicitud: RazonSolicitudResolver,
       parentesco: ParentescoResolver,
     },
+  },
+  {
+    path: Rutas.SERVICIOS_Y_VIGILIAS,
+    component: ServiciosYVigiliasComponent,
+    resolve: {
+      linkEventos: LinkEventosResolver,
+    },
+  },
+  {
+    path: Rutas.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
+    component: ConfigurarServiciosYVigiliasComponent,
   },
 ];
 

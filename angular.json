@@ -179,6 +179,7 @@
       }
     }
   },
+  "defaultProject": "sistemacmi",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
