@@ -6,7 +6,6 @@ import { GeneroModel } from './genero.model';
 import { GradoAcademicoModel } from './grado-academico.model';
 import { NacionalidadModel } from './nacionalidad.model';
 import { RolCasaModel } from './rol-casa.model';
-import { TipoDocumentoModel } from './tipo-documento.model';
 import { TipoEmpleoModel } from './tipo-empleo.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
 import { CongregacionInterface, UsuarioCongregacionModel } from './usuarioCongregacion.model';
@@ -34,17 +33,14 @@ export class UsuarioModel {
     public apodo?: string,
     public ingresoMensual?: string,
     public especializacionEmpleo?: string,
-    public numeroDocumento?: string,
     public telefonoCasa?: string,
     public login?: string,
     public password?: string,
     public foto?: string,
-    public tipoDocumento_id?: number,
     public rolCasa_id?: number,
     public nacionalidad_id?: number,
     public gradoAcademico_id?: number,
     public tipoEmpleo_id?: number,
-    public tipoDocumento?: TipoDocumentoModel,
     public genero?: GeneroModel,
     public estadoCivil?: EstadoCivilModel,
     public rolCasa?: RolCasaModel,

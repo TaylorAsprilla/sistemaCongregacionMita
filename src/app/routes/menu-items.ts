@@ -103,7 +103,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: Rutas.USUARIOS,
-        title: 'Usuarios',
+        title: 'Feligreses',
         icon: '',
         class: '',
         extralink: false,

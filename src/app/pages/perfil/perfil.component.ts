@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CampoModel } from 'src/app/core/models/campo.model';
@@ -10,7 +10,6 @@ import { GeneroModel } from 'src/app/core/models/genero.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
-import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { Rutas } from 'src/app/routes/menu-items';
@@ -22,7 +21,6 @@ import { GeneroService } from 'src/app/services/genero/genero.service';
 import { NacionalidadService } from 'src/app/services/nacionalidad/nacionalidad.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { RolCasaService } from 'src/app/services/rol-casa/rol-casa.service';
-import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { VacunaService } from 'src/app/services/vacuna/vacuna.service';
 import Swal from 'sweetalert2';
@@ -37,7 +35,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   //Subscription
   public usuarioSubscription: Subscription;
-  public tipoDocumentoSubscription: Subscription;
   public generoSubscription: Subscription;
   public estadoCivilSubscription: Subscription;
   public rolCasaSubscription: Subscription;
@@ -48,9 +45,9 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public dosisSubscription: Subscription;
   public nacionalidadSubscription: Subscription;
 
-  public perfilForm: UntypedFormGroup;
+  public perfilForm: FormGroup;
   public usuario: UsuarioModel;
-  public tipoDocumentos: TipoDocumentoModel[];
+
   public usuarios: UsuarioModel[] = [];
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
@@ -63,10 +60,10 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public nacionalidades: NacionalidadModel[] = [];
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private router: Router,
     private usuarioService: UsuarioService,
-    private tipoDocumentoService: TipoDocumentoService,
+
     private generoService: GeneroService,
     private estadoCivilService: EstadoCivilService,
     private rolCasaService: RolCasaService,
@@ -86,7 +83,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
       segundoNombre: [this.usuario?.segundoNombre, [Validators.minLength(3)]],
       primerApellido: [this.usuario?.primerApellido, [Validators.required, Validators.minLength(3)]],
       segundoApellido: [this.usuario?.segundoApellido, [Validators.minLength(3)]],
-      numeroDocumento: [this.usuario?.numeroDocumento],
       nacionalidad_id: [this.usuario?.nacionalidad_id, [Validators.required, Validators.minLength(3)]],
       fechaNacimiento: [this.usuario?.fechaNacimiento, [Validators.required]],
       email: [this.usuario?.email, [Validators.required, Validators.email]],
@@ -96,7 +92,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
       password: ['', [Validators.required]],
       foto: [this.usuario?.fotoUrl, []],
       genero_id: [this.usuario?.genero_id, [Validators.required]],
-      tipoDocumento_id: [this.usuario?.tipoDocumento_id, [Validators.required]],
       estadoCivil_id: [this.usuario?.estadoCivil_id, [Validators.required]],
       rolCasa_id: [this.usuario?.rolCasa_id, [Validators.required]],
       pais_id: ['', [Validators.required]],
@@ -106,23 +101,9 @@ export class PerfilComponent implements OnInit, OnDestroy {
       dosis_id: [this.usuario?.dosis_id, [Validators.required]],
     });
 
-    this.tipoDocumentoSubscription = this.tipoDocumentoService
-      .listarTipoDocumentos()
-      .subscribe((tipoDocumento: TipoDocumentoModel[]) => {
-        this.tipoDocumentos = tipoDocumento.filter(
-          (tipoDocumento: TipoDocumentoModel) => tipoDocumento.estado === true
-        );
-      });
-
     this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
       this.usuarios = usuarios;
     });
-
-    this.tipoDocumentoSubscription = this.tipoDocumentoService
-      .listarTipoDocumentos()
-      .subscribe((tipoDocumento: TipoDocumentoModel[]) => {
-        this.tipoDocumentos = tipoDocumento;
-      });
 
     this.generoSubscription = this.generoService.getGeneros().subscribe((genero: GeneroModel[]) => {
       this.generos = genero;
@@ -168,9 +149,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.tipoDocumentoSubscription?.unsubscribe();
     this.usuarioSubscription?.unsubscribe();
-    this.tipoDocumentoSubscription?.unsubscribe();
     this.generoSubscription?.unsubscribe();
     this.estadoCivilSubscription?.unsubscribe();
     this.rolCasaSubscription?.unsubscribe();

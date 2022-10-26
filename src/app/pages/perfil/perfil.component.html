@@ -162,26 +162,6 @@
           </div>
 
           <div class="form-group">
-            <label>Tipo Documento:</label>
-            <select class="form-control" formControlName="tipoDocumento_id">
-              <option value="" disabled>Seleccione el tipo de documento</option>
-              <option *ngFor="let tipoDocumento of tipoDocumentos" [value]="tipoDocumento.id">
-                {{ tipoDocumento.documento }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Número de Documento:</label>
-            <input
-              type="text"
-              formControlName="numeroDocumento"
-              class="form-control"
-              placeholder="Número de documento"
-            />
-          </div>
-
-          <div class="form-group">
             <label>Vacuna:</label>
             <select class="form-control" formControlName="vacuna_id">
               <option [value]="">Seleccione la vacuna</option>

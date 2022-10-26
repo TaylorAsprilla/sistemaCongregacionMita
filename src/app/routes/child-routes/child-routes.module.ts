@@ -44,7 +44,6 @@ import { MinisterioResolver } from 'src/app/resolvers/ministerio/ministerio.reso
 import { VoluntariadoResolver } from 'src/app/resolvers/voluntariado/voluntariado.resolver';
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
-import { TipoDocumentoResolver } from 'src/app/resolvers/tipo-documento/tipo-documento.resolver';
 import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
 import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
@@ -87,7 +86,6 @@ const childRoutes: Routes = [
       voluntariado: VoluntariadoResolver,
       pais: PaisResolver,
       campo: CampoResolver,
-      tipoDocumento: TipoDocumentoResolver,
       vacuna: VacunaResolver,
       dosis: DosisResolver,
     },
