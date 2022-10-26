@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./crear-congregacion.component.scss'],
 })
 export class CrearCongregacionComponent implements OnInit {
-  public congregacionForm: FormGroup;
+  public congregacionForm: UntypedFormGroup;
 
   public congregaciones: CongregacionModel[] = [];
   public paises: PaisModel[] = [];
@@ -33,7 +33,7 @@ export class CrearCongregacionComponent implements OnInit {
   public usuariosSubscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private activateRouter: ActivatedRoute,
     private congregacionService: CongregacionService,

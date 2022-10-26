@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./informe-metas.component.scss'],
 })
 export class InformeMetasComponent implements OnInit, OnDestroy {
-  public metaForm: FormGroup;
+  public metaForm: UntypedFormGroup;
 
   public estatus: EstatusModel[] = [];
 
@@ -24,7 +24,7 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
   public estatusSubscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private estatusService: EstatusService,
     private metaService: MetaService

@@ -554,9 +554,8 @@
 
         <button (click)="previous()" type="button" name="next" class="btn btn-primary mr-3">Anterior</button>
 
-        <button (click)="next()" [disabled]="registroDosForm.invalid" type="button" name="next" class="btn btn-primary">
-          Siguiente
-        </button>
+        <button (click)="next()" type="button" name="next" class="btn btn-primary">Siguiente</button>
+        <!-- [disabled]="registroDosForm.invalid" -->
       </fieldset>
     </form>
 

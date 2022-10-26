@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Login, LoginForm } from 'src/app/core/interfaces/login-form.interface';
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     remember: [false],
   });
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private usuarioService: UsuarioService) {}
+  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.usuariosSubscription = this.usuarioService.listarUsuarios().subscribe(

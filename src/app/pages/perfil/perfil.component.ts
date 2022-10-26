@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CampoModel } from 'src/app/core/models/campo.model';
@@ -48,7 +48,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public dosisSubscription: Subscription;
   public nacionalidadSubscription: Subscription;
 
-  public perfilForm: FormGroup;
+  public perfilForm: UntypedFormGroup;
   public usuario: UsuarioModel;
   public tipoDocumentos: TipoDocumentoModel[];
   public usuarios: UsuarioModel[] = [];
@@ -63,7 +63,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public nacionalidades: NacionalidadModel[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private usuarioService: UsuarioService,
     private tipoDocumentoService: TipoDocumentoService,
