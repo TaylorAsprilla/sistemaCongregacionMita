@@ -22,6 +22,7 @@ import { LogroModel } from 'src/app/core/models/logro.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { ActividadModel } from 'src/app/core/models/actividad.model';
 import { InformeModel } from 'src/app/core/models/informe.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 
 @Component({
   selector: 'app-ver-informe',
@@ -84,6 +85,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   dataAspectoContable: ContabilidadModel[] = [];
   dataAsuntoPendiente: AsuntoPendienteModel[] = [];
 
+  congregaciones: CongregacionModel[] = [];
+
   public seccionesInformes: SeccionInformeModel[];
   informeSubscription: Subscription;
 
@@ -98,9 +101,12 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // traer secciones
-    this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
-      this.seccionesInformes = data.seccionInforme;
-    });
+    this.activatedRoute.data.subscribe(
+      (data: { seccionInforme: SeccionInformeModel[]; congregacion: CongregacionModel[] }) => {
+        this.seccionesInformes = data.seccionInforme;
+        this.congregaciones = data.congregacion;
+      }
+    );
 
     this.primerNombre = sessionStorage.getItem('primerNombre');
     this.segundoNombre = sessionStorage.getItem('segundoNombre');

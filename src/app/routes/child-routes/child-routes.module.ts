@@ -190,7 +190,10 @@ const childRoutes: Routes = [
   {
     path: Rutas.INFORME,
     component: InformeComponent,
-    resolve: { informes: InformesResolver },
+    resolve: {
+      informes: InformesResolver,
+      congregacion: CongregacionResolver,
+    },
   },
   {
     path: Rutas.VER_INFORME,
