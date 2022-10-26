@@ -22,6 +22,7 @@ import { LogroModel } from 'src/app/core/models/logro.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { ActividadModel } from 'src/app/core/models/actividad.model';
 import { InformeModel } from 'src/app/core/models/informe.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 
 @Component({
   selector: 'app-ver-informe',
@@ -84,6 +85,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   dataAspectoContable: ContabilidadModel[] = [];
   dataAsuntoPendiente: AsuntoPendienteModel[] = [];
 
+  congregaciones: CongregacionModel[] = [];
+
   public seccionesInformes: SeccionInformeModel[];
   informeSubscription: Subscription;
 
@@ -98,9 +101,12 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // traer secciones
-    this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
-      this.seccionesInformes = data.seccionInforme;
-    });
+    this.activatedRoute.data.subscribe(
+      (data: { seccionInforme: SeccionInformeModel[]; congregacion: CongregacionModel[] }) => {
+        this.seccionesInformes = data.seccionInforme;
+        this.congregaciones = data.congregacion;
+      }
+    );
 
     this.primerNombre = sessionStorage.getItem('primerNombre');
     this.segundoNombre = sessionStorage.getItem('segundoNombre');
@@ -185,14 +191,40 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       let year = fecha.slice(0, 4);
       let month = fecha.slice(5, 7);
       let monthNum = Number(month);
+
       let day = fecha.slice(8, 10);
+
+      let min = this.selectMinMaxMonth(monthSelect)[0];
+      let max = this.selectMinMaxMonth(monthSelect)[1];
       if (yearSelect == year) {
-        if (monthSelectNum >= monthNum && monthSelectNum <= monthNum) {
+        if (monthNum >= min && monthNum <= max) {
           result.push(actividad);
         }
       }
     });
+    console.log(result);
     return result;
+  }
+
+  selectMinMaxMonth(mes) {
+    let min, max;
+    if (mes >= 1 && mes <= 3) {
+      min = 1;
+      max = 3;
+    }
+    if (mes >= 4 && mes <= 6) {
+      min = 4;
+      max = 6;
+    }
+    if (mes >= 7 && mes <= 9) {
+      min = 7;
+      max = 9;
+    }
+    if (mes >= 10 && mes <= 12) {
+      min = 10;
+      max = 12;
+    }
+    return [min, max];
   }
 
   filtrarFechaCreatedAt(conjunto) {
@@ -205,8 +237,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       let year = fecha.slice(0, 4);
       let month = fecha.slice(5, 7);
       let monthNum = Number(month);
+      let min = this.selectMinMaxMonth(monthSelect)[0];
+      let max = this.selectMinMaxMonth(monthSelect)[1];
       if (yearSelect == year) {
-        if (monthSelectNum >= monthNum && monthSelectNum <= monthNum) {
+        if (monthNum >= min && monthNum <= max) {
           result.push(actividad);
         }
       }
