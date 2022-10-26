@@ -27,6 +27,7 @@
   <ul id="sidebarnav">
     <!-- First level menu -->
     <li
+      class="resuelve"
       [class.active]="showMenu === sidebarnavItem.title"
       *ngFor="let sidebarnavItem of sidebarnavItems"
       [routerLinkActive]="sidebarnavItem.submenu.length != 0 ? '' : 'active'"
@@ -39,20 +40,24 @@
         (click)="addExpandClass(sidebarnavItem.title)"
       >
         <i [ngClass]="[sidebarnavItem.icon]"></i>
-        <span class="hide-menu"
-          >{{ sidebarnavItem.title }}
+        <!-- nombre -->
+        <span class="hide-menu">
+          {{ sidebarnavItem.title }}
+          <!-- numerito -->
           <span class="label label-rouded label-themecolor">
             {{ sidebarnavItem.submenu.length }}
           </span>
         </span>
       </a>
       <!-- Second level menu -->
+      <!-- <div class="resuelve"> -->
       <ul
         class="collapse"
         *ngIf="sidebarnavItem.submenu.length > 0"
         [ngClass]="{ in: showMenu === sidebarnavItem.title }"
       >
         <li
+          class=""
           *ngFor="let sidebarnavSubItem of sidebarnavItem.submenu"
           [class.active]="showSubMenu === sidebarnavSubItem.title"
           [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'active'"
@@ -64,9 +69,10 @@
             *ngIf="!sidebarnavSubItem.extralink"
             (click)="addActiveClass(sidebarnavSubItem.title)"
           >
-            <i [ngClass]="[sidebarnavSubItem.icon]"></i>
+            <!-- <i [ngClass]="[sidebarnavSubItem.icon]"></i> -->
             {{ sidebarnavSubItem.title }}
           </a>
+
           <!-- Third level menu -->
           <ul
             class="collapse"
@@ -90,6 +96,7 @@
           </ul>
         </li>
       </ul>
+      <!-- </div> -->
     </li>
   </ul>
 </nav>
