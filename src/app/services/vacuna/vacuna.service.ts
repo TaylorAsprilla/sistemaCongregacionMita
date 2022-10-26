@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { VacunaModel } from 'src/app/models/vacuna.model';
+import { VacunaModel } from 'src/app/core/models/vacuna.model';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -22,7 +22,7 @@ export class VacunaService {
     };
   }
 
-  listarVacuna() {
+  getVacunas() {
     return this.httpClient
       .get(`${base_url}/vacuna`, this.headers)
       .pipe(map((vacuna: { ok: boolean; vacuna: VacunaModel[] }) => vacuna.vacuna));

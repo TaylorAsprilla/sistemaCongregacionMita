@@ -30,6 +30,30 @@ import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais
 import { DivisasResolver } from 'src/app/resolvers/divisas/divisas.resolver';
 import { SeccionInformeResolver } from 'src/app/resolvers/seccion-informe/seccion-informe.resolver';
 import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
+import { CrearSolicitudMultimediaComponent } from 'src/app/pages/multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
+import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitud-multimedia/solicitud-multimedia.component';
+import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil.resolver';
+import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
+import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
+import { FuenteIngresoResolver } from 'src/app/resolvers/fuente-ingreso/fuente-ingreso.resolver';
+import { GradoAcademicoResolver } from 'src/app/resolvers/grado-academico/grado-academico.resolver';
+import { TipoEmpleoResolver } from 'src/app/resolvers/tipo-empleo/tipo-empleo.resolver';
+import { CongregacionResolver } from 'src/app/resolvers/congregacion/congregacion.resolver';
+import { TipoMiembroResolver } from 'src/app/resolvers/tipo-miembro/tipo-miembro.resolver';
+import { MinisterioResolver } from 'src/app/resolvers/ministerio/ministerio.resolver';
+import { VoluntariadoResolver } from 'src/app/resolvers/voluntariado/voluntariado.resolver';
+import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
+import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
+import { TipoDocumentoResolver } from 'src/app/resolvers/tipo-documento/tipo-documento.resolver';
+import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
+import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
+import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
+import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
+import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
+import { ConfigurarServiciosYVigiliasComponent } from 'src/app/pages/multimedia/configurar-servicios-y-vigilias/configurar-servicios-y-vigilias.component';
+import { LinkEventosResolver } from 'src/app/resolvers/link-eventos/link-eventos.resolver';
+import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
+import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
 
 const childRoutes: Routes = [
   {
@@ -43,13 +67,30 @@ const childRoutes: Routes = [
     path: Rutas.USUARIOS,
     component: UsuariosComponent,
     data: { titulo: 'Usuarios Registrados' },
-    resolve: { nacionalidad: NacionalidadResolver },
+    resolve: { nacionalidad: NacionalidadResolver, pais: PaisResolver, campo: CampoResolver },
   },
 
   {
     path: `${Rutas.USUARIOS}/:id`,
     component: RegistrarUsuarioComponent,
-    resolve: { nacionalidad: NacionalidadResolver },
+    resolve: {
+      nacionalidad: NacionalidadResolver,
+      estadoCivil: EstadoCivilResolver,
+      genero: GeneroResolver,
+      rolCasa: RolCasaResolver,
+      fuenteDeIngreso: FuenteIngresoResolver,
+      gradoAcademico: GradoAcademicoResolver,
+      tipoEmpleo: TipoEmpleoResolver,
+      congregacion: CongregacionResolver,
+      tipoMiembro: TipoMiembroResolver,
+      ministerio: MinisterioResolver,
+      voluntariado: VoluntariadoResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
+      tipoDocumento: TipoDocumentoResolver,
+      vacuna: VacunaResolver,
+      dosis: DosisResolver,
+    },
   },
 
   {
@@ -155,6 +196,53 @@ const childRoutes: Routes = [
     path: Rutas.VER_INFORME,
     component: VerInformeComponent,
     resolve: { seccionInforme: SeccionInformeResolver },
+  },
+  {
+    path: `${Rutas.SOLICITUD_MULTIMEDIA}/:id`,
+    component: CrearSolicitudMultimediaComponent,
+    resolve: {
+      nacionalidad: NacionalidadResolver,
+      congregacion: CongregacionResolver,
+      pais: PaisResolver,
+      razonSolicitud: RazonSolicitudResolver,
+      parentesco: ParentescoResolver,
+    },
+  },
+  {
+    path: Rutas.SOLICITUDES_MULTIMEDIA,
+    component: SolicitudMultimediaComponent,
+    resolve: {
+      nacionalidad: NacionalidadResolver,
+      congregacion: CongregacionResolver,
+      pais: PaisResolver,
+      razonSolicitud: RazonSolicitudResolver,
+      parentesco: ParentescoResolver,
+    },
+  },
+  {
+    path: Rutas.SERVICIOS_Y_VIGILIAS,
+    component: ServiciosYVigiliasComponent,
+    resolve: {
+      linkEventos: LinkEventosResolver,
+    },
+  },
+  {
+    path: Rutas.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
+    component: ConfigurarServiciosYVigiliasComponent,
+  },
+  {
+    path: Rutas.BIBLIOTECA_SERVICIOS,
+    component: ServiciosComponent,
+    resolve: {
+      linkEventos: LinkEventosResolver,
+    },
+  },
+  {
+    path: Rutas.BIBLIOTECA_VIGILIAS,
+    component: VigiliasComponent,
+    resolve: {
+      linkEventos: LinkEventosResolver,
+    },
   },
 ];
 

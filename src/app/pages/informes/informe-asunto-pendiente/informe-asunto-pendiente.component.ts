@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AsuntoPendienteModel } from 'src/app/models/asunto-pendiente.model';
+import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { AsuntoPendienteService } from 'src/app/services/asunto-pendiente/asunto-pendiente.service';
 import Swal from 'sweetalert2';
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./informe-asunto-pendiente.component.scss'],
 })
 export class InformeAsuntoPendienteComponent implements OnInit, OnDestroy {
-  public asuntoPendienteForm: FormGroup;
+  public asuntoPendienteForm: UntypedFormGroup;
 
   asuntosPendientes: AsuntoPendienteModel[] = [];
 
@@ -21,7 +21,7 @@ export class InformeAsuntoPendienteComponent implements OnInit, OnDestroy {
   public asuntoPendienteSubscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private asuntoPendienteService: AsuntoPendienteService
   ) {}

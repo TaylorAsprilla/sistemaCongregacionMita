@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Configurar Servicios</h3>
+      </div>
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="serviciosForm">
+          <div class="form-group">
+            <label>Título</label>
+            <input type="text" formControlName="link" class="form-control" placeholder="Título del servicio" />
+          </div>
+
+          <div class="form-group">
+            <label>ID del servicio</label>
+            <input type="text" formControlName="link" class="form-control" placeholder="Id del servicio" />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" formControlName="fecha" class="form-control" />
+          </div>
+
+          <div class="card">
+            <button
+              type="submit"
+              class="submit btn btn-primary"
+              (click)="guardarServicio()"
+              [disabled]="serviciosForm.invalid"
+            >
+              <i class="fa fa-save"></i> Guardar servicio
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Configurar Vigilias</h3>
+      </div>
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="vigiliasForm">
+          <div class="form-group">
+            <label>Título</label>
+            <input type="text" formControlName="link" class="form-control" placeholder="Título del servicio" />
+          </div>
+
+          <div class="form-group">
+            <label>ID del servicio</label>
+            <input type="text" formControlName="link" class="form-control" placeholder="Id del servicio" />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" formControlName="fecha" class="form-control" />
+          </div>
+          <div class="card">
+            <button
+              type="submit"
+              class="submit btn btn-primary"
+              (click)="guardarVigilia()"
+              [disabled]="vigiliasForm.invalid"
+            >
+              <i class="fa fa-save"></i> Guardar vigilia
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

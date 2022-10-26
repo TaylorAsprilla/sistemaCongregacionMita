@@ -8,10 +8,10 @@ import { DivisaService } from 'src/app/services/divisa/divisa.service';
   providedIn: 'root',
 })
 export class DivisasResolver implements Resolve<any> {
-  constructor(private divisasServises: DivisaService) {}
+  constructor(private divisasServise: DivisaService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    return this.divisasServises.listarDivisa().pipe(
+    return this.divisasServise.listarDivisa().pipe(
       catchError((error) => {
         return of('No dara');
       })

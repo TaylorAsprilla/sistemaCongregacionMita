@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { MinisterioModel } from 'src/app/models/ministerio.model';
+import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 import Swal from 'sweetalert2';

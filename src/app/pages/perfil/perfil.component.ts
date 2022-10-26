@@ -1,18 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CampoModel } from 'src/app/models/campo.model';
-import { CongregacionModel } from 'src/app/models/congregacion.model';
-import { DosisModel } from 'src/app/models/dosis.model';
-import { EstadoCivilModel } from 'src/app/models/estado-civil.model';
-import { GeneroModel } from 'src/app/models/genero.model';
-import { NacionalidadModel } from 'src/app/models/nacionalidad.model';
-import { PaisModel } from 'src/app/models/pais.model';
-import { RolCasaModel } from 'src/app/models/rol-casa.model';
-import { TipoDocumentoModel } from 'src/app/models/tipo-documento.model';
-import { UsuarioModel } from 'src/app/models/usuario.model';
-import { VacunaModel } from 'src/app/models/vacuna.model';
+import { CampoModel } from 'src/app/core/models/campo.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { DosisModel } from 'src/app/core/models/dosis.model';
+import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
+import { GeneroModel } from 'src/app/core/models/genero.model';
+import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
+import { PaisModel } from 'src/app/core/models/pais.model';
+import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
+import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
@@ -48,7 +48,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public dosisSubscription: Subscription;
   public nacionalidadSubscription: Subscription;
 
-  public perfilForm: FormGroup;
+  public perfilForm: UntypedFormGroup;
   public usuario: UsuarioModel;
   public tipoDocumentos: TipoDocumentoModel[];
   public usuarios: UsuarioModel[] = [];
@@ -63,7 +63,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public nacionalidades: NacionalidadModel[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private usuarioService: UsuarioService,
     private tipoDocumentoService: TipoDocumentoService,
@@ -124,17 +124,17 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.tipoDocumentos = tipoDocumento;
       });
 
-    this.generoSubscription = this.generoService.listarGeneros().subscribe((genero: GeneroModel[]) => {
+    this.generoSubscription = this.generoService.getGeneros().subscribe((genero: GeneroModel[]) => {
       this.generos = genero;
     });
 
     this.estadoCivilSubscription = this.estadoCivilService
-      .listarEstadoCivil()
+      .getEstadoCivil()
       .subscribe((estadoCivil: EstadoCivilModel[]) => {
         this.estadoCivil = estadoCivil;
       });
 
-    this.rolCasaSubscription = this.rolCasaService.listarRolCasa().subscribe((rolCasa: RolCasaModel[]) => {
+    this.rolCasaSubscription = this.rolCasaService.getRolCasa().subscribe((rolCasa: RolCasaModel[]) => {
       this.rolCasa = rolCasa;
     });
 
@@ -148,15 +148,15 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.congregaciones = congregacion;
       });
 
-    this.campoSubscription = this.campoService.listarCampo().subscribe((campo: CampoModel[]) => {
+    this.campoSubscription = this.campoService.getCampos().subscribe((campo: CampoModel[]) => {
       this.campos = campo;
     });
 
-    this.vacunaSubscription = this.vacunaService.listarVacuna().subscribe((vacuna: VacunaModel[]) => {
+    this.vacunaSubscription = this.vacunaService.getVacunas().subscribe((vacuna: VacunaModel[]) => {
       this.vacunas = vacuna;
     });
 
-    this.dosisSubscription = this.dosisService.listarDosis().subscribe((dosis: DosisModel[]) => {
+    this.dosisSubscription = this.dosisService.getDosis().subscribe((dosis: DosisModel[]) => {
       this.dosis = dosis;
     });
 
@@ -222,7 +222,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   toggleEdit() {
     this.isEdit = !this.isEdit;
-    console.log(this.isEdit);
   }
 
   submit() {

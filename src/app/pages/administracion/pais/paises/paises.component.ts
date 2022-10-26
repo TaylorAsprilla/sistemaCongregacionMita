@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DivisaModel } from 'src/app/models/divisa.model';
-import { PaisModel } from 'src/app/models/pais.model';
+import { DivisaModel } from 'src/app/core/models/divisa.model';
+import { PaisModel } from 'src/app/core/models/pais.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import Swal from 'sweetalert2';

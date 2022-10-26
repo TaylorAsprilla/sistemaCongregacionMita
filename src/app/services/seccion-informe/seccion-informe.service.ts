@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { SeccionInformeModel } from 'src/app/models/seccion-informe.model';
+import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
 
 const base_url = environment.base_url;
 

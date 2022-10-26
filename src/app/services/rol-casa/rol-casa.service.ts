@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { RolCasaModel } from 'src/app/models/rol-casa.model';
+import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -22,17 +22,17 @@ export class RolCasaService {
       },
     };
   }
-  listarRolCasa() {
+  getRolCasa() {
     return this.httpClient
       .get(`${base_url}/rolcasa`, this.headers)
       .pipe(map((rolCasa: { ok: boolean; rolCasa: RolCasaModel[] }) => rolCasa.rolCasa));
   }
 
-  crearGenero(rolCasa: RolCasaModel) {
+  crearRolCasa(rolCasa: RolCasaModel) {
     return this.httpClient.post(`${base_url}/rolcasa`, rolCasa, this.headers);
   }
 
-  actualizarGenero(rolCasa: RolCasaModel) {
+  actualizarRolCasa(rolCasa: RolCasaModel) {
     return this.httpClient.put(`${base_url}/rolcasa/${rolCasa.id}`, rolCasa, this.headers);
   }
 }

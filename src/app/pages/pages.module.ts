@@ -6,15 +6,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PagesComponent } from './pages.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { InicioComponent } from './inicio/inicio.component';
 import { PerfilModule } from './perfil/perfil.module';
 import { InformeModule } from './informes/informe.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { NopagefoundModule } from './nopagefound/nopagefound.module';
+import { CargandoInformacionModule } from '../components/cargando-informacion/cargando-informacion.module';
+import { MultimediaModule } from './multimedia/multimedia.module';
+import { InicioModule } from './inicio/inicio.module';
 
 @NgModule({
-  declarations: [PagesComponent, InicioComponent],
-  exports: [PagesComponent, InicioComponent],
+  declarations: [PagesComponent],
+  exports: [PagesComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -27,6 +29,9 @@ import { NopagefoundModule } from './nopagefound/nopagefound.module';
     InformeModule,
     PipesModule,
     NopagefoundModule,
+    CargandoInformacionModule,
+    MultimediaModule,
+    InicioModule,
   ],
 })
 export class PagesModule {}

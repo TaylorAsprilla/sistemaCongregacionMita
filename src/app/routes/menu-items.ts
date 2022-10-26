@@ -1,9 +1,12 @@
-import { RouteInfo } from 'src/app/interfaces/route-info.interfase';
+import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 
 export enum Rutas {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
-
+  BIBLIOTECA_MULTIMEDIA = 'biblioteca-multimedia',
+  BIBLIOTECA_SERVICIOS = 'biblioteca-servicios',
+  BIBLIOTECA_VIGILIAS = 'biblioteca-vigilias',
   CAMPOS = 'campos',
+  CONFIGURAR_SERVICIOS_Y_VIGILIAS = 'configurar-servicios-y-vigilias',
   CONGREGACION = 'congregacion',
   CONGREGACIONES = 'congregaciones',
   CREAR_TIPO_ACTIVIDAD = 'crear-tipo-actividad',
@@ -23,8 +26,11 @@ export enum Rutas {
   PERFIL = 'perfil',
   USUARIOS = 'usuarios',
   REGISTRAR_USUARIO = 'registrar-usuario',
+  SERVICIOS_Y_VIGILIAS = 'servicios-y-vigilias',
   SISTEMA = 'sistema',
   SITUACION_VISITA = 'situacion-visita',
+  SOLICITUD_MULTIMEDIA = 'solicitud-multimedia',
+  SOLICITUDES_MULTIMEDIA = 'solicitudes-multimedia',
   RUTA_NUEVA = 'ruta-nueva',
   VER_INFORME = 'ver-informe',
 }
@@ -98,6 +104,39 @@ export const ROUTES: RouteInfo[] = [
       {
         path: Rutas.USUARIOS,
         title: 'Usuarios',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+    ],
+  },
+  {
+    path: '',
+    title: 'Multimedia',
+    icon: 'fa fa-tv',
+    class: 'has-arrow',
+    extralink: false,
+    submenu: [
+      {
+        path: Rutas.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
+        title: 'Configurar Servicios y Vigilias',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+      {
+        path: Rutas.SOLICITUDES_MULTIMEDIA,
+        title: 'Solicitud de Acceso',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+      {
+        path: `${Rutas.SOLICITUD_MULTIMEDIA}/nuevo`,
+        title: 'Nueva Solicitud',
         icon: '',
         class: '',
         extralink: false,
@@ -199,6 +238,57 @@ export const ROUTES: RouteInfo[] = [
         class: '',
         extralink: false,
         submenu: [],
+      },
+    ],
+  },
+  {
+    path: '',
+    title: 'Live',
+    icon: '',
+    class: 'nav-small-cap',
+
+    extralink: true,
+    submenu: [],
+  },
+  {
+    path: '',
+    title: 'Multimedia LIVE',
+    icon: 'fa fa-tv',
+    class: 'has-arrow',
+    extralink: false,
+    submenu: [
+      {
+        path: Rutas.SERVICIOS_Y_VIGILIAS,
+        title: 'Servicios y Vigilias',
+        icon: '',
+        class: '',
+        extralink: false,
+        submenu: [],
+      },
+      {
+        path: '',
+        title: 'Biblioteca Multimedia',
+        icon: '',
+        class: 'has-arrow',
+        extralink: false,
+        submenu: [
+          {
+            path: Rutas.BIBLIOTECA_SERVICIOS,
+            title: 'Servicios',
+            icon: '',
+            class: '',
+            extralink: false,
+            submenu: [],
+          },
+          {
+            path: Rutas.BIBLIOTECA_VIGILIAS,
+            title: 'Vigilias',
+            icon: '',
+            class: '',
+            extralink: false,
+            submenu: [],
+          },
+        ],
       },
     ],
   },

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CampoModel } from 'src/app/models/campo.model';
+import { CampoModel } from 'src/app/core/models/campo.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import Swal from 'sweetalert2';
@@ -22,7 +22,7 @@ export class CamposComponent implements OnInit {
 
   cargarCampos() {
     this.cargando = true;
-    this.campoService.listarCampo().subscribe((campos: CampoModel[]) => {
+    this.campoService.getCampos().subscribe((campos: CampoModel[]) => {
       this.campos = campos;
       this.cargando = false;
     });

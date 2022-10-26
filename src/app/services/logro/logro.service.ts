@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { LogroModel } from 'src/app/models/logro.model';
+import { LogroModel } from 'src/app/core/models/logro.model';
 
 const base_url = environment.base_url;
 
@@ -24,7 +24,7 @@ export class LogroService {
     };
   }
 
-  listarLogros() {
+  getLogros() {
     return this.httpClient
       .get(`${base_url}/logro`, this.headers)
       .pipe(map((logros: { ok: boolean; logros: LogroModel[] }) => logros.logros));

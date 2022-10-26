@@ -2,26 +2,26 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
-import { SeccionInformeModel } from 'src/app/models/seccion-informe.model';
+import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
-import { TipoActividadModel } from 'src/app/models/tipo-actividad.model';
-import { UsuarioModel } from 'src/app/models/usuario.model';
-import { PaisModel } from 'src/app/models/pais.model';
+import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
-import { UsuarioInterface } from 'src/app/interfaces/usuario.interface';
-import { UsuarioCongregacionModel } from 'src/app/models/usuarioCongregacion.model';
+import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
 import { data } from 'jquery';
-import { ContabilidadModel } from 'src/app/models/contabilidad.model';
-import { VisitaModel } from 'src/app/models/visita.model';
-import { SituacionVisitaModel } from 'src/app/models/situacion-visita.model';
-import { AsuntoPendienteModel } from 'src/app/models/asunto-pendiente.model';
-import { LogroModel } from 'src/app/models/logro.model';
-import { MetaModel } from 'src/app/models/meta.model';
-import { ActividadModel } from 'src/app/models/actividad.model';
-import { InformeModel } from 'src/app/models/informe.model';
+import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
+import { VisitaModel } from 'src/app/core/models/visita.model';
+import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
+import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
+import { LogroModel } from 'src/app/core/models/logro.model';
+import { MetaModel } from 'src/app/core/models/meta.model';
+import { ActividadModel } from 'src/app/core/models/actividad.model';
+import { InformeModel } from 'src/app/core/models/informe.model';
 
 @Component({
   selector: 'app-ver-informe',

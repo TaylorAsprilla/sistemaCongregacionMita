@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { InformeModel } from 'src/app/models/informe.model';
+import { InformeModel } from 'src/app/core/models/informe.model';
 
 const base_url = environment.base_url;
 

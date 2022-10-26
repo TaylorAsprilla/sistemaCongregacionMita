@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { VisitaModel } from 'src/app/models/visita.model';
+import { VisitaModel } from 'src/app/core/models/visita.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { VisitaService } from 'src/app/services/visita/visita.service';
 import Swal from 'sweetalert2';
@@ -13,14 +13,14 @@ import Swal from 'sweetalert2';
   styleUrls: ['./informe-visitas.component.scss'],
 })
 export class InformeVisitasComponent implements OnInit, OnDestroy {
-  public visitaForm: FormGroup;
+  public visitaForm: UntypedFormGroup;
 
   public visitas: VisitaModel[] = [];
 
   // Subscription
   public visitaSubscription: Subscription;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private visitaService: VisitaService) {}
+  constructor(private formBuilder: UntypedFormBuilder, private router: Router, private visitaService: VisitaService) {}
 
   ngOnInit(): void {
     this.visitaForm = this.formBuilder.group({

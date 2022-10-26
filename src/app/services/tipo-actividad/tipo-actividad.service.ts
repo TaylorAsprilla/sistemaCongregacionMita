@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { TipoActividadModel } from 'src/app/models/tipo-actividad.model';
+import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 
 const base_url = environment.base_url;
 

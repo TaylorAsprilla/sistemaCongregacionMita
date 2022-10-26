@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ListarUsuario } from 'src/app/interfaces/usuario.interface';
-import { DivisaModel } from 'src/app/models/divisa.model';
-import { PaisModel } from 'src/app/models/pais.model';
-import { UsuarioModel } from 'src/app/models/usuario.model';
+import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
+import { DivisaModel } from 'src/app/core/models/divisa.model';
+import { PaisModel } from 'src/app/core/models/pais.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { DivisaService } from 'src/app/services/divisa/divisa.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./crear-pais.component.scss'],
 })
 export class CrearPaisComponent implements OnInit, OnDestroy {
-  public paisForm: FormGroup;
+  public paisForm: UntypedFormGroup;
 
   public paises: PaisModel[] = [];
   public divisas: DivisaModel[] = [];
@@ -33,7 +33,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   public usuariosSubscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private paisService: PaisService,
     private divisaService: DivisaService,

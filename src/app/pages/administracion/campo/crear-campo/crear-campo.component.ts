@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { ListarUsuario } from 'src/app/interfaces/usuario.interface';
-import { CampoModel } from 'src/app/models/campo.model';
-import { CongregacionModel } from 'src/app/models/congregacion.model';
-import { UsuarioModel } from 'src/app/models/usuario.model';
+import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
+import { CampoModel } from 'src/app/core/models/campo.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./crear-campo.component.scss'],
 })
 export class CrearCampoComponent implements OnInit {
-  public campoForm: FormGroup;
+  public campoForm: UntypedFormGroup;
 
   public campos: CampoModel[] = [];
   public congregaciones: CongregacionModel[] = [];
@@ -33,7 +33,7 @@ export class CrearCampoComponent implements OnInit {
   public campoSeleccionado: CampoModel;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private campoService: CampoService,
     private congregacionService: CongregacionService,
@@ -69,7 +69,7 @@ export class CrearCampoComponent implements OnInit {
   }
 
   cargarCampos() {
-    this.campoSubscription = this.campoService.listarCampo().subscribe((campo: CampoModel[]) => {
+    this.campoSubscription = this.campoService.getCampos().subscribe((campo: CampoModel[]) => {
       this.campos = campo.filter((campo) => campo.estado === true);
     });
   }
