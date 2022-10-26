@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./informe-situacion-visita.component.scss'],
 })
 export class InformeSituacionVisitaComponent implements OnInit {
-  public situacionVisitaForm: FormGroup;
+  public situacionVisitaForm: UntypedFormGroup;
 
   public situacionVisitas: SituacionVisitaModel[] = [];
 
@@ -21,7 +21,7 @@ export class InformeSituacionVisitaComponent implements OnInit {
   public situacionVisitaSubscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private situacionVisitaService: SituacionVisitaService
   ) {}

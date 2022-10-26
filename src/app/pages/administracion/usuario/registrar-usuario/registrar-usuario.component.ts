@@ -1,5 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
@@ -108,7 +115,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private usuarioService: UsuarioService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -205,7 +212,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
 
     this.registroTresForm = this.formBuilder.group({
-      fuenteIngresos: new FormArray([]),
+      fuenteIngresos: new UntypedFormArray([]),
       ingresoMensual: ['1250000', []],
       gradoAcademico_id: ['2', [Validators.required]],
       tipoEmpleo_id: ['2', [Validators.required]],
@@ -219,8 +226,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       esJoven: ['1', [Validators.required]],
       ejerceMinisterio: [, [Validators.required]],
       esVoluntario: [, [Validators.required]],
-      ministerio: new FormArray([]),
-      voluntariado: new FormArray([]),
+      ministerio: new UntypedFormArray([]),
+      voluntariado: new UntypedFormArray([]),
       congregacionPais_id: ['', [Validators.required]],
       tipoDocumento_id: ['', []],
       vacuna_id: ['', [Validators.required]],
@@ -230,9 +237,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   onCheckboxFuenteDeIngresosChange(event: any) {
-    const selectedFuenteDeIngresos = this.registroTresForm.controls['fuenteIngresos'] as FormArray;
+    const selectedFuenteDeIngresos = this.registroTresForm.controls['fuenteIngresos'] as UntypedFormArray;
     if (event.target.checked) {
-      selectedFuenteDeIngresos.push(new FormControl(event.target.value));
+      selectedFuenteDeIngresos.push(new UntypedFormControl(event.target.value));
     } else {
       const index = selectedFuenteDeIngresos.controls.findIndex((x) => x.value === event.target.value);
       selectedFuenteDeIngresos.removeAt(index);
@@ -240,9 +247,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   onCheckboxMinisteriosChange(event: any) {
-    const selectedMinisterios = this.registroCuatroForm.controls['ministerio'] as FormArray;
+    const selectedMinisterios = this.registroCuatroForm.controls['ministerio'] as UntypedFormArray;
     if (event.target.checked) {
-      selectedMinisterios.push(new FormControl(event.target.value));
+      selectedMinisterios.push(new UntypedFormControl(event.target.value));
     } else {
       const index = selectedMinisterios.controls.findIndex((x) => x.value === event.target.value);
       selectedMinisterios.removeAt(index);
@@ -250,9 +257,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   onCheckboxVoluntariadosChange(event: any) {
-    const selectedVoluntariados = this.registroCuatroForm.controls['voluntariado'] as FormArray;
+    const selectedVoluntariados = this.registroCuatroForm.controls['voluntariado'] as UntypedFormArray;
     if (event.target.checked) {
-      selectedVoluntariados.push(new FormControl(event.target.value));
+      selectedVoluntariados.push(new UntypedFormControl(event.target.value));
     } else {
       const index = selectedVoluntariados.controls.findIndex((x) => x.value === event.target.value);
       selectedVoluntariados.removeAt(index);

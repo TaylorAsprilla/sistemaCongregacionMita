@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LogroModel } from 'src/app/core/models/logro.model';
@@ -13,13 +13,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./informe-logros.component.scss'],
 })
 export class InformeLogrosComponent implements OnInit, OnDestroy {
-  public logroForm: FormGroup;
+  public logroForm: UntypedFormGroup;
 
   public logros: LogroModel[] = [];
 
   // Subscription
   public logroSubscription: Subscription;
-  constructor(private formBuilder: FormBuilder, private router: Router, private logroService: LogroService) {}
+  constructor(private formBuilder: UntypedFormBuilder, private router: Router, private logroService: LogroService) {}
 
   ngOnInit(): void {
     this.logroForm = this.formBuilder.group({
@@ -29,7 +29,7 @@ export class InformeLogrosComponent implements OnInit, OnDestroy {
       informe_id: ['1', [Validators.required]],
     });
 
-    this.logroSubscription = this.logroService.listarLogros().subscribe((logro: LogroModel[]) => {
+    this.logroSubscription = this.logroService.getLogros().subscribe((logro: LogroModel[]) => {
       this.logros = logro;
     });
   }

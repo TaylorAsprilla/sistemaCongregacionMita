@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Rutas } from 'src/app/routes/menu-items';
 import { ContabilidadService } from 'src/app/services/contabilidad/contabilidad.service';
@@ -11,10 +11,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./informe-contables.component.scss'],
 })
 export class InformeContablesComponent implements OnInit, OnDestroy {
-  public contabilidadForm: FormGroup;
+  public contabilidadForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private contabilidadService: ContabilidadService
   ) {}

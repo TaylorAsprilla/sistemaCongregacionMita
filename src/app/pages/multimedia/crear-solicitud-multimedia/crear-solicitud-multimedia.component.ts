@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedi
   styleUrls: ['./crear-solicitud-multimedia.component.scss'],
 })
 export class CrearSolicitudMultimediaComponent implements OnInit {
-  public solicitudForm: FormGroup;
+  public solicitudForm: UntypedFormGroup;
 
   public paises: PaisModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
@@ -55,7 +55,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
   letrasFiltrarCongregacion: Observable<CongregacionModel[]>;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private solicitudMultimediaService: SolicitudMultimediaService

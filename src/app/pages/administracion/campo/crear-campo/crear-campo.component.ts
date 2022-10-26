@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./crear-campo.component.scss'],
 })
 export class CrearCampoComponent implements OnInit {
-  public campoForm: FormGroup;
+  public campoForm: UntypedFormGroup;
 
   public campos: CampoModel[] = [];
   public congregaciones: CongregacionModel[] = [];
@@ -33,7 +33,7 @@ export class CrearCampoComponent implements OnInit {
   public campoSeleccionado: CampoModel;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private campoService: CampoService,
     private congregacionService: CongregacionService,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
@@ -13,13 +13,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./crear-status.component.scss'],
 })
 export class CrearStatusComponent implements OnInit {
-  public estatusForm: FormGroup;
+  public estatusForm: UntypedFormGroup;
 
   public estatus: EstatusModel[] = [];
   // Subscription
   public estatusSubscription: Subscription;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private estatusService: EstatusService) {}
+  constructor(private formBuilder: UntypedFormBuilder, private router: Router, private estatusService: EstatusService) {}
 
   ngOnInit(): void {
     this.estatusForm = this.formBuilder.group({
