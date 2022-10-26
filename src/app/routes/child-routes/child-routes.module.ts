@@ -192,13 +192,12 @@ const childRoutes: Routes = [
     component: InformeComponent,
     resolve: {
       informes: InformesResolver,
-      congregacion: CongregacionResolver,
     },
   },
   {
     path: Rutas.VER_INFORME,
     component: VerInformeComponent,
-    resolve: { seccionInforme: SeccionInformeResolver },
+    resolve: { seccionInforme: SeccionInformeResolver, congregacion: CongregacionResolver },
   },
   {
     path: `${Rutas.SOLICITUD_MULTIMEDIA}/:id`,
