@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CrearMinisterioComponent } from './ministerios/crear-ministerio/crear-ministerio.component';
 import { CargandoInformacionModule } from 'src/app/components/cargando-informacion/cargando-informacion.module';
+import { ConfirmacionDeRegistroComponent } from './usuario/confirmacion-de-registro/confirmacion-de-registro.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { CargandoInformacionModule } from 'src/app/components/cargando-informaci
     PaisesComponent,
     RegistrarUsuarioComponent,
     CrearMinisterioComponent,
+    ConfirmacionDeRegistroComponent,
   ],
   imports: [
     CommonModule,

@@ -19,19 +19,15 @@
             <th class="w100">Item</th>
             <th>Nombre</th>
             <th>Nacionalidad</th>
-            <th>Dirección</th>
             <th class="w100">Ciudad</th>
-            <th>Departamento</th>
-            <th class="w100">Código Postal</th>
-            <th>Teléfono</th>
             <th>Celular</th>
             <th class="w100">Email</th>
             <th>Pais</th>
             <th>Congregación</th>
-            <th class="w100">¿Es de la Congregación?</th>
+            <!-- <th class="w100">¿Es de la Congregación?</th> -->
             <th>Login</th>
-            <th>Estado</th>
-            <th>Acciones</th>
+            <!-- <th>Estado</th> -->
+            <th class="w300">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -41,46 +37,48 @@
               {{ solicitud.nombre }}
             </td>
             <td>Colombiana</td>
-            <td>{{ solicitud.direccion }}</td>
 
             <td>{{ solicitud.ciudad }}</td>
 
-            <td>{{ solicitud.departamento }}</td>
-
-            <td>{{ solicitud.codigoPostal }}</td>
-
-            <td>{{ solicitud.telefono }}</td>
             <td>{{ solicitud.celular }}</td>
             <td>{{ solicitud.email }}</td>
             <td>Colombia</td>
             <td>Bogotá</td>
-            <td><span class="badge badge-primary"> Sí </span></td>
+            <!-- <td><span class="badge badge-primary"> Sí </span></td> -->
 
             <td>
               <!-- {{ solicitud.login }} -->
             </td>
 
-            <td>
+            <!-- <td>
               <span class="badge badge-primary">Activo</span>
               <span class="badge badge-danger">Deshabilitado</span>
-            </td>
+            </td> -->
             <td>
-              <a *ngIf="!!solicitud.estado" data-toggle="tooltip" data-original-title="Editar" class="btn bg-info"
-                ><i class="fas fa-pencil-alt ml-1"></i
+              <a data-toggle="tooltip" data-original-title="Editar" class="btn bg-info" (click)="aceptarSolicitud()"
+                ><i class="fa fa-check"></i
               ></a>
               <a
-                *ngIf="!!solicitud.estado"
                 data-toggle="tooltip"
                 data-original-title="Borrar"
                 class="btn bg-danger ml-1"
-                ><i class="fas fa-trash-alt"></i
+                (click)="deshabilitarSolicitud()"
+                ><i class="fa fa-trash"></i
               ></a>
-              <a
+              <!-- <a
                 *ngIf="!solicitud.estado"
                 data-toggle="tooltip"
                 data-original-title="Activar"
                 class="btn bg-secondary ml-1"
-                ><i class="fas fa-check-square"></i
+                ><i class="fa fa-trash"></i
+              ></a> -->
+
+              <a
+                data-toggle="tooltip"
+                data-original-title="Activar"
+                class="btn bg-warning ml-1"
+                (click)="desAprobarSolicitud()"
+                ><i class="fa fa-x"></i
               ></a>
             </td>
           </tr>
@@ -89,18 +87,16 @@
           <th class="w100">id</th>
           <th>Nombre</th>
           <th>Nacionalidad</th>
-          <th>Dirección</th>
+
           <th class="w100">Ciudad</th>
-          <th>Departamento</th>
-          <th>Código Postal</th>
-          <th>Teléfono</th>
+
           <th class="w100">Celular</th>
-          <th>Email</th>
+          <th class="w100">Email</th>
           <th>Pais</th>
           <th>Congregación</th>
-          <th class="w100">Es de la Congregación</th>
+          <!-- <th class="w100">Es de la Congregación</th> -->
           <th>Login</th>
-          <th>Estado</th>
+          <!-- <th>Estado</th> -->
           <th>Acciones</th>
         </tfoot>
       </table>
