@@ -24,7 +24,7 @@
               registroUnoForm.get('fechaNacimiento').touched
             "
           >
-            La fecha de nacimiento del usuario es requerida.
+            La fecha de nacimiento del feligrés es requerida.
           </small>
         </div>
 
@@ -38,7 +38,7 @@
                 registroUnoForm.get('primerNombre').hasError('required') && registroUnoForm.get('primerNombre').touched
               "
             >
-              La primer nombre del usuario es requerido.
+              La primer nombre del feligrés es requerido.
             </small>
             <small
               class="form-text text-muted"
@@ -46,7 +46,7 @@
                 registroUnoForm.get('primerNombre').hasError('minlength') && registroUnoForm.get('primerNombre').touched
               "
             >
-              El primer nombre del usuario no tiene la longitud mínima permitida.
+              El primer nombre del feligrés no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -60,7 +60,7 @@
                 registroUnoForm.get('segundoNombre').touched
               "
             >
-              El segundo nombre del usuario no tiene la longitud mínima permitida.
+              El segundo nombre del feligrés no tiene la longitud mínima permitida.
             </small>
           </div>
         </div>
@@ -76,7 +76,7 @@
                 registroUnoForm.get('primerApellido').touched
               "
             >
-              La primer apellido del usuario es requerido.
+              La primer apellido del feligrés es requerido.
             </small>
             <small
               class="form-text text-muted"
@@ -85,7 +85,7 @@
                 registroUnoForm.get('primerApellido').touched
               "
             >
-              El primer apellido del usuario no tiene la longitud mínima permitida.
+              El primer apellido del feligrés no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -99,7 +99,7 @@
                 registroUnoForm.get('segundoApellido').touched
               "
             >
-              El segundo apellido del usuario no tiene la longitud mínima permitida.
+              El segundo apellido del feligrés no tiene la longitud mínima permitida.
             </small>
           </div>
         </div>
@@ -112,7 +112,7 @@
               class="form-text text-muted"
               *ngIf="registroUnoForm.get('apodo').hasError('minlength') && registroUnoForm.get('apodo').touched"
             >
-              El apodo del usuario no tiene la longitud mínima permitida.
+              El apodo del feligrés no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -158,7 +158,7 @@
               class="form-text text-muted"
               *ngIf="registroUnoForm.get('genero_id').hasError('required') && registroUnoForm.get('genero_id').touched"
             >
-              El género del usuario es requerido.
+              El género del feligrés es requerido.
             </small>
           </div>
 
@@ -177,7 +177,7 @@
                 registroUnoForm.get('estadoCivil_id').touched
               "
             >
-              El estado civil del usuario es requerido.
+              El estado civil del feligrés es requerido.
             </small>
           </div>
         </div>
@@ -225,7 +225,7 @@
                 registroDosForm.get('nacionalidad').hasError('required') && registroDosForm.get('nacionalidad').touched
               "
             >
-              La nacionalidad del usuario es requerida.
+              La nacionalidad del feligrés es requerida.
             </small>
             <small
               class="form-text text-muted"
@@ -233,7 +233,7 @@
                 registroDosForm.get('nacionalidad').hasError('minlength') && registroDosForm.get('nacionalidad').touched
               "
             >
-              La nacionalidad del usuario no tiene la longitud mínima permitida.
+              La nacionalidad del feligrés no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -251,7 +251,7 @@
                 registroDosForm.get('rolCasa_id').hasError('required') && registroDosForm.get('rolCasa_id').touched
               "
             >
-              El rol de la casa del usuario es requerido.
+              El rol de la casa del feligrés es requerido.
             </small>
           </div>
         </div>
@@ -286,7 +286,7 @@
                 registroDosForm.get('numeroCelular').touched
               "
             >
-              El número de celular del usuario es requerido.
+              El número de celular del feligrés es requerido.
             </small>
             <small
               class="form-text text-muted"
@@ -295,7 +295,7 @@
                 registroDosForm.get('numeroCelular').touched
               "
             >
-              El número de celular del usuario no tiene la longitud mínima permitida.
+              El número de celular del feligrés no tiene la longitud mínima permitida.
             </small>
             <small class="form-text text-muted" *ngIf="!!mensajeBuscarNumeroCelular">
               {{ mensajeBuscarNumeroCelular }}
@@ -328,7 +328,7 @@
               registroDosForm.get('telefonoCasa').hasError('minlength') && registroDosForm.get('telefonoCasa').touched
             "
           >
-            El número de teléfono de la casa del usuario no tiene la longitud mínima permitida.
+            El número de teléfono de la casa del feligrés no tiene la longitud mínima permitida.
           </small>
         </div>
 
@@ -349,7 +349,7 @@
                 registroDosForm.get('direccionResidencia').touched
               "
             >
-              La dirección del usuario es requerido.
+              La dirección del feligrés es requerido.
             </small>
             <small
               class="form-text text-muted"
@@ -358,7 +358,7 @@
                 registroDosForm.get('direccionResidencia').touched
               "
             >
-              La dirección del usuario no tiene la longitud mínima permitida.
+              La dirección del feligrés no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -554,8 +554,9 @@
 
         <button (click)="previous()" type="button" name="next" class="btn btn-primary mr-3">Anterior</button>
 
-        <button (click)="next()" type="button" name="next" class="btn btn-primary">Siguiente</button>
-        <!-- [disabled]="registroDosForm.invalid" -->
+        <button (click)="next()" type="button" name="next" class="btn btn-primary" [disabled]="registroDosForm.invalid">
+          Siguiente
+        </button>
       </fieldset>
     </form>
 
@@ -816,7 +817,7 @@
                 registroCuatroForm.get('congregacionPais_id').touched
               "
             >
-              La congregación del usuario es requerida.
+              La congregación del feligrés es requerida.
             </small>
           </div>
 
@@ -841,7 +842,7 @@
                 registroCuatroForm.get('congregacion_id').touched
               "
             >
-              La congregación del usuario es requerida.
+              La congregación del feligrés es requerida.
             </small>
           </div>
 
@@ -855,27 +856,7 @@
             </select>
           </div>
         </div>
-        <div class="row">
-          <div class="form-group col-sm-12 col-md-6 col-lg-6">
-            <label class="input-group">Tipo Documento:</label>
-            <select class="form-control" formControlName="tipoDocumento_id">
-              <option value="" disabled>Seleccione el tipo de documento</option>
-              <option *ngFor="let tipoDocumento of tipoDocumentos" [value]="tipoDocumento.id">
-                {{ tipoDocumento.documento }}
-              </option>
-            </select>
-          </div>
 
-          <div class="form-group col-sm-12 col-md-6 col-lg-6">
-            <label class="input-group">Número de Documento:</label>
-            <input
-              type="number"
-              formControlName="numeroDocumento"
-              class="form-control"
-              placeholder="Número de Documento"
-            />
-          </div>
-        </div>
         <div class="row">
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group">Vacuna:</label>
@@ -891,7 +872,7 @@
                 registroCuatroForm.get('vacuna_id').hasError('required') && registroCuatroForm.get('vacuna_id').touched
               "
             >
-              La vanuna del usuario es requerida.
+              La vanuna del feligrés es requerida.
             </small>
           </div>
 
@@ -909,7 +890,7 @@
                 registroCuatroForm.get('dosis_id').hasError('required') && registroCuatroForm.get('dosis_id').touched
               "
             >
-              Las dosis del usuario es requerida.
+              Las dosis del feligrés es requerida.
             </small>
           </div>
         </div>

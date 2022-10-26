@@ -37,7 +37,7 @@ export class ConfigurarServiciosYVigiliasComponent implements OnInit {
     const servicio = this.serviciosForm.value;
     this.linkEventosService.crearEvento(servicio).subscribe(
       (respuesta: any) => {
-        Swal.fire('Logros', 'Se cargó el servicio correctamente', 'success');
+        Swal.fire('Servicio', 'Se cargó el servicio correctamente', 'success');
         this.serviciosForm.reset();
       },
       (error) => {
@@ -49,9 +49,9 @@ export class ConfigurarServiciosYVigiliasComponent implements OnInit {
         });
 
         Swal.fire({
-          title: 'Logros',
+          title: 'Servicio',
           icon: 'error',
-          html: `Error al guardar el logro <p> ${listaErrores.join('')}`,
+          html: `Error al guardar el servicio <p> ${listaErrores.join('')}`,
         });
       }
     );
@@ -61,7 +61,7 @@ export class ConfigurarServiciosYVigiliasComponent implements OnInit {
     const vigilia = this.vigiliasForm.value;
     this.linkEventosService.crearEvento(vigilia).subscribe(
       (respuesta: any) => {
-        Swal.fire('Logros', 'Se cargó el servicio correctamente', 'success');
+        Swal.fire('Vigilia', 'Se cargó el servicio correctamente', 'success');
         this.vigiliasForm.reset();
       },
       (error) => {
@@ -73,9 +73,9 @@ export class ConfigurarServiciosYVigiliasComponent implements OnInit {
         });
 
         Swal.fire({
-          title: 'Logros',
+          title: 'Vigilia',
           icon: 'error',
-          html: `Error al guardar el logro <p> ${listaErrores.join('')}`,
+          html: `Error al guardar el vigilia <p> ${listaErrores.join('')}`,
         });
       }
     );
