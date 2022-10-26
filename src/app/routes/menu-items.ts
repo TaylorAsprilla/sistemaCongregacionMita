@@ -2,6 +2,9 @@ import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 
 export enum Rutas {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
+  BIBLIOTECA_MULTIMEDIA = 'biblioteca-multimedia',
+  BIBLIOTECA_SERVICIOS = 'biblioteca-servicios',
+  BIBLIOTECA_VIGILIAS = 'biblioteca-vigilias',
   CAMPOS = 'campos',
   CONFIGURAR_SERVICIOS_Y_VIGILIAS = 'configurar-servicios-y-vigilias',
   CONGREGACION = 'congregacion',
@@ -261,6 +264,31 @@ export const ROUTES: RouteInfo[] = [
         class: '',
         extralink: false,
         submenu: [],
+      },
+      {
+        path: '',
+        title: 'Biblioteca Multimedia',
+        icon: '',
+        class: 'has-arrow',
+        extralink: false,
+        submenu: [
+          {
+            path: Rutas.BIBLIOTECA_SERVICIOS,
+            title: 'Servicios',
+            icon: '',
+            class: '',
+            extralink: false,
+            submenu: [],
+          },
+          {
+            path: Rutas.BIBLIOTECA_VIGILIAS,
+            title: 'Vigilias',
+            icon: '',
+            class: '',
+            extralink: false,
+            submenu: [],
+          },
+        ],
       },
     ],
   },

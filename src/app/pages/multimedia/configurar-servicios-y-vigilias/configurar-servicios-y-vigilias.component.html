@@ -7,8 +7,18 @@
       <div class="card-body">
         <form class="form-signin" autocomplete="off" [formGroup]="serviciosForm">
           <div class="form-group">
+            <label>Título</label>
+            <input type="text" formControlName="link" class="form-control" placeholder="Título del servicio" />
+          </div>
+
+          <div class="form-group">
             <label>ID del servicio</label>
             <input type="text" formControlName="link" class="form-control" placeholder="Id del servicio" />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" formControlName="fecha" class="form-control" />
           </div>
 
           <div class="card">
@@ -34,10 +44,19 @@
       <div class="card-body">
         <form class="form-signin" autocomplete="off" [formGroup]="vigiliasForm">
           <div class="form-group">
-            <label>ID de la vigilia</label>
-            <input type="text" formControlName="link" class="form-control" placeholder="ID de la vígilia" />
+            <label>Título</label>
+            <input type="text" formControlName="link" class="form-control" placeholder="Título del servicio" />
           </div>
 
+          <div class="form-group">
+            <label>ID del servicio</label>
+            <input type="text" formControlName="link" class="form-control" placeholder="Id del servicio" />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" formControlName="fecha" class="form-control" />
+          </div>
           <div class="card">
             <button
               type="submit"

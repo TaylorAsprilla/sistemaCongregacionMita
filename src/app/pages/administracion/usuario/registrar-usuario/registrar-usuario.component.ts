@@ -1,5 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
@@ -37,11 +44,11 @@ import config from 'src/environments/config/config';
   styleUrls: ['./registrar-usuario.component.scss'],
 })
 export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
-  public usuarioForm: UntypedFormGroup;
-  public registroUnoForm!: UntypedFormGroup;
-  public registroDosForm!: UntypedFormGroup;
-  public registroTresForm!: UntypedFormGroup;
-  public registroCuatroForm!: UntypedFormGroup;
+  public usuarioForm: FormGroup;
+  public registroUnoForm!: FormGroup;
+  public registroDosForm!: FormGroup;
+  public registroTresForm!: FormGroup;
+  public registroCuatroForm!: FormGroup;
 
   public registroUno_step = false;
   public registroDos_step = false;

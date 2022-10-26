@@ -20,11 +20,15 @@ export class ConfigurarServiciosYVigiliasComponent implements OnInit {
 
   ngOnInit(): void {
     this.serviciosForm = this.formBuilder.group({
+      titulo: ['', [Validators.required, Validators.minLength(3)]],
       link: ['', [Validators.required, Validators.minLength(3)]],
+      fecha: ['', [Validators.required, Validators.minLength(3)]],
       tipoEvento_id: ['1', [Validators.required]],
     });
     this.vigiliasForm = this.formBuilder.group({
+      titulo: ['', [Validators.required, Validators.minLength(3)]],
       link: ['', [Validators.required, Validators.minLength(3)]],
+      fecha: ['', [Validators.required, Validators.minLength(3)]],
       tipoEvento_id: ['2', [Validators.required]],
     });
   }

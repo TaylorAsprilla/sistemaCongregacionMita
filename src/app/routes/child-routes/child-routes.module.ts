@@ -52,6 +52,8 @@ import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.reso
 import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
 import { ConfigurarServiciosYVigiliasComponent } from 'src/app/pages/multimedia/configurar-servicios-y-vigilias/configurar-servicios-y-vigilias.component';
 import { LinkEventosResolver } from 'src/app/resolvers/link-eventos/link-eventos.resolver';
+import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
+import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
 
 const childRoutes: Routes = [
   {
@@ -227,6 +229,20 @@ const childRoutes: Routes = [
   {
     path: Rutas.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
     component: ConfigurarServiciosYVigiliasComponent,
+  },
+  {
+    path: Rutas.BIBLIOTECA_SERVICIOS,
+    component: ServiciosComponent,
+    resolve: {
+      linkEventos: LinkEventosResolver,
+    },
+  },
+  {
+    path: Rutas.BIBLIOTECA_VIGILIAS,
+    component: VigiliasComponent,
+    resolve: {
+      linkEventos: LinkEventosResolver,
+    },
   },
 ];
 
