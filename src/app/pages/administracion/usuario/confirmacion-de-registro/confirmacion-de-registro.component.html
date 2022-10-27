@@ -1,0 +1,24 @@
+<div class="card animate__animated animate__fadeIn">
+  <div class="card-header">
+    <h3 class="card-title text-center">Bienvenido al Censo de la Congregación Mita Inc</h3>
+  </div>
+
+  <div class="card-body text-center">
+    <h2>
+      {{ usuario?.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario?.primerApellido }}
+      {{ usuario?.segundoApellido }}
+    </h2>
+
+    <h3>
+      El número Mita asignado es <b>{{ usuario?.id }}</b>
+    </h3>
+  </div>
+  <div class="text-center">
+    <p>Escanea el código QR para descargar el certificado</p>
+    <img src="assets/images/qr.png" alt="QR" width="300" />
+  </div>
+
+  <div class="text-center p-5">
+    <button class="btn btn-primary" (click)="nuevoRegistro()">Nuevo Registro</button>
+  </div>
+</div>

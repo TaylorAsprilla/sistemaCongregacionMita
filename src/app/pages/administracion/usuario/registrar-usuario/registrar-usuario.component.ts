@@ -338,7 +338,10 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
         (usuarioCreado: any) => {
           Swal.fire('Usuario creado', 'correctamente', 'success');
-          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}`);
+          console.log('usuarioCreado', usuarioCreado);
+          this.router.navigateByUrl(
+            `${Rutas.SISTEMA}/${Rutas.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
+          );
         },
         (error) => {
           let errores = error.error.errors;

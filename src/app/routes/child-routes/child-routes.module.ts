@@ -53,12 +53,19 @@ import { ConfigurarServiciosYVigiliasComponent } from 'src/app/pages/multimedia/
 import { LinkEventosResolver } from 'src/app/resolvers/link-eventos/link-eventos.resolver';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
+import { ConfirmacionDeRegistroComponent } from 'src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component';
 
 const childRoutes: Routes = [
   {
     path: 'inicio',
     component: InicioComponent,
     data: { titulo: 'Censo' },
+    resolve: {
+      congregacion: CongregacionResolver,
+      ministerio: MinisterioResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
+    },
   },
 
   // Administración
@@ -66,7 +73,12 @@ const childRoutes: Routes = [
     path: Rutas.USUARIOS,
     component: UsuariosComponent,
     data: { titulo: 'Usuarios Registrados' },
-    resolve: { nacionalidad: NacionalidadResolver, pais: PaisResolver, campo: CampoResolver },
+    resolve: {
+      congregacion: CongregacionResolver,
+      ministerio: MinisterioResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
+    },
   },
 
   {
@@ -95,6 +107,11 @@ const childRoutes: Routes = [
     path: Rutas.REGISTRAR_USUARIO,
     component: RegistrarUsuarioComponent,
     resolve: { nacionalidad: NacionalidadResolver },
+  },
+
+  {
+    path: `${Rutas.CONFIRMAR_REGISTRO}/:id`,
+    component: ConfirmacionDeRegistroComponent,
   },
   {
     path: Rutas.MINISTERIOS,
