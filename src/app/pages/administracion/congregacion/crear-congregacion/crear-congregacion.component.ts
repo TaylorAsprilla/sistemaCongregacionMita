@@ -80,6 +80,8 @@ export class CrearCongregacionComponent implements OnInit {
   crearCongregacion() {
     const congregacionNueva = this.congregacionForm.value;
 
+    console.log(congregacionNueva);
+
     if (this.congregacionSeleccionada) {
       const data = {
         ...this.congregacionForm.value,

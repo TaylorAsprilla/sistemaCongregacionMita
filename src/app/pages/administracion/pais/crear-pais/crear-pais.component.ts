@@ -43,7 +43,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.paisForm = this.formBuilder.group({
       pais: ['', [Validators.required, Validators.minLength(3)]],
-      idDivisa: ['', [Validators.required]],
+      // idDivisa: ['', [Validators.required]],
       idObreroEncargado: ['', [Validators.required]],
     });
 
@@ -122,10 +122,10 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
         .pipe(delay(100))
         .subscribe(
           (paisEncontrado: PaisModel) => {
-            const { pais, idDivisa } = paisEncontrado;
+            const { pais, idObreroEncargado } = paisEncontrado;
             this.paisSeleccionado = paisEncontrado;
 
-            this.paisForm.setValue({ pais, idDivisa });
+            this.paisForm.setValue({ pais, idObreroEncargado });
           },
           (error) => {
             let errores = error.error.errors;

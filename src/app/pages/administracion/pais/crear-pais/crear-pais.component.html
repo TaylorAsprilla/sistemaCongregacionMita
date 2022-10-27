@@ -11,7 +11,7 @@
             <input type="text" formControlName="pais" class="form-control" placeholder="Dígite un país nuevo" />
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="inputDivisa" class="col-form-label">Moneda</label>
             <select class="form-control" id="inputDivisa" formControlName="idDivisa">
               <option value="" disabled>Seleccione Moneda</option>
@@ -19,7 +19,7 @@
                 {{ divisa.divisa }}
               </option>
             </select>
-          </div>
+          </div> -->
 
           <div class="form-group">
             <label for="inputPais" class="col-form-label">Obrero Encargado</label>
@@ -33,7 +33,7 @@
           </div>
 
           <div class="card">
-            <button type="submit" class="submit btn btn-primary" (click)="crearPais()" [disabled]="paisForm.invalid">
+            <button type="submit" class="submit btn btn-primary" (click)="crearPais()">
               <i class="fa fa-save"></i> Guardar
             </button>
           </div>
