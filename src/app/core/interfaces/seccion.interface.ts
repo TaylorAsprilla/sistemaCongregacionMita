@@ -58,12 +58,5 @@ export const generarSeccioninforme: Seccion[] = [
     estatus: 'N / A',
     color: 'crimson',
   },
-  {
-    nombre: 'Asunto pendiente',
-    ruta: `../${Rutas.ASUNTO_PENDIENTE}`,
-    imagen: '../assets/images/iconSeccionInforme.jpeg',
-    descripcion: 'Logros obtenidos durante el trimestre',
-    estatus: 'N / A',
-    color: 'crimson',
-  },
+  // asuntos pendientes eliminado
 ];

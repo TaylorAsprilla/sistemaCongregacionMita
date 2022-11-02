@@ -22,10 +22,10 @@ export class InformeContablesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.contabilidadForm = this.formBuilder.group({
       sobres: ['', [Validators.required]],
-      transferencia: ['', [Validators.required]],
+      transferencia: ['', []],
       restrictos: ['', [Validators.required]],
       noRestrictos: ['', [Validators.required]],
-      depositoActividades: ['', [Validators.required]],
+      depositoActividades: ['', []],
       informe_id: ['1', [Validators.required]],
     });
   }

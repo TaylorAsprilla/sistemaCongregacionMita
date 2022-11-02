@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-6">
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Informe Metas</h3>
@@ -20,8 +20,8 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="inputFecha" class="col-sm-2 col-form-label">Fecha a completarse o completado</label>
-              <div class="col-sm-10">
+              <label for="inputFecha" class="col-sm-5 col-form-label">Fecha a completarse o completado</label>
+              <div class="col-sm-7">
                 <input
                   type="date"
                   formControlName="fecha"
@@ -33,8 +33,8 @@
             </div>
 
             <div class="form-group row">
-              <label for="inputAccion" class="col-sm-2 col-form-label">Acción a tomar</label>
-              <div class="col-sm-10">
+              <label for="inputAccion" class="col-sm-5 col-form-label">Acción a tomar</label>
+              <div class="col-sm-7">
                 <textarea
                   class="form-control"
                   formControlName="accion"
@@ -48,8 +48,8 @@
             </div>
 
             <div class="form-group row">
-              <label for="inputTipoActividad" class="col-sm-2 col-form-label">Estatus</label>
-              <div class="col-sm-10">
+              <label for="inputTipoActividad" class="col-sm-5 col-form-label">Estatus</label>
+              <div class="col-sm-7">
                 <select class="form-control" formControlName="tipoStatus_id">
                   <option value="" disabled>Seleccione el estatus</option>
                   <option *ngFor="let estatus of estatus" [value]="estatus.id">
@@ -60,8 +60,8 @@
             </div>
 
             <div class="form-group row">
-              <label for="inputComentarios" class="col-sm-2 col-form-label">Comentarios y/o acuerdos generales</label>
-              <div class="col-sm-10">
+              <label for="inputComentarios" class="col-sm-5 col-form-label">Comentarios y/o acuerdos generales</label>
+              <div class="col-sm-7">
                 <textarea class="form-control" formControlName="comentarios" id="inputComentarios" rows="5" cols="30">
                 </textarea>
               </div>
@@ -73,6 +73,23 @@
         <button type="submit" class="btn btn-primary" (click)="guardarMeta()">
           <i class="fa fa-save"></i> Guardar
         </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Listado de Metas</h3>
+      </div>
+      <div class="card-body">
+        <div *ngFor="let meta of metas">
+          <a class="pointer">
+            <!-- <li (click)="buscarPais(pais.id.toString())"> -->
+            <span class="font-medium">{{ meta.accion }}</span>
+            <!-- </li> -->
+          </a>
+        </div>
       </div>
     </div>
   </div>

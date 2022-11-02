@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ObjectUnsubscribedError, Subscription } from 'rxjs';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { Rutas } from 'src/app/routes/menu-items';
@@ -18,6 +18,10 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
   public metaForm: UntypedFormGroup;
 
   public estatus: EstatusModel[] = [];
+
+  public metas: MetaModel[] = [];
+
+  public metaSeleccionada: MetaModel;
 
   // Subscription
   public metaSubscription: Subscription;
@@ -40,14 +44,27 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
       tipoStatus_id: ['', [Validators.required]],
     });
 
-    this.metaSubscription = this.estatusService.getEstatus().subscribe((estatus) => {
+    this.cargarEstatus();
+    this.cargarMetas();
+  }
+
+  ngOnDestroy(): void {
+    this.estatusSubscription?.unsubscribe();
+    this.metaSubscription?.unsubscribe();
+  }
+
+  cargarEstatus() {
+    this.estatusSubscription = this.estatusService.getEstatus().subscribe((estatus) => {
       this.estatus = estatus.filter((estatus: EstatusModel) => estatus.estado === true);
     });
   }
 
-  ngOnDestroy(): void {
-    this.metaSubscription?.unsubscribe();
+  cargarMetas() {
+    this.metaSubscription = this.metaService.getMeta().subscribe((meta: MetaModel[]) => {
+      this.metas = meta;
+    });
   }
+
   guardarMeta() {
     const informeMeta = this.metaForm.value;
 
