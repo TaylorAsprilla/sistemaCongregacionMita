@@ -25,4 +25,55 @@ export class InformeComponent implements OnInit {
       this.informes = data.informes;
     });
   }
+
+  //countDownDate = new Date('july 1, 2022 15:37:25').getTime();
+
+  currYear = new Date().getFullYear();
+
+  trimestreActual = new Date('january 1, ' + (this.currYear + 1) + ' 00:00:00').getTime();
+
+  finPrimerTrimestre = new Date('april 1, ' + this.currYear + ' 00:00:00').getTime();
+  finSegundoTrimestre = new Date('july 1, ' + this.currYear + ' 00:00:00').getTime();
+  finTercerTrimestre = new Date('october 1, ' + this.currYear + ' 00:00:00').getTime();
+  finCuartoTrimestre = new Date('january 1, ' + (this.currYear + 1) + ' 00:00:00').getTime();
+
+  trimestres = [this.finPrimerTrimestre, this.finSegundoTrimestre, this.finTercerTrimestre, this.finCuartoTrimestre];
+
+  escogerTrimestre(finalTrimestreActual) {
+    var ahora = new Date().getTime();
+    //var ahora = this.countDownDate;
+    // this.trimestres.forEach((date) => {
+    //   var distancia = date - ahora;
+    //   if (distancia >= 0) {
+    //     finalTrimestreActual = date;
+    //   }
+    // });
+    for (var i = 0; i < this.trimestres.length; i++) {
+      var distancia = this.trimestres[i] - ahora;
+      console.log('distancia ' + distancia);
+      if (distancia >= 0) {
+        finalTrimestreActual = this.trimestres[i];
+        console.log('trimestre ' + i);
+        break;
+      }
+    }
+
+    return finalTrimestreActual;
+  }
+
+  demo: any;
+  display: any;
+  x = setInterval(() => {
+    var now = new Date().getTime();
+    //var now = this.countDownDate;
+    this.escogerTrimestre(this.trimestreActual);
+
+    var distance = this.trimestreActual - now;
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    this.demo = days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
+    this.display = days;
+  });
 }
