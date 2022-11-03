@@ -24,6 +24,7 @@ export class CrearCongregacionComponent implements OnInit {
   public congregaciones: CongregacionModel[] = [];
   public paises: PaisModel[] = [];
   public usuarios: UsuarioModel[] = [];
+  public obreros: UsuarioModel[] = [];
 
   public congregacionSeleccionada: CongregacionModel;
 
@@ -35,15 +36,19 @@ export class CrearCongregacionComponent implements OnInit {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private router: Router,
-    private activateRouter: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private congregacionService: CongregacionService,
     private paisService: PaisService,
     private usuariosService: UsuarioService
   ) {}
 
   ngOnInit(): void {
-    this.activateRouter.params.subscribe(({ id }) => {
+    this.activatedRoute.params.subscribe(({ id }) => {
       this.buscarCongregacion(id);
+    });
+
+    this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[] }) => {
+      this.obreros = data.obrero;
     });
 
     this.congregacionForm = this.formBuilder.group({
@@ -79,8 +84,6 @@ export class CrearCongregacionComponent implements OnInit {
 
   crearCongregacion() {
     const congregacionNueva = this.congregacionForm.value;
-
-    console.log(congregacionNueva);
 
     if (this.congregacionSeleccionada) {
       const data = {
@@ -138,10 +141,10 @@ export class CrearCongregacionComponent implements OnInit {
         .pipe(delay(100))
         .subscribe(
           (congregacionEncontrada: CongregacionModel) => {
-            const { congregacion, pais_id } = congregacionEncontrada;
+            const { congregacion, pais_id, idObreroEncargado } = congregacionEncontrada;
             this.congregacionSeleccionada = congregacionEncontrada;
 
-            this.congregacionForm.setValue({ congregacion, pais_id });
+            this.congregacionForm.setValue({ congregacion, pais_id, idObreroEncargado });
           },
           (error) => {
             let errores = error.error.errors;

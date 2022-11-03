@@ -6,6 +6,7 @@ import { delay } from 'rxjs/operators';
 import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
@@ -24,6 +25,7 @@ export class CrearCampoComponent implements OnInit {
   public campos: CampoModel[] = [];
   public congregaciones: CongregacionModel[] = [];
   public usuarios: UsuarioModel[] = [];
+  public obreros: UsuarioModel[] = [];
 
   // Subscription
   public campoSubscription: Subscription;
@@ -36,23 +38,24 @@ export class CrearCampoComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     private router: Router,
     private campoService: CampoService,
-    private congregacionService: CongregacionService,
-    private activateRouter: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private usuariosService: UsuarioService
   ) {}
 
   ngOnInit(): void {
-    this.activateRouter.params.subscribe(({ id }) => {
+    this.activatedRoute.params.subscribe(({ id }) => {
       this.buscarCampo(id);
+    });
+
+    this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[]; congregacion: CongregacionModel[] }) => {
+      this.congregaciones = data.congregacion;
+      this.obreros = data.obrero;
     });
 
     this.campoForm = this.formBuilder.group({
       campo: ['', [Validators.required, Validators.minLength(3)]],
       congregacion_id: ['', [Validators.required]],
-    });
-
-    this.congregacionSubscription = this.congregacionService.getCongregaciones().subscribe((congregacion) => {
-      this.congregaciones = congregacion.filter((congregacion: CongregacionModel) => congregacion.estado === true);
+      idObreroEncargado: ['', [Validators.required]],
     });
 
     this.usuariosSubscription = this.usuariosService.listarTodosLosUsuarios().subscribe((usuarios: ListarUsuario) => {
@@ -64,7 +67,6 @@ export class CrearCampoComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.campoSubscription?.unsubscribe();
-    this.congregacionSubscription?.unsubscribe();
     this.usuariosSubscription?.unsubscribe();
   }
 
@@ -108,10 +110,10 @@ export class CrearCampoComponent implements OnInit {
         .pipe(delay(100))
         .subscribe(
           (campoActualizado: CampoModel) => {
-            const { campo, congregacion_id } = campoActualizado;
+            const { campo, congregacion_id, idObreroEncargado } = campoActualizado;
             this.campoSeleccionado = campoActualizado;
 
-            this.campoForm.setValue({ campo, congregacion_id });
+            this.campoForm.setValue({ campo, congregacion_id, idObreroEncargado });
           },
           (error) => {
             let errores = error.error.errors;

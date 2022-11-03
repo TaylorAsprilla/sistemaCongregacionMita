@@ -2,7 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
+import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import Swal from 'sweetalert2';
@@ -16,6 +18,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
   public paises: PaisModel[] = [];
   public divisas: DivisaModel[] = [];
+  public obreros: UsuarioModel[] = [];
 
   // Subscription
   public paisSubscription: Subscription;
@@ -24,8 +27,9 @@ export class PaisesComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private paisService: PaisService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { divisas: DivisaModel[] }) => {
+    this.activatedRoute.data.subscribe((data: { divisas: DivisaModel[]; obrero: UsuarioModel[] }) => {
       this.divisas = data.divisas;
+      this.obreros = data.obrero;
     });
 
     this.cargarPaises();
@@ -102,5 +106,21 @@ export class PaisesComponent implements OnInit, OnDestroy {
     } else {
       return 'No tiene divisa asignada';
     }
+  }
+
+  buscarObrero(idObrero: number): string {
+    let obrero = this.obreros.find((obrero) => obrero.id === idObrero);
+
+    const nombreObrero = obrero
+      ? obrero?.primerNombre +
+        ' ' +
+        obrero?.segundoNombre +
+        ' ' +
+        obrero?.primerApellido +
+        ' ' +
+        obrero?.segundoApellido
+      : 'Sin obrero Asignado';
+
+    return nombreObrero;
   }
 }

@@ -18,7 +18,5 @@ export class BibliotecaMultimediaComponent implements OnInit {
 
     tag.src = 'https://www.youtube.com/iframe_api';
     document.body.appendChild(tag);
-
-    console.log(this.serviciosYvigilias);
   }
 }
