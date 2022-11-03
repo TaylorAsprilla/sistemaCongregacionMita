@@ -25,7 +25,7 @@ export class InformeVisitasComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.visitaForm = this.formBuilder.group({
       fecha: ['', [Validators.required]],
-      visitasHogares: ['', [Validators.required]],
+      visitasHogares: ['', []],
       cantidad: ['', []],
       efectivo: ['', []],
       referidasOots: ['', []],

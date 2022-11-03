@@ -4,6 +4,7 @@ import { DosisModel } from './dosis.model';
 import { EstadoCivilModel } from './estado-civil.model';
 import { GeneroModel } from './genero.model';
 import { GradoAcademicoModel } from './grado-academico.model';
+import { MinisterioModel } from './ministerio.model';
 import { NacionalidadModel } from './nacionalidad.model';
 import { RolCasaModel } from './rol-casa.model';
 import { TipoEmpleoModel } from './tipo-empleo.model';
@@ -51,7 +52,8 @@ export class UsuarioModel {
     public tipoEmpleo?: TipoEmpleoModel,
     public tipoMiembro?: TipoMiembroModel,
     public direcciones?: DireccionInterface[],
-    public usuarioCongregacion?: CongregacionInterface
+    public usuarioCongregacion?: CongregacionInterface,
+    public usuarioMinisterio?: MinisterioModel
   ) {}
 
   get fotoUrl() {

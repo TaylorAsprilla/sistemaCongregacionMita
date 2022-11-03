@@ -8,6 +8,7 @@ import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
@@ -24,6 +25,7 @@ import { ActividadModel } from 'src/app/core/models/actividad.model';
 import { InformeModel } from 'src/app/core/models/informe.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { ObreroModel } from 'src/app/core/models/obrero.model';
+import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 
 @Component({
   selector: 'app-ver-informe',
@@ -45,6 +47,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public obreroSeleccionado: UsuarioModel;
   public paisObrero: string;
 
+  public sumatoriaActividadesEspeciales = 0;
+
   items = [
     { name: 'jean', surname: 'kruger' },
     { name: 'bobby', surname: 'marais' },
@@ -52,6 +56,9 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   public usuarios: UsuarioModel[] = [];
   public usuarioSubscription: Subscription;
+
+  public ministerios: MinisterioModel[] = [];
+  public ministerioSubcription: Subscription;
 
   public paises: PaisModel[] = [];
   public paisSubscription: Subscription;
@@ -94,6 +101,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   constructor(
     private usuarioService: UsuarioService,
+    private ministerioService: MinisterioService,
     private paisService: PaisService,
     private informeService: InformeService,
     private actividadService: ActividadService,
@@ -118,6 +126,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
     this.filtrarInformacionInforme();
     this.cargarUsuarios();
+    this.cargarMinisterios();
     this.cargarPaises();
     this.cargarTipoActividad();
   }
@@ -204,7 +213,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
         }
       }
     });
-    console.log(result);
+
     return result;
   }
 
@@ -261,7 +270,16 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   cargarUsuarios() {
     this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
-      this.usuarios = usuarios;
+      this.usuarios = usuarios.filter((usuario: UsuarioModel) => console.log(usuario));
+      //  usuario.usuarioMinisterio.ministerio === 'Obrero');
+      // falta filtrar por ministerio me los devuelve undefined
+    });
+  }
+
+  cargarMinisterios() {
+    this.ministerioSubcription = this.ministerioService.getMinisterios().subscribe((ministerios) => {
+      this.ministerios = ministerios.filter((ministerio: MinisterioModel) => ministerio.estado === true);
+      // console.log(ministerios);
     });
   }
 
@@ -302,6 +320,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.fraccion = '4to Trimestre del año';
     }
     this.filtrarInformacionInforme();
+    this.sumatoriaActividadesEspeciales = this.sumatoriaActividades();
+    console.log('Total ' + this.sumatoriaActividadesEspeciales);
   }
 
   filtrarInformacionInforme() {
@@ -319,6 +339,16 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.logros = this.filtrarFechaCreatedAt(this.dataLogros);
       this.asuntoPendiente = this.filtrarFechaCreatedAt(this.dataAsuntoPendiente);
     }
+  }
+
+  sumatoriaActividades() {
+    var total = 0;
+    this.especiales.forEach((actividad) => {
+      total += +actividad.cantidadRecaudada;
+      // console.log(typeof actividad.cantidadRecaudada);
+      // console.log(actividad.cantidadRecaudada);
+    });
+    return total;
   }
 
   makePDF() {

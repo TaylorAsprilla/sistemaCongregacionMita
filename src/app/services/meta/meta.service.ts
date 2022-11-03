@@ -26,8 +26,8 @@ export class MetaService {
 
   getMeta() {
     return this.httpClient
-      .get(`${base_url}/meta/`, this.headers)
-      .pipe(map((meta: { ok: boolean; meta: MetaModel[] }) => meta.meta));
+      .get(`${base_url}/meta`, this.headers)
+      .pipe(map((meta: { ok: boolean; metas: MetaModel[] }) => meta.metas));
   }
 
   crearMeta(meta: MetaModel) {
