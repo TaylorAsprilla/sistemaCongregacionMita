@@ -4,25 +4,27 @@
   <div class="card animate__animated animate__fadeIn animate__slow" *ngIf="!cargando">
     <div class="card-header">
       <div class="row">
-        <div class="col-8">
+        <div class="col-8 px-4 pt-4">
           <h3 class="card-title">Total de Campos ({{ campos.length }})</h3>
           <p>Campos registradas en la aplicación</p>
         </div>
         <div class="col">
-          <div class="text-right">
+          <div class="float-end p-4">
             <a class="btn btn-primary" (click)="crearCampo()"> <i class="fas fa-plus"></i> Crear Campo </a>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card-body">
+    <div class="card-body mx-auto">
       <table class="table table-bordered table-striped table-responsive">
         <thead>
           <tr>
             <th class="w100">item</th>
-            <th class="w1200">Nombre</th>
-            <th>Obrero Encargado</th>
+            <th class="w400">Nombre</th>
+            <th class="w400">Obrero Encargado</th>
+            <th>Pais</th>
+            <th>Congregación</th>
             <th class="w200">Estado</th>
             <th class="w200">Acciones</th>
           </tr>
@@ -31,7 +33,13 @@
           <tr *ngFor="let campo of campos; index as i">
             <td>{{ i + 1 }}</td>
             <td>{{ campo.campo }}</td>
-            <td>{{ campo.idObreroEncargado }}</td>
+            <td>{{ buscarObrero(campo.idObreroEncargado) }}</td>
+            <td>
+              {{ buscarCongregacion(campo.congregacion_id)['congregacion'] }}
+            </td>
+            <td>
+              {{ buscarCongregacion(campo.congregacion_id)['pais'] }}
+            </td>
 
             <td>
               <span *ngIf="campo.estado" class="badge badge-primary">Activo</span>
@@ -69,8 +77,10 @@
         <tfoot>
           <tr>
             <th class="w100">item</th>
-            <th>Nombre</th>
-            <th>Obrero Encargado</th>
+            <th class="w400">Nombre</th>
+            <th class="w400">Obrero Encargado</th>
+            <th>Pais</th>
+            <th>Congregación</th>
             <th class="w100">Estado</th>
             <th class="w100">Acciones</th>
           </tr>

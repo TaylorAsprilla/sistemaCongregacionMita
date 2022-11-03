@@ -11,16 +11,25 @@
             <input type="text" formControlName="campo" class="form-control" placeholder="Campo" />
           </div>
 
-          <div class="form-group row">
-            <label for="inputCongregacion" class="col-sm-6 col-md-4 col-form-label">Congregación</label>
-            <div class="col-sm-6 col-md-8">
-              <select class="form-control" id="inputCongregacion" formControlName="congregacion_id">
-                <option value="" disabled>Seleccione congregación</option>
-                <option *ngFor="let congregacion of congregaciones" [value]="congregacion.id">
-                  {{ congregacion.congregacion }}
-                </option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label class="col-form-label">Congregación</label>
+            <select class="form-control" id="inputCongregacion" formControlName="congregacion_id">
+              <option value="" disabled>Seleccione congregación</option>
+              <option *ngFor="let congregacion of congregaciones" [value]="congregacion.id">
+                {{ congregacion.congregacion }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="col-form-label">Obrero Encargado</label>
+            <select class="form-control" formControlName="idObreroEncargado">
+              <option value="" disabled>Seleccione el obrero encargado</option>
+              <option *ngFor="let obrero of obreros" [value]="obrero.id">
+                {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
+                {{ obrero.segundoApellido }}
+              </option>
+            </select>
           </div>
 
           <div class="card">

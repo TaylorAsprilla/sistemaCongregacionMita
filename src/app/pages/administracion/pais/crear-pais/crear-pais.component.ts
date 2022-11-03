@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
+import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
@@ -24,6 +25,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   public paises: PaisModel[] = [];
   public divisas: DivisaModel[] = [];
   public usuarios: UsuarioModel[] = [];
+  public obreros: UsuarioModel[] = [];
 
   public paisSeleccionado: PaisModel;
 
@@ -37,10 +39,14 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
     private router: Router,
     private paisService: PaisService,
     private divisaService: DivisaService,
-    private usuariosService: UsuarioService
+    private usuariosService: UsuarioService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[] }) => {
+      this.obreros = data.obrero;
+    });
     this.paisForm = this.formBuilder.group({
       pais: ['', [Validators.required, Validators.minLength(3)]],
       // idDivisa: ['', [Validators.required]],

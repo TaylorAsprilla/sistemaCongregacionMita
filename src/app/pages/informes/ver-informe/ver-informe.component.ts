@@ -23,6 +23,7 @@ import { MetaModel } from 'src/app/core/models/meta.model';
 import { ActividadModel } from 'src/app/core/models/actividad.model';
 import { InformeModel } from 'src/app/core/models/informe.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { ObreroModel } from 'src/app/core/models/obrero.model';
 
 @Component({
   selector: 'app-ver-informe',
@@ -86,6 +87,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   dataAsuntoPendiente: AsuntoPendienteModel[] = [];
 
   congregaciones: CongregacionModel[] = [];
+  obreros: UsuarioModel[] = [];
 
   public seccionesInformes: SeccionInformeModel[];
   informeSubscription: Subscription;
@@ -100,11 +102,12 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // traer secciones
     this.activatedRoute.data.subscribe(
-      (data: { seccionInforme: SeccionInformeModel[]; congregacion: CongregacionModel[] }) => {
+      (data: { seccionInforme: SeccionInformeModel[]; congregacion: CongregacionModel[]; obrero: any[] }) => {
+        console.log(data);
         this.seccionesInformes = data.seccionInforme;
         this.congregaciones = data.congregacion;
+        this.obreros = data.obrero;
       }
     );
 

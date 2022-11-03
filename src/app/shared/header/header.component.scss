@@ -1,10 +1,18 @@
 .logo {
-  width: 30%;
+  width: 3.5em;
+  padding: 5% 0 5% 0;
 }
 
 @media (max-width: 1170px) {
   .logo {
     width: 100%;
     max-width: 75px;
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-expand-md .navbar-collapse {
+    display: grid !important;
+    flex-basis: auto;
   }
 }

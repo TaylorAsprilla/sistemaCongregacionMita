@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CampoModel } from 'src/app/core/models/campo.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { PaisModel } from 'src/app/core/models/pais.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import Swal from 'sweetalert2';
@@ -13,11 +16,24 @@ import Swal from 'sweetalert2';
 export class CamposComponent implements OnInit {
   public cargando: boolean = true;
   public campos: CampoModel[] = [];
+  public obreros: UsuarioModel[] = [];
+  public paises: PaisModel[] = [];
+  public congregaciones: CongregacionModel[] = [];
 
-  constructor(private router: Router, private campoService: CampoService) {}
+  constructor(private router: Router, private campoService: CampoService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.activatedRoute.data.subscribe(
+      (data: { obrero: UsuarioModel[]; pais: PaisModel[]; congregacion: CongregacionModel[] }) => {
+        this.obreros = data.obrero;
+        this.paises = data.pais;
+        this.congregaciones = data.congregacion;
+      }
+    );
+    console.log(this.congregaciones);
     this.cargarCampos();
+
+    console.log('Buscar Congregacion', this.buscarCongregacion(3)['congregacion']);
   }
 
   cargarCampos() {
@@ -25,6 +41,7 @@ export class CamposComponent implements OnInit {
     this.campoService.getCampos().subscribe((campos: CampoModel[]) => {
       this.campos = campos;
       this.cargando = false;
+      console.log(this.campos);
     });
   }
 
@@ -77,5 +94,33 @@ export class CamposComponent implements OnInit {
   crearCampo() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}/${nuevo}`);
+  }
+
+  buscarObrero(idObrero: number): string {
+    let obrero = this.obreros.find((obrero) => obrero.id === idObrero);
+
+    const nombreObrero = obrero
+      ? obrero?.primerNombre +
+        ' ' +
+        obrero?.segundoNombre +
+        ' ' +
+        obrero?.primerApellido +
+        ' ' +
+        obrero?.segundoApellido
+      : 'Sin obrero Asignado';
+
+    return nombreObrero;
+  }
+
+  buscarPais(idPais: number): string {
+    return this.paises.find((pais) => pais.id === idPais)?.pais;
+  }
+
+  buscarCongregacion(idCongregacion: number): object {
+    const congregacion = this.congregaciones.find((congregacion) => congregacion.id === idCongregacion);
+
+    this.buscarPais(congregacion?.pais_id);
+
+    return { congregacion: congregacion?.congregacion, pais: this.buscarPais(congregacion?.pais_id) };
   }
 }
