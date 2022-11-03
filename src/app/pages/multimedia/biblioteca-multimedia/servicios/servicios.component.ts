@@ -20,7 +20,5 @@ export class ServiciosComponent implements OnInit {
     });
 
     this.servicios = this.linkEventos.filter((servicio) => servicio.tipoEvento_id === TIPOEVENTO.SERVICIO);
-
-    console.log('Servicios', this.servicios);
   }
 }

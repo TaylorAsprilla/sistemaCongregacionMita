@@ -27,7 +27,5 @@ export class ServiciosYVigiliasComponent implements OnInit {
 
     this.servicio = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 1)[0];
     this.vigilia = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 2)[0];
-
-    console.log(this.servicio);
   }
 }

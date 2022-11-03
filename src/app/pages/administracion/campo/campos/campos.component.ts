@@ -30,10 +30,8 @@ export class CamposComponent implements OnInit {
         this.congregaciones = data.congregacion;
       }
     );
-    console.log(this.congregaciones);
-    this.cargarCampos();
 
-    console.log('Buscar Congregacion', this.buscarCongregacion(3)['congregacion']);
+    this.cargarCampos();
   }
 
   cargarCampos() {
@@ -41,7 +39,6 @@ export class CamposComponent implements OnInit {
     this.campoService.getCampos().subscribe((campos: CampoModel[]) => {
       this.campos = campos;
       this.cargando = false;
-      console.log(this.campos);
     });
   }
 

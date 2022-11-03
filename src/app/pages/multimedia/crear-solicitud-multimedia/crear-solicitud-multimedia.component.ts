@@ -148,7 +148,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
   crearSolicitud(valoresFamiliares: FamiliarModel[]) {
     const formFamiliares = valoresFamiliares['familiares'];
     const formSolicitud = this.solicitudForm.value;
-    console.log('formSolicitud', formSolicitud);
 
     const solicitudNueva: SolicitudMultimediaModel = {
       nombre: formSolicitud.nombre,
@@ -171,8 +170,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
       estado: true,
       status: false,
     };
-
-    console.log('solicitudNueva', solicitudNueva);
 
     this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe((respuesta: any) => {
       console.log(respuesta);

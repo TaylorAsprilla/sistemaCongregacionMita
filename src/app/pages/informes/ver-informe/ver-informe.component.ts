@@ -104,7 +104,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
       (data: { seccionInforme: SeccionInformeModel[]; congregacion: CongregacionModel[]; obrero: any[] }) => {
-        console.log(data);
         this.seccionesInformes = data.seccionInforme;
         this.congregaciones = data.congregacion;
         this.obreros = data.obrero;

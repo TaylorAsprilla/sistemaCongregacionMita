@@ -78,7 +78,7 @@ export class CrearCampoComponent implements OnInit {
 
   crearCampo() {
     const campoNuevo = this.campoForm.value;
-    console.log(campoNuevo);
+
     this.campoService.crearCampo(campoNuevo).subscribe(
       (campoCreado: any) => {
         Swal.fire('Campo creado', `${campoCreado.campo.campo}`, 'success');
