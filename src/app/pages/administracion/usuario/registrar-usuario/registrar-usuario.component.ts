@@ -72,7 +72,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public usuarioSeleccionado: UsuarioModel;
 
   public mensajeBuscarCorreo: string = '';
-  public mensajeBuscarNumeroCelular: string = '';
   public sinCongregacion: number;
   public sinCampo: number;
 
@@ -110,8 +109,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     private usuarioService: UsuarioService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private buscarCorreoService: BuscarCorreoService,
-    private buscarCelularService: BuscarCelularService
+    private buscarCorreoService: BuscarCorreoService
   ) {}
 
   ngOnInit(): void {
@@ -149,7 +147,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.tiposEmpleos = data.tipoEmpleo;
         this.tipoMiembros = data.tipoMiembro;
         this.congregaciones = data.congregacion.filter((congregacion) => congregacion.estado === true);
-        this.ministerios = data.ministerio;
+        this.ministerios = data.ministerio.filter((ministerio) => ministerio.estado === true);
         this.voluntariados = data.voluntariado;
         this.paises = data.pais.filter((pais) => pais.estado === true);
         this.campos = data.campo.filter((campo) => campo.estado === true);
@@ -179,7 +177,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       primerApellido: ['Mosquera', [Validators.required, Validators.minLength(3)]],
       segundoApellido: ['Martinez', [Validators.minLength(3)]],
       apodo: ['Julianita', [Validators.minLength(3)]],
-      email: ['juliana@gmail.com', [Validators.email]],
+      email: ['juliana@gmail.com', [Validators.required, Validators.email]],
       genero_id: ['1', [Validators.required]],
       estadoCivil_id: ['1', [Validators.required]],
     });
@@ -187,7 +185,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.registroDosForm = this.formBuilder.group({
       nacionalidad: ['Colombia', [Validators.required, Validators.minLength(3)]],
       rolCasa_id: ['1', [Validators.required]],
-      numeroCelular: ['+573118874747', [Validators.required, Validators.minLength(3)]],
+      numeroCelular: ['', [Validators.required, Validators.minLength(3)]],
       telefonoCasa: ['+6012035614', [Validators.minLength(3)]],
       direccionResidencia: ['Calle 13 # 14 10', [Validators.required, Validators.minLength(3)]],
       ciudadResidencia: ['Bogotá', [Validators.required, Validators.minLength(3)]],
@@ -481,19 +479,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.mensajeBuscarCorreo = respuesta.msg;
       }
     });
-  }
-
-  buscarCelular(numeroCelular: string = null) {
-    if (!!numeroCelular) {
-      let numero = numeroCelular.slice(1);
-
-      this.mensajeBuscarNumeroCelular = '';
-      this.buscarCelularSubscription = this.buscarCelularService.buscarcelular(numero).subscribe((respuesta: any) => {
-        if (!respuesta.ok) {
-          this.mensajeBuscarNumeroCelular = respuesta.msg;
-        }
-      });
-    }
   }
 
   next() {

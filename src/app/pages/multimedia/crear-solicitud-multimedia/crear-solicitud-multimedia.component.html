@@ -27,13 +27,13 @@
                 />
 
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('nombre').hasError('required') && solicitudForm.get('nombre').touched"
                 >
                   El nombre del feligrés es requerida.
                 </small>
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('nombre').hasError('minlength') && solicitudForm.get('nombre').touched"
                 >
                   El nombre del feligrés no tiene la longitud mínima permitida.
@@ -57,7 +57,7 @@
                 </mat-autocomplete>
 
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="
                     solicitudForm.get('nacionalidad').hasError('required') && solicitudForm.get('nacionalidad').touched
                   "
@@ -72,13 +72,13 @@
                 <label class="input-group">Dirección de residencia</label>
                 <input type="text" formControlName="direccion" class="form-control" placeholder="Dirección" />
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('direccion').hasError('required') && solicitudForm.get('direccion').touched"
                 >
                   La dirección de residencia del feligrés es requerida.
                 </small>
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('direccion').hasError('minlength') && solicitudForm.get('direccion').touched"
                 >
                   La dirección de residencia del feligrés no tiene la longitud mínima permitida.
@@ -89,13 +89,13 @@
                 <label class="input-group">Ciudad</label>
                 <input type="text" formControlName="ciudad" class="form-control" placeholder="Ciudad" />
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('ciudad').hasError('required') && solicitudForm.get('ciudad').touched"
                 >
                   La ciudad de residencia del feligrés es requerida.
                 </small>
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('ciudad').hasError('minlength') && solicitudForm.get('ciudad').touched"
                 >
                   La ciudad de residencia del feligrés no tiene la longitud mínima permitida.
@@ -108,7 +108,7 @@
                 <label class="input-group">Departamento o Estado</label>
                 <input type="text" formControlName="departamento" class="form-control" placeholder="Departamento" />
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="
                     solicitudForm.get('departamento').hasError('minlength') && solicitudForm.get('departamento').touched
                   "
@@ -121,7 +121,7 @@
                 <label class="input-group">Código postal <span class="mensajeExplicativo"> (Si aplica)</span></label>
                 <input type="text" formControlName="codigoPostal" class="form-control" placeholder="Código Postal" />
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="
                     solicitudForm.get('codigoPostal').hasError('minlength') && solicitudForm.get('codigoPostal').touched
                   "
@@ -147,7 +147,7 @@
                 </mat-autocomplete>
 
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('pais').hasError('required') && solicitudForm.get('pais').touched"
                 >
                   El país de la dirección es requerido.
@@ -177,13 +177,13 @@
                 </ngx-intl-tel-input>
 
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('celular').hasError('required') && solicitudForm.get('celular').touched"
                 >
                   El número de celular del feligrés es requerido.
                 </small>
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('celular').hasError('minlength') && solicitudForm.get('celular').touched"
                 >
                   El número de celular del feligrés no tiene la longitud mínima permitida.
@@ -211,7 +211,7 @@
                 </ngx-intl-tel-input>
               </div>
               <small
-                class="form-text text-muted"
+                class="form-text text-danger"
                 *ngIf="solicitudForm.get('telefono').hasError('minlength') && solicitudForm.get('telefono').touched"
               >
                 El número de teléfono de la casa del feligrés no tiene la longitud mínima permitida.
@@ -221,13 +221,13 @@
                 <label class="input-group">Correo Electrónico</label>
                 <input type="email" formControlName="email" class="form-control" placeholder="Correo Electrónico" />
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('email').hasError('required') && solicitudForm.get('email').touched"
                 >
                   El correo electrónico del feligrés es requerido.
                 </small>
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('email').hasError('minlength') && solicitudForm.get('email').touched"
                 >
                   El correo electrónico del feligrés no tiene la longitud mínima permitida.
@@ -293,7 +293,7 @@
                   </mat-option>
                 </mat-autocomplete>
                 <small
-                  class="form-text text-muted"
+                  class="form-text text-danger"
                   *ngIf="
                     solicitudForm.get('congregacionCercana').hasError('minlength') &&
                     solicitudForm.get('congregacionCercana').touched
