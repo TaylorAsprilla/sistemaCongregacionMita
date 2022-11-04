@@ -173,32 +173,32 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   crearFormularios() {
     this.registroUnoForm = this.formBuilder.group({
-      fechaNacimiento: ['', [Validators.required]],
-      primerNombre: ['', [Validators.required, Validators.minLength(3)]],
-      segundoNombre: ['', [Validators.minLength(3)]],
-      primerApellido: ['', [Validators.required, Validators.minLength(3)]],
-      segundoApellido: ['', [Validators.minLength(3)]],
-      apodo: ['', [Validators.minLength(3)]],
-      email: ['', [Validators.email]],
-      genero_id: ['', [Validators.required]],
-      estadoCivil_id: ['', [Validators.required]],
+      fechaNacimiento: ['1989-01-01', [Validators.required]],
+      primerNombre: ['Maria', [Validators.required, Validators.minLength(3)]],
+      segundoNombre: ['Juliana', [Validators.minLength(3)]],
+      primerApellido: ['Mosquera', [Validators.required, Validators.minLength(3)]],
+      segundoApellido: ['Martinez', [Validators.minLength(3)]],
+      apodo: ['Julianita', [Validators.minLength(3)]],
+      email: ['juliana@gmail.com', [Validators.email]],
+      genero_id: ['1', [Validators.required]],
+      estadoCivil_id: ['1', [Validators.required]],
     });
 
     this.registroDosForm = this.formBuilder.group({
-      nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
-      rolCasa_id: ['', [Validators.required]],
-      numeroCelular: ['', [Validators.required, Validators.minLength(3)]],
-      telefonoCasa: ['', [Validators.minLength(3)]],
-      direccionResidencia: ['', [Validators.required, Validators.minLength(3)]],
-      ciudadResidencia: ['', [Validators.required, Validators.minLength(3)]],
-      departamentoResidencia: ['', [Validators.minLength(3)]],
-      codigoPostalResidencia: ['', [Validators.minLength(3)]],
-      paisResidencia: ['', [Validators.required, Validators.minLength(3)]],
-      direccionPostal: ['', [Validators.minLength(5)]],
-      ciudadPostal: ['', [Validators.minLength(3)]],
-      departamentoPostal: ['', [Validators.minLength(3)]],
-      codigoPostal: ['', [Validators.minLength(3)]],
-      paisPostal: ['', [Validators.minLength(3)]],
+      nacionalidad: ['Colombia', [Validators.required, Validators.minLength(3)]],
+      rolCasa_id: ['1', [Validators.required]],
+      numeroCelular: ['+573118874747', [Validators.required, Validators.minLength(3)]],
+      telefonoCasa: ['+6012035614', [Validators.minLength(3)]],
+      direccionResidencia: ['Calle 13 # 14 10', [Validators.required, Validators.minLength(3)]],
+      ciudadResidencia: ['Bogotá', [Validators.required, Validators.minLength(3)]],
+      departamentoResidencia: ['Cundinamarca', [Validators.minLength(3)]],
+      codigoPostalResidencia: ['789456', [Validators.minLength(3)]],
+      paisResidencia: ['Colombia', [Validators.required, Validators.minLength(3)]],
+      direccionPostal: ['Calle 14 # 45 78', [Validators.minLength(5)]],
+      ciudadPostal: ['Bogotá', [Validators.minLength(3)]],
+      departamentoPostal: ['Cundinamarca', [Validators.minLength(3)]],
+      codigoPostal: ['789456', [Validators.minLength(3)]],
+      paisPostal: ['Colombia', [Validators.minLength(3)]],
     });
 
     this.registroTresForm = this.formBuilder.group({
@@ -273,7 +273,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&
-      // this.registroDosForm.valid &&
+      this.registroDosForm.valid &&
       this.registroTresForm.valid &&
       this.registroCuatroForm.valid
     ) {
@@ -506,11 +506,11 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.step == 2) {
-      console.log('this.registroDosForm', this.registroDosForm);
       this.registroDos_step = true;
-      // if (this.registroDosForm.invalid) {
-      //   return;
-      // }
+      console.log('this.registroDosForm', this.registroDosForm);
+      if (this.registroDosForm.invalid) {
+        return;
+      }
       this.step++;
       return;
     }

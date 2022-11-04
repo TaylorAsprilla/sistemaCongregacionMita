@@ -1,7 +1,7 @@
 .nested-menu {
   .list-group-item {
     cursor: pointer;
-   background-color: red;
+    background-color: red;
   }
   .nested {
     list-style-type: none;
@@ -9,15 +9,13 @@
   ul.submenu {
     display: none;
     height: 0;
-   
   }
   & .expand {
     ul.submenu {
-      display:block;
+      display: block;
       list-style-type: none;
       height: auto;
       li {
-       
         a {
           padding: 10px;
           display: block;
@@ -27,18 +25,13 @@
   }
 }
 
-
 a {
   color: #1976d2;
   text-decoration: none;
   background-color: transparent;
 }
 
-.resuelve{
+.fondo {
   background-color: transparent;
   padding-top: 10px;
 }
-
-
-
-

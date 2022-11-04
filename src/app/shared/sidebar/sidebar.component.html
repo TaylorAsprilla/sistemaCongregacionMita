@@ -27,7 +27,7 @@
   <ul id="sidebarnav">
     <!-- First level menu -->
     <li
-      class="resuelve"
+      class="fondo pointer"
       [class.active]="showMenu === sidebarnavItem.title"
       *ngFor="let sidebarnavItem of sidebarnavItems"
       [routerLinkActive]="sidebarnavItem.submenu.length != 0 ? '' : 'active'"
@@ -69,7 +69,7 @@
             *ngIf="!sidebarnavSubItem.extralink"
             (click)="addActiveClass(sidebarnavSubItem.title)"
           >
-            <!-- <i [ngClass]="[sidebarnavSubItem.icon]"></i> -->
+            <i [ngClass]="[sidebarnavSubItem.icon]"></i>
             {{ sidebarnavSubItem.title }}
           </a>
 
