@@ -1,6 +1,3 @@
-// @import 'variables';
-
-
 .form {
   width: 80%;
   text-align: center;
@@ -81,7 +78,7 @@
   -moz-box-shadow: none !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
-  border: 1px solid ;
+  border: 1px solid;
   outline-width: 0;
   transition: All 0.5s ease-in;
   -webkit-transition: All 0.5s ease-in;
@@ -104,7 +101,7 @@
 
 #msform .action-button:hover,
 #msform .action-button:focus {
-   box-shadow: 0 0 0 2px white, 0 0 0 3px #0b65c2;
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #0b65c2;
 }
 
 #msform .action-button-previous {
@@ -124,11 +121,11 @@
   box-shadow: 0 0 0 2px white, 0 0 0 3px #c5c5f1;
 }
 
-.form-check{
+.form-check {
   text-align: left;
 }
 
-input.form-check-input{
+input.form-check-input {
   width: auto !important;
 }
 
@@ -202,8 +199,8 @@ input.form-check-input{
 /*The number of the step and the connector before it = green*/
 #progressbar li.active:before,
 #progressbar li.active:after {
-   background: #0b65c2;
-   color: #ffffff;
+  background: #0b65c2;
+  color: #ffffff;
 }
 
 #progressbar li.inactive:before {
@@ -281,5 +278,51 @@ input.form-check-input{
   }
 }
 
+.obligatorio:after {
+  content: '*';
+  margin-left: 3px;
+  color: #ef5350;
+  font-weight: bold;
+}
 
+.form-check-input {
+  width: 1em;
+  height: 1em;
+  margin-top: 1.25em;
+  vertical-align: top;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  -webkit-appearance: listbox;
+  appearance: auto;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  padding: 8px !important;
+}
 
+.form-check .form-check-input {
+  float: initial;
+  margin-left: -1.5em;
+}
+
+.checkbox-lg .form-check-input {
+  top: 0.8rem;
+  scale: 1.4;
+  margin-right: 0.7rem;
+}
+
+.checkbox-lg .form-check-label {
+  padding-top: 13px;
+}
+
+.checkbox-xl .form-check-input {
+  top: 1.2rem;
+  scale: 1.7;
+  margin-right: 0.8rem;
+}
+
+.checkbox-xl .form-check-label {
+  padding-top: 19px;
+}
