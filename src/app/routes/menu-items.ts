@@ -36,13 +36,21 @@ export enum Rutas {
   VER_INFORME = 'ver-informe',
 }
 
+export enum ROLES {
+  ADMINISTRADOR = 'ADMINISTRADOR',
+  SUPERVISOR_GENERAL = 'SUPERVISOR_GENERAL',
+  SUPERVISOR_LOCAL = 'SUPERVISOR_LOCAL',
+  OBRERO = 'OBRERO',
+  USUARIO = 'USUARIO',
+}
+
 export const ROUTES: RouteInfo[] = [
   {
     path: '',
     title: 'Administración',
     icon: '',
     class: 'nav-small-cap',
-
+    role: [ROLES.ADMINISTRADOR],
     extralink: true,
     submenu: [],
   },
@@ -52,6 +60,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-home',
     class: 'has-arrow',
     extralink: false,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: Rutas.INICIO,
@@ -59,6 +68,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -67,6 +77,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -75,6 +86,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -83,6 +95,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -91,6 +104,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],
@@ -101,6 +115,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-users',
     class: 'has-arrow',
     extralink: false,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: Rutas.USUARIOS,
@@ -108,6 +123,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],
@@ -118,6 +134,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-tv',
     class: 'has-arrow',
     extralink: false,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: Rutas.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
@@ -125,6 +142,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -133,6 +151,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -141,6 +160,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],
@@ -151,6 +171,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-book',
     class: 'has-arrow',
     extralink: false,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: Rutas.CREAR_TIPO_ACTIVIDAD,
@@ -158,6 +179,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -166,6 +188,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],
@@ -175,16 +198,16 @@ export const ROUTES: RouteInfo[] = [
     title: 'Congregaciones',
     icon: 'mdi mdi-apps',
     class: 'has-arrow',
-
     extralink: false,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: Rutas.PAISES,
         title: 'Paises',
         icon: '',
         class: '',
-
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -192,8 +215,8 @@ export const ROUTES: RouteInfo[] = [
         title: 'Congregaciones',
         icon: '',
         class: '',
-
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -201,8 +224,8 @@ export const ROUTES: RouteInfo[] = [
         title: 'Campos',
         icon: '',
         class: '',
-
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],
@@ -212,8 +235,8 @@ export const ROUTES: RouteInfo[] = [
     title: 'Infomes',
     icon: '',
     class: 'nav-small-cap',
-
     extralink: true,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [],
   },
   {
@@ -221,8 +244,8 @@ export const ROUTES: RouteInfo[] = [
     title: 'Crear Informe',
     icon: 'fa fa-book',
     class: 'has-arrow',
-
     extralink: false,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: Rutas.INFORME,
@@ -230,6 +253,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -238,6 +262,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],
@@ -247,8 +272,8 @@ export const ROUTES: RouteInfo[] = [
     title: 'Live',
     icon: '',
     class: 'nav-small-cap',
-
     extralink: true,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [],
   },
   {
@@ -257,6 +282,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-tv',
     class: 'has-arrow',
     extralink: false,
+    role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: Rutas.SERVICIOS_Y_VIGILIAS,
@@ -264,6 +290,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -272,6 +299,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: 'has-arrow',
         extralink: false,
+        role: [ROLES.ADMINISTRADOR],
         submenu: [
           {
             path: Rutas.BIBLIOTECA_SERVICIOS,
@@ -279,6 +307,7 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
+            role: [ROLES.ADMINISTRADOR],
             submenu: [],
           },
           {
@@ -287,6 +316,7 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
+            role: [ROLES.ADMINISTRADOR],
             submenu: [],
           },
         ],

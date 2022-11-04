@@ -1,4 +1,4 @@
-import { ROLES } from '../enum/roles.enum';
+import { ROLES } from 'src/app/routes/menu-items';
 
 // Sidebar route metadata
 export interface RouteInfo {

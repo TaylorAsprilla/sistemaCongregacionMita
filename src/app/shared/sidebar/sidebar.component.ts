@@ -50,6 +50,7 @@ export class SidebarComponent implements OnInit {
   // End open close
   ngOnInit() {
     this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
+    console.log('Menu', this.sidebarnavItems);
     this.usuario = this.usuarioService.usuario;
   }
 
