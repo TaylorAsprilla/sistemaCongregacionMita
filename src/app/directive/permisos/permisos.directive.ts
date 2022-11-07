@@ -18,15 +18,10 @@ export class PermisosDirective {
   constructor(
     private activatedRoute: ActivatedRoute,
     private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private usuarioService: UsuarioService
+    private viewContainer: ViewContainerRef
   ) {}
 
-  ngOnInit(): void {
-    // this.usuarioService.usuarioId.subscribe((usuario: ListarUsuario) => {
-    //   this.usuarios = usuario.usuarios;
-    // });
-  }
+  ngOnInit(): void {}
 
   @Input()
   set appPermisos(val: Array<string>) {
