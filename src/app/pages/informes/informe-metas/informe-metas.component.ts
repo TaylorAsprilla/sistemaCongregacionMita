@@ -74,6 +74,8 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
   // public tipoStatus_id: number,
   // public comentarios?: string
 
+  //comentado por error
+
   // buscarMeta(id: string) {
   //   if (id !== 'nuevo') {
   //     this.metaService
