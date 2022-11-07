@@ -24,6 +24,8 @@ export class InformeComponent implements OnInit {
     this.activatedRoute.data.subscribe((data: { informes: InformeModel[] }) => {
       this.informes = data.informes;
     });
+
+    this.calcularDias();
   }
 
   //countDownDate = new Date('july 1, 2022 15:37:25').getTime();
@@ -63,7 +65,8 @@ export class InformeComponent implements OnInit {
 
   demo: any;
   display: any;
-  x = setInterval(() => {
+
+  calcularDias() {
     var now = new Date().getTime();
     //var now = this.countDownDate;
     this.escogerTrimestre(this.trimestreActual);
@@ -75,5 +78,5 @@ export class InformeComponent implements OnInit {
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
     this.demo = days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
     this.display = days;
-  });
+  }
 }

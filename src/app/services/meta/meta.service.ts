@@ -24,11 +24,23 @@ export class MetaService {
     };
   }
 
-  getMeta() {
+  getMetas() {
     return this.httpClient
       .get(`${base_url}/meta`, this.headers)
       .pipe(map((meta: { ok: boolean; metas: MetaModel[] }) => meta.metas));
   }
+
+  getMeta(id: number) {
+    return this.httpClient
+      .get(`${base_url}/meta/${id}`, this.headers)
+      .pipe(map((meta: { ok: boolean; meta: MetaModel[] }) => meta.meta));
+  }
+
+  // getPais(id: number) {
+  //   return this.httpClient
+  //     .get(`${base_url}/pais/${id}`, this.headers)
+  //     .pipe(map((pais: { ok: boolean; pais: PaisModel; id: number }) => pais.pais));
+  // }
 
   crearMeta(meta: MetaModel) {
     return this.httpClient.post(`${base_url}/meta`, meta, this.headers);

@@ -122,10 +122,10 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
         .pipe(delay(100))
         .subscribe(
           (paisEncontrado: PaisModel) => {
-            const { pais, idDivisa } = paisEncontrado;
+            const { pais, idDivisa, idObreroEncargado } = paisEncontrado;
             this.paisSeleccionado = paisEncontrado;
 
-            this.paisForm.setValue({ pais, idDivisa });
+            this.paisForm.setValue({ pais, idDivisa, idObreroEncargado });
           },
           (error) => {
             let errores = error.error.errors;

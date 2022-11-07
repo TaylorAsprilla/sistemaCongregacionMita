@@ -87,6 +87,10 @@
               <td (change)="seleccionarTrimestre()" *ngFor="let list of actividad | keys">{{ actividad[list] }}</td>
             </tr>
           </tbody>
+          <tr *ngIf="sumatoriaVisible">
+            <td class="bold">Total de dinero recaudado:</td>
+            <td>{{ sumatoriaServicios }}</td>
+          </tr>
         </table>
 
         <p class="heading spacingHeading">B. RESUMEN DE VISITAS REALIZADAS A LOS/AS FELIGRESES:</p>
@@ -132,9 +136,10 @@
               <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
             </tr>
           </tbody>
-          <tr>
+
+          <tr *ngIf="sumatoriaVisible">
             <td class="bold">Total de dinero recaudado:</td>
-            <td>{{ sumatoriaActividadesEspeciales }}</td>
+            <td>{{ sumatoriaEspeciales }}</td>
           </tr>
         </table>
 
@@ -151,6 +156,10 @@
               <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
             </tr>
           </tbody>
+          <tr *ngIf="sumatoriaVisible">
+            <td class="bold">Total de dinero recaudado:</td>
+            <td>{{ sumatoriaEspirituales }}</td>
+          </tr>
         </table>
 
         <p class="heading spacingHeading">F. REUNIONES:</p>
@@ -166,6 +175,10 @@
               <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
             </tr>
           </tbody>
+          <tr *ngIf="sumatoriaVisible">
+            <td class="bold">Total de dinero recaudado:</td>
+            <td>{{ sumatoriaReuniones }}</td>
+          </tr>
         </table>
 
         <p class="heading spacingHeading">G. ASPECTOS CONTABLES:</p>
