@@ -34,8 +34,6 @@ export interface RegisterFormInterface {
   ministerios: MinisterioModel[];
   voluntariados: VoluntariadoModel[];
   congregacion: CongregacionInterfase;
-  tipoDocumento_id: number;
-  numeroDocumento: string;
   vacuna_id: number;
   dosis_id: number;
   terminos: boolean;

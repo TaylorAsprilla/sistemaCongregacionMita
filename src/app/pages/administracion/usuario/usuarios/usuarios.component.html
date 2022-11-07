@@ -2,11 +2,11 @@
 
 <div class="card animate__animated animate__fadeIn" *ngIf="!cargando">
   <div class="card-header">
-    <h3 class="card-title float-left">Total de usuarios registrados: {{ totalUsuarios }}</h3>
+    <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
 
     <div class="col">
-      <div class="text-right mb-4">
-        <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Usuario Nuevo </a>
+      <div class="text-right mb-4 float-end">
+        <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
       </div>
     </div>
 
@@ -21,20 +21,24 @@
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
+            <th class="w100"># Mita</th>
             <th class="w100">Foto</th>
-            <th>Nombre</th>
+            <th class="w250">Nombre</th>
             <th>Correo</th>
             <th class="w100">Fecha de Nacimiento</th>
             <th>Teléfono Casa</th>
             <th>Celular</th>
             <th class="w100">Congregación</th>
-            <th>Nacionalidad</th>
+            <th class="w100">Nacionalidad</th>
             <th class="w100">Estado</th>
-            <th class="w100">Acciones</th>
+            <th class="w280">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let usuario of usuarios">
+            <td>
+              {{ usuario.id }}
+            </td>
             <td class="text-center">
               <img src="assets/images/users/perfil.png" alt="user" class="avatar pointer" />
             </td>
@@ -90,10 +94,17 @@
                 (click)="activarUsuario(usuario)"
                 ><i class="fas fa-check-square"></i
               ></a>
+              <a data-toggle="tooltip" data-original-title="trascendió" class="btn bg-warning ml-1">
+                <i class="fa-solid fa-x"></i
+              ></a>
+              <a data-toggle="tooltip" data-original-title="traslado" class="btn bg-success ml-1">
+                <i class="fa fa-right-left"></i
+              ></a>
             </td>
           </tr>
         </tbody>
         <tfoot>
+          <th class="w100"># Mita</th>
           <th class="w100">Foto</th>
           <th>Nombre</th>
           <th>Correo</th>

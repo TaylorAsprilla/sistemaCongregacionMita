@@ -44,7 +44,6 @@ import { MinisterioResolver } from 'src/app/resolvers/ministerio/ministerio.reso
 import { VoluntariadoResolver } from 'src/app/resolvers/voluntariado/voluntariado.resolver';
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
-import { TipoDocumentoResolver } from 'src/app/resolvers/tipo-documento/tipo-documento.resolver';
 import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
 import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
@@ -54,12 +53,20 @@ import { ConfigurarServiciosYVigiliasComponent } from 'src/app/pages/multimedia/
 import { LinkEventosResolver } from 'src/app/resolvers/link-eventos/link-eventos.resolver';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
+import { ConfirmacionDeRegistroComponent } from 'src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component';
+import { ObreroResolver } from 'src/app/resolvers/obrero/obrero.resolver';
 
 const childRoutes: Routes = [
   {
     path: 'inicio',
     component: InicioComponent,
     data: { titulo: 'Censo' },
+    resolve: {
+      congregacion: CongregacionResolver,
+      ministerio: MinisterioResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
+    },
   },
 
   // Administración
@@ -67,7 +74,12 @@ const childRoutes: Routes = [
     path: Rutas.USUARIOS,
     component: UsuariosComponent,
     data: { titulo: 'Usuarios Registrados' },
-    resolve: { nacionalidad: NacionalidadResolver, pais: PaisResolver, campo: CampoResolver },
+    resolve: {
+      congregacion: CongregacionResolver,
+      ministerio: MinisterioResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
+    },
   },
 
   {
@@ -87,7 +99,6 @@ const childRoutes: Routes = [
       voluntariado: VoluntariadoResolver,
       pais: PaisResolver,
       campo: CampoResolver,
-      tipoDocumento: TipoDocumentoResolver,
       vacuna: VacunaResolver,
       dosis: DosisResolver,
     },
@@ -97,6 +108,11 @@ const childRoutes: Routes = [
     path: Rutas.REGISTRAR_USUARIO,
     component: RegistrarUsuarioComponent,
     resolve: { nacionalidad: NacionalidadResolver },
+  },
+
+  {
+    path: `${Rutas.CONFIRMAR_REGISTRO}/:id`,
+    component: ConfirmacionDeRegistroComponent,
   },
   {
     path: Rutas.MINISTERIOS,
@@ -108,30 +124,35 @@ const childRoutes: Routes = [
     path: Rutas.PAISES,
     component: PaisesComponent,
     data: { titulo: 'Paises' },
-    resolve: { divisas: DivisasResolver },
+    resolve: { divisas: DivisasResolver, obrero: ObreroResolver },
   },
   {
     path: `${Rutas.PAISES}/:id`,
     component: CrearPaisComponent,
+    resolve: { divisas: DivisasResolver, obrero: ObreroResolver },
     data: { titulo: 'Crear Pais' },
   },
   {
     path: Rutas.CONGREGACIONES,
     component: CongregacionesComponent,
+    resolve: { divisas: DivisasResolver, obrero: ObreroResolver, pais: PaisResolver },
     data: { titulo: 'Congregaciones' },
   },
   {
     path: `${Rutas.CONGREGACIONES}/:id`,
     component: CrearCongregacionComponent,
+    resolve: { divisas: DivisasResolver, obrero: ObreroResolver, pais: PaisResolver },
   },
   {
     path: Rutas.CAMPOS,
     component: CamposComponent,
+    resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
     data: { titulo: 'Campos' },
   },
   {
     path: `${Rutas.CAMPOS}/:id`,
     component: CrearCampoComponent,
+    resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
   },
 
   // Perfil
@@ -197,7 +218,11 @@ const childRoutes: Routes = [
   {
     path: Rutas.VER_INFORME,
     component: VerInformeComponent,
-    resolve: { seccionInforme: SeccionInformeResolver, congregacion: CongregacionResolver },
+    resolve: {
+      seccionInforme: SeccionInformeResolver,
+      congregacion: CongregacionResolver,
+      obrero: ObreroResolver,
+    },
   },
   {
     path: `${Rutas.SOLICITUD_MULTIMEDIA}/:id`,

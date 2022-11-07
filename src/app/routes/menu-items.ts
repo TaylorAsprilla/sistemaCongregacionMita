@@ -7,6 +7,7 @@ export enum Rutas {
   BIBLIOTECA_VIGILIAS = 'biblioteca-vigilias',
   CAMPOS = 'campos',
   CONFIGURAR_SERVICIOS_Y_VIGILIAS = 'configurar-servicios-y-vigilias',
+  CONFIRMAR_REGISTRO = 'confirmar-registro',
   CONGREGACION = 'congregacion',
   CONGREGACIONES = 'congregaciones',
   CREAR_TIPO_ACTIVIDAD = 'crear-tipo-actividad',
@@ -103,7 +104,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: Rutas.USUARIOS,
-        title: 'Usuarios',
+        title: 'Feligreses',
         icon: '',
         class: '',
         extralink: false,

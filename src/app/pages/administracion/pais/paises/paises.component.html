@@ -5,26 +5,26 @@
   <div class="card animate__animated animate__fadeIn animate__slow" *ngIf="!cargando">
     <div class="card-header">
       <div class="row">
-        <div class="col-8">
+        <div class="col-8 px-4 pt-4">
           <h3 class="card-title">Total de Paises ({{ paises.length }})</h3>
           <p>Paises registrados en la aplicación</p>
         </div>
         <div class="col">
-          <div class="text-right">
+          <div class="float-end p-4">
             <a class="btn btn-primary" (click)="crearPais()"> <i class="fas fa-plus"></i> Crear Pais </a>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card-body">
+    <div class="card-body mx-auto">
       <table class="table table-bordered table-striped table-responsive">
         <thead>
           <tr>
             <th class="w100">item</th>
-            <th class="w1200">Nombre</th>
-            <th>Obrero Encargado</th>
-            <th class="w1200">Divisa</th>
+            <th class="w400">Nombre</th>
+            <th class="w400">Obrero Encargado</th>
+            <th>Divisa</th>
             <th class="w200">Estado</th>
             <th class="w200">Acciones</th>
           </tr>
@@ -34,7 +34,7 @@
             <td>{{ i + 1 }}</td>
             <td>{{ pais.pais }}</td>
 
-            <td>{{ pais.idObreroEncargado }}</td>
+            <td>{{ buscarObrero(pais.idObreroEncargado) }}</td>
 
             <td>{{ buscarDivisa(pais.idDivisa) }}</td>
 
@@ -74,9 +74,9 @@
         <tfoot>
           <tr>
             <th class="w100">item</th>
-            <th class="w1200">Nombre</th>
+            <th>Nombre</th>
             <th>Obrero Encargado</th>
-            <th class="w1200">Divisa</th>
+            <th>Divisa</th>
             <th class="w200">Estado</th>
             <th class="w200">Acciones</th>
           </tr>

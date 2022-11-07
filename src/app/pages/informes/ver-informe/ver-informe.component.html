@@ -22,8 +22,9 @@
       <label>Seleccione un Obrero</label>
       <select [(ngModel)]="obreroSeleccionado" class="form-control" (change)="seleccionarObrero(obreroSeleccionado)">
         <option value="" disabled>Obrero no seleccionado</option>
-        <option *ngFor="let usuario of usuarios" [ngValue]="usuario">
-          {{ usuario.primerNombre + ' ' + usuario.primerApellido }}
+        <option *ngFor="let obrero of obreros" [ngValue]="obrero">
+          {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
+          {{ obrero.segundoApellido }}
         </option>
       </select>
     </div>
@@ -62,7 +63,10 @@
             <td>
               <p class="heading">Obrero/a:</p>
             </td>
-            <td class="info">{{ obreroSeleccionado?.primerNombre }} {{ obreroSeleccionado?.primerApellido }}</td>
+            <td class="info">
+              {{ obreroSeleccionado?.primerNombre }} {{ obreroSeleccionado?.segundoNombre }}
+              {{ obreroSeleccionado?.primerApellido }} {{ obreroSeleccionado?.segundoApellido }}
+            </td>
           </tr>
           <tr>
             <td>

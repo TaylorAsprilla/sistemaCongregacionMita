@@ -19,6 +19,5 @@ export class VigiliasComponent implements OnInit {
     });
 
     this.vigilias = this.linkEventos.filter((vigilia) => vigilia.tipoEvento_id === TIPOEVENTO.VIGILIA);
-    console.log('Vigilias', this.vigilias);
   }
 }

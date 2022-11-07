@@ -4,25 +4,20 @@
   </div>
   <div class="row">
     <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
-      <h3>Servicios</h3>
-      <!-- <youtube-player [videoId]="servicio" suggestedQuality="hd1080" [height]="320" [width]="600"> </youtube-player> -->
-      <iframe
-        title="vimeo-player"
-        src="https://player.vimeo.com/video/249186549?h=97b13c4a1b"
-        width="640"
-        height="360"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
+      <h3>{{ servicio.titulo }}</h3>
+      <youtube-player [videoId]="servicio.link" suggestedQuality="hd1080" [height]="320" [width]="600">
+      </youtube-player>
     </div>
-
     <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
-      <h3>Vígilia</h3>
-      <youtube-player [videoId]="vigilia" suggestedQuality="hd1080" [height]="320" [width]="600"> </youtube-player>
+      <h3>{{ vigilia.titulo }}</h3>
+      <youtube-player [videoId]="vigilia.link" suggestedQuality="hd1080" [height]="320" [width]="600"> </youtube-player>
     </div>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
+      <h3>Servicios - Vimeo</h3>
 
-    <!-- <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
-      <h3>Vígilia</h3>
       <iframe
         title="vimeo-player"
         src="https://player.vimeo.com/video/249186549?h=97b13c4a1b"
@@ -31,6 +26,6 @@
         frameborder="0"
         allowfullscreen
       ></iframe>
-    </div> -->
+    </div>
   </div>
 </div>

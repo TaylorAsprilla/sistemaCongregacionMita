@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { SolicitudMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-solicitud-multimedia',
@@ -34,5 +35,17 @@ export class SolicitudMultimediaComponent implements OnInit {
   crearSolicitud() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.SOLICITUD_MULTIMEDIA}/${nuevo}`);
+  }
+
+  aceptarSolicitud() {
+    Swal.fire('Solicitud Aprobada', 'La solicitud fue aprobada exitosamente', 'success');
+  }
+
+  deshabilitarSolicitud() {
+    Swal.fire('Solicitud Deshabilitada', 'La solicitud se deshabilito exitosamente', 'success');
+  }
+
+  desAprobarSolicitud() {
+    Swal.fire('No aprobado', 'La solicitud no se aprobó', 'success');
   }
 }

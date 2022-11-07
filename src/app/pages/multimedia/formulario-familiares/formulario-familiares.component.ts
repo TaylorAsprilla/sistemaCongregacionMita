@@ -86,7 +86,6 @@ export class FormularioFamiliaresComponent implements OnInit {
 
   crearSolicitud() {
     const value = this.familiaresForm.value;
-    console.log('Familiares', value);
     this.valoresFormulario.emit(value);
   }
 }

@@ -1,12 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  UntypedFormArray,
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
@@ -20,7 +13,6 @@ import { GeneroModel } from 'src/app/core/models/genero.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
-import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { Rutas } from 'src/app/routes/menu-items';
@@ -58,7 +50,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   currentDate = moment();
 
   public usuarios: UsuarioModel[] = [];
-  public tipoDocumentos: TipoDocumentoModel[] = [];
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
   public rolCasa: RolCasaModel[] = [];
@@ -115,7 +106,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private usuarioService: UsuarioService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -145,7 +136,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         voluntariado: VoluntariadoModel[];
         pais: PaisModel[];
         campo: CampoModel[];
-        tipoDocumento: TipoDocumentoModel[];
+
         vacuna: VacunaModel[];
         dosis: DosisModel[];
       }) => {
@@ -164,7 +155,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.campos = data.campo.filter((campo) => campo.estado === true);
         this.vacunas = data.vacuna;
         this.dosis = data.dosis;
-        this.tipoDocumentos = data.tipoDocumento;
       }
     );
 
@@ -183,13 +173,13 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   crearFormularios() {
     this.registroUnoForm = this.formBuilder.group({
-      fechaNacimiento: ['2022-07-27', [Validators.required]],
-      primerNombre: ['Taylor', [Validators.required, Validators.minLength(3)]],
-      segundoNombre: ['Alirio', [Validators.minLength(3)]],
-      primerApellido: ['Asprilla', [Validators.required, Validators.minLength(3)]],
-      segundoApellido: ['Bohórquez', [Validators.minLength(3)]],
-      apodo: ['Tay', [Validators.minLength(3)]],
-      email: ['taylor.asprilla@gmail.com', [Validators.email]],
+      fechaNacimiento: ['1989-01-01', [Validators.required]],
+      primerNombre: ['Maria', [Validators.required, Validators.minLength(3)]],
+      segundoNombre: ['Juliana', [Validators.minLength(3)]],
+      primerApellido: ['Mosquera', [Validators.required, Validators.minLength(3)]],
+      segundoApellido: ['Martinez', [Validators.minLength(3)]],
+      apodo: ['Julianita', [Validators.minLength(3)]],
+      email: ['juliana@gmail.com', [Validators.email]],
       genero_id: ['1', [Validators.required]],
       estadoCivil_id: ['1', [Validators.required]],
     });
@@ -197,49 +187,47 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.registroDosForm = this.formBuilder.group({
       nacionalidad: ['Colombia', [Validators.required, Validators.minLength(3)]],
       rolCasa_id: ['1', [Validators.required]],
-      numeroCelular: ['+573118873332', { updateOn: 'blur' }, [Validators.required, Validators.minLength(3)]],
-      telefonoCasa: ['+17879343120', [Validators.minLength(3)]],
-      direccionResidencia: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(3)]],
+      numeroCelular: ['+573118874747', [Validators.required, Validators.minLength(3)]],
+      telefonoCasa: ['+6012035614', [Validators.minLength(3)]],
+      direccionResidencia: ['Calle 13 # 14 10', [Validators.required, Validators.minLength(3)]],
       ciudadResidencia: ['Bogotá', [Validators.required, Validators.minLength(3)]],
-      departamentoResidencia: ['Cundinamarca', [Validators.minLength(5)]],
-      codigoPostalResidencia: ['100123', [Validators.minLength(3)]],
-      paisResidencia: ['Puerto Rico', [Validators.required, Validators.minLength(3)]],
-      direccionPostal: ['Calle 12 # 17 - 34', [Validators.required, Validators.minLength(5)]],
-      ciudadPostal: ['Bogotá', [Validators.required, Validators.minLength(3)]],
+      departamentoResidencia: ['Cundinamarca', [Validators.minLength(3)]],
+      codigoPostalResidencia: ['789456', [Validators.minLength(3)]],
+      paisResidencia: ['Colombia', [Validators.required, Validators.minLength(3)]],
+      direccionPostal: ['Calle 14 # 45 78', [Validators.minLength(5)]],
+      ciudadPostal: ['Bogotá', [Validators.minLength(3)]],
       departamentoPostal: ['Cundinamarca', [Validators.minLength(3)]],
-      codigoPostal: ['12300', [Validators.minLength(3)]],
-      paisPostal: ['Colombia', [Validators.required, Validators.minLength(3)]],
+      codigoPostal: ['789456', [Validators.minLength(3)]],
+      paisPostal: ['Colombia', [Validators.minLength(3)]],
     });
 
     this.registroTresForm = this.formBuilder.group({
-      fuenteIngresos: new UntypedFormArray([]),
-      ingresoMensual: ['1250000', []],
-      gradoAcademico_id: ['2', [Validators.required]],
-      tipoEmpleo_id: ['2', [Validators.required]],
-      especializacionEmpleo: ['Ingeniero', [Validators.minLength(3)]],
+      fuenteIngresos: new FormArray([]),
+      ingresoMensual: ['', []],
+      gradoAcademico_id: ['', [Validators.required]],
+      tipoEmpleo_id: ['', [Validators.required]],
+      especializacionEmpleo: ['', [Validators.minLength(3)]],
     });
 
     this.registroCuatroForm = this.formBuilder.group({
-      tipoMiembro_id: ['2', [Validators.required]],
+      tipoMiembro_id: ['', [Validators.required]],
       congregacion_id: ['', [Validators.required]],
       campo_id: ['', []],
-      esJoven: ['1', [Validators.required]],
-      ejerceMinisterio: [, [Validators.required]],
-      esVoluntario: [, [Validators.required]],
-      ministerio: new UntypedFormArray([]),
-      voluntariado: new UntypedFormArray([]),
+      esJoven: ['', [Validators.required]],
+      ejerceMinisterio: ['', [Validators.required]],
+      esVoluntario: ['', [Validators.required]],
+      ministerio: new FormArray([]),
+      voluntariado: new FormArray([]),
       congregacionPais_id: ['', [Validators.required]],
-      tipoDocumento_id: ['', []],
       vacuna_id: ['', [Validators.required]],
       dosis_id: ['', [Validators.required]],
-      numeroDocumento: ['', [Validators.minLength(4)]],
     });
   }
 
   onCheckboxFuenteDeIngresosChange(event: any) {
-    const selectedFuenteDeIngresos = this.registroTresForm.controls['fuenteIngresos'] as UntypedFormArray;
+    const selectedFuenteDeIngresos = this.registroTresForm.controls['fuenteIngresos'] as FormArray;
     if (event.target.checked) {
-      selectedFuenteDeIngresos.push(new UntypedFormControl(event.target.value));
+      selectedFuenteDeIngresos.push(new FormControl(event.target.value));
     } else {
       const index = selectedFuenteDeIngresos.controls.findIndex((x) => x.value === event.target.value);
       selectedFuenteDeIngresos.removeAt(index);
@@ -247,9 +235,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   onCheckboxMinisteriosChange(event: any) {
-    const selectedMinisterios = this.registroCuatroForm.controls['ministerio'] as UntypedFormArray;
+    const selectedMinisterios = this.registroCuatroForm.controls['ministerio'] as FormArray;
     if (event.target.checked) {
-      selectedMinisterios.push(new UntypedFormControl(event.target.value));
+      selectedMinisterios.push(new FormControl(event.target.value));
     } else {
       const index = selectedMinisterios.controls.findIndex((x) => x.value === event.target.value);
       selectedMinisterios.removeAt(index);
@@ -257,9 +245,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   onCheckboxVoluntariadosChange(event: any) {
-    const selectedVoluntariados = this.registroCuatroForm.controls['voluntariado'] as UntypedFormArray;
+    const selectedVoluntariados = this.registroCuatroForm.controls['voluntariado'] as FormArray;
     if (event.target.checked) {
-      selectedVoluntariados.push(new UntypedFormControl(event.target.value));
+      selectedVoluntariados.push(new FormControl(event.target.value));
     } else {
       const index = selectedVoluntariados.controls.findIndex((x) => x.value === event.target.value);
       selectedVoluntariados.removeAt(index);
@@ -302,7 +290,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         primerApellido: informacionFormulario.primerApellido,
         segundoApellido: informacionFormulario.segundoApellido ? informacionFormulario.segundoApellido : '',
         apodo: informacionFormulario.apodo ? informacionFormulario.apodo : '',
-        numeroDocumento: informacionFormulario.numeroDocumento ? informacionFormulario.numeroDocumento : '',
         nacionalidad_id: this.buscarIDNacionalidad(informacionFormulario.nacionalidad),
         email: informacionFormulario.email ? informacionFormulario.email : '',
         numeroCelular: informacionFormulario.numeroCelular?.internationalNumber,
@@ -346,13 +333,15 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         },
         terminos: false,
         rolCasa_id: informacionFormulario.rolCasa_id,
-        tipoDocumento_id: informacionFormulario.tipoDocumento_id ? informacionFormulario.tipoDocumento_id : '',
       };
 
       this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
         (usuarioCreado: any) => {
           Swal.fire('Usuario creado', 'correctamente', 'success');
-          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}`);
+
+          this.router.navigateByUrl(
+            `${Rutas.SISTEMA}/${Rutas.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
+          );
         },
         (error) => {
           let errores = error.error.errors;
@@ -400,13 +389,10 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
               dosis_id,
               segundoNombre,
               segundoApellido,
-              numeroDocumento,
               telefonoCasa,
-
               login,
               password,
               foto,
-              tipoDocumento_id,
               rolCasa_id,
               nacionalidad_id,
             } = usuarioEncontrado.usuario;
@@ -429,13 +415,10 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
               dosis_id,
               segundoNombre,
               segundoApellido,
-              numeroDocumento,
               telefonoCasa,
-
               login,
               password,
               foto,
-              tipoDocumento_id,
               rolCasa_id,
               nacionalidad_id,
             });
@@ -524,6 +507,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     }
     if (this.step == 2) {
       this.registroDos_step = true;
+      console.log('this.registroDosForm', this.registroDosForm);
       if (this.registroDosForm.invalid) {
         return;
       }

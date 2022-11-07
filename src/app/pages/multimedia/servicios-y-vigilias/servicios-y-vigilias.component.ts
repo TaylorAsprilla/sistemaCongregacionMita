@@ -10,8 +10,8 @@ import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
 })
 export class ServiciosYVigiliasComponent implements OnInit {
   linkEventos: LinkEventoModel[] = [];
-  servicio: string;
-  vigilia: string;
+  servicio: LinkEventoModel;
+  vigilia: LinkEventoModel;
 
   constructor(private activatedRoute: ActivatedRoute) {}
 
@@ -25,9 +25,7 @@ export class ServiciosYVigiliasComponent implements OnInit {
     tag.src = 'https://www.youtube.com/iframe_api';
     document.body.appendChild(tag);
 
-    this.servicio = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 1).slice(-1)[0].link;
-    this.vigilia = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 2).slice(-1)[0].link;
-
-    console.log(this.servicio[0].link);
+    this.servicio = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 1)[0];
+    this.vigilia = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 2)[0];
   }
 }
