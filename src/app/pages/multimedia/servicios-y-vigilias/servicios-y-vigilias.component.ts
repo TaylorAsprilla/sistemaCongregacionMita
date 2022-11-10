@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LinkEventoModel } from 'src/app/core/models/link-evento.model';
 import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-servicios-y-vigilias',
@@ -12,10 +13,12 @@ export class ServiciosYVigiliasComponent implements OnInit {
   linkEventos: LinkEventoModel[] = [];
   servicio: LinkEventoModel;
   vigilia: LinkEventoModel;
+  vimeo: string;
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(private activatedRoute: ActivatedRoute, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
+    this.vimeo = 'https://vimeo.com/event/2594553/embed';
     this.activatedRoute.data.subscribe((data: { linkEventos: LinkEventoModel[] }) => {
       this.linkEventos = data.linkEventos;
     });
@@ -27,5 +30,14 @@ export class ServiciosYVigiliasComponent implements OnInit {
 
     this.servicio = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 1)[0];
     this.vigilia = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 2)[0];
+
+    // const player = new Player('handstick', {
+    //   id: 19231868,
+    //   width: 640,
+    // });
+
+    // player.on('play', function () {
+    //   console.log('played the video!');
+    // });
   }
 }
