@@ -76,37 +76,37 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
 
   //comentado por error
 
-  // buscarMeta(id: string) {
-  //   if (id !== 'nuevo') {
-  //     this.metaService
-  //       .getMeta(Number(id))
-  //       .pipe(delay(100))
-  //       .subscribe(
-  //         (metaEncontrada: MetaModel) => {
-  //           const { meta, fecha, accion, tipoStatus_id, comentarios } = metaEncontrada;
-  //           this.metaSeleccionada = metaEncontrada;
+  buscarMeta(id: string) {
+    if (id !== 'nuevo') {
+      this.metaService
+        .getMeta(Number(id))
+        .pipe(delay(100))
+        .subscribe(
+          (metaEncontrada: MetaModel) => {
+            const { meta, fecha, accion, tipoStatus_id, comentarios, informe_id } = metaEncontrada;
+            this.metaSeleccionada = metaEncontrada;
 
-  //           this.metaForm.setValue({ meta, fecha, accion, tipoStatus_id, comentarios });
-  //         },
-  //         (error) => {
-  //           let errores = error.error.errors;
-  //           let listaErrores = [];
+            this.metaForm.setValue({ meta, fecha, accion, tipoStatus_id, comentarios, informe_id });
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
 
-  //           Object.entries(errores).forEach(([key, value]) => {
-  //             listaErrores.push('° ' + value['msg'] + '<br>');
-  //           });
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
 
-  //           Swal.fire({
-  //             title: 'Congregacion',
-  //             icon: 'error',
-  //             html: `${listaErrores.join('')}`,
-  //           });
+            Swal.fire({
+              title: 'Congregacion',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
 
-  //           return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.METAS}`);
-  //         }
-  //       );
-  //   }
-  // }
+            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.METAS}`);
+          }
+        );
+    }
+  }
 
   guardarMeta() {
     const informeMeta = this.metaForm.value;
