@@ -19,6 +19,7 @@
                 />
               </div>
             </div>
+
             <div class="form-group row">
               <label for="inputFecha" class="col-sm-5 col-form-label">Fecha a completarse o completado</label>
               <div class="col-sm-7">
@@ -85,9 +86,9 @@
       <div class="card-body">
         <div *ngFor="let meta of metas">
           <a class="pointer">
-            <!-- <li (click)="buscarPais(pais.id.toString())"> -->
-            <span class="font-medium">{{ meta.accion }}</span>
-            <!-- </li> -->
+            <li (click)="buscarMeta(meta.id.toString())">
+              <span class="font-medium">{{ meta.accion }}</span>
+            </li>
           </a>
         </div>
       </div>

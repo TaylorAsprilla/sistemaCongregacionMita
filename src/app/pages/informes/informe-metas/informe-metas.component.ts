@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ObjectUnsubscribedError, Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { Rutas } from 'src/app/routes/menu-items';
@@ -60,9 +61,51 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
   }
 
   cargarMetas() {
-    this.metaSubscription = this.metaService.getMeta().subscribe((meta: MetaModel[]) => {
+    this.metaSubscription = this.metaService.getMetas().subscribe((meta: MetaModel[]) => {
       this.metas = meta;
     });
+  }
+
+  // public id: number,
+  // public meta: string,
+  // public fecha: Date,
+  // public accion: string,
+  // public informe_id: number,
+  // public tipoStatus_id: number,
+  // public comentarios?: string
+
+  //comentado por error
+
+  buscarMeta(id: string) {
+    if (id !== 'nuevo') {
+      this.metaService
+        .getMeta(Number(id))
+        .pipe(delay(100))
+        .subscribe(
+          (metaEncontrada: MetaModel) => {
+            const { meta, fecha, accion, tipoStatus_id, comentarios, informe_id } = metaEncontrada;
+            this.metaSeleccionada = metaEncontrada;
+
+            this.metaForm.setValue({ meta, fecha, accion, tipoStatus_id, comentarios, informe_id });
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Congregacion',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+
+            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.METAS}`);
+          }
+        );
+    }
   }
 
   guardarMeta() {

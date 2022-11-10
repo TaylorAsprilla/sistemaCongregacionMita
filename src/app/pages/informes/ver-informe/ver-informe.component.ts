@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
@@ -47,12 +47,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public obreroSeleccionado: UsuarioModel;
   public paisObrero: string;
 
-  public sumatoriaActividadesEspeciales = 0;
-
-  items = [
-    { name: 'jean', surname: 'kruger' },
-    { name: 'bobby', surname: 'marais' },
-  ];
+  public sumatoriaEspeciales: number = 0;
+  public sumatoriaEspirituales: number = 0;
+  public sumatoriaServicios: number = 0;
+  public sumatoriaReuniones: number = 0;
 
   public usuarios: UsuarioModel[] = [];
   public usuarioSubscription: Subscription;
@@ -68,6 +66,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public tipoActividades: TipoActividadModel[] = [];
 
   public cargando: boolean = true;
+
+  public sumatoriaVisible: boolean = false;
 
   // desglosar informacion de informe
   informe: InformeModel[];
@@ -270,9 +270,11 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   cargarUsuarios() {
     this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
-      this.usuarios = usuarios.filter((usuario: UsuarioModel) => console.log(usuario));
-      //  usuario.usuarioMinisterio.ministerio === 'Obrero');
+      this.usuarios = usuarios.filter((usuario: UsuarioModel) => usuario.estado == true);
+
       // falta filtrar por ministerio me los devuelve undefined
+
+      console.log(usuarios);
     });
   }
 
@@ -320,8 +322,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.fraccion = '4to Trimestre del año';
     }
     this.filtrarInformacionInforme();
-    this.sumatoriaActividadesEspeciales = this.sumatoriaActividades();
-    console.log('Total ' + this.sumatoriaActividadesEspeciales);
+    this.sumatoriaEspeciales = this.sumatoriaActividades(this.especiales);
+    this.sumatoriaEspirituales = this.sumatoriaActividades(this.espirituales);
+    this.sumatoriaServicios = this.sumatoriaActividades(this.servicios);
+    this.sumatoriaReuniones = this.sumatoriaActividades(this.reuniones);
   }
 
   filtrarInformacionInforme() {
@@ -341,13 +345,14 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     }
   }
 
-  sumatoriaActividades() {
+  sumatoriaActividades(actividades) {
     var total = 0;
-    this.especiales.forEach((actividad) => {
+    actividades.forEach((actividad) => {
       total += +actividad.cantidadRecaudada;
       // console.log(typeof actividad.cantidadRecaudada);
       // console.log(actividad.cantidadRecaudada);
     });
+    this.sumatoriaVisible = true;
     return total;
   }
 
