@@ -11,7 +11,6 @@ import { InformeVisitasComponent } from './informe-visitas/informe-visitas.compo
 import { InformeSituacionVisitaComponent } from './informe-situacion-visita/informe-situacion-visita.component';
 import { InformeComponent } from './informe/informe.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { InformeAsuntoPendienteComponent } from './informe-asunto-pendiente/informe-asunto-pendiente.component';
 import { CrearCampoComponent } from '../administracion/campo/crear-campo/crear-campo.component';
 import { VerInformeComponent } from './ver-informe/ver-informe.component';
 import { KeysPipe } from './ver-informe/keys.pipe';
@@ -28,7 +27,6 @@ import { SeccionInformeModule } from 'src/app/components/seccion-informe/seccion
     InformeVisitasComponent,
     InformeSituacionVisitaComponent,
     InformeComponent,
-    InformeAsuntoPendienteComponent,
     CrearCampoComponent,
     VerInformeComponent,
     KeysPipe,

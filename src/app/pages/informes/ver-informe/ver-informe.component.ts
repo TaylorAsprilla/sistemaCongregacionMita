@@ -18,7 +18,6 @@ import { data } from 'jquery';
 import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
 import { VisitaModel } from 'src/app/core/models/visita.model';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
-import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
 import { LogroModel } from 'src/app/core/models/logro.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { ActividadModel } from 'src/app/core/models/actividad.model';
@@ -79,7 +78,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   reuniones: ActividadModel[] = [];
 
   aspectoContable: ContabilidadModel[] = [];
-  asuntoPendiente: AsuntoPendienteModel[] = [];
   informacionInforme: InformeModel[];
   logros: LogroModel[] = [];
   metas: MetaModel[] = [];
@@ -91,7 +89,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   dataLogros: LogroModel[] = [];
   dataMetas: MetaModel[] = [];
   dataAspectoContable: ContabilidadModel[] = [];
-  dataAsuntoPendiente: AsuntoPendienteModel[] = [];
 
   congregaciones: CongregacionModel[] = [];
   obreros: UsuarioModel[] = [];
@@ -151,7 +148,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.dataLogros = this.informe['logros'];
       this.dataMetas = this.informe['metas'];
       this.dataAspectoContable = this.informe['aspectoContable'];
-      this.dataAsuntoPendiente = this.informe['asuntoPendiente'];
     });
     return true;
   }
@@ -341,7 +337,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.aspectoContable = this.filtrarFechaCreatedAt(this.dataAspectoContable);
       this.metas = this.filtrarFecha(this.dataMetas);
       this.logros = this.filtrarFechaCreatedAt(this.dataLogros);
-      this.asuntoPendiente = this.filtrarFechaCreatedAt(this.dataAsuntoPendiente);
     }
   }
 
@@ -349,8 +344,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     var total = 0;
     actividades.forEach((actividad) => {
       total += +actividad.cantidadRecaudada;
-      // console.log(typeof actividad.cantidadRecaudada);
-      // console.log(actividad.cantidadRecaudada);
     });
     this.sumatoriaVisible = true;
     return total;

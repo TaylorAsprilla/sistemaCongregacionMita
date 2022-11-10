@@ -21,7 +21,6 @@ import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 
 import { RegistrarUsuarioComponent } from 'src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component';
 import { Rutas } from '../menu-items';
-import { InformeAsuntoPendienteComponent } from 'src/app/pages/informes/informe-asunto-pendiente/informe-asunto-pendiente.component';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
 import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
 import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
@@ -178,10 +177,6 @@ const childRoutes: Routes = [
   {
     path: Rutas.CREAR_ESTATUS,
     component: CrearStatusComponent,
-  },
-  {
-    path: Rutas.ASUNTO_PENDIENTE,
-    component: InformeAsuntoPendienteComponent,
   },
   {
     path: Rutas.INFORME_ACTIVIDADES,

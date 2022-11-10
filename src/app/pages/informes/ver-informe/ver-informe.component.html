@@ -215,23 +215,6 @@
           </tbody>
         </table>
 
-        <p class="heading spacingHeading">
-          I. ASUNTOS PENDIENTES (ADMINISTRATIVOS, CONSTRUCCIÓN, ACTIVIDADES, ECLESIÁSTICOS):
-        </p>
-
-        <table class="tabla">
-          <thead>
-            <tr>
-              <th *ngFor="let head of asuntoPendiente[0] | keys">{{ head }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ap of asuntoPendiente">
-              <td *ngFor="let list of ap | keys">{{ ap[list] }}</td>
-            </tr>
-          </tbody>
-        </table>
-
         <p class="heading spacingHeading">J. METAS PARA EL PRÓXIMO TRIMESTRE:</p>
 
         <table class="tabla">
