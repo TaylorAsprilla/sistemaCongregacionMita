@@ -7,7 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --configuration production --base-href",
-    "deploy-front:prod": "ng build --configuration production --base-href && aws s3 sync dist/sistemacmi s3://sistemacmi --acl public-read",
+    "deploy-front:prod": "ng build --configuration production --base-href && aws s3 sync dist s3://sistemacmi --acl public-read",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
