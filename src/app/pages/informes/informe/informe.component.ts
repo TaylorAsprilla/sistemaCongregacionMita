@@ -28,8 +28,6 @@ export class InformeComponent implements OnInit {
     this.calcularDias();
   }
 
-  //countDownDate = new Date('july 1, 2022 15:37:25').getTime();
-
   currYear = new Date().getFullYear();
 
   trimestreActual = new Date('january 1, ' + (this.currYear + 1) + ' 00:00:00').getTime();
@@ -43,19 +41,12 @@ export class InformeComponent implements OnInit {
 
   escogerTrimestre(finalTrimestreActual) {
     var ahora = new Date().getTime();
-    //var ahora = this.countDownDate;
-    // this.trimestres.forEach((date) => {
-    //   var distancia = date - ahora;
-    //   if (distancia >= 0) {
-    //     finalTrimestreActual = date;
-    //   }
-    // });
+
     for (var i = 0; i < this.trimestres.length; i++) {
       var distancia = this.trimestres[i] - ahora;
-      console.log('distancia ' + distancia);
+
       if (distancia >= 0) {
         finalTrimestreActual = this.trimestres[i];
-        console.log('trimestre ' + i);
         break;
       }
     }
@@ -68,7 +59,7 @@ export class InformeComponent implements OnInit {
 
   calcularDias() {
     var now = new Date().getTime();
-    //var now = this.countDownDate;
+
     this.escogerTrimestre(this.trimestreActual);
 
     var distance = this.trimestreActual - now;

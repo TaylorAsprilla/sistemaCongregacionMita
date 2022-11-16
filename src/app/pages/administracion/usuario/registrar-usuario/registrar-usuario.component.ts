@@ -492,7 +492,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     }
     if (this.step == 2) {
       this.registroDos_step = true;
-      console.log('this.registroDosForm', this.registroDosForm);
       if (this.registroDosForm.invalid) {
         return;
       }

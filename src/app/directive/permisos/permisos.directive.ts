@@ -26,10 +26,9 @@ export class PermisosDirective {
   @Input()
   set appPermisos(val: Array<string>) {
     this.activatedRoute.data.subscribe((data: { permisos: PermisoModel[] }) => {
-      console.log('Dataaa', data);
       this.permisoUsuario = data.permisos;
     });
-    console.log('val', val);
+
     this.permisos = val;
     this.actualizarVista();
   }
@@ -43,8 +42,6 @@ export class PermisosDirective {
 
   private validarPermisos(): boolean {
     let tienePermiso = false;
-
-    console.log('permisos', this.permisos);
 
     if (this.permisoUsuario) {
       for (const permiso of this.permisos) {

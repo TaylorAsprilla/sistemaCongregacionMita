@@ -30,14 +30,5 @@ export class ServiciosYVigiliasComponent implements OnInit {
 
     this.servicio = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 1)[0];
     this.vigilia = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 2)[0];
-
-    // const player = new Player('handstick', {
-    //   id: 19231868,
-    //   width: 640,
-    // });
-
-    // player.on('play', function () {
-    //   console.log('played the video!');
-    // });
   }
 }

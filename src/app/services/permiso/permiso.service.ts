@@ -27,11 +27,6 @@ export class PermisoService {
     };
   }
 
-  // get permisoUsuario() {
-  //   const idUsuario = localStorage.getItem('idUsuario');
-  //   return this.getPermisosUsuario(idUsuario).subscribe();
-  // }
-
   tienePermisos(idUsuario: string, permisos: ROLES[]) {
     return idUsuario && permisos.includes;
   }

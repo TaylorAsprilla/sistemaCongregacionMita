@@ -46,10 +46,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public obreroSeleccionado: UsuarioModel;
   public paisObrero: string;
 
-  public sumatoriaEspeciales: number = 0;
-  public sumatoriaEspirituales: number = 0;
-  public sumatoriaServicios: number = 0;
-  public sumatoriaReuniones: number = 0;
+  public sumatoriaActividadesEspeciales: number = 0;
+  public sumatoriaActividadesEspirituales: number = 0;
+  public sumatoriaActividadesEnServicios: number = 0;
+  public sumatoriaActividadesEnReuniones: number = 0;
 
   public usuarios: UsuarioModel[] = [];
   public usuarioSubscription: Subscription;
@@ -267,17 +267,12 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   cargarUsuarios() {
     this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
       this.usuarios = usuarios.filter((usuario: UsuarioModel) => usuario.estado == true);
-
-      // falta filtrar por ministerio me los devuelve undefined
-
-      console.log(usuarios);
     });
   }
 
   cargarMinisterios() {
     this.ministerioSubcription = this.ministerioService.getMinisterios().subscribe((ministerios) => {
       this.ministerios = ministerios.filter((ministerio: MinisterioModel) => ministerio.estado === true);
-      // console.log(ministerios);
     });
   }
 
@@ -318,10 +313,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.fraccion = '4to Trimestre del año';
     }
     this.filtrarInformacionInforme();
-    this.sumatoriaEspeciales = this.sumatoriaActividades(this.especiales);
-    this.sumatoriaEspirituales = this.sumatoriaActividades(this.espirituales);
-    this.sumatoriaServicios = this.sumatoriaActividades(this.servicios);
-    this.sumatoriaReuniones = this.sumatoriaActividades(this.reuniones);
+    this.sumatoriaActividadesEspeciales = this.sumatoriaActividades(this.especiales);
+    this.sumatoriaActividadesEspirituales = this.sumatoriaActividades(this.espirituales);
+    this.sumatoriaActividadesEnServicios = this.sumatoriaActividades(this.servicios);
+    this.sumatoriaActividadesEnReuniones = this.sumatoriaActividades(this.reuniones);
   }
 
   filtrarInformacionInforme() {
@@ -355,23 +350,11 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     let srcWidth = document.getElementById('content').scrollWidth;
     let margin = 18; // narrow margin - 1.27 cm (36);
     let scale = (pWidth - margin * 2) / srcWidth;
-    // pdf.setFont('Times');
-    //pdf.addFont('ArialMS', 'Arial', 'normal');
 
-    // pdf.html(this.el.nativeElement, {
-    //   callback: (pdf) => {
-    //     // texto insertado
-    //     pdf.text(fechaSeleccionada, 25, 25);
-    //     pdf.text(obreroSeleccionado, 25, 35);
-
-    //     pdf.save('informe.pdf');
-    //   },
-    // });
     pdf.html(document.getElementById('content'), {
       x: margin,
       y: margin,
       html2canvas: {
-        // insert html2canvas options here, e.g.
         scale: scale,
       },
       callback: function () {

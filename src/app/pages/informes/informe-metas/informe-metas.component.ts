@@ -66,16 +66,6 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
     });
   }
 
-  // public id: number,
-  // public meta: string,
-  // public fecha: Date,
-  // public accion: string,
-  // public informe_id: number,
-  // public tipoStatus_id: number,
-  // public comentarios?: string
-
-  //comentado por error
-
   buscarMeta(id: string) {
     if (id !== 'nuevo') {
       this.metaService
@@ -97,7 +87,7 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
             });
 
             Swal.fire({
-              title: 'Congregacion',
+              title: 'Metas',
               icon: 'error',
               html: `${listaErrores.join('')}`,
             });
