@@ -36,6 +36,8 @@ export interface RegisterFormInterface {
   congregacion: CongregacionInterfase;
   vacuna_id: number;
   dosis_id: number;
+  tipoDocumento_id: number;
+  numeroDocumento: string;
   terminos: boolean;
 }
 

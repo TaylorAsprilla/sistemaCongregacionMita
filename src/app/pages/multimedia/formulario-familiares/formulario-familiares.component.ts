@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class FormularioFamiliaresComponent implements OnInit {
 
   @Output() valoresFormulario = new EventEmitter<FamiliarModel[]>();
 
-  public familiaresForm: UntypedFormGroup;
+  public familiaresForm: FormGroup;
 
   codigoDeMarcadoSeparado = false;
   buscarPais = SearchCountryField;
@@ -28,7 +28,7 @@ export class FormularioFamiliaresComponent implements OnInit {
 
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
 
-  constructor(private formBuilder: UntypedFormBuilder) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.familiaresForm = this.formBuilder.group({
@@ -45,7 +45,7 @@ export class FormularioFamiliaresComponent implements OnInit {
     });
   }
   get getFamiliares() {
-    return this.familiaresForm.get('familiares') as UntypedFormArray;
+    return this.familiaresForm.get('familiares') as FormArray;
   }
 
   buscarNacionalidad(formControlName: string, index: number) {
@@ -66,7 +66,7 @@ export class FormularioFamiliaresComponent implements OnInit {
   }
 
   agregarFamiliar() {
-    const control = <UntypedFormArray>this.familiaresForm.controls['familiares'];
+    const control = <FormArray>this.familiaresForm.controls['familiares'];
     control.push(
       this.formBuilder.group({
         nombre: ['Familiar 2', [Validators.required, Validators.minLength(3)]],
@@ -80,7 +80,7 @@ export class FormularioFamiliaresComponent implements OnInit {
   }
 
   eliminarFamiliar(index: number) {
-    const control = <UntypedFormArray>this.familiaresForm.controls['familiares'];
+    const control = <FormArray>this.familiaresForm.controls['familiares'];
     control.removeAt(index);
   }
 

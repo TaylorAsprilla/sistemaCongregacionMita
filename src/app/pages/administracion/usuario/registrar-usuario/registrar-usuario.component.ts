@@ -27,8 +27,8 @@ import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RegisterFormInterface, TIPO_DIRECCION } from 'src/app/core/interfaces/register-form.interface';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
-import { BuscarCelularService } from 'src/app/services/buscar-celular/buscar-celular.service';
 import config from 'src/environments/config/config';
+import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 
 @Component({
   selector: 'app-registrar-usuario',
@@ -65,6 +65,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public tipoMiembros: TipoMiembroModel[] = [];
   public ministerios: MinisterioModel[] = [];
   public voluntariados: VoluntariadoModel[] = [];
+  public tiposDeDocumentos: TipoDocumentoModel[] = [];
+  public tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
 
   public congregacionesFiltradas: CongregacionModel[] = [];
   public camposFiltrados: CampoModel[] = [];
@@ -130,11 +132,11 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         tipoEmpleo: TipoEmpleoModel[];
         congregacion: CongregacionModel[];
         tipoMiembro: TipoMiembroModel[];
+        tipoDocumento: TipoDocumentoModel[];
         ministerio: MinisterioModel[];
         voluntariado: VoluntariadoModel[];
         pais: PaisModel[];
         campo: CampoModel[];
-
         vacuna: VacunaModel[];
         dosis: DosisModel[];
       }) => {
@@ -153,6 +155,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.campos = data.campo.filter((campo) => campo.estado === true);
         this.vacunas = data.vacuna;
         this.dosis = data.dosis;
+        this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
       }
     );
 
@@ -161,6 +164,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
 
     this.crearFormularios();
+    this.agregarControlTipoDocumento();
   }
 
   ngOnDestroy(): void {
@@ -185,8 +189,8 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.registroDosForm = this.formBuilder.group({
       nacionalidad: ['Colombia', [Validators.required, Validators.minLength(3)]],
       rolCasa_id: ['1', [Validators.required]],
-      numeroCelular: ['', [Validators.required, Validators.minLength(3)]],
-      telefonoCasa: ['+6012035614', [Validators.minLength(3)]],
+      numeroCelular: ['3118873332', [Validators.required, Validators.minLength(3)]],
+      telefonoCasa: ['6012035614', [Validators.minLength(3)]],
       direccionResidencia: ['Calle 13 # 14 10', [Validators.required, Validators.minLength(3)]],
       ciudadResidencia: ['Bogotá', [Validators.required, Validators.minLength(3)]],
       departamentoResidencia: ['Cundinamarca', [Validators.minLength(3)]],
@@ -329,8 +333,10 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
           congregacion_id: informacionFormulario.congregacion_id,
           campo_id: informacionFormulario.campo_id,
         },
-        terminos: false,
         rolCasa_id: informacionFormulario.rolCasa_id,
+        tipoDocumento_id: informacionFormulario.tipoDocumento_id ? informacionFormulario.tipoDocumento_id : '',
+        numeroDocumento: informacionFormulario.numeroDocumento ? informacionFormulario.numeroDocumento : '',
+        terminos: false,
       };
 
       this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
@@ -479,6 +485,35 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.mensajeBuscarCorreo = respuesta.msg;
       }
     });
+  }
+
+  tieneTipoDocumento(idPais: string): number {
+    this.tipoDeDocumentosFiltrados = [];
+    this.tipoDeDocumentosFiltrados = this.tiposDeDocumentos.filter(
+      (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais)
+    );
+    if (this.tipoDeDocumentosFiltrados.length > 0) {
+      this.agregarControlTipoDocumento();
+    } else {
+      this.eliminarControlTipoDocumento();
+    }
+    return this.tipoDeDocumentosFiltrados.length;
+  }
+
+  agregarControlTipoDocumento() {
+    this.registroCuatroForm = this.formBuilder.group({
+      ...this.registroCuatroForm.controls,
+      tipoDocumento_id: ['', Validators.required],
+      numeroDocumento: ['123456', Validators.required],
+    });
+    return true;
+  }
+
+  eliminarControlTipoDocumento() {
+    this.registroCuatroForm.removeControl('tipoDocumento_id');
+    this.registroCuatroForm.removeControl('numeroDocumento');
+
+    return true;
   }
 
   next() {

@@ -54,6 +54,9 @@ import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimed
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
 import { ConfirmacionDeRegistroComponent } from 'src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component';
 import { ObreroResolver } from 'src/app/resolvers/obrero/obrero.resolver';
+import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
+import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
+import { DocumentoResolver } from 'src/app/resolvers/tipo-documento/documento.resolver';
 
 const childRoutes: Routes = [
   {
@@ -100,6 +103,7 @@ const childRoutes: Routes = [
       campo: CampoResolver,
       vacuna: VacunaResolver,
       dosis: DosisResolver,
+      tipoDocumento: DocumentoResolver,
     },
   },
 
@@ -152,6 +156,16 @@ const childRoutes: Routes = [
     path: `${Rutas.CAMPOS}/:id`,
     component: CrearCampoComponent,
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
+  },
+  {
+    path: Rutas.TIPO_DE_DOCUMENTO,
+    component: TiposDeDocumentosComponent,
+    resolve: { pais: PaisResolver },
+  },
+  {
+    path: `${Rutas.TIPO_DE_DOCUMENTO}/:id`,
+    component: CrearTipoDocumentoComponent,
+    resolve: { pais: PaisResolver },
   },
 
   // Perfil

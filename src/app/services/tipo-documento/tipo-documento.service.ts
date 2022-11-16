@@ -25,7 +25,7 @@ export class TipoDocumentoService {
     };
   }
 
-  listarTipoDocumentos() {
+  getTiposDeDocumentos() {
     return this.httpClient
       .get(`${base_url}/tipodocumento`, this.headers)
       .pipe(map((tipoDocumento: { ok: boolean; tipoDocumento: TipoDocumentoModel[] }) => tipoDocumento.tipoDocumento));
@@ -34,7 +34,7 @@ export class TipoDocumentoService {
   getTipoDocumento(id: string) {
     return this.httpClient
       .get(`${base_url}/tipodocumento/${id}`, this.headers)
-      .pipe(map((tipodocumento: { ok: boolean; tipodocumento: TipoDocumentoModel }) => tipodocumento.tipodocumento));
+      .pipe(map((tipodocumento: { ok: boolean; tipoDocumento: TipoDocumentoModel }) => tipodocumento.tipoDocumento));
   }
 
   crearTipoDocumento(tipoDocumento: TipoDocumentoModel) {
@@ -47,5 +47,9 @@ export class TipoDocumentoService {
 
   elimiminarTipoDocumento(tipoDocumento: TipoDocumentoModel) {
     return this.httpClient.delete(`${base_url}/tipodocumento/${tipoDocumento.id}`, this.headers);
+  }
+
+  activarTipoDocumento(tipoDocumento: TipoDocumentoModel) {
+    return this.httpClient.put(`${base_url}/tipodocumento/activar/${tipoDocumento.id}`, tipoDocumento, this.headers);
   }
 }
