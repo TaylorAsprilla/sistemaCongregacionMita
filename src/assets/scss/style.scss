@@ -118,3 +118,52 @@ i.fas {
 .w1200 {
   width: 1200px;
 }
+
+.obligatorio:after {
+  content: '*';
+  margin-left: 3px;
+  color: #ef5350;
+  font-weight: bold;
+}
+
+.form-check-input {
+  width: 1em;
+  height: 1em;
+  margin-top: 1.25em;
+  vertical-align: top;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  -webkit-appearance: listbox;
+  appearance: auto;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  padding: 8px !important;
+}
+
+.form-check .form-check-input {
+  float: initial;
+  margin-left: -1.5em;
+}
+
+.checkbox-lg .form-check-input {
+  top: 0.8rem;
+  scale: 1.4;
+  margin-right: 0.7rem;
+}
+
+.checkbox-lg .form-check-label {
+  padding-top: 13px;
+}
+
+.checkbox-xl .form-check-input {
+  top: 1.2rem;
+  scale: 1.7;
+  margin-right: 0.8rem;
+}
+
+.checkbox-xl .form-check-label {
+  padding-top: 19px;
+}

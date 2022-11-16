@@ -19,6 +19,8 @@ import { MatInputModule } from '@angular/material/input';
 import { CrearMinisterioComponent } from './ministerios/crear-ministerio/crear-ministerio.component';
 import { CargandoInformacionModule } from 'src/app/components/cargando-informacion/cargando-informacion.module';
 import { ConfirmacionDeRegistroComponent } from './usuario/confirmacion-de-registro/confirmacion-de-registro.component';
+import { CrearTipoDocumentoComponent } from './tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
+import { TiposDeDocumentosComponent } from './tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { ConfirmacionDeRegistroComponent } from './usuario/confirmacion-de-regis
     RegistrarUsuarioComponent,
     CrearMinisterioComponent,
     ConfirmacionDeRegistroComponent,
+    CrearTipoDocumentoComponent,
+    TiposDeDocumentosComponent,
   ],
   imports: [
     CommonModule,

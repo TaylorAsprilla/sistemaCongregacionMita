@@ -27,12 +27,13 @@ export enum Rutas {
   PERFIL = 'perfil',
   USUARIOS = 'usuarios',
   REGISTRAR_USUARIO = 'registrar-usuario',
+  RUTA_NUEVA = 'ruta-nueva',
   SERVICIOS_Y_VIGILIAS = 'servicios-y-vigilias',
   SISTEMA = 'sistema',
   SITUACION_VISITA = 'situacion-visita',
   SOLICITUD_MULTIMEDIA = 'solicitud-multimedia',
   SOLICITUDES_MULTIMEDIA = 'solicitudes-multimedia',
-  RUTA_NUEVA = 'ruta-nueva',
+  TIPO_DE_DOCUMENTO = 'tipo-de-documento',
   VER_INFORME = 'ver-informe',
 }
 
@@ -101,6 +102,15 @@ export const ROUTES: RouteInfo[] = [
       {
         path: Rutas.INFORME,
         title: 'Informes',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR],
+        submenu: [],
+      },
+      {
+        path: Rutas.TIPO_DE_DOCUMENTO,
+        title: 'Tipo de Documentos',
         icon: '',
         class: '',
         extralink: false,

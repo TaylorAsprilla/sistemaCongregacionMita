@@ -54,6 +54,7 @@ import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimed
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
 import { ConfirmacionDeRegistroComponent } from 'src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component';
 import { ObreroResolver } from 'src/app/resolvers/obrero/obrero.resolver';
+import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
 
 const childRoutes: Routes = [
   {
@@ -152,6 +153,11 @@ const childRoutes: Routes = [
     path: `${Rutas.CAMPOS}/:id`,
     component: CrearCampoComponent,
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
+  },
+  {
+    path: Rutas.TIPO_DE_DOCUMENTO,
+    component: TiposDeDocumentosComponent,
+    resolve: { pais: PaisResolver },
   },
 
   // Perfil

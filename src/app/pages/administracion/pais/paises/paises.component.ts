@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
-import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { Rutas } from 'src/app/routes/menu-items';
@@ -22,7 +21,6 @@ export class PaisesComponent implements OnInit, OnDestroy {
 
   // Subscription
   public paisSubscription: Subscription;
-  public divisaSubscription: Subscription;
 
   constructor(private router: Router, private paisService: PaisService, private activatedRoute: ActivatedRoute) {}
 

@@ -25,7 +25,7 @@ export class TipoDocumentoService {
     };
   }
 
-  listarTipoDocumentos() {
+  getTiposDeDocumentos() {
     return this.httpClient
       .get(`${base_url}/tipodocumento`, this.headers)
       .pipe(map((tipoDocumento: { ok: boolean; tipoDocumento: TipoDocumentoModel[] }) => tipoDocumento.tipoDocumento));

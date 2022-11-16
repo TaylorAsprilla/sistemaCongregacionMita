@@ -4,20 +4,22 @@
     <!-- Logo -->
     <!-- ============================================================== -->
     <div class="navbar-header">
-      <a class="navbar-brand" [routerLink]="Rutas.INICIO">
-        <!-- Logo icon -->
-        <div>
-          <img src="assets/images/escudo-CMI.png" alt="Congregación Mita INC" class="dark-logo" />
-        </div>
-      </a>
+      <a href="index.html" class="navbar-brand"
+        ><b
+          ><img src="assets/images/escudo-CMI.png" alt="homepage" class="dark-logo" /><img
+            src="assets/images/escudo-CMI.png"
+            alt="Congregación Mita INC"
+            class="light-logo" /></b
+      ></a>
     </div>
+
     <div class="navbar-collapse">
       <!-- ============================================================== -->
       <!-- toggle and nav items -->
       <!-- ============================================================== -->
       <!-- <div class="row"> -->
       <!-- <ul class="navbar-nav my-lg-0"> -->
-      <ul class="navbar-nav mr-auto mt-md-0">
+      <ul class="navbar-nav me-auto mt-md-0">
         <!-- This is  -->
         <li (click)="toggleSidebar.emit()" class="nav-item m-l-10">
           <a class="nav-link sidebartoggler waves-effect waves-dark" href="javascript:void(0)"
@@ -30,7 +32,7 @@
       <!-- User profile and search -->
       <!-- ============================================================== -->
       <!-- <div class="col-md-8"> -->
-      <ul class="navbar-nav my-lg-0">
+      <ul class="navbar-nav ms-auto my-lg-0">
         <!-- ============================================================== -->
         <!-- Search -->
         <!-- ============================================================== -->
