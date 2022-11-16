@@ -24,9 +24,9 @@ export class InformeComponent implements OnInit {
     this.activatedRoute.data.subscribe((data: { informes: InformeModel[] }) => {
       this.informes = data.informes;
     });
-  }
 
-  //countDownDate = new Date('july 1, 2022 15:37:25').getTime();
+    this.calcularDias();
+  }
 
   currYear = new Date().getFullYear();
 
@@ -41,19 +41,12 @@ export class InformeComponent implements OnInit {
 
   escogerTrimestre(finalTrimestreActual) {
     var ahora = new Date().getTime();
-    //var ahora = this.countDownDate;
-    // this.trimestres.forEach((date) => {
-    //   var distancia = date - ahora;
-    //   if (distancia >= 0) {
-    //     finalTrimestreActual = date;
-    //   }
-    // });
+
     for (var i = 0; i < this.trimestres.length; i++) {
       var distancia = this.trimestres[i] - ahora;
-      console.log('distancia ' + distancia);
+
       if (distancia >= 0) {
         finalTrimestreActual = this.trimestres[i];
-        console.log('trimestre ' + i);
         break;
       }
     }
@@ -63,9 +56,10 @@ export class InformeComponent implements OnInit {
 
   demo: any;
   display: any;
-  x = setInterval(() => {
+
+  calcularDias() {
     var now = new Date().getTime();
-    //var now = this.countDownDate;
+
     this.escogerTrimestre(this.trimestreActual);
 
     var distance = this.trimestreActual - now;
@@ -75,5 +69,5 @@ export class InformeComponent implements OnInit {
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
     this.demo = days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
     this.display = days;
-  });
+  }
 }

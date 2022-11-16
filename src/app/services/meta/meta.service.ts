@@ -24,10 +24,16 @@ export class MetaService {
     };
   }
 
-  getMeta() {
+  getMetas() {
     return this.httpClient
       .get(`${base_url}/meta`, this.headers)
       .pipe(map((meta: { ok: boolean; metas: MetaModel[] }) => meta.metas));
+  }
+
+  getMeta(id: number) {
+    return this.httpClient
+      .get(`${base_url}/meta/${id}`, this.headers)
+      .pipe(map((meta: { ok: boolean; meta: MetaModel }) => meta.meta));
   }
 
   crearMeta(meta: MetaModel) {

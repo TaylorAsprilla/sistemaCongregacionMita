@@ -18,7 +18,7 @@
           <label class="input-group obligatorio">Fecha de Nacimiento: </label>
           <input type="date" formControlName="fechaNacimiento" class="form-control" placeholder="Fecha de Nacimiento" />
           <small
-            class="form-text text-muted"
+            class="form-text text-danger"
             *ngIf="
               registroUnoForm.get('fechaNacimiento').hasError('required') &&
               registroUnoForm.get('fechaNacimiento').touched
@@ -33,7 +33,7 @@
             <label class="input-group obligatorio">Primer Nombre:</label>
             <input type="text" formControlName="primerNombre" class="form-control" placeholder="Primer Nombre" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroUnoForm.get('primerNombre').hasError('required') && registroUnoForm.get('primerNombre').touched
               "
@@ -41,7 +41,7 @@
               La primer nombre del feligrés es requerido.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroUnoForm.get('primerNombre').hasError('minlength') && registroUnoForm.get('primerNombre').touched
               "
@@ -54,7 +54,7 @@
             <label class="input-group">Segundo Nombre:</label>
             <input type="text" formControlName="segundoNombre" class="form-control" placeholder="Segundo Nombre" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroUnoForm.get('segundoNombre').hasError('minlength') &&
                 registroUnoForm.get('segundoNombre').touched
@@ -70,7 +70,7 @@
             <label class="input-group obligatorio">Primer Apellido:</label>
             <input type="text" formControlName="primerApellido" class="form-control" placeholder="Primer Apellido" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroUnoForm.get('primerApellido').hasError('required') &&
                 registroUnoForm.get('primerApellido').touched
@@ -79,7 +79,7 @@
               La primer apellido del feligrés es requerido.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroUnoForm.get('primerApellido').hasError('minlength') &&
                 registroUnoForm.get('primerApellido').touched
@@ -93,7 +93,7 @@
             <label class="input-group">Segundo Apellido:</label>
             <input type="text" formControlName="segundoApellido" class="form-control" placeholder="Segundo Apellido" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroUnoForm.get('segundoApellido').hasError('minlength') &&
                 registroUnoForm.get('segundoApellido').touched
@@ -109,7 +109,7 @@
             <label class="input-group">Apodo:</label>
             <input type="text" formControlName="apodo" class="form-control" placeholder="Apodo" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="registroUnoForm.get('apodo').hasError('minlength') && registroUnoForm.get('apodo').touched"
             >
               El apodo del feligrés no tiene la longitud mínima permitida.
@@ -118,29 +118,21 @@
 
           <div class="form-group col-md-6 col-sm-12">
             <label class="input-group obligatorio">Email:</label>
-            <input
-              type="email"
-              formControlName="email"
-              class="form-control"
-              inputmode="text"
-              placeholder="Email"
-              (blur)="buscarCorreo(txtEmail.value)"
-              #txtEmail
-            />
+            <input type="email" formControlName="email" class="form-control" inputmode="text" placeholder="Email" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="registroUnoForm.get('email').hasError('required') && registroUnoForm.get('email').touched"
             >
               El correo electrónico es requerido.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="registroUnoForm.get('email').hasError('email') && registroUnoForm.get('email').touched"
             >
               El valor ingresado no corresponde a un correo electrónico.
             </small>
 
-            <small class="form-text text-muted" *ngIf="!!mensajeBuscarCorreo">
+            <small class="form-text text-danger" *ngIf="!!mensajeBuscarCorreo">
               {{ mensajeBuscarCorreo }}
             </small>
           </div>
@@ -148,14 +140,14 @@
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
             <label class="input-group obligatorio">Genero:</label>
-            <select class="form-control" formControlName="genero_id">
+            <select class="form-select" formControlName="genero_id">
               <option value="" disabled>Seleccione el genero</option>
               <option *ngFor="let genero of generos" [value]="genero.id">
                 {{ genero.genero }}
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="registroUnoForm.get('genero_id').hasError('required') && registroUnoForm.get('genero_id').touched"
             >
               El género del feligrés es requerido.
@@ -164,14 +156,14 @@
 
           <div class="form-group col-md-6 col-sm-12">
             <label class="input-group obligatorio">Estado Civil:</label>
-            <select class="form-control" formControlName="estadoCivil_id">
+            <select class="form-select" formControlName="estadoCivil_id">
               <option value="" disabled>Seleccione el Estado Civil</option>
               <option *ngFor="let estadoCivil of estadoCivil" [value]="estadoCivil.id">
                 {{ estadoCivil.estadoCivil }}
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroUnoForm.get('estadoCivil_id').hasError('required') &&
                 registroUnoForm.get('estadoCivil_id').touched
@@ -186,11 +178,12 @@
           (click)="next()"
           type="button"
           name="next"
-          class="btn btn-primary"
+          class="btn btn-primary float-end"
           [disabled]="this.registroUnoForm.invalid"
         >
           Siguiente
         </button>
+        <div class="float-start"><span class="text-danger">* </span>Campos obligatorios</div>
       </fieldset>
     </form>
 
@@ -220,7 +213,7 @@
             </mat-autocomplete>
 
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('nacionalidad').hasError('required') && registroDosForm.get('nacionalidad').touched
               "
@@ -228,7 +221,7 @@
               La nacionalidad del feligrés es requerida.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('nacionalidad').hasError('minlength') && registroDosForm.get('nacionalidad').touched
               "
@@ -239,14 +232,14 @@
 
           <div class="form-group col-md-6 col-sm-12">
             <label class="input-group obligatorio">Rol en casa:</label>
-            <select class="form-control" formControlName="rolCasa_id">
+            <select class="form-select" formControlName="rolCasa_id">
               <option value="" disabled>Seleccione el Rol en la Casa</option>
               <option *ngFor="let rolCasa of rolCasa" [value]="rolCasa.id">
                 {{ rolCasa.rolCasa }}
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('rolCasa_id').hasError('required') && registroDosForm.get('rolCasa_id').touched
               "
@@ -274,13 +267,24 @@
               [numberFormat]="formatoNumeroTelefonico.International"
               name="numeroCelular"
               formControlName="numeroCelular"
-              (ngModelChange)="buscarCelular(registroDosForm.get('numeroCelular')?.value?.internationalNumber)"
-              #txtNumeroCelular
             >
             </ngx-intl-tel-input>
 
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
+              *ngIf="
+                !registroDosForm.get('numeroCelular').hasError('required') &&
+                registroDosForm.get('numeroCelular').invalid &&
+                registroDosForm.get('numeroCelular').touched
+              "
+            >
+              El número de celular no es válido
+            </small>
+            <small class="form-text text-primary" *ngIf="!registroDosForm.get('numeroCelular').invalid">
+              El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
+            </small>
+            <small
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('numeroCelular').hasError('required') &&
                 registroDosForm.get('numeroCelular').touched
@@ -289,7 +293,7 @@
               El número de celular del feligrés es requerido.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('numeroCelular').hasError('minlength') &&
                 registroDosForm.get('numeroCelular').touched
@@ -297,13 +301,11 @@
             >
               El número de celular del feligrés no tiene la longitud mínima permitida.
             </small>
-            <small class="form-text text-muted" *ngIf="!!mensajeBuscarNumeroCelular">
-              {{ mensajeBuscarNumeroCelular }}
-            </small>
           </div>
 
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group">Teléfono de la Casa:</label>
+            <label class="input-group">Teléfono de la Casa: </label>
+
             <ngx-intl-tel-input
               [cssClass]="'form-control'"
               [preferredCountries]="paisesPreferidos"
@@ -321,15 +323,28 @@
               formControlName="telefonoCasa"
             >
             </ngx-intl-tel-input>
+            <div class="form-text text-info" *ngIf="registroDosForm.get('telefonoCasa').invalid">
+              Digitar el número de teléfono con el indicativo de la región local
+            </div>
+            <small
+              class="form-text text-danger"
+              *ngIf="registroDosForm.get('telefonoCasa').invalid && registroDosForm.get('telefonoCasa').touched"
+            >
+              El número de teléfono de la casa no es válido
+            </small>
+            <small class="form-text text-primary" *ngIf="!registroDosForm.get('telefonoCasa').invalid">
+              El número de teléfono de la casa es válido <i class="fa-solid fa-thumbs-up"></i>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('telefonoCasa').hasError('minlength') && registroDosForm.get('telefonoCasa').touched
+              "
+            >
+              El número de la casa del feligrés no tiene la longitud mínima permitida.
+            </small>
           </div>
-          <small
-            class="form-text text-muted"
-            *ngIf="
-              registroDosForm.get('telefonoCasa').hasError('minlength') && registroDosForm.get('telefonoCasa').touched
-            "
-          >
-            El número de teléfono de la casa del feligrés no tiene la longitud mínima permitida.
-          </small>
         </div>
 
         <div class="row border p-4 rounded bg-light shadow">
@@ -343,7 +358,7 @@
               placeholder="Dirección de la residencia"
             />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('direccionResidencia').hasError('required') &&
                 registroDosForm.get('direccionResidencia').touched
@@ -352,7 +367,7 @@
               La dirección del feligrés es requerido.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('direccionResidencia').hasError('minlength') &&
                 registroDosForm.get('direccionResidencia').touched
@@ -366,7 +381,7 @@
             <label class="input-group obligatorio">Ciudad / Localidad:</label>
             <input type="text" formControlName="ciudadResidencia" class="form-control" placeholder="Ciudad" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('ciudadResidencia').hasError('required') &&
                 registroDosForm.get('ciudadResidencia').touched
@@ -375,7 +390,7 @@
               El campo ciudad / localidad es requerido.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('ciudadResidencia').hasError('minlength') &&
                 registroDosForm.get('ciudadResidencia').touched
@@ -395,7 +410,7 @@
             />
 
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('departamentoResidencia').hasError('minlength') &&
                 registroDosForm.get('departamentoResidencia').touched
@@ -415,7 +430,7 @@
             />
           </div>
           <small
-            class="form-text text-muted"
+            class="form-text text-danger"
             *ngIf="
               registroDosForm.get('codigoPostalResidencia').hasError('minlength') &&
               registroDosForm.get('codigoPostalResidencia').touched
@@ -439,7 +454,7 @@
               </mat-option>
             </mat-autocomplete>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('paisResidencia').hasError('required') &&
                 registroDosForm.get('paisResidencia').touched
@@ -448,7 +463,7 @@
               El pais de la dirección de residencia es requerida.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('paisResidencia').hasError('minlength') &&
                 registroDosForm.get('paisResidencia').touched
@@ -465,7 +480,7 @@
             <label class="input-group">Dirección:</label>
             <input type="text" class="form-control" formControlName="direccionPostal" placeholder="Dirección" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('direccionPostal').hasError('required') &&
                 registroDosForm.get('direccionPostal').touched
@@ -474,7 +489,7 @@
               La dirección postal es requerida.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('direccionPostal').hasError('minlength') &&
                 registroDosForm.get('direccionPostal').touched
@@ -488,7 +503,7 @@
             <label class="input-group">Ciudad / Localidad :</label>
             <input type="text" formControlName="ciudadPostal" class="form-control" placeholder="Ciudad" />
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('ciudadPostal').hasError('required') && registroDosForm.get('ciudadPostal').touched
               "
@@ -496,7 +511,7 @@
               El campo ciudad / localidad de la dirección postal es requerida.
             </small>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('ciudadPostal').hasError('minlength') && registroDosForm.get('ciudadPostal').touched
               "
@@ -510,7 +525,7 @@
             <input type="text" formControlName="departamentoPostal" class="form-control" placeholder="Departamento" />
 
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('departamentoPostal').hasError('minlength') &&
                 registroDosForm.get('departamentoPostal').touched
@@ -542,7 +557,7 @@
             </mat-autocomplete>
 
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroDosForm.get('paisPostal').hasError('required') && registroDosForm.get('paisPostal').touched
               "
@@ -551,12 +566,20 @@
             </small>
           </div>
         </div>
+        <div class="float-end">
+          <button (click)="previous()" type="button" name="next" class="btn btn-primary mx-2">Anterior</button>
 
-        <button (click)="previous()" type="button" name="next" class="btn btn-primary mx-2">Anterior</button>
-
-        <button (click)="next()" type="button" name="next" class="btn btn-primary" [disabled]="registroDosForm.invalid">
-          Siguiente
-        </button>
+          <button
+            (click)="next()"
+            type="button"
+            name="next"
+            class="btn btn-primary"
+            [disabled]="registroDosForm.invalid"
+          >
+            Siguiente
+          </button>
+        </div>
+        <div class="float-start"><span class="text-danger">* </span>Campos obligatorios</div>
       </fieldset>
     </form>
 
@@ -593,14 +616,14 @@
         <div class="row">
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">¿Cuál es el grado académico más alto alcanzado? </label>
-            <select class="form-control" formControlName="gradoAcademico_id">
+            <select class="form-select" formControlName="gradoAcademico_id">
               <option value="" disabled>Seleccione un grado académico</option>
               <option *ngFor="let gradoAcademico of gradosAcademicos" [value]="gradoAcademico.id">
                 {{ gradoAcademico.gradoAcademico }}
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroTresForm.get('gradoAcademico_id').hasError('required') &&
                 registroTresForm.get('gradoAcademico_id').touched
@@ -612,14 +635,14 @@
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">¿A qué se dedica? </label>
-            <select class="form-control" formControlName="tipoEmpleo_id">
+            <select class="form-select" formControlName="tipoEmpleo_id">
               <option value="0" selected>Seleccione un tipo de empleo</option>
               <option *ngFor="let empleo of tiposEmpleos" [value]="empleo.id">
                 {{ empleo.nombreEmpleo }}
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroTresForm.get('tipoEmpleo_id').hasError('required') &&
                 registroTresForm.get('tipoEmpleo_id').touched
@@ -640,7 +663,7 @@
             />
           </div>
           <small
-            class="form-text text-muted"
+            class="form-text text-danger"
             *ngIf="
               registroTresForm.get('especializacionEmpleo').hasError('minlength') &&
               registroTresForm.get('especializacionEmpleo').touched
@@ -650,17 +673,20 @@
           </small>
         </div>
 
-        <button (click)="previous()" type="button" name="previous" class="next btn btn-primary mx-2">Anterior</button>
+        <div class="float-end">
+          <button (click)="previous()" type="button" name="previous" class="next btn btn-primary mx-2">Anterior</button>
 
-        <button
-          (click)="next()"
-          [disabled]="registroTresForm.invalid"
-          type="button"
-          name="next"
-          class="btn btn-primary"
-        >
-          Siguiente
-        </button>
+          <button
+            (click)="next()"
+            [disabled]="registroTresForm.invalid"
+            type="button"
+            name="next"
+            class="btn btn-primary"
+          >
+            Siguiente
+          </button>
+        </div>
+        <div class="float-start"><span class="text-danger">* </span>Campos obligatorios</div>
       </fieldset>
     </form>
 
@@ -690,7 +716,7 @@
               </label>
             </div>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroCuatroForm.get('tipoMiembro_id').hasError('tipoMiembro_id') &&
                 registroCuatroForm.get('tipoMiembro_id').touched
@@ -714,7 +740,7 @@
             </div>
 
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="registroCuatroForm.get('esJoven').hasError('esJoven') && registroCuatroForm.get('esJoven').touched"
             >
               Selecciones si es o no Joven
@@ -732,7 +758,7 @@
               <label class="form-check-label">No</label>
             </div>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroCuatroForm.get('ejerceMinisterio').hasError('ejerceMinisterio') &&
                 registroCuatroForm.get('ejerceMinisterio').touched
@@ -753,7 +779,7 @@
               <label class="form-check-label">No</label>
             </div>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroCuatroForm.get('esVoluntario').hasError('esVoluntario') &&
                 registroCuatroForm.get('esVoluntario').touched
@@ -800,7 +826,7 @@
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">Congregación - Pais: </label>
             <select
-              class="form-control"
+              class="form-select"
               formControlName="congregacionPais_id"
               (change)="listarCongregaciones(txtPaisCongregacion.value)"
               #txtPaisCongregacion
@@ -811,7 +837,7 @@
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroCuatroForm.get('congregacionPais_id').hasError('required') &&
                 registroCuatroForm.get('congregacionPais_id').touched
@@ -824,7 +850,7 @@
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">Congregación: </label>
             <select
-              class="form-control"
+              class="form-select"
               formControlName="congregacion_id"
               (change)="listarCampos(txtCongregacion.value)"
               #txtCongregacion
@@ -836,7 +862,7 @@
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroCuatroForm.get('congregacion_id').hasError('required') &&
                 registroCuatroForm.get('congregacion_id').touched
@@ -847,8 +873,8 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Campo: </label>
-            <select class="form-control" formControlName="campo_id">
+            <label class="input-group">Campo: </label>
+            <select class="form-select" formControlName="campo_id">
               <option value="" disabled>Seleccione el campo al que pertenece</option>
               <option *ngFor="let campo of camposFiltrados" [value]="campo.id">
                 {{ campo.campo }}
@@ -860,14 +886,14 @@
         <div class="row">
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">Vacuna:</label>
-            <select class="form-control" formControlName="vacuna_id">
+            <select class="form-select" formControlName="vacuna_id">
               <option value="" disabled>Seleccione la vacuna</option>
               <option *ngFor="let vacuna of vacunas" [value]="vacuna.id">
                 {{ vacuna.vacuna }}
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroCuatroForm.get('vacuna_id').hasError('required') && registroCuatroForm.get('vacuna_id').touched
               "
@@ -878,14 +904,14 @@
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">Dosis:</label>
-            <select class="form-control" formControlName="dosis_id">
+            <select class="form-select" formControlName="dosis_id">
               <option value="" disabled>Seleccione la dosis</option>
               <option *ngFor="let dosis of dosis" [value]="dosis.id">
                 {{ dosis.dosis }}
               </option>
             </select>
             <small
-              class="form-text text-muted"
+              class="form-text text-danger"
               *ngIf="
                 registroCuatroForm.get('dosis_id').hasError('required') && registroCuatroForm.get('dosis_id').touched
               "
@@ -894,13 +920,20 @@
             </small>
           </div>
         </div>
-
-        <button (click)="previous()" type="button" name="previous" class="next btn btn-primary botonPrincipal">
-          Anterior
-        </button>
-        <button type="submit" class="btn btn-primary mx-2" (click)="guardarUsuario()">
-          <i class="fa fa-save"></i> Registro
-        </button>
+        <div class="float-end">
+          <button (click)="previous()" type="button" name="previous" class="next btn btn-primary botonPrincipal">
+            Anterior
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary mx-2"
+            (click)="guardarUsuario()"
+            [disabled]="this.registroCuatroForm.invalid"
+          >
+            <i class="fa fa-save"></i> Registro
+          </button>
+        </div>
+        <div class="float-start"><span class="text-danger">* </span>Campos obligatorios</div>
       </fieldset>
     </form>
   </div>

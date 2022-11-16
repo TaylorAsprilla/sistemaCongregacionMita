@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../core/guards/auth.guard';
+import { PermisosResolver } from '../resolvers/permisos/permisos.resolver';
 import { PagesComponent } from './pages.component';
 
 const routes: Routes = [
@@ -9,6 +10,7 @@ const routes: Routes = [
     component: PagesComponent,
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
+    resolve: { permisos: PermisosResolver },
 
     loadChildren: () => import('../routes/child-routes/child-routes.module').then((m) => m.ChildRoutesModule),
   },

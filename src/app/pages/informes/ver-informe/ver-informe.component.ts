@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
@@ -18,7 +18,6 @@ import { data } from 'jquery';
 import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
 import { VisitaModel } from 'src/app/core/models/visita.model';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
-import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
 import { LogroModel } from 'src/app/core/models/logro.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { ActividadModel } from 'src/app/core/models/actividad.model';
@@ -47,12 +46,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public obreroSeleccionado: UsuarioModel;
   public paisObrero: string;
 
-  public sumatoriaActividadesEspeciales = 0;
-
-  items = [
-    { name: 'jean', surname: 'kruger' },
-    { name: 'bobby', surname: 'marais' },
-  ];
+  public sumatoriaActividadesEspeciales: number = 0;
+  public sumatoriaActividadesEspirituales: number = 0;
+  public sumatoriaActividadesEnServicios: number = 0;
+  public sumatoriaActividadesEnReuniones: number = 0;
 
   public usuarios: UsuarioModel[] = [];
   public usuarioSubscription: Subscription;
@@ -69,6 +66,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   public cargando: boolean = true;
 
+  public sumatoriaVisible: boolean = false;
+
   // desglosar informacion de informe
   informe: InformeModel[];
   actividades: ActividadModel[];
@@ -79,7 +78,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   reuniones: ActividadModel[] = [];
 
   aspectoContable: ContabilidadModel[] = [];
-  asuntoPendiente: AsuntoPendienteModel[] = [];
   informacionInforme: InformeModel[];
   logros: LogroModel[] = [];
   metas: MetaModel[] = [];
@@ -91,7 +89,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   dataLogros: LogroModel[] = [];
   dataMetas: MetaModel[] = [];
   dataAspectoContable: ContabilidadModel[] = [];
-  dataAsuntoPendiente: AsuntoPendienteModel[] = [];
 
   congregaciones: CongregacionModel[] = [];
   obreros: UsuarioModel[] = [];
@@ -151,7 +148,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.dataLogros = this.informe['logros'];
       this.dataMetas = this.informe['metas'];
       this.dataAspectoContable = this.informe['aspectoContable'];
-      this.dataAsuntoPendiente = this.informe['asuntoPendiente'];
     });
     return true;
   }
@@ -270,16 +266,13 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   cargarUsuarios() {
     this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
-      this.usuarios = usuarios.filter((usuario: UsuarioModel) => console.log(usuario));
-      //  usuario.usuarioMinisterio.ministerio === 'Obrero');
-      // falta filtrar por ministerio me los devuelve undefined
+      this.usuarios = usuarios.filter((usuario: UsuarioModel) => usuario.estado == true);
     });
   }
 
   cargarMinisterios() {
     this.ministerioSubcription = this.ministerioService.getMinisterios().subscribe((ministerios) => {
       this.ministerios = ministerios.filter((ministerio: MinisterioModel) => ministerio.estado === true);
-      // console.log(ministerios);
     });
   }
 
@@ -320,8 +313,10 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.fraccion = '4to Trimestre del año';
     }
     this.filtrarInformacionInforme();
-    this.sumatoriaActividadesEspeciales = this.sumatoriaActividades();
-    console.log('Total ' + this.sumatoriaActividadesEspeciales);
+    this.sumatoriaActividadesEspeciales = this.sumatoriaActividades(this.especiales);
+    this.sumatoriaActividadesEspirituales = this.sumatoriaActividades(this.espirituales);
+    this.sumatoriaActividadesEnServicios = this.sumatoriaActividades(this.servicios);
+    this.sumatoriaActividadesEnReuniones = this.sumatoriaActividades(this.reuniones);
   }
 
   filtrarInformacionInforme() {
@@ -337,17 +332,15 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.aspectoContable = this.filtrarFechaCreatedAt(this.dataAspectoContable);
       this.metas = this.filtrarFecha(this.dataMetas);
       this.logros = this.filtrarFechaCreatedAt(this.dataLogros);
-      this.asuntoPendiente = this.filtrarFechaCreatedAt(this.dataAsuntoPendiente);
     }
   }
 
-  sumatoriaActividades() {
+  sumatoriaActividades(actividades) {
     var total = 0;
-    this.especiales.forEach((actividad) => {
+    actividades.forEach((actividad) => {
       total += +actividad.cantidadRecaudada;
-      // console.log(typeof actividad.cantidadRecaudada);
-      // console.log(actividad.cantidadRecaudada);
     });
+    this.sumatoriaVisible = true;
     return total;
   }
 
@@ -357,23 +350,11 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     let srcWidth = document.getElementById('content').scrollWidth;
     let margin = 18; // narrow margin - 1.27 cm (36);
     let scale = (pWidth - margin * 2) / srcWidth;
-    // pdf.setFont('Times');
-    //pdf.addFont('ArialMS', 'Arial', 'normal');
 
-    // pdf.html(this.el.nativeElement, {
-    //   callback: (pdf) => {
-    //     // texto insertado
-    //     pdf.text(fechaSeleccionada, 25, 25);
-    //     pdf.text(obreroSeleccionado, 25, 35);
-
-    //     pdf.save('informe.pdf');
-    //   },
-    // });
     pdf.html(document.getElementById('content'), {
       x: margin,
       y: margin,
       html2canvas: {
-        // insert html2canvas options here, e.g.
         scale: scale,
       },
       callback: function () {

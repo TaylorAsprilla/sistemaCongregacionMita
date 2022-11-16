@@ -4,10 +4,10 @@
     <!-- Logo -->
     <!-- ============================================================== -->
     <div class="navbar-header">
-      <a class="navbar-brand pt-4" [routerLink]="Rutas.INICIO">
+      <a class="navbar-brand" [routerLink]="Rutas.INICIO">
         <!-- Logo icon -->
         <div>
-          <img src="assets/images/escudo-congregacion-mita.png" alt="Congregación Mita INC" class="logo" />
+          <img src="assets/images/escudo-CMI.png" alt="Congregación Mita INC" class="dark-logo" />
         </div>
       </a>
     </div>
@@ -15,86 +15,86 @@
       <!-- ============================================================== -->
       <!-- toggle and nav items -->
       <!-- ============================================================== -->
-      <div class="row">
-        <div class="col-md-4">
-          <ul class="navbar-nav mr-auto mt-md-0">
-            <!-- This is  -->
-            <li (click)="toggleSidebar.emit()" class="nav-item m-l-10">
-              <a class="nav-link sidebartoggler waves-effect waves-dark" href="javascript:void(0)"
-                ><i class="ti-menu"></i
-              ></a>
-            </li>
-          </ul>
-        </div>
+      <!-- <div class="row"> -->
+      <!-- <ul class="navbar-nav my-lg-0"> -->
+      <ul class="navbar-nav mr-auto mt-md-0">
+        <!-- This is  -->
+        <li (click)="toggleSidebar.emit()" class="nav-item m-l-10">
+          <a class="nav-link sidebartoggler waves-effect waves-dark" href="javascript:void(0)"
+            ><i class="ti-menu"></i
+          ></a>
+        </li>
+      </ul>
+      <!-- </ul> -->
+      <!-- ============================================================== -->
+      <!-- User profile and search -->
+      <!-- ============================================================== -->
+      <!-- <div class="col-md-8"> -->
+      <ul class="navbar-nav my-lg-0">
         <!-- ============================================================== -->
-        <!-- User profile and search -->
+        <!-- Search -->
         <!-- ============================================================== -->
-        <div class="col-md-8">
-          <ul class="navbar-nav my-lg-0 float-end">
-            <!-- ============================================================== -->
-            <!-- Search -->
-            <!-- ============================================================== -->
-            <li class="nav-item hidden-sm-down search-box">
-              <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)">
-                <i class="ti-search"></i>
-              </a>
-              <form class="app-search">
-                <input type="text" class="form-control" placeholder="Search & enter" />
-                <a class="srh-btn">
-                  <i class="ti-close"></i>
-                </a>
-              </form>
-            </li>
-            <!-- ============================================================== -->
-            <!-- Profile -->
-            <!-- ============================================================== -->
-            <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
-              <a
-                ngbDropdownToggle
-                class="nav-link dropdown-toggle text-muted waves-effect waves-dark"
-                href="javascript:void(0)"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <img src="assets/images/users/perfil.png" alt="user" class="profile-pic" />
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                <ul class="dropdown-user">
-                  <li>
-                    <div class="dw-user-box">
-                      <div class="u-img">
-                        <img src="assets/images/users/perfil.png" alt="user" />
-                      </div>
-                      <div class="u-text">
-                        <h4>{{ usuario.primerNombre }} {{ usuario.primerApellido }}</h4>
-                        <p class="text-muted">{{ usuario.email }}</p>
-                        <p class="text-muted">{{ usuario.numeroCelular }}</p>
-                      </div>
-                    </div>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <a [routerLink]="Rutas.PERFIL"> <i class="ti-user"></i> Perfil</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <a href="#"> <i class="ti-settings"></i> Configuración</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <a (click)="logout()" class="pointer"> <i class="fa fa-power-off"></i> Cerrar Sesión</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
+        <li class="nav-item hidden-sm-down search-box">
+          <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)">
+            <i class="ti-search"></i>
+          </a>
+          <form class="app-search ng-untouched ng-pristine ng-valid">
+            <input type="text" class="form-control" placeholder="Search & enter" />
+            <a class="srh-btn">
+              <i class="ti-close"></i>
+            </a>
+          </form>
+        </li>
+        <!-- ============================================================== -->
+        <!-- Profile -->
+        <!-- ============================================================== -->
+        <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
+          <a
+            ngbDropdownToggle
+            class="dropdown-toggle nav-link text-muted waves-effect waves-dark"
+            href="javascript:void(0)"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <img src="assets/images/users/perfil.png" alt="user" class="profile-pic" />
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+            <ul class="dropdown-user">
+              <li>
+                <div class="dw-user-box">
+                  <div class="u-img">
+                    <img src="assets/images/users/perfil.png" alt="user" />
+                  </div>
+                  <div class="u-text">
+                    <h4>{{ usuario.primerNombre }} {{ usuario.primerApellido }}</h4>
+                    <p class="text-muted">{{ usuario.email }}</p>
+                    <p class="text-muted">{{ usuario.numeroCelular }}</p>
+                  </div>
+                </div>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a [routerLink]="Rutas.PERFIL"> <i class="ti-user"></i> Perfil</a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a href="#"> <i class="ti-settings"></i> Configuración</a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a (click)="logout()" class="pointer"> <i class="fa fa-power-off"></i> Cerrar Sesión</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
     </div>
+    <!-- </div> -->
+    <!-- </div> -->
   </nav>
 </header>

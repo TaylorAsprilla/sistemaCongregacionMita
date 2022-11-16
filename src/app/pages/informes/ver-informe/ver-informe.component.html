@@ -91,6 +91,10 @@
               <td (change)="seleccionarTrimestre()" *ngFor="let list of actividad | keys">{{ actividad[list] }}</td>
             </tr>
           </tbody>
+          <tr *ngIf="sumatoriaVisible">
+            <td class="bold">Total de dinero recaudado:</td>
+            <td>{{ sumatoriaActividadesEnServicios }}</td>
+          </tr>
         </table>
 
         <p class="heading spacingHeading">B. RESUMEN DE VISITAS REALIZADAS A LOS/AS FELIGRESES:</p>
@@ -136,7 +140,8 @@
               <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
             </tr>
           </tbody>
-          <tr>
+
+          <tr *ngIf="sumatoriaVisible">
             <td class="bold">Total de dinero recaudado:</td>
             <td>{{ sumatoriaActividadesEspeciales }}</td>
           </tr>
@@ -155,6 +160,10 @@
               <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
             </tr>
           </tbody>
+          <tr *ngIf="sumatoriaVisible">
+            <td class="bold">Total de dinero recaudado:</td>
+            <td>{{ sumatoriaActividadesEspirituales }}</td>
+          </tr>
         </table>
 
         <p class="heading spacingHeading">F. REUNIONES:</p>
@@ -170,6 +179,10 @@
               <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
             </tr>
           </tbody>
+          <tr *ngIf="sumatoriaVisible">
+            <td class="bold">Total de dinero recaudado:</td>
+            <td>{{ sumatoriaActividadesEnReuniones }}</td>
+          </tr>
         </table>
 
         <p class="heading spacingHeading">G. ASPECTOS CONTABLES:</p>
@@ -198,23 +211,6 @@
           <tbody>
             <tr *ngFor="let logro of logros">
               <td *ngFor="let list of logro | keys">{{ logro[list] }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="heading spacingHeading">
-          I. ASUNTOS PENDIENTES (ADMINISTRATIVOS, CONSTRUCCIÓN, ACTIVIDADES, ECLESIÁSTICOS):
-        </p>
-
-        <table class="tabla">
-          <thead>
-            <tr>
-              <th *ngFor="let head of asuntoPendiente[0] | keys">{{ head }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ap of asuntoPendiente">
-              <td *ngFor="let list of ap | keys">{{ ap[list] }}</td>
             </tr>
           </tbody>
         </table>

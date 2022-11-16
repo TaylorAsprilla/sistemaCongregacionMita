@@ -7,6 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --configuration production --base-href",
+    "deploy-front:prod": "ng build --configuration production --base-href && aws s3 sync dist s3://sistemacmi --acl public-read",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -43,7 +44,6 @@
     "angular-notifier": "^12.0.0",
     "angular-text-input-autocomplete": "^0.5.0",
     "animate.css": "^4.1.1",
-    "bootstrap": "^5.2.2",
     "braces": "^3.0.2",
     "calendar-utils": "^0.10.4",
     "chart.js": "^3.9.1",
