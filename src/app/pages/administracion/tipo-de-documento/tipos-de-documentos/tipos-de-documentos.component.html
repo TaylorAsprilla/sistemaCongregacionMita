@@ -11,7 +11,9 @@
         </div>
         <div class="col">
           <div class="float-end p-4">
-            <a class="btn btn-primary" (click)="crearTipoDeDocumento()"> <i class="fas fa-plus"></i> Crear Pais </a>
+            <a class="btn btn-primary" (click)="crearTipoDeDocumento()">
+              <i class="fas fa-plus"></i> Crear un Tipo de documento
+            </a>
           </div>
         </div>
       </div>
@@ -33,7 +35,7 @@
             <td>{{ i + 1 }}</td>
             <td>{{ tipoDeDocumento.documento }}</td>
 
-            <td>{{ buscarPais() }}</td>
+            <td>{{ buscarPais(tipoDeDocumento.pais_id) }}</td>
 
             <td>
               <span *ngIf="tipoDeDocumento.estado" class="badge badge-primary">Activo</span>
@@ -46,7 +48,7 @@
                 data-toggle="tooltip"
                 data-original-title="Editar"
                 class="btn bg-info"
-                (click)="actualizarTipoDeDocumento(tipoDeDocumento.id)"
+                (click)="actualizarTipoDocumento(tipoDeDocumento.id)"
                 ><i class="fas fa-pencil-alt ml-1"></i
               ></a>
               <a
@@ -54,7 +56,7 @@
                 data-toggle="tooltip"
                 data-original-title="Borrar"
                 class="btn bg-danger ml-1"
-                (click)="borrarTipoDeDocumento(tipoDeDocumento.id)"
+                (click)="borrarTipoDeDocumento(tipoDeDocumento)"
                 ><i class="fas fa-trash-alt"></i
               ></a>
               <a
@@ -62,7 +64,7 @@
                 data-toggle="tooltip"
                 data-original-title="Activar"
                 class="btn bg-secondary ml-1"
-                (click)="activarTipoDeDocumento(tipoDeDocumento.id)"
+                (click)="activarTipoDeDocumento(tipoDeDocumento)"
                 ><i class="fas fa-check-square"></i
               ></a>
             </td>
