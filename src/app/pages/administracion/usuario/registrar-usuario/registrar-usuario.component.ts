@@ -506,7 +506,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
       tipoDocumento_id: ['', Validators.required],
       numeroDocumento: ['123456', Validators.required],
     });
-    console.log('this.registroCuatroForm', this.registroCuatroForm);
     return true;
   }
 
