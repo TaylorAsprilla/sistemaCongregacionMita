@@ -25,7 +25,6 @@
     "@angular/platform-browser": "^14.2.7",
     "@angular/platform-browser-dynamic": "^14.2.7",
     "@angular/router": "^14.2.7",
-    "@angular/youtube-player": "^14.2.5",
     "@fortawesome/fontawesome-free": "^6.0.0",
     "@iplab/ngx-file-upload": "^4.0.0",
     "@mattlewis92/dom-autoscroller": "^2.4.2",
@@ -83,7 +82,6 @@
     "rxjs-compat": "^6.5.4",
     "sweetalert2": "^11.4.4",
     "tslib": "^2.3.0",
-    "youtube-player": "^5.5.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
