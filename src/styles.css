@@ -25,7 +25,25 @@ placeholder {
   display: block !important;
 }
 
+a.lista {
+  color: #7d8b92;
+  cursor: pointer;
+  text-decoration: none;
+}
 
+a.lista :hover {
+  color: #0b65c2;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 18px;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}

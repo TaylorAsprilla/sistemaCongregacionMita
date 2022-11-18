@@ -14,11 +14,13 @@ export class ServiciosYVigiliasComponent implements OnInit {
   servicio: LinkEventoModel;
   vigilia: LinkEventoModel;
   vimeo: string;
+  video: string;
 
   constructor(private activatedRoute: ActivatedRoute, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
-    this.vimeo = 'https://vimeo.com/event/2594553/embed';
+    this.video = 'https://vimeo.com/137307669';
+    // this.vimeo = 'https://vimeo.com/event/2594553/embed';
     this.activatedRoute.data.subscribe((data: { linkEventos: LinkEventoModel[] }) => {
       this.linkEventos = data.linkEventos;
     });
@@ -30,5 +32,8 @@ export class ServiciosYVigiliasComponent implements OnInit {
 
     this.servicio = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 1)[0];
     this.vigilia = this.linkEventos.filter((eventos) => eventos.tipoEvento_id === 2)[0];
+
+    console.log('this.servicios', this.servicio);
+    console.log('this.vigilia', this.vigilia);
   }
 }

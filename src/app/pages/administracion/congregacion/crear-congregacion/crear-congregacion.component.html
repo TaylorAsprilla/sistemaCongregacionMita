@@ -59,9 +59,9 @@
       </div>
       <div class="card-body">
         <div *ngFor="let congregacion of congregaciones">
-          <a class="pointer">
+          <a class="lista">
             <li (click)="buscarCongregacion(congregacion.id.toString())">
-              <span class="font-medium">{{ congregacion.congregacion }}</span>
+              <span class="font-light">{{ congregacion.congregacion }}</span>
             </li></a
           >
         </div>
