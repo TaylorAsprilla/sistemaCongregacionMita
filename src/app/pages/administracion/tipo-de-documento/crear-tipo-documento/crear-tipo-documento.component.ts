@@ -100,7 +100,6 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
 
   buscarTipoDeDocumento(id: string) {
     if (id !== 'nuevo') {
-      console.log(id);
       this.tipoDocumentoService
         .getTipoDocumento(id)
         .pipe(delay(100))

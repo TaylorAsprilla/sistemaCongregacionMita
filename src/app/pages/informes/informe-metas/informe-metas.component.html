@@ -85,9 +85,9 @@
       </div>
       <div class="card-body">
         <div *ngFor="let meta of metas">
-          <a class="pointer">
+          <a class="lista">
             <li (click)="buscarMeta(meta.id.toString())">
-              <span class="font-medium">{{ meta.accion }}</span>
+              <span class="font-light">{{ meta.accion }}</span>
             </li>
           </a>
         </div>

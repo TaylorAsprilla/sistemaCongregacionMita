@@ -43,9 +43,9 @@
       </div>
       <div class="card-body">
         <div *ngFor="let tipoDeDocumento of tiposDeDocumentos">
-          <a class="pointer">
+          <a class="lista">
             <li (click)="buscarTipoDeDocumento(tipoDeDocumento.id.toString())">
-              <span class="font-medium">{{ tipoDeDocumento.documento }}</span>
+              <span class="font-light">{{ tipoDeDocumento.documento }}</span>
             </li>
           </a>
         </div>

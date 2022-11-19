@@ -5,21 +5,25 @@
 
   <div class="card-body">
     <div class="row p-4">
-      <div *ngFor="let item of serviciosYvigilias; index as i" class="col-sm-12 col-md-4 col-lg-4 text-center p2">
+      <div
+        *ngFor="let item of serviciosYvigilias; index as i"
+        class="card-body col-sm-12 col-md-12 col-lg-6 text-center p2"
+      >
         <div class="mb-5">
           <h3>{{ item.titulo }}</h3>
-          <p>{{ item.fecha }}</p>
+          <h4>{{ item.fecha }}</h4>
 
-          <youtube-player [videoId]="item.link" suggestedQuality="hd1080" [height]="280" [width]="500">
-          </youtube-player>
-          <!-- <iframe
-          title="vimeo-player"
-          src="https://player.vimeo.com/video/249186549?h=97b13c4a1b"
-          width="640"
-          height="360"
-          frameborder="0"
-          allowfullscreen
-        ></iframe> -->
+          <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center ratio ratio-16x9">
+            <iframe
+              [src]="item.link | vimeoUrlPipe"
+              width="400"
+              height="255"
+              frameborder="0"
+              webkitallowfullscreen
+              mozallowfullscreen
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>

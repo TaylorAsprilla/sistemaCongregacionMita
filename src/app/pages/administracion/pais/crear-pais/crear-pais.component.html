@@ -49,9 +49,9 @@
       </div>
       <div class="card-body">
         <div *ngFor="let pais of paises">
-          <a class="pointer">
+          <a class="lista">
             <li (click)="buscarPais(pais.id.toString())">
-              <span class="font-medium">{{ pais.pais }}</span>
+              <span class="font-light">{{ pais.pais }}</span>
             </li>
           </a>
         </div>

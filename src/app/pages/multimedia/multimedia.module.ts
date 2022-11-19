@@ -16,10 +16,10 @@ import { FormularioFamiliaresComponent } from './formulario-familiares/formulari
 import { ValidarEmailComponent } from './validar-email/validar-email.component';
 import { ServiciosYVigiliasComponent } from './servicios-y-vigilias/servicios-y-vigilias.component';
 import { ConfigurarServiciosYVigiliasComponent } from './configurar-servicios-y-vigilias/configurar-servicios-y-vigilias.component';
-import { YouTubePlayerModule } from '@angular/youtube-player';
 import { ServiciosComponent } from './biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from './biblioteca-multimedia/vigilias/vigilias.component';
 import { BibliotecaMultimediaModule } from 'src/app/components/biblioteca-multimedia/biblioteca-multimedia.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 const lang = 'en-US';
 
@@ -47,8 +47,8 @@ const lang = 'en-US';
     NgxIntlTelInputModule,
     CargandoInformacionModule,
     NgxMaterialTimepickerModule,
-    YouTubePlayerModule,
     BibliotecaMultimediaModule,
+    PipesModule,
   ],
   exports: [[SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent]],
 })
