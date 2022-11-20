@@ -7,7 +7,6 @@ File: scss
 
 @import 'variable';
 
-
 /*==============================================================
  For all pages
  ============================================================== */
@@ -34,14 +33,12 @@ File: scss
   padding-bottom: 60px;
   height: calc(100vh - 64px);
   position: relative;
-    overflow: auto;
+  overflow: auto;
 }
 
 .container-fluid {
   padding: 0 30px 25px 30px;
 }
-
-
 
 /*******************
  Topbar
@@ -72,13 +69,13 @@ File: scss
         }
       }
     }
-    .navbar-nav>.nav-item>.nav-link {
-      padding-left: .75rem;
-      padding-right: .75rem;
+    .navbar-nav > .nav-item > .nav-link {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
       font-size: 15px;
       line-height: 40px;
     }
-    .navbar-nav>.nav-item.show {
+    .navbar-nav > .nav-item.show {
       background: $dark-transparent;
     }
   }
@@ -211,8 +208,8 @@ File: scss
       margin-top: 0px;
       margin-bottom: 0px;
     }
-    .breadcrumb-item+.breadcrumb-item::before {
-      content: "\e649";
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: '\e649';
       font-family: themify;
       color: $light-text;
       font-size: 11px;
@@ -223,23 +220,19 @@ File: scss
   }
 }
 
-
-
 /*******************
  Right side toggle
 *******************/
 
-
 .right-side-toggle {
   position: relative;
-
 }
-.btn-circle.right-side-toggle{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  padding:25px;
-  z-index:10;
+.btn-circle.right-side-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 25px;
+  z-index: 10;
 }
 .right-side-toggle i {
   -webkit-transition-property: -webkit-transform;
@@ -283,7 +276,7 @@ File: scss
     }
   }
   .r-panel-body {
-    height:100%;
+    height: 100%;
     position: absolute;
     width: 100%;
     padding-bottom: 40px;
@@ -312,8 +305,6 @@ File: scss
   padding-bottom: 20px;
 }
 
-
-
 /*******************
  Footer
 *******************/
@@ -323,13 +314,11 @@ File: scss
   color: $bodytext;
   left: 0px;
   padding: 17px 15px;
-  position: absolute;
+  position: fixed;
   right: 0;
   border-top: 1px solid $border;
   background: $white;
 }
-
-
 
 /*******************
  Card title
@@ -348,43 +337,43 @@ File: scss
 .card-inverse .card-link,
 .card-inverse .card-subtitle,
 .card-inverse .card-text {
-  color: rgba(255, 255, 255, .65);
+  color: rgba(255, 255, 255, 0.65);
 }
-html body .card{
-&.card-success {
-  background: $success;
-  border-color: $success;
-}
+html body .card {
+  &.card-success {
+    background: $success;
+    border-color: $success;
+  }
 
-&.card-danger {
-  background: $danger;
-  border-color: $danger;
-}
+  &.card-danger {
+    background: $danger;
+    border-color: $danger;
+  }
 
-&.card-warning {
-  background: $warning;
-  border-color: $warning;
-}
+  &.card-warning {
+    background: $warning;
+    border-color: $warning;
+  }
 
-&.card-info {
-  background: $info;
-  border-color: $info;
-}
+  &.card-info {
+    background: $info;
+    border-color: $info;
+  }
 
-&.card-primary {
-  background: $primary;
-  border-color: $primary;
-}
+  &.card-primary {
+    background: $primary;
+    border-color: $primary;
+  }
 
-&.card-dark {
-  background: $inverse;
-  border-color: $inverse;
-}
+  &.card-dark {
+    background: $inverse;
+    border-color: $inverse;
+  }
 
-&.card-megna {
-  background: $megna;
-  border-color: $megna;
-}
+  &.card-megna {
+    background: $megna;
+    border-color: $megna;
+  }
 }
 /*==============================================================
  Cards page
@@ -409,8 +398,8 @@ html body .card{
 }
 
 .collapsing {
-  -webkit-transition: height .08s ease;
-  transition: height .08s ease;
+  -webkit-transition: height 0.08s ease;
+  transition: height 0.08s ease;
 }
 
 .card-info {
@@ -501,7 +490,6 @@ html body .card{
   }
 }
 
-
 /*==============================================================
 Breadcrumb
  ============================================================== */
@@ -514,7 +502,7 @@ Breadcrumb
       opacity: 0.7;
     }
   }
-  .breadcrumb-item+.breadcrumb-item::before {
+  .breadcrumb-item + .breadcrumb-item::before {
     color: rgba(255, 255, 255, 0.4);
   }
 }
@@ -522,8 +510,6 @@ Breadcrumb
 .breadcrumb {
   margin-bottom: 0px;
 }
-
-
 
 /*==============================================================
  Ui-bootstrap
@@ -564,8 +550,6 @@ ul.two-part {
   }
 }
 
-
-
 /*Accordion*/
 
 html body .accordion {
@@ -574,16 +558,14 @@ html body .accordion {
   }
 }
 
-
-
 /*==============================================================
  sparkline chart
  ============================================================== */
 html body {
   .jqstooltip,
   .flotTip {
-    width: auto!important;
-    height: auto!important;
+    width: auto !important;
+    height: auto !important;
     background: $dark;
     color: $white;
     padding: 5px 10px;
@@ -595,30 +577,9 @@ body .jqstooltip {
   border-radius: 60px;
 }
 
-
-
-
-
-
-
 /*==============================================================
 Dashboard1 chart
  ============================================================== */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*******************
 Pagination
@@ -649,9 +610,6 @@ Pagination
     color: $border;
   }
 }
-
-
-
 
 /*******************
 Table-Layout
@@ -893,7 +851,7 @@ Table-Layout
 }
 
 .full-color-table.full-dark-table {
-  background-color: rgba(43, 43, 43, .8);
+  background-color: rgba(43, 43, 43, 0.8);
   thead th {
     background-color: $dark;
     border: 0;
@@ -942,7 +900,7 @@ Table-Layout
 }
 
 .full-color-table.full-muted-table {
-  background-color: rgba(152, 166, 173, .2);
+  background-color: rgba(152, 166, 173, 0.2);
   thead th {
     background-color: $muted;
     border: 0;
@@ -956,10 +914,6 @@ Table-Layout
     color: $white;
   }
 }
-
-
-
-
 
 /*******************
 Table- editable table
@@ -990,7 +944,6 @@ Table- editable table
   }
 }
 
-
 /*******************
 Icon list fontawesom
 ******************/
@@ -1011,13 +964,13 @@ Icon list fontawesom
   }
   i {
     -webkit-transition: all 0.2s;
-    -webkit-transition: font-size .2s;
+    -webkit-transition: font-size 0.2s;
     display: inline-block;
     font-size: 18px;
     margin: 0 15px 0 10px;
     text-align: left;
     transition: all 0.2s;
-    transition: font-size .2s;
+    transition: font-size 0.2s;
     vertical-align: middle;
     transition: all 0.3s ease 0s;
   }
@@ -1034,8 +987,6 @@ Icon list fontawesom
   font-size: 2em;
 }
 
-
-
 /*******************
 Icon list material icon
 ******************/
@@ -1043,9 +994,6 @@ Icon list material icon
 .material-icon-list-demo .mdi {
   font-size: 21px;
 }
-
-
-
 
 /*******************
 list and media
@@ -1072,8 +1020,6 @@ list and media
   padding: 15px;
 }
 
-
-
 /*******************
 Timeline page
 ******************/
@@ -1087,7 +1033,7 @@ Timeline page
 }
 
 .timeline:before {
-  content: " ";
+  content: ' ';
   position: absolute;
   top: 0;
   bottom: 0;
@@ -1097,32 +1043,32 @@ Timeline page
   background-color: $light;
 }
 
-.timeline>li {
+.timeline > li {
   position: relative;
   margin-bottom: 20px;
 }
 
-.timeline>li:before,
-.timeline>li:after {
-  content: " ";
+.timeline > li:before,
+.timeline > li:after {
+  content: ' ';
   display: table;
 }
 
-.timeline>li:after {
+.timeline > li:after {
   clear: both;
 }
 
-.timeline>li:before,
-.timeline>li:after {
-  content: " ";
+.timeline > li:before,
+.timeline > li:after {
+  content: ' ';
   display: table;
 }
 
-.timeline>li:after {
+.timeline > li:after {
   clear: both;
 }
 
-.timeline>li>.timeline-panel {
+.timeline > li > .timeline-panel {
   float: left;
   position: relative;
   width: 46%;
@@ -1133,8 +1079,8 @@ Timeline page
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 
-.timeline>li>.timeline-panel:before {
-  content: " ";
+.timeline > li > .timeline-panel:before {
+  content: ' ';
   display: inline-block;
   position: absolute;
   top: 26px;
@@ -1145,8 +1091,8 @@ Timeline page
   border-left: 8px solid $border;
 }
 
-.timeline>li>.timeline-panel:after {
-  content: " ";
+.timeline > li > .timeline-panel:after {
+  content: ' ';
   display: inline-block;
   position: absolute;
   top: 27px;
@@ -1157,7 +1103,7 @@ Timeline page
   border-left: 7px solid $white;
 }
 
-.timeline>li>.timeline-badge {
+.timeline > li > .timeline-badge {
   z-index: 10;
   position: absolute;
   top: 16px;
@@ -1173,18 +1119,18 @@ Timeline page
   overflow: hidden;
 }
 
-.timeline>li.timeline-inverted>.timeline-panel {
+.timeline > li.timeline-inverted > .timeline-panel {
   float: right;
 }
 
-.timeline>li.timeline-inverted>.timeline-panel:before {
+.timeline > li.timeline-inverted > .timeline-panel:before {
   right: auto;
   left: -8px;
   border-right-width: 8px;
   border-left-width: 0;
 }
 
-.timeline>li.timeline-inverted>.timeline-panel:after {
+.timeline > li.timeline-inverted > .timeline-panel:after {
   right: auto;
   left: -7px;
   border-right-width: 7px;
@@ -1217,17 +1163,14 @@ Timeline page
   font-weight: 400;
 }
 
-.timeline-body>p,
-.timeline-body>ul {
+.timeline-body > p,
+.timeline-body > ul {
   margin-bottom: 0;
 }
 
-.timeline-body>p+p {
+.timeline-body > p + p {
   margin-top: 5px;
 }
-
-
-
 
 /*******************
 Error Page
@@ -1253,10 +1196,6 @@ Error Page
     line-height: 210px;
   }
 }
-
-
-
-
 
 /*******************
 Login register and recover password Page
@@ -1300,9 +1239,6 @@ Login register and recover password Page
   }
 }
 
-
-
-
 /*******************
 Pricing Page
 ******************/
@@ -1343,7 +1279,7 @@ Pricing Page
     position: absolute;
     font-size: 15px;
     top: -10px;
-    margin-left: -10px
+    margin-left: -10px;
   }
 }
 
@@ -1372,12 +1308,6 @@ Pricing Page
   right: 0px;
 }
 
-
-
-
-
-
-
 /*Documentation page*/
 
 .plugin-details {
@@ -1400,27 +1330,27 @@ Pricing Page
   }
 }
 
-
-.btn-link{
-  border:0px;
+.btn-link {
+  border: 0px;
 }
 /*******************
 Smart table
 ******************/
-.smart-table tr td, .smart-table tr th{
-    padding:15px!important;
+.smart-table tr td,
+.smart-table tr th {
+  padding: 15px !important;
 }
-.ng2-smart-action-add-add{
-   color:$white!important;
-   background: $themecolor;
-   padding: 8px 15px;
-   border-radius: $radius;
+.ng2-smart-action-add-add {
+  color: $white !important;
+  background: $themecolor;
+  padding: 8px 15px;
+  border-radius: $radius;
 }
-.ng2-smart-pagination-nav{
-    margin-left: auto;
+.ng2-smart-pagination-nav {
+  margin-left: auto;
 }
 .ng2-smart-pagination-nav .pagination > li > a {
-    line-height: 1rem;
+  line-height: 1rem;
 }
 
 /*******************
@@ -1428,20 +1358,20 @@ NGX Data table
 ******************/
 
 .ngx-datatable.material {
- box-shadow:none!important;
-    border:1px solid $border;
+  box-shadow: none !important;
+  border: 1px solid $border;
 }
 
 /*******************
 Chartistt chart css
 ******************/
-.barchrt{
-    .ct-series-a .ct-bar{
-        stroke:$success;
-    }
-    .ct-series-b .ct-bar{
-        stroke:$info;
-    }
+.barchrt {
+  .ct-series-a .ct-bar {
+    stroke: $success;
+  }
+  .ct-series-b .ct-bar {
+    stroke: $info;
+  }
 }
 
 .linearea {
@@ -1475,26 +1405,26 @@ Chartistt chart css
   }
   .ct-series-a .ct-point,
   .ct-series-b .ct-point,
-  .ct-series-c .ct-point{
+  .ct-series-c .ct-point {
     stroke-width: 6px;
   }
 }
-.piechart{
-    .ct-series-a .ct-slice-donut{
-        stroke:$info
-    }
-    .ct-series-b .ct-slice-donut{
-        stroke:$success
-    }
-    .ct-series-c .ct-slice-donut{
-        stroke:$inverse
-    }
-    .ct-series-d .ct-slice-donut{
-        stroke:$danger
-    }
-    .ct-series-e .ct-slice-donut{
-        stroke:$warning
-    }
+.piechart {
+  .ct-series-a .ct-slice-donut {
+    stroke: $info;
+  }
+  .ct-series-b .ct-slice-donut {
+    stroke: $success;
+  }
+  .ct-series-c .ct-slice-donut {
+    stroke: $inverse;
+  }
+  .ct-series-d .ct-slice-donut {
+    stroke: $danger;
+  }
+  .ct-series-e .ct-slice-donut {
+    stroke: $warning;
+  }
 }
 
 /*******************
@@ -1553,7 +1483,7 @@ Taskboard scss
     }
   }
   .taskboard-task:after {
-    content: "";
+    content: '';
     position: absolute;
     border: 4px solid transparent;
     top: 0;
@@ -1599,16 +1529,16 @@ Taskboard scss
 }
 
 .afu-valid-file {
-    .progress {
-        width: 500px;
-        height: 13px;
-    }
+  .progress {
+    width: 500px;
+    height: 13px;
+  }
 }
 
 #attachPin {
-    .label:empty {
-        display: none;
-    }
+  .label:empty {
+    display: none;
+  }
 }
 
 /*******************
@@ -1634,7 +1564,7 @@ Notifier pages scss
   backface-visibility: hidden;
 }
 
-$notifier-shadow-color: rgba(0, 0, 0, .2) !default;
+$notifier-shadow-color: rgba(0, 0, 0, 0.2) !default;
 
 .notifier__notification--material {
   border-radius: 3px;
@@ -1649,7 +1579,6 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
   }
 
   .notifier__notification {
-
     &-message {
       display: inline-block;
 
@@ -1666,8 +1595,8 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
 
     &-button {
       display: inline-block;
-      transition: opacity .2s ease;
-      opacity: .5;
+      transition: opacity 0.2s ease;
+      opacity: 0.5;
 
       margin: {
         right: -10px;
@@ -1675,7 +1604,6 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
         top: -4px;
       }
 
-      ;
       outline: none;
       border: none;
       background: none;
@@ -1691,14 +1619,11 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
       }
 
       &:active {
-        transform: scale(.82); // Make me "feel" the click by a push back (#UX)
+        transform: scale(0.82); // Make me "feel" the click by a push back (#UX)
         opacity: 1;
       }
-
     }
-
   }
-
 }
 
 .notifier__notification--default {
@@ -1709,7 +1634,6 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
     // 16x16 fixed size
     fill: $white;
   }
-
 }
 
 .notifier__notification--info {
@@ -1720,7 +1644,6 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
     // 16x16 fixed size
     fill: $white;
   }
-
 }
 
 .notifier__notification--warning {
@@ -1731,7 +1654,6 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
     // 16x16 fixed size
     fill: $white;
   }
-
 }
 
 .notifier__notification--success {
@@ -1742,7 +1664,6 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
     // 16x16 fixed size
     fill: $white;
   }
-
 }
 
 .notifier__notification--error {
@@ -1753,7 +1674,6 @@ $notifier-shadow-color: rgba(0, 0, 0, .2) !default;
     // 16x16 fixed size
     fill: $white;
   }
-
 }
 
 /*******************
@@ -1771,7 +1691,7 @@ Ngx wizard pages scss
   &::before {
     height: 2px;
     background: $border-color;
-    content: "";
+    content: '';
     position: absolute;
     width: 75%;
     margin: 0 auto;
@@ -1792,14 +1712,13 @@ Ngx wizard pages scss
       z-index: 2;
       border: 1px solid $border-color;
       border-radius: 100%;
-
     }
 
-    >a {
+    > a {
       padding: 0.5rem 0;
     }
 
-    >a.active .round-tabs {
+    > a.active .round-tabs {
       background: $info;
       border-color: $info;
       color: $white;
