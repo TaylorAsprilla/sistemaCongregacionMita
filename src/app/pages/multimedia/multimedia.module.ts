@@ -20,6 +20,7 @@ import { ServiciosComponent } from './biblioteca-multimedia/servicios/servicios.
 import { VigiliasComponent } from './biblioteca-multimedia/vigilias/vigilias.component';
 import { BibliotecaMultimediaModule } from 'src/app/components/biblioteca-multimedia/biblioteca-multimedia.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 const lang = 'en-US';
 
@@ -47,9 +48,10 @@ const lang = 'en-US';
     NgxIntlTelInputModule,
     CargandoInformacionModule,
     NgxMaterialTimepickerModule,
-    BibliotecaMultimediaModule,
     PipesModule,
+    YouTubePlayerModule,
+    BibliotecaMultimediaModule,
   ],
-  exports: [[SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent]],
+  exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
 })
 export class MultimediaModule {}
