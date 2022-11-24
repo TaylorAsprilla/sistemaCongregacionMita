@@ -2,23 +2,41 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Configurar Servicios</h3>
+        <h3 class="card-title">Configurar Servicios, Vígilias y/o Eventos Especiales</h3>
       </div>
       <div class="card-body">
         <form class="form-signin" autocomplete="off" [formGroup]="serviciosForm">
           <div class="form-group">
+            <label>Plataforma de Streaming</label>
+            <select class="form-select" formControlName="plataforma">
+              <option value="" disabled>Seleccione la plataforma de Streaming</option>
+              <option [value]="PLATAFORMA.YOUTUBE">{{ PLATAFORMA.YOUTUBE.toUpperCase() }}</option>
+              <option [value]="PLATAFORMA.VIMEO">{{ PLATAFORMA.VIMEO.toUpperCase() }}</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Título</label>
-            <input type="text" formControlName="titulo" class="form-control" placeholder="Título del servicio" />
+            <input type="text" formControlName="titulo" class="form-control" />
           </div>
 
           <div class="form-group">
-            <label>ID del servicio</label>
-            <input type="text" formControlName="link" class="form-control" placeholder="Id del servicio" />
+            <label>Link del vídeo</label>
+            <input type="text" formControlName="link" class="form-control" />
           </div>
 
           <div class="form-group">
             <label>Fecha</label>
             <input type="date" formControlName="fecha" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Evento</label>
+            <select class="form-select" formControlName="tipoEvento_id">
+              <option value="" disabled>Seleccione una opción</option>
+              <option [value]="TIPOEVENTO.SERVICIO">Servicio</option>
+              <option [value]="TIPOEVENTO.VIGILIA">Vigilia</option>
+              <option [value]="TIPOEVENTO.ESPECIAL">Evento Especial</option>
+            </select>
           </div>
 
           <div class="card">
@@ -39,36 +57,9 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Configurar Vigilias</h3>
+        <h3 class="card-title">Listado de Servicios, Vígilias y/o Eventos Especiales</h3>
       </div>
-      <div class="card-body">
-        <form class="form-signin" autocomplete="off" [formGroup]="vigiliasForm">
-          <div class="form-group">
-            <label>Título</label>
-            <input type="text" formControlName="titulo" class="form-control" placeholder="Título del servicio" />
-          </div>
-
-          <div class="form-group">
-            <label>ID del servicio</label>
-            <input type="text" formControlName="link" class="form-control" placeholder="Id del servicio" />
-          </div>
-
-          <div class="form-group">
-            <label>Fecha</label>
-            <input type="date" formControlName="fecha" class="form-control" />
-          </div>
-          <div class="card">
-            <button
-              type="submit"
-              class="submit btn btn-primary"
-              (click)="guardarVigilia()"
-              [disabled]="vigiliasForm.invalid"
-            >
-              <i class="fa fa-save"></i> Guardar vigilia
-            </button>
-          </div>
-        </form>
-      </div>
+      <div class="card-body"></div>
     </div>
   </div>
 </div>
