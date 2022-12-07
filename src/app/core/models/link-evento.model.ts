@@ -1,7 +1,7 @@
 export enum TIPOEVENTO {
   SERVICIO = 1,
   VIGILIA = 2,
-  ESPECIAL = 3,
+  EVENTO_ESPECIAL = 3,
 }
 
 export enum PLATAFORMA {
@@ -16,6 +16,7 @@ export class LinkEventoModel {
     public link: string,
     public fecha: Date,
     public tipoEvento_id: number,
-    public plataforma: string
+    public plataforma: string,
+    public estado: boolean
   ) {}
 }

@@ -48,8 +48,6 @@ const lang = 'en-US';
     NgxIntlTelInputModule,
     CargandoInformacionModule,
     NgxMaterialTimepickerModule,
-    PipesModule,
-    YouTubePlayerModule,
     BibliotecaMultimediaModule,
   ],
   exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
