@@ -1,66 +1,28 @@
 <div class="card animate__animated animate__fadeIn">
   <div class="card-header">
-    <h3 class="card-title float-left">Servicios / Vigilias</h3>
+    <h3 class="card-title float-left pt-4 pl-4">servicios y Vigilias</h3>
   </div>
-  <div class="row p-3">
-    <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
-      <h2>{{ servicio.titulo }}</h2>
-      <h3>{{ servicio.fecha }}</h3>
+  <!-- /.card-header -->
+  <div class="card-body">
+    <!-- Servicios -->
+    <app-biblioteca-multimedia
+      [serviciosYvigilias]="servicios"
+      [titulo]="'Servicios'"
+      [tipoDeEvento]="TIPOEVENTO.SERVICIO"
+    ></app-biblioteca-multimedia>
 
-      <div>
-        <div
-          *ngIf="servicio.plataforma === PLATAFORMA.YOUTUBE"
-          class="card-body col-sm-12 col-md-12 col-lg-12 text-center"
-          #templateYouTubePlayer
-        >
-          <youtube-player
-            [videoId]="servicio.link | youtube"
-            suggestedQuality="default"
-            [width]="videoWidth"
-            [height]="videoHeight"
-          >
-          </youtube-player>
-        </div>
-      </div>
-      <div
-        *ngIf="servicio.plataforma === PLATAFORMA.VIMEO"
-        class="card-body col-sm-12 col-md-12 col-lg-12 text-center ratio ratio-16x9"
-      >
-        <iframe
-          [src]="servicio.link | vimeoUrlPipe"
-          width="400"
-          height="255"
-          frameborder="0"
-          webkitallowfullscreen
-          mozallowfullscreen
-          allowfullscreen
-        ></iframe>
-      </div>
-    </div>
-  </div>
-  <hr />
-  <div class="card-body col-sm-12 col-md-12 col-lg-12 text-center">
-    <h2>{{ vigilia.titulo }}</h2>
-    <h3>{{ vigilia.fecha }}</h3>
-    <div>
-      <div
-        *ngIf="vigilia.plataforma === PLATAFORMA.YOUTUBE"
-        class="card-body col-sm-12 col-md-12 col-lg-6 text-center ratio ratio-16x9 #templateYouTubePlayer"
-      >
-        <youtube-player [videoId]="vigilia.link | youtube" suggestedQuality="highres" [width]="400" [height]="255">
-        </youtube-player>
-      </div>
-      <div *ngIf="vigilia.plataforma === PLATAFORMA.VIMEO" class="card-body col-sm-12 col-md-12 col-lg-12 text-center">
-        <iframe
-          [src]="vigilia.link | vimeoUrlPipe"
-          width="1000"
-          height="600"
-          frameborder="0"
-          webkitallowfullscreen
-          mozallowfullscreen
-          allowfullscreen
-        ></iframe>
-      </div>
-    </div>
+    <!-- Vigilias -->
+    <app-biblioteca-multimedia
+      [serviciosYvigilias]="vigilias"
+      [titulo]="'Vigilias'"
+      [tipoDeEvento]="TIPOEVENTO.VIGILIA"
+    ></app-biblioteca-multimedia>
+
+    <!-- Eventos -->
+    <app-biblioteca-multimedia
+      [serviciosYvigilias]="eventos"
+      [titulo]="'Evento Especial'"
+      [tipoDeEvento]="TIPOEVENTO.EVENTO_ESPECIAL"
+    ></app-biblioteca-multimedia>
   </div>
 </div>
