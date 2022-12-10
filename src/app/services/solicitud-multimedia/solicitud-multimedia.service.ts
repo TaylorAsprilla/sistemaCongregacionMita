@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { SolicitudMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
+import { SolicitudMultimediaInterface, SolicitudMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 
 const base_url = environment.base_url;
 
@@ -26,7 +26,7 @@ export class SolicitudMultimediaService {
 
   getSolicitudes() {
     return this.httpClient
-      .get(`${base_url}/solicitud`, this.headers)
+      .get(`${base_url}/solicitudmultimedia`, this.headers)
       .pipe(
         map(
           (respuesta: { ok: boolean; solicitudDeAccesos: SolicitudMultimediaModel[] }) => respuesta.solicitudDeAccesos
@@ -36,7 +36,7 @@ export class SolicitudMultimediaService {
 
   getSolicitud(id: number) {
     return this.httpClient
-      .get(`${base_url}/solicitud/${id}`, this.headers)
+      .get(`${base_url}/solicitudmultimedia/${id}`, this.headers)
       .pipe(
         map(
           (respuesta: { ok: boolean; solicitudDeAcceso: SolicitudMultimediaModel; id: number }) =>
@@ -45,11 +45,11 @@ export class SolicitudMultimediaService {
       );
   }
 
-  crearSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaModel) {
-    return this.httpClient.post(`${base_url}/solicitud`, solicitudDeacceso, this.headers);
+  crearSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface) {
+    return this.httpClient.post(`${base_url}/solicitudmultimedia`, solicitudDeacceso, this.headers);
   }
 
   validarEmail(id: number) {
-    return this.httpClient.put(`${base_url}/solicitud/validaremail/${id}`, null);
+    return this.httpClient.put(`${base_url}/solicitudmultimedia/validaremail/${id}`, null);
   }
 }

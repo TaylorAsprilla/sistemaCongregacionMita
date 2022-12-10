@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { SolicitudMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
+import { SolicitudMultimediaInterface, SolicitudMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
-import { FamiliarModel } from 'src/app/core/models/familiar.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
-import { ParentescoModel } from 'src/app/core/models/parentesco.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
+import { Rutas } from 'src/app/routes/menu-items';
+import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-crear-solicitud-multimedia',
@@ -19,15 +21,19 @@ import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedi
   styleUrls: ['./crear-solicitud-multimedia.component.scss'],
 })
 export class CrearSolicitudMultimediaComponent implements OnInit {
-  public solicitudForm: UntypedFormGroup;
+  public solicitudForm: FormGroup;
 
   public paises: PaisModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
   public congregaciones: CongregacionModel[] = [];
   public razonSolicitudes: RazonSolicitudModel[] = [];
-  public parentescos: ParentescoModel[] = [];
+
+  public mensajeBuscarCorreo: string = '';
+
+  public idUsuario: number;
 
   // Subscription
+  public buscarCorreoSubscription: Subscription;
 
   codigoDeMarcadoSeparado = false;
   buscarPais = SearchCountryField;
@@ -58,7 +64,9 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private solicitudMultimediaService: SolicitudMultimediaService
+    private solicitudMultimediaService: SolicitudMultimediaService,
+    private usuarioService: UsuarioService,
+    private buscarCorreoService: BuscarCorreoService
   ) {}
 
   ngOnInit(): void {
@@ -71,39 +79,44 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
         congregacion: CongregacionModel[];
         pais: PaisModel[];
         razonSolicitud: RazonSolicitudModel[];
-        parentesco: ParentescoModel[];
       }) => {
         this.nacionalidades = data.nacionalidad;
         this.congregaciones = data.congregacion;
         this.paises = data.pais;
         this.razonSolicitudes = data.razonSolicitud;
-        this.parentescos = data.parentesco;
       }
     );
+
+    this.idUsuario = this.usuarioService.usuarioId;
 
     this.crearFormularioDeLaSolicitud();
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.buscarCorreoSubscription?.unsubscribe();
+  }
 
   crearFormularioDeLaSolicitud() {
     this.solicitudForm = this.formBuilder.group({
-      nombre: ['Christian Guti Comba', [Validators.required, Validators.minLength(3)]],
-      direccion: ['Calle 23 # 4567 Piso 4', [Validators.required, Validators.minLength(3)]],
-      ciudad: ['Ciudad de Mexico', [Validators.required, Validators.minLength(3)]],
-      departamento: ['Mexico', [Validators.minLength(3)]],
-      codigoPostal: ['1245656', [Validators.minLength(3)]],
-      pais: ['Mexico', [Validators.required, Validators.minLength(3)]],
-      telefono: ['+57 601235614', [Validators.minLength(3)]],
-      celular: ['+57 311887332', { updateOn: 'blur' }, [Validators.required, Validators.minLength(3)]],
-      email: ['christian@gmail.com', [Validators.required, Validators.minLength(3), Validators.email]],
-      miembroCongregacion: ['1', [Validators.required]],
-      congregacionCercana: ['Bogotá', [Validators.minLength(3)]],
-      distancia: ['02:24', [Validators.minLength(3)]],
-      familiaEnPR: ['1', [Validators.required]],
-      razonSolicitud_id: ['1', []],
-      otraRazonSolicitud: ['No puedo ir', []],
-      nacionalidad: ['Colombia', [Validators.required, Validators.minLength(3)]],
+      nombre: ['', [Validators.required, Validators.minLength(3)]],
+      direccion: ['', [Validators.required, Validators.minLength(3)]],
+      ciudad: ['', [Validators.required, Validators.minLength(3)]],
+      departamento: ['', [Validators.minLength(3)]],
+      codigoPostal: ['', [Validators.minLength(3)]],
+      pais: ['', [Validators.required, Validators.minLength(3)]],
+      telefono: ['', [Validators.minLength(3)]],
+      celular: ['', [Validators.required, Validators.minLength(3)]],
+      email: [
+        '',
+        {
+          validators: [Validators.required, Validators.minLength(3), Validators.email],
+        },
+      ],
+      miembroCongregacion: ['', [Validators.required]],
+      congregacionCercana: ['', [Validators.minLength(3)]],
+      razonSolicitud_id: ['', []],
+      otraRazonSolicitud: ['', []],
+      nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -137,19 +150,24 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
     );
   }
 
-  tieneFamiliaresEnPR() {
-    return this.solicitudForm.controls['familiaEnPR'].value || false;
-  }
-
   buscarIDNacionalidad(nacionalidad: string): number {
     return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre === nacionalidad).id;
   }
 
-  crearSolicitud(valoresFamiliares: FamiliarModel[]) {
-    const formFamiliares = valoresFamiliares['familiares'];
-    const formSolicitud = this.solicitudForm.value;
+  buscarCorreo(email: string) {
+    this.mensajeBuscarCorreo = '';
+    this.buscarCorreoSubscription = this.buscarCorreoService
+      .buscarCorreoSolicitud(email)
+      .subscribe((respuesta: any) => {
+        if (!respuesta.ok) {
+          this.mensajeBuscarCorreo = respuesta.msg;
+        }
+      });
+  }
 
-    const solicitudNueva: SolicitudMultimediaModel = {
+  crearSolicitud() {
+    const formSolicitud = this.solicitudForm.value;
+    const solicitudNueva: SolicitudMultimediaInterface = {
       nombre: formSolicitud.nombre,
       direccion: formSolicitud.direccion,
       ciudad: formSolicitud.ciudad,
@@ -161,18 +179,41 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
       email: formSolicitud.email,
       miembroCongregacion: formSolicitud.miembroCongregacion,
       congregacionCercana: formSolicitud.congregacionCercana,
-      distancia: formSolicitud.distancia,
-      familiaEnPR: formSolicitud.familiaEnPR,
       razonSolicitud_id: formSolicitud.razonSolicitud_id,
       nacionalidad_id: this.buscarIDNacionalidad(formSolicitud.nacionalidad),
-      familiares: formFamiliares,
-      id: 0,
       estado: true,
       status: false,
+      usuarioQueRegistra_id: this.idUsuario,
     };
 
-    this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe((respuesta: any) => {
-      console.log(respuesta);
-    });
+    this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(
+      (respuesta: any) => {
+        Swal.fire({
+          title: 'Solicitud Acceso a cmar.live',
+          text: `${respuesta.solicitudDeAcceso.nombre}, por favor revise el correo electrónico ${respuesta.solicitudDeAcceso.email} y realice el proceso de validación para que sea procesada su solicitud`,
+          icon: 'success',
+        });
+        this.resetFormulario();
+      },
+      (error) => {
+        let errores = error.error.errors;
+        let listaErrores = [];
+
+        Object.entries(errores).forEach(([key, value]) => {
+          listaErrores.push('° ' + value['msg'] + '<br>');
+        });
+
+        Swal.fire({
+          title: 'Error al crear la solicitud de acceso a cmar.live',
+          icon: 'error',
+          html: `${listaErrores.join('')}`,
+        });
+        this.resetFormulario();
+      }
+    );
+  }
+
+  resetFormulario() {
+    this.solicitudForm.reset();
   }
 }

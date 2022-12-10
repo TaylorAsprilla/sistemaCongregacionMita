@@ -12,15 +12,12 @@ import { CargandoInformacionModule } from 'src/app/components/cargando-informaci
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { FormularioFamiliaresComponent } from './formulario-familiares/formulario-familiares.component';
 import { ValidarEmailComponent } from './validar-email/validar-email.component';
 import { ServiciosYVigiliasComponent } from './servicios-y-vigilias/servicios-y-vigilias.component';
 import { ConfigurarServiciosYVigiliasComponent } from './configurar-servicios-y-vigilias/configurar-servicios-y-vigilias.component';
 import { ServiciosComponent } from './biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from './biblioteca-multimedia/vigilias/vigilias.component';
 import { BibliotecaMultimediaModule } from 'src/app/components/biblioteca-multimedia/biblioteca-multimedia.module';
-import { PipesModule } from 'src/app/pipes/pipes.module';
-import { YouTubePlayerModule } from '@angular/youtube-player';
 
 const lang = 'en-US';
 
@@ -28,7 +25,6 @@ const lang = 'en-US';
   declarations: [
     SolicitudMultimediaComponent,
     CrearSolicitudMultimediaComponent,
-    FormularioFamiliaresComponent,
     ValidarEmailComponent,
     ServiciosYVigiliasComponent,
     ConfigurarServiciosYVigiliasComponent,

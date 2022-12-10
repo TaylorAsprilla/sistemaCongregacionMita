@@ -9,7 +9,7 @@
           <form id="msform" autocomplete="off" [formGroup]="solicitudForm">
             <div class="row">
               <div class="form-group col-sm-12 col-md-6 col col-lg-6">
-                <label class="input-group">Nombre</label>
+                <label class="input-group obligatorio">Nombre</label>
                 <input
                   type="text"
                   formControlName="nombre"
@@ -33,7 +33,7 @@
               </div>
 
               <div class="form-group col-sm-12 col-md-6 col col-lg-6">
-                <label class="input-group">Nacionalidad </label>
+                <label class="input-group obligatorio">Nacionalidad </label>
                 <input
                   type="text"
                   placeholder="Buscar la nacionalidad"
@@ -61,7 +61,7 @@
 
             <div class="row">
               <div class="form-group col-sm-12 col-md-6 col col-lg-6">
-                <label class="input-group">Dirección de residencia</label>
+                <label class="input-group obligatorio">Dirección de residencia</label>
                 <input type="text" formControlName="direccion" class="form-control" placeholder="Dirección" />
                 <small
                   class="form-text text-danger"
@@ -78,7 +78,7 @@
               </div>
 
               <div class="form-group col-sm-12 col-md-6 col col-lg-6">
-                <label class="input-group">Ciudad</label>
+                <label class="input-group obligatorio">Ciudad</label>
                 <input type="text" formControlName="ciudad" class="form-control" placeholder="Ciudad" />
                 <small
                   class="form-text text-danger"
@@ -123,7 +123,7 @@
               </div>
 
               <div class="form-group col-md-6 col col-sm-12 col-lg-4">
-                <label class="input-group">País </label>
+                <label class="input-group obligatorio">País </label>
                 <input
                   type="text"
                   placeholder="Buscar el pais de residencia"
@@ -149,7 +149,7 @@
 
             <div class="row">
               <div class="form-group col-md-6 col-sm-12 col-lg-4">
-                <label class="input-group">Celular</label>
+                <label class="input-group obligatorio">Celular</label>
                 <ngx-intl-tel-input
                   [cssClass]="'form-control'"
                   [preferredCountries]="paisesPreferidos"
@@ -167,6 +167,20 @@
                   formControlName="celular"
                 >
                 </ngx-intl-tel-input>
+
+                <small
+                  class="form-text text-danger"
+                  *ngIf="
+                    !solicitudForm.get('celular').hasError('required') &&
+                    solicitudForm.get('celular').invalid &&
+                    solicitudForm.get('celular').touched
+                  "
+                >
+                  El número de celular no es válido
+                </small>
+                <small class="form-text text-primary" *ngIf="!solicitudForm.get('celular').invalid">
+                  El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
+                </small>
 
                 <small
                   class="form-text text-danger"
@@ -210,8 +224,15 @@
               </small>
 
               <div class="form-group col-md-6 col col-sm-12 col-lg-4">
-                <label class="input-group">Correo Electrónico</label>
-                <input type="email" formControlName="email" class="form-control" placeholder="Correo Electrónico" />
+                <label class="input-group obligatorio">Correo Electrónico</label>
+                <input
+                  type="email"
+                  formControlName="email"
+                  class="form-control"
+                  placeholder="Correo Electrónico"
+                  (blur)="buscarCorreo(txtEmail.value)"
+                  #txtEmail
+                />
                 <small
                   class="form-text text-danger"
                   *ngIf="solicitudForm.get('email').hasError('required') && solicitudForm.get('email').touched"
@@ -220,15 +241,34 @@
                 </small>
                 <small
                   class="form-text text-danger"
+                  *ngIf="solicitudForm.get('email').hasError('email') && solicitudForm.get('email').touched"
+                >
+                  El valor ingresado no corresponde a un correo electrónico.
+                </small>
+                <small
+                  class="form-text text-danger"
                   *ngIf="solicitudForm.get('email').hasError('minlength') && solicitudForm.get('email').touched"
                 >
                   El correo electrónico del feligrés no tiene la longitud mínima permitida.
+                </small>
+
+                <small class="form-text text-danger" *ngIf="!!mensajeBuscarCorreo">
+                  {{ mensajeBuscarCorreo }}
+                </small>
+
+                <small
+                  class="form-text text-primary"
+                  *ngIf="
+                    !solicitudForm.get('email').invalid && solicitudForm.get('email').touched && !mensajeBuscarCorreo
+                  "
+                >
+                  El correo electrónico es válido <i class="fa-solid fa-thumbs-up"></i>
                 </small>
               </div>
             </div>
 
             <div class="row">
-              <div class="form-group col-sm-6 col-md-3 col-lg-3">
+              <div class="form-group col-sm-6 col-md-6 col-lg-4">
                 <label class="input-group obligatorio">¿Eres miembro de la Congregación?</label>
                 <div class="form-check checkbox-lg">
                   <input
@@ -252,20 +292,20 @@
                 </div>
               </div>
 
-              <div class="form-group col-sm-6 col-md-3 col-lg-3">
-                <label class="input-group">¿Estás cerca a alguna congregación?</label>
+              <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                <label class="input-group obligatorio">¿Estás cerca a alguna congregación?</label>
 
-                <div class="form-check pl-5 mt-2">
+                <div class="form-check checkbox-lg">
                   <input value="Sí" class="form-check-input" type="radio" name="congregacionCerca" />
                   <label class="form-check-label"> Sí </label>
                 </div>
-                <div class="form-check pl-5 mt-2">
+                <div class="form-check checkbox-lg">
                   <input value="No" class="form-check-input" type="radio" name="congregacionCerca" />
                   <label class="form-check-label"> No </label>
                 </div>
               </div>
 
-              <div class="form-group col-sm-6 col-md-3 col-lg-3">
+              <div class="form-group col-sm-6 col-md-6 col-lg-4">
                 <label>Congregación cercana</label>
                 <input
                   type="text"
@@ -294,22 +334,15 @@
                   La congregación del feligrés es requerida.
                 </small>
               </div>
-
-              <div class="form-group col-sm-6 col-md-3 col-lg-3">
-                <label class="input-group"
-                  >¿A cuánta distancia? <span class="mensajeExplicativo"> (Tiempo en horas y minutos)</span></label
-                >
-
-                <input [ngxTimepicker]="picker" [format]="24" formControlName="distancia" class="form-control" />
-                <ngx-material-timepicker #picker></ngx-material-timepicker>
-              </div>
             </div>
 
             <div class="row">
-              <div class="form-group col-sm-6 col-md-6 col-lg-5">
-                <label class="input-group">Especifique la razón por la cual desea ver los servicio por internet</label>
+              <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                <label class="input-group obligatorio"
+                  >Especifique la razón por la cual desea ver los servicio por internet</label
+                >
 
-                <select class="form-control" formControlName="razonSolicitud_id" #txtRazonsolicitud>
+                <select class="form-select" formControlName="razonSolicitud_id" #txtRazonsolicitud>
                   <option value="" disabled>Seleccione una opción</option>
                   <option *ngFor="let razonSolicitud of razonSolicitudes" [value]="razonSolicitud.id">
                     {{ razonSolicitud.solicitud }}
@@ -317,46 +350,16 @@
                 </select>
               </div>
 
-              <div *ngIf="txtRazonsolicitud" class="form-group col-sm-6 col-md-6 col-lg-4">
+              <div *ngIf="txtRazonsolicitud.value == '5'" class="form-group col-sm-6 col-md-6 col-lg-6">
                 <label class="input-group">Específique la razón</label>
                 <input type="tetx" class="form-control" formControlName="otraRazonSolicitud" [required] />
               </div>
-
-              <div class="form-group col-sm-6 col-md-6 col-lg-3">
-                <label class="input-group">¿Tiene familiares en Puerto Rico?</label>
-
-                <div class="form-check pl-5 mt-2">
-                  <input
-                    value="1"
-                    class="form-check-input"
-                    type="radio"
-                    name="familiaEnPR"
-                    formControlName="familiaEnPR"
-                  />
-                  <label class="form-check-label"> Sí </label>
-                </div>
-                <div class="form-check pl-5 mt-2">
-                  <input
-                    value="0"
-                    class="form-check-input"
-                    type="radio"
-                    name="familiaEnPR"
-                    formControlName="familiaEnPR"
-                  />
-                  <label class="form-check-label"> No </label>
-                </div>
-              </div>
             </div>
-          </form>
 
-          <div *ngIf="tieneFamiliaresEnPR() == '1'">
-            <app-formulario-familiares
-              [parentescos]="parentescos"
-              [paisesPreferidos]="paisesPreferidos"
-              [nacionalidades]="nacionalidades"
-              (valoresFormulario)="crearSolicitud($event)"
-            ></app-formulario-familiares>
-          </div>
+            <button type="submit" class="submit btn btn-primary mt-4 float-left" (click)="crearSolicitud()">
+              <i class="fa fa-save"></i> Crear Solicitud
+            </button>
+          </form>
         </div>
       </div>
     </div>

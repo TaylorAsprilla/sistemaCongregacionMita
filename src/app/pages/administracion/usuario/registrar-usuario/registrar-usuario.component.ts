@@ -480,7 +480,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   buscarCorreo(email: string) {
     this.mensajeBuscarCorreo = '';
-    this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreo(email).subscribe((respuesta: any) => {
+    this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreoUsuario(email).subscribe((respuesta: any) => {
       if (!respuesta.ok) {
         this.mensajeBuscarCorreo = respuesta.msg;
       }
