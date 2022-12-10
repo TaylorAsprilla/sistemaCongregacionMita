@@ -22,7 +22,11 @@ export class LoginComponent implements OnInit {
     remember: [false],
   });
 
-  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private usuarioService: UsuarioService) {}
+  constructor(
+    private router: Router,
+    private formBuilder: UntypedFormBuilder,
+    private usuarioService: UsuarioService
+  ) {}
 
   ngOnInit(): void {
     this.usuariosSubscription = this.usuarioService.listarUsuarios().subscribe(

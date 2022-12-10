@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { CongregacionResolver } from 'src/app/resolvers/congregacion/congregacion.resolver';
 import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
-import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
 import { Rutas } from 'src/app/routes/menu-items';
 import { CrearSolicitudMultimediaComponent } from './crear-solicitud-multimedia/crear-solicitud-multimedia.component';
@@ -19,7 +18,6 @@ const routes: Routes = [
       congregacion: CongregacionResolver,
       pais: PaisResolver,
       razonSolicitud: RazonSolicitudResolver,
-      parentesco: ParentescoResolver,
     },
   },
   {

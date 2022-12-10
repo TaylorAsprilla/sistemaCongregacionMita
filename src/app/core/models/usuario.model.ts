@@ -9,7 +9,7 @@ import { NacionalidadModel } from './nacionalidad.model';
 import { RolCasaModel } from './rol-casa.model';
 import { TipoEmpleoModel } from './tipo-empleo.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
-import { CongregacionInterface, UsuarioCongregacionModel } from './usuarioCongregacion.model';
+import { CongregacionInterface } from './usuarioCongregacion.model';
 import { VacunaModel } from './vacuna.model';
 
 const base_url = environment.base_url;

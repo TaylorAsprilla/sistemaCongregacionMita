@@ -8,7 +8,6 @@ import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
-import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -92,14 +91,12 @@ export class UsuarioService {
             dosis_id,
             segundoNombre,
             segundoApellido,
-
             telefonoCasa,
             direccion,
             zipCode,
             login,
             password,
             foto,
-
             rolCasa_id,
             nacionalidad_id,
             indicativoCasa,
