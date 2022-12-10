@@ -283,7 +283,7 @@ export const ROUTES: RouteInfo[] = [
     icon: '',
     class: 'nav-small-cap',
     extralink: true,
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.OBRERO],
     submenu: [],
   },
   {
