@@ -292,7 +292,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-tv',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.OBRERO],
     submenu: [
       {
         path: Rutas.SERVICIOS_Y_VIGILIAS,
@@ -300,7 +300,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.OBRERO],
         submenu: [],
       },
       {
@@ -309,7 +309,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: 'has-arrow',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.OBRERO],
         submenu: [
           {
             path: Rutas.BIBLIOTECA_SERVICIOS,
@@ -317,7 +317,7 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
-            role: [ROLES.ADMINISTRADOR],
+            role: [ROLES.OBRERO],
             submenu: [],
           },
           {
@@ -326,10 +326,19 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
-            role: [ROLES.ADMINISTRADOR],
+            role: [ROLES.OBRERO],
             submenu: [],
           },
         ],
+      },
+      {
+        path: Rutas.SOLICITUDES_MULTIMEDIA,
+        title: 'Solicitud de Acceso',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.OBRERO],
+        submenu: [],
       },
     ],
   },
