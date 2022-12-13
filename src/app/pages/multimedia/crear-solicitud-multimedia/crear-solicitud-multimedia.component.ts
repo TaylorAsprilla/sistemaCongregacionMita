@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { SolicitudMultimediaInterface, SolicitudMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';

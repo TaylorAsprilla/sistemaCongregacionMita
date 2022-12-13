@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { SolicitudMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
+import { SolicitudMultimediaModel } from 'src/app/core/models/solicitud-multimedia';
 import { Rutas } from 'src/app/routes/menu-items';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import Swal from 'sweetalert2';

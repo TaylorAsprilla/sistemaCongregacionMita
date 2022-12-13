@@ -1,41 +1,23 @@
-export class SolicitudMultimediaModel {
+export class AccesoMultimediaModel {
   constructor(
     public id: number,
     public nombre: string,
+    public celular: string,
+    public email: string,
     public direccion: string,
     public ciudad: string,
-    public celular: string,
-    public pais: string,
-    public email: string,
-    public miembroCongregacion: boolean,
-    public congregacionCercana: string,
-    public estado: boolean,
-    public status: boolean,
-    public razonSolicitud_id: number,
-    public nacionalidad_id: number,
-    public distancia: string,
     public departamento: string,
-    public codigoPostal: string,
-    public telefono: string,
-    public usuarioQueRegistra_id: number
+    public solicitud_id: string,
+    public tiempoAprobacion_id: string,
+    public estado?: boolean
   ) {}
 }
 
-export interface SolicitudMultimediaInterface {
-  nombre: string;
-  direccion: string;
-  ciudad: string;
-  celular: string;
-  pais: string;
-  email: string;
-  miembroCongregacion: boolean;
-  congregacionCercana: string;
+export interface LoginUsuarioCmarLive {
+  id: number;
+  login: string;
+  password: string;
+  solicitud_id: number;
+  tiempoAprobacion_id: number;
   estado: boolean;
-  status: boolean;
-  razonSolicitud_id: number;
-  nacionalidad_id: number;
-  departamento: string;
-  codigoPostal: string;
-  telefono: string;
-  usuarioQueRegistra_id: number;
 }

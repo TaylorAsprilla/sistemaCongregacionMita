@@ -43,6 +43,7 @@ export enum ROLES {
   SUPERVISOR_LOCAL = 'SUPERVISOR_LOCAL',
   OBRERO = 'OBRERO',
   USUARIO = 'USUARIO',
+  MULTIMEDIA = 'MULTIMEDIA',
 }
 
 export const ROUTES: RouteInfo[] = [
@@ -283,7 +284,7 @@ export const ROUTES: RouteInfo[] = [
     icon: '',
     class: 'nav-small-cap',
     extralink: true,
-    role: [ROLES.OBRERO],
+    role: [ROLES.MULTIMEDIA],
     submenu: [],
   },
   {
@@ -292,7 +293,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-tv',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.OBRERO],
+    role: [ROLES.MULTIMEDIA],
     submenu: [
       {
         path: Rutas.SERVICIOS_Y_VIGILIAS,
@@ -300,7 +301,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.OBRERO],
+        role: [],
         submenu: [],
       },
       {
@@ -309,7 +310,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: 'has-arrow',
         extralink: false,
-        role: [ROLES.OBRERO],
+        role: [],
         submenu: [
           {
             path: Rutas.BIBLIOTECA_SERVICIOS,
@@ -317,7 +318,7 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
-            role: [ROLES.OBRERO],
+            role: [],
             submenu: [],
           },
           {
@@ -326,7 +327,7 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
-            role: [ROLES.OBRERO],
+            role: [],
             submenu: [],
           },
         ],
@@ -337,7 +338,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.OBRERO],
+        role: [],
         submenu: [],
       },
     ],

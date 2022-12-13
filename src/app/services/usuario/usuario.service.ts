@@ -8,6 +8,7 @@ import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
+import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -16,6 +17,7 @@ const base_url = environment.base_url;
 export class UsuarioService {
   public usuario: UsuarioModel;
   public idUsuario: number;
+  public usuarioMultimedia: AccesoMultimediaModel;
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
@@ -25,6 +27,10 @@ export class UsuarioService {
 
   get usuarioId(): number {
     return this.usuario.id || null;
+  }
+
+  get usuarioLogin() {
+    return this.usuario || this.usuarioMultimedia;
   }
 
   get headers() {
@@ -50,60 +56,81 @@ export class UsuarioService {
       })
       .pipe(
         map((respuesta: any) => {
-          const {
-            id,
-            primerNombre,
-            segundoNombre,
-            primerApellido,
-            segundoApellido,
-            email,
-            numeroCelular,
-            telefonoCasa,
-            direccion,
-            zipCode,
-            fechaNacimiento,
-            login,
-            password,
-            foto,
-            estado,
-            genero_id,
-            pais_id,
-            estadoCivil_id,
-            rolCasa_id,
-            vacuna_id,
-            dosis_id,
-            nacionalidad_id,
-            indicativoCasa,
-            indicativoCelular,
-          } = respuesta.usuario;
+          if (!!respuesta.accesoMultimedia) {
+            const { id, nombre, celular, email, direccion, ciudad, departamento, solicitud_id, tiempoAprobacion_id } =
+              respuesta.usuario;
 
-          this.usuario = new UsuarioModel(
-            id,
-            primerNombre,
-            primerApellido,
-            email,
-            numeroCelular,
-            fechaNacimiento,
-            estado,
-            genero_id,
-            estadoCivil_id,
-            vacuna_id,
-            dosis_id,
-            segundoNombre,
-            segundoApellido,
-            telefonoCasa,
-            direccion,
-            zipCode,
-            login,
-            password,
-            foto,
-            rolCasa_id,
-            nacionalidad_id,
-            indicativoCasa,
-            indicativoCelular
-          );
-          localStorage.setItem('token', respuesta.token);
-          return true;
+            this.usuarioMultimedia = new AccesoMultimediaModel(
+              id,
+              nombre,
+              celular,
+              email,
+              direccion,
+              ciudad,
+              departamento,
+              solicitud_id,
+              tiempoAprobacion_id
+            );
+
+            localStorage.setItem('token', respuesta.token);
+            return true;
+          } else {
+            const {
+              id,
+              primerNombre,
+              segundoNombre,
+              primerApellido,
+              segundoApellido,
+              email,
+              numeroCelular,
+              telefonoCasa,
+              direccion,
+              zipCode,
+              fechaNacimiento,
+              login,
+              password,
+              foto,
+              estado,
+              genero_id,
+              pais_id,
+              estadoCivil_id,
+              rolCasa_id,
+              vacuna_id,
+              dosis_id,
+              nacionalidad_id,
+              indicativoCasa,
+              indicativoCelular,
+            } = respuesta.usuario;
+
+            this.usuario = new UsuarioModel(
+              id,
+              primerNombre,
+              primerApellido,
+              email,
+              numeroCelular,
+              fechaNacimiento,
+              estado,
+              genero_id,
+              estadoCivil_id,
+              vacuna_id,
+              dosis_id,
+              segundoNombre,
+              segundoApellido,
+              telefonoCasa,
+              direccion,
+              zipCode,
+              login,
+              password,
+              foto,
+              rolCasa_id,
+              nacionalidad_id,
+              indicativoCasa,
+              indicativoCelular
+            );
+
+            localStorage.setItem('token', respuesta.token);
+            return true;
+          }
         }),
 
         catchError((error) => {
@@ -124,10 +151,16 @@ export class UsuarioService {
   login(formData: LoginForm) {
     return this.httpClient.post(`${base_url}/login`, formData).pipe(
       tap((resp: any) => {
-        sessionStorage.setItem('primerNombre', resp.usuario.primerNombre);
-        sessionStorage.setItem('segundoNombre', resp.usuario.segundoNombre);
-        sessionStorage.setItem('primerApellido', resp.usuario.primerApellido);
-        sessionStorage.setItem('segundoApellido', resp.usuario.segundoApellido);
+        if (!!resp.loginUsuarioCmarLive) {
+          sessionStorage.setItem('nombre', resp.usuario.nombre);
+          sessionStorage.setItem('email', resp.usuario.email);
+          sessionStorage.setItem('celular', resp.usuario.celular);
+        } else {
+          sessionStorage.setItem('primerNombre', resp.usuario.primerNombre);
+          sessionStorage.setItem('segundoNombre', resp.usuario.segundoNombre);
+          sessionStorage.setItem('primerApellido', resp.usuario.primerApellido);
+          sessionStorage.setItem('segundoApellido', resp.usuario.segundoApellido);
+        }
 
         localStorage.setItem('token', resp.token);
         this.idUsuario = resp.usuario.id;
