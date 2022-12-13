@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROUTES, Rutas } from 'src/app/routes/menu-items';
+import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 
 declare var $: any;
 
@@ -16,6 +17,14 @@ declare var $: any;
 export class SidebarComponent implements OnInit {
   menuItems: any[] = [];
   usuario: UsuarioModel;
+  public usuarioMultimedia: AccesoMultimediaModel;
+
+  public primerNombre: string = '';
+  public segundoNombre: string = '';
+  public primerApellido: string = '';
+  public segundoApellido: string = '';
+  public email: string = '';
+  public numeroCelular: string = '';
 
   showMenu = '';
   showSubMenu = '';
@@ -52,6 +61,14 @@ export class SidebarComponent implements OnInit {
     this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
 
     this.usuario = this.usuarioService.usuario;
+    this.usuarioMultimedia = this.usuarioService.usuarioMultimedia;
+
+    this.primerNombre = this.usuario?.primerNombre ? this.usuario.primerNombre : this.usuarioMultimedia.nombre;
+    this.segundoNombre = this.usuario?.segundoNombre ? this.usuario.segundoNombre : '';
+    this.primerApellido = this.usuario?.primerApellido ? this.usuario.primerApellido : '';
+    this.segundoApellido = this.usuario?.segundoApellido ? this.usuario.segundoApellido : '';
+    this.email = this.usuario?.email ? this.usuario.email : '';
+    this.numeroCelular = this.usuario?.numeroCelular ? this.usuario.numeroCelular : '';
   }
 
   logout() {

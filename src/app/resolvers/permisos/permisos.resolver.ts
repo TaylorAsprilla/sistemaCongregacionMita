@@ -13,8 +13,9 @@ export class PermisosResolver implements Resolve<boolean> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     let usuario = this.usuarioService.usuario;
+    const id = usuario?.id ? usuario.id : 0;
 
-    return this.permisoService.getPermisosUsuario(usuario.id).pipe(
+    return this.permisoService.getPermisosUsuario(id).pipe(
       catchError((error) => {
         this.router.navigateByUrl('/login');
         return of('No data');
