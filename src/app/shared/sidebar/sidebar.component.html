@@ -33,7 +33,7 @@
         [routerLinkActive]="sidebarnavItem.submenu.length != 0 ? '' : 'active'"
         *appPermisos="sidebarnavItem.role"
       >
-        <div class="nav-small-cap noPointer" *ngIf="sidebarnavItem.extralink === true">
+        <div class="nav-small-cap pointer" *ngIf="sidebarnavItem.extralink === true">
           {{ sidebarnavItem.title }}
         </div>
 
