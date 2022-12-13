@@ -41,11 +41,11 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.usuarioService.login(this.loginForm.value).subscribe(
-      (loginUsuario: Login) => {
+      (loginUsuario: any) => {
         const usuario: UsuarioModel = loginUsuario.usuario;
 
         if (!!usuario) {
-          const primerNombre: string = usuario.primerNombre ? usuario.primerNombre : '';
+          const primerNombre: string = usuario.primerNombre ? usuario.primerNombre : loginUsuario.usuario.nombre;
           const segundoNombre: string = usuario.segundoNombre ? usuario.segundoNombre : '';
           const primerApellido: string = usuario.primerApellido ? usuario.primerApellido : '';
           const segundoApellido: string = usuario.segundoApellido ? usuario.segundoApellido : '';

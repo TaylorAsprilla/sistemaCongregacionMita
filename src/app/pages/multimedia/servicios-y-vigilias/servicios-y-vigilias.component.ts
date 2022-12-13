@@ -23,7 +23,7 @@ export class ServiciosYVigiliasComponent implements OnInit {
   }
 
   get servicios() {
-    return this.linkEventos.filter((eventos) => eventos.tipoEvento_id === TIPOEVENTO.SERVICIO).slice(0, 2);
+    return this.linkEventos.filter((eventos) => eventos.tipoEvento_id === TIPOEVENTO.SERVICIO).slice(0, 1);
   }
 
   get vigilias() {

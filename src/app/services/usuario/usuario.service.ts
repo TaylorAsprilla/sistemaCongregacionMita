@@ -59,6 +59,7 @@ export class UsuarioService {
           if (!!respuesta.accesoMultimedia) {
             const { id, nombre, celular, email, direccion, ciudad, departamento, solicitud_id, tiempoAprobacion_id } =
               respuesta.usuario;
+            this.usuario = null;
 
             this.usuarioMultimedia = new AccesoMultimediaModel(
               id,
@@ -155,15 +156,16 @@ export class UsuarioService {
           sessionStorage.setItem('nombre', resp.usuario.nombre);
           sessionStorage.setItem('email', resp.usuario.email);
           sessionStorage.setItem('celular', resp.usuario.celular);
+          localStorage.setItem('token', resp.token);
+          this.idUsuario = resp.usuario.id;
         } else {
           sessionStorage.setItem('primerNombre', resp.usuario.primerNombre);
           sessionStorage.setItem('segundoNombre', resp.usuario.segundoNombre);
           sessionStorage.setItem('primerApellido', resp.usuario.primerApellido);
           sessionStorage.setItem('segundoApellido', resp.usuario.segundoApellido);
+          localStorage.setItem('token', resp.token);
+          this.idUsuario = resp.usuario.id;
         }
-
-        localStorage.setItem('token', resp.token);
-        this.idUsuario = resp.usuario.id;
       })
     );
   }
