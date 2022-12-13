@@ -12,10 +12,16 @@ export class PermisosResolver implements Resolve<boolean> {
   constructor(private router: Router, private permisoService: PermisoService, private usuarioService: UsuarioService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+    let idUsuario = 0;
     let usuario = this.usuarioService.usuario;
-    const id = usuario?.id ? usuario.id : 0;
 
-    return this.permisoService.getPermisosUsuario(id).pipe(
+    if (!!usuario) {
+      idUsuario = usuario.id;
+    } else {
+      idUsuario = 0;
+    }
+
+    return this.permisoService.getPermisosUsuario(idUsuario).pipe(
       catchError((error) => {
         this.router.navigateByUrl('/login');
         return of('No data');

@@ -19,8 +19,6 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
   @Input() serviciosYvigilias: LinkEventoModel[] = [];
   @Input() titulo: string = '';
   @Input() tipoDeEvento: TIPOEVENTO;
-  // @Input() servicios: LinkEventoModel[] = [];
-  // @Input() vigilias: LinkEventoModel[] = [];
 
   @ViewChild('templateYouTubePlayer') templateYouTubePlayer: ElementRef<HTMLDivElement>;
   videoWidth: number | undefined;

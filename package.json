@@ -27,8 +27,8 @@
     "@angular/platform-browser": "^14.2.7",
     "@angular/platform-browser-dynamic": "^14.2.7",
     "@angular/router": "^14.2.7",
-    "@fortawesome/fontawesome-free": "^6.0.0",
     "@angular/youtube-player": "^14.2.5",
+    "@fortawesome/fontawesome-free": "^6.0.0",
     "@iplab/ngx-file-upload": "^4.0.0",
     "@mattlewis92/dom-autoscroller": "^2.4.2",
     "@ng-bootstrap/ng-bootstrap": "^13.1.0",
@@ -84,8 +84,7 @@
     "rxjs": "^6.5.4",
     "rxjs-compat": "^6.5.4",
     "sweetalert2": "^11.4.4",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.6",

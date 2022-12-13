@@ -37,7 +37,7 @@ export class PermisoService {
       .pipe(map((permiso: { ok: boolean; permiso: PermisoModel[] }) => permiso.permiso));
   }
 
-  getPermisosUsuario(idUsuario: number) {
+  getPermisosUsuario(idUsuario: number = 0) {
     return this.httpClient
       .get(`${base_url}/permiso/usuario/${idUsuario}`, this.headers)
       .pipe(map((permisos: { ok: boolean; permisos: PermisoUsuarioModel[] }) => permisos.permisos));

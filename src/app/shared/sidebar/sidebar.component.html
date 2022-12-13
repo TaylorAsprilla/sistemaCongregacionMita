@@ -26,17 +26,21 @@
 <nav class="sidebar-nav">
   <ul id="sidebarnav">
     <!-- First level menu -->
-    <li
-      class="fondo pointer"
-      [class.active]="showMenu === sidebarnavItem.title"
-      *ngFor="let sidebarnavItem of sidebarnavItems"
-      [routerLinkActive]="sidebarnavItem.submenu.length != 0 ? '' : 'active'"
-    >
-      <ng-container *appPermisos="sidebarnavItem.role">
-        <div class="nav-small-cap" *ngIf="sidebarnavItem.extralink === true">{{ sidebarnavItem.title }}</div>
+    <li *ngFor="let sidebarnavItem of sidebarnavItems">
+      <ng-container
+        class="fondo pointer"
+        [class.active]="showMenu === sidebarnavItem.title"
+        [routerLinkActive]="sidebarnavItem.submenu.length != 0 ? '' : 'active'"
+        *appPermisos="sidebarnavItem.role"
+      >
+        <div class="nav-small-cap noPointer" *ngIf="sidebarnavItem.extralink === true">
+          {{ sidebarnavItem.title }}
+        </div>
+
         <a
           [routerLink]="sidebarnavItem.class === '' ? [sidebarnavItem.path] : null"
           [ngClass]="[sidebarnavItem.class]"
+          class="pointer"
           *ngIf="!sidebarnavItem.extralink"
           (click)="addExpandClass(sidebarnavItem.title)"
         >
@@ -96,7 +100,6 @@
             </ul>
           </li>
         </ul>
-        <!-- </div> -->
       </ng-container>
     </li>
   </ul>
