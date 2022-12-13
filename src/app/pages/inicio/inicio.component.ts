@@ -6,6 +6,7 @@ import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { ROUTES } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Component({
@@ -21,6 +22,8 @@ export class InicioComponent implements OnInit {
   congregaciones: CongregacionModel[] = [];
   campos: CampoModel[] = [];
   ministerios: MinisterioModel[] = [];
+
+  public sidebarnavItems: any[] = [];
 
   usuariosSubscription: Subscription;
   constructor(private usuarioServices: UsuarioService, private activatedRoute: ActivatedRoute) {}
@@ -44,6 +47,8 @@ export class InicioComponent implements OnInit {
       this.totalUsuarios = totalUsuarios;
       this.usuarios = usuarios;
     });
+
+    this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
   }
 
   ngOnDestroy(): void {

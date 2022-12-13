@@ -1,10 +1,9 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
-import { PermisoUsuarioModel } from 'src/app/core/models/permiso-usuario.model';
+
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { ROLES } from 'src/app/routes/menu-items';
 
 @Directive({
   selector: '[appPermisos]',
@@ -45,11 +44,17 @@ export class PermisosDirective {
 
     if (this.permisoUsuario) {
       for (const permiso of this.permisos) {
+        //TODO Todos los usuarios tienen permiso para la sección de Multimedia
+        if (permiso === ROLES.MULTIMEDIA) {
+          tienePermiso = true;
+          break;
+        }
         const permisosUsuario = this.permisoUsuario.find(
           (permiso) => permiso.permiso.toUpperCase() === this.permisos.toString()
         );
+        const permisos = permisosUsuario;
 
-        if (permisosUsuario) {
+        if (permisos) {
           tienePermiso = true;
           break;
         }
