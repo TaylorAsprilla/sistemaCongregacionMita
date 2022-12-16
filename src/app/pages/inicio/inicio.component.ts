@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { generarSeccionHome, SeccionHome } from 'src/app/core/interfaces/seccion-home.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
@@ -23,9 +24,10 @@ export class InicioComponent implements OnInit {
   campos: CampoModel[] = [];
   ministerios: MinisterioModel[] = [];
 
-  public sidebarnavItems: any[] = [];
+  public generarSeccionHome: any[] = [];
 
   usuariosSubscription: Subscription;
+
   constructor(private usuarioServices: UsuarioService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -48,7 +50,7 @@ export class InicioComponent implements OnInit {
       this.usuarios = usuarios;
     });
 
-    this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
+    this.generarSeccionHome = generarSeccionHome.filter((seccionInforme) => seccionInforme);
   }
 
   ngOnDestroy(): void {

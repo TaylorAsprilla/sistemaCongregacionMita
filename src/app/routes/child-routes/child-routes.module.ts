@@ -56,6 +56,7 @@ import { ObreroResolver } from 'src/app/resolvers/obrero/obrero.resolver';
 import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
 import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
 import { DocumentoResolver } from 'src/app/resolvers/tipo-documento/documento.resolver';
+import { PermisosResolver } from 'src/app/resolvers/permisos/permisos.resolver';
 
 const childRoutes: Routes = [
   {
@@ -67,6 +68,7 @@ const childRoutes: Routes = [
       ministerio: MinisterioResolver,
       pais: PaisResolver,
       campo: CampoResolver,
+      permiso: PermisosResolver,
     },
   },
 

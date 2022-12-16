@@ -59,79 +59,16 @@
 </div>
 
 <div class="row">
-  <div class="col-xl-3 col-md-6">
-    <div class="card">
-      <div class="card-body widget-user">
-        <div class="d-flex align-items-center">
-          <div class="flex-shrink-0 avatar-lg mr-4">
-            <img src="assets/images/vista-principal/censo.png" class="img-fluid rounded-circle" alt="user" />
-          </div>
-          <div class="flex-grow-1 overflow-hidden">
-            <h5 class="mt-0 mb-1">Censo</h5>
-            <p class="text-muted mb-2 font-13 text-truncate">mindy.carrion@gmail.com</p>
-            <small class="text-warning"><b>Mindy Carrión</b></small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-md-6">
-    <div class="card">
-      <div class="card-body widget-user">
-        <div class="d-flex align-items-center">
-          <div class="flex-shrink-0 avatar-lg mr-3">
-            <img
-              src="assets/images/vista-principal/logo-multimedia.png"
-              class="img-fluid rounded-circle"
-              alt="Multimedia"
-            />
-          </div>
-          <div class="flex-grow-1 overflow-hidden">
-            <h5 class="mt-0 mb-1">CMAR Live</h5>
-            <p class="text-muted mb-2 font-13 text-truncate">juan.mejia@congregacionmita.org</p>
-            <small class="text-pink"><b>Juan Mejia</b></small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-md-6">
-    <div class="card">
-      <div class="card-body widget-user">
-        <div class="d-flex align-items-center">
-          <div class="flex-shrink-0 avatar-lg mr-3">
-            <img src="assets/images/vista-principal/logo-informes.png" class="img-fluid rounded-circle" alt="user" />
-          </div>
-          <div class="flex-grow-1 overflow-hidden">
-            <h5 class="mt-0 mb-1">Informes</h5>
-            <p class="text-muted mb-2 font-13 text-truncate">mindy.carrion@gmail.com</p>
-            <small class="text-success"><b>Mindy Carrión</b></small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-md-6">
-    <div class="card">
-      <div class="card-body widget-user">
-        <div class="d-flex align-items-center">
-          <div class="flex-shrink-0 avatar-lg mr-3">
-            <img
-              src="assets/images/vista-principal/logo-congregacion.png"
-              class="img-fluid rounded-circle"
-              alt="Congregaciones"
-            />
-          </div>
-          <div class="flex-grow-1 overflow-hidden">
-            <h5 class="mt-0 mb-1">Congregaciones</h5>
-            <!-- <p class="text-muted mb-2 font-13 text-truncate">coderthemes@gmail.com</p>
-            <small class="text-info"><b>Developer</b></small> -->
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3" *ngFor="let seccionHome of generarSeccionHome">
+    <ng-container *appPermisos="seccionHome.role">
+      <app-seccion-home
+        [permisos]="seccionHome.role"
+        [nombreSeccion]="seccionHome.nombreSeccion"
+        [nombreResponsable]="seccionHome.nombreResponsable"
+        [email]="seccionHome.email"
+        [logo]="seccionHome.logo"
+        [ruta]="seccionHome.ruta"
+      ></app-seccion-home>
+    </ng-container>
   </div>
 </div>
