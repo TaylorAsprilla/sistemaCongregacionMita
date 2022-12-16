@@ -6,6 +6,7 @@ import { GeneroModel } from './genero.model';
 import { GradoAcademicoModel } from './grado-academico.model';
 import { MinisterioModel } from './ministerio.model';
 import { NacionalidadModel } from './nacionalidad.model';
+import { PermisoModel } from './permisos.model';
 import { RolCasaModel } from './rol-casa.model';
 import { TipoEmpleoModel } from './tipo-empleo.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
@@ -53,7 +54,8 @@ export class UsuarioModel {
     public tipoMiembro?: TipoMiembroModel,
     public direcciones?: DireccionInterface[],
     public usuarioCongregacion?: CongregacionInterface,
-    public usuarioMinisterio?: MinisterioModel
+    public usuarioMinisterio?: MinisterioModel,
+    public usuarioPermiso?: PermisoModel[]
   ) {}
 
   get fotoUrl() {
