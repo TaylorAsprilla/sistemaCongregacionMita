@@ -27,7 +27,9 @@ export class SolicitudMultimediaComponent implements OnInit {
   cargarSolicitudDeAccesos() {
     this.cargando = true;
     this.accesoMultimediaServices.getSolicitudes().subscribe((solicitudesDeAcceso) => {
-      this.solicitudesDeAccesos = solicitudesDeAcceso;
+      this.solicitudesDeAccesos = solicitudesDeAcceso.filter(
+        (solicitud: SolicitudMultimediaModel) => solicitud.status === true
+      );
       this.cargando = false;
     });
   }
