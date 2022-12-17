@@ -353,7 +353,7 @@ export const ROUTES: RouteInfo[] = [
         ],
       },
       {
-        path: Rutas.SOLICITUDES_MULTIMEDIA,
+        path: `${Rutas.SOLICITUD_MULTIMEDIA}/nuevo`,
         title: 'Solicitud de Acceso',
         icon: '',
         class: '',

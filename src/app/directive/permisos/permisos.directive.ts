@@ -1,7 +1,5 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
-
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES } from 'src/app/routes/menu-items';
@@ -11,14 +9,11 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
   selector: '[appPermisos]',
 })
 export class PermisosDirective {
-  private usuarios: UsuarioModel[] = [];
-  private permisoUsuario: PermisoModel[] = [];
   private permisos = [];
   private usuario: UsuarioModel;
   private usuarioMultimedia: AccesoMultimediaModel;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,
     private usuarioServices: UsuarioService
@@ -56,7 +51,7 @@ export class PermisosDirective {
           break;
         } else {
           const permisosUsuario = this.usuario?.usuarioPermiso.find(
-            (permisos) => permisos.permiso.toUpperCase() === this.permisos[index].toString()
+            (permisosUsuario: PermisoModel) => permisosUsuario.permiso.toUpperCase() === this.permisos[index].toString()
           );
 
           if (permisosUsuario) {

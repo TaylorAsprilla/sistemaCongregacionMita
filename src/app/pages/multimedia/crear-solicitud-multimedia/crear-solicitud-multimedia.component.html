@@ -216,6 +216,21 @@
                 >
                 </ngx-intl-tel-input>
               </div>
+              <div class="form-text text-danger" *ngIf="solicitudForm.get('telefono').invalid">
+                Digitar el número de teléfono con el indicativo de la región local
+              </div>
+              <small
+                class="form-text text-danger"
+                *ngIf="solicitudForm.get('telefono').invalid && solicitudForm.get('telefono').touched"
+              >
+                El número de teléfono de la casa no es válido
+              </small>
+              <small
+                class="form-text text-primary"
+                *ngIf="!solicitudForm.get('telefono').invalid && solicitudForm.get('telefono').value"
+              >
+                El número de teléfono de la casa es válido <i class="fa-solid fa-thumbs-up"></i>
+              </small>
               <small
                 class="form-text text-danger"
                 *ngIf="solicitudForm.get('telefono').hasError('minlength') && solicitudForm.get('telefono').touched"
@@ -268,7 +283,7 @@
             </div>
 
             <div class="row">
-              <div class="form-group col-sm-6 col-md-6 col-lg-4">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label class="input-group obligatorio">¿Eres miembro de la Congregación?</label>
                 <div class="form-check checkbox-lg">
                   <input
@@ -292,67 +307,80 @@
                 </div>
               </div>
 
-              <div class="form-group col-sm-6 col-md-6 col-lg-4">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label class="input-group obligatorio">¿Estás cerca a alguna congregación?</label>
 
                 <div class="form-check checkbox-lg">
-                  <input value="Sí" class="form-check-input" type="radio" name="congregacionCerca" />
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="estaCercaACongregacion"
+                    [value]="true"
+                  />
                   <label class="form-check-label"> Sí </label>
                 </div>
                 <div class="form-check checkbox-lg">
-                  <input value="No" class="form-check-input" type="radio" name="congregacionCerca" />
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="estaCercaACongregacion"
+                    [value]="false"
+                    [checked]="true"
+                  />
                   <label class="form-check-label"> No </label>
                 </div>
               </div>
 
-              <div class="form-group col-sm-6 col-md-6 col-lg-4">
-                <label>Congregación cercana</label>
-                <input
-                  type="text"
-                  placeholder="Buscar la congregación más cercana"
-                  formControlName="congregacionCercana"
-                  [matAutocomplete]="autoCongregacion"
-                  class="form-control"
-                  (keypress)="buscarCongregacion('congregacionCercana')"
-                />
+              <div class="row">
+                <div *ngIf="!!estaCercaACongregacion()" class="form-group col-sm-6 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">Congregación cercana</label>
+                  <input
+                    type="text"
+                    placeholder="Buscar la congregación más cercana"
+                    formControlName="congregacionCercana"
+                    [matAutocomplete]="autoCongregacion"
+                    class="form-control"
+                    (keypress)="buscarCongregacion('congregacionCercana')"
+                  />
 
-                <mat-autocomplete #autoCongregacion="matAutocomplete">
-                  <mat-option
-                    *ngFor="let congregacion of letrasFiltrarCongregacion | async"
-                    [value]="congregacion.congregacion"
+                  <mat-autocomplete #autoCongregacion="matAutocomplete">
+                    <mat-option
+                      *ngFor="let congregacion of letrasFiltrarCongregacion | async"
+                      [value]="congregacion.congregacion"
+                    >
+                      {{ congregacion.congregacion }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('congregacionCercana').hasError('minlength') &&
+                      solicitudForm.get('congregacionCercana').touched
+                    "
                   >
-                    {{ congregacion.congregacion }}
-                  </mat-option>
-                </mat-autocomplete>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="
-                    solicitudForm.get('congregacionCercana').hasError('minlength') &&
-                    solicitudForm.get('congregacionCercana').touched
-                  "
-                >
-                  La congregación del feligrés es requerida.
-                </small>
-              </div>
-            </div>
+                    La congregación del feligrés es requerida.
+                  </small>
+                </div>
 
-            <div class="row">
-              <div class="form-group col-sm-6 col-md-6 col-lg-6">
-                <label class="input-group obligatorio"
-                  >Especifique la razón por la cual desea ver los servicio por internet</label
-                >
+                <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio"
+                    >Especifique la razón por la cual desea ver los servicio por internet</label
+                  >
 
-                <select class="form-select" formControlName="razonSolicitud_id" #txtRazonsolicitud>
-                  <option value="" disabled>Seleccione una opción</option>
-                  <option *ngFor="let razonSolicitud of razonSolicitudes" [value]="razonSolicitud.id">
-                    {{ razonSolicitud.solicitud }}
-                  </option>
-                </select>
+                  <select class="form-select" formControlName="razonSolicitud_id" #txtRazonsolicitud>
+                    <option value="" disabled>Seleccione una opción</option>
+                    <option *ngFor="let razonSolicitud of razonSolicitudes" [value]="razonSolicitud.id">
+                      {{ razonSolicitud.solicitud }}
+                    </option>
+                  </select>
+                </div>
               </div>
 
-              <div *ngIf="txtRazonsolicitud.value == '5'" class="form-group col-sm-6 col-md-6 col-lg-6">
-                <label class="input-group">Específique la razón</label>
-                <input type="tetx" class="form-control" formControlName="otraRazonSolicitud" [required] />
+              <div class="row">
+                <div *ngIf="txtRazonsolicitud.value == '5'" class="form-group col-sm-6 col-md-6 col-lg-6">
+                  <label class="input-group">Específique la razón</label>
+                  <input type="tetx" class="form-control" formControlName="otraRazonSolicitud" [required] />
+                </div>
               </div>
             </div>
 

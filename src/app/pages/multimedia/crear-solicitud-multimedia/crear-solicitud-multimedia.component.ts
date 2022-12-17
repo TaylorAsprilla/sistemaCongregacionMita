@@ -112,8 +112,9 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
         },
       ],
       miembroCongregacion: ['', [Validators.required]],
+      estaCercaACongregacion: [false, [Validators.required]],
       congregacionCercana: ['', [Validators.minLength(3)]],
-      razonSolicitud_id: ['', []],
+      razonSolicitud_id: ['', [Validators.required]],
       otraRazonSolicitud: ['', []],
       nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
     });
@@ -150,7 +151,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
   }
 
   buscarIDNacionalidad(nacionalidad: string): number {
-    return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre === nacionalidad).id;
+    return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre === nacionalidad)?.id;
   }
 
   buscarCorreo(email: string) {
@@ -164,8 +165,13 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
       });
   }
 
+  estaCercaACongregacion() {
+    return this.solicitudForm.controls['estaCercaACongregacion'].value || false;
+  }
+
   crearSolicitud() {
     const formSolicitud = this.solicitudForm.value;
+
     const solicitudNueva: SolicitudMultimediaInterface = {
       nombre: formSolicitud.nombre,
       direccion: formSolicitud.direccion,
@@ -173,8 +179,8 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
       departamento: formSolicitud.departamento,
       codigoPostal: formSolicitud.codigoPostal,
       pais: formSolicitud.pais,
-      telefono: formSolicitud.telefono.internationalNumber,
-      celular: formSolicitud.celular.internationalNumber,
+      telefono: formSolicitud.telefono?.internationalNumber ? formSolicitud.telefono?.internationalNumber : '',
+      celular: formSolicitud.celular?.internationalNumber,
       email: formSolicitud.email,
       miembroCongregacion: formSolicitud.miembroCongregacion,
       congregacionCercana: formSolicitud.congregacionCercana,
@@ -207,7 +213,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
           icon: 'error',
           html: `${listaErrores.join('')}`,
         });
-        this.resetFormulario();
       }
     );
   }
