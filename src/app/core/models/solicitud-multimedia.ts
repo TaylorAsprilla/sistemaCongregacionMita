@@ -1,4 +1,5 @@
-import { LoginUsuarioCmarLive } from './acceso-multimedia.model';
+import { AccesoMultimediaModel, LoginUsuarioCmarLiveInterface } from './acceso-multimedia.model';
+import { NacionalidadModel } from './nacionalidad.model';
 import { RazonSolicitudModel } from './razon-solicitud.model';
 import { TipoAprobacionModel } from './tiempo-aprobacion.model';
 import { UsuarioModel } from './usuario.model';
@@ -23,7 +24,8 @@ export class SolicitudMultimediaModel {
     public departamento?: string,
     public codigoPostal?: string,
     public telefono?: string,
-    public accesoMultimedia?: LoginUsuarioCmarLive,
+    public nacionalidad?: NacionalidadModel,
+    public accesoMultimedia?: AccesoMultimediaModel,
     public razonSolicitud?: RazonSolicitudModel,
     public tiempoAprobación?: TipoAprobacionModel,
     public otraRazon?: string

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'environment';
 import { tap } from 'rxjs/operators';
-import { AccesoMultimediaModel, LoginUsuarioCmarLive } from 'src/app/core/models/acceso-multimedia.model';
+import { AccesoMultimediaModel, LoginUsuarioCmarLiveInterface } from 'src/app/core/models/acceso-multimedia.model';
 
 const base_url = environment.base_url;
 
@@ -25,7 +25,7 @@ export class AccesoMultimediaService {
     };
   }
 
-  crearAccesoMultimedia(accesoMultimedia: LoginUsuarioCmarLive) {
+  crearAccesoMultimedia(accesoMultimedia: LoginUsuarioCmarLiveInterface) {
     return this.httpClient.post(`${base_url}/accesomultimedia`, accesoMultimedia, this.headers).pipe(
       tap((resp: any) => {
         resp;
@@ -33,15 +33,15 @@ export class AccesoMultimediaService {
     );
   }
 
-  eliminarAccesoMultimedia(accesoMultimedia: LoginUsuarioCmarLive) {
-    return this.httpClient.delete(`${base_url}/accesomultimedia/${accesoMultimedia.id}`, this.headers);
+  eliminarAccesoMultimedia(idAccesoMultimedia: number) {
+    return this.httpClient.delete(`${base_url}/accesomultimedia/${idAccesoMultimedia}`, this.headers);
   }
 
-  actualizarAccesoMultimedia(accesoMultimedia: LoginUsuarioCmarLive, id: number) {
+  actualizarAccesoMultimedia(accesoMultimedia: LoginUsuarioCmarLiveInterface, id: number) {
     return this.httpClient.put(`${base_url}/accesomultimedia/${id}`, accesoMultimedia, this.headers);
   }
 
-  activarUsuario(accesoMultimedia: LoginUsuarioCmarLive) {
+  activarAccesoMultimedia(accesoMultimedia: AccesoMultimediaModel) {
     return this.httpClient.put(
       `${base_url}/accesomultimedia/activar/${accesoMultimedia.id}`,
       accesoMultimedia,

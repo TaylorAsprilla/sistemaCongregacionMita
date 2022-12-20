@@ -19,7 +19,6 @@
             <th class="w100">Item</th>
             <th>Nombre</th>
             <th>Nacionalidad</th>
-
             <th>Celular</th>
             <th class="w100">Email</th>
             <th>Pais</th>
@@ -36,54 +35,57 @@
               <p><td class="link-primary pointer" (click)="masInformacion(solicitud.id)">Ver Más</td></p>
             </td>
 
-            <td>{{ solicitud.nombre }}</td>
+            <td>{{ solicitud?.nombre }}</td>
 
-            <td>Colombiana</td>
+            <td>{{ solicitud?.nacionalidad.nombre }}</td>
 
-            <td>{{ solicitud.celular }}</td>
+            <td>{{ solicitud?.celular }}</td>
 
-            <td>{{ solicitud.email }}</td>
+            <td>{{ solicitud?.email }}</td>
 
-            <td>Colombia</td>
+            <td>{{ solicitud?.pais }}</td>
 
-            <td>Bogotá</td>
+            <td>{{ solicitud?.ciudad }}</td>
 
-            <td>Login</td>
+            <td>{{ solicitud?.accesoMultimedia?.login }}</td>
 
             <td>
-              <span class="badge badge-primary">Activo</span>
-              <span class="badge badge-danger">Deshabilitado</span>
+              <span class="badge badge-primary" *ngIf="!!solicitud?.accesoMultimedia?.estado">Activo</span>
+              <span class="badge badge-danger" *ngIf="!solicitud?.accesoMultimedia?.estado">Deshabilitado</span>
             </td>
 
             <td>
               <a
+                *ngIf="!solicitud?.accesoMultimedia?.login"
                 data-toggle="tooltip"
-                data-original-title="Crear"
+                data-original-title="Crear Acceso"
                 class="btn bg-info"
-                (click)="aceptarSolicitud(solicitud)"
-                ><i class="fa fa-check"></i
+                (click)="crearAccesoMultimedia(solicitud)"
+                ><i class="fa fa-plus"></i
               ></a>
               <a
+                *ngIf="!!solicitud?.accesoMultimedia?.login"
                 data-toggle="tooltip"
-                data-original-title="Borrar"
-                class="btn bg-danger ml-1"
-                (click)="deshabilitarSolicitud()"
-                ><i class="fa fa-trash"></i
-              ></a>
-              <!-- <a
-                *ngIf="!solicitud.estado"
-                data-toggle="tooltip"
-                data-original-title="Activar"
-                class="btn bg-secondary ml-1"
-                ><i class="fa fa-trash"></i
-              ></a> -->
-
-              <a
-                data-toggle="tooltip"
-                data-original-title="Activar"
+                data-original-title="Editar Acceso"
                 class="btn bg-warning ml-1"
-                (click)="desAprobarSolicitud()"
-                ><i class="fa fa-x"></i
+                (click)="editarAccesoMultimedia(solicitud)"
+                ><i class="fa fa-pen-to-square"></i
+              ></a>
+              <a
+                *ngIf="!!solicitud?.accesoMultimedia?.estado"
+                data-toggle="tooltip"
+                data-original-title="Eliminar Acceso"
+                class="btn bg-danger ml-1"
+                (click)="eliminarAccesoMultimedia(solicitud)"
+                ><i class="fa fa-trash"></i
+              ></a>
+              <a
+                *ngIf="!solicitud?.accesoMultimedia?.estado && !!solicitud?.accesoMultimedia?.login"
+                data-toggle="tooltip"
+                data-original-title="Activar Acceso"
+                class="btn bg-secondary ml-1"
+                (click)="activarAccesoMultimedia(solicitud)"
+                ><i class="fa fa-check"></i
               ></a>
             </td>
           </tr>

@@ -8,7 +8,8 @@ import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
-import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
+import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
+import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitud-multimedia/solicitud-multimedia.component';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -17,7 +18,7 @@ const base_url = environment.base_url;
 export class UsuarioService {
   public usuario: UsuarioModel;
   public idUsuario: number;
-  public usuarioMultimedia: AccesoMultimediaModel;
+  public usuarioMultimedia: MultimediaCmarLiveModel;
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
@@ -61,7 +62,7 @@ export class UsuarioService {
               respuesta.usuario;
             this.usuario = null;
 
-            this.usuarioMultimedia = new AccesoMultimediaModel(
+            this.usuarioMultimedia = new MultimediaCmarLiveModel(
               id,
               nombre,
               celular,
