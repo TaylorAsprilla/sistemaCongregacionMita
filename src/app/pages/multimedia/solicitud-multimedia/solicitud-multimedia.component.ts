@@ -192,6 +192,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       showCancelButton: true,
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
+      showCloseButton: true,
       allowOutsideClick: false,
       allowEscapeKey: false,
       icon: 'question',
@@ -211,6 +212,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           focusConfirm: true,
           allowOutsideClick: false,
           allowEscapeKey: false,
+          showCloseButton: true,
           preConfirm: () => {
             return [
               (document.getElementById('login') as HTMLInputElement).value,
@@ -265,6 +267,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       showCancelButton: true,
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
+      showCloseButton: true,
       allowOutsideClick: false,
       allowEscapeKey: false,
       icon: 'question',
@@ -283,6 +286,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
           focusConfirm: true,
           allowOutsideClick: false,
+          showCloseButton: true,
           allowEscapeKey: false,
           preConfirm: () => {
             return [
@@ -343,6 +347,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       showCancelButton: true,
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
+      showCloseButton: true,
       icon: 'question',
       html: `Desea deshabilitar el acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
     }).then((result) => {
@@ -354,6 +359,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
               title: 'CMAR LIVE',
               icon: 'warning',
               html: `Se deshabilitó el acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
+              showCloseButton: true,
             });
           });
         this.cargarSolicitudDeAccesos();
@@ -365,6 +371,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'CMAR LIVE',
       showCancelButton: true,
+      showCloseButton: true,
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
       icon: 'question',
