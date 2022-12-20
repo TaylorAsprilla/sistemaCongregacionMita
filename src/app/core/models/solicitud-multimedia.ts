@@ -1,3 +1,8 @@
+import { LoginUsuarioCmarLive } from './acceso-multimedia.model';
+import { RazonSolicitudModel } from './razon-solicitud.model';
+import { TipoAprobacionModel } from './tiempo-aprobacion.model';
+import { UsuarioModel } from './usuario.model';
+
 export class SolicitudMultimediaModel {
   constructor(
     public id: number,
@@ -13,11 +18,15 @@ export class SolicitudMultimediaModel {
     public status: boolean,
     public razonSolicitud_id: number,
     public nacionalidad_id: number,
-    public distancia: string,
-    public departamento: string,
-    public codigoPostal: string,
-    public telefono: string,
-    public usuarioQueRegistra_id: number
+    public usuarioQueRegistra_id: number,
+    public usuarioQueRegistra: UsuarioModel,
+    public departamento?: string,
+    public codigoPostal?: string,
+    public telefono?: string,
+    public accesoMultimedia?: LoginUsuarioCmarLive,
+    public razonSolicitud?: RazonSolicitudModel,
+    public tiempoAprobación?: TipoAprobacionModel,
+    public otraRazon?: string
   ) {}
 }
 
