@@ -86,7 +86,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
       }
     );
 
-    this.idUsuario = this.usuarioService.usuarioId;
+    this.idUsuario = this.usuarioService?.usuarioLogin.id;
 
     this.crearFormularioDeLaSolicitud();
   }
