@@ -73,7 +73,6 @@ export class UsuarioService {
               solicitud_id,
               tiempoAprobacion_id
             );
-            console.log('this.usuarioMultimedia ', this.usuarioMultimedia);
 
             localStorage.setItem('token', respuesta.token);
             return true;
