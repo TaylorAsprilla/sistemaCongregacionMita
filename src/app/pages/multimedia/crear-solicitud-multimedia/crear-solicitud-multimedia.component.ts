@@ -9,6 +9,7 @@ import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
 import { SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia';
+import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -65,7 +66,8 @@ export class CrearSolicitudMultimediaComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private solicitudMultimediaService: SolicitudMultimediaService,
     private usuarioService: UsuarioService,
-    private buscarCorreoService: BuscarCorreoService
+    private buscarCorreoService: BuscarCorreoService,
+    private accesoMultimediaService: AccesoMultimediaService
   ) {}
 
   ngOnInit(): void {

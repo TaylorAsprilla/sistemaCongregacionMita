@@ -1,5 +1,5 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
+import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES } from 'src/app/routes/menu-items';
@@ -11,7 +11,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 export class PermisosDirective {
   private permisos = [];
   private usuario: UsuarioModel;
-  private usuarioMultimedia: AccesoMultimediaModel;
+  private usuarioMultimedia: MultimediaCmarLiveModel;
 
   constructor(
     private templateRef: TemplateRef<any>,

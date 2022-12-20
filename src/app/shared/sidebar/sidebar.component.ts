@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROUTES, Rutas } from 'src/app/routes/menu-items';
-import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
+import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
 
 declare var $: any;
 
@@ -17,7 +17,7 @@ declare var $: any;
 export class SidebarComponent implements OnInit {
   menuItems: any[] = [];
   usuario: UsuarioModel;
-  public usuarioMultimedia: AccesoMultimediaModel;
+  public usuarioMultimedia: MultimediaCmarLiveModel;
 
   public primerNombre: string = '';
   public segundoNombre: string = '';
@@ -50,12 +50,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  constructor(
-    private modalService: NgbModal,
-    private router: Router,
-    private route: ActivatedRoute,
-    private usuarioService: UsuarioService
-  ) {}
+  constructor(private modalService: NgbModal, private usuarioService: UsuarioService) {}
   // End open close
   ngOnInit() {
     this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
