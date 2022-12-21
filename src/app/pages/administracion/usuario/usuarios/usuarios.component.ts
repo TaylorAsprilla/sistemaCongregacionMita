@@ -50,7 +50,7 @@ export class UsuariosComponent implements OnInit {
       this.usuarios = usuarios;
       this.usuariosTemporales = usuarios;
       this.cargando = false;
-      this.totalPaginas = Math.ceil(totalUsuarios / 30);
+      this.totalPaginas = Math.ceil(totalUsuarios / 50);
     });
   }
 
