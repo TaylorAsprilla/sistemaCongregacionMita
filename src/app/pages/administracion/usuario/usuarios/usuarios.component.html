@@ -43,26 +43,26 @@
               <img src="assets/images/users/perfil.png" alt="user" class="avatar pointer" />
             </td>
             <td>
-              {{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }}
-              {{ usuario.segundoApellido }}
+              {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
+              {{ usuario?.segundoApellido }}
             </td>
-            <td>{{ usuario.email }}</td>
+            <td>{{ usuario?.email }}</td>
             <td>{{ usuario.fechaNacimiento }}</td>
 
-            <td>{{ usuario.telefonoCasa }}</td>
+            <td>{{ usuario?.telefonoCasa }}</td>
 
-            <td>{{ usuario.numeroCelular }}</td>
+            <td>{{ usuario?.numeroCelular }}</td>
 
             <td>
-              <span *ngIf="!!usuario.paisId" class="badge badge-primary"> {{ buscarPais(usuario.paisId) }} </span>
+              <span *ngIf="!!usuario.paisId" class="badge badge-primary"> {{ buscarPais(usuario?.paisId) }} </span>
               <span *ngIf="!!usuario.nombreCongregacion" class="badge badge-danger">
                 {{ usuario.nombreCongregacion }}</span
               >
-              <span *ngIf="!!usuario.campoId" class="badge badge-success"> {{ buscarCampo(usuario.campoId) }} </span>
+              <span *ngIf="!!usuario.campoId" class="badge badge-success"> {{ buscarCampo(usuario?.campoId) }} </span>
             </td>
 
             <td>
-              {{ usuario.nacionalidad.nombre }}
+              {{ usuario.nacionalidad?.nombre }}
             </td>
 
             <td>
@@ -119,12 +119,16 @@
       </table>
     </div>
   </div>
-  <div class="col-md-4 mb-4 ml-2">
-    <button class="btn btn-secondary" (click)="cambiarPagina(-5, -1)" [disabled]="pagina == 1 ? true : false">
+  <div class="col-md-4 mb-4 ml-2 px-4">
+    <button class="btn btn-secondary" (click)="cambiarPagina(-50, -1)" [disabled]="pagina == 1 ? true : false">
       Anterior
     </button>
     &nbsp;
-    <button class="btn btn-secondary" (click)="cambiarPagina(5, 1)" [disabled]="pagina === totalPaginas ? true : false">
+    <button
+      class="btn btn-secondary"
+      (click)="cambiarPagina(50, 1)"
+      [disabled]="pagina === totalPaginas ? true : false"
+    >
       Siguiente
     </button>
   </div>
