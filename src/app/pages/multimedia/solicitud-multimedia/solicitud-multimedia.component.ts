@@ -186,6 +186,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   }
 
   crearAccesoMultimedia(solicitud: SolicitudMultimediaModel) {
+    let password = this.generarPassword();
     Swal.fire({
       title: 'CMAR LIVE',
       html: `Desea crear acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
@@ -203,9 +204,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           html:
             `<p>Credenciales para <b>${solicitud.nombre}</b></p>` +
             `<label class="input-group obligatorio">Login: </label>
-              <input type="text" id="login" name="login" class="form-control" placeholder="Login" required />` +
+              <input type="text" id="login" name="login" class="form-control"  value="${solicitud.email}"  required />` +
             `<label class="input-group obligatorio">Contraseña: </label>
-              <input type="password" id="password" name="password" class="form-control" placeholder="Ingrese la contraseña" required/>` +
+              <input type="password" id="password" name="password" class="form-control" value="${password}"/>` +
             `<label class="input-group obligatorio">Tiempo de aprobación:</label>
                <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" required/>` +
             `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
@@ -388,5 +389,16 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
         this.cargarSolicitudDeAccesos();
       }
     });
+  }
+
+  generarPassword() {
+    var generator = require('generate-password-browser');
+
+    var password = generator.generate({
+      length: 10,
+      numbers: true,
+    });
+
+    return password;
   }
 }
