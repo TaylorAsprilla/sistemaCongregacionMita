@@ -71,6 +71,7 @@
               [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'router-link-active'"
               [ngClass]="[sidebarnavSubItem.class]"
               *ngIf="!sidebarnavSubItem.extralink"
+              class="pointer"
               (click)="addActiveClass(sidebarnavSubItem.title)"
             >
               <i [ngClass]="[sidebarnavSubItem.icon]"></i>
