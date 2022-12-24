@@ -4,7 +4,10 @@
       <h3 class="card-title">Historial de Vigilias</h3>
     </div>
     <div class="card-body">
-      <app-biblioteca-multimedia [serviciosYvigilias]="vigilias"></app-biblioteca-multimedia>
+      <app-biblioteca-multimedia
+        [serviciosYvigilias]="vigilias"
+        [tipoDeEvento]="TIPOEVENTO.VIGILIA"
+      ></app-biblioteca-multimedia>
     </div>
   </div>
 </div>

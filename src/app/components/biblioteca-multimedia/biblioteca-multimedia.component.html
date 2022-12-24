@@ -25,29 +25,87 @@
         class="card-body col-sm-12 col-md-12 col-lg-12 text-center ratio ratio-16x9"
       >
         <iframe
-          [src]="item.link | vimeoUrlPipe"
+          [src]="domSanitizerVideo(item.link)"
           width="400"
           height="255"
           frameborder="0"
           webkitallowfullscreen
           mozallowfullscreen
           allowfullscreen
-          allow-top-navigation
-          allow-presentation
         ></iframe>
       </div>
     </div>
 
-    <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center ratio ratio-16x9">
-      <iframe
-        [src]="item.link | vimeoUrlPipe"
-        width="400"
-        height="255"
-        frameborder="0"
-        webkitallowfullscreen
-        mozallowfullscreen
-        allowfullscreen
-      ></iframe>
+    <!-- Vigilias-->
+    <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO.VIGILIA">
+      <h3>{{ item.titulo }}</h3>
+      <h4>{{ item.fecha }}</h4>
+
+      <div>
+        <div
+          *ngIf="item.plataforma === PLATAFORMA.YOUTUBE"
+          class="card-body col-sm-12 col-md-12 col-lg-12 text-center"
+          #templateYouTubePlayer
+        >
+          <youtube-player
+            [videoId]="item.link | youtube"
+            suggestedQuality="default"
+            [width]="videoWidth"
+            [height]="videoHeight"
+          >
+          </youtube-player>
+        </div>
+      </div>
+      <div
+        *ngIf="item.plataforma === PLATAFORMA.VIMEO"
+        class="card-body col-sm-12 col-md-12 col-lg-12 text-center ratio ratio-16x9"
+      >
+        <iframe
+          [src]="domSanitizerVideo(item.link)"
+          width="400"
+          height="255"
+          frameborder="0"
+          webkitallowfullscreen
+          mozallowfullscreen
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+    <!-- Evento Especial -->
+
+    <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO.EVENTO_ESPECIAL">
+      <h3>{{ item.titulo }}</h3>
+      <h4>{{ item.fecha }}</h4>
+
+      <div>
+        <div
+          *ngIf="item.plataforma === PLATAFORMA.YOUTUBE"
+          class="card-body col-sm-12 col-md-12 col-lg-12 text-center"
+          #templateYouTubePlayer
+        >
+          <youtube-player
+            [videoId]="item.link | youtube"
+            suggestedQuality="default"
+            [width]="videoWidth"
+            [height]="videoHeight"
+          >
+          </youtube-player>
+        </div>
+      </div>
+      <div
+        *ngIf="item.plataforma === PLATAFORMA.VIMEO"
+        class="card-body col-sm-12 col-md-12 col-lg-12 text-center ratio ratio-16x9"
+      >
+        <iframe
+          [src]="domSanitizerVideo(item.link)"
+          width="400"
+          height="255"
+          frameborder="0"
+          webkitallowfullscreen
+          mozallowfullscreen
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
   </div>
 </div>

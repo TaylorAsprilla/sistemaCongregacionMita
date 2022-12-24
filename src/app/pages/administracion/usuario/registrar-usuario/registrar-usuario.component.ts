@@ -380,7 +380,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         .pipe(delay(100))
         .subscribe(
           (usuarioEncontrado: UsuarioInterface) => {
-            console.info(usuarioEncontrado);
             const {
               primerNombre,
               primerApellido,
