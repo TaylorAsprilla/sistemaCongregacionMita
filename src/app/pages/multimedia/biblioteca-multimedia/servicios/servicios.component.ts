@@ -12,6 +12,10 @@ export class ServiciosComponent implements OnInit {
   servicios: LinkEventoModel[] = [];
   vigilias: LinkEventoModel[] = [];
 
+  get TIPOEVENTO() {
+    return TIPOEVENTO;
+  }
+
   constructor(private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {

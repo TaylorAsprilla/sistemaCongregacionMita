@@ -8,6 +8,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LinkEventoModel, PLATAFORMA, TIPOEVENTO } from 'src/app/core/models/link-evento.model';
 
 @Component({
@@ -25,6 +26,7 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
   videoHeight: number | undefined;
 
   linkEventos: LinkEventoModel[] = [];
+  urlVideo: SafeResourceUrl;
 
   get PLATAFORMA() {
     return PLATAFORMA;
@@ -34,7 +36,7 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
     return TIPOEVENTO;
   }
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
+  constructor(private changeDetectorRef: ChangeDetectorRef, public sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const tag = document.createElement('script');
@@ -54,8 +56,12 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
 
   onResize = (): void => {
     // Automatically expand the video to fit the page up to 1200px x 720px
-    this.videoWidth = Math.min(this.templateYouTubePlayer.nativeElement.clientWidth, 1000);
+    this.videoWidth = Math.min(this.templateYouTubePlayer?.nativeElement.clientWidth, 1000);
     this.videoHeight = this.videoWidth * 0.6;
     this.changeDetectorRef.detectChanges();
   };
+
+  domSanitizerVideo(linVideo: string) {
+    return (this.urlVideo = this.sanitizer.bypassSecurityTrustResourceUrl(linVideo));
+  }
 }

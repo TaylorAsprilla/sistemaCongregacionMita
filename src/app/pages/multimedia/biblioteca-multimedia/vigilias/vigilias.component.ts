@@ -11,6 +11,10 @@ export class VigiliasComponent implements OnInit {
   linkEventos: LinkEventoModel[] = [];
   vigilias: LinkEventoModel[] = [];
 
+  get TIPOEVENTO() {
+    return TIPOEVENTO;
+  }
+
   constructor(private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
