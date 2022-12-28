@@ -57,6 +57,7 @@ import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de
 import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
 import { DocumentoResolver } from 'src/app/resolvers/tipo-documento/documento.resolver';
 import { PermisosResolver } from 'src/app/resolvers/permisos/permisos.resolver';
+import { UsuariosSupervisorComponent } from 'src/app/pages/supervisor/usuarios-supervisor/usuarios-supervisor.component';
 
 const childRoutes: Routes = [
   {
@@ -84,7 +85,6 @@ const childRoutes: Routes = [
       campo: CampoResolver,
     },
   },
-
   {
     path: `${Rutas.USUARIOS}/:id`,
     component: RegistrarUsuarioComponent,
@@ -106,6 +106,11 @@ const childRoutes: Routes = [
       dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
     },
+  },
+
+  {
+    path: Rutas.USUARIOS_SUPERVISOR,
+    component: UsuariosSupervisorComponent,
   },
 
   {

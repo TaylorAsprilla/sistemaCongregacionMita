@@ -26,6 +26,7 @@ export enum Rutas {
   PAISES = 'paises',
   PERFIL = 'perfil',
   USUARIOS = 'usuarios',
+  USUARIOS_SUPERVISOR = 'usuarios-supervisor',
   REGISTRAR_USUARIO = 'registrar-usuario',
   RUTA_NUEVA = 'ruta-nueva',
   SERVICIOS_Y_VIGILIAS = 'servicios-y-vigilias',
@@ -39,7 +40,7 @@ export enum Rutas {
 
 export enum ROLES {
   ADMINISTRADOR = 'ADMINISTRADOR',
-  SUPERVISOR_GENERAL = 'SUPERVISOR_GENERAL',
+  SUPERVISOR = 'SUPERVISOR',
   SUPERVISOR_LOCAL = 'SUPERVISOR_LOCAL',
   OBRERO = 'OBRERO',
   USUARIO = 'USUARIO',
@@ -139,7 +140,6 @@ export const ROUTES: RouteInfo[] = [
       },
     ],
   },
-
   {
     path: '',
     title: 'Censo',
@@ -253,6 +253,34 @@ export const ROUTES: RouteInfo[] = [
       {
         path: Rutas.CAMPOS,
         title: 'Campos',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [],
+        submenu: [],
+      },
+    ],
+  },
+  {
+    path: '',
+    title: 'Supervisor',
+    icon: '',
+    class: 'nav-small-cap',
+    role: [ROLES.SUPERVISOR],
+    extralink: true,
+    submenu: [],
+  },
+  {
+    path: '',
+    title: 'Supervisor',
+    icon: 'fa fa-home',
+    class: 'has-arrow',
+    extralink: false,
+    role: [ROLES.SUPERVISOR],
+    submenu: [
+      {
+        path: Rutas.USUARIOS_SUPERVISOR,
+        title: 'Usuarios',
         icon: '',
         class: '',
         extralink: false,
