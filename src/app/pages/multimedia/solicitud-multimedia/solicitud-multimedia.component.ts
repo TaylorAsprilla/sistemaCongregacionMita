@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { LoginUsuarioCmarLiveInterface } from 'src/app/core/models/acceso-multimedia.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
@@ -49,6 +50,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.cargando = true;
     this.solicitudAccesoSubscription = this.solicitudMultimediaService
       .getSolicitudes()
+      .pipe(delay(100))
       .subscribe((solicitudesDeAcceso) => {
         this.solicitudesDeAccesos = solicitudesDeAcceso.filter(
           (solicitud: SolicitudMultimediaModel) => solicitud.status === true

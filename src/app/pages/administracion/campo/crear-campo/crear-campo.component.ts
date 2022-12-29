@@ -79,28 +79,46 @@ export class CrearCampoComponent implements OnInit {
   crearCampo() {
     const campoNuevo = this.campoForm.value;
 
-    this.campoService.crearCampo(campoNuevo).subscribe(
-      (campoCreado: any) => {
-        Swal.fire('Campo creado', `${campoCreado.campo.campo}`, 'success');
-        this.resetFormulario();
-        this.cargarCampos();
-      },
-      (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
-
-        Object.entries(errores).forEach(([key, value]) => {
-          listaErrores.push('° ' + value['msg'] + '<br>');
-        });
-
+    if (this.campoSeleccionado) {
+      const data = {
+        ...this.campoForm.value,
+        id: this.campoSeleccionado.id,
+      };
+      this.campoService.actualizarCampo(data).subscribe((campo: any) => {
         Swal.fire({
-          title: 'Error al crear campo',
-          icon: 'error',
-          html: `${listaErrores.join('')}`,
+          title: 'Campo Actualizado',
+          icon: 'success',
+          html: `El campo ${campo.campoActualizado.campo} se actualizó correctamente`,
         });
-        this.router.navigateByUrl(Rutas.INICIO);
-      }
-    );
+      });
+      this.resetFormulario();
+      this.cargarCampos();
+      this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}`);
+    } else {
+      this.campoService.crearCampo(campoNuevo).subscribe(
+        (campoCreado: any) => {
+          Swal.fire('Campo creado', `${campoCreado.campo.campo}`, 'success');
+          this.resetFormulario();
+          this.cargarCampos();
+          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}`);
+        },
+        (error) => {
+          let errores = error.error.errors;
+          let listaErrores = [];
+
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
+
+          Swal.fire({
+            title: 'Error al crear campo',
+            icon: 'error',
+            html: `${listaErrores.join('')}`,
+          });
+          this.router.navigateByUrl(Rutas.INICIO);
+        }
+      );
+    }
   }
 
   buscarCampo(id: string) {

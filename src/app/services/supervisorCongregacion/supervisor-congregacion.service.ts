@@ -24,7 +24,6 @@ export class SupervisorCongregacionService {
   }
 
   getUsuariosSupervisor(idSupervisor: number) {
-    console.log('idSupervisor', idSupervisor);
     return this.httpClient
       .get(`${base_url}/supervisorcongregacion/${idSupervisor}`, this.headers)
       .pipe(map((respuesta: { ok: boolean; feligres: usuariosSupervisorModel[] }) => respuesta.feligres));

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -39,10 +40,13 @@ export class PaisesComponent implements OnInit, OnDestroy {
 
   cargarPaises() {
     this.cargando = true;
-    this.paisSubscription = this.paisService.getPaises().subscribe((pais: PaisModel[]) => {
-      this.paises = pais;
-      this.cargando = false;
-    });
+    this.paisSubscription = this.paisService
+      .getPaises()
+      .pipe(delay(100))
+      .subscribe((pais: PaisModel[]) => {
+        this.paises = pais;
+        this.cargando = false;
+      });
   }
 
   borrarPais(pais: PaisModel) {
