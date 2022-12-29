@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -45,6 +46,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
     this.cargando = true;
     this.congregacionSubscription = this.congregacionService
       .getCongregaciones()
+      .pipe(delay(100))
       .subscribe((congregaciones: CongregacionModel[]) => {
         this.congregaciones = congregaciones;
         this.cargando = false;

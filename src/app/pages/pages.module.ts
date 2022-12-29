@@ -13,6 +13,7 @@ import { NopagefoundModule } from './nopagefound/nopagefound.module';
 import { CargandoInformacionModule } from '../components/cargando-informacion/cargando-informacion.module';
 import { MultimediaModule } from './multimedia/multimedia.module';
 import { InicioModule } from './inicio/inicio.module';
+import { SupervisorModule } from './supervisor/supervisor.module';
 
 @NgModule({
   declarations: [PagesComponent],
@@ -32,6 +33,7 @@ import { InicioModule } from './inicio/inicio.module';
     CargandoInformacionModule,
     MultimediaModule,
     InicioModule,
+    SupervisorModule,
   ],
 })
 export class PagesModule {}

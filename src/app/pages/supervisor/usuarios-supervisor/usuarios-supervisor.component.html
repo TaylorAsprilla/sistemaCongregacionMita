@@ -1,0 +1,59 @@
+<app-cargando-informacion *ngIf="!!cargando"></app-cargando-informacion>
+
+<div class="card animate__animated animate__fadeIn" *ngIf="!cargando">
+  <div class="card-header">
+    <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ usuarios.length }}</h3>
+
+    <div class="col">
+      <div class="text-right mb-4 float-end">
+        <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+      </div>
+    </div>
+  </div>
+  <!-- /.card-header -->
+  <div class="card-body">
+    <div class="table-responsive" *ngIf="!!usuarios.length; else mensaje">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th class="w100"># Mita</th>
+            <th class="w100">Foto</th>
+            <th>Nombre</th>
+            <th>País - Congregación</th>
+            <th class="w100">Congregación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td>
+              {{ usuario.id }}
+            </td>
+            <td class="text-center">
+              <img src="assets/images/users/perfil.png" alt="user" class="avatar pointer" />
+            </td>
+            <td>
+              {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
+              {{ usuario?.segundoApellido }}
+            </td>
+            <td>
+              {{ usuario.pais }}
+            </td>
+
+            <td>
+              {{ usuario.congregacion }}
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <th class="w100"># Mita</th>
+          <th class="w100">Foto</th>
+          <th>Nombre</th>
+
+          <th>País - Congregación</th>
+          <th class="w100">Congregación</th>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <ng-template #mensaje>No existen feligreses registrados bajo su jerarquía </ng-template>
+</div>

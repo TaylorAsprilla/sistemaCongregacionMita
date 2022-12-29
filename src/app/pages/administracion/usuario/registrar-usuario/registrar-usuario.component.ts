@@ -18,7 +18,7 @@ import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { Rutas } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
-import * as moment from 'moment';
+
 import { FuenteIngresoModel } from 'src/app/core/models/fuente-ingreso.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
@@ -46,8 +46,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public registroDos_step = false;
   public registroTres_step = false;
   public step: number = 1;
-
-  currentDate = moment();
 
   public usuarios: UsuarioModel[] = [];
   public generos: GeneroModel[] = [];

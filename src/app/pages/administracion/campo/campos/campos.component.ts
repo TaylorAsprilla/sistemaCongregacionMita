@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { delay } from 'rxjs/operators';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
@@ -36,10 +37,13 @@ export class CamposComponent implements OnInit {
 
   cargarCampos() {
     this.cargando = true;
-    this.campoService.getCampos().subscribe((campos: CampoModel[]) => {
-      this.campos = campos;
-      this.cargando = false;
-    });
+    this.campoService
+      .getCampos()
+      .pipe(delay(100))
+      .subscribe((campos: CampoModel[]) => {
+        this.campos = campos;
+        this.cargando = false;
+      });
   }
 
   borrarCampo(campo: CampoModel) {
