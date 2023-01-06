@@ -1,12 +1,38 @@
+<app-informacion-usuario
+  [usuario]="usuario"
+  [generos]="generos"
+  [estadoCivil]="estadoCivil"
+  [paises]="paises"
+  [rolCasa]="rolCasa"
+  [congregaciones]="congregaciones"
+  [campos]="campos"
+  [vacunas]="vacunas"
+  [dosis]="dosis"
+  [nacionalidades]="nacionalidades"
+  [fuenteDeIngresos]="fuenteDeIngresos"
+  [gradosAcademicos]="gradosAcademicos"
+  [tiposEmpleos]="tiposEmpleos"
+  [ministerios]="ministerios"
+  [voluntariados]="voluntariados"
+  [tiposDeDocumentos]="tiposDeDocumentos"
+  [generos]="generos"
+  [tipoMiembros]="tipoMiembros"
+  [codigoDeMarcadoSeparado]="false"
+  [operacion]="'actualizar'"
+  (usuarioNuevo)="realizarOperacion('actualizar', $event)"
+></app-informacion-usuario>
+
 <div class="row">
-  <div class="col-md-6">
+  <!-- <div class="col-md-12">
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Actualizar Perfil</h3>
       </div>
 
+
       <div class="card-body">
         <form class="form-signin" autocomplete="off" [formGroup]="perfilForm">
+          <div class="fs-title mb-2">Información Personal</div>
           <div class="form-group">
             <label>Fecha de Nacimiento:</label>
             <input
@@ -38,6 +64,16 @@
           </div>
 
           <div class="form-group">
+            <label>Apodo:</label>
+            <input type="text" formControlName="apodo" class="form-control" placeholder="Apodo" />
+          </div>
+
+          <div class="form-group">
+            <label>Email:</label>
+            <input type="email" formControlName="email" class="form-control" inputmode="text" placeholder="Email" />
+          </div>
+
+          <div class="form-group">
             <label>Genero:</label>
             <select class="form-control" formControlName="genero_id">
               <option value="" disabled>Seleccione el genero</option>
@@ -47,10 +83,7 @@
             </select>
           </div>
 
-          <div class="form-group">
-            <label>Email:</label>
-            <input type="email" formControlName="email" class="form-control" inputmode="text" placeholder="Email" />
-          </div>
+          <hr />
 
           <div class="form-group">
             <label>Estado Civil:</label>
@@ -199,8 +232,8 @@
         </form>
       </div>
     </div>
-  </div>
-  <div class="col-md-6">
+  </div> -->
+  <!-- <div class="col-md-6">
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Foto de Perfil</h3>
@@ -208,13 +241,13 @@
 
       <div class="card-body">
         <div class="text-center">
-          <!-- <img *ngIf="!imagenTemporal" [src]="imagenCarnet" class="img-thumbnail" />
-        <img *ngIf="imagenTemporal" [src]="imagenTemporal" class="img-thumbnail" /> -->
+           <img *ngIf="!imagenTemporal" [src]="imagenCarnet" class="img-thumbnail" />
+        <img *ngIf="imagenTemporal" [src]="imagenTemporal" class="img-thumbnail" />
           <img src="./assets/images/users/perfil.png" class="img-thumbnail" />
         </div>
 
         <div class="mt-4">
-          <!-- <input type="file" (change)="cambiarImagen($event.target.files[0])" /> -->
+        <input type="file" (change)="cambiarImagen($event.target.files[0])" />
           <br />
         </div>
       </div>
@@ -222,5 +255,5 @@
         <button type="submit" class="submit btn btn-primary"><i class="fa fa-save"></i> Actualizar Foto</button>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

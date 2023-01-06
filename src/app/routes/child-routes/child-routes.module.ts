@@ -178,6 +178,24 @@ const childRoutes: Routes = [
   {
     path: Rutas.PERFIL,
     component: PerfilComponent,
+    resolve: {
+      nacionalidad: NacionalidadResolver,
+      estadoCivil: EstadoCivilResolver,
+      genero: GeneroResolver,
+      rolCasa: RolCasaResolver,
+      fuenteDeIngreso: FuenteIngresoResolver,
+      gradoAcademico: GradoAcademicoResolver,
+      tipoEmpleo: TipoEmpleoResolver,
+      congregacion: CongregacionResolver,
+      tipoMiembro: TipoMiembroResolver,
+      ministerio: MinisterioResolver,
+      voluntariado: VoluntariadoResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
+      vacuna: VacunaResolver,
+      dosis: DosisResolver,
+      tipoDocumento: DocumentoResolver,
+    },
   },
   // Informes
   {

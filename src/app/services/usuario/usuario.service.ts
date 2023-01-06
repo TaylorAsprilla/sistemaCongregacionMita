@@ -117,6 +117,7 @@ export class UsuarioService {
               usuarioCongregacion,
               usuarioMinisterio,
               usuarioPermiso,
+              usuarioFuenteIngreso,
             } = respuesta.usuario;
 
             this.usuario = new UsuarioModel(
@@ -158,7 +159,8 @@ export class UsuarioService {
               direcciones,
               usuarioCongregacion,
               usuarioMinisterio,
-              usuarioPermiso
+              usuarioPermiso,
+              usuarioFuenteIngreso
             );
 
             localStorage.setItem('token', respuesta.token);
@@ -320,7 +322,7 @@ export class UsuarioService {
     return this.httpClient.delete(`${base_url}/usuarios/${usuario.id}`, this.headers);
   }
 
-  actualizarUsuario(usuario: UsuarioModel, id: number) {
+  actualizarUsuario(usuario: RegisterFormInterface, id: number) {
     return this.httpClient.put(`${base_url}/usuarios/${id}`, usuario, this.headers);
   }
 

@@ -2,6 +2,7 @@ import { environment } from 'environment';
 import { DireccionInterface } from '../interfaces/register-form.interface';
 import { DosisModel } from './dosis.model';
 import { EstadoCivilModel } from './estado-civil.model';
+import { FuenteIngresoModel } from './fuente-ingreso.model';
 import { GeneroModel } from './genero.model';
 import { GradoAcademicoModel } from './grado-academico.model';
 import { MinisterioModel } from './ministerio.model';
@@ -55,7 +56,8 @@ export class UsuarioModel {
     public direcciones?: DireccionInterface[],
     public usuarioCongregacion?: CongregacionInterface,
     public usuarioMinisterio?: MinisterioModel,
-    public usuarioPermiso?: PermisoModel[]
+    public usuarioPermiso?: PermisoModel[],
+    public usuarioFuenteIngreso?: FuenteIngresoModel[]
   ) {}
 
   get fotoUrl() {
