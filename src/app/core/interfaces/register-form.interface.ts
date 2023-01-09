@@ -1,4 +1,3 @@
-import { CongregacionModel } from '../models/congregacion.model';
 import { FuenteIngresoModel } from '../models/fuente-ingreso.model';
 import { MinisterioModel } from '../models/ministerio.model';
 import { VoluntariadoModel } from '../models/voluntariado.model';
@@ -36,9 +35,9 @@ export interface RegisterFormInterface {
   congregacion: CongregacionInterfase;
   vacuna_id: number;
   dosis_id: number;
-  tipoDocumento_id: number;
   numeroDocumento: string;
   terminos: boolean;
+  tipoDocumento_id?: number;
 }
 
 export interface DireccionInterface {

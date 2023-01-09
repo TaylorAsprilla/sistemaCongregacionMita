@@ -10,6 +10,8 @@ import { Rutas } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import Swal from 'sweetalert2';
+import { generate } from 'generate-password-browser';
+// import generator = require('generate-password-browser');
 
 @Component({
   selector: 'app-solicitud-multimedia',
@@ -21,6 +23,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   razonSolicitudes: RazonSolicitudModel[] = [];
   nacionalidades: NacionalidadModel[] = [];
   cargando: boolean = false;
+  fieldTextType: boolean;
 
   // Subscription
   public solicitudAccesoSubscription: Subscription;
@@ -53,7 +56,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       .pipe(delay(100))
       .subscribe((solicitudesDeAcceso) => {
         this.solicitudesDeAccesos = solicitudesDeAcceso.filter(
-          (solicitud: SolicitudMultimediaModel) => solicitud.status === true
+          (solicitud: SolicitudMultimediaModel) => solicitud.status === true && solicitud.estado === true
         );
         this.cargando = false;
       });
@@ -264,6 +267,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   }
 
   editarAccesoMultimedia(solicitud: SolicitudMultimediaModel) {
+    const password = this.generarPassword();
     Swal.fire({
       title: 'CMAR LIVE',
       html: `Desea editar las credenciales de ingreso del usuario ${solicitud.nombre}`,
@@ -283,7 +287,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             `<label class="input-group obligatorio">Login: </label>
               <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.accesoMultimedia.login} required/>` +
             `<label class="input-group obligatorio">Contraseña: </label>
-              <input type="password" id="password" name="password" class="form-control" placeholder="Ingrese la contraseña"  required/>` +
+              <input type="password" id="password" name="password" class="form-control" value="${password}" placeholder="Ingrese la contraseña"  required/>` +
             `<label class="input-group obligatorio">Tiempo de aprobación:</label>
                <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${solicitud.accesoMultimedia.tiempoAprobacion} required/>` +
             `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
@@ -393,14 +397,39 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  generarPassword() {
-    var generator = require('generate-password-browser');
+  denegarAccesoMultimedia(solicitud: SolicitudMultimediaModel) {
+    Swal.fire({
+      title: 'CMAR LIVE',
+      showCancelButton: true,
+      showCloseButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+      icon: 'question',
+      html: `Desea denegar la solicitud CMAR LIVE al usuario ${solicitud.nombre}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.solicitudMultimediaService.eliminarSolicitudMultimedia(solicitud.id).subscribe((respuesta: any) => {
+          Swal.fire({
+            title: 'CMAR LIVE',
+            icon: 'warning',
+            html: `Se denego la solicitud de acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
+          });
+        });
+        this.cargarSolicitudDeAccesos();
+      }
+    });
+  }
 
-    var password = generator.generate({
+  generarPassword() {
+    const password = generate({
       length: 10,
       numbers: true,
     });
 
     return password;
+  }
+
+  mostrarContrasena() {
+    this.fieldTextType = !this.fieldTextType;
   }
 }

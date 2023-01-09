@@ -1,0 +1,990 @@
+<div class="row">
+  <div class="col-md-12 col-md-offset-3">
+    <form [formGroup]="registroUnoForm" id="msform">
+      <!-- progressbar -->
+      <ul id="progressbar">
+        <li [ngClass]="step >= 1 ? 'active ' : 'inactive'">Información Personal</li>
+        <li [ngClass]="step >= 2 ? 'active' : 'inactive'">Locación</li>
+        <li [ngClass]="step >= 3 ? 'active' : 'inactive'">Información Laboral</li>
+        <li [ngClass]="step == 4 ? 'active' : 'inactive'">Información Eclesiástica</li>
+      </ul>
+      <!-- ==============================================================================
+                      Formulario #1 Información Personal
+    ============================================================================== -->
+      <!-- fieldsets -->
+      <fieldset *ngIf="step == 1">
+        <div class="fs-title mb-2">Información Personal</div>
+        <div class="form-group">
+          <label class="input-group obligatorio">Fecha de Nacimiento: </label>
+          <input type="date" formControlName="fechaNacimiento" class="form-control" placeholder="Fecha de Nacimiento" />
+          <small
+            class="form-text text-danger"
+            *ngIf="
+              registroUnoForm.get('fechaNacimiento').hasError('required') &&
+              registroUnoForm.get('fechaNacimiento').touched
+            "
+          >
+            La fecha de nacimiento del feligrés es requerida.
+          </small>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group obligatorio">Primer Nombre:</label>
+            <input type="text" formControlName="primerNombre" class="form-control" placeholder="Primer Nombre" />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroUnoForm.get('primerNombre').hasError('required') && registroUnoForm.get('primerNombre').touched
+              "
+            >
+              La primer nombre del feligrés es requerido.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroUnoForm.get('primerNombre').hasError('minlength') && registroUnoForm.get('primerNombre').touched
+              "
+            >
+              El primer nombre del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-md-6 col col-sm-12">
+            <label class="input-group">Segundo Nombre:</label>
+            <input type="text" formControlName="segundoNombre" class="form-control" placeholder="Segundo Nombre" />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroUnoForm.get('segundoNombre').hasError('minlength') &&
+                registroUnoForm.get('segundoNombre').touched
+              "
+            >
+              El segundo nombre del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group obligatorio">Primer Apellido:</label>
+            <input type="text" formControlName="primerApellido" class="form-control" placeholder="Primer Apellido" />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroUnoForm.get('primerApellido').hasError('required') &&
+                registroUnoForm.get('primerApellido').touched
+              "
+            >
+              La primer apellido del feligrés es requerido.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroUnoForm.get('primerApellido').hasError('minlength') &&
+                registroUnoForm.get('primerApellido').touched
+              "
+            >
+              El primer apellido del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group">Segundo Apellido:</label>
+            <input type="text" formControlName="segundoApellido" class="form-control" placeholder="Segundo Apellido" />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroUnoForm.get('segundoApellido').hasError('minlength') &&
+                registroUnoForm.get('segundoApellido').touched
+              "
+            >
+              El segundo apellido del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group">Apodo:</label>
+            <input type="text" formControlName="apodo" class="form-control" placeholder="Apodo" />
+            <small
+              class="form-text text-danger"
+              *ngIf="registroUnoForm.get('apodo').hasError('minlength') && registroUnoForm.get('apodo').touched"
+            >
+              El apodo del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group obligatorio">Email:</label>
+            <input type="email" formControlName="email" class="form-control" inputmode="text" placeholder="Email" />
+            <small
+              class="form-text text-danger"
+              *ngIf="registroUnoForm.get('email').hasError('required') && registroUnoForm.get('email').touched"
+            >
+              El correo electrónico es requerido.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="registroUnoForm.get('email').hasError('email') && registroUnoForm.get('email').touched"
+            >
+              El valor ingresado no corresponde a un correo electrónico.
+            </small>
+
+            <small class="form-text text-danger" *ngIf="!!mensajeBuscarCorreo">
+              {{ mensajeBuscarCorreo }}
+            </small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group obligatorio">Genero:</label>
+            <select class="form-select" formControlName="genero_id">
+              <option value="" disabled>Seleccione el genero</option>
+              <option *ngFor="let genero of generos" [value]="genero.id">
+                {{ genero.genero }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="registroUnoForm.get('genero_id').hasError('required') && registroUnoForm.get('genero_id').touched"
+            >
+              El género del feligrés es requerido.
+            </small>
+          </div>
+
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group obligatorio">Estado Civil:</label>
+            <select class="form-select" formControlName="estadoCivil_id">
+              <option value="" disabled>Seleccione el Estado Civil</option>
+              <option *ngFor="let estadoCivil of estadoCivil" [value]="estadoCivil.id">
+                {{ estadoCivil.estadoCivil }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroUnoForm.get('estadoCivil_id').hasError('required') &&
+                registroUnoForm.get('estadoCivil_id').touched
+              "
+            >
+              El estado civil del feligrés es requerido.
+            </small>
+          </div>
+        </div>
+
+        <button
+          (click)="next()"
+          type="button"
+          name="next"
+          class="btn btn-primary float-end"
+          [disabled]="this.registroUnoForm.invalid"
+        >
+          Siguiente
+        </button>
+        <div class="float-start"><span class="text-danger">* </span>Campos obligatorios</div>
+      </fieldset>
+    </form>
+
+    <!-- ==============================================================================
+                      Formulario #2 Información de Locación
+    ============================================================================== -->
+
+    <form [formGroup]="registroDosForm" id="msform">
+      <fieldset *ngIf="step == 2">
+        <h2 class="fs-title">Información de Locación</h2>
+        <div class="row">
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group obligatorio">Nacionalidad: </label>
+            <input
+              type="text"
+              placeholder="Buscar la nacionalidad"
+              formControlName="nacionalidad"
+              [matAutocomplete]="nacionalidad"
+              (keypress)="buscarNacionalidad('nacionalidad')"
+              matInput
+              class="form-control"
+            />
+            <mat-autocomplete #nacionalidad="matAutocomplete">
+              <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
+                {{ item.nombre }}
+              </mat-option>
+            </mat-autocomplete>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('nacionalidad').hasError('required') && registroDosForm.get('nacionalidad').touched
+              "
+            >
+              La nacionalidad del feligrés es requerida.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('nacionalidad').hasError('minlength') && registroDosForm.get('nacionalidad').touched
+              "
+            >
+              La nacionalidad del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group obligatorio">Rol en casa:</label>
+            <select class="form-select" formControlName="rolCasa_id">
+              <option value="" disabled>Seleccione el Rol en la Casa</option>
+              <option *ngFor="let rolCasa of rolCasa" [value]="rolCasa.id">
+                {{ rolCasa.rolCasa }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('rolCasa_id').hasError('required') && registroDosForm.get('rolCasa_id').touched
+              "
+            >
+              El rol de la casa del feligrés es requerido.
+            </small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group obligatorio">Celular:</label>
+            <ngx-intl-tel-input
+              [cssClass]="'form-control'"
+              [preferredCountries]="paisesPreferidos"
+              [enableAutoCountrySelect]="true"
+              [enablePlaceholder]="true"
+              [searchCountryFlag]="true"
+              [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+              [selectFirstCountry]="false"
+              [selectedCountryISO]="paisISO.PuertoRico"
+              [maxLength]="15"
+              [phoneValidation]="true"
+              [separateDialCode]="codigoDeMarcadoSeparado"
+              [numberFormat]="formatoNumeroTelefonico.International"
+              name="numeroCelular"
+              formControlName="numeroCelular"
+            >
+            </ngx-intl-tel-input>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                !registroDosForm.get('numeroCelular').hasError('required') &&
+                registroDosForm.get('numeroCelular').invalid &&
+                registroDosForm.get('numeroCelular').touched
+              "
+            >
+              El número de celular no es válido
+            </small>
+            <small class="form-text text-primary" *ngIf="!registroDosForm.get('numeroCelular').invalid">
+              El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('numeroCelular').hasError('required') &&
+                registroDosForm.get('numeroCelular').touched
+              "
+            >
+              El número de celular del feligrés es requerido.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('numeroCelular').hasError('minlength') &&
+                registroDosForm.get('numeroCelular').touched
+              "
+            >
+              El número de celular del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-md-6 col-sm-12">
+            <label class="input-group">Teléfono de la Casa: </label>
+
+            <ngx-intl-tel-input
+              [cssClass]="'form-control'"
+              [preferredCountries]="paisesPreferidos"
+              [enableAutoCountrySelect]="true"
+              [enablePlaceholder]="true"
+              [searchCountryFlag]="true"
+              [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+              [selectFirstCountry]="false"
+              [selectedCountryISO]="paisISO.PuertoRico"
+              [maxLength]="15"
+              [phoneValidation]="true"
+              [separateDialCode]="codigoDeMarcadoSeparado"
+              [numberFormat]="formatoNumeroTelefonico.National"
+              name="telefonoCasa"
+              formControlName="telefonoCasa"
+            >
+            </ngx-intl-tel-input>
+            <div class="form-text text-info" *ngIf="registroDosForm.get('telefonoCasa').invalid">
+              Digitar el número de teléfono con el indicativo de la región local
+            </div>
+            <small
+              class="form-text text-danger"
+              *ngIf="registroDosForm.get('telefonoCasa').invalid && registroDosForm.get('telefonoCasa').touched"
+            >
+              El número de teléfono de la casa no es válido
+            </small>
+            <small class="form-text text-primary" *ngIf="!registroDosForm.get('telefonoCasa').invalid">
+              El número de teléfono de la casa es válido <i class="fa-solid fa-thumbs-up"></i>
+            </small>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('telefonoCasa').hasError('minlength') && registroDosForm.get('telefonoCasa').touched
+              "
+            >
+              El número de la casa del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+        </div>
+
+        <div class="row border p-4 rounded bg-light shadow">
+          <legend class="fw-semibold fs-title">Dirección de Residencia</legend>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Dirección:</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="direccionResidencia"
+              placeholder="Dirección de la residencia"
+            />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('direccionResidencia').hasError('required') &&
+                registroDosForm.get('direccionResidencia').touched
+              "
+            >
+              La dirección del feligrés es requerido.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('direccionResidencia').hasError('minlength') &&
+                registroDosForm.get('direccionResidencia').touched
+              "
+            >
+              La dirección del feligrés no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Ciudad / Localidad:</label>
+            <input type="text" formControlName="ciudadResidencia" class="form-control" placeholder="Ciudad" />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('ciudadResidencia').hasError('required') &&
+                registroDosForm.get('ciudadResidencia').touched
+              "
+            >
+              El campo ciudad / localidad es requerido.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('ciudadResidencia').hasError('minlength') &&
+                registroDosForm.get('ciudadResidencia').touched
+              "
+            >
+              El campo ciudad / localidad no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Estado / Provincia / Departamento:</label>
+            <input
+              type="text"
+              formControlName="departamentoResidencia"
+              class="form-control"
+              placeholder="Departamento"
+            />
+
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('departamentoResidencia').hasError('minlength') &&
+                registroDosForm.get('departamentoResidencia').touched
+              "
+            >
+              El campo estado / provincia / departamento no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Código Postal:</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="codigoPostalResidencia"
+              placeholder="Código Postal"
+            />
+          </div>
+          <small
+            class="form-text text-danger"
+            *ngIf="
+              registroDosForm.get('codigoPostalResidencia').hasError('minlength') &&
+              registroDosForm.get('codigoPostalResidencia').touched
+            "
+          >
+            El código postal no tiene la longitud mínima permitida.
+          </small>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Pais: </label>
+            <input
+              type="text"
+              placeholder="Pais de Residencia"
+              formControlName="paisResidencia"
+              class="form-control"
+              [matAutocomplete]="auto"
+              (keypress)="buscarNacionalidad('paisResidencia')"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let pais of letrasFiltrarNacionalidad | async" [value]="pais.nombre">
+                {{ pais.nombre }}
+              </mat-option>
+            </mat-autocomplete>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('paisResidencia').hasError('required') &&
+                registroDosForm.get('paisResidencia').touched
+              "
+            >
+              El pais de la dirección de residencia es requerida.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('paisResidencia').hasError('minlength') &&
+                registroDosForm.get('paisResidencia').touched
+              "
+            >
+              El pais de la dirección de residencia no tiene la longitud mínima permitida.
+            </small>
+          </div>
+        </div>
+
+        <div class="row border mt-4 mb-4 p-4 rounded bg-light shadow">
+          <legend class="fw-semibold fs-title">Dirección postal</legend>
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Dirección:</label>
+            <input type="text" class="form-control" formControlName="direccionPostal" placeholder="Dirección" />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('direccionPostal').hasError('required') &&
+                registroDosForm.get('direccionPostal').touched
+              "
+            >
+              La dirección postal es requerida.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('direccionPostal').hasError('minlength') &&
+                registroDosForm.get('direccionPostal').touched
+              "
+            >
+              La dirección postal no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Ciudad / Localidad :</label>
+            <input type="text" formControlName="ciudadPostal" class="form-control" placeholder="Ciudad" />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('ciudadPostal').hasError('required') && registroDosForm.get('ciudadPostal').touched
+              "
+            >
+              El campo ciudad / localidad de la dirección postal es requerida.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('ciudadPostal').hasError('minlength') && registroDosForm.get('ciudadPostal').touched
+              "
+            >
+              El campo ciudad / localidad de la dirección postal no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Estado / Provincia / Departamento:</label>
+            <input type="text" formControlName="departamentoPostal" class="form-control" placeholder="Departamento" />
+
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('departamentoPostal').hasError('minlength') &&
+                registroDosForm.get('departamentoPostal').touched
+              "
+            >
+              El campo estado / provincia / departamento de la dirección postal no tiene la longitud mínima permitida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Código Postal:</label>
+            <input type="number" class="form-control" formControlName="codigoPostal" placeholder="Código Postal" />
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Pais: </label>
+            <input
+              type="text"
+              placeholder="Pais de la dirección postal"
+              formControlName="paisPostal"
+              [matAutocomplete]="auto"
+              class="form-control"
+              (keypress)="buscarNacionalidad('paisPostal')"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
+                {{ item.nombre }}
+              </mat-option>
+            </mat-autocomplete>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('paisPostal').hasError('required') && registroDosForm.get('paisPostal').touched
+              "
+            >
+              El país de la dirección postal es requerido.
+            </small>
+          </div>
+        </div>
+        <div class="float-end">
+          <button (click)="previous()" type="button" name="next" class="btn btn-primary mx-2">Anterior</button>
+
+          <button
+            (click)="next()"
+            type="button"
+            name="next"
+            class="btn btn-primary"
+            [disabled]="registroDosForm.invalid"
+          >
+            Siguiente
+          </button>
+        </div>
+        <div class="float-start"><span class="text-danger">* </span>Campos obligatorios</div>
+      </fieldset>
+    </form>
+
+    <!-- ==============================================================================
+                      Formulario #3 Información Laboral
+    ============================================================================== -->
+
+    <form [formGroup]="registroTresForm" id="msform">
+      <fieldset *ngIf="step == 3">
+        <h2 class="fs-title">Información Laboral</h2>
+
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-5 px-5">
+            <label class="input-group obligatorio">¿Cuáles son sus fuentes de ingresos mensual?</label>
+
+            <div class="form-check checkbox-lg" *ngFor="let fuenteDeIngreso of fuenteDeIngresos; let i = index">
+              <input
+                type="checkbox"
+                formArrayName="fuenteIngresos"
+                class="form-check-input"
+                [value]="fuenteDeIngreso.id"
+                (change)="onCheckboxFuenteDeIngresosChange($event)"
+              />
+              <label class="form-check-label"> {{ fuenteDeIngreso.fuenteIngreso }}</label>
+            </div>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-7">
+            <label class="input-group">Aproximadamente ¿cuál es su ingreso mensual?</label>
+            <p class="input-group">Por favor incluya las iniciales de la moneda de su país (ej. USD, CAD)</p>
+            <input type="text" formControlName="ingresoMensual" class="form-control" placeholder="Ingreso Mensual" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">¿Cuál es el grado académico más alto alcanzado? </label>
+            <select class="form-select" formControlName="gradoAcademico_id">
+              <option value="" disabled>Seleccione un grado académico</option>
+              <option *ngFor="let gradoAcademico of gradosAcademicos" [value]="gradoAcademico.id">
+                {{ gradoAcademico.gradoAcademico }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroTresForm.get('gradoAcademico_id').hasError('required') &&
+                registroTresForm.get('gradoAcademico_id').touched
+              "
+            >
+              Seleccione un grado académico.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">¿A qué se dedica? </label>
+            <select class="form-select" formControlName="tipoEmpleo_id">
+              <option value="0" selected>Seleccione un tipo de empleo</option>
+              <option *ngFor="let empleo of tiposEmpleos" [value]="empleo.id">
+                {{ empleo.nombreEmpleo }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroTresForm.get('tipoEmpleo_id').hasError('required') &&
+                registroTresForm.get('tipoEmpleo_id').touched
+              "
+            >
+              Seleccione una opción.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Especialización de empleo </label>
+            <span></span>
+            <input
+              type="text"
+              formControlName="especializacionEmpleo"
+              class="form-control"
+              placeholder="(Ejemplo: Cirujano, Mecánico de equipo pesado)"
+            />
+          </div>
+          <small
+            class="form-text text-danger"
+            *ngIf="
+              registroTresForm.get('especializacionEmpleo').hasError('minlength') &&
+              registroTresForm.get('especializacionEmpleo').touched
+            "
+          >
+            El campo especialización de empleo no tiene la longitud mínima permitida.
+          </small>
+        </div>
+
+        <div class="float-end">
+          <button (click)="previous()" type="button" name="previous" class="next btn btn-primary mx-2">Anterior</button>
+
+          <button
+            (click)="next()"
+            [disabled]="registroTresForm.invalid"
+            type="button"
+            name="next"
+            class="btn btn-primary"
+          >
+            Siguiente
+          </button>
+        </div>
+        <div class="float-start"><span class="text-danger">* </span>Campos obligatorios</div>
+      </fieldset>
+    </form>
+
+    <!-- ==============================================================================
+                      Formulario #4 Información de Eclesiástica
+    ============================================================================== -->
+
+    <form [formGroup]="registroCuatroForm" id="msform">
+      <fieldset *ngIf="step == 4">
+        <h2 class="fs-title">Información de Eclesiástica</h2>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-12 col-lg-12">
+            <label class="input-group obligatorio">
+              ¿Es usted un miembro nuevo <b>(MN)</b>,miembro activo <b>(MA)</b>, miembro no activo <b>(MNA)</b> o
+              miembro enfermo <b>(ME)</b>?</label
+            >
+            <div class="form-check checkbox-lg" *ngFor="let tipoMiembro of tipoMiembros">
+              <input
+                [value]="tipoMiembro.id"
+                class="form-check-input"
+                type="radio"
+                name="tipoMiembro_id"
+                formControlName="tipoMiembro_id"
+              />
+              <label class="form-check-label">
+                {{ tipoMiembro.miembro }}
+              </label>
+            </div>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('tipoMiembro_id').hasError('tipoMiembro_id') &&
+                registroCuatroForm.get('tipoMiembro_id').touched
+              "
+            >
+              Selecciones que tipo de miembro es
+            </small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio"> ¿Eres miembro de la Juventud?</label>
+            <div class="form-check checkbox-lg">
+              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="true" />
+              <label class="form-check-label">Sí</label>
+            </div>
+            <div class="form-check checkbox-lg">
+              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="false" />
+              <label class="form-check-label">No</label>
+            </div>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="registroCuatroForm.get('esJoven').hasError('esJoven') && registroCuatroForm.get('esJoven').touched"
+            >
+              Selecciones si es o no Joven
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio"> ¿Ejerce algún ministerio en la Congregación?</label>
+            <div class="form-check checkbox-lg">
+              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="true" />
+              <label class="form-check-label">Sí</label>
+            </div>
+            <div class="form-check checkbox-lg">
+              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="false" />
+              <label class="form-check-label">No</label>
+            </div>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('ejerceMinisterio').hasError('ejerceMinisterio') &&
+                registroCuatroForm.get('ejerceMinisterio').touched
+              "
+            >
+              ¿Ejerce algún ministerio?
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio"> ¿Realiza labor voluntaria/ministerial?</label>
+            <div class="form-check checkbox-lg">
+              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="true" />
+              <label class="form-check-label">Sí</label>
+            </div>
+            <div class="form-check checkbox-lg">
+              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="false" />
+              <label class="form-check-label">No</label>
+            </div>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('esVoluntario').hasError('esVoluntario') &&
+                registroCuatroForm.get('esVoluntario').touched
+              "
+            >
+              ¿Realiza labor voluntaria/ministerial?
+            </small>
+          </div>
+        </div>
+
+        <div *ngIf="!!ejerceAlgunMinisterio() || !!esVoluntario()" class="row border p-4 mb-5 rounded bg-light shadow">
+          <div *ngIf="!!ejerceAlgunMinisterio()" class="form-group col-sm-12 col-md-6 col-lg-6">
+            <label class="input-group">¿A cuál de los cuerpos ministeriales pertenece?</label>
+
+            <div class="form-check checkbox-lg" *ngFor="let ministerio of ministerios; let i = index">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                formArrayName="ministerio"
+                [value]="ministerio.id"
+                (change)="onCheckboxMinisteriosChange($event)"
+              />
+              <label class="form-check-label"> {{ ministerio.ministerio }}</label>
+            </div>
+          </div>
+
+          <div *ngIf="!!esVoluntario()" class="form-group col-sm-12 col-md-6 col-lg-6">
+            <label class="input-group">¿Qué tipo de labor voluntaria/ministerial realiza?</label>
+
+            <div class="form-check checkbox-lg" *ngFor="let voluntariado of voluntariados; let i = index">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                formArrayName="voluntariado"
+                [value]="voluntariado.id"
+                (change)="onCheckboxVoluntariadosChange($event)"
+              />
+              <label class="form-check-label"> {{ voluntariado.nombreVoluntariado }}</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Congregación - Pais: </label>
+            <select
+              class="form-select"
+              formControlName="congregacionPais_id"
+              (change)="listarCongregaciones(txtPaisCongregacion.value)"
+              (change)="tieneTipoDocumento(txtPaisCongregacion.value)"
+              #txtPaisCongregacion
+            >
+              <!-- (change)="listarCongregaciones(txtPaisCongregacion.value)" -->
+              <option value="" disabled>Seleccione el pais de la congregación a la que pertenece</option>
+              <option *ngFor="let pais of paises" [value]="pais.id">
+                {{ pais.pais }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('congregacionPais_id').hasError('required') &&
+                registroCuatroForm.get('congregacionPais_id').touched
+              "
+            >
+              La congregación del feligrés es requerida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Congregación - Ciudad: </label>
+            <select
+              class="form-select"
+              formControlName="congregacion_id"
+              (change)="listarCampos(txtCongregacion.value)"
+              #txtCongregacion
+            >
+              <option value="" disabled>Seleccione la congregación a la que pertenece</option>
+              <option [value]="sinCongregacion">Sin Congregación</option>
+              <option *ngFor="let congregacion of congregacionesFiltradas" [value]="congregacion.id">
+                {{ congregacion.congregacion }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('congregacion_id').hasError('required') &&
+                registroCuatroForm.get('congregacion_id').touched
+              "
+            >
+              La congregación del feligrés es requerida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group">Campo: </label>
+            <select class="form-select" formControlName="campo_id">
+              <option value="" disabled>Seleccione el campo al que pertenece</option>
+              <option *ngFor="let campo of camposFiltrados" [value]="campo.id">
+                {{ campo.campo }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="tipoDeDocumentosFiltrados.length > 0" class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Tipo de documento:</label>
+            <select class="form-select" formControlName="tipoDocumento_id">
+              <option value="" disabled>Seleccione el tipo de documento</option>
+              <option *ngFor="let tipoDocumento of tipoDeDocumentosFiltrados" [value]="tipoDocumento.id">
+                {{ tipoDocumento.documento }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('tipoDocumento_id').hasError('required') &&
+                registroCuatroForm.get('tipoDocumento_id').touched
+              "
+            >
+              El tipo de documento del feligrés es requerido.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Número de documento:</label>
+            <input
+              type="text"
+              formControlName="numeroDocumento"
+              class="form-control"
+              placeholder="número de documento"
+            />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('numeroDocumento').hasError('required') &&
+                registroCuatroForm.get('numeroDocumento').touched
+              "
+            >
+              El número de documento es requerido
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('numeroDocumento').hasError('minlength') &&
+                registroCuatroForm.get('numeroDocumento').touched
+              "
+            >
+              El número de documento no tiene la longitud mínima permitida.
+            </small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Vacuna:</label>
+            <select class="form-select" formControlName="vacuna_id">
+              <option value="" disabled>Seleccione la vacuna</option>
+              <option *ngFor="let vacuna of vacunas" [value]="vacuna.id">
+                {{ vacuna.vacuna }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('vacuna_id').hasError('required') && registroCuatroForm.get('vacuna_id').touched
+              "
+            >
+              La vanuna del feligrés es requerida.
+            </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4">
+            <label class="input-group obligatorio">Dosis:</label>
+            <select class="form-select" formControlName="dosis_id">
+              <option value="" disabled>Seleccione la dosis</option>
+              <option *ngFor="let dosis of dosis" [value]="dosis.id">
+                {{ dosis.dosis }}
+              </option>
+            </select>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroCuatroForm.get('dosis_id').hasError('required') && registroCuatroForm.get('dosis_id').touched
+              "
+            >
+              Las dosis del feligrés es requerida.
+            </small>
+          </div>
+        </div>
+        <div class="float-end">
+          <button (click)="previous()" type="button" name="previous" class="next btn btn-primary botonPrincipal">
+            Anterior
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary mx-2"
+            (click)="guardarUsuario()"
+            [disabled]="this.registroCuatroForm.invalid"
+          >
+            <i class="fa fa-save"></i> Registro
+          </button>
+        </div>
+        <div class="float-start"><span class="text-danger">* </span>Campos obligatorios</div>
+      </fieldset>
+    </form>
+  </div>
+</div>

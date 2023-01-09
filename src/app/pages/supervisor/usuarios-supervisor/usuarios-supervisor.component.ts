@@ -39,7 +39,6 @@ export class UsuariosSupervisorComponent implements OnInit {
 
   ngOnInit(): void {
     this.idSupervisor = this.usuarioService.usuarioId;
-    console.log('this.idSupervisor', this.idSupervisor);
     this.cargarUsuarios();
   }
 

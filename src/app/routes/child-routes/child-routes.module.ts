@@ -58,6 +58,9 @@ import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-d
 import { DocumentoResolver } from 'src/app/resolvers/tipo-documento/documento.resolver';
 import { PermisosResolver } from 'src/app/resolvers/permisos/permisos.resolver';
 import { UsuariosSupervisorComponent } from 'src/app/pages/supervisor/usuarios-supervisor/usuarios-supervisor.component';
+import { TipoEstudioResolver } from 'src/app/resolvers/tipo-estudio/tipo-estudio.resolver';
+import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/opcion-transporte.resolver';
+import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
 
 const childRoutes: Routes = [
   {
@@ -178,6 +181,24 @@ const childRoutes: Routes = [
   {
     path: Rutas.PERFIL,
     component: PerfilComponent,
+    resolve: {
+      nacionalidad: NacionalidadResolver,
+      estadoCivil: EstadoCivilResolver,
+      genero: GeneroResolver,
+      rolCasa: RolCasaResolver,
+      fuenteDeIngreso: FuenteIngresoResolver,
+      gradoAcademico: GradoAcademicoResolver,
+      tipoEmpleo: TipoEmpleoResolver,
+      congregacion: CongregacionResolver,
+      tipoMiembro: TipoMiembroResolver,
+      ministerio: MinisterioResolver,
+      voluntariado: VoluntariadoResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
+      vacuna: VacunaResolver,
+      dosis: DosisResolver,
+      tipoDocumento: DocumentoResolver,
+    },
   },
   // Informes
   {
@@ -247,6 +268,9 @@ const childRoutes: Routes = [
       congregacion: CongregacionResolver,
       pais: PaisResolver,
       razonSolicitud: RazonSolicitudResolver,
+      tipoEstudio: TipoEstudioResolver,
+      opcionTransporte: OpcionTransporteResolver,
+      parentesco: ParentescoResolver,
     },
   },
   {

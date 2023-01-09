@@ -1,12 +1,13 @@
-.solicitud{
+.solicitud {
   background-color: #eef5f9;
 }
 
-.mensajeExplicativo{
+.mensajeExplicativo {
   font-size: 12px;
+  color: #ef5350;
 }
 
-.tituloFamiliar{
+.tituloFamiliar {
   font-size: 18px;
   color: #2c3e50;
   margin-bottom: 10px;
@@ -72,7 +73,7 @@
   -moz-box-shadow: none !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
-  border: 1px solid ;
+  border: 1px solid;
   outline-width: 0;
   transition: All 0.5s ease-in;
   -webkit-transition: All 0.5s ease-in;
@@ -95,7 +96,7 @@
 
 #msform .action-button:hover,
 #msform .action-button:focus {
-   box-shadow: 0 0 0 2px white, 0 0 0 3px #0b65c2;
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #0b65c2;
 }
 
 #msform .action-button-previous {
@@ -115,11 +116,11 @@
   box-shadow: 0 0 0 2px white, 0 0 0 3px #c5c5f1;
 }
 
-.form-check{
+.form-check {
   text-align: left;
 }
 
-input.form-check-input{
+input.form-check-input {
   width: auto !important;
 }
 
@@ -139,7 +140,14 @@ input.form-check-input{
   margin-bottom: 20px;
 }
 
-.crearSolicitud{
-  padding: 2% 10%
+.crearSolicitud {
+  padding: 2% 10%;
 }
 
+#msform input.ng-invalid.ng-touched.ng-invalid {
+  border-color: #ef5350;
+}
+
+#msform select.ng-invalid.ng-touched.ng-invalid {
+  border-color: #ef5350;
+}

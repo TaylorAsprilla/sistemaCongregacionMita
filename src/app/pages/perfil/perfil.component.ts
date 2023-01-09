@@ -1,28 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
+import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { DosisModel } from 'src/app/core/models/dosis.model';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
+import { FuenteIngresoModel } from 'src/app/core/models/fuente-ingreso.model';
 import { GeneroModel } from 'src/app/core/models/genero.model';
+import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
+import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
+import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
+import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
+import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
+import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { Rutas } from 'src/app/routes/menu-items';
-import { CampoService } from 'src/app/services/campo/campo.service';
-import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
-import { DosisService } from 'src/app/services/dosis/dosis.service';
-import { EstadoCivilService } from 'src/app/services/estado-civil/estado-civil.service';
-import { GeneroService } from 'src/app/services/genero/genero.service';
-import { NacionalidadService } from 'src/app/services/nacionalidad/nacionalidad.service';
-import { PaisService } from 'src/app/services/pais/pais.service';
-import { RolCasaService } from 'src/app/services/rol-casa/rol-casa.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import { VacunaService } from 'src/app/services/vacuna/vacuna.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -35,20 +36,9 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   //Subscription
   public usuarioSubscription: Subscription;
-  public generoSubscription: Subscription;
-  public estadoCivilSubscription: Subscription;
-  public rolCasaSubscription: Subscription;
-  public paisSubscription: Subscription;
-  public congregacionSubscription: Subscription;
-  public campoSubscription: Subscription;
-  public vacunaSubscription: Subscription;
-  public dosisSubscription: Subscription;
-  public nacionalidadSubscription: Subscription;
 
-  public perfilForm: FormGroup;
   public usuario: UsuarioModel;
 
-  public usuarios: UsuarioModel[] = [];
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
   public rolCasa: RolCasaModel[] = [];
@@ -58,113 +48,133 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public vacunas: VacunaModel[] = [];
   public dosis: DosisModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
+  public fuenteDeIngresos: FuenteIngresoModel[] = [];
+  public gradosAcademicos: GradoAcademicoModel[] = [];
+  public tiposEmpleos: TipoEmpleoModel[] = [];
+  public tipoMiembros: TipoMiembroModel[] = [];
+  public ministerios: MinisterioModel[] = [];
+  public voluntariados: VoluntariadoModel[] = [];
+  public tiposDeDocumentos: TipoDocumentoModel[] = [];
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private usuarioService: UsuarioService,
+  public usuarioSeleccionado: UsuarioModel;
 
-    private generoService: GeneroService,
-    private estadoCivilService: EstadoCivilService,
-    private rolCasaService: RolCasaService,
-    private paisService: PaisService,
-    private congregacionService: CongregacionService,
-    private campoService: CampoService,
-    private vacunaService: VacunaService,
-    private dosisService: DosisService,
-    private nacionalidadServices: NacionalidadService
-  ) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.usuario = this.usuarioService.usuario;
 
-    this.perfilForm = this.formBuilder.group({
-      primerNombre: [this.usuario?.primerNombre, [Validators.required, Validators.minLength(3)]],
-      segundoNombre: [this.usuario?.segundoNombre, [Validators.minLength(3)]],
-      primerApellido: [this.usuario?.primerApellido, [Validators.required, Validators.minLength(3)]],
-      segundoApellido: [this.usuario?.segundoApellido, [Validators.minLength(3)]],
-      nacionalidad_id: [this.usuario?.nacionalidad_id, [Validators.required, Validators.minLength(3)]],
-      fechaNacimiento: [this.usuario?.fechaNacimiento, [Validators.required]],
-      email: [this.usuario?.email, [Validators.required, Validators.email]],
-      numeroCelular: [this.usuario?.numeroCelular, [Validators.minLength(3)]],
-      telefonoCasa: [this.usuario?.telefonoCasa, [Validators.minLength(3)]],
-      login: [this.usuario?.login, []],
-      password: ['', [Validators.required]],
-      foto: [this.usuario?.fotoUrl, []],
-      genero_id: [this.usuario?.genero_id, [Validators.required]],
-      estadoCivil_id: [this.usuario?.estadoCivil_id, [Validators.required]],
-      rolCasa_id: [this.usuario?.rolCasa_id, [Validators.required]],
-      pais_id: ['', [Validators.required]],
-      congregacion_id: ['', [Validators.required]],
-      campo_id: ['', [Validators.required]],
-      vacuna_id: [this.usuario?.vacuna_id, [Validators.required]],
-      dosis_id: [this.usuario?.dosis_id, [Validators.required]],
-    });
+    // this.activatedRoute.params.subscribe(({ id }) => {
+    //   this.buscarUsuario(id);
+    // });
 
-    this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
-      this.usuarios = usuarios;
-    });
+    this.usuarioSeleccionado = this.usuario;
 
-    this.generoSubscription = this.generoService.getGeneros().subscribe((genero: GeneroModel[]) => {
-      this.generos = genero;
-    });
-
-    this.estadoCivilSubscription = this.estadoCivilService
-      .getEstadoCivil()
-      .subscribe((estadoCivil: EstadoCivilModel[]) => {
-        this.estadoCivil = estadoCivil;
-      });
-
-    this.rolCasaSubscription = this.rolCasaService.getRolCasa().subscribe((rolCasa: RolCasaModel[]) => {
-      this.rolCasa = rolCasa;
-    });
-
-    this.paisSubscription = this.paisService.getPaises().subscribe((pais: PaisModel[]) => {
-      this.paises = pais;
-    });
-
-    this.congregacionSubscription = this.congregacionService
-      .getCongregaciones()
-      .subscribe((congregacion: CongregacionModel[]) => {
-        this.congregaciones = congregacion;
-      });
-
-    this.campoSubscription = this.campoService.getCampos().subscribe((campo: CampoModel[]) => {
-      this.campos = campo;
-    });
-
-    this.vacunaSubscription = this.vacunaService.getVacunas().subscribe((vacuna: VacunaModel[]) => {
-      this.vacunas = vacuna;
-    });
-
-    this.dosisSubscription = this.dosisService.getDosis().subscribe((dosis: DosisModel[]) => {
-      this.dosis = dosis;
-    });
-
-    this.nacionalidadSubscription = this.nacionalidadServices
-      .getNacionalidades()
-      .subscribe((nacionalidad: NacionalidadModel[]) => {
-        this.nacionalidades = nacionalidad;
-      });
+    this.activatedRoute.data.subscribe(
+      (data: {
+        nacionalidad: NacionalidadModel[];
+        estadoCivil: EstadoCivilModel[];
+        rolCasa: RolCasaModel[];
+        genero: GeneroModel[];
+        fuenteDeIngreso: FuenteIngresoModel[];
+        gradoAcademico: GradoAcademicoModel[];
+        tipoEmpleo: TipoEmpleoModel[];
+        congregacion: CongregacionModel[];
+        tipoMiembro: TipoMiembroModel[];
+        tipoDocumento: TipoDocumentoModel[];
+        ministerio: MinisterioModel[];
+        voluntariado: VoluntariadoModel[];
+        pais: PaisModel[];
+        campo: CampoModel[];
+        vacuna: VacunaModel[];
+        dosis: DosisModel[];
+      }) => {
+        this.nacionalidades = data.nacionalidad;
+        this.estadoCivil = data.estadoCivil;
+        this.rolCasa = data.rolCasa;
+        this.generos = data.genero;
+        this.fuenteDeIngresos = data.fuenteDeIngreso;
+        this.gradosAcademicos = data.gradoAcademico;
+        this.tiposEmpleos = data.tipoEmpleo;
+        this.tipoMiembros = data.tipoMiembro;
+        this.congregaciones = data.congregacion.filter((congregacion) => congregacion.estado === true);
+        this.ministerios = data.ministerio.filter((ministerio) => ministerio.estado === true);
+        this.voluntariados = data.voluntariado;
+        this.paises = data.pais.filter((pais) => pais.estado === true);
+        this.campos = data.campo.filter((campo) => campo.estado === true);
+        this.vacunas = data.vacuna;
+        this.dosis = data.dosis;
+        this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
+      }
+    );
   }
 
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
-    this.generoSubscription?.unsubscribe();
-    this.estadoCivilSubscription?.unsubscribe();
-    this.rolCasaSubscription?.unsubscribe();
-    this.paisSubscription?.unsubscribe();
-    this.congregacionSubscription?.unsubscribe();
-    this.campoSubscription?.unsubscribe();
-    this.vacunaSubscription?.unsubscribe();
-    this.dosisSubscription?.unsubscribe();
   }
 
-  habilitarFormulario() {
-    this.perfilForm.enable();
+  buscarUsuario(id: string) {
+    if (id !== 'nuevo') {
+      this.usuarioService
+        .getUsuario(Number(id))
+        .pipe(delay(100))
+        .subscribe(
+          (usuarioEncontrado: UsuarioInterface) => {
+            this.usuarioSeleccionado = usuarioEncontrado.usuario;
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Congregacion',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+
+            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
+          }
+        );
+    }
   }
 
-  actualizarPerfil() {
+  realizarOperacion(operacion: string, data: RegisterFormInterface) {
+    if (operacion === 'actualizar') {
+      this.actualizarPerfil(data);
+    } else {
+      this.crearUsuario(data);
+    }
+  }
+
+  crearUsuario(usuarioNuevo: RegisterFormInterface) {
+    this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
+      (usuarioCreado: any) => {
+        Swal.fire('Usuario creado', 'correctamente', 'success');
+        this.router.navigateByUrl(
+          `${Rutas.SISTEMA}/${Rutas.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
+        );
+      },
+      (error) => {
+        let errores = error.error.errors;
+        let listaErrores = [];
+        if (!!errores) {
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
+        }
+        Swal.fire({
+          title: 'El usuario NO ha sido creado',
+          icon: 'error',
+          html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+        });
+      }
+    );
+  }
+
+  actualizarPerfil(usuario: RegisterFormInterface) {
     Swal.fire({
       title: 'Actualizar Perfil',
       text: '¿Desea actualizar la información de su perfil?',
@@ -175,7 +185,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Sí',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.usuarioService.actualizarUsuario(this.perfilForm.value, this.usuario.id).subscribe(
+        this.usuarioService.actualizarUsuario(usuario, this.usuario.id).subscribe(
           (usuarioActualizado) => {
             Swal.fire('Actualizado', 'Los datos del perfil se actualizaron', 'success');
             this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INICIO}`);
@@ -197,13 +207,5 @@ export class PerfilComponent implements OnInit, OnDestroy {
         );
       }
     });
-  }
-
-  toggleEdit() {
-    this.isEdit = !this.isEdit;
-  }
-
-  submit() {
-    this.toggleEdit();
   }
 }

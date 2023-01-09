@@ -52,4 +52,20 @@ export class SolicitudMultimediaService {
   validarEmail(id: number) {
     return this.httpClient.put(`${base_url}/solicitudmultimedia/validaremail/${id}`, null);
   }
+
+  eliminarSolicitudMultimedia(idsolicitudDeacceso: number) {
+    return this.httpClient.delete(`${base_url}/solicitudmultimedia/${idsolicitudDeacceso}`, this.headers);
+  }
+
+  actualizarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface, id: number) {
+    return this.httpClient.put(`${base_url}/solicitudmultimedia/${id}`, solicitudDeacceso, this.headers);
+  }
+
+  activarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaModel) {
+    return this.httpClient.put(
+      `${base_url}/solicitudmultimedia/activar/${solicitudDeacceso.id}`,
+      solicitudDeacceso,
+      this.headers
+    );
+  }
 }
