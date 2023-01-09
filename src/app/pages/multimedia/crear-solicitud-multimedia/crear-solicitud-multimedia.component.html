@@ -6,9 +6,14 @@
           <h3 class="card-title">Crear Solicitud</h3>
         </div>
         <div class="card-body p-4">
+          <div class="alert alert-primary" role="alert">
+            El solicitante accede libre y voluntariamente a compartir la información requerida y certifica que es real y
+            válida, de ninguna forma proporcionará información falsa, en tal caso su solicitud podría ser descartada
+          </div>
+
           <form id="msform" autocomplete="off" [formGroup]="solicitudForm">
             <div class="row">
-              <div class="form-group col-sm-12 col-md-6 col col-lg-6">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label class="input-group obligatorio">Nombre</label>
                 <input
                   type="text"
@@ -32,7 +37,7 @@
                 </small>
               </div>
 
-              <div class="form-group col-sm-12 col-md-6 col col-lg-6">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label class="input-group obligatorio">Nacionalidad </label>
                 <input
                   type="text"
@@ -60,7 +65,7 @@
             </div>
 
             <div class="row">
-              <div class="form-group col-sm-12 col-md-6 col col-lg-6">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label class="input-group obligatorio">Dirección de residencia</label>
                 <input type="text" formControlName="direccion" class="form-control" placeholder="Dirección" />
                 <small
@@ -77,7 +82,7 @@
                 </small>
               </div>
 
-              <div class="form-group col-sm-12 col-md-6 col col-lg-6">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label class="input-group obligatorio">Ciudad</label>
                 <input type="text" formControlName="ciudad" class="form-control" placeholder="Ciudad" />
                 <small
@@ -96,7 +101,7 @@
             </div>
 
             <div class="row">
-              <div class="form-group col-md-6 col col-sm-12 col-lg-4">
+              <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="input-group">Departamento o Estado</label>
                 <input type="text" formControlName="departamento" class="form-control" placeholder="Departamento" />
                 <small
@@ -109,7 +114,7 @@
                 </small>
               </div>
 
-              <div class="form-group col-md-6 col col-sm-12 col-lg-4">
+              <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="input-group">Código postal <span class="mensajeExplicativo"> (Si aplica)</span></label>
                 <input type="text" formControlName="codigoPostal" class="form-control" placeholder="Código Postal" />
                 <small
@@ -122,7 +127,7 @@
                 </small>
               </div>
 
-              <div class="form-group col-md-6 col col-sm-12 col-lg-4">
+              <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="input-group obligatorio">País </label>
                 <input
                   type="text"
@@ -148,7 +153,7 @@
             </div>
 
             <div class="row">
-              <div class="form-group col-md-6 col-sm-12 col-lg-4">
+              <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="input-group obligatorio">Celular</label>
                 <ngx-intl-tel-input
                   [cssClass]="'form-control'"
@@ -196,7 +201,7 @@
                 </small>
               </div>
 
-              <div class="form-group col-md-6 col-sm-12 col-lg-4">
+              <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="input-group">Teléfono de la Casa</label>
                 <ngx-intl-tel-input
                   [cssClass]="'form-control'"
@@ -238,7 +243,7 @@
                 El número de teléfono de la casa del feligrés no tiene la longitud mínima permitida.
               </small>
 
-              <div class="form-group col-md-6 col col-sm-12 col-lg-4">
+              <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="input-group obligatorio">Correo Electrónico</label>
                 <input
                   type="email"
@@ -332,7 +337,7 @@
               </div>
 
               <div class="row">
-                <div *ngIf="!!estaCercaACongregacion()" class="form-group col-sm-6 col-md-6 col-lg-6">
+                <div *ngIf="!!estaCercaACongregacion()" class="form-group col-sm-12 col-md-6 col-lg-6">
                   <label class="input-group obligatorio">Congregación cercana</label>
                   <input
                     type="text"
@@ -354,37 +359,444 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('congregacionCercana').hasError('minlength') &&
+                      solicitudForm.get('congregacionCercana').hasError('required') &&
                       solicitudForm.get('congregacionCercana').touched
                     "
                   >
                     La congregación del feligrés es requerida.
                   </small>
                 </div>
-
-                <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                <hr />
+                <div class="form-group col-sm-12 col-md-12 col-lg-12">
                   <label class="input-group obligatorio"
                     >Especifique la razón por la cual desea ver los servicio por internet</label
                   >
 
-                  <select class="form-select" formControlName="razonSolicitud_id" #txtRazonsolicitud>
+                  <select
+                    class="form-select"
+                    formControlName="razonSolicitud_id"
+                    (ngModelChange)="tipoDeSolicitud(txtRazonsolicitud.value)"
+                    #txtRazonsolicitud
+                  >
                     <option value="" disabled>Seleccione una opción</option>
                     <option *ngFor="let razonSolicitud of razonSolicitudes" [value]="razonSolicitud.id">
                       {{ razonSolicitud.solicitud }}
                     </option>
                   </select>
                 </div>
+
+                <div
+                  *ngIf="txtRazonsolicitud.value == RAZON_SOLICITUD_ID.OTRA"
+                  class="form-group col-sm-12 col-md-6 col-lg-6"
+                >
+                  <label class="input-group">Específique la razón</label>
+                  <input type="tetx" class="form-control" formControlName="otraRazonSolicitud" required />
+                </div>
               </div>
 
-              <div class="row">
-                <div *ngIf="txtRazonsolicitud.value == '5'" class="form-group col-sm-6 col-md-6 col-lg-6">
-                  <label class="input-group">Específique la razón</label>
-                  <input type="tetx" class="form-control" formControlName="otraRazonSolicitud" [required] />
+              <div *ngIf="txtRazonsolicitud.value == RAZON_SOLICITUD_ID.ESTUDIANTE" class="row">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">País donde está estudiando </label>
+                  <input
+                    type="text"
+                    placeholder="País donde está estudiando"
+                    formControlName="paisDondeEstudia"
+                    [matAutocomplete]="autoPaisDondeEstudia"
+                    class="form-control"
+                    (keypress)="buscarNacionalidad('paisDondeEstudia')"
+                  />
+                  <mat-autocomplete #autoPaisDondeEstudia="matAutocomplete">
+                    <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
+                      {{ item.nombre }}
+                    </mat-option>
+                  </mat-autocomplete>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('paisDondeEstudia').hasError('required') &&
+                      solicitudForm.get('paisDondeEstudia').touched
+                    "
+                  >
+                    Por favor diligencie el país donde estudia el feligrés.
+                  </small>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('paisDondeEstudia').hasError('minlength') &&
+                      solicitudForm.get('paisDondeEstudia').touched
+                    "
+                  >
+                    El país donde estudia el feligrés no tiene la longitud mínima permitida.
+                  </small>
                 </div>
+
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">Ciudad donde está estudiando</label>
+                  <input
+                    type="tetx"
+                    class="form-control"
+                    formControlName="ciudadDondeEstudia"
+                    placeholder="Ciudad donde está estudiando"
+                    required
+                  />
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('ciudadDondeEstudia').hasError('required') &&
+                      solicitudForm.get('ciudadDondeEstudia').touched
+                    "
+                  >
+                    Por favor diligencie la ciudad donde estudia el feligrés.
+                  </small>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('ciudadDondeEstudia').hasError('minlength') &&
+                      solicitudForm.get('ciudadDondeEstudia').touched
+                    "
+                  >
+                    La ciudad donde estudia el feligrés no tiene la longitud mínima permitida.
+                  </small>
+                </div>
+
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">Tipo de estudio</label>
+
+                  <select class="form-select" formControlName="tipoDeEstudio_id">
+                    <option value="" disabled>Seleccione una opción</option>
+                    <option *ngFor="let tipoEstudio of tipoEstudios" [value]="tipoEstudio.id">
+                      {{ tipoEstudio.estudio }}
+                    </option>
+                  </select>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('tipoDeEstudio_id').hasError('required') &&
+                      solicitudForm.get('tipoDeEstudio_id').touched
+                    "
+                  >
+                    Por favor seleccione el tipo de estudio.
+                  </small>
+                </div>
+
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">Duración del periodo de estudio</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    formControlName="duracionDelPeriodoDeEstudio"
+                    placeholder="Duración del periodo de estudio"
+                    required
+                  />
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('duracionDelPeriodoDeEstudio').hasError('required') &&
+                      solicitudForm.get('duracionDelPeriodoDeEstudio').touched
+                    "
+                  >
+                    Por favor diligencie la duración del estudio.
+                  </small>
+                </div>
+              </div>
+
+              <div *ngIf="txtRazonsolicitud.value == RAZON_SOLICITUD_ID.FUERZAS_ARMADAS" class="row">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">Base Militar</label>
+                  <input
+                    type="tetx"
+                    class="form-control"
+                    formControlName="baseMilitar"
+                    placeholder="Base Militar donde se encuentra"
+                    required
+                  />
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('baseMilitar').hasError('required') && solicitudForm.get('baseMilitar').touched
+                    "
+                  >
+                    Por favor diligencie la base militar donde se encuentra el feligrés.
+                  </small>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('baseMilitar').hasError('minlength') && solicitudForm.get('baseMilitar').touched
+                    "
+                  >
+                    La base militar del feligrés no tiene la longitud mínima permitida.
+                  </small>
+                </div>
+              </div>
+
+              <div *ngIf="txtRazonsolicitud.value == RAZON_SOLICITUD_ID.DISTANCIA_AL_TEMPLO_MAS_CERCANO" class="row">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">¿A cuántas horas te encuentras del templo más cercano?</label>
+                  <small class="mensajeExplicativo">Rango de 1 a 24 Horas</small>
+                  <input type="number" formControlName="horaTemploMasCercano" min="01" max="24" required />
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('horaTemploMasCercano').hasError('required') &&
+                      solicitudForm.get('horaTemploMasCercano').touched
+                    "
+                  >
+                    Campo requerido.
+                  </small>
+                </div>
+
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">Opciones de Transportación</label>
+
+                  <select class="form-select" formControlName="opcionTransporte_id">
+                    <option value="" disabled>Opciónes de Transportación</option>
+                    <option *ngFor="let transporte of opcionTransporte" [value]="transporte.id">
+                      {{ transporte.tipoTransporte }}
+                    </option>
+                  </select>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      solicitudForm.get('opcionTransporte_id').hasError('required') &&
+                      solicitudForm.get('opcionTransporte_id').touched
+                    "
+                  >
+                    Por favor seleccione una opción de transporte.
+                  </small>
+                </div>
+
+                <small class="alert alert-primary text-start" role="alert"
+                  ><p>
+                    <b>Nota:</b> Para ser tenido en cuenta la persona debe vivir 2 horas o más de distancia del templo
+                    más cercano y dependerá de la zona geográfica en la que vivas, para efectos de aprobación y cada
+                    caso será evaluado de manera independiente por el obrero de cada congregación.
+                  </p>
+                  <p>
+                    (El obrero tiene el deber de agotar todas las alternativas posibles y viables para proveerle la
+                    posibilidad de que asista al servicio presencial, de agotar todos los recursos puede solicitar este
+                    apartado).
+                  </p></small
+                >
+              </div>
+
+              <div *ngIf="txtRazonsolicitud.value == RAZON_SOLICITUD_ID.ENFERMEDAD">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">¿Eres una persona encamada? </label>
+                  <div class="form-check checkbox-lg">
+                    <input
+                      [value]="true"
+                      class="form-check-input"
+                      type="radio"
+                      name="personaEncamada"
+                      formControlName="personaEncamada"
+                    />
+                    <label class="form-check-label"> Sí </label>
+                  </div>
+                  <div class="form-check checkbox-lg">
+                    <input
+                      [value]="false"
+                      class="form-check-input"
+                      type="radio"
+                      name="personaEncamada"
+                      formControlName="personaEncamada"
+                    />
+                    <label class="form-check-label"> No </label>
+                  </div>
+                </div>
+
+                <div *ngIf="!!esPersonaEncamada()" class="row">
+                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <label class="input-group obligatorio">Persona encargada</label>
+                    <input
+                      type="text"
+                      formControlName="personaEncargada"
+                      name="personaEncargada"
+                      class="form-control"
+                      placeholder="Nombre Completo de la persona encargada"
+                    />
+
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        solicitudForm.get('personaEncargada').hasError('required') &&
+                        solicitudForm.get('personaEncargada').touched
+                      "
+                    >
+                      El nombre de la persona encargada es requerido.
+                    </small>
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        solicitudForm.get('personaEncargada').hasError('minlength') &&
+                        solicitudForm.get('personaEncargada').touched
+                      "
+                    >
+                      El nombre de la persona encargada no tiene la longitud mínima permitida.
+                    </small>
+                  </div>
+                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <label class="input-group obligatorio">Parentesco</label>
+
+                    <select class="form-select" formControlName="parentesco_id">
+                      <option value="" disabled>Seleccione un parentesco</option>
+                      <option *ngFor="let parentesco of parentescos" [value]="parentesco.id">
+                        {{ parentesco.nombre }}
+                      </option>
+                    </select>
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        solicitudForm.get('parentesco_id').hasError('required') &&
+                        solicitudForm.get('parentesco_id').touched
+                      "
+                    >
+                      Por favor seleccione el parentesco
+                    </small>
+                  </div>
+
+                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <label class="input-group obligatorio">Teléfono de la persona encargada</label>
+                    <ngx-intl-tel-input
+                      [cssClass]="'form-control'"
+                      [preferredCountries]="paisesPreferidos"
+                      [enableAutoCountrySelect]="true"
+                      [enablePlaceholder]="true"
+                      [searchCountryFlag]="true"
+                      [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+                      [selectFirstCountry]="false"
+                      [selectedCountryISO]="paisISO.PuertoRico"
+                      [maxLength]="15"
+                      [phoneValidation]="true"
+                      [separateDialCode]="codigoDeMarcadoSeparado"
+                      [numberFormat]="formatoNumeroTelefonico.International"
+                      name="celularPersonaEncargada"
+                      formControlName="celularPersonaEncargada"
+                    >
+                    </ngx-intl-tel-input>
+
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        !solicitudForm.get('celularPersonaEncargada').hasError('required') &&
+                        solicitudForm.get('celularPersonaEncargada').invalid &&
+                        solicitudForm.get('celularPersonaEncargada').touched
+                      "
+                    >
+                      El número de celular no es válido
+                    </small>
+                    <small class="form-text text-primary" *ngIf="!solicitudForm.get('celularPersonaEncargada').invalid">
+                      El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
+                    </small>
+
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        solicitudForm.get('celularPersonaEncargada').hasError('celularPersonaEncargada') &&
+                        solicitudForm.get('celularPersonaEncargada').touched
+                      "
+                    >
+                      El número de celular es requerido.
+                    </small>
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        solicitudForm.get('celularPersonaEncargada').hasError('minlength') &&
+                        solicitudForm.get('celularPersonaEncargada').touched
+                      "
+                    >
+                      El número de celular no tiene la longitud mínima permitida.
+                    </small>
+                  </div>
+                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <label class="input-group obligatorio">Tienes una enfermedad aguda o crónica discapacitante </label>
+                    <div class="form-check checkbox-lg">
+                      <input
+                        [value]="true"
+                        class="form-check-input"
+                        type="radio"
+                        name="enfermedadCronica"
+                        formControlName="enfermedadCronica"
+                      />
+                      <label class="form-check-label"> Sí </label>
+                    </div>
+                    <div class="form-check checkbox-lg">
+                      <input
+                        [value]="false"
+                        class="form-check-input"
+                        type="radio"
+                        name="enfermedadCronica"
+                        formControlName="enfermedadCronica"
+                      />
+                      <label class="form-check-label"> No </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group"
+                    >Que enfermedad Padeces <small class="mensajeExplicativo">Opcional</small></label
+                  >
+                  <input
+                    type="text"
+                    formControlName="enfermedadQuePadece"
+                    name="enfermedadQuePadece"
+                    class="form-control"
+                    placeholder="Que enfermedad padeces"
+                  />
+                </div>
+
+                <div class="alert alert-primary text-start" role="alert">
+                  <b>Nota:</b> El obrero o encargado de llenar esta solicitud, reconoce que el solicitante padece de una
+                  condición crónica de enfermedad que no le permite allegarse al templo más cercano.
+                </div>
+              </div>
+              <hr />
+              <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label class="input-group text-start"
+                  >Según la necesidad detectada ¿Qué periodo de tiempo sugieres que se le de acceso al
+                  solicitante?:</label
+                >
+                <input type="date" formControlName="tiempoSugerido" name="tiempoSugerido" class="form-control" />
+              </div>
+
+              <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label class="input-group obligatorio">Observaciones</label>
+                <textarea
+                  name="comentario"
+                  formControlName="observaciones"
+                  name="observaciones"
+                  class="form-control"
+                  rows="10"
+                  cols="40"
+                ></textarea>
+              </div>
+
+              <hr />
+
+              <div class="form-check form-check-inline px-5">
+                <input
+                  [value]="true"
+                  class="form-check-input"
+                  type="checkbox"
+                  name="terminos"
+                  formControlName="terminos"
+                />
+                <label class="form-check-label ms-3">
+                  El obrero o encargado de llenar esta solicitud reconoce y da fe de que el solicitante tiene una razón
+                  válida y real para presentarla y que los datos suministrados son correctos.</label
+                >
               </div>
             </div>
 
-            <button type="submit" class="submit btn btn-primary mt-4 float-left" (click)="crearSolicitud()">
+            <div class="float-start">
+              <div class="obligatorio text-start mt-2">Campos Obligatorios</div>
+              <div class="mt-2"><b>Solicitud creada por:</b> {{ nombreUsuario }}</div>
+            </div>
+
+            <button type="submit" class="submit btn btn-primary mt-4 float-end" (click)="crearSolicitud()">
               <i class="fa fa-save"></i> Crear Solicitud
             </button>
           </form>

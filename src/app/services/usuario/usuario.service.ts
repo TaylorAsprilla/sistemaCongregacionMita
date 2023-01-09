@@ -34,6 +34,10 @@ export class UsuarioService {
     return this.usuario || this.usuarioMultimedia;
   }
 
+  get usuarioNombre(): string {
+    return `${this.usuario.primerNombre} ${this.usuario.segundoNombre} ${this.usuario.primerApellido} ${this.usuario.segundoApellido}`;
+  }
+
   get headers() {
     return {
       headers: {

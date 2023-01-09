@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SolicitudMultimediaComponent } from './solicitud-multimedia/solicitud-multimedia.component';
 import { CrearSolicitudMultimediaComponent } from './crear-solicitud-multimedia/crear-solicitud-multimedia.component';
@@ -11,7 +11,6 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { CargandoInformacionModule } from 'src/app/components/cargando-informacion/cargando-informacion.module';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { ValidarEmailComponent } from './validar-email/validar-email.component';
 import { ServiciosYVigiliasComponent } from './servicios-y-vigilias/servicios-y-vigilias.component';
 import { ConfigurarServiciosYVigiliasComponent } from './configurar-servicios-y-vigilias/configurar-servicios-y-vigilias.component';
@@ -43,9 +42,9 @@ const lang = 'en-US';
     BrowserAnimationsModule,
     NgxIntlTelInputModule,
     CargandoInformacionModule,
-    NgxMaterialTimepickerModule,
     BibliotecaMultimediaModule,
   ],
   exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
+  providers: [{ provide: LOCALE_ID, useValue: lang }],
 })
 export class MultimediaModule {}
