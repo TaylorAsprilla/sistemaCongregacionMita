@@ -16,16 +16,16 @@
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
-            <th class="w100">Item</th>
+            <th class="w50">Item</th>
             <th>Nombre</th>
             <th>Nacionalidad</th>
             <th>Celular</th>
             <th class="w100">Email</th>
             <th>Pais</th>
             <th>Congregación</th>
-            <th>Login</th>
+            <th class="w100">Login</th>
             <th>Estado</th>
-            <th class="w300">Acciones</th>
+            <th class="w150">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +67,7 @@
                 *ngIf="!!solicitud?.accesoMultimedia?.login"
                 data-toggle="tooltip"
                 data-original-title="Editar Acceso"
-                class="btn bg-warning ml-1"
+                class="btn bg-warning ms-1"
                 (click)="editarAccesoMultimedia(solicitud)"
                 ><i class="fa fa-pen-to-square"></i
               ></a>
@@ -75,7 +75,7 @@
                 *ngIf="!!solicitud?.accesoMultimedia?.estado"
                 data-toggle="tooltip"
                 data-original-title="Eliminar Acceso"
-                class="btn bg-danger ml-1"
+                class="btn bg-danger ms-1"
                 (click)="eliminarAccesoMultimedia(solicitud)"
                 ><i class="fa fa-trash"></i
               ></a>
@@ -83,24 +83,31 @@
                 *ngIf="!solicitud?.accesoMultimedia?.estado && !!solicitud?.accesoMultimedia?.login"
                 data-toggle="tooltip"
                 data-original-title="Activar Acceso"
-                class="btn bg-secondary ml-1"
+                class="btn bg-secondary ms-1"
                 (click)="activarAccesoMultimedia(solicitud)"
                 ><i class="fa fa-check"></i
+              ></a>
+              <a
+                data-toggle="tooltip"
+                data-original-title="Denegar Acceso"
+                class="btn bg-danger ms-1"
+                (click)="denegarAccesoMultimedia(solicitud)"
+                ><i class="fa fa-x"></i
               ></a>
             </td>
           </tr>
         </tbody>
         <tfoot>
-          <th class="w100">id</th>
+          <th class="w50">id</th>
           <th>Nombre</th>
           <th>Nacionalidad</th>
           <th class="w100">Celular</th>
           <th class="w100">Email</th>
           <th>Pais</th>
           <th>Congregación</th>
-          <th>Login</th>
+          <th class="w100">Login</th>
           <th>Estado</th>
-          <th>Acciones</th>
+          <th class="w150">Acciones</th>
         </tfoot>
       </table>
     </div>

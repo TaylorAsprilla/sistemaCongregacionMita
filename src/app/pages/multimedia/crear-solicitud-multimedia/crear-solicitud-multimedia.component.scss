@@ -143,3 +143,11 @@ input.form-check-input {
 .crearSolicitud {
   padding: 2% 10%;
 }
+
+#msform input.ng-invalid.ng-touched.ng-invalid {
+  border-color: #ef5350;
+}
+
+#msform select.ng-invalid.ng-touched.ng-invalid {
+  border-color: #ef5350;
+}

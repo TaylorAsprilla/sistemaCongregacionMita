@@ -126,12 +126,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       pais: ['', [Validators.required, Validators.minLength(3)]],
       telefono: ['', [Validators.minLength(3)]],
       celular: ['', [Validators.required, Validators.minLength(3)]],
-      email: [
-        '',
-        {
-          validators: [Validators.required, Validators.minLength(3), Validators.email],
-        },
-      ],
+      email: ['', [Validators.required, Validators.minLength(3), Validators.email]],
       miembroCongregacion: ['', [Validators.required]],
       estaCercaACongregacion: [false, [Validators.required]],
       congregacionCercana: ['', [Validators.minLength(3)]],
@@ -140,7 +135,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
       observaciones: ['', [Validators.minLength(3)]],
       tiempoSugerido: ['', []],
-      terminos: ['', [Validators.required]],
+      terminos: ['', [Validators.required, Validators.requiredTrue]],
     });
   }
 
