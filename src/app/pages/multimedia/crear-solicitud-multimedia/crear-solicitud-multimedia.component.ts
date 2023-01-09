@@ -211,7 +211,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       ...this.solicitudForm.controls,
       paisDondeEstudia: ['', [Validators.minLength(3), Validators.required]],
       ciudadDondeEstudia: ['', [Validators.minLength(3), Validators.required]],
-      tipoDeEstudio_id: ['', [Validators.minLength(3), Validators.required]],
+      tipoDeEstudio_id: ['', [Validators.required]],
       duracionDelPeriodoDeEstudio: ['', [Validators.required]],
     });
     return true;
@@ -244,7 +244,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudForm = this.formBuilder.group({
       ...this.solicitudForm.controls,
       horaTemploMasCercano: ['', [Validators.min(1), Validators.max(24), Validators.required]],
-      opcionTransporte_id: ['', [Validators.minLength(3), Validators.required]],
+      opcionTransporte_id: ['', [Validators.required]],
     });
     return true;
   }
@@ -261,7 +261,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       ...this.solicitudForm.controls,
       personaEncamada: ['', [Validators.required]],
       personaEncargada: ['', [Validators.minLength(3), Validators.required]],
-      parentesco_id: ['', [Validators.minLength(3), Validators.required]],
+      parentesco_id: ['', [Validators.required]],
       celularPersonaEncargada: ['', [Validators.minLength(3), Validators.required]],
       enfermedadCronica: ['', [Validators.required]],
       enfermedadQuePadece: ['', [Validators.minLength(3)]],
