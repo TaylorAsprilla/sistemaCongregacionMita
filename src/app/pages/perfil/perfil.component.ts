@@ -22,7 +22,7 @@ import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -135,7 +135,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
+            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
           }
         );
     }
@@ -154,7 +154,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
       (usuarioCreado: any) => {
         Swal.fire('Usuario creado', 'correctamente', 'success');
         this.router.navigateByUrl(
-          `${Rutas.SISTEMA}/${Rutas.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
+          `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
         );
       },
       (error) => {
@@ -188,7 +188,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.usuarioService.actualizarUsuario(usuario, this.usuario.id).subscribe(
           (usuarioActualizado) => {
             Swal.fire('Actualizado', 'Los datos del perfil se actualizaron', 'success');
-            this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INICIO}`);
+            this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
           },
           (error) => {
             let errores = error.error.errors;

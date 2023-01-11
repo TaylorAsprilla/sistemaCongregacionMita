@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { generarSeccioninforme, Seccion } from 'src/app/core/interfaces/seccion-informe.interface';
 import { InformeModel } from 'src/app/core/models/informe.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 
 @Component({
   selector: 'app-informe',
@@ -11,7 +11,7 @@ import { Rutas } from 'src/app/routes/menu-items';
 })
 export class InformeComponent implements OnInit {
   get Rutas() {
-    return Rutas;
+    return RUTAS;
   }
 
   informes: InformeModel[] = [];

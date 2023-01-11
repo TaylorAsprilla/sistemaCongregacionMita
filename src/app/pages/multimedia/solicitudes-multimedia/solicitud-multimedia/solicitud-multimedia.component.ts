@@ -6,7 +6,7 @@ import { LoginUsuarioCmarLiveInterface } from 'src/app/core/models/acceso-multim
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
 import { SolicitudMultimediaModel } from 'src/app/core/models/solicitud-multimedia';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import Swal from 'sweetalert2';
@@ -64,7 +64,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   crearSolicitud() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.SOLICITUD_MULTIMEDIA}/${nuevo}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.SOLICITUD_MULTIMEDIA}/${nuevo}`);
   }
 
   masInformacion(idSolicitud: number) {

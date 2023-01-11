@@ -5,7 +5,7 @@ import { delay } from 'rxjs/operators';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import Swal from 'sweetalert2';
 
@@ -92,12 +92,12 @@ export class PaisesComponent implements OnInit, OnDestroy {
   }
 
   actualizarPais(id: number) {
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.PAISES}/${id}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}/${id}`);
   }
 
   crearPais() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.PAISES}/${nuevo}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}/${nuevo}`);
   }
 
   buscarDivisa(idDivisa: number): string {

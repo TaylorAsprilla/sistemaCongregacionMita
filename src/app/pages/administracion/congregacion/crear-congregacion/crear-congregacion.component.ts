@@ -7,7 +7,7 @@ import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -101,7 +101,7 @@ export class CrearCongregacionComponent implements OnInit {
 
       this.resetFormulario();
       this.cargarCongregaciones();
-      this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
+      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
     } else {
       this.congregacionService.crearCongregacion(congregacionNueva).subscribe(
         (congregacionCreado: any) => {
@@ -113,7 +113,7 @@ export class CrearCongregacionComponent implements OnInit {
 
           this.resetFormulario();
           this.cargarCongregaciones();
-          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
+          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
         },
         (error) => {
           let errores = error.error.errors;
@@ -128,7 +128,7 @@ export class CrearCongregacionComponent implements OnInit {
             icon: 'error',
             html: `${listaErrores.join('')}`,
           });
-          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
+          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
         }
       );
     }
@@ -160,7 +160,7 @@ export class CrearCongregacionComponent implements OnInit {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}`);
+            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
           }
         );
     }

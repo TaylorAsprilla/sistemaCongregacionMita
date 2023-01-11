@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
 import Swal from 'sweetalert2';
 
@@ -50,7 +50,7 @@ export class TiposDeDocumentosComponent implements OnInit {
 
   crearTipoDeDocumento() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.TIPO_DE_DOCUMENTO}/${nuevo}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_DOCUMENTO}/${nuevo}`);
   }
 
   buscarPais(idPais: number) {
@@ -118,6 +118,6 @@ export class TiposDeDocumentosComponent implements OnInit {
   }
 
   actualizarTipoDocumento(id: number) {
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.TIPO_DE_DOCUMENTO}/${id}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_DOCUMENTO}/${id}`);
   }
 }

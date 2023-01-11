@@ -9,7 +9,7 @@ import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.int
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
 import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
-import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitud-multimedia/solicitud-multimedia.component';
+import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 
 const base_url = environment.base_url;
 @Injectable({

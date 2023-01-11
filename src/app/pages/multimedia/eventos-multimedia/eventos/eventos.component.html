@@ -1,0 +1,91 @@
+<section class="content">
+  <app-cargando-informacion *ngIf="cargando"></app-cargando-informacion>
+
+  <div class="card" *ngIf="!cargando">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-8 px-4 pt-4">
+          <h3 class="card-title">Total de eventos ({{ linkEventos.length }})</h3>
+          <p>Eventos registrados en la aplicación</p>
+        </div>
+        <div class="col">
+          <div class="float-end p-4">
+            <a class="btn btn-primary" (click)="crearEvento()"> <i class="fas fa-plus"></i> Nuevo Evento </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body mx-auto table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Título</th>
+            <th>Link</th>
+            <th>Fecha</th>
+            <th>Tipo de Evento</th>
+            <th>Plataforma</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let linkEvento of linkEventos; index as i">
+            <td>{{ i + 1 }}</td>
+            <td class="text-capitalize">
+              {{ linkEvento.titulo }}
+            </td>
+            <td>{{ linkEvento.link }}</td>
+            <td>
+              {{ linkEvento.fecha }}
+            </td>
+            <td>
+              {{ buscarTipoDeEvento(linkEvento.tipoEvento_id) }}
+            </td>
+            <td class="text-capitalize">
+              {{ linkEvento.plataforma }}
+            </td>
+
+            <td>
+              <a
+                *ngIf="!!linkEvento.estado"
+                data-toggle="tooltip"
+                data-original-title="Editar"
+                class="btn bg-info"
+                (click)="actualizarEvento(linkEvento.id)"
+                ><i class="fas fa-pencil-alt ml-1"></i
+              ></a>
+              <a
+                *ngIf="!!linkEvento.estado"
+                data-toggle="tooltip"
+                data-original-title="Borrar"
+                class="btn bg-danger ml-1"
+                (click)="borrarEvento(linkEvento)"
+                ><i class="fas fa-trash-alt"></i
+              ></a>
+              <a
+                *ngIf="!linkEvento.estado"
+                data-toggle="tooltip"
+                data-original-title="Activar"
+                class="btn bg-secondary ml-1"
+                (click)="activarEvento(linkEvento)"
+                ><i class="fas fa-check-square"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Item</th>
+            <th>Título</th>
+            <th>Link</th>
+            <th>Fecha</th>
+            <th>Tipo de Evento</th>
+            <th>Plataforma</th>
+            <th>Acciones</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>

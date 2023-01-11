@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { ContabilidadService } from 'src/app/services/contabilidad/contabilidad.service';
 import Swal from 'sweetalert2';
 
@@ -59,6 +59,6 @@ export class InformeContablesComponent implements OnInit, OnDestroy {
   }
 
   navegarAlInforme() {
-    return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
+    return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
   }
 }

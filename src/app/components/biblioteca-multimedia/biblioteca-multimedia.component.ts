@@ -19,7 +19,7 @@ import { LinkEventoModel, PLATAFORMA, TIPOEVENTO } from 'src/app/core/models/lin
 export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() serviciosYvigilias: LinkEventoModel[] = [];
   @Input() titulo: string = '';
-  @Input() tipoDeEvento: TIPOEVENTO;
+  @Input() tipoDeEvento: TIPOEVENTO | string;
 
   @ViewChild('templateYouTubePlayer') templateYouTubePlayer: ElementRef<HTMLDivElement>;
   videoWidth: number | undefined;

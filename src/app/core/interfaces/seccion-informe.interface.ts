@@ -1,4 +1,4 @@
-import { Rutas } from '../../routes/menu-items';
+import { RUTAS } from '../../routes/menu-items';
 
 export interface Seccion {
   nombre: string;
@@ -12,7 +12,7 @@ export interface Seccion {
 export const generarSeccioninforme: Seccion[] = [
   {
     nombre: 'Informe de Actividades',
-    ruta: `../${Rutas.INFORME_ACTIVIDADES}`,
+    ruta: `../${RUTAS.INFORME_ACTIVIDADES}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Servicios, vigilias, oraciones, reuniones, actividades',
     estatus: 'Completado',
@@ -20,7 +20,7 @@ export const generarSeccioninforme: Seccion[] = [
   },
   {
     nombre: 'Aspectos Contables',
-    ruta: `../${Rutas.INFORME_CONTABLE}`,
+    ruta: `../${RUTAS.INFORME_CONTABLE}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Diezmos, transferencias, etc',
     estatus: 'N / A',
@@ -28,7 +28,7 @@ export const generarSeccioninforme: Seccion[] = [
   },
   {
     nombre: 'Metas',
-    ruta: `../${Rutas.METAS}`,
+    ruta: `../${RUTAS.METAS}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Metas para el próximo trimestre',
     estatus: 'N / A',
@@ -36,7 +36,7 @@ export const generarSeccioninforme: Seccion[] = [
   },
   {
     nombre: 'Visitas',
-    ruta: `../${Rutas.INFORME_VISITAS}`,
+    ruta: `../${RUTAS.INFORME_VISITAS}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Informe de las visitas realizadas a los/as feligreses',
     estatus: 'N / A',
@@ -44,7 +44,7 @@ export const generarSeccioninforme: Seccion[] = [
   },
   {
     nombre: 'Situación en las visitas',
-    ruta: `../${Rutas.SITUACION_VISITA}`,
+    ruta: `../${RUTAS.SITUACION_VISITA}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Situaciones encontradas durante las visitas',
     estatus: 'N / A',
@@ -52,7 +52,7 @@ export const generarSeccioninforme: Seccion[] = [
   },
   {
     nombre: 'Logros obtenidos',
-    ruta: `../${Rutas.INFORME_LOGROS}`,
+    ruta: `../${RUTAS.INFORME_LOGROS}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Logros obtenidos durante el trimestre',
     estatus: 'N / A',

@@ -15,7 +15,7 @@ import { PaisModel } from 'src/app/core/models/pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -342,7 +342,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
           Swal.fire('Usuario creado', 'correctamente', 'success');
 
           this.router.navigateByUrl(
-            `${Rutas.SISTEMA}/${Rutas.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
+            `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
           );
         },
         (error) => {
@@ -438,7 +438,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}`);
+            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}`);
           }
         );
     }

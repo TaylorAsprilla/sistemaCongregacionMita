@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 import Swal from 'sweetalert2';
 
@@ -85,11 +85,11 @@ export class MinisteriosComponent implements OnInit, OnDestroy {
   }
 
   actualizarMinisterio(id: number) {
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.MINISTERIOS}/${id}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.MINISTERIOS}/${id}`);
   }
 
   crearMinisterio() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.MINISTERIOS}/${nuevo}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.MINISTERIOS}/${nuevo}`);
   }
 }

@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { SituacionVisitaService } from 'src/app/services/situacion-visita/situacion-visita.service';
 import Swal from 'sweetalert2';
 
@@ -50,7 +50,7 @@ export class InformeSituacionVisitaComponent implements OnInit {
     this.situacionVisitaService.crearSituacionVisita(situacionVisita).subscribe(
       (situacionVisitaCreada: any) => {
         Swal.fire('Situación de las visitas', 'Se registró las situacion de las visitas correctamente', 'success');
-        this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
+        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
       },
       (error) => {
         let errores = error.error.errors;

@@ -5,7 +5,7 @@ import { delay } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import Swal from 'sweetalert2';
 
@@ -100,12 +100,12 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
   }
 
   actualizarCongregacion(id: number) {
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}/${id}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}/${id}`);
   }
 
   crearCongregacion() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CONGREGACIONES}/${nuevo}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}/${nuevo}`);
   }
 
   buscarObrero(idObrero: number): string {

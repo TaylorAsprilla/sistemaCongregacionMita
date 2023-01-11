@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { ROUTES, Rutas } from 'src/app/routes/menu-items';
+import { ROUTES, RUTAS } from 'src/app/routes/menu-items';
 import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
 
 declare var $: any;
@@ -31,7 +31,7 @@ export class SidebarComponent implements OnInit {
   public sidebarnavItems: any[] = [];
 
   get Rutas() {
-    return Rutas;
+    return RUTAS;
   }
 
   // this is for the open close

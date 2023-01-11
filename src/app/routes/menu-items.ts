@@ -1,6 +1,6 @@
 import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 
-export enum Rutas {
+export enum RUTAS {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
   BIBLIOTECA_MULTIMEDIA = 'biblioteca-multimedia',
   BIBLIOTECA_SERVICIOS = 'biblioteca-servicios',
@@ -13,14 +13,17 @@ export enum Rutas {
   CREAR_TIPO_ACTIVIDAD = 'crear-tipo-actividad',
   CREAR_CAMPO = 'crear-campo',
   CREAR_CONGREGACION = 'crear-congregacion',
+  CREAR_EVENTO = 'crear-evento',
   CREAR_PAIS = 'crear-pais',
   CREAR_ESTATUS = 'crear-estatus',
+  EVENTOS = 'eventos',
   INICIO = 'inicio',
   INFORME = 'informe',
   INFORME_ACTIVIDADES = 'informe-actividades',
   INFORME_CONTABLE = 'informe-contable',
   INFORME_LOGROS = 'informe-logros',
   INFORME_VISITAS = 'informe-visitas',
+  LOGIN = '/login',
   METAS = 'metas',
   MINISTERIOS = 'ministerios',
   PAISES = 'paises',
@@ -28,6 +31,7 @@ export enum Rutas {
   USUARIOS = 'usuarios',
   USUARIOS_SUPERVISOR = 'usuarios-supervisor',
   REGISTRAR_USUARIO = 'registrar-usuario',
+  RESET_PASSWORD = '/reset-password',
   RUTA_NUEVA = 'ruta-nueva',
   SERVICIOS_Y_VIGILIAS = 'servicios-y-vigilias',
   SISTEMA = 'sistema',
@@ -66,7 +70,7 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.ADMINISTRADOR, ROLES.OBRERO, ROLES.MULTIMEDIA],
     submenu: [
       {
-        path: Rutas.INICIO,
+        path: RUTAS.INICIO,
         title: 'Inicio',
         icon: '',
         class: '',
@@ -75,7 +79,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.PERFIL,
+        path: RUTAS.PERFIL,
         title: 'Perfil',
         icon: '',
         class: '',
@@ -97,13 +101,13 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '',
     title: 'Administración',
-    icon: 'fa fa-home',
+    icon: 'fa fa-lock',
     class: 'has-arrow',
     extralink: false,
     role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
-        path: Rutas.USUARIOS,
+        path: RUTAS.USUARIOS,
         title: 'Usuarios',
         icon: '',
         class: '',
@@ -112,7 +116,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.MINISTERIOS,
+        path: RUTAS.MINISTERIOS,
         title: 'Ministerios',
         icon: '',
         class: '',
@@ -121,7 +125,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.INFORME,
+        path: RUTAS.INFORME,
         title: 'Informes',
         icon: '',
         class: '',
@@ -130,7 +134,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.TIPO_DE_DOCUMENTO,
+        path: RUTAS.TIPO_DE_DOCUMENTO,
         title: 'Tipo de Documentos',
         icon: '',
         class: '',
@@ -149,7 +153,7 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
-        path: Rutas.USUARIOS,
+        path: RUTAS.USUARIOS,
         title: 'Feligreses',
         icon: '',
         class: '',
@@ -168,8 +172,8 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
-        path: Rutas.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
-        title: 'Configurar Servicios y Vigilias',
+        path: RUTAS.EVENTOS,
+        title: 'Eventos',
         icon: '',
         class: '',
         extralink: false,
@@ -177,7 +181,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.SOLICITUDES_MULTIMEDIA,
+        path: RUTAS.SOLICITUDES_MULTIMEDIA,
         title: 'Solicitud de Acceso',
         icon: '',
         class: '',
@@ -186,7 +190,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: `${Rutas.SOLICITUD_MULTIMEDIA}/nuevo`,
+        path: `${RUTAS.SOLICITUD_MULTIMEDIA}/nuevo`,
         title: 'Nueva Solicitud',
         icon: '',
         class: '',
@@ -205,7 +209,7 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
-        path: Rutas.CREAR_TIPO_ACTIVIDAD,
+        path: RUTAS.CREAR_TIPO_ACTIVIDAD,
         title: 'Crear Actividad',
         icon: '',
         class: '',
@@ -214,7 +218,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.CREAR_ESTATUS,
+        path: RUTAS.CREAR_ESTATUS,
         title: 'Crear estatus',
         icon: '',
         class: '',
@@ -233,7 +237,7 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
-        path: Rutas.PAISES,
+        path: RUTAS.PAISES,
         title: 'Congregación - Paises',
         icon: '',
         class: 'menuCongregacion',
@@ -242,7 +246,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.CONGREGACIONES,
+        path: RUTAS.CONGREGACIONES,
         title: 'Congregación - Ciudad',
         icon: '',
         class: 'menuCongregacion',
@@ -251,7 +255,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.CAMPOS,
+        path: RUTAS.CAMPOS,
         title: 'Congregación - Campo',
         icon: '',
         class: 'menuCongregacion',
@@ -279,7 +283,7 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.SUPERVISOR],
     submenu: [
       {
-        path: Rutas.USUARIOS_SUPERVISOR,
+        path: RUTAS.USUARIOS_SUPERVISOR,
         title: 'Usuarios',
         icon: '',
         class: '',
@@ -307,7 +311,7 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.OBRERO],
     submenu: [
       {
-        path: Rutas.INFORME,
+        path: RUTAS.INFORME,
         title: 'Generar Informe',
         icon: '',
         class: '',
@@ -316,7 +320,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: Rutas.VER_INFORME,
+        path: RUTAS.VER_INFORME,
         title: 'Ver Informe',
         icon: '',
         class: '',
@@ -335,7 +339,7 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.OBRERO],
     submenu: [
       {
-        path: `${Rutas.SOLICITUD_MULTIMEDIA}/nuevo`,
+        path: `${RUTAS.SOLICITUD_MULTIMEDIA}/nuevo`,
         title: 'Solicitud de Acceso',
         icon: '',
         class: '',
@@ -363,7 +367,7 @@ export const ROUTES: RouteInfo[] = [
     role: [ROLES.MULTIMEDIA],
     submenu: [
       {
-        path: Rutas.SERVICIOS_Y_VIGILIAS,
+        path: RUTAS.SERVICIOS_Y_VIGILIAS,
         title: 'Servicios y Vigilias',
         icon: '',
         class: '',
@@ -380,7 +384,7 @@ export const ROUTES: RouteInfo[] = [
         role: [],
         submenu: [
           {
-            path: Rutas.BIBLIOTECA_SERVICIOS,
+            path: RUTAS.BIBLIOTECA_SERVICIOS,
             title: 'Servicios',
             icon: '',
             class: '',
@@ -389,7 +393,7 @@ export const ROUTES: RouteInfo[] = [
             submenu: [],
           },
           {
-            path: Rutas.BIBLIOTECA_VIGILIAS,
+            path: RUTAS.BIBLIOTECA_VIGILIAS,
             title: 'Vigilias',
             icon: '',
             class: '',
