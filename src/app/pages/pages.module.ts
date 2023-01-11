@@ -14,6 +14,9 @@ import { CargandoInformacionModule } from '../components/cargando-informacion/ca
 import { MultimediaModule } from './multimedia/multimedia.module';
 import { InicioModule } from './inicio/inicio.module';
 import { SupervisorModule } from './supervisor/supervisor.module';
+import { SpinnerModule } from '../components/spinner/spinner.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SpinnerInterceptor } from '../shared/interceptors/spinner.interceptors';
 
 @NgModule({
   declarations: [PagesComponent],
@@ -34,6 +37,8 @@ import { SupervisorModule } from './supervisor/supervisor.module';
     MultimediaModule,
     InicioModule,
     SupervisorModule,
+    SpinnerModule,
   ],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true }],
 })
 export class PagesModule {}
