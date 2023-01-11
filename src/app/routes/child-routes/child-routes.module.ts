@@ -20,7 +20,7 @@ import { InicioComponent } from 'src/app/pages/inicio/inicio.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 
 import { RegistrarUsuarioComponent } from 'src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component';
-import { Rutas } from '../menu-items';
+import { RUTAS } from '../menu-items';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
 import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
 import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
@@ -29,8 +29,8 @@ import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais
 import { DivisasResolver } from 'src/app/resolvers/divisas/divisas.resolver';
 import { SeccionInformeResolver } from 'src/app/resolvers/seccion-informe/seccion-informe.resolver';
 import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
-import { CrearSolicitudMultimediaComponent } from 'src/app/pages/multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
-import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitud-multimedia/solicitud-multimedia.component';
+import { CrearSolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
+import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil.resolver';
 import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
 import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
@@ -46,8 +46,7 @@ import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
 import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
 import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
-import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
-import { ConfigurarServiciosYVigiliasComponent } from 'src/app/pages/multimedia/configurar-servicios-y-vigilias/configurar-servicios-y-vigilias.component';
+import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
 import { LinkEventosResolver } from 'src/app/resolvers/link-eventos/link-eventos.resolver';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
@@ -61,6 +60,8 @@ import { UsuariosSupervisorComponent } from 'src/app/pages/supervisor/usuarios-s
 import { TipoEstudioResolver } from 'src/app/resolvers/tipo-estudio/tipo-estudio.resolver';
 import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/opcion-transporte.resolver';
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
+import { ConfigurarEventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/configurar-eventos/configurar-eventos.component';
+import { EventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos/eventos.component';
 
 const childRoutes: Routes = [
   {
@@ -78,7 +79,7 @@ const childRoutes: Routes = [
 
   // Administración
   {
-    path: Rutas.USUARIOS,
+    path: RUTAS.USUARIOS,
     component: UsuariosComponent,
     data: { titulo: 'Usuarios Registrados' },
     resolve: {
@@ -89,7 +90,7 @@ const childRoutes: Routes = [
     },
   },
   {
-    path: `${Rutas.USUARIOS}/:id`,
+    path: `${RUTAS.USUARIOS}/:id`,
     component: RegistrarUsuarioComponent,
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -112,74 +113,74 @@ const childRoutes: Routes = [
   },
 
   {
-    path: Rutas.USUARIOS_SUPERVISOR,
+    path: RUTAS.USUARIOS_SUPERVISOR,
     component: UsuariosSupervisorComponent,
   },
 
   {
-    path: Rutas.REGISTRAR_USUARIO,
+    path: RUTAS.REGISTRAR_USUARIO,
     component: RegistrarUsuarioComponent,
     resolve: { nacionalidad: NacionalidadResolver },
   },
 
   {
-    path: `${Rutas.CONFIRMAR_REGISTRO}/:id`,
+    path: `${RUTAS.CONFIRMAR_REGISTRO}/:id`,
     component: ConfirmacionDeRegistroComponent,
   },
   {
-    path: Rutas.MINISTERIOS,
+    path: RUTAS.MINISTERIOS,
     component: MinisteriosComponent,
     // resolve: { nacionalidad: NacionalidadResolver },
   },
 
   {
-    path: Rutas.PAISES,
+    path: RUTAS.PAISES,
     component: PaisesComponent,
     data: { titulo: 'Paises' },
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver },
   },
   {
-    path: `${Rutas.PAISES}/:id`,
+    path: `${RUTAS.PAISES}/:id`,
     component: CrearPaisComponent,
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver },
     data: { titulo: 'Crear Pais' },
   },
   {
-    path: Rutas.CONGREGACIONES,
+    path: RUTAS.CONGREGACIONES,
     component: CongregacionesComponent,
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver, pais: PaisResolver },
     data: { titulo: 'Congregaciones' },
   },
   {
-    path: `${Rutas.CONGREGACIONES}/:id`,
+    path: `${RUTAS.CONGREGACIONES}/:id`,
     component: CrearCongregacionComponent,
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver, pais: PaisResolver },
   },
   {
-    path: Rutas.CAMPOS,
+    path: RUTAS.CAMPOS,
     component: CamposComponent,
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
     data: { titulo: 'Campos' },
   },
   {
-    path: `${Rutas.CAMPOS}/:id`,
+    path: `${RUTAS.CAMPOS}/:id`,
     component: CrearCampoComponent,
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
   },
   {
-    path: Rutas.TIPO_DE_DOCUMENTO,
+    path: RUTAS.TIPO_DE_DOCUMENTO,
     component: TiposDeDocumentosComponent,
     resolve: { pais: PaisResolver },
   },
   {
-    path: `${Rutas.TIPO_DE_DOCUMENTO}/:id`,
+    path: `${RUTAS.TIPO_DE_DOCUMENTO}/:id`,
     component: CrearTipoDocumentoComponent,
     resolve: { pais: PaisResolver },
   },
 
   // Perfil
   {
-    path: Rutas.PERFIL,
+    path: RUTAS.PERFIL,
     component: PerfilComponent,
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -202,57 +203,57 @@ const childRoutes: Routes = [
   },
   // Informes
   {
-    path: Rutas.CREAR_TIPO_ACTIVIDAD,
+    path: RUTAS.CREAR_TIPO_ACTIVIDAD,
     component: CrearActividadComponent,
     resolve: { seccionInforme: SeccionInformeResolver },
   },
   {
-    path: Rutas.CREAR_CAMPO,
+    path: RUTAS.CREAR_CAMPO,
     component: CrearCampoComponent,
   },
 
   {
-    path: Rutas.CREAR_PAIS,
+    path: RUTAS.CREAR_PAIS,
     component: CrearPaisComponent,
   },
   {
-    path: Rutas.CREAR_ESTATUS,
+    path: RUTAS.CREAR_ESTATUS,
     component: CrearStatusComponent,
   },
   {
-    path: Rutas.INFORME_ACTIVIDADES,
+    path: RUTAS.INFORME_ACTIVIDADES,
     component: InformeActividadesComponent,
   },
   {
-    path: Rutas.INFORME_CONTABLE,
+    path: RUTAS.INFORME_CONTABLE,
     component: InformeContablesComponent,
   },
   {
-    path: Rutas.INFORME_LOGROS,
+    path: RUTAS.INFORME_LOGROS,
     component: InformeLogrosComponent,
   },
   {
-    path: Rutas.METAS,
+    path: RUTAS.METAS,
     component: InformeMetasComponent,
   },
   {
-    path: Rutas.INFORME_VISITAS,
+    path: RUTAS.INFORME_VISITAS,
     component: InformeVisitasComponent,
   },
   {
-    path: Rutas.SITUACION_VISITA,
+    path: RUTAS.SITUACION_VISITA,
     component: InformeSituacionVisitaComponent,
   },
   // informes pagina principal
   {
-    path: Rutas.INFORME,
+    path: RUTAS.INFORME,
     component: InformeComponent,
     resolve: {
       informes: InformesResolver,
     },
   },
   {
-    path: Rutas.VER_INFORME,
+    path: RUTAS.VER_INFORME,
     component: VerInformeComponent,
     resolve: {
       seccionInforme: SeccionInformeResolver,
@@ -261,7 +262,7 @@ const childRoutes: Routes = [
     },
   },
   {
-    path: `${Rutas.SOLICITUD_MULTIMEDIA}/:id`,
+    path: `${RUTAS.SOLICITUD_MULTIMEDIA}/:id`,
     component: CrearSolicitudMultimediaComponent,
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -274,7 +275,7 @@ const childRoutes: Routes = [
     },
   },
   {
-    path: Rutas.SOLICITUDES_MULTIMEDIA,
+    path: RUTAS.SOLICITUDES_MULTIMEDIA,
     component: SolicitudMultimediaComponent,
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -284,25 +285,29 @@ const childRoutes: Routes = [
     },
   },
   {
-    path: Rutas.SERVICIOS_Y_VIGILIAS,
+    path: RUTAS.SERVICIOS_Y_VIGILIAS,
     component: ServiciosYVigiliasComponent,
     resolve: {
       linkEventos: LinkEventosResolver,
     },
   },
   {
-    path: Rutas.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
-    component: ConfigurarServiciosYVigiliasComponent,
+    path: `${RUTAS.EVENTOS}/:id`,
+    component: ConfigurarEventosComponent,
   },
   {
-    path: Rutas.BIBLIOTECA_SERVICIOS,
+    path: RUTAS.EVENTOS,
+    component: EventosComponent,
+  },
+  {
+    path: RUTAS.BIBLIOTECA_SERVICIOS,
     component: ServiciosComponent,
     resolve: {
       linkEventos: LinkEventosResolver,
     },
   },
   {
-    path: Rutas.BIBLIOTECA_VIGILIAS,
+    path: RUTAS.BIBLIOTECA_VIGILIAS,
     component: VigiliasComponent,
     resolve: {
       linkEventos: LinkEventosResolver,

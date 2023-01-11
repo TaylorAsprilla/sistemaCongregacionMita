@@ -4,7 +4,7 @@
       <div class="col-md-9 col-lg-6 col-xl-5 d-none d-sm-none d-md-block">
         <img
           src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-          class="img-fluid animate__animated animate__fadeIn animate__slow"
+          class="img-fluid"
           alt="Sample image"
         />
       </div>
@@ -14,7 +14,7 @@
             src="assets/images/escudo-congregacion-mita.png"
             width="30%"
             alt="Congregación Mita INC"
-            class="img-fluid animate__animated animate__fadeIn animate__slow"
+            class="img-fluid"
           />
         </div>
 
@@ -39,7 +39,7 @@
               <input class="form-check-input me-2" type="checkbox" formControlName="remember" id="recordar" />
               <label class="form-check-label" for="recordar"> Recordar </label>
             </div>
-            <a href="#!" class="text-body">¿Has olvidado tu contraseña?</a>
+            <a [routerLink]="[Rutas.RESET_PASSWORD]" class="text-body">¿Has olvidado tu contraseña?</a>
           </div>
 
           <div class="text-lg-start mt-4 pt-2">

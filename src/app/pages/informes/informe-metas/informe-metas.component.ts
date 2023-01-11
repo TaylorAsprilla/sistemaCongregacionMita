@@ -5,7 +5,7 @@ import { ObjectUnsubscribedError, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import { MetaService } from 'src/app/services/meta/meta.service';
 import Swal from 'sweetalert2';
@@ -92,7 +92,7 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.METAS}`);
+            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.METAS}`);
           }
         );
     }
@@ -125,6 +125,6 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
   }
 
   navegarAlInforme() {
-    return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
+    return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
   }
 }

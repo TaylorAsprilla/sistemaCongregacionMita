@@ -5,7 +5,7 @@ import { NgbModal, ModalDismissReasons, NgbPanelChangeEvent, NgbCarouselConfig }
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 declare var $: any;
 @Component({
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
   public numeroCelular: string = '';
 
   get Rutas() {
-    return Rutas;
+    return RUTAS;
   }
 
   constructor(private modalService: NgbModal, private usuarioService: UsuarioService, private router: Router) {}

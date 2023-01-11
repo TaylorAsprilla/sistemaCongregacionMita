@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import Swal from 'sweetalert2';
 
@@ -19,7 +19,11 @@ export class CrearStatusComponent implements OnInit {
   // Subscription
   public estatusSubscription: Subscription;
 
-  constructor(private formBuilder: UntypedFormBuilder, private router: Router, private estatusService: EstatusService) {}
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private router: Router,
+    private estatusService: EstatusService
+  ) {}
 
   ngOnInit(): void {
     this.estatusForm = this.formBuilder.group({
@@ -57,7 +61,7 @@ export class CrearStatusComponent implements OnInit {
           icon: 'error',
           html: `${listaErrores.join('')}`,
         });
-        this.router.navigateByUrl(Rutas.INICIO);
+        this.router.navigateByUrl(RUTAS.INICIO);
       }
     );
   }

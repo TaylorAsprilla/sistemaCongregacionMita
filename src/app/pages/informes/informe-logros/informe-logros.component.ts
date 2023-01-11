@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LogroModel } from 'src/app/core/models/logro.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import Swal from 'sweetalert2';
 
@@ -44,7 +44,7 @@ export class InformeLogrosComponent implements OnInit, OnDestroy {
     this.logroService.crearLogro(informeLogro).subscribe(
       (logroCreado: any) => {
         Swal.fire('Logros', 'Se registró el logro correctamente', 'success');
-        this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
+        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
       },
       (error) => {
         let errores = error.error.errors;

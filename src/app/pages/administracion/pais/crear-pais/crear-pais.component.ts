@@ -7,7 +7,7 @@ import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { DivisaService } from 'src/app/services/divisa/divisa.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -93,7 +93,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
       });
       this.resetFormulario();
       this.cargarPaises();
-      this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.PAISES}`);
+      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
     } else {
       this.paisService.crearPais(paisNuevo).subscribe(
         (paisCreado: any) => {
@@ -114,7 +114,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
             icon: 'error',
             html: `${listaErrores.join('')}`,
           });
-          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.PAISES}`);
+          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
         }
       );
     }
@@ -146,7 +146,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.PAISES}`);
+            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
           }
         );
     }

@@ -1,0 +1,155 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { LinkEventoModel, PLATAFORMA, TIPOEVENTO } from 'src/app/core/models/link-evento.model';
+import { RUTAS } from 'src/app/routes/menu-items';
+import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
+import Swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-configurar-eventos',
+  templateUrl: './configurar-eventos.component.html',
+  styleUrls: ['./configurar-eventos.component.scss'],
+})
+export class ConfigurarEventosComponent implements OnInit, OnDestroy {
+  public eventosForm: FormGroup;
+  public vigiliasForm: FormGroup;
+
+  public linkEventos: LinkEventoModel[] = [];
+  public linkEventoSeleccionado: LinkEventoModel[] = [];
+
+  linkEventosSubscription: Subscription;
+
+  get PLATAFORMA() {
+    return PLATAFORMA;
+  }
+
+  get TIPOEVENTO() {
+    return TIPOEVENTO;
+  }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private linkEventosService: LinkEventosService
+  ) {}
+
+  ngOnInit(): void {
+    this.activatedRoute.params.subscribe(({ id }) => {
+      this.buscarLinkEvento(id);
+    });
+
+    this.cargarEventos();
+    this.crearFormulario();
+  }
+
+  ngOnDestroy(): void {
+    this.linkEventosSubscription?.unsubscribe();
+  }
+
+  crearFormulario() {
+    this.eventosForm = this.formBuilder.group({
+      titulo: ['', [Validators.required, Validators.minLength(3)]],
+      link: ['', [Validators.required, Validators.minLength(3)]],
+      fecha: ['', [Validators.required, Validators.minLength(3)]],
+      tipoEvento_id: ['', [Validators.required]],
+      plataforma: ['', [Validators.required, Validators.minLength(3)]],
+    });
+  }
+
+  cargarEventos() {
+    this.linkEventosSubscription = this.linkEventosService.getEventos().subscribe((linkEvento: LinkEventoModel[]) => {
+      this.linkEventos = linkEvento.filter((linkEvento) => linkEvento.estado === true);
+    });
+  }
+
+  guardarEvento() {
+    const servicio = this.eventosForm.value;
+
+    if (this.linkEventoSeleccionado) {
+      this.actualizarEvento();
+    } else {
+      this.linkEventosService.crearEvento(servicio).subscribe(
+        (respuesta: any) => {
+          Swal.fire('Evento', 'Se cargó el evento correctamente', 'success');
+          this.resetFormulario();
+          this.cargarEventos();
+        },
+        (error) => {
+          let errores = error.error.errors;
+          let listaErrores = [];
+
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
+
+          Swal.fire({
+            title: 'Eventos',
+            icon: 'error',
+            html: `Error al guardar el servicio <p> ${listaErrores.join('')}`,
+          });
+        }
+      );
+    }
+  }
+
+  actualizarEvento() {
+    const data = {
+      ...this.eventosForm.value,
+      id: this.linkEventoSeleccionado[0].id,
+      titulo: this.linkEventoSeleccionado[0].titulo,
+      link: this.linkEventoSeleccionado[0].link,
+      fecha: this.linkEventoSeleccionado[0].fecha,
+      tipoEvento_id: this.linkEventoSeleccionado[0].tipoEvento_id,
+      plataforma: this.linkEventoSeleccionado[0].plataforma,
+    };
+    this.linkEventosService.actualizarEvento(data).subscribe((evento: any) => {
+      Swal.fire({
+        title: 'Evento Actualizado',
+        icon: 'success',
+        html: `El evento ${evento.eventoactualizado.titulo} se actualizó correctamente`,
+      });
+    });
+    this.resetFormulario();
+    this.cargarEventos();
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
+  }
+
+  buscarLinkEvento(id: string) {
+    if (id !== 'nuevo') {
+      this.linkEventosService
+        .getUnLinkEvento(Number(id))
+        .pipe(delay(100))
+        .subscribe(
+          (linkEvento: LinkEventoModel) => {
+            const { titulo, link, fecha, tipoEvento_id, plataforma } = linkEvento;
+            this.linkEventoSeleccionado[0] = linkEvento;
+            this.eventosForm.setValue({ titulo, link, fecha, tipoEvento_id, plataforma });
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Eventos',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+
+            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
+          }
+        );
+    }
+  }
+
+  resetFormulario() {
+    this.eventosForm.reset();
+  }
+}

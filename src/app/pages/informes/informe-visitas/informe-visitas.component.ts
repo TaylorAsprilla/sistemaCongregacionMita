@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VisitaModel } from 'src/app/core/models/visita.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { VisitaService } from 'src/app/services/visita/visita.service';
 import Swal from 'sweetalert2';
 
@@ -49,7 +49,7 @@ export class InformeVisitasComponent implements OnInit, OnDestroy {
     this.visitaService.crearVisita(informeVisita).subscribe(
       (visitaCreada: any) => {
         Swal.fire('Informe de visitas', 'Se registró el informe de visitas correctamente', 'success');
-        this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
+        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
       },
       (error) => {
         let errores = error.error.errors;

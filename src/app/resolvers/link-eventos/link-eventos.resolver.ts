@@ -11,7 +11,7 @@ export class LinkEventosResolver implements Resolve<boolean> {
   constructor(private linkEventosService: LinkEventosService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    return this.linkEventosService.getLinkEventos().pipe(
+    return this.linkEventosService.getEventos().pipe(
       catchError((error) => {
         return of('No dara');
       })

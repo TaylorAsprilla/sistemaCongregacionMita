@@ -8,7 +8,7 @@ import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -93,14 +93,14 @@ export class CrearCampoComponent implements OnInit {
       });
       this.resetFormulario();
       this.cargarCampos();
-      this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}`);
+      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
     } else {
       this.campoService.crearCampo(campoNuevo).subscribe(
         (campoCreado: any) => {
           Swal.fire('Campo creado', `${campoCreado.campo.campo}`, 'success');
           this.resetFormulario();
           this.cargarCampos();
-          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}`);
+          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
         },
         (error) => {
           let errores = error.error.errors;
@@ -115,7 +115,7 @@ export class CrearCampoComponent implements OnInit {
             icon: 'error',
             html: `${listaErrores.join('')}`,
           });
-          this.router.navigateByUrl(Rutas.INICIO);
+          this.router.navigateByUrl(RUTAS.INICIO);
         }
       );
     }
@@ -147,7 +147,7 @@ export class CrearCampoComponent implements OnInit {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}`);
+            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
           }
         );
     }

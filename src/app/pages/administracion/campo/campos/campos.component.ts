@@ -5,7 +5,7 @@ import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import Swal from 'sweetalert2';
 
@@ -89,12 +89,12 @@ export class CamposComponent implements OnInit {
   }
 
   actualizarCampo(id: number) {
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}/${id}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}/${id}`);
   }
 
   crearCampo() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.CAMPOS}/${nuevo}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}/${nuevo}`);
   }
 
   buscarObrero(idObrero: number): string {

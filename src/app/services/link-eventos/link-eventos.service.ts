@@ -24,13 +24,31 @@ export class LinkEventosService {
     };
   }
 
-  getLinkEventos() {
+  getEventos() {
     return this.httpClient
       .get(`${base_url}/evento`, this.headers)
-      .pipe(map((links: { ok: boolean; linkEvento: LinkEventoModel[] }) => links.linkEvento));
+      .pipe(map((respuesta: { ok: boolean; linkEvento: LinkEventoModel[] }) => respuesta.linkEvento));
+  }
+
+  getUnLinkEvento(id: number) {
+    return this.httpClient
+      .get(`${base_url}/evento/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; linkEvento: LinkEventoModel }) => respuesta.linkEvento));
   }
 
   crearEvento(evento: LinkEventoModel) {
     return this.httpClient.post(`${base_url}/evento`, evento, this.headers);
+  }
+
+  actualizarEvento(evento: LinkEventoModel) {
+    return this.httpClient.put(`${base_url}/evento/${evento.id}`, evento, this.headers);
+  }
+
+  eliminarEvento(evento: LinkEventoModel) {
+    return this.httpClient.delete(`${base_url}/evento/${evento.id}`, this.headers);
+  }
+
+  activarEvento(evento: LinkEventoModel) {
+    return this.httpClient.put(`${base_url}/evento/activar/${evento.id}`, evento, this.headers);
   }
 }

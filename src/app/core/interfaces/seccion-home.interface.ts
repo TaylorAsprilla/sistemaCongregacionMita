@@ -1,4 +1,4 @@
-import { ROLES, Rutas } from '../../routes/menu-items';
+import { ROLES, RUTAS } from '../../routes/menu-items';
 
 export interface SeccionHome {
   nombreSeccion: string;
@@ -12,10 +12,10 @@ export interface SeccionHome {
 export const generarSeccionHome: SeccionHome[] = [
   {
     nombreSeccion: 'CMAR Live',
-    nombreResponsable: 'Juan Carlos Mejía',
-    email: 'juan.mejia@congregacionmita.org',
+    nombreResponsable: '',
+    email: '',
     logo: 'assets/images/vista-principal/logo-multimedia.png',
-    ruta: `../${Rutas.SERVICIOS_Y_VIGILIAS}`,
+    ruta: `../${RUTAS.SERVICIOS_Y_VIGILIAS}`,
     role: [ROLES.MULTIMEDIA],
   },
   {
@@ -23,7 +23,7 @@ export const generarSeccionHome: SeccionHome[] = [
     nombreResponsable: '',
     email: '',
     logo: 'assets/images/vista-principal/censo.png',
-    ruta: `../${Rutas.USUARIOS}`,
+    ruta: `../${RUTAS.USUARIOS}`,
     role: [ROLES.ADMINISTRADOR],
   },
   {
@@ -31,7 +31,7 @@ export const generarSeccionHome: SeccionHome[] = [
     nombreResponsable: '',
     email: '',
     logo: 'assets/images/vista-principal/logo-informes.png',
-    ruta: `../${Rutas.INFORME}`,
+    ruta: `../${RUTAS.INFORME}`,
     role: [ROLES.ADMINISTRADOR],
   },
   {
@@ -39,7 +39,7 @@ export const generarSeccionHome: SeccionHome[] = [
     nombreResponsable: '',
     email: '',
     logo: 'assets/images/vista-principal/logo-congregacion.png',
-    ruta: `../${Rutas.CONGREGACIONES}`,
+    ruta: `../${RUTAS.CONGREGACIONES}`,
     role: [ROLES.OBRERO],
   },
 ];

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Login, LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -15,28 +14,33 @@ import Swal from 'sweetalert2';
 })
 export class LoginComponent implements OnInit {
   usuariosSubscription: Subscription;
+  loginForm: FormGroup;
 
-  loginForm = this.formBuilder.group({
-    login: [localStorage.getItem('login') || '', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(3)]],
-    remember: [false],
-  });
+  get Rutas() {
+    return RUTAS;
+  }
 
-  constructor(
-    private router: Router,
-    private formBuilder: UntypedFormBuilder,
-    private usuarioService: UsuarioService
-  ) {}
+  constructor(private router: Router, private formBuilder: FormBuilder, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.usuariosSubscription = this.usuarioService.listarUsuarios().subscribe(
       (res) => console.log(res),
       (err) => console.error(err)
     );
+
+    this.crearFormularioLogin();
   }
 
   ngOnDestroy(): void {
     this.usuariosSubscription?.unsubscribe();
+  }
+
+  crearFormularioLogin() {
+    this.loginForm = this.formBuilder.group({
+      login: [localStorage.getItem('login') || '', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
+      remember: [false],
+    });
   }
 
   login() {
@@ -56,9 +60,6 @@ export class LoginComponent implements OnInit {
             localStorage.removeItem('login');
           }
           Swal.fire({
-            showClass: {
-              popup: 'animate__animated animate__fadeIn animate__slower',
-            },
             position: 'bottom-end',
             html: `Bienvenido ${primerNombre} ${segundoNombre} ${primerApellido} ${segundoApellido}`,
             showConfirmButton: false,
@@ -66,7 +67,7 @@ export class LoginComponent implements OnInit {
           });
 
           // Navegar al Dashboard
-          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INICIO}`);
+          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
         }
       },
       (err) => {

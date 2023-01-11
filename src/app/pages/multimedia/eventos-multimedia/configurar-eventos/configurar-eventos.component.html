@@ -5,7 +5,7 @@
         <h3 class="card-title">Configurar Servicios, Vígilias y/o Eventos Especiales</h3>
       </div>
       <div class="card-body">
-        <form class="form-signin" autocomplete="off" [formGroup]="serviciosForm">
+        <form class="form-signin" autocomplete="off" [formGroup]="eventosForm">
           <div class="form-group">
             <label>Plataforma de Streaming</label>
             <select class="form-select" formControlName="plataforma">
@@ -43,8 +43,8 @@
             <button
               type="submit"
               class="submit btn btn-primary"
-              (click)="guardarServicio()"
-              [disabled]="serviciosForm.invalid"
+              (click)="guardarEvento()"
+              [disabled]="eventosForm.invalid"
             >
               <i class="fa fa-save"></i> Guardar servicio
             </button>
@@ -59,7 +59,31 @@
       <div class="card-header">
         <h3 class="card-title">Listado de Servicios, Vígilias y/o Eventos Especiales</h3>
       </div>
-      <div class="card-body"></div>
+      <div class="card-body">
+        <div *ngFor="let linkEvento of linkEventos">
+          <a class="lista">
+            <li (click)="buscarLinkEvento(linkEvento.id.toString())">
+              <span class="font-light">{{ linkEvento.titulo }} - {{ linkEvento.fecha }}</span>
+            </li></a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Vista Previa</h3>
+      </div>
+      <div class="card-body">
+        <app-biblioteca-multimedia
+          [serviciosYvigilias]="linkEventoSeleccionado"
+          [tipoDeEvento]="linkEventoSeleccionado[0]?.tipoEvento_id"
+        ></app-biblioteca-multimedia>
+      </div>
     </div>
   </div>
 </div>

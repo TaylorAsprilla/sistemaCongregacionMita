@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { delay } from 'rxjs/operators';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Component({
@@ -32,6 +32,6 @@ export class ConfirmacionDeRegistroComponent implements OnInit {
   }
 
   nuevoRegistro() {
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}/nuevo`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/nuevo`);
   }
 }

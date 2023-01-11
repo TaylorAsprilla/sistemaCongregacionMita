@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -123,12 +123,12 @@ export class UsuariosComponent implements OnInit {
   }
 
   actualizarUsuario(id: number) {
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}/${id}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${id}`);
   }
 
   crearUsuario() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.USUARIOS}/${nuevo}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
   }
 
   buscarPais(idPais: number): string {

@@ -4,10 +4,10 @@ import { CongregacionResolver } from 'src/app/resolvers/congregacion/congregacio
 import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
-import { Rutas } from 'src/app/routes/menu-items';
-import { CrearSolicitudMultimediaComponent } from './crear-solicitud-multimedia/crear-solicitud-multimedia.component';
-import { ServiciosYVigiliasComponent } from './servicios-y-vigilias/servicios-y-vigilias.component';
-import { ValidarEmailComponent } from './validar-email/validar-email.component';
+import { RUTAS } from 'src/app/routes/menu-items';
+import { CrearSolicitudMultimediaComponent } from './solicitudes-multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
+import { ServiciosYVigiliasComponent } from './eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
+import { ValidarEmailComponent } from './solicitudes-multimedia/validar-email/validar-email.component';
 
 const routes: Routes = [
   {
@@ -25,7 +25,7 @@ const routes: Routes = [
     component: ValidarEmailComponent,
   },
   {
-    path: Rutas.SERVICIOS_Y_VIGILIAS,
+    path: RUTAS.SERVICIOS_Y_VIGILIAS,
     component: ServiciosYVigiliasComponent,
   },
 ];

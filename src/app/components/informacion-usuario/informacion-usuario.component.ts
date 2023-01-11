@@ -213,17 +213,17 @@ export class InformacionUsuarioComponent implements OnInit {
     this.voluntario = true;
     // this.ministerioUsuario=''
     // this.voluntarioUsuario = this.usuario.usuario ? true : false;
-    this.congregacionPais = this.usuario.usuarioCongregacion[0].congregacion
+    this.congregacionPais = this.usuario.usuarioCongregacion[0]?.congregacion
       ? this.usuario.usuarioCongregacion[0].pais_id
       : '';
-    this.congreacionCiudad = this.usuario.usuarioCongregacion[0].congregacion
-      ? this.usuario.usuarioCongregacion[0].UsuarioCongregacion.congregacion_id
+    this.congreacionCiudad = this.usuario.usuarioCongregacion[0]?.congregacion
+      ? this.usuario.usuarioCongregacion[0].UsuarioCongregacion?.congregacion_id
       : '';
-    this.congregacionCampo = this.usuario.usuarioCongregacion[0].congregacion
-      ? this.usuario.usuarioCongregacion[0].UsuarioCongregacion.campo_id
+    this.congregacionCampo = this.usuario.usuarioCongregacion[0]?.congregacion
+      ? this.usuario.usuarioCongregacion[0].UsuarioCongregacion?.campo_id
       : '';
-    this.vacuna = this.usuario.vacuna_id ? this.usuario.vacuna_id : '';
-    this.dosisUsuario = this.usuario.dosis_id ? this.usuario.dosis_id : '';
+    this.vacuna = this.usuario.vacuna_id ? this.usuario?.vacuna_id : '';
+    this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : '';
   }
 
   crearFormularios() {

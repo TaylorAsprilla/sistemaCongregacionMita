@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
@@ -75,7 +75,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private solicitudMultimediaService: SolicitudMultimediaService,
     private usuarioService: UsuarioService,

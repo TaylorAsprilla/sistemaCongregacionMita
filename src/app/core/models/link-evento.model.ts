@@ -4,6 +4,12 @@ export enum TIPOEVENTO {
   EVENTO_ESPECIAL = 3,
 }
 
+export enum NOMBRETIPOEVENTO {
+  SERVICIO = 'Servicio',
+  VIGILIA = 'Vigilia',
+  EVENTO_ESPECIAL = 'Evento Especial',
+}
+
 export enum PLATAFORMA {
   YOUTUBE = 'youtube',
   VIMEO = 'vimeo',

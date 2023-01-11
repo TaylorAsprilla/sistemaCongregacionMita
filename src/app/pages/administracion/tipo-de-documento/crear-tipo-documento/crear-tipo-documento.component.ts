@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
 import Swal from 'sweetalert2';
 
@@ -92,7 +92,7 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
             icon: 'error',
             html: `${listaErrores.join('')}`,
           });
-          this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.TIPO_DE_DOCUMENTO}`);
+          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_DOCUMENTO}`);
         }
       );
     }
@@ -124,7 +124,7 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.TIPO_DE_DOCUMENTO}`);
+            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_DOCUMENTO}`);
           }
         );
     }

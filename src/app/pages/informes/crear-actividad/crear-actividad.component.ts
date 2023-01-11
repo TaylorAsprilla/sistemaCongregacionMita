@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import Swal from 'sweetalert2';
 
@@ -71,7 +71,7 @@ export class CrearActividadComponent implements OnInit {
           icon: 'error',
           html: `${listaErrores.join('')}`,
         });
-        this.router.navigateByUrl(Rutas.INICIO);
+        this.router.navigateByUrl(RUTAS.INICIO);
       }
     );
   }

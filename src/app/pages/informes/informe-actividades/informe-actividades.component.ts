@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
-import { Rutas } from 'src/app/routes/menu-items';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import Swal from 'sweetalert2';
@@ -73,6 +73,6 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
   }
 
   navegarAlInforme() {
-    return this.router.navigateByUrl(`${Rutas.SISTEMA}/${Rutas.INFORME}`);
+    return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
   }
 }
