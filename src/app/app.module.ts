@@ -19,6 +19,8 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { PagesModule } from './pages/pages.module';
 import { SharedModule } from './shared/shared.module';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -32,6 +34,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
@@ -53,6 +56,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
+    // { provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
