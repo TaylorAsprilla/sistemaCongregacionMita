@@ -32,7 +32,7 @@ export class SolicitudMultimediaModel {
     public miembroCongregacion: boolean,
     public congregacionCercana: string,
     public estado: boolean,
-    public status: boolean,
+    public emailVerificado: boolean,
     public razonSolicitud_id: number,
     public nacionalidad_id: number,
     public usuarioQueRegistra_id: number,

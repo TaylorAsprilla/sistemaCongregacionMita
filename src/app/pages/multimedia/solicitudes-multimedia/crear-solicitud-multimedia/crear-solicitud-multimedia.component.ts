@@ -83,7 +83,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    //   this.activateRouter.params.subscribe(({ id }) => {
+    //   this.activatedRoute.params.subscribe(({ id }) => {
     //     this.buscarCongregacion(id);
     // }
     this.activatedRoute.data.subscribe(

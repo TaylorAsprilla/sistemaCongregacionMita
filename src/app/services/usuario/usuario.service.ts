@@ -9,7 +9,6 @@ import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.int
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
 import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
-import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -205,6 +204,30 @@ export class UsuarioService {
           this.idUsuario = resp.usuario.id;
         }
       })
+    );
+  }
+
+  forgotPassword(login: string) {
+    return this.httpClient.put(`${base_url}/login/forgotpassword`, login, this.headers);
+  }
+
+  cambiarPassword(password: string, token: string) {
+    return this.httpClient.put(
+      `${base_url}/login/cambiarpassword`,
+      { nuevoPassword: password },
+      {
+        headers: {
+          'x-reset': token,
+        },
+      }
+    );
+  }
+
+  cambiarPasswordUsuario(idUsuario: number, passwordAntiguo: string, passwordNuevo: string) {
+    return this.httpClient.put(
+      `${base_url}/login/cambiarpasswordusuario`,
+      { idUsuario, passwordAntiguo, passwordNuevo },
+      this.headers
     );
   }
 

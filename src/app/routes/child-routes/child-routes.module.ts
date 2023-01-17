@@ -62,6 +62,7 @@ import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/op
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
 import { ConfigurarEventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/configurar-eventos/configurar-eventos.component';
 import { EventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos/eventos.component';
+import { CambiarPasswordUsuarioComponent } from 'src/app/pages/administracion/usuario/cambiar-password-usuario/cambiar-password-usuario.component';
 
 const childRoutes: Routes = [
   {
@@ -110,6 +111,11 @@ const childRoutes: Routes = [
       dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
     },
+  },
+
+  {
+    path: RUTAS.RESET_PASSWORD_USUARIO,
+    component: CambiarPasswordUsuarioComponent,
   },
 
   {

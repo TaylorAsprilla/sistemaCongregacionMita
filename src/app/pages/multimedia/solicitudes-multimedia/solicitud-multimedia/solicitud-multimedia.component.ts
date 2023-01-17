@@ -11,7 +11,6 @@ import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acce
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
-// import generator = require('generate-password-browser');
 
 @Component({
   selector: 'app-solicitud-multimedia',
@@ -54,9 +53,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudAccesoSubscription = this.solicitudMultimediaService
       .getSolicitudes()
       .pipe(delay(100))
-      .subscribe((solicitudesDeAcceso) => {
+      .subscribe((solicitudesDeAcceso: SolicitudMultimediaModel[]) => {
         this.solicitudesDeAccesos = solicitudesDeAcceso.filter(
-          (solicitud: SolicitudMultimediaModel) => solicitud.status === true && solicitud.estado === true
+          (solicitud: SolicitudMultimediaModel) => solicitud.emailVerificado === true && solicitud.estado === true
         );
         this.cargando = false;
       });
@@ -427,9 +426,5 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
 
     return password;
-  }
-
-  mostrarContrasena() {
-    this.fieldTextType = !this.fieldTextType;
   }
 }

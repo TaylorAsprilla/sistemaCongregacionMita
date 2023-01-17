@@ -10,6 +10,8 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class SolicitudMultimediaService {
+  public solicitudMultimedia: SolicitudMultimediaModel[] = [];
+
   constructor(private httpClient: HttpClient) {}
 
   get token(): string {

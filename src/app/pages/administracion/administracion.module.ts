@@ -20,6 +20,7 @@ import { CargandoInformacionModule } from 'src/app/components/cargando-informaci
 import { ConfirmacionDeRegistroComponent } from './usuario/confirmacion-de-registro/confirmacion-de-registro.component';
 import { CrearTipoDocumentoComponent } from './tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
 import { TiposDeDocumentosComponent } from './tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
+import { CambiarPasswordUsuarioComponent } from './usuario/cambiar-password-usuario/cambiar-password-usuario.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { TiposDeDocumentosComponent } from './tipo-de-documento/tipos-de-documen
     ConfirmacionDeRegistroComponent,
     CrearTipoDocumentoComponent,
     TiposDeDocumentosComponent,
+    CambiarPasswordUsuarioComponent,
   ],
   imports: [
     CommonModule,
