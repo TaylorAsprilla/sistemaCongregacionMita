@@ -11,12 +11,12 @@ export class ValidarEmailComponent implements OnInit {
   public solicitudValida: boolean = false;
   constructor(
     private router: Router,
-    private activateRouter: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private solicitudMultimediaService: SolicitudMultimediaService
   ) {}
 
   ngOnInit(): void {
-    this.activateRouter.params.subscribe(({ id }) => {
+    this.activatedRoute.params.subscribe(({ id }) => {
       this.activarSolicitud(id);
     });
   }

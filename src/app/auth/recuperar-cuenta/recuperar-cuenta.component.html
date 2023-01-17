@@ -1,0 +1,39 @@
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-8 col-lg-6 col-xl-4">
+        <div class="text-center">
+          <img
+            src="assets/images/escudo-congregacion-mita.png"
+            width="30%"
+            alt="Congregación Mita INC"
+            class="img-fluid"
+          />
+        </div>
+
+        <form [formGroup]="cuentaForm" autocomplete="off" class="form-signin" (submit)="recuperarCuenta()">
+          <h2 class="mb-3 text-center">Recupera tu cuenta</h2>
+          <span class="fs-5 text">Ingresa tu correo electrónico para resstablecer la contraseña.</span>
+          <div class="form-outline my-4">
+            <input
+              type="text"
+              formControlName="login"
+              class="form-control form-control-lg"
+              placeholder="Correo Electrónico"
+            />
+          </div>
+
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-secondary" [routerLink]="Rutas.LOGIN">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="text-center py-4 px-4 px-xl-5 bg-primary">
+    <div class="text-white mb-3 mb-md-0">
+      Congregación Mita Inc. Copyright © 2022 Derechos Reservados. Términos y Condiciones
+    </div>
+  </div>
+</section>

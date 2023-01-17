@@ -17,8 +17,7 @@
       <!-- ============================================================== -->
       <!-- toggle and nav items -->
       <!-- ============================================================== -->
-      <!-- <div class="row"> -->
-      <!-- <ul class="navbar-nav my-lg-0"> -->
+
       <ul class="navbar-nav me-auto mt-md-0">
         <!-- This is  -->
         <li (click)="toggleSidebar.emit()" class="nav-item m-l-10">
@@ -27,11 +26,11 @@
           ></a>
         </li>
       </ul>
-      <!-- </ul> -->
+
       <!-- ============================================================== -->
       <!-- User profile and search -->
       <!-- ============================================================== -->
-      <!-- <div class="col-md-8"> -->
+
       <ul class="navbar-nav ms-auto my-lg-0">
         <!-- ============================================================== -->
         <!-- Search -->
@@ -87,8 +86,13 @@
               </li>
               <li role="separator" class="divider"></li>
               <li>
+                <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
                 <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
               </li>
+
               <li role="separator" class="divider"></li>
               <li>
                 <a href="#"> <i class="ti-settings"></i> Configuración</a>
@@ -102,7 +106,5 @@
         </li>
       </ul>
     </div>
-    <!-- </div> -->
-    <!-- </div> -->
   </nav>
 </header>
