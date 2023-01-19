@@ -26,11 +26,11 @@ export class UsuarioService {
   }
 
   get usuarioId(): number {
-    return this.usuario.id || null;
+    return this.usuario?.id || this.usuarioMultimedia?.id;
   }
 
   get usuarioLogin() {
-    return this.usuario || this.usuarioMultimedia;
+    return this.usuario?.login || this.usuarioMultimedia?.email;
   }
 
   get usuarioNombre(): string {
@@ -223,10 +223,10 @@ export class UsuarioService {
     );
   }
 
-  cambiarPasswordUsuario(idUsuario: number, passwordAntiguo: string, passwordNuevo: string) {
+  cambiarPasswordUsuario(idUsuario: number, login: string, passwordAntiguo: string, passwordNuevo: string) {
     return this.httpClient.put(
       `${base_url}/login/cambiarpasswordusuario`,
-      { idUsuario, passwordAntiguo, passwordNuevo },
+      { idUsuario, passwordAntiguo, passwordNuevo, login },
       this.headers
     );
   }
