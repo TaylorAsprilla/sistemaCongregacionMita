@@ -40,4 +40,9 @@ export class GeneroService {
   elimiminarGenero(genero: GeneroModel) {
     return this.httpClient.delete(`${base_url}/genero/${genero.id}`, this.headers);
   }
+
+  // preguntar creo q no existe en back
+  activarGenero(genero: GeneroModel) {
+    return this.httpClient.put(`${base_url}/genero/activar/${genero.id}`, genero, this.headers);
+  }
 }

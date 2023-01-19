@@ -48,6 +48,11 @@ export class OpcionTransporteService {
     return this.httpClient.delete(`${base_url}/opciontransporte/${opcionTransporte.id}`, this.headers);
   }
 
+  //preguntar para borrar los otros
+  eliminarOpcion(opcionTransporte: OpcionTransporteModel) {
+    return this.httpClient.delete(`${base_url}/opciontransporte/${opcionTransporte.id}`, this.headers);
+  }
+
   activarTipoEmpleo(opcionTransporte: OpcionTransporteModel) {
     return this.httpClient.put(
       `${base_url}/opciontransporte/activar/${opcionTransporte.id}`,
