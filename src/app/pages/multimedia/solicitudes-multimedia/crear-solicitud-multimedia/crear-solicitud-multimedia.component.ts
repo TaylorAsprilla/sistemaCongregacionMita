@@ -106,7 +106,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.idUsuario = this.usuarioService?.usuarioLogin.id;
+    this.idUsuario = this.usuarioService?.usuarioId;
     this.nombreUsuario = this.usuarioService.usuarioNombre;
 
     this.crearFormularioDeLaSolicitud();

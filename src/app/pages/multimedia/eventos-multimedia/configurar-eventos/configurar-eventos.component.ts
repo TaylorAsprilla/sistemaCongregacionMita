@@ -69,7 +69,7 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   guardarEvento() {
     const servicio = this.eventosForm.value;
 
-    if (this.linkEventoSeleccionado) {
+    if (!!this.linkEventoSeleccionado.length) {
       this.actualizarEvento();
     } else {
       this.linkEventosService.crearEvento(servicio).subscribe(
@@ -115,7 +115,7 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
     });
     this.resetFormulario();
     this.cargarEventos();
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.EVENTOS}`);
   }
 
   buscarLinkEvento(id: string) {

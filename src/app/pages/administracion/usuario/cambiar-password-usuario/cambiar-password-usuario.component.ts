@@ -14,6 +14,7 @@ export class CambiarPasswordUsuarioComponent implements OnInit {
   passwordUsuarioForm: FormGroup;
   formSubmitted: boolean = false;
   idusuario: number;
+  loginUsuario: string;
 
   get Rutas() {
     return RUTAS;
@@ -28,6 +29,7 @@ export class CambiarPasswordUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.idusuario = this.usuarioservice.usuarioId;
+    this.loginUsuario = this.usuarioservice.usuarioLogin;
 
     this.passwordUsuarioForm = this.formBuilder.group(
       {
@@ -71,26 +73,28 @@ export class CambiarPasswordUsuarioComponent implements OnInit {
     const passwordNuevoUno = this.passwordUsuarioForm.controls['passwordNuevoUno']?.value;
 
     if (this.passwordUsuarioForm.valid) {
-      this.usuarioservice.cambiarPasswordUsuario(this.idusuario, passwordAntiguo, passwordNuevoUno).subscribe(
-        (respuesta: any) => {
-          Swal.fire({
-            title: 'CMAR LIVE',
-            icon: 'warning',
-            html: `${respuesta.msg}`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.router.navigateByUrl(`${RUTAS.LOGIN}`);
-            }
-          });
-        },
-        (err) => {
-          Swal.fire({
-            title: 'CMAR LIVE',
-            icon: 'warning',
-            html: `${err.error.msg}`,
-          });
-        }
-      );
+      this.usuarioservice
+        .cambiarPasswordUsuario(this.idusuario, this.loginUsuario, passwordAntiguo, passwordNuevoUno)
+        .subscribe(
+          (respuesta: any) => {
+            Swal.fire({
+              title: 'CMAR LIVE',
+              icon: 'warning',
+              html: `${respuesta.msg}`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.router.navigateByUrl(`${RUTAS.LOGIN}`);
+              }
+            });
+          },
+          (err) => {
+            Swal.fire({
+              title: 'CMAR LIVE',
+              icon: 'warning',
+              html: `${err.error.msg}`,
+            });
+          }
+        );
     }
   }
 
