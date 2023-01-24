@@ -13,7 +13,7 @@
 
           <form id="msform" autocomplete="off" [formGroup]="solicitudForm" (submit)="crearSolicitud()">
             <div class="row">
-              <div class="form-group col-sm-12 col-md-6 col-lg-6">
+              <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label class="input-group obligatorio">Nombre</label>
                 <input
                   type="text"
@@ -34,6 +34,27 @@
                   *ngIf="solicitudForm.get('nombre').hasError('minlength') && solicitudForm.get('nombre').touched"
                 >
                   El nombre del feligrés no tiene la longitud mínima permitida.
+                </small>
+              </div>
+
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                <label class="input-group obligatorio">Fecha de Nacimiento</label>
+                <input
+                  type="date"
+                  formControlName="fechaNacimiento"
+                  name="fechaNacimiento"
+                  class="form-control"
+                  placeholder="Fecha de Nacimiento"
+                />
+
+                <small
+                  class="form-text text-danger"
+                  *ngIf="
+                    solicitudForm.get('fechaNacimiento').hasError('required') &&
+                    solicitudForm.get('fechaNacimiento').touched
+                  "
+                >
+                  La Fecha de nacimiento es requerida.
                 </small>
               </div>
 
