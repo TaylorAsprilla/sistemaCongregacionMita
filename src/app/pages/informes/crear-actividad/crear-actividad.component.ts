@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
@@ -13,8 +13,8 @@ import Swal from 'sweetalert2';
   templateUrl: './crear-actividad.component.html',
   styleUrls: ['./crear-actividad.component.scss'],
 })
-export class CrearActividadComponent implements OnInit {
-  public tipoActividadForm: UntypedFormGroup;
+export class CrearActividadComponent implements OnInit, OnDestroy {
+  public tipoActividadForm: FormGroup;
 
   public tiposActividad: TipoActividadModel[] = [];
   public seccionesInformes: SeccionInformeModel[] = [];
@@ -22,7 +22,7 @@ export class CrearActividadComponent implements OnInit {
   public tipoActividadSubscription: Subscription;
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private router: Router,
     private tipoActividadService: TipoActividadService,
     private activatedRoute: ActivatedRoute
@@ -39,6 +39,10 @@ export class CrearActividadComponent implements OnInit {
     });
 
     this.cargarTipoActividades();
+  }
+
+  ngOnDestroy(): void {
+    this.tipoActividadSubscription?.unsubscribe();
   }
 
   cargarTipoActividades() {

@@ -48,6 +48,22 @@
 
             <td>
               <a
+                *ngIf="!linkEvento.eventoEnBiblioteca"
+                data-toggle="tooltip"
+                data-original-title="Agregar a Biblioteca"
+                class="btn bg-success"
+                (click)="agregarABiblioteca(linkEvento)"
+                ><i class="fas fa-plus ml-1"></i
+              ></a>
+              <a
+                *ngIf="!!linkEvento.eventoEnBiblioteca"
+                data-toggle="tooltip"
+                data-original-title="Eliminar de la Biblioteca"
+                class="btn bg-secondary"
+                (click)="eliminarDeLaBiblioteca(linkEvento)"
+                ><i class="fa-solid fa-minus"></i
+              ></a>
+              <a
                 *ngIf="!!linkEvento.estado"
                 data-toggle="tooltip"
                 data-original-title="Editar"
