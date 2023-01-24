@@ -7,7 +7,7 @@ import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { ROUTES } from 'src/app/routes/menu-items';
+import { ROLES } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Component({
@@ -23,6 +23,8 @@ export class InicioComponent implements OnInit {
   congregaciones: CongregacionModel[] = [];
   campos: CampoModel[] = [];
   ministerios: MinisterioModel[] = [];
+
+  roles: ROLES[] = [];
 
   public generarSeccionHome: any[] = [];
 
@@ -51,6 +53,14 @@ export class InicioComponent implements OnInit {
     });
 
     this.generarSeccionHome = generarSeccionHome.filter((seccionInforme) => seccionInforme);
+
+    this.roles = [
+      ROLES.ADMINISTRADOR,
+      ROLES.SUPERVISOR,
+      ROLES.SUPERVISOR_LOCAL,
+      ROLES.OBRERO_CIUDAD,
+      ROLES.OBRERO_CAMPO,
+    ];
   }
 
   ngOnDestroy(): void {

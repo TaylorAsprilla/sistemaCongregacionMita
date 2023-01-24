@@ -101,7 +101,6 @@ export class CrearCongregacionComponent implements OnInit {
 
       this.resetFormulario();
       this.cargarCongregaciones();
-      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
     } else {
       this.congregacionService.crearCongregacion(congregacionNueva).subscribe(
         (congregacionCreado: any) => {
@@ -113,7 +112,6 @@ export class CrearCongregacionComponent implements OnInit {
 
           this.resetFormulario();
           this.cargarCongregaciones();
-          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
         },
         (error) => {
           let errores = error.error.errors;
@@ -128,7 +126,6 @@ export class CrearCongregacionComponent implements OnInit {
             icon: 'error',
             html: `${listaErrores.join('')}`,
           });
-          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
         }
       );
     }
