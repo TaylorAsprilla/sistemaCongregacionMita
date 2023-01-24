@@ -71,6 +71,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       .getSolicitud(idSolicitud)
       .subscribe((informacionSolicitud: SolicitudMultimediaModel) => {
         const nombre = informacionSolicitud?.nombre;
+        const fecha = informacionSolicitud?.fechaNacimiento;
         const login = informacionSolicitud?.accesoMultimedia?.login
           ? informacionSolicitud?.accesoMultimedia?.login
           : '';
@@ -130,6 +131,10 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                     <tr>
                       <td>Tiempo de Aprobación:</td>
                       <td>${tiempoDeAprobacion}</td>
+                    </tr>
+                     <tr>
+                      <td>Fecha de Nacimiento:</td>
+                      <td>${fecha}</td>
                     </tr>
                     <tr>
                       <td>Nacionalidad:</td>
