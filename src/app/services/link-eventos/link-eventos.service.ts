@@ -51,4 +51,12 @@ export class LinkEventosService {
   activarEvento(evento: LinkEventoModel) {
     return this.httpClient.put(`${base_url}/evento/activar/${evento.id}`, evento, this.headers);
   }
+
+  agregarABiblioteca(evento: LinkEventoModel) {
+    return this.httpClient.put(`${base_url}/evento/agregarbiblioteca/${evento.id}`, evento, this.headers);
+  }
+
+  eliminarDeLaBiblioteca(evento: LinkEventoModel) {
+    return this.httpClient.put(`${base_url}/evento/eliminardebiblioteca/${evento.id}`, evento, this.headers);
+  }
 }

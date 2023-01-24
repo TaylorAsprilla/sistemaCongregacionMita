@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { LinkEventoModel, PLATAFORMA, TIPOEVENTO } from 'src/app/core/models/link-evento.model';
+import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
 import Swal from 'sweetalert2';
@@ -27,7 +27,7 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   }
 
   get TIPOEVENTO() {
-    return TIPOEVENTO;
+    return TIPOEVENTO_ID;
   }
 
   constructor(

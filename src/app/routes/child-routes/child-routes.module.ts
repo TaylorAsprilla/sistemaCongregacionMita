@@ -136,7 +136,6 @@ const childRoutes: Routes = [
   {
     path: RUTAS.MINISTERIOS,
     component: MinisteriosComponent,
-    // resolve: { nacionalidad: NacionalidadResolver },
   },
 
   {
@@ -293,9 +292,6 @@ const childRoutes: Routes = [
   {
     path: RUTAS.SERVICIOS_Y_VIGILIAS,
     component: ServiciosYVigiliasComponent,
-    resolve: {
-      linkEventos: LinkEventosResolver,
-    },
   },
   {
     path: `${RUTAS.EVENTOS}/:id`,
@@ -308,16 +304,10 @@ const childRoutes: Routes = [
   {
     path: RUTAS.BIBLIOTECA_SERVICIOS,
     component: ServiciosComponent,
-    resolve: {
-      linkEventos: LinkEventosResolver,
-    },
   },
   {
     path: RUTAS.BIBLIOTECA_VIGILIAS,
     component: VigiliasComponent,
-    resolve: {
-      linkEventos: LinkEventosResolver,
-    },
   },
 ];
 

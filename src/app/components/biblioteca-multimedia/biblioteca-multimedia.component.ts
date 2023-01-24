@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { LinkEventoModel, PLATAFORMA, TIPOEVENTO } from 'src/app/core/models/link-evento.model';
+import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 
 @Component({
   selector: 'app-biblioteca-multimedia',
@@ -19,7 +19,7 @@ import { LinkEventoModel, PLATAFORMA, TIPOEVENTO } from 'src/app/core/models/lin
 export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() serviciosYvigilias: LinkEventoModel[] = [];
   @Input() titulo: string = '';
-  @Input() tipoDeEvento: TIPOEVENTO | string;
+  @Input() tipoDeEvento: TIPOEVENTO_ID | string;
 
   @ViewChild('templateYouTubePlayer') templateYouTubePlayer: ElementRef<HTMLDivElement>;
   videoWidth: number | undefined;
@@ -33,7 +33,7 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
   }
 
   get TIPOEVENTO() {
-    return TIPOEVENTO;
+    return TIPOEVENTO_ID;
   }
 
   constructor(private changeDetectorRef: ChangeDetectorRef, public sanitizer: DomSanitizer) {}
@@ -61,7 +61,7 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
     this.changeDetectorRef.detectChanges();
   };
 
-  domSanitizerVideo(linVideo: string) {
-    return (this.urlVideo = this.sanitizer.bypassSecurityTrustResourceUrl(linVideo));
+  domSanitizerVideo(linkVideo: string) {
+    return (this.urlVideo = this.sanitizer.bypassSecurityTrustResourceUrl(linkVideo));
   }
 }
