@@ -83,9 +83,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    //   this.activatedRoute.params.subscribe(({ id }) => {
-    //     this.buscarCongregacion(id);
-    // }
     this.activatedRoute.data.subscribe(
       (data: {
         nacionalidad: NacionalidadModel[];
@@ -119,6 +116,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   crearFormularioDeLaSolicitud() {
     this.solicitudForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
+      fechaNacimiento: ['', [Validators.required, Validators.minLength(3)]],
       direccion: ['', [Validators.required, Validators.minLength(3)]],
       ciudad: ['', [Validators.required, Validators.minLength(3)]],
       departamento: ['', [Validators.minLength(3)]],
@@ -287,6 +285,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
 
     const solicitudNueva: SolicitudMultimediaInterface = {
       nombre: formSolicitud.nombre,
+      fechaNacimiento: formSolicitud.fechaNacimiento,
       direccion: formSolicitud.direccion,
       ciudad: formSolicitud.ciudad,
       departamento: formSolicitud.departamento,

@@ -24,6 +24,7 @@ export class SolicitudMultimediaModel {
   constructor(
     public id: number,
     public nombre: string,
+    public fechaNacimiento: Date,
     public direccion: string,
     public ciudad: string,
     public celular: string,
@@ -65,6 +66,7 @@ export class SolicitudMultimediaModel {
 
 export interface SolicitudMultimediaInterface {
   nombre: string;
+  fechaNacimiento: Date;
   direccion: string;
   ciudad: string;
   celular: string;
