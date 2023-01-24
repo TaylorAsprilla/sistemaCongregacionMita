@@ -40,6 +40,6 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-congregacion.png',
     ruta: `../${RUTAS.CONGREGACIONES}`,
-    role: [ROLES.OBRERO],
+    role: [ROLES.OBRERO_CIUDAD],
   },
 ];

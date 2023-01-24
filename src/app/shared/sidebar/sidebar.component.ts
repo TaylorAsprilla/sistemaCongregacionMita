@@ -55,6 +55,8 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
 
+    console.log('this.sidebarnavItems', this.sidebarnavItems);
+
     this.usuario = this.usuarioService.usuario;
     this.usuarioMultimedia = this.usuarioService.usuarioMultimedia;
 

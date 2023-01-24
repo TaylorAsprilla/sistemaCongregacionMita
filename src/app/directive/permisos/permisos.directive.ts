@@ -29,7 +29,7 @@ export class PermisosDirective {
   @Input()
   set appPermisos(val: Array<string>) {
     this.permisos = val;
-
+    console.log('permisos', this.permisos);
     this.actualizarVista();
   }
 
