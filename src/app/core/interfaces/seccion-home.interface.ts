@@ -16,7 +16,16 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-multimedia.png',
     ruta: `../${RUTAS.SERVICIOS_Y_VIGILIAS}`,
-    role: [ROLES.MULTIMEDIA],
+    role: [
+      ROLES.ADMINISTRADOR,
+      ROLES.SUPERVISOR,
+      ROLES.SUPERVISOR_LOCAL,
+      ROLES.OBRERO_CIUDAD,
+      ROLES.OBRERO_CAMPO,
+      ROLES.MULTIMEDIA,
+      ROLES.ADMINISTRADOR_MULTIMEDIA,
+      ROLES.ASISTENTE_OOTS,
+    ],
   },
   {
     nombreSeccion: 'Censo',
@@ -24,7 +33,7 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/censo.png',
     ruta: `../${RUTAS.USUARIOS}`,
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
   },
   {
     nombreSeccion: 'Informes',
@@ -32,7 +41,7 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-informes.png',
     ruta: `../${RUTAS.INFORME}`,
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
   },
   {
     nombreSeccion: 'Congregaciones',
@@ -40,6 +49,6 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-congregacion.png',
     ruta: `../${RUTAS.CONGREGACIONES}`,
-    role: [ROLES.OBRERO],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
   },
 ];

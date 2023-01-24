@@ -1,16 +1,19 @@
 <div class="card">
   <div class="card-body widget-user">
-    <div class="d-flex align-items-center">
-      <div class="flex-shrink-0 avatar-lg mr-4">
-        <img [src]="logo" class="img-fluid rounded-circle" alt="user" />
+    <a [routerLink]="ruta">
+      <div class="d-flex align-items-center">
+        <div class="flex-shrink-0 avatar-lg mr-4">
+          <img [src]="logo" class="img-fluid rounded-circle" alt="user" />
+        </div>
+
+        <div class="flex-grow-1 overflow-hidden">
+          <h5 class="mt-0 mb-1">{{ nombreSeccion }}</h5>
+          <p class="text-muted mb-2 font-13 text-truncate">{{ email }}</p>
+          <small class="text-warning"
+            ><b>{{ nombreResponsable }}</b></small
+          >
+        </div>
       </div>
-      <div class="flex-grow-1 overflow-hidden">
-        <h5 class="mt-0 mb-1">{{ nombreSeccion }}</h5>
-        <p class="text-muted mb-2 font-13 text-truncate">{{ email }}</p>
-        <small class="text-warning"
-          ><b>{{ nombreResponsable }}</b></small
-        >
-      </div>
-    </div>
+    </a>
   </div>
 </div>

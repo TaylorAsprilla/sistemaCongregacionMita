@@ -43,13 +43,12 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe(({ id }) => {
+      this.buscarPais(id);
+    });
+
     this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[] }) => {
       this.obreros = data.obrero;
-    });
-    this.paisForm = this.formBuilder.group({
-      pais: ['', [Validators.required, Validators.minLength(3)]],
-      // idDivisa: ['', [Validators.required]],
-      idObreroEncargado: ['', [Validators.required]],
     });
 
     this.divisaSubscription = this.divisaService.listarDivisa().subscribe((divisa) => {
@@ -61,12 +60,21 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
     });
 
     this.cargarPaises();
+    this.crearFormulario();
   }
 
   ngOnDestroy(): void {
     this.divisaSubscription?.unsubscribe();
     this.paisSubscription?.unsubscribe();
     this.usuariosSubscription?.unsubscribe();
+  }
+
+  crearFormulario() {
+    this.paisForm = this.formBuilder.group({
+      pais: ['', [Validators.required, Validators.minLength(3)]],
+      // idDivisa: ['', [Validators.required]],
+      idObreroEncargado: ['', [Validators.required]],
+    });
   }
 
   cargarPaises() {
@@ -93,7 +101,6 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
       });
       this.resetFormulario();
       this.cargarPaises();
-      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
     } else {
       this.paisService.crearPais(paisNuevo).subscribe(
         (paisCreado: any) => {
@@ -114,7 +121,6 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
             icon: 'error',
             html: `${listaErrores.join('')}`,
           });
-          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
         }
       );
     }

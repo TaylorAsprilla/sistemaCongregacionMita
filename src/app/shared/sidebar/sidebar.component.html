@@ -33,9 +33,7 @@
         [routerLinkActive]="sidebarnavItem.submenu.length != 0 ? '' : 'active'"
         *appPermisos="sidebarnavItem.role"
       >
-        <div class="nav-small-cap pointer" *ngIf="sidebarnavItem.extralink === true">
-          {{ sidebarnavItem.title }}
-        </div>
+        <div class="nav-small-cap pointer" *ngIf="sidebarnavItem.extralink === true">{{ sidebarnavItem.title }}</div>
 
         <a
           [routerLink]="sidebarnavItem.class === '' ? [sidebarnavItem.path] : null"
@@ -48,13 +46,14 @@
           <!-- nombre -->
           <span class="hide-menu">
             {{ sidebarnavItem.title }}
-            <!-- numerito -->
+            <!-- Número -->
             <span class="label label-rouded label-themecolor">
               {{ sidebarnavItem.submenu.length }}
             </span>
           </span>
         </a>
         <!-- Second level menu -->
+
         <ul
           class="collapse"
           *ngIf="sidebarnavItem.submenu.length > 0"
@@ -66,17 +65,19 @@
             [class.active]="showSubMenu === sidebarnavSubItem.title"
             [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'active'"
           >
-            <a
-              [routerLink]="sidebarnavSubItem.submenu.length > 0 ? null : [sidebarnavSubItem.path]"
-              [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'router-link-active'"
-              [ngClass]="[sidebarnavSubItem.class]"
-              *ngIf="!sidebarnavSubItem.extralink"
-              class="pointer"
-              (click)="addActiveClass(sidebarnavSubItem.title)"
-            >
-              <i [ngClass]="[sidebarnavSubItem.icon]"></i>
-              {{ sidebarnavSubItem.title }}
-            </a>
+            <ng-container *appPermisos="sidebarnavSubItem.role">
+              <a
+                [routerLink]="sidebarnavSubItem.submenu.length > 0 ? null : [sidebarnavSubItem.path]"
+                [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'router-link-active'"
+                [ngClass]="[sidebarnavSubItem.class]"
+                *ngIf="!sidebarnavSubItem.extralink"
+                class="pointer"
+                (click)="addActiveClass(sidebarnavSubItem.title)"
+              >
+                <i [ngClass]="[sidebarnavSubItem.icon]"></i>
+                {{ sidebarnavSubItem.title }}
+              </a>
+            </ng-container>
 
             <!-- Third level menu -->
             <ul

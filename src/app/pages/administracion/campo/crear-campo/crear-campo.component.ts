@@ -93,14 +93,12 @@ export class CrearCampoComponent implements OnInit {
       });
       this.resetFormulario();
       this.cargarCampos();
-      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
     } else {
       this.campoService.crearCampo(campoNuevo).subscribe(
         (campoCreado: any) => {
           Swal.fire('Campo creado', `${campoCreado.campo.campo}`, 'success');
           this.resetFormulario();
           this.cargarCampos();
-          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
         },
         (error) => {
           let errores = error.error.errors;
