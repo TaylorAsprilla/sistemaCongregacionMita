@@ -9,6 +9,7 @@ import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.int
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
 import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
+import { ROLES } from 'src/app/routes/menu-items';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -35,6 +36,12 @@ export class UsuarioService {
 
   get usuarioNombre(): string {
     return `${this.usuario.primerNombre} ${this.usuario.segundoNombre} ${this.usuario.primerApellido} ${this.usuario.segundoApellido}`;
+  }
+
+  get role() {
+    return this.usuario.usuarioPermiso.map((permiso) => {
+      return permiso.permiso;
+    });
   }
 
   get headers() {

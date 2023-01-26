@@ -20,7 +20,7 @@ import { InicioComponent } from 'src/app/pages/inicio/inicio.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 
 import { RegistrarUsuarioComponent } from 'src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component';
-import { RUTAS } from '../menu-items';
+import { ROLES, RUTAS } from '../menu-items';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
 import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
 import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
@@ -63,10 +63,12 @@ import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.reso
 import { ConfigurarEventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/configurar-eventos/configurar-eventos.component';
 import { EventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos/eventos.component';
 import { CambiarPasswordUsuarioComponent } from 'src/app/pages/administracion/usuario/cambiar-password-usuario/cambiar-password-usuario.component';
+import { RolesGuard } from 'src/app/core/guards/roles/roles.guard';
 
 const childRoutes: Routes = [
   {
     path: 'inicio',
+
     component: InicioComponent,
     data: { titulo: 'Censo' },
     resolve: {
@@ -82,7 +84,11 @@ const childRoutes: Routes = [
   {
     path: RUTAS.USUARIOS,
     component: UsuariosComponent,
-    data: { titulo: 'Usuarios Registrados' },
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Usuarios Registrados',
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    },
     resolve: {
       congregacion: CongregacionResolver,
       ministerio: MinisterioResolver,
@@ -93,6 +99,9 @@ const childRoutes: Routes = [
   {
     path: `${RUTAS.USUARIOS}/:id`,
     component: RegistrarUsuarioComponent,
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    },
     resolve: {
       nacionalidad: NacionalidadResolver,
       estadoCivil: EstadoCivilResolver,
@@ -121,12 +130,9 @@ const childRoutes: Routes = [
   {
     path: RUTAS.USUARIOS_SUPERVISOR,
     component: UsuariosSupervisorComponent,
-  },
-
-  {
-    path: RUTAS.REGISTRAR_USUARIO,
-    component: RegistrarUsuarioComponent,
-    resolve: { nacionalidad: NacionalidadResolver },
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+    },
   },
 
   {

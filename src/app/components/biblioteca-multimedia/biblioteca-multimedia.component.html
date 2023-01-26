@@ -3,7 +3,6 @@
   <div *ngFor="let item of serviciosYvigilias; index as i" class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
     <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO.SERVICIO">
       <h3>{{ item.titulo }}</h3>
-      <!-- <h4>{{ item.fecha }}</h4> -->
 
       <div>
         <div
@@ -39,7 +38,6 @@
     <!-- Vigilias-->
     <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO.VIGILIA">
       <h3>{{ item.titulo }}</h3>
-      <!-- <h4>{{ item.fecha }}</h4> -->
 
       <div>
         <div
@@ -75,7 +73,6 @@
 
     <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO.EVENTO_ESPECIAL">
       <h3>{{ item.titulo }}</h3>
-      <!-- <h4>{{ item.fecha }}</h4> -->
 
       <div>
         <div
