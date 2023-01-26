@@ -51,7 +51,7 @@ export class PermisosDirective {
           break;
         } else {
           const permisosUsuario = this.usuario?.usuarioPermiso.find(
-            (permisosUsuario: PermisoModel) => permisosUsuario.permiso.toUpperCase() === this.permisos[index].toString()
+            (permisosUsuario: PermisoModel) => permisosUsuario.permiso.toUpperCase() === permiso
           );
 
           if (permisosUsuario) {
