@@ -103,10 +103,10 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
     if (opcion) {
       const data = {
         tipoTransporte: opcion,
-        id: 6,
+        id: id,
         estado: true,
       };
-      this.opcionTransporteService.crearTipoEstudio(data).subscribe((opcionActiva: OpcionTransporteModel) => {
+      this.opcionTransporteService.actualizarOpcionTransporte(data).subscribe((opcionActiva: OpcionTransporteModel) => {
         Swal.fire('Creada!', `La opción ${opcion.tipoTransporte} fue creada correctamente`, 'success');
 
         this.cargarOpciones();
@@ -127,11 +127,17 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.opcionTransporteService.eliminarOpcion(opcion).subscribe((opcionEliminada: OpcionTransporteModel) => {
-          Swal.fire('¡Deshabilitado!', `La opción ${opcion.tipoTransporte} fue deshabilitado correctamente`, 'success');
-          console.log(opcion);
-          this.cargarOpciones();
-        });
+        this.opcionTransporteService
+          .eliminarOpciontransporte(opcion)
+          .subscribe((opcionEliminada: OpcionTransporteModel) => {
+            Swal.fire(
+              '¡Deshabilitado!',
+              `La opción ${opcion.tipoTransporte} fue deshabilitado correctamente`,
+              'success'
+            );
+            console.log(opcion);
+            this.cargarOpciones();
+          });
       }
     });
   }
@@ -158,37 +164,22 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
   }
 
   async crearOpcion() {
-    // const ipAPI = '//api.ipify.org?format=json';
-
-    // const inputValue = fetch(ipAPI)
-    //   .then((response) => response.json())
-    //   .then((data) => data.ip);
-
-    const { value: opcion } = await Swal.fire({
+    const { value: tipoTransporte } = await Swal.fire({
       title: 'Nueva opción',
       input: 'text',
       inputLabel: 'Opción',
-      // inputValue: inputValue,
       showCancelButton: true,
-      // inputValidator: (value) => {
-      //   if (!value) {
-      //     return 'You need to write something!';
-      //   }
-      // },
     });
 
-    if (opcion) {
-      const data = {
-        tipoTransporte: opcion,
-        id: 6,
-        estado: true,
-      };
-      this.opcionTransporteService.crearTipoEstudio(data).subscribe((opcionActiva: OpcionTransporteModel) => {
-        Swal.fire('Creada!', `La opción ${opcion.tipoTransporte} fue creada correctamente`, 'success');
+    if (tipoTransporte) {
+      this.opcionTransporteService
+        .crearOpcionTransporte(tipoTransporte)
+        .subscribe((opcionActiva: OpcionTransporteModel) => {
+          Swal.fire('Creada!', `La opción ${tipoTransporte.tipoTransporte} fue creada correctamente`, 'success');
 
-        this.cargarOpciones();
-      });
-      Swal.fire(`${opcion} creada!`);
+          this.cargarOpciones();
+        });
+      Swal.fire(`${tipoTransporte} creada!`);
     }
   }
 }

@@ -29,8 +29,18 @@ export class GeneroService {
       .pipe(map((genero: { ok: boolean; genero: GeneroModel[] }) => genero.genero));
   }
 
-  crearGenero(genero: GeneroModel) {
-    return this.httpClient.post(`${base_url}/genero`, genero, this.headers);
+  getGenero(id: number) {
+    return this.httpClient
+      .get(`${base_url}/genero/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; genero: GeneroModel }) => respuesta.genero));
+  }
+
+  // crearGenero(genero: GeneroModel) {
+  //   return this.httpClient.post(`${base_url}/genero`, genero, this.headers);
+  // }
+
+  crearGenero(genero: string) {
+    return this.httpClient.post(`${base_url}/genero`, { genero: genero }, this.headers);
   }
 
   actualizarGenero(genero: GeneroModel) {

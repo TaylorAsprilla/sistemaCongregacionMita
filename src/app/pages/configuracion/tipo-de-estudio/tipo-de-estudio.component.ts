@@ -43,8 +43,63 @@ export class TipoDeEstudioComponent implements OnInit {
       });
   }
 
-  actualizartipoEstudios(id: number) {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_ESTUDIO}/${id}`);
+  async buscarTipoEstudio(id: number) {
+    let tipoEstudio = '';
+    if (id) {
+      await this.tipoEstudioService
+        .getUnTipoEstudio(Number(id))
+        .pipe(delay(100))
+        .subscribe(
+          (tipoEstudioEncontrado: TipoEstudioModel) => {
+            tipoEstudio = tipoEstudioEncontrado.estudio;
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Congregacion',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+          }
+        );
+    }
+    return tipoEstudio;
+  }
+
+  async actualizartipoEstudio(id: number) {
+    let opt = await this.buscarTipoEstudio(id);
+    console.log('soy opt ' + opt);
+    const { value: tipoEstudioNombre } = await Swal.fire({
+      title: 'Actualizar opción',
+      input: 'text',
+      inputLabel: 'Opción',
+      showCancelButton: true,
+      inputPlaceholder: opt,
+    });
+
+    if (tipoEstudioNombre) {
+      const data = {
+        estudio: tipoEstudioNombre,
+        id: id,
+        estado: true,
+      };
+      this.tipoEstudioService.actualizarTipoEstudio(data).subscribe((tipoEstudiaActiva: TipoEstudioModel) => {
+        Swal.fire(
+          'Creada!',
+          `El tipo de estudio ${tipoEstudioNombre.tipoTransporte} fue creado correctamente`,
+          'success'
+        );
+
+        this.cargartipoEstudios();
+      });
+      Swal.fire(`${tipoEstudioNombre} creada!`);
+    }
   }
 
   borrartipoEstudio(tipoEstudio: TipoEstudioModel) {
@@ -91,5 +146,24 @@ export class TipoDeEstudioComponent implements OnInit {
         });
       }
     });
+  }
+
+  async crearTipoEstudio() {
+    const { value: tipoEstudio } = await Swal.fire({
+      title: 'Nueva opción',
+      input: 'text',
+      inputLabel: 'Opción',
+
+      showCancelButton: true,
+    });
+
+    if (tipoEstudio) {
+      this.tipoEstudioService.crearTipoEstudio(tipoEstudio).subscribe((tipoEstudioActivo: TipoEstudioModel) => {
+        Swal.fire('Creada!', `La opción ${tipoEstudio.tipoTransporte} fue creada correctamente`, 'success');
+
+        this.cargartipoEstudios();
+      });
+      Swal.fire(`${tipoEstudio} creada!`);
+    }
   }
 }

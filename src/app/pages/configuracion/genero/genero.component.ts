@@ -39,8 +39,65 @@ export class GeneroComponent implements OnInit, OnDestroy {
       });
   }
 
-  actualizarGenero(id: number) {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.GENERO}/${id}`);
+  async buscarGenero(id: number) {
+    let generoNombre = '';
+    if (id) {
+      await this.generoService
+        .getGenero(Number(id))
+        .pipe(delay(100))
+        .subscribe(
+          (generoEncontrado: GeneroModel) => {
+            //const { tipoTransporte } = opcionEncontrada;
+            //this.paisSeleccionado = paisEncontrado;
+
+            //opcionForm.setValue({ tipoTransporte });
+            generoNombre = generoEncontrado.genero;
+            console.log('encontrada ' + generoNombre);
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Congregacion',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+          }
+        );
+    }
+    console.log('hola' + generoNombre);
+    return generoNombre;
+  }
+
+  async actualizarGenero(id: number) {
+    let opt = await this.buscarGenero(id);
+    console.log('soy opt ' + opt);
+    const { value: generoNombre } = await Swal.fire({
+      title: 'Actualizar opción',
+      input: 'text',
+      inputLabel: 'Opción',
+      showCancelButton: true,
+      inputPlaceholder: opt,
+    });
+
+    if (generoNombre) {
+      const data = {
+        genero: generoNombre,
+        id: id,
+        estado: true,
+      };
+      this.generoService.actualizarGenero(data).subscribe((generoActivo: GeneroModel) => {
+        Swal.fire('Creada!', `La opción ${generoNombre.tipoTransporte} fue creada correctamente`, 'success');
+
+        this.cargarGeneros();
+      });
+      Swal.fire(`${generoNombre} creada!`);
+    }
   }
 
   borrarGenero(genero: GeneroModel) {
@@ -76,12 +133,31 @@ export class GeneroComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.generoService.actualizarGenero(genero).subscribe((generoActivo: GeneroModel) => {
+        this.generoService.activarGenero(genero).subscribe((generoActivo: GeneroModel) => {
           Swal.fire('¡Activado!', `El género ${genero.genero} fue activado correctamente`, 'success');
 
           this.cargarGeneros();
         });
       }
     });
+  }
+
+  async crearGenero() {
+    const { value: genero } = await Swal.fire({
+      title: 'Nueva opción',
+      input: 'text',
+      inputLabel: 'Opción',
+
+      showCancelButton: true,
+    });
+
+    if (genero) {
+      this.generoService.crearGenero(genero).subscribe((generoActivo: GeneroModel) => {
+        Swal.fire('Creada!', `La opción ${genero.tipoTransporte} fue creada correctamente`, 'success');
+
+        this.cargarGeneros();
+      });
+      Swal.fire(`${genero} creada!`);
+    }
   }
 }

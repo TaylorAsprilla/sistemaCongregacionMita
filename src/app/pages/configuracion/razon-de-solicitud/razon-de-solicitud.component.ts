@@ -43,8 +43,62 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
       });
   }
 
-  actualizarRazonSolicitud(id: number) {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.RAZON_DE_SOLICITUD}/${id}`);
+  async buscarRazonSolicitud(id: number) {
+    let razonSol = '';
+    if (id) {
+      await this.razonSolicitudService
+        .getUnaRazonsolicitud(Number(id))
+        .pipe(delay(100))
+        .subscribe(
+          (razonEncontrada: RazonSolicitudModel) => {
+            razonSol = razonEncontrada.solicitud;
+            console.log('encontrada ' + razonSol);
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Congregacion',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+          }
+        );
+    }
+    console.log('hola' + razonSol);
+    return razonSol;
+  }
+
+  async actualizarRazonSolicitud(id: number) {
+    let opt = await this.buscarRazonSolicitud(id);
+    console.log('soy opt ' + opt);
+    const { value: opcion } = await Swal.fire({
+      title: 'Actualizar razón',
+      input: 'text',
+      inputLabel: 'Razón',
+
+      showCancelButton: true,
+      inputPlaceholder: opt,
+    });
+
+    if (opcion) {
+      const data = {
+        solicitud: opcion,
+        id: id,
+        estado: true,
+      };
+      this.razonSolicitudService.activarRazonSolicitud(data).subscribe((razonActiva: RazonDeSolicitudComponent) => {
+        Swal.fire('Creada!', `La opción ${opcion.tipoTransporte} fue creada correctamente`, 'success');
+
+        this.cargarRazonSolicitud();
+      });
+      Swal.fire(`${opcion} creada!`);
+    }
   }
 
   borrarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
@@ -83,7 +137,7 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.razonSolicitudService
-          .actualizarRazonSolicitud(razonSolicitud)
+          .activarRazonSolicitud(razonSolicitud)
           .subscribe((razonSolicitudActivo: RazonSolicitudModel) => {
             Swal.fire('¡Activado!', `${razonSolicitud.solicitud} fue activado correctamente`, 'success');
             console.log(this.razonSolicitudes[0]);
@@ -91,5 +145,25 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
           });
       }
     });
+  }
+
+  async crearRazonSolicitud() {
+    const { value: razonSolicitud } = await Swal.fire({
+      title: 'Nueva razón',
+      input: 'text',
+      inputLabel: 'Opción',
+      showCancelButton: true,
+    });
+
+    if (razonSolicitud) {
+      this.razonSolicitudService
+        .crearRazonSolicitud(razonSolicitud)
+        .subscribe((razonSolicitudActiva: RazonSolicitudModel) => {
+          Swal.fire('Creada!', `La opción ${razonSolicitud.tipoTransporte} fue creada correctamente`, 'success');
+
+          this.cargarRazonSolicitud();
+        });
+      Swal.fire(`${razonSolicitud} creada!`);
+    }
   }
 }

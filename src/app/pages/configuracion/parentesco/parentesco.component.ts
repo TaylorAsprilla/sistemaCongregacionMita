@@ -43,8 +43,64 @@ export class ParentescoComponent implements OnInit {
       });
   }
 
-  actualizarParentesco(id: number) {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PARENTESCO}/${id}`);
+  async buscarParentesco(id: number) {
+    let tipo = '';
+    if (id) {
+      await this.parentescoService
+        .getUnParentesco(Number(id))
+        .pipe(delay(100))
+        .subscribe(
+          (parentescoEncontrada: ParentescoModel) => {
+            //const { tipo } = parentescoEncontrada;
+            //this.paisSeleccionado = paisEncontrado;
+
+            //parentescoForm.setValue({ tipo });
+            tipo = parentescoEncontrada.nombre;
+          },
+          (error) => {
+            let errores = error.error.errors;
+            let listaErrores = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Congregacion',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+          }
+        );
+    }
+    console.log('hola' + tipo);
+    return tipo;
+  }
+
+  async actualizarParentesco(id: number) {
+    let opt = await this.buscarParentesco(id);
+    console.log('soy opt ' + opt);
+    const { value: parentesco } = await Swal.fire({
+      title: 'Actualizar parentesco',
+      input: 'text',
+      inputLabel: 'Parentesco',
+      showCancelButton: true,
+      inputPlaceholder: opt,
+    });
+
+    if (parentesco) {
+      const data = {
+        nombre: parentesco,
+        id: id,
+        estado: true,
+      };
+      this.parentescoService.actualizarParentesco(data).subscribe((parentescoActiva: ParentescoModel) => {
+        Swal.fire('Creada!', `La opción ${parentesco.tipo} fue creada correctamente`, 'success');
+
+        this.cargarParentescos();
+      });
+      Swal.fire(`${parentesco} creada!`);
+    }
   }
 
   borrarParentesco(parentesco: ParentescoModel) {
@@ -87,5 +143,23 @@ export class ParentescoComponent implements OnInit {
         });
       }
     });
+  }
+
+  async crearParentesco() {
+    const { value: tipo } = await Swal.fire({
+      title: 'Nuevo Parentesco',
+      input: 'text',
+      inputLabel: 'Parentesco',
+      showCancelButton: true,
+    });
+
+    if (tipo) {
+      this.parentescoService.crearParentesco(tipo).subscribe((parentescoActiva: ParentescoModel) => {
+        Swal.fire('Creada!', `La opción ${tipo.tipo} fue creada correctamente`, 'success');
+
+        this.cargarParentescos();
+      });
+      Swal.fire(`${tipo} creada!`);
+    }
   }
 }
