@@ -36,8 +36,12 @@ export class ParentescoService {
       .pipe(map((respuesta: { ok: boolean; parentesco: ParentescoModel }) => respuesta.parentesco));
   }
 
+  // crearParentesco(parentesco: ParentescoModel) {
+  //   return this.httpClient.post(`${base_url}/parentesco`, parentesco, this.headers);
+  // }
+
   crearParentesco(parentesco: ParentescoModel) {
-    return this.httpClient.post(`${base_url}/parentesco`, parentesco, this.headers);
+    return this.httpClient.post(`${base_url}/parentesco`, { nombre: parentesco }, this.headers);
   }
 
   actualizarParentesco(parentesco: ParentescoModel) {

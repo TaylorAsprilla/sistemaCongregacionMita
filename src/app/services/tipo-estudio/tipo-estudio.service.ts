@@ -37,8 +37,12 @@ export class TipoEstudioService {
       .pipe(map((respuesta: { ok: boolean; tipoEstudio: TipoEstudioModel }) => respuesta.tipoEstudio));
   }
 
-  crearTipoEstudio(tipoEstudio: TipoEstudioModel) {
-    return this.httpClient.post(`${base_url}/tipoestudio`, tipoEstudio, this.headers);
+  // crearTipoEstudio(tipoEstudio: TipoEstudioModel) {
+  //   return this.httpClient.post(`${base_url}/tipoestudio`, tipoEstudio, this.headers);
+  // }
+
+  crearTipoEstudio(tipoEstudio: string) {
+    return this.httpClient.post(`${base_url}/tipoestudio`, { estudio: tipoEstudio }, this.headers);
   }
 
   actualizarTipoEstudio(tipoEstudio: TipoEstudioModel) {

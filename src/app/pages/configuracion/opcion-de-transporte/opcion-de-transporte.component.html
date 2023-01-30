@@ -1,0 +1,80 @@
+<section class="content">
+  <!-- Cargado información -->
+  <app-cargando-informacion *ngIf="cargando"></app-cargando-informacion>
+
+  <div class="card" *ngIf="!cargando">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-8 px-4 pt-4">
+          <h3 class="card-title">Total de Opciones de Transporte ({{ opcionesTransporte.length }})</h3>
+          <p>Opciones de transporte registradas en la aplicación</p>
+        </div>
+        <div class="col">
+          <div class="float-end p-4">
+            <a class="btn btn-primary" (click)="crearOpcion()"> <i class="fas fa-plus"></i> Crear Opción </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body mx-auto">
+      <table class="table table-bordered table-striped table-responsive">
+        <thead>
+          <tr>
+            <th class="w100">item</th>
+            <th class="w400">Nombre</th>
+
+            <th class="w200">Estado</th>
+            <th class="w200">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let opcion of opcionesTransporte; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ opcion.tipoTransporte }}</td>
+
+            <td>
+              <span *ngIf="opcion.estado" class="badge badge-primary">Activo</span>
+              <span *ngIf="!opcion.estado" class="badge badge-danger">Deshabilitado</span>
+            </td>
+
+            <td>
+              <a
+                *ngIf="!!opcion.estado"
+                data-toggle="tooltip"
+                data-original-title="Editar"
+                class="btn bg-info"
+                (click)="actualizarOpciones(opcion.id)"
+                ><i class="fas fa-pencil-alt ml-1"></i
+              ></a>
+              <a
+                *ngIf="!!opcion.estado"
+                data-toggle="tooltip"
+                data-original-title="Borrar"
+                class="btn bg-danger ml-1"
+                (click)="borrarOpcion(opcion)"
+                ><i class="fas fa-trash-alt"></i
+              ></a>
+              <a
+                *ngIf="!opcion.estado"
+                data-toggle="tooltip"
+                data-original-title="Activar"
+                class="btn bg-secondary ml-1"
+                (click)="activarOpcion(opcion)"
+                ><i class="fas fa-check-square"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th class="w100">item</th>
+            <th>Nombre</th>
+            <th class="w200">Estado</th>
+            <th class="w200">Acciones</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>

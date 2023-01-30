@@ -64,6 +64,11 @@ import { ConfigurarEventosComponent } from 'src/app/pages/multimedia/eventos-mul
 import { EventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos/eventos.component';
 import { CambiarPasswordUsuarioComponent } from 'src/app/pages/administracion/usuario/cambiar-password-usuario/cambiar-password-usuario.component';
 import { RolesGuard } from 'src/app/core/guards/roles/roles.guard';
+import { OpcionDeTransporteComponent } from 'src/app/pages/configuracion/opcion-de-transporte/opcion-de-transporte.component';
+import { GeneroComponent } from 'src/app/pages/configuracion/genero/genero.component';
+import { TipoDeEstudioComponent } from 'src/app/pages/configuracion/tipo-de-estudio/tipo-de-estudio.component';
+import { RazonDeSolicitudComponent } from 'src/app/pages/configuracion/razon-de-solicitud/razon-de-solicitud.component';
+import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/parentesco.component';
 
 const childRoutes: Routes = [
   {
@@ -187,6 +192,63 @@ const childRoutes: Routes = [
     path: `${RUTAS.TIPO_DE_DOCUMENTO}/:id`,
     component: CrearTipoDocumentoComponent,
     resolve: { pais: PaisResolver },
+  },
+
+  // Configuracion
+  {
+    path: RUTAS.OPCION_DE_TRANSPORTE,
+    component: OpcionDeTransporteComponent,
+    // data: { titulo: 'Usuarios Registrados' },
+    // resolve: {
+    //   congregacion: CongregacionResolver,
+    //   ministerio: MinisterioResolver,
+    //   pais: PaisResolver,
+    //   campo: CampoResolver,
+    // },
+  },
+  {
+    path: RUTAS.GENERO,
+    component: GeneroComponent,
+    // data: { titulo: 'Usuarios Registrados' },
+    // resolve: {
+    //   congregacion: CongregacionResolver,
+    //   ministerio: MinisterioResolver,
+    //   pais: PaisResolver,
+    //   campo: CampoResolver,
+    // },
+  },
+  {
+    path: RUTAS.TIPO_DE_ESTUDIO,
+    component: TipoDeEstudioComponent,
+    // data: { titulo: 'Usuarios Registrados' },
+    // resolve: {
+    //   congregacion: CongregacionResolver,
+    //   ministerio: MinisterioResolver,
+    //   pais: PaisResolver,
+    //   campo: CampoResolver,
+    // },
+  },
+  {
+    path: RUTAS.RAZON_DE_SOLICITUD,
+    component: RazonDeSolicitudComponent,
+    // data: { titulo: 'Usuarios Registrados' },
+    // resolve: {
+    //   congregacion: CongregacionResolver,
+    //   ministerio: MinisterioResolver,
+    //   pais: PaisResolver,
+    //   campo: CampoResolver,
+    // },
+  },
+  {
+    path: RUTAS.PARENTESCO,
+    component: ParentescoComponent,
+    // data: { titulo: 'Usuarios Registrados' },
+    // resolve: {
+    //   congregacion: CongregacionResolver,
+    //   ministerio: MinisterioResolver,
+    //   pais: PaisResolver,
+    //   campo: CampoResolver,
+    // },
   },
 
   // Perfil

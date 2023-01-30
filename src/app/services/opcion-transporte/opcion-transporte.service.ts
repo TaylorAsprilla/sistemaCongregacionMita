@@ -36,15 +36,21 @@ export class OpcionTransporteService {
       .pipe(map((respuesta: { ok: boolean; opcionTransporte: OpcionTransporteModel }) => respuesta.opcionTransporte));
   }
 
-  crearTipoEstudio(opcionTransporte: OpcionTransporteModel) {
-    return this.httpClient.post(`${base_url}/opciontransporte`, opcionTransporte, this.headers);
+  crearOpcionTransporte(opcionTransporte: string) {
+    return this.httpClient.post(
+      `${base_url}/opciontransporte`,
+      {
+        tipoTransporte: opcionTransporte,
+      },
+      this.headers
+    );
   }
 
-  actualizarTipoEstudio(opcionTransporte: OpcionTransporteModel) {
+  actualizarOpcionTransporte(opcionTransporte: OpcionTransporteModel) {
     return this.httpClient.put(`${base_url}/opciontransporte/${opcionTransporte.id}`, opcionTransporte, this.headers);
   }
 
-  eliminarTipoEmpleo(opcionTransporte: OpcionTransporteModel) {
+  eliminarOpciontransporte(opcionTransporte: OpcionTransporteModel) {
     return this.httpClient.delete(`${base_url}/opciontransporte/${opcionTransporte.id}`, this.headers);
   }
 
