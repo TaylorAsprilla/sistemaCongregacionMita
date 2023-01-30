@@ -92,7 +92,7 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
         id: id,
         estado: true,
       };
-      this.razonSolicitudService.activarRazonSolicitud(data).subscribe((razonActiva: RazonDeSolicitudComponent) => {
+      this.razonSolicitudService.actualizarRazonSolicitud(data).subscribe((razonActiva: RazonDeSolicitudComponent) => {
         Swal.fire('Creada!', `La opción ${opcion.tipoTransporte} fue creada correctamente`, 'success');
 
         this.cargarRazonSolicitud();

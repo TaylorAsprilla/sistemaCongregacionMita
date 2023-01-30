@@ -123,7 +123,7 @@ export class GeneroComponent implements OnInit, OnDestroy {
 
   activarGenero(genero: GeneroModel) {
     Swal.fire({
-      title: 'Activar Opción',
+      title: 'Activar Género',
       text: `Esta seguro de activar el género ${genero.genero}`,
       icon: 'question',
       showCancelButton: true,
