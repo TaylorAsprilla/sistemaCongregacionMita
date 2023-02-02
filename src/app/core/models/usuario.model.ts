@@ -55,7 +55,7 @@ export class UsuarioModel {
     public tipoMiembro?: TipoMiembroModel,
     public direcciones?: DireccionInterface[],
     public usuarioCongregacion?: CongregacionInterface,
-    public usuarioMinisterio?: MinisterioModel,
+    public usuarioMinisterio?: MinisterioModel[],
     public usuarioPermiso?: PermisoModel[],
     public usuarioFuenteIngreso?: FuenteIngresoModel[]
   ) {}
@@ -80,5 +80,11 @@ export class UsuarioModel {
 
   get paisId() {
     return this.usuarioCongregacion[0]?.UsuarioCongregacion.pais_id;
+  }
+
+  get ministerios() {
+    return this.usuarioMinisterio.map((ministerio) => {
+      return ministerio.id;
+    });
   }
 }

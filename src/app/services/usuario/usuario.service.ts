@@ -44,6 +44,12 @@ export class UsuarioService {
     });
   }
 
+  get usuarioMinisterio() {
+    return this.usuario.usuarioMinisterio.map((ministerio) => {
+      return ministerio.id;
+    });
+  }
+
   get headers() {
     return {
       headers: {

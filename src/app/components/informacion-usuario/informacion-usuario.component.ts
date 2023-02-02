@@ -62,6 +62,7 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() public voluntariados: VoluntariadoModel[] = [];
   @Input() public tiposDeDocumentos: TipoDocumentoModel[] = [];
   @Input() public tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
+  @Input() public ministeriosUsuario: number[] = [];
 
   @Input() usuarioForm: FormGroup;
   @Input() codigoDeMarcadoSeparado = false;
@@ -131,7 +132,7 @@ export class InformacionUsuarioComponent implements OnInit {
   esjoven: boolean;
   ejerMinisterio: boolean;
   voluntario: boolean;
-  ministerioUsuario: MinisterioModel;
+  ministerioUsuario: number[];
   voluntarioUsuario: VoluntariadoModel[];
   congregacionPais: number | string;
   congreacionCiudad: number | string;
@@ -211,7 +212,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.esjoven = this.usuario.esJoven ? this.usuario.esJoven : false;
     this.ejerMinisterio = this.usuario.usuarioMinisterio ? true : false;
     this.voluntario = true;
-    // this.ministerioUsuario=''
+    this.ministerioUsuario = this.ministeriosUsuario;
     // this.voluntarioUsuario = this.usuario.usuario ? true : false;
     this.congregacionPais = this.usuario.usuarioCongregacion[0]?.congregacion
       ? this.usuario.usuarioCongregacion[0].pais_id
@@ -227,6 +228,8 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   crearFormularios() {
+    const controlMinisterios = this.ministerios.map((control) => this.formBuilder.control(false));
+
     this.registroUnoForm = this.formBuilder.group({
       fechaNacimiento: [this.fechaDeNacimiento, [Validators.required]],
       primerNombre: [this.primerNombre, [Validators.required, Validators.minLength(3)]],
@@ -271,11 +274,24 @@ export class InformacionUsuarioComponent implements OnInit {
       esJoven: [this.esjoven, [Validators.required]],
       ejerceMinisterio: [this.ejerMinisterio, [Validators.required]],
       esVoluntario: [this.voluntario, [Validators.required]],
-      ministerio: new FormArray([]),
-      voluntariado: new FormArray([]),
+      ministerio: this.formBuilder.array(controlMinisterios),
+      voluntariado: this.formBuilder.array(controlMinisterios),
       congregacionPais_id: [this.congregacionPais, [Validators.required]],
       vacuna_id: [this.vacuna, [Validators.required]],
       dosis_id: [this.dosisUsuario, [Validators.required]],
+    });
+    this.patchValueMinisterios();
+  }
+
+  get ministeriosArr() {
+    return this.registroCuatroForm.get('ministerio') as FormArray;
+  }
+
+  patchValueMinisterios() {
+    this.ministerios.map((ministerio, i) => {
+      if (this.ministerioUsuario.indexOf(ministerio.id) !== -1) {
+        this.ministeriosArr.at(i)?.patchValue(true);
+      }
     });
   }
 
@@ -381,7 +397,7 @@ export class InformacionUsuarioComponent implements OnInit {
         especializacionEmpleo: informacionFormulario.especializacionEmpleo,
         tipoMiembro_id: informacionFormulario.tipoEmpleo_id,
         esJoven: informacionFormulario.esJoven,
-        ministerios: informacionFormulario.ministerio,
+        ministerios: this.ministeriosSeleccionados(),
         voluntariados: informacionFormulario.voluntariado,
         congregacion: {
           pais_id: informacionFormulario.congregacionPais_id,
@@ -394,6 +410,7 @@ export class InformacionUsuarioComponent implements OnInit {
         terminos: false,
       };
 
+      console.log('usuarioNuevo', usuarioNuevo);
       this.usuarioNuevo.emit(usuarioNuevo);
     } else {
       Swal.fire({
@@ -402,6 +419,13 @@ export class InformacionUsuarioComponent implements OnInit {
         html: 'Existen campos obligatorios sin llenar',
       });
     }
+  }
+
+  ministeriosSeleccionados(): number[] {
+    const ministeriosSeleccionados = this.registroCuatroForm.value.ministerio
+      .map((checked: any, i: number) => (checked ? this.ministerios[i].id : null))
+      .filter((value: any) => value !== null);
+    return ministeriosSeleccionados;
   }
 
   listarCongregaciones(pais: string) {

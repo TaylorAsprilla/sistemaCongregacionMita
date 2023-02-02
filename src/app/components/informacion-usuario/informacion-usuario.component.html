@@ -793,17 +793,31 @@
         <div *ngIf="!!ejerceAlgunMinisterio() || !!esVoluntario()" class="row border p-4 mb-5 rounded bg-light shadow">
           <div *ngIf="!!ejerceAlgunMinisterio()" class="form-group col-sm-12 col-md-6 col-lg-6">
             <label class="input-group">¿A cuál de los cuerpos ministeriales pertenece?</label>
-
-            <div class="form-check checkbox-lg" *ngFor="let ministerio of ministerios; let i = index">
+            <!-- <div class="form-check checkbox-lg" *ngFor="let ministerio of ministeriosArr.controls; let i = index">
               <input
                 type="checkbox"
                 class="form-check-input"
-                formArrayName="ministerio"
-                [value]="ministerio.id"
+                [formControlName]="i"
+                [value]="ministerios[i].id"
                 (change)="onCheckboxMinisteriosChange($event)"
               />
-              <label class="form-check-label"> {{ ministerio.ministerio }}</label>
-            </div>
+              <label class="form-check-label"> {{ ministerios[i].ministerio }}</label>
+            </div> -->
+
+            <!-- <div class="form-check checkbox-lg" *ngFor="let ministerio of ministeriosArr.controls; let i = index">
+              <input type="checkbox" class="form-check-input" [formControlName]="i" />
+              <label class="form-check-label"> {{ ministerios[i].ministerio }}</label>
+            </div> -->
+
+            <label
+              class="form-check-label form-check checkbox-lg"
+              formArrayName="ministerio"
+              *ngFor="let ministerio of ministeriosArr.controls; index as i"
+            >
+              <input type="checkbox" class="form-check-input" [formControlName]="i" />
+
+              {{ ministerios[i].ministerio }}
+            </label>
           </div>
 
           <div *ngIf="!!esVoluntario()" class="form-group col-sm-12 col-md-6 col-lg-6">
