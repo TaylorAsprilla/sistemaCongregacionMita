@@ -28,14 +28,14 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.cargarOpciones();
+    this.cargarOpcionesDeTransporte();
   }
 
   ngOnDestroy(): void {
     this.opcionTransporteSubscription?.unsubscribe();
   }
 
-  cargarOpciones() {
+  cargarOpcionesDeTransporte() {
     this.cargando = true;
     this.opcionTransporteSubscription = this.opcionTransporteService
       .getOpcionTransporte()
@@ -46,7 +46,7 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
       });
   }
 
-  async buscarOpcion(id: number) {
+  async buscarOpcionDeTransporte(id: number) {
     let tipoTransporte = '';
     if (id) {
       await this.opcionTransporteService
@@ -54,12 +54,7 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
         .pipe(delay(100))
         .subscribe(
           (opcionEncontrada: OpcionTransporteModel) => {
-            //const { tipoTransporte } = opcionEncontrada;
-            //this.paisSeleccionado = paisEncontrado;
-
-            //opcionForm.setValue({ tipoTransporte });
             tipoTransporte = opcionEncontrada.tipoTransporte;
-            console.log('encontrada ' + tipoTransporte);
           },
           (error) => {
             let errores = error.error.errors;
@@ -70,34 +65,26 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
             });
 
             Swal.fire({
-              title: 'Congregacion',
+              title: 'Transporte',
               icon: 'error',
               html: `${listaErrores.join('')}`,
             });
-
-            //return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
           }
         );
     }
-    console.log('hola' + tipoTransporte);
+
     return tipoTransporte;
   }
 
-  async actualizarOpciones(id: number) {
-    let opt = await this.buscarOpcion(id);
-    console.log('soy opt ' + opt);
+  async actualizarOpcionDeTransporte(id: number) {
+    let opcionDeTransporte = await this.buscarOpcionDeTransporte(id);
+
     const { value: opcion } = await Swal.fire({
-      title: 'Actualizar opción',
+      title: 'Actualizar opción de transporte',
       input: 'text',
       inputLabel: 'Opción',
-      // inputValue: inputValue,
       showCancelButton: true,
-      inputPlaceholder: opt,
-      // inputValidator: (value) => {
-      //   if (!value) {
-      //     return 'You need to write something!';
-      //   }
-      // },
+      inputPlaceholder: opcionDeTransporte,
     });
 
     if (opcion) {
@@ -107,15 +94,15 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
         estado: true,
       };
       this.opcionTransporteService.actualizarOpcionTransporte(data).subscribe((opcionActiva: OpcionTransporteModel) => {
-        Swal.fire('Creada!', `La opción ${opcion.tipoTransporte} fue creada correctamente`, 'success');
+        Swal.fire('Creada!', `La opción de transporte ${opcion.tipoTransporte} fue creada correctamente`, 'success');
 
-        this.cargarOpciones();
+        this.cargarOpcionesDeTransporte();
       });
       Swal.fire(`${opcion} creada!`);
     }
   }
 
-  borrarOpcion(opcion: OpcionTransporteModel) {
+  borrarOpcionDeTransporte(opcion: OpcionTransporteModel) {
     Swal.fire({
       title: '¿Borrar Opción de Transporte?',
       text: `Esta seguro de borrar la opción ${opcion.tipoTransporte}`,
@@ -132,19 +119,19 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
           .subscribe((opcionEliminada: OpcionTransporteModel) => {
             Swal.fire(
               '¡Deshabilitado!',
-              `La opción ${opcion.tipoTransporte} fue deshabilitado correctamente`,
+              `La opción de transporte ${opcion.tipoTransporte} fue deshabilitado correctamente`,
               'success'
             );
-            console.log(opcion);
-            this.cargarOpciones();
+
+            this.cargarOpcionesDeTransporte();
           });
       }
     });
   }
 
-  activarOpcion(opcion: OpcionTransporteModel) {
+  activarOpcionDeTransporte(opcion: OpcionTransporteModel) {
     Swal.fire({
-      title: 'Activar Opción',
+      title: 'Activar Opción de Transporte',
       text: `Esta seguro de activar la opción ${opcion.tipoTransporte}`,
       icon: 'question',
       showCancelButton: true,
@@ -155,17 +142,21 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.opcionTransporteService.activarTipoEmpleo(opcion).subscribe((opcionActiva: OpcionTransporteModel) => {
-          Swal.fire('¡Activado!', `La opción ${opcion.tipoTransporte} fue activada correctamente`, 'success');
+          Swal.fire(
+            '¡Activado!',
+            `La opción de transporte ${opcion.tipoTransporte} fue activada correctamente`,
+            'success'
+          );
 
-          this.cargarOpciones();
+          this.cargarOpcionesDeTransporte();
         });
       }
     });
   }
 
-  async crearOpcion() {
+  async crearOpcionDeTransporte() {
     const { value: tipoTransporte } = await Swal.fire({
-      title: 'Nueva opción',
+      title: 'Nueva opción de Transporte',
       input: 'text',
       inputLabel: 'Opción',
       showCancelButton: true,
@@ -177,7 +168,7 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
         .subscribe((opcionActiva: OpcionTransporteModel) => {
           Swal.fire('Creada!', `La opción ${tipoTransporte.tipoTransporte} fue creada correctamente`, 'success');
 
-          this.cargarOpciones();
+          this.cargarOpcionesDeTransporte();
         });
       Swal.fire(`${tipoTransporte} creada!`);
     }

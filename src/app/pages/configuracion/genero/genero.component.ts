@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { GeneroModel } from 'src/app/core/models/genero.model';
-import { RUTAS } from 'src/app/routes/menu-items';
 import { GeneroService } from 'src/app/services/genero/genero.service';
 import Swal from 'sweetalert2';
 
@@ -18,7 +17,7 @@ export class GeneroComponent implements OnInit, OnDestroy {
 
   public generoSubscription: Subscription;
 
-  constructor(private router: Router, private generoService: GeneroService, private activatedRoute: ActivatedRoute) {}
+  constructor(private generoService: GeneroService) {}
 
   ngOnInit(): void {
     this.cargarGeneros();
@@ -47,12 +46,7 @@ export class GeneroComponent implements OnInit, OnDestroy {
         .pipe(delay(100))
         .subscribe(
           (generoEncontrado: GeneroModel) => {
-            //const { tipoTransporte } = opcionEncontrada;
-            //this.paisSeleccionado = paisEncontrado;
-
-            //opcionForm.setValue({ tipoTransporte });
             generoNombre = generoEncontrado.genero;
-            console.log('encontrada ' + generoNombre);
           },
           (error) => {
             let errores = error.error.errors;
@@ -63,24 +57,23 @@ export class GeneroComponent implements OnInit, OnDestroy {
             });
 
             Swal.fire({
-              title: 'Congregacion',
+              title: 'Género',
               icon: 'error',
               html: `${listaErrores.join('')}`,
             });
           }
         );
     }
-    console.log('hola' + generoNombre);
+
     return generoNombre;
   }
 
   async actualizarGenero(id: number) {
     let opt = await this.buscarGenero(id);
-    console.log('soy opt ' + opt);
     const { value: generoNombre } = await Swal.fire({
-      title: 'Actualizar opción',
+      title: 'Actualizar Género',
       input: 'text',
-      inputLabel: 'Opción',
+      inputLabel: 'Género',
       showCancelButton: true,
       inputPlaceholder: opt,
     });
@@ -92,11 +85,11 @@ export class GeneroComponent implements OnInit, OnDestroy {
         estado: true,
       };
       this.generoService.actualizarGenero(data).subscribe((generoActivo: GeneroModel) => {
-        Swal.fire('Creada!', `La opción ${generoNombre.tipoTransporte} fue creada correctamente`, 'success');
+        Swal.fire('Actualizado!', `El Género ${generoNombre.genero} se actualizó correctamente`, 'success');
 
         this.cargarGeneros();
       });
-      Swal.fire(`${generoNombre} creada!`);
+      Swal.fire(`${generoNombre} creado!`);
     }
   }
 
@@ -144,20 +137,20 @@ export class GeneroComponent implements OnInit, OnDestroy {
 
   async crearGenero() {
     const { value: genero } = await Swal.fire({
-      title: 'Nueva opción',
+      title: 'Nueva Género',
       input: 'text',
-      inputLabel: 'Opción',
+      inputLabel: 'Género',
 
       showCancelButton: true,
     });
 
     if (genero) {
       this.generoService.crearGenero(genero).subscribe((generoActivo: GeneroModel) => {
-        Swal.fire('Creada!', `La opción ${genero.tipoTransporte} fue creada correctamente`, 'success');
+        Swal.fire('Creado!', `El Género ${genero.tipoTransporte} fue creado correctamente`, 'success');
 
         this.cargarGeneros();
       });
-      Swal.fire(`${genero} creada!`);
+      Swal.fire(`${genero} Creado!`);
     }
   }
 }

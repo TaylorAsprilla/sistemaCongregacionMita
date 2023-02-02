@@ -44,15 +44,14 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
   }
 
   async buscarRazonSolicitud(id: number) {
-    let razonSol = '';
+    let razonSolicitud = '';
     if (id) {
       await this.razonSolicitudService
         .getUnaRazonsolicitud(Number(id))
         .pipe(delay(100))
         .subscribe(
           (razonEncontrada: RazonSolicitudModel) => {
-            razonSol = razonEncontrada.solicitud;
-            console.log('encontrada ' + razonSol);
+            razonSolicitud = razonEncontrada.solicitud;
           },
           (error) => {
             let errores = error.error.errors;
@@ -63,24 +62,24 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
             });
 
             Swal.fire({
-              title: 'Congregacion',
+              title: 'Razon Solicitud',
               icon: 'error',
               html: `${listaErrores.join('')}`,
             });
           }
         );
     }
-    console.log('hola' + razonSol);
-    return razonSol;
+
+    return razonSolicitud;
   }
 
   async actualizarRazonSolicitud(id: number) {
     let opt = await this.buscarRazonSolicitud(id);
-    console.log('soy opt ' + opt);
+
     const { value: opcion } = await Swal.fire({
-      title: 'Actualizar razón',
+      title: 'Actualizar',
       input: 'text',
-      inputLabel: 'Razón',
+      inputLabel: 'Razón de Solicitud',
 
       showCancelButton: true,
       inputPlaceholder: opt,
@@ -93,7 +92,7 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
         estado: true,
       };
       this.razonSolicitudService.actualizarRazonSolicitud(data).subscribe((razonActiva: RazonDeSolicitudComponent) => {
-        Swal.fire('Creada!', `La opción ${opcion.tipoTransporte} fue creada correctamente`, 'success');
+        Swal.fire('Creada!', `La razón de la solicitud ${opcion.solicitud} fue creada correctamente`, 'success');
 
         this.cargarRazonSolicitud();
       });
@@ -103,7 +102,7 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
 
   borrarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
     Swal.fire({
-      title: '¿Borrar Género?',
+      title: '¿Borrar?',
       text: `Esta seguro de borrar ${razonSolicitud.solicitud}`,
       icon: 'question',
       showCancelButton: true,
@@ -116,7 +115,11 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
         this.razonSolicitudService
           .elimiminarRazonsolicitud(razonSolicitud)
           .subscribe((razonSolicitudEliminado: RazonSolicitudModel) => {
-            Swal.fire('¡Deshabilitado!', ` ${razonSolicitud.solicitud} fue deshabilitada correctamente`, 'success');
+            Swal.fire(
+              '¡Deshabilitado!',
+              `La razón de solicitud ${razonSolicitud.solicitud} fue deshabilitada correctamente`,
+              'success'
+            );
 
             this.cargarRazonSolicitud();
           });
@@ -126,8 +129,8 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
 
   activarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
     Swal.fire({
-      title: 'Activar Opción',
-      text: `Esta seguro de activar el género ${razonSolicitud.solicitud}`,
+      title: 'Activar',
+      text: `Esta seguro de activar la razón de la solicitud ${razonSolicitud.solicitud}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -139,8 +142,12 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
         this.razonSolicitudService
           .activarRazonSolicitud(razonSolicitud)
           .subscribe((razonSolicitudActivo: RazonSolicitudModel) => {
-            Swal.fire('¡Activado!', `${razonSolicitud.solicitud} fue activado correctamente`, 'success');
-            console.log(this.razonSolicitudes[0]);
+            Swal.fire(
+              '¡Activado!',
+              `La razón de la solicitud ${razonSolicitud.solicitud} fue activado correctamente`,
+              'success'
+            );
+
             this.cargarRazonSolicitud();
           });
       }
@@ -159,7 +166,11 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
       this.razonSolicitudService
         .crearRazonSolicitud(razonSolicitud)
         .subscribe((razonSolicitudActiva: RazonSolicitudModel) => {
-          Swal.fire('Creada!', `La opción ${razonSolicitud.tipoTransporte} fue creada correctamente`, 'success');
+          Swal.fire(
+            'Creada!',
+            `La razón de la solicitud ${razonSolicitud.solicitud} fue creada correctamente`,
+            'success'
+          );
 
           this.cargarRazonSolicitud();
         });

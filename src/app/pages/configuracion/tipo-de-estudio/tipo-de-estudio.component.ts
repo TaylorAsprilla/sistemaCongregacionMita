@@ -74,11 +74,11 @@ export class TipoDeEstudioComponent implements OnInit {
 
   async actualizartipoEstudio(id: number) {
     let opt = await this.buscarTipoEstudio(id);
-    console.log('soy opt ' + opt);
+
     const { value: tipoEstudioNombre } = await Swal.fire({
-      title: 'Actualizar opción',
+      title: 'Actualizar',
       input: 'text',
-      inputLabel: 'Opción',
+      inputLabel: 'Tipo de Estudio',
       showCancelButton: true,
       inputPlaceholder: opt,
     });
@@ -90,11 +90,7 @@ export class TipoDeEstudioComponent implements OnInit {
         estado: true,
       };
       this.tipoEstudioService.actualizarTipoEstudio(data).subscribe((tipoEstudiaActiva: TipoEstudioModel) => {
-        Swal.fire(
-          'Creada!',
-          `El tipo de estudio ${tipoEstudioNombre.tipoTransporte} fue creado correctamente`,
-          'success'
-        );
+        Swal.fire('Creada!', `El tipo de estudio ${tipoEstudioNombre.estudio} fue creado correctamente`, 'success');
 
         this.cargartipoEstudios();
       });
@@ -104,7 +100,7 @@ export class TipoDeEstudioComponent implements OnInit {
 
   borrartipoEstudio(tipoEstudio: TipoEstudioModel) {
     Swal.fire({
-      title: '¿Borrar Opción de Transporte?',
+      title: '¿Borrar?',
       text: `Esta seguro de borrar tipo de estudio ${tipoEstudio.estudio}`,
       icon: 'question',
       showCancelButton: true,
@@ -129,7 +125,7 @@ export class TipoDeEstudioComponent implements OnInit {
 
   activartipoEstudio(tipoEstudio: TipoEstudioModel) {
     Swal.fire({
-      title: 'Activar Opción',
+      title: 'Activar',
       text: `Esta seguro de activar la opción ${tipoEstudio.estudio}`,
       icon: 'question',
       showCancelButton: true,
@@ -140,7 +136,7 @@ export class TipoDeEstudioComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.tipoEstudioService.activarTipoEmpleo(tipoEstudio).subscribe((tipoEstudioActiva: TipoEstudioModel) => {
-          Swal.fire('¡Activado!', `La opción ${tipoEstudio.estudio} fue activada correctamente`, 'success');
+          Swal.fire('¡Activado!', `El tipo de estudio ${tipoEstudio.estudio} fue activada correctamente`, 'success');
 
           this.cargartipoEstudios();
         });
@@ -150,7 +146,7 @@ export class TipoDeEstudioComponent implements OnInit {
 
   async crearTipoEstudio() {
     const { value: tipoEstudio } = await Swal.fire({
-      title: 'Nueva opción',
+      title: 'Tipo de Estudio',
       input: 'text',
       inputLabel: 'Opción',
 
@@ -159,7 +155,7 @@ export class TipoDeEstudioComponent implements OnInit {
 
     if (tipoEstudio) {
       this.tipoEstudioService.crearTipoEstudio(tipoEstudio).subscribe((tipoEstudioActivo: TipoEstudioModel) => {
-        Swal.fire('Creada!', `La opción ${tipoEstudio.tipoTransporte} fue creada correctamente`, 'success');
+        Swal.fire('Creada!', `El tipo de estudio ${tipoEstudio.estudio} fue creada correctamente`, 'success');
 
         this.cargartipoEstudios();
       });

@@ -44,18 +44,14 @@ export class ParentescoComponent implements OnInit {
   }
 
   async buscarParentesco(id: number) {
-    let tipo = '';
+    let tipoDeParentesco = '';
     if (id) {
       await this.parentescoService
         .getUnParentesco(Number(id))
         .pipe(delay(100))
         .subscribe(
           (parentescoEncontrada: ParentescoModel) => {
-            //const { tipo } = parentescoEncontrada;
-            //this.paisSeleccionado = paisEncontrado;
-
-            //parentescoForm.setValue({ tipo });
-            tipo = parentescoEncontrada.nombre;
+            tipoDeParentesco = parentescoEncontrada.nombre;
           },
           (error) => {
             let errores = error.error.errors;
@@ -66,20 +62,20 @@ export class ParentescoComponent implements OnInit {
             });
 
             Swal.fire({
-              title: 'Congregacion',
+              title: 'Parentesco',
               icon: 'error',
               html: `${listaErrores.join('')}`,
             });
           }
         );
     }
-    console.log('hola' + tipo);
-    return tipo;
+
+    return tipoDeParentesco;
   }
 
   async actualizarParentesco(id: number) {
     let opt = await this.buscarParentesco(id);
-    console.log('soy opt ' + opt);
+
     const { value: parentesco } = await Swal.fire({
       title: 'Actualizar parentesco',
       input: 'text',
@@ -95,7 +91,7 @@ export class ParentescoComponent implements OnInit {
         estado: true,
       };
       this.parentescoService.actualizarParentesco(data).subscribe((parentescoActiva: ParentescoModel) => {
-        Swal.fire('Creada!', `La opción ${parentesco.tipo} fue creada correctamente`, 'success');
+        Swal.fire('Creada!', `El parentesco ${parentesco.tipo} fue creado correctamente`, 'success');
 
         this.cargarParentescos();
       });
@@ -105,7 +101,7 @@ export class ParentescoComponent implements OnInit {
 
   borrarParentesco(parentesco: ParentescoModel) {
     Swal.fire({
-      title: '¿Borrar Género?',
+      title: '¿Borrar Parentesco?',
       text: `Esta seguro de borrar ${parentesco.nombre}`,
       icon: 'question',
       showCancelButton: true,
@@ -116,7 +112,7 @@ export class ParentescoComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.parentescoService.eliminarParentesco(parentesco).subscribe((parentescoEliminado: ParentescoModel) => {
-          Swal.fire('¡Deshabilitado!', `El género ${parentesco.nombre} fue deshabilitado correctamente`, 'success');
+          Swal.fire('¡Deshabilitado!', `El parentesco ${parentesco.nombre} fue deshabilitado correctamente`, 'success');
 
           this.cargarParentescos();
         });
@@ -126,8 +122,8 @@ export class ParentescoComponent implements OnInit {
 
   activarParentesco(parentesco: ParentescoModel) {
     Swal.fire({
-      title: 'Activar Opción',
-      text: `Esta seguro de activar el género ${parentesco.nombre}`,
+      title: 'Activar Parentesco',
+      text: `Esta seguro de activar el parentesco ${parentesco.nombre}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -137,7 +133,7 @@ export class ParentescoComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.parentescoService.activarParentesco(parentesco).subscribe((parentescoActivo: ParentescoModel) => {
-          Swal.fire('¡Activado!', `El género ${parentesco.nombre} fue activado correctamente`, 'success');
+          Swal.fire('¡Activado!', `El parentesco ${parentesco.nombre} fue activado correctamente`, 'success');
 
           this.cargarParentescos();
         });
@@ -155,7 +151,7 @@ export class ParentescoComponent implements OnInit {
 
     if (tipo) {
       this.parentescoService.crearParentesco(tipo).subscribe((parentescoActiva: ParentescoModel) => {
-        Swal.fire('Creada!', `La opción ${tipo.tipo} fue creada correctamente`, 'success');
+        Swal.fire('Creada!', `El parentesco ${tipo.tipo} fue creada correctamente`, 'success');
 
         this.cargarParentescos();
       });
