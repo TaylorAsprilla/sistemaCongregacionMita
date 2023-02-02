@@ -26,6 +26,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   // Subscription
   public solicitudAccesoSubscription: Subscription;
+  public solicitudMultimediaServiceSubscription: Subscription;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -46,6 +48,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.solicitudAccesoSubscription?.unsubscribe;
+    this.solicitudMultimediaServiceSubscription?.unsubscribe;
   }
 
   cargarSolicitudDeAccesos() {
@@ -67,11 +70,11 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   }
 
   masInformacion(idSolicitud: number) {
-    this.solicitudMultimediaService
+    this.solicitudMultimediaServiceSubscription = this.solicitudMultimediaService
       .getSolicitud(idSolicitud)
       .subscribe((informacionSolicitud: SolicitudMultimediaModel) => {
         const nombre = informacionSolicitud?.nombre;
-        const fecha = informacionSolicitud?.fechaNacimiento;
+        const fecha = informacionSolicitud?.fechaNacimiento ? informacionSolicitud?.fechaNacimiento : '';
         const login = informacionSolicitud?.accesoMultimedia?.login
           ? informacionSolicitud?.accesoMultimedia?.login
           : '';
@@ -98,6 +101,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             ? informacionSolicitud?.razonSolicitud?.solicitud
             : informacionSolicitud?.otraRazon;
         const nacionalidad = informacionSolicitud?.nacionalidad?.nombre;
+        const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
+        const fechaDeSolicitud = informacionSolicitud.createdAt;
         const estado = !!informacionSolicitud?.accesoMultimedia?.estado
           ? '<span class="badge badge-primary">Activo</span>'
           : '<span class="badge badge-danger">Deshabilitado</span>';
@@ -105,7 +110,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
         Swal.fire({
           icon: 'info',
           text: `${informacionSolicitud.nombre}`,
-          html: ` <table class="table  table-hover text-start">
+          html: ` <table class="table table-hover text-start">
                   <thead>
                     <tr>
                       <th scope="col">Item</th>
@@ -115,74 +120,82 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Nombre:</td>
-                      <td>${nombre}</td>
+                      <td class="col-md-5">Nombre:</td>
+                      <td class="col-md-7">${nombre}</td>
                     </tr>
                     <tr>
-                      <td>Login:</td>
-                      <td>${login}</td>
+                      <td class="col-md-5">Login:</td>
+                      <td class="col-md-7">${login}</td>
                     </tr>
                     <tr>
-                      <td>Registrado por:</td>
-                      <td>
+                      <td class="col-md-5">Registrado por:</td>
+                      <td class="col-md-7">
                       ${usuarioQueLoRegistro}
                       </td>
                     </tr>
                     <tr>
-                      <td>Tiempo de Aprobación:</td>
-                      <td>${tiempoDeAprobacion}</td>
+                      <td class="col-md-5">Tiempo de Aprobación:</td>
+                      <td class="col-md-7">${tiempoDeAprobacion}</td>
                     </tr>
                      <tr>
-                      <td>Fecha de Nacimiento:</td>
-                      <td>${fecha}</td>
+                      <td class="col-md-5">Fecha de Nacimiento:</td>
+                      <td class="col-md-7">${fecha}</td>
                     </tr>
                     <tr>
-                      <td>Nacionalidad:</td>
-                      <td>${nacionalidad}</td>
+                      <td class="col-md-5">Nacionalidad:</td>
+                      <td class="col-md-7">${nacionalidad}</td>
                     </tr>
                     <tr>
-                      <td>Dirección:</td>
-                      <td>${direccion}</td>
+                      <td class="col-md-5">Dirección:</td>
+                      <td class="col-md-7">${direccion}</td>
                     </tr>
                     <tr>
-                      <td>Ciudad:</td>
-                      <td>${ciudad}</td>
+                      <td class="col-md-5">Ciudad:</td>
+                      <td class="col-md-7">${ciudad}</td>
                     </tr>
                      <tr>
-                      <td>Departamento:</td>
-                      <td>${departamento}</td>
+                      <td class="col-md-5">Departamento:</td>
+                      <td class="col-md-7">${departamento}</td>
                     </tr>
                      <tr>
-                      <td>Código Postal:</td>
-                      <td>${codigoPostal}</td>
+                      <td class="col-md-5">Código Postal:</td>
+                      <td class="col-md-7">${codigoPostal}</td>
                     </tr>
                      <tr>
-                      <td>País:</td>
-                      <td>${pais}</td>
+                      <td class="col-md-5">País:</td>
+                      <td class="col-md-7">${pais}</td>
                     </tr>
                      <tr>
-                      <td>Teléfono:</td>
-                      <td>${telefono}</td>
+                      <td class="col-md-5">Teléfono:</td>
+                      <td class="col-md-7">${telefono}</td>
                     </tr>
                      <tr>
-                      <td>Celular:</td>
-                      <td>${celular}</td>
+                      <td class="col-md-5">Celular:</td>
+                      <td class="col-md-7">${celular}</td>
                     </tr>
                     <tr>
-                      <td>Congregación:</td>
-                      <td>${congregacionCercana}</td>
+                      <td class="col-md-5">Congregación:</td>
+                      <td class="col-md-7">${congregacionCercana}</td>
                     </tr>
                       <tr>
-                      <td>Es Miembro:</td>
-                      <td>${esMiembro}</td>
+                      <td class="col-md-5">Es Miembro:</td>
+                      <td class="col-md-7">${esMiembro}</td>
                     </tr>
                     <tr>
-                      <td>Razón de la solicitud:</td>
-                      <td>${razonSolicitud}</td>
+                      <td class="col-md-5">Razón de la solicitud:</td>
+                      <td class="col-md-7">${razonSolicitud}</td>
                     </tr>
                      <tr>
-                      <td>Estado</td>
-                      <td>${estado}</td>
+                      <td class="col-md-5">Estado</td>
+                      <td class="col-md-7">${estado}</td>
+                    </tr>
+                     <tr>
+                      <td class="col-md-5">Observaciones</td>
+                      <td class="col-md-7">${observaciones}</td>
+                    </tr>
+                     <tr>
+                      <td class="col-md-5">Fecha de solicitud</td>
+                      <td class="col-md-7">${new Date(fechaDeSolicitud)}</td>
                     </tr>
                   </tbody>
                 </table>`,
