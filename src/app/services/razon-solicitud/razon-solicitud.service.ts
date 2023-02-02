@@ -26,12 +26,28 @@ export class RazonSolicitudService {
 
   getRazonsolicitud() {
     return this.httpClient
-      .get(`${base_url}/razonsolicitud`)
+      .get(`${base_url}/razonsolicitud`, this.headers)
       .pipe(map((respuesta: { ok: boolean; razonSolicitud: RazonSolicitudModel[] }) => respuesta.razonSolicitud));
   }
 
-  crearRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
-    return this.httpClient.post(`${base_url}/razonsolicitud`, razonSolicitud, this.headers);
+  //pregunta
+  getUnaRazonsolicitud(id: number) {
+    return this.httpClient
+      .get(`${base_url}/razonsolicitud/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; razonSolicitud: RazonSolicitudModel }) => respuesta.razonSolicitud));
+  }
+
+  // crearRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
+  //   return this.httpClient.post(`${base_url}/razonsolicitud`, razonSolicitud, this.headers);
+  // }
+
+  //pregunta
+  crearRazonSolicitud(razonSolicitud: string) {
+    return this.httpClient.post(
+      `${base_url}/razonsolicitud`,
+      { solicitud: razonSolicitud, estado: true },
+      this.headers
+    );
   }
 
   actualizarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {

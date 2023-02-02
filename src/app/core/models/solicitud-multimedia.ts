@@ -39,6 +39,8 @@ export class SolicitudMultimediaModel {
     public usuarioQueRegistra_id: number,
     public usuarioQueRegistra: UsuarioModel,
     public terminos: boolean,
+    public createdAt: Date,
+    public updatedAt: Date,
     public departamento?: string,
     public codigoPostal?: string,
     public telefono?: string,
