@@ -384,7 +384,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: RUTAS.SERVICIOS_Y_VIGILIAS,
-        title: 'Servicios y Vigilias',
+        title: 'Servicios y Vigilias en Vivo',
         icon: '',
         class: '',
         extralink: false,
