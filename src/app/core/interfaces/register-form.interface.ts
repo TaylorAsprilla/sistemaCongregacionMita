@@ -30,7 +30,7 @@ export interface RegisterFormInterface {
   especializacionEmpleo: string;
   tipoMiembro_id: number;
   esJoven: boolean;
-  ministerios: MinisterioModel[];
+  ministerios: number[];
   voluntariados: VoluntariadoModel[];
   congregacion: CongregacionInterfase;
   vacuna_id: number;

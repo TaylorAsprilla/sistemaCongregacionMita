@@ -118,7 +118,15 @@
 
           <div class="form-group col-md-6 col-sm-12">
             <label class="input-group obligatorio">Email:</label>
-            <input type="email" formControlName="email" class="form-control" inputmode="text" placeholder="Email" />
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control"
+              inputmode="text"
+              placeholder="Email"
+              (blur)="buscarCorreo(txtEmail.value)"
+              #txtEmail
+            />
             <small
               class="form-text text-danger"
               *ngIf="registroUnoForm.get('email').hasError('required') && registroUnoForm.get('email').touched"
@@ -595,16 +603,15 @@
           <div class="form-group col-sm-12 col-md-6 col-lg-5 px-5">
             <label class="input-group obligatorio">¿Cuáles son sus fuentes de ingresos mensual?</label>
 
-            <div class="form-check checkbox-lg" *ngFor="let fuenteDeIngreso of fuenteDeIngresos; let i = index">
-              <input
-                type="checkbox"
-                formArrayName="fuenteIngresos"
-                class="form-check-input"
-                [value]="fuenteDeIngreso.id"
-                (change)="onCheckboxFuenteDeIngresosChange($event)"
-              />
-              <label class="form-check-label"> {{ fuenteDeIngreso.fuenteIngreso }}</label>
-            </div>
+            <label
+              class="form-check-label form-check checkbox-lg"
+              formArrayName="fuenteIngresos"
+              *ngFor="let fuenteDeIngreso of fuenteDeIngresosArr.controls; index as i"
+            >
+              <input type="checkbox" class="form-check-input" [formControlName]="i" />
+
+              {{ fuenteDeIngresos[i].fuenteIngreso }}
+            </label>
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-7">
@@ -794,31 +801,29 @@
           <div *ngIf="!!ejerceAlgunMinisterio()" class="form-group col-sm-12 col-md-6 col-lg-6">
             <label class="input-group">¿A cuál de los cuerpos ministeriales pertenece?</label>
 
-            <div class="form-check checkbox-lg" *ngFor="let ministerio of ministerios; let i = index">
-              <input
-                type="checkbox"
-                class="form-check-input"
-                formArrayName="ministerio"
-                [value]="ministerio.id"
-                (change)="onCheckboxMinisteriosChange($event)"
-              />
-              <label class="form-check-label"> {{ ministerio.ministerio }}</label>
-            </div>
+            <label
+              class="form-check-label form-check checkbox-lg"
+              formArrayName="ministerio"
+              *ngFor="let ministerio of ministeriosArr.controls; index as i"
+            >
+              <input type="checkbox" class="form-check-input" [formControlName]="i" />
+
+              {{ ministerios[i].ministerio }}
+            </label>
           </div>
 
           <div *ngIf="!!esVoluntario()" class="form-group col-sm-12 col-md-6 col-lg-6">
             <label class="input-group">¿Qué tipo de labor voluntaria/ministerial realiza?</label>
 
-            <div class="form-check checkbox-lg" *ngFor="let voluntariado of voluntariados; let i = index">
-              <input
-                type="checkbox"
-                class="form-check-input"
-                formArrayName="voluntariado"
-                [value]="voluntariado.id"
-                (change)="onCheckboxVoluntariadosChange($event)"
-              />
-              <label class="form-check-label"> {{ voluntariado.nombreVoluntariado }}</label>
-            </div>
+            <label
+              class="form-check-label form-check checkbox-lg"
+              formArrayName="voluntariado"
+              *ngFor="let voluntariado of voluntariadosArr.controls; index as i"
+            >
+              <input type="checkbox" class="form-check-input" [formControlName]="i" />
+
+              {{ voluntariados[i].nombreVoluntariado }}
+            </label>
           </div>
         </div>
 
@@ -832,7 +837,6 @@
               (change)="tieneTipoDocumento(txtPaisCongregacion.value)"
               #txtPaisCongregacion
             >
-              <!-- (change)="listarCongregaciones(txtPaisCongregacion.value)" -->
               <option value="" disabled>Seleccione el pais de la congregación a la que pertenece</option>
               <option *ngFor="let pais of paises" [value]="pais.id">
                 {{ pais.pais }}
@@ -974,6 +978,7 @@
           <button (click)="previous()" type="button" name="previous" class="next btn btn-primary botonPrincipal">
             Anterior
           </button>
+
           <button
             type="submit"
             class="btn btn-primary mx-2"

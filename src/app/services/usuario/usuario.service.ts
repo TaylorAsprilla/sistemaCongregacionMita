@@ -126,6 +126,7 @@ export class UsuarioService {
               direcciones,
               usuarioCongregacion,
               usuarioMinisterio,
+              usuarioVoluntariado,
               usuarioPermiso,
               usuarioFuenteIngreso,
             } = respuesta.usuario;
@@ -169,6 +170,7 @@ export class UsuarioService {
               direcciones,
               usuarioCongregacion,
               usuarioMinisterio,
+              usuarioVoluntariado,
               usuarioPermiso,
               usuarioFuenteIngreso
             );
@@ -282,6 +284,7 @@ export class UsuarioService {
               usuario.direcciones,
               usuario.usuarioCongregacion,
               usuario.usuarioMinisterio,
+              usuario.usuarioVoluntariado,
               usuario.usuarioPermiso
             )
         );
@@ -335,6 +338,7 @@ export class UsuarioService {
               usuario.direcciones,
               usuario.usuarioCongregacion,
               usuario.usuarioMinisterio,
+              usuario.usuarioVoluntariado,
               usuario.usuarioPermiso
             )
         );
