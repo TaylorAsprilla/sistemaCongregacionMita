@@ -224,18 +224,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     });
   }
 
-  get ministeriosForm() {
-    return this.registroCuatroForm.get('ministerio') as FormArray;
-  }
-
-  // validarAlmenosUnministerio(control: FormArray) {
-  //   return control.length > 3
-  //     ? {
-  //         invalidSize: true,
-  //       }
-  //     : null;
-  // }
-
   onCheckboxFuenteDeIngresosChange(event: any) {
     const selectedFuenteDeIngresos = this.registroTresForm.controls['fuenteIngresos'] as FormArray;
     if (event.target.checked) {
@@ -282,7 +270,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   guardarUsuario() {
-    console.log('Formulario cuatro', this.registroCuatroForm);
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&

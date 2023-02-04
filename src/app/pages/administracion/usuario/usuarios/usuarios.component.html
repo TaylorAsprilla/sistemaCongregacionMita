@@ -55,9 +55,7 @@
 
             <td>
               <span *ngIf="!!usuario.paisId" class="badge badge-primary"> {{ buscarPais(usuario?.paisId) }} </span>
-              <span *ngIf="!!usuario.nombreCongregacion" class="badge badge-danger">
-                {{ usuario.nombreCongregacion }}</span
-              >
+              <span *ngIf="!!usuario.congregacion" class="badge badge-danger"> {{ usuario.congregacion }}</span>
               <span *ngIf="!!usuario.campoId" class="badge badge-success"> {{ buscarCampo(usuario?.campoId) }} </span>
             </td>
 

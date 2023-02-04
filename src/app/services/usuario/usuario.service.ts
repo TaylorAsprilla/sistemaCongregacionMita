@@ -44,12 +44,6 @@ export class UsuarioService {
     });
   }
 
-  get usuarioMinisterio() {
-    return this.usuario.usuarioMinisterio.map((ministerio) => {
-      return ministerio.id;
-    });
-  }
-
   get headers() {
     return {
       headers: {
@@ -132,6 +126,7 @@ export class UsuarioService {
               direcciones,
               usuarioCongregacion,
               usuarioMinisterio,
+              usuarioVoluntariado,
               usuarioPermiso,
               usuarioFuenteIngreso,
             } = respuesta.usuario;
@@ -175,6 +170,7 @@ export class UsuarioService {
               direcciones,
               usuarioCongregacion,
               usuarioMinisterio,
+              usuarioVoluntariado,
               usuarioPermiso,
               usuarioFuenteIngreso
             );
@@ -288,6 +284,7 @@ export class UsuarioService {
               usuario.direcciones,
               usuario.usuarioCongregacion,
               usuario.usuarioMinisterio,
+              usuario.usuarioVoluntariado,
               usuario.usuarioPermiso
             )
         );
@@ -341,6 +338,7 @@ export class UsuarioService {
               usuario.direcciones,
               usuario.usuarioCongregacion,
               usuario.usuarioMinisterio,
+              usuario.usuarioVoluntariado,
               usuario.usuarioPermiso
             )
         );

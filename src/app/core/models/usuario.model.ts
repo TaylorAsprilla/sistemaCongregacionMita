@@ -13,6 +13,7 @@ import { TipoEmpleoModel } from './tipo-empleo.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
 import { CongregacionInterface } from './usuarioCongregacion.model';
 import { VacunaModel } from './vacuna.model';
+import { VoluntariadoModel } from './voluntariado.model';
 
 const base_url = environment.base_url;
 
@@ -56,6 +57,7 @@ export class UsuarioModel {
     public direcciones?: DireccionInterface[],
     public usuarioCongregacion?: CongregacionInterface,
     public usuarioMinisterio?: MinisterioModel[],
+    public usuarioVoluntariado?: VoluntariadoModel[],
     public usuarioPermiso?: PermisoModel[],
     public usuarioFuenteIngreso?: FuenteIngresoModel[]
   ) {}
@@ -70,21 +72,37 @@ export class UsuarioModel {
     }
   }
 
-  get nombreCongregacion() {
+  get paisId() {
+    return this.usuarioCongregacion[0]?.UsuarioCongregacion.pais_id;
+  }
+
+  get congregacion() {
     return this.usuarioCongregacion[0]?.congregacion;
+  }
+
+  get congregacionId() {
+    return this.usuarioCongregacion[0]?.id;
   }
 
   get campoId() {
     return this.usuarioCongregacion[0]?.UsuarioCongregacion.campo_id;
   }
 
-  get paisId() {
-    return this.usuarioCongregacion[0]?.UsuarioCongregacion.pais_id;
+  get ministerios() {
+    return this.usuarioMinisterio.map((ministerio: MinisterioModel) => {
+      return ministerio.id;
+    });
   }
 
-  get ministerios() {
-    return this.usuarioMinisterio.map((ministerio) => {
-      return ministerio.id;
+  get voluntariados() {
+    return this.usuarioVoluntariado.map((voluntariado: VoluntariadoModel) => {
+      return voluntariado.id;
+    });
+  }
+
+  get fuenteDeIngresos() {
+    return this.usuarioFuenteIngreso.map((fuenteDeIngreso: FuenteIngresoModel) => {
+      return fuenteDeIngreso.id;
     });
   }
 }

@@ -2,9 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
-import { delay, map, startWith } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { RegisterFormInterface, TIPO_DIRECCION } from 'src/app/core/interfaces/register-form.interface';
-import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { DosisModel } from 'src/app/core/models/dosis.model';
@@ -62,7 +61,9 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() public voluntariados: VoluntariadoModel[] = [];
   @Input() public tiposDeDocumentos: TipoDocumentoModel[] = [];
   @Input() public tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
-  @Input() public ministeriosUsuario: number[] = [];
+  @Input() public usuarioMinisterios: number[] = [];
+  @Input() public usuarioVoluntariados: number[] = [];
+  @Input() public usuarioFuenteDeIngresos: number[] = [];
 
   @Input() usuarioForm: FormGroup;
   @Input() codigoDeMarcadoSeparado = false;
@@ -100,17 +101,17 @@ export class InformacionUsuarioComponent implements OnInit {
   public sinCongregacion: number;
   public sinCampo: number;
 
-  fechaDeNacimiento: Date | string;
+  fechaDeNacimiento: Date;
   primerNombre: string;
   segundoNombre: string;
   primerApellido: string;
   segundoApellio: string;
   apodo: string;
   email: string;
-  genero_id: number | string;
-  estadoCivil_id: number | string;
+  genero_id: number;
+  estadoCivil_id: number;
   nacionalidad: string;
-  rolEnCasa: number | string;
+  rolEnCasa: number;
   celular: string;
   telefonoCasa: string;
   direccionResidencia: string;
@@ -123,22 +124,22 @@ export class InformacionUsuarioComponent implements OnInit {
   departamentoPostal: string;
   codigoPostal: string;
   paisPostal: string;
-  fuenteDeIngresos_id: FuenteIngresoModel[] | string;
+  fuentedeIngresoUsuario: number[];
   ingresoMensual: string;
-  gradoAcademico: number | string;
-  tipoEmpleo: number | string;
-  especializacionEmpleo: number | string;
-  tipoMiembro: number | string;
+  gradoAcademico: number;
+  tipoEmpleo: number;
+  especializacionEmpleo: string;
+  tipoMiembro: number;
   esjoven: boolean;
   ejerMinisterio: boolean;
   voluntario: boolean;
   ministerioUsuario: number[];
-  voluntarioUsuario: VoluntariadoModel[];
-  congregacionPais: number | string;
-  congreacionCiudad: number | string;
-  congregacionCampo: number | string;
-  vacuna: number | string;
-  dosisUsuario: number | string;
+  voluntarioUsuario: number[];
+  congregacionPais: number;
+  congreacionCiudad: number;
+  congregacionCampo: number;
+  vacuna: number;
+  dosisUsuario: number;
 
   // Subscription
   public usuarioSubscription: Subscription;
@@ -152,23 +153,25 @@ export class InformacionUsuarioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.listarCongregaciones();
+    this.listarCampos();
+    this.tieneTipoDocumento();
     this.informacionDelUsuario();
     this.crearFormularios();
-    this.agregarControlTipoDocumento();
   }
 
   informacionDelUsuario() {
-    this.fechaDeNacimiento = this.usuario.fechaNacimiento ? this.usuario.fechaNacimiento : '';
+    this.fechaDeNacimiento = this.usuario.fechaNacimiento ? this.usuario.fechaNacimiento : null;
     this.primerNombre = this.usuario.primerNombre ? this.usuario.primerNombre : '';
     this.segundoNombre = this.usuario.segundoNombre ? this.usuario.segundoNombre : '';
     this.primerApellido = this.usuario.primerApellido ? this.usuario.primerApellido : '';
     this.segundoApellio = this.usuario.segundoApellido ? this.usuario.segundoApellido : '';
     this.apodo = this.usuario.apodo ? this.usuario.apodo : '';
     this.email = this.usuario.email ? this.usuario.email : '';
-    this.genero_id = this.usuario.genero_id ? this.usuario.genero_id : '';
-    this.estadoCivil_id = this.usuario.estadoCivil_id ? this.usuario.estadoCivil_id : '';
+    this.genero_id = this.usuario.genero_id ? this.usuario.genero_id : null;
+    this.estadoCivil_id = this.usuario.estadoCivil_id ? this.usuario.estadoCivil_id : null;
     this.nacionalidad = this.usuario.nacionalidad?.nombre ? this.usuario.nacionalidad?.nombre : '';
-    this.rolEnCasa = this.usuario.rolCasa_id ? this.usuario.rolCasa_id : '';
+    this.rolEnCasa = this.usuario.rolCasa_id ? this.usuario.rolCasa_id : null;
     this.celular = this.usuario.numeroCelular ? this.usuario.numeroCelular : '';
     this.telefonoCasa = this.usuario.telefonoCasa ? this.usuario.telefonoCasa : '';
     this.direccionResidencia = this.usuario.direcciones.find(
@@ -202,33 +205,31 @@ export class InformacionUsuarioComponent implements OnInit {
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_POSTAL
     )?.pais;
 
-    this.fuenteDeIngresos_id = this.usuario.usuarioFuenteIngreso ? this.usuario.usuarioFuenteIngreso : '';
+    this.fuentedeIngresoUsuario = this.usuarioFuenteDeIngresos ? this.usuarioFuenteDeIngresos : null;
     this.ingresoMensual = this.usuario.ingresoMensual ? this.usuario.ingresoMensual : '';
-    this.gradoAcademico = this.usuario.gradoAcademico_id ? this.usuario.gradoAcademico_id : '';
-    this.tipoEmpleo = this.usuario.tipoEmpleo_id ? this.usuario.tipoEmpleo_id : '';
-    this.especializacionEmpleo = this.usuario.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
+    this.gradoAcademico = this.usuario.gradoAcademico_id ? this.usuario.gradoAcademico_id : null;
+    this.tipoEmpleo = this.usuario.tipoEmpleo_id ? this.usuario.tipoEmpleo_id : null;
+    this.especializacionEmpleo = this.usuario.especializacionEmpleo ? this.usuario.especializacionEmpleo : null;
 
-    this.tipoMiembro = this.usuario.tipoMiembro_id ? this.usuario.tipoMiembro_id : '';
+    this.tipoMiembro = this.usuario.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
     this.esjoven = this.usuario.esJoven ? this.usuario.esJoven : false;
     this.ejerMinisterio = this.usuario.usuarioMinisterio ? true : false;
-    this.voluntario = true;
-    this.ministerioUsuario = this.ministeriosUsuario;
-    // this.voluntarioUsuario = this.usuario.usuario ? true : false;
-    this.congregacionPais = this.usuario.usuarioCongregacion[0]?.congregacion
-      ? this.usuario.usuarioCongregacion[0].pais_id
-      : '';
-    this.congreacionCiudad = this.usuario.usuarioCongregacion[0]?.congregacion
-      ? this.usuario.usuarioCongregacion[0].UsuarioCongregacion?.congregacion_id
-      : '';
-    this.congregacionCampo = this.usuario.usuarioCongregacion[0]?.congregacion
-      ? this.usuario.usuarioCongregacion[0].UsuarioCongregacion?.campo_id
-      : '';
-    this.vacuna = this.usuario.vacuna_id ? this.usuario?.vacuna_id : '';
-    this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : '';
+    this.voluntario = this.usuario.usuarioVoluntariado ? true : false;
+    this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
+    this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
+    this.congregacionPais = this.usuario.paisId ? this.usuario.paisId : null;
+    this.congreacionCiudad = this.usuario.congregacionId ? this.usuario.congregacionId : null;
+
+    this.congregacionCampo = this.usuario.campoId ? this.usuario.campoId : null;
+
+    this.vacuna = this.usuario.vacuna_id ? this.usuario?.vacuna_id : null;
+    this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : null;
   }
 
   crearFormularios() {
     const controlMinisterios = this.ministerios.map((control) => this.formBuilder.control(false));
+    const controlVoluntariados = this.voluntariados.map((control) => this.formBuilder.control(false));
+    const controlFuenteDeIngresos = this.fuenteDeIngresos.map((control) => this.formBuilder.control(false));
 
     this.registroUnoForm = this.formBuilder.group({
       fechaNacimiento: [this.fechaDeNacimiento, [Validators.required]],
@@ -260,8 +261,8 @@ export class InformacionUsuarioComponent implements OnInit {
     });
 
     this.registroTresForm = this.formBuilder.group({
-      fuenteIngresos: new FormArray([]),
-      ingresoMensual: [this.ingresoMensual, []],
+      fuenteIngresos: this.formBuilder.array(controlFuenteDeIngresos),
+      ingresoMensual: [this.ingresoMensual, [Validators.minLength(3)]],
       gradoAcademico_id: [this.gradoAcademico, [Validators.required]],
       tipoEmpleo_id: [this.tipoEmpleo, [Validators.required]],
       especializacionEmpleo: [this.especializacionEmpleo, [Validators.minLength(3)]],
@@ -269,28 +270,55 @@ export class InformacionUsuarioComponent implements OnInit {
 
     this.registroCuatroForm = this.formBuilder.group({
       tipoMiembro_id: [this.tipoMiembro, [Validators.required]],
+      congregacionPais_id: [this.congregacionPais, [Validators.required]],
       congregacion_id: [this.congreacionCiudad, [Validators.required]],
       campo_id: [this.congregacionCampo, []],
       esJoven: [this.esjoven, [Validators.required]],
       ejerceMinisterio: [this.ejerMinisterio, [Validators.required]],
       esVoluntario: [this.voluntario, [Validators.required]],
       ministerio: this.formBuilder.array(controlMinisterios),
-      voluntariado: this.formBuilder.array(controlMinisterios),
-      congregacionPais_id: [this.congregacionPais, [Validators.required]],
+      voluntariado: this.formBuilder.array(controlVoluntariados),
       vacuna_id: [this.vacuna, [Validators.required]],
       dosis_id: [this.dosisUsuario, [Validators.required]],
     });
+
     this.patchValueMinisterios();
+    this.patchValueVoluntariados();
+    this.patchValueFuenteDeIngresos();
+  }
+
+  get fuenteDeIngresosArr() {
+    return this.registroTresForm.get('fuenteIngresos') as FormArray;
   }
 
   get ministeriosArr() {
     return this.registroCuatroForm.get('ministerio') as FormArray;
   }
 
+  get voluntariadosArr() {
+    return this.registroCuatroForm.get('voluntariado') as FormArray;
+  }
+
   patchValueMinisterios() {
-    this.ministerios.map((ministerio, i) => {
+    this.ministerios.map((ministerio: MinisterioModel, i: number) => {
       if (this.ministerioUsuario.indexOf(ministerio.id) !== -1) {
         this.ministeriosArr.at(i)?.patchValue(true);
+      }
+    });
+  }
+
+  patchValueVoluntariados() {
+    this.voluntariados.map((voluntariado: VoluntariadoModel, i: number) => {
+      if (this.voluntarioUsuario.indexOf(voluntariado.id) !== -1) {
+        this.voluntariadosArr.at(i)?.patchValue(true);
+      }
+    });
+  }
+
+  patchValueFuenteDeIngresos() {
+    this.fuenteDeIngresos.map((fuenteDeIngreso: FuenteIngresoModel, i: number) => {
+      if (this.fuentedeIngresoUsuario.indexOf(fuenteDeIngreso.id) !== -1) {
+        this.fuenteDeIngresosArr.at(i)?.patchValue(true);
       }
     });
   }
@@ -343,6 +371,8 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   guardarUsuario() {
+    this.registroCuatroForm;
+
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&
@@ -410,7 +440,6 @@ export class InformacionUsuarioComponent implements OnInit {
         terminos: false,
       };
 
-      console.log('usuarioNuevo', usuarioNuevo);
       this.usuarioNuevo.emit(usuarioNuevo);
     } else {
       Swal.fire({
@@ -428,13 +457,13 @@ export class InformacionUsuarioComponent implements OnInit {
     return ministeriosSeleccionados;
   }
 
-  listarCongregaciones(pais: string) {
-    this.congregacionesFiltradas = this.congregaciones.filter(
+  listarCongregaciones(pais: string = this.usuario.paisId) {
+    this.congregacionesFiltradas = this.congregaciones?.filter(
       (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
     );
   }
 
-  listarCampos(congregacion: string) {
+  listarCampos(congregacion: string = this.usuario.congregacionId) {
     this.camposFiltrados = this.campos.filter(
       (campoABuscar) => campoABuscar.congregacion_id === parseInt(congregacion)
     );
@@ -459,7 +488,8 @@ export class InformacionUsuarioComponent implements OnInit {
     return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre == nacionalidad).id;
   }
 
-  buscarCorreo(email: string) {
+  buscarCorreo(email) {
+    console.log(email);
     this.mensajeBuscarCorreo = '';
     this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreoUsuario(email).subscribe((respuesta: any) => {
       if (!respuesta.ok) {
@@ -468,45 +498,33 @@ export class InformacionUsuarioComponent implements OnInit {
     });
   }
 
-  tieneTipoDocumento(idPais: string): number {
+  tieneTipoDocumento(idPais: string = this.usuario.paisId) {
     this.tipoDeDocumentosFiltrados = [];
     this.tipoDeDocumentosFiltrados = this.tiposDeDocumentos.filter(
       (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais)
     );
+
     if (this.tipoDeDocumentosFiltrados.length > 0) {
       this.agregarControlTipoDocumento();
     } else {
       this.eliminarControlTipoDocumento();
     }
-    return this.tipoDeDocumentosFiltrados.length;
   }
 
   agregarControlTipoDocumento() {
     this.registroCuatroForm = this.formBuilder.group({
       ...this.registroCuatroForm.controls,
       tipoDocumento_id: ['', Validators.required],
-      numeroDocumento: ['123456', Validators.required],
+      numeroDocumento: ['', Validators.required],
     });
     return true;
   }
 
   eliminarControlTipoDocumento() {
-    this.registroCuatroForm.removeControl('tipoDocumento_id');
-    this.registroCuatroForm.removeControl('numeroDocumento');
+    this.registroCuatroForm?.removeControl('tipoDocumento_id');
+    this.registroCuatroForm?.removeControl('numeroDocumento');
 
     return true;
-  }
-
-  buscarCongregacion(idCongregacion: number): string {
-    const congregacion = this.congregaciones.find((congregacion) => congregacion.id === idCongregacion);
-
-    return congregacion.congregacion;
-  }
-
-  buscarCongregacionPais(idPais: number): string {
-    const congregacionPais = this.paises.find((pais) => pais.id === idPais);
-
-    return congregacionPais.pais;
   }
 
   next() {

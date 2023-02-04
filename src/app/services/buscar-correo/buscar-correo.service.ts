@@ -23,7 +23,7 @@ export class BuscarCorreoService {
   }
 
   buscarCorreoUsuario(email: string) {
-    return this.httpClient.get(`${base_url}/usuario/buscarcorreo/${email}`, this.headers);
+    return this.httpClient.get(`${base_url}/usuarios/buscarcorreo/${email}`, this.headers);
   }
 
   buscarCorreoSolicitud(email: string) {

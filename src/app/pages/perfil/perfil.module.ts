@@ -10,15 +10,7 @@ import { InformacionUsuarioModule } from 'src/app/components/informacion-usuario
 
 @NgModule({
   declarations: [PerfilComponent],
-  imports: [
-    CommonModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-    PipesModule,
-    InformacionUsuarioModule,
-  ],
+  imports: [CommonModule, AppRoutingModule, RouterModule, PipesModule, InformacionUsuarioModule],
   exports: [PerfilComponent],
 })
 export class PerfilModule {}
