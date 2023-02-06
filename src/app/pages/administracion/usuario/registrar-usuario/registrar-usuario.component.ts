@@ -18,16 +18,13 @@ import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
-
 import { FuenteIngresoModel } from 'src/app/core/models/fuente-ingreso.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
-import { RegisterFormInterface, TIPO_DIRECCION } from 'src/app/core/interfaces/register-form.interface';
-import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
-import config from 'src/environments/config/config';
+import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 
 @Component({
@@ -36,18 +33,7 @@ import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
   styleUrls: ['./registrar-usuario.component.scss'],
 })
 export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
-  public usuarioForm: FormGroup;
-  public registroUnoForm!: FormGroup;
-  public registroDosForm!: FormGroup;
-  public registroTresForm!: FormGroup;
-  public registroCuatroForm!: FormGroup;
-
-  public registroUno_step = false;
-  public registroDos_step = false;
-  public registroTres_step = false;
-  public step: number = 1;
-
-  public usuarios: UsuarioModel[] = [];
+  public usuario: UsuarioModel;
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
   public rolCasa: RolCasaModel[] = [];
@@ -64,60 +50,16 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public ministerios: MinisterioModel[] = [];
   public voluntariados: VoluntariadoModel[] = [];
   public tiposDeDocumentos: TipoDocumentoModel[] = [];
-  public tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
-
-  public congregacionesFiltradas: CongregacionModel[] = [];
-  public camposFiltrados: CampoModel[] = [];
 
   public usuarioSeleccionado: UsuarioModel;
 
-  public mensajeBuscarCorreo: string = '';
-  public sinCongregacion: number;
-  public sinCampo: number;
-
-  // Subscription
+  //Subscription
   public usuarioSubscription: Subscription;
-  public buscarCorreoSubscription: Subscription;
-  public buscarCelularSubscription: Subscription;
 
-  codigoDeMarcadoSeparado = false;
-  buscarPais = SearchCountryField;
-  paisISO = CountryISO;
-  formatoNumeroTelefonico = PhoneNumberFormat;
-  paisesPreferidos: CountryISO[] = [
-    CountryISO.PuertoRico,
-    CountryISO.Canada,
-    CountryISO.Chile,
-    CountryISO.Colombia,
-    CountryISO.CostaRica,
-    CountryISO.Ecuador,
-    CountryISO.ElSalvador,
-    CountryISO.Spain,
-    CountryISO.UnitedStates,
-    CountryISO.Italy,
-    CountryISO.Mexico,
-    CountryISO.Panama,
-    CountryISO.Peru,
-    CountryISO.DominicanRepublic,
-    CountryISO.Venezuela,
-  ];
-
-  letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private usuarioService: UsuarioService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private buscarCorreoService: BuscarCorreoService
-  ) {}
+  constructor(private usuarioService: UsuarioService, private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.sinCongregacion = config.sinCongregacion;
-
-    this.activatedRoute.params.subscribe(({ id }) => {
-      this.buscarUsuario(id);
-    });
+    this.usuario = this.usuarioService.usuario;
 
     this.activatedRoute.data.subscribe(
       (data: {
@@ -156,273 +98,60 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
       }
     );
-
-    this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
-      this.usuarios = usuarios;
-    });
-
-    this.crearFormularios();
-    this.agregarControlTipoDocumento();
   }
 
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
-    this.buscarCelularSubscription?.unsubscribe();
-    this.buscarCorreoSubscription?.unsubscribe();
   }
 
-  crearFormularios() {
-    this.registroUnoForm = this.formBuilder.group({
-      fechaNacimiento: ['', [Validators.required]],
-      primerNombre: ['', [Validators.required, Validators.minLength(3)]],
-      segundoNombre: ['', [Validators.minLength(3)]],
-      primerApellido: ['', [Validators.required, Validators.minLength(3)]],
-      segundoApellido: ['', [Validators.minLength(3)]],
-      apodo: ['', [Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      genero_id: ['', [Validators.required]],
-      estadoCivil_id: ['', [Validators.required]],
-    });
-
-    this.registroDosForm = this.formBuilder.group({
-      nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
-      rolCasa_id: ['', [Validators.required]],
-      numeroCelular: ['', [Validators.required, Validators.minLength(3)]],
-      telefonoCasa: ['', [Validators.minLength(3)]],
-      direccionResidencia: ['', [Validators.required, Validators.minLength(3)]],
-      ciudadResidencia: ['', [Validators.required, Validators.minLength(3)]],
-      departamentoResidencia: ['', [Validators.minLength(3)]],
-      codigoPostalResidencia: ['', [Validators.minLength(3)]],
-      paisResidencia: ['', [Validators.required, Validators.minLength(3)]],
-      direccionPostal: ['', [Validators.minLength(5)]],
-      ciudadPostal: ['', [Validators.minLength(3)]],
-      departamentoPostal: ['', [Validators.minLength(3)]],
-      codigoPostal: ['', [Validators.minLength(3)]],
-      paisPostal: ['', [Validators.minLength(3)]],
-    });
-
-    this.registroTresForm = this.formBuilder.group({
-      fuenteIngresos: new FormArray([]),
-      ingresoMensual: ['', []],
-      gradoAcademico_id: ['', [Validators.required]],
-      tipoEmpleo_id: ['', [Validators.required]],
-      especializacionEmpleo: ['', [Validators.minLength(3)]],
-    });
-
-    this.registroCuatroForm = this.formBuilder.group({
-      tipoMiembro_id: ['', [Validators.required]],
-      congregacion_id: ['', [Validators.required]],
-      campo_id: ['', []],
-      esJoven: ['', [Validators.required]],
-      ejerceMinisterio: ['', [Validators.required]],
-      esVoluntario: ['', [Validators.required]],
-      ministerio: new FormArray([]),
-      voluntariado: new FormArray([]),
-      congregacionPais_id: ['', [Validators.required]],
-      vacuna_id: ['', [Validators.required]],
-      dosis_id: ['', [Validators.required]],
-    });
-  }
-
-  onCheckboxFuenteDeIngresosChange(event: any) {
-    const selectedFuenteDeIngresos = this.registroTresForm.controls['fuenteIngresos'] as FormArray;
-    if (event.target.checked) {
-      selectedFuenteDeIngresos.push(new FormControl(event.target.value));
+  realizarOperacion(operacion: string, data: RegisterFormInterface) {
+    if (operacion === 'crear') {
+      this.actualizarPerfil(data);
     } else {
-      const index = selectedFuenteDeIngresos.controls.findIndex((x) => x.value === event.target.value);
-      selectedFuenteDeIngresos.removeAt(index);
+      this.crearUsuario(data);
     }
   }
 
-  onCheckboxMinisteriosChange(event: any) {
-    const selectedMinisterios = this.registroCuatroForm.controls['ministerio'] as FormArray;
-    if (event.target.checked) {
-      selectedMinisterios.push(new FormControl(event.target.value));
-    } else {
-      const index = selectedMinisterios.controls.findIndex((x) => x.value === event.target.value);
-      selectedMinisterios.removeAt(index);
-    }
-  }
-
-  onCheckboxVoluntariadosChange(event: any) {
-    const selectedVoluntariados = this.registroCuatroForm.controls['voluntariado'] as FormArray;
-    if (event.target.checked) {
-      selectedVoluntariados.push(new FormControl(event.target.value));
-    } else {
-      const index = selectedVoluntariados.controls.findIndex((x) => x.value === event.target.value);
-      selectedVoluntariados.removeAt(index);
-    }
-  }
-
-  ejerceAlgunMinisterio() {
-    return this.registroCuatroForm.controls['ejerceMinisterio'].value || false;
-  }
-
-  esVoluntario() {
-    return this.registroCuatroForm.controls['esVoluntario'].value || false;
-  }
-
-  resetFormulario() {
-    this.registroUnoForm.reset();
-    this.registroDosForm.reset();
-    this.registroTresForm.reset();
-    this.registroCuatroForm.reset();
-  }
-
-  guardarUsuario() {
-    if (
-      this.step == 4 &&
-      this.registroUnoForm.valid &&
-      this.registroDosForm.valid &&
-      this.registroTresForm.valid &&
-      this.registroCuatroForm.valid
-    ) {
-      let informacionFormulario = Object.assign(
-        this.registroUnoForm.value,
-        this.registroDosForm.value,
-        this.registroTresForm.value,
-        this.registroCuatroForm.value
-      );
-
-      const usuarioNuevo: RegisterFormInterface = {
-        primerNombre: informacionFormulario.primerNombre,
-        segundoNombre: informacionFormulario.segundoNombre ? informacionFormulario.segundoNombre : '',
-        primerApellido: informacionFormulario.primerApellido,
-        segundoApellido: informacionFormulario.segundoApellido ? informacionFormulario.segundoApellido : '',
-        apodo: informacionFormulario.apodo ? informacionFormulario.apodo : '',
-        nacionalidad_id: this.buscarIDNacionalidad(informacionFormulario.nacionalidad),
-        email: informacionFormulario.email ? informacionFormulario.email : '',
-        numeroCelular: informacionFormulario.numeroCelular?.internationalNumber,
-        telefonoCasa: informacionFormulario.telefonoCasa?.internationalNumber,
-        fechaNacimiento: informacionFormulario.fechaNacimiento,
-        genero_id: informacionFormulario.genero_id,
-        estadoCivil_id: informacionFormulario.estadoCivil_id,
-        vacuna_id: informacionFormulario.vacuna_id,
-        dosis_id: informacionFormulario.dosis_id,
-        direcciones: [
-          {
-            direccion: informacionFormulario.direccionResidencia,
-            ciudad: informacionFormulario.ciudadResidencia,
-            departamento: informacionFormulario.departamentoResidencia,
-            pais: informacionFormulario.paisResidencia,
-            codigoPostal: informacionFormulario.codigoPostalResidencia,
-            tipoDireccion_id: TIPO_DIRECCION.DIRECCION_RESIDENCIAL,
-          },
-          {
-            direccion: informacionFormulario.direccionPostal,
-            ciudad: informacionFormulario.ciudadPostal,
-            departamento: informacionFormulario.departamentoPostal,
-            pais: informacionFormulario.paisPostal,
-            codigoPostal: informacionFormulario.codigoPostal,
-            tipoDireccion_id: TIPO_DIRECCION.DIRECCION_POSTAL,
-          },
-        ],
-        fuentesDeIngreso: informacionFormulario.fuenteIngresos,
-        ingresoMensual: informacionFormulario.ingresoMensual,
-        gradoAcademico_id: informacionFormulario.gradoAcademico_id,
-        tipoEmpleo_id: informacionFormulario.tipoMiembro_id,
-        especializacionEmpleo: informacionFormulario.especializacionEmpleo,
-        tipoMiembro_id: informacionFormulario.tipoEmpleo_id,
-        esJoven: informacionFormulario.esJoven,
-        ministerios: informacionFormulario.ministerio,
-        voluntariados: informacionFormulario.voluntariado,
-        congregacion: {
-          pais_id: informacionFormulario.congregacionPais_id,
-          congregacion_id: informacionFormulario.congregacion_id,
-          campo_id: informacionFormulario.campo_id,
-        },
-        rolCasa_id: informacionFormulario.rolCasa_id,
-        tipoDocumento_id: informacionFormulario.tipoDocumento_id ? informacionFormulario.tipoDocumento_id : '',
-        numeroDocumento: informacionFormulario.numeroDocumento ? informacionFormulario.numeroDocumento : '',
-        terminos: false,
-      };
-
-      this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
-        (usuarioCreado: any) => {
-          Swal.fire('Usuario creado', 'correctamente', 'success');
-
-          this.router.navigateByUrl(
-            `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
-          );
-        },
-        (error) => {
-          let errores = error.error.errors;
-          let listaErrores = [];
-
-          if (!!errores) {
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-          }
-
-          Swal.fire({
-            title: 'El usuario NO ha sido creado',
-            icon: 'error',
-            html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+  crearUsuario(usuarioNuevo: RegisterFormInterface) {
+    this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
+      (usuarioCreado: any) => {
+        Swal.fire('Usuario creado', 'correctamente', 'success');
+        this.router.navigateByUrl(
+          `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
+        );
+      },
+      (error) => {
+        let errores = error.error.errors;
+        let listaErrores = [];
+        if (!!errores) {
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
           });
         }
-      );
-    } else {
-      Swal.fire({
-        title: 'El usuario NO ha sido creado',
-        icon: 'error',
-        html: 'Existen campos obligatorios sin llenar',
-      });
-    }
+        Swal.fire({
+          title: 'El usuario NO ha sido creado',
+          icon: 'error',
+          html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+        });
+      }
+    );
   }
 
-  buscarUsuario(id: string) {
-    if (id !== 'nuevo') {
-      this.usuarioService
-        .getUsuario(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (usuarioEncontrado: UsuarioInterface) => {
-            const {
-              primerNombre,
-              primerApellido,
-              email,
-              numeroCelular,
-              fechaNacimiento,
-              genero_id,
-              estadoCivil_id,
-              vacuna_id,
-              dosis_id,
-              segundoNombre,
-              segundoApellido,
-              telefonoCasa,
-              login,
-              password,
-              foto,
-              rolCasa_id,
-              nacionalidad_id,
-            } = usuarioEncontrado.usuario;
-            this.usuarioSeleccionado = usuarioEncontrado.usuario;
-
-            const { pais_id, congregacion_id, campo_id } = usuarioEncontrado.usuarioCongregacion;
-
-            this.usuarioForm.setValue({
-              primerNombre,
-              primerApellido,
-              email,
-              numeroCelular,
-              fechaNacimiento,
-              genero_id,
-              pais_id,
-              congregacion_id,
-              campo_id,
-              estadoCivil_id,
-              vacuna_id,
-              dosis_id,
-              segundoNombre,
-              segundoApellido,
-              telefonoCasa,
-              login,
-              password,
-              foto,
-              rolCasa_id,
-              nacionalidad_id,
-            });
+  actualizarPerfil(usuario: RegisterFormInterface) {
+    Swal.fire({
+      title: 'Actualizar Perfil',
+      text: '¿Desea actualizar la información de su perfil?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.usuarioService.actualizarUsuario(usuario, this.usuario.id).subscribe(
+          (usuarioActualizado) => {
+            Swal.fire('Actualizado', 'Los datos del perfil se actualizaron', 'success');
+            this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
           },
           (error) => {
             let errores = error.error.errors;
@@ -433,122 +162,13 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
             });
 
             Swal.fire({
-              title: 'Usuario',
+              title: 'Error',
               icon: 'error',
-              html: `${listaErrores.join('')}`,
+              html: `Error al actualizar el perfil <p> ${listaErrores.join('')}`,
             });
-
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}`);
           }
         );
-    }
-  }
-
-  listarCongregaciones(pais: string) {
-    this.congregacionesFiltradas = this.congregaciones.filter(
-      (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
-    );
-  }
-
-  listarCampos(congregacion: string) {
-    this.camposFiltrados = this.campos.filter(
-      (campoABuscar) => campoABuscar.congregacion_id === parseInt(congregacion)
-    );
-  }
-
-  buscarNacionalidad(formControlName: string) {
-    this.letrasFiltrarNacionalidad = this.registroDosForm.get(formControlName.toString()).valueChanges.pipe(
-      startWith(''),
-      map((valor) => this.filtrar(valor || ''))
-    );
-  }
-
-  private filtrar(valor: string): NacionalidadModel[] {
-    const filtrarValores = valor.toLowerCase();
-
-    return this.nacionalidades.filter((nacionalidad: NacionalidadModel) =>
-      nacionalidad.nombre.toLowerCase().includes(filtrarValores)
-    );
-  }
-
-  buscarIDNacionalidad(nacionalidad: string): number {
-    return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre == nacionalidad).id;
-  }
-
-  buscarCorreo(email: string) {
-    this.mensajeBuscarCorreo = '';
-    this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreoUsuario(email).subscribe((respuesta: any) => {
-      if (!respuesta.ok) {
-        this.mensajeBuscarCorreo = respuesta.msg;
       }
     });
-  }
-
-  tieneTipoDocumento(idPais: string): number {
-    this.tipoDeDocumentosFiltrados = [];
-    this.tipoDeDocumentosFiltrados = this.tiposDeDocumentos.filter(
-      (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais)
-    );
-    if (this.tipoDeDocumentosFiltrados.length > 0) {
-      this.agregarControlTipoDocumento();
-    } else {
-      this.eliminarControlTipoDocumento();
-    }
-    return this.tipoDeDocumentosFiltrados.length;
-  }
-
-  agregarControlTipoDocumento() {
-    this.registroCuatroForm = this.formBuilder.group({
-      ...this.registroCuatroForm.controls,
-      tipoDocumento_id: ['', Validators.required],
-      numeroDocumento: ['', Validators.required],
-    });
-    return true;
-  }
-
-  eliminarControlTipoDocumento() {
-    this.registroCuatroForm.removeControl('tipoDocumento_id');
-    this.registroCuatroForm.removeControl('numeroDocumento');
-
-    return true;
-  }
-
-  next() {
-    if (this.step == 1) {
-      this.registroUno_step = true;
-      if (this.registroUnoForm.invalid) {
-        return;
-      }
-      this.step++;
-      return;
-    }
-    if (this.step == 2) {
-      this.registroDos_step = true;
-      if (this.registroDosForm.invalid) {
-        return;
-      }
-      this.step++;
-      return;
-    }
-    if (this.step == 3) {
-      this.registroTres_step = true;
-      if (this.registroTresForm.invalid) {
-        return;
-      }
-      this.step++;
-    }
-  }
-
-  previous() {
-    this.step--;
-    if (this.step == 1) {
-      this.registroUno_step = false;
-    }
-    if (this.step == 2) {
-      this.registroDos_step = false;
-    }
-    if (this.step == 3) {
-      this.registroTres_step = false;
-    }
   }
 }

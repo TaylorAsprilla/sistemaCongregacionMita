@@ -31,13 +31,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./perfil.component.css'],
 })
 export class PerfilComponent implements OnInit, OnDestroy {
-  isEdit: boolean = false;
-
-  //Subscription
-  public usuarioSubscription: Subscription;
-
   public usuario: UsuarioModel;
-
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
   public rolCasa: RolCasaModel[] = [];
@@ -56,6 +50,9 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public tiposDeDocumentos: TipoDocumentoModel[] = [];
 
   public usuarioSeleccionado: UsuarioModel;
+
+  //Subscription
+  public usuarioSubscription: Subscription;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}
 

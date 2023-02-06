@@ -42,7 +42,7 @@ export class InformacionUsuarioComponent implements OnInit {
   public registroTres_step = false;
   public step: number = 1;
 
-  @Input() public usuario: UsuarioModel;
+  @Input() public usuario: UsuarioModel = null;
   @Input() public usuarios: UsuarioModel[] = [];
   @Input() public generos: GeneroModel[] = [];
   @Input() public estadoCivil: EstadoCivilModel[] = [];
@@ -161,68 +161,68 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   informacionDelUsuario() {
-    this.fechaDeNacimiento = this.usuario.fechaNacimiento ? this.usuario.fechaNacimiento : null;
-    this.primerNombre = this.usuario.primerNombre ? this.usuario.primerNombre : '';
-    this.segundoNombre = this.usuario.segundoNombre ? this.usuario.segundoNombre : '';
-    this.primerApellido = this.usuario.primerApellido ? this.usuario.primerApellido : '';
-    this.segundoApellio = this.usuario.segundoApellido ? this.usuario.segundoApellido : '';
-    this.apodo = this.usuario.apodo ? this.usuario.apodo : '';
-    this.email = this.usuario.email ? this.usuario.email : '';
-    this.genero_id = this.usuario.genero_id ? this.usuario.genero_id : null;
-    this.estadoCivil_id = this.usuario.estadoCivil_id ? this.usuario.estadoCivil_id : null;
-    this.nacionalidad = this.usuario.nacionalidad?.nombre ? this.usuario.nacionalidad?.nombre : '';
-    this.rolEnCasa = this.usuario.rolCasa_id ? this.usuario.rolCasa_id : null;
-    this.celular = this.usuario.numeroCelular ? this.usuario.numeroCelular : '';
-    this.telefonoCasa = this.usuario.telefonoCasa ? this.usuario.telefonoCasa : '';
-    this.direccionResidencia = this.usuario.direcciones.find(
+    this.fechaDeNacimiento = this.usuario?.fechaNacimiento ? this.usuario.fechaNacimiento : null;
+    this.primerNombre = this.usuario?.primerNombre ? this.usuario.primerNombre : '';
+    this.segundoNombre = this.usuario?.segundoNombre ? this.usuario.segundoNombre : '';
+    this.primerApellido = this.usuario?.primerApellido ? this.usuario.primerApellido : '';
+    this.segundoApellio = this.usuario?.segundoApellido ? this.usuario.segundoApellido : '';
+    this.apodo = this.usuario?.apodo ? this.usuario.apodo : '';
+    this.email = this.usuario?.email ? this.usuario.email : '';
+    this.genero_id = this.usuario?.genero_id ? this.usuario.genero_id : null;
+    this.estadoCivil_id = this.usuario?.estadoCivil_id ? this.usuario.estadoCivil_id : null;
+    this.nacionalidad = this.usuario?.nacionalidad?.nombre ? this.usuario.nacionalidad?.nombre : '';
+    this.rolEnCasa = this.usuario?.rolCasa_id ? this.usuario.rolCasa_id : null;
+    this.celular = this.usuario?.numeroCelular ? this.usuario.numeroCelular : '';
+    this.telefonoCasa = this.usuario?.telefonoCasa ? this.usuario.telefonoCasa : '';
+    this.direccionResidencia = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_RESIDENCIAL
     )?.direccion;
-    this.ciudadResidencia = this.usuario.direcciones.find(
+    this.ciudadResidencia = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_RESIDENCIAL
     )?.ciudad;
-    this.departamentoResidencia = this.usuario.direcciones.find(
+    this.departamentoResidencia = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_RESIDENCIAL
     )?.departamento;
-    this.codigoPostalResidencia = this.usuario.direcciones.find(
+    this.codigoPostalResidencia = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_RESIDENCIAL
     )?.codigoPostal;
-    this.paisResidencia = this.usuario.direcciones.find(
+    this.paisResidencia = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_RESIDENCIAL
     )?.pais;
-    this.direccionPostal = this.usuario.direcciones.find(
+    this.direccionPostal = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_POSTAL
     )?.direccion;
-    this.ciudadPostal = this.usuario.direcciones.find(
+    this.ciudadPostal = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_POSTAL
     )?.ciudad;
-    this.departamentoPostal = this.usuario.direcciones.find(
+    this.departamentoPostal = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_POSTAL
     )?.departamento;
-    this.codigoPostal = this.usuario.direcciones.find(
+    this.codigoPostal = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_POSTAL
     )?.codigoPostal;
-    this.paisPostal = this.usuario.direcciones.find(
+    this.paisPostal = this.usuario?.direcciones.find(
       (direccion) => direccion?.tipoDireccion_id === TIPO_DIRECCION.DIRECCION_POSTAL
     )?.pais;
 
     this.fuentedeIngresoUsuario = this.usuarioFuenteDeIngresos ? this.usuarioFuenteDeIngresos : null;
-    this.ingresoMensual = this.usuario.ingresoMensual ? this.usuario.ingresoMensual : '';
-    this.gradoAcademico = this.usuario.gradoAcademico_id ? this.usuario.gradoAcademico_id : null;
-    this.tipoEmpleo = this.usuario.tipoEmpleo_id ? this.usuario.tipoEmpleo_id : null;
-    this.especializacionEmpleo = this.usuario.especializacionEmpleo ? this.usuario.especializacionEmpleo : null;
+    this.ingresoMensual = this.usuario?.ingresoMensual ? this.usuario.ingresoMensual : '';
+    this.gradoAcademico = this.usuario?.gradoAcademico_id ? this.usuario.gradoAcademico_id : null;
+    this.tipoEmpleo = this.usuario?.tipoEmpleo_id ? this.usuario.tipoEmpleo_id : null;
+    this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : null;
 
-    this.tipoMiembro = this.usuario.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
-    this.esjoven = this.usuario.esJoven ? this.usuario.esJoven : false;
-    this.ejerMinisterio = this.usuario.usuarioMinisterio ? true : false;
-    this.voluntario = this.usuario.usuarioVoluntariado ? true : false;
+    this.tipoMiembro = this.usuario?.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
+    this.esjoven = this.usuario?.esJoven ? this.usuario.esJoven : false;
+    this.ejerMinisterio = this.usuario?.usuarioMinisterio ? true : false;
+    this.voluntario = this.usuario?.usuarioVoluntariado ? true : false;
     this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
     this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
-    this.congregacionPais = this.usuario.paisId ? this.usuario.paisId : null;
-    this.congreacionCiudad = this.usuario.congregacionId ? this.usuario.congregacionId : null;
+    this.congregacionPais = this.usuario?.paisId ? this.usuario.paisId : null;
+    this.congreacionCiudad = this.usuario?.congregacionId ? this.usuario.congregacionId : null;
 
-    this.congregacionCampo = this.usuario.campoId ? this.usuario.campoId : null;
+    this.congregacionCampo = this.usuario?.campoId ? this.usuario.campoId : null;
 
-    this.vacuna = this.usuario.vacuna_id ? this.usuario?.vacuna_id : null;
+    this.vacuna = this.usuario?.vacuna_id ? this.usuario?.vacuna_id : null;
     this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : null;
   }
 
@@ -388,20 +388,20 @@ export class InformacionUsuarioComponent implements OnInit {
       );
 
       const usuarioNuevo: RegisterFormInterface = {
-        primerNombre: informacionFormulario.primerNombre,
+        primerNombre: informacionFormulario?.primerNombre,
         segundoNombre: informacionFormulario.segundoNombre ? informacionFormulario.segundoNombre : '',
-        primerApellido: informacionFormulario.primerApellido,
+        primerApellido: informacionFormulario?.primerApellido,
         segundoApellido: informacionFormulario.segundoApellido ? informacionFormulario.segundoApellido : '',
         apodo: informacionFormulario.apodo ? informacionFormulario.apodo : '',
         nacionalidad_id: this.buscarIDNacionalidad(informacionFormulario.nacionalidad),
         email: informacionFormulario.email ? informacionFormulario.email : '',
         numeroCelular: informacionFormulario.numeroCelular?.internationalNumber,
         telefonoCasa: informacionFormulario.telefonoCasa?.internationalNumber,
-        fechaNacimiento: informacionFormulario.fechaNacimiento,
-        genero_id: informacionFormulario.genero_id,
-        estadoCivil_id: informacionFormulario.estadoCivil_id,
-        vacuna_id: informacionFormulario.vacuna_id,
-        dosis_id: informacionFormulario.dosis_id,
+        fechaNacimiento: informacionFormulario?.fechaNacimiento,
+        genero_id: informacionFormulario?.genero_id,
+        estadoCivil_id: informacionFormulario?.estadoCivil_id,
+        vacuna_id: informacionFormulario?.vacuna_id,
+        dosis_id: informacionFormulario?.dosis_id,
         direcciones: [
           {
             direccion: informacionFormulario.direccionResidencia,
@@ -423,9 +423,9 @@ export class InformacionUsuarioComponent implements OnInit {
         fuentesDeIngreso: informacionFormulario.fuenteIngresos,
         ingresoMensual: informacionFormulario.ingresoMensual,
         gradoAcademico_id: informacionFormulario.gradoAcademico_id,
-        tipoEmpleo_id: informacionFormulario.tipoMiembro_id,
+        tipoEmpleo_id: informacionFormulario.tipoEmpleo_id,
         especializacionEmpleo: informacionFormulario.especializacionEmpleo,
-        tipoMiembro_id: informacionFormulario.tipoEmpleo_id,
+        tipoMiembro_id: informacionFormulario?.tipoMiembro_id,
         esJoven: informacionFormulario.esJoven,
         ministerios: this.ministeriosSeleccionados(),
         voluntariados: informacionFormulario.voluntariado,
@@ -435,7 +435,7 @@ export class InformacionUsuarioComponent implements OnInit {
           campo_id: informacionFormulario.campo_id,
         },
         rolCasa_id: informacionFormulario.rolCasa_id,
-        tipoDocumento_id: informacionFormulario?.tipoDocumento_id,
+        tipoDocumento_id: informacionFormulario?.tipoDocumento_id ? informacionFormulario?.tipoDocumento_id : null,
         numeroDocumento: informacionFormulario.numeroDocumento ? informacionFormulario.numeroDocumento : '',
         terminos: false,
       };
@@ -457,13 +457,13 @@ export class InformacionUsuarioComponent implements OnInit {
     return ministeriosSeleccionados;
   }
 
-  listarCongregaciones(pais: string = this.usuario.paisId) {
+  listarCongregaciones(pais: string = this.usuario?.paisId) {
     this.congregacionesFiltradas = this.congregaciones?.filter(
       (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
     );
   }
 
-  listarCampos(congregacion: string = this.usuario.congregacionId) {
+  listarCampos(congregacion: string = this.usuario?.congregacionId) {
     this.camposFiltrados = this.campos.filter(
       (campoABuscar) => campoABuscar.congregacion_id === parseInt(congregacion)
     );
@@ -497,7 +497,7 @@ export class InformacionUsuarioComponent implements OnInit {
     });
   }
 
-  tieneTipoDocumento(idPais: string = this.usuario.paisId) {
+  tieneTipoDocumento(idPais: string = this.usuario?.paisId) {
     this.tipoDeDocumentosFiltrados = [];
     this.tipoDeDocumentosFiltrados = this.tiposDeDocumentos.filter(
       (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais)
