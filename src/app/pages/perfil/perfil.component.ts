@@ -59,10 +59,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.usuario = this.usuarioService.usuario;
 
-    // this.activatedRoute.params.subscribe(({ id }) => {
-    //   this.buscarUsuario(id);
-    // });
-
     this.usuarioSeleccionado = this.usuario;
 
     this.activatedRoute.data.subscribe(

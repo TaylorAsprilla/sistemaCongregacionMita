@@ -16,10 +16,6 @@
   [tiposDeDocumentos]="tiposDeDocumentos"
   [generos]="generos"
   [tipoMiembros]="tipoMiembros"
-  [usuarioMinisterios]="usuario.ministerios"
-  [usuarioVoluntariados]="usuario.voluntariados"
-  [usuarioFuenteDeIngresos]="usuario.fuenteDeIngresos"
   [codigoDeMarcadoSeparado]="false"
-  [operacion]="'actualizar'"
-  (usuarioNuevo)="realizarOperacion('actualizar', $event)"
+  (usuarioNuevo)="realizarOperacion(OPERACION.CREAR_USUARIO, $event)"
 ></app-informacion-usuario>

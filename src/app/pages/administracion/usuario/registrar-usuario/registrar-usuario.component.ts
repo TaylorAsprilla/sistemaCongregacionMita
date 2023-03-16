@@ -1,10 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
-import { Observable, Subscription } from 'rxjs';
-import { delay, map, startWith } from 'rxjs/operators';
-import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { Subscription } from 'rxjs';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { DosisModel } from 'src/app/core/models/dosis.model';
@@ -13,7 +9,7 @@ import { GeneroModel } from 'src/app/core/models/genero.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { PaisModel } from 'src/app/core/models/pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
-import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { OPERACION, UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -55,6 +51,10 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
 
   //Subscription
   public usuarioSubscription: Subscription;
+
+  get OPERACION() {
+    return OPERACION;
+  }
 
   constructor(private usuarioService: UsuarioService, private router: Router, private activatedRoute: ActivatedRoute) {}
 
@@ -105,9 +105,9 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   }
 
   realizarOperacion(operacion: string, data: RegisterFormInterface) {
-    if (operacion === 'crear') {
+    if (operacion === OPERACION.ACTUALIZAR_USUARIO) {
       this.actualizarPerfil(data);
-    } else {
+    } else if (operacion === OPERACION.CREAR_USUARIO) {
       this.crearUsuario(data);
     }
   }
@@ -116,6 +116,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
     this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
       (usuarioCreado: any) => {
         Swal.fire('Usuario creado', 'correctamente', 'success');
+
         this.router.navigateByUrl(
           `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
         );

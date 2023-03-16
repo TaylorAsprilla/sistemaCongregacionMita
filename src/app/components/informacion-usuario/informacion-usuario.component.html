@@ -612,6 +612,16 @@
 
               {{ fuenteDeIngresos[i].fuenteIngreso }}
             </label>
+
+            <!-- <label
+              class="form-check-label form-check checkbox-lg"
+              formArrayName="ministerio"
+              *ngFor="let ministerio of ministeriosArr.controls; index as i"
+            >
+              <input type="checkbox" class="form-check-input" [formControlName]="i" />
+
+              {{ ministerios[i].ministerio }}
+            </label> -->
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-7">
@@ -738,11 +748,11 @@
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio"> ¿Eres miembro de la Juventud?</label>
             <div class="form-check checkbox-lg">
-              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="true" />
+              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="1" />
               <label class="form-check-label">Sí</label>
             </div>
             <div class="form-check checkbox-lg">
-              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="false" />
+              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="0" />
               <label class="form-check-label">No</label>
             </div>
 
