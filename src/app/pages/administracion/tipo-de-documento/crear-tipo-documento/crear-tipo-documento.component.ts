@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
   public tipoDocumentoForm: FormGroup;
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public tiposDeDocumentos: TipoDocumentoModel[] = [];
   public tipoDeDocumentoSeleccionado: TipoDocumentoModel;
 
@@ -30,7 +30,7 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { pais: PaisModel[] }) => {
+    this.activatedRoute.data.subscribe((data: { pais: CongregacionPaisModel[] }) => {
       this.paises = data.pais;
     });
 

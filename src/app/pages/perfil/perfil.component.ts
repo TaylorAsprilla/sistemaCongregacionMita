@@ -13,7 +13,7 @@ import { GeneroModel } from 'src/app/core/models/genero.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
@@ -31,17 +31,11 @@ import Swal from 'sweetalert2';
   styleUrls: ['./perfil.component.css'],
 })
 export class PerfilComponent implements OnInit, OnDestroy {
-  isEdit: boolean = false;
-
-  //Subscription
-  public usuarioSubscription: Subscription;
-
   public usuario: UsuarioModel;
-
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
   public rolCasa: RolCasaModel[] = [];
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public congregaciones: CongregacionModel[] = [];
   public campos: CampoModel[] = [];
   public vacunas: VacunaModel[] = [];
@@ -57,14 +51,13 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   public usuarioSeleccionado: UsuarioModel;
 
+  //Subscription
+  public usuarioSubscription: Subscription;
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.usuario = this.usuarioService.usuario;
-
-    // this.activatedRoute.params.subscribe(({ id }) => {
-    //   this.buscarUsuario(id);
-    // });
 
     this.usuarioSeleccionado = this.usuario;
 
@@ -82,7 +75,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
         tipoDocumento: TipoDocumentoModel[];
         ministerio: MinisterioModel[];
         voluntariado: VoluntariadoModel[];
-        pais: PaisModel[];
+        pais: CongregacionPaisModel[];
         campo: CampoModel[];
         vacuna: VacunaModel[];
         dosis: DosisModel[];

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CampoModel } from 'src/app/core/models/campo.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -19,7 +19,7 @@ export class UsuariosComponent implements OnInit {
 
   public usuariosTemporales: UsuarioModel[] = [];
   public campos: CampoModel[] = [];
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
 
   public paginaDesde: number = 0;
   public pagina: number = 1;
@@ -36,7 +36,7 @@ export class UsuariosComponent implements OnInit {
   constructor(private router: Router, private usuarioService: UsuarioService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { pais: PaisModel[]; campo: CampoModel[] }) => {
+    this.activatedRoute.data.subscribe((data: { pais: CongregacionPaisModel[]; campo: CampoModel[] }) => {
       this.paises = data.pais.filter((pais) => pais.estado === true);
       this.campos = data.campo.filter((campo) => campo.estado === true);
     });

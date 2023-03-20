@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
@@ -22,7 +22,7 @@ export class CrearCongregacionComponent implements OnInit {
   public congregacionForm: UntypedFormGroup;
 
   public congregaciones: CongregacionModel[] = [];
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public usuarios: UsuarioModel[] = [];
   public obreros: UsuarioModel[] = [];
 
@@ -58,7 +58,7 @@ export class CrearCongregacionComponent implements OnInit {
     });
 
     this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
-      this.paises = pais.filter((pais: PaisModel) => pais.estado === true);
+      this.paises = pais.filter((pais: CongregacionPaisModel) => pais.estado === true);
     });
 
     this.usuariosSubscription = this.usuariosService.listarTodosLosUsuarios().subscribe((usuarios: ListarUsuario) => {

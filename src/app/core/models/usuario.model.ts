@@ -1,5 +1,4 @@
 import { environment } from 'environment';
-import { DireccionInterface } from '../interfaces/register-form.interface';
 import { DosisModel } from './dosis.model';
 import { EstadoCivilModel } from './estado-civil.model';
 import { FuenteIngresoModel } from './fuente-ingreso.model';
@@ -17,6 +16,12 @@ import { VoluntariadoModel } from './voluntariado.model';
 
 const base_url = environment.base_url;
 
+export enum OPERACION {
+  CREAR_USUARIO = 'Crear Usuario',
+  ACTUALIZAR_USUARIO = 'Actualizar Usuario',
+  ELIMINAR_USUARIO = 'Eliminar Usuario',
+}
+
 export class UsuarioModel {
   constructor(
     public id: number,
@@ -27,6 +32,9 @@ export class UsuarioModel {
     public fechaNacimiento: Date,
     public esJoven: boolean,
     public estado: boolean,
+    public direccion: string,
+    public ciudadDireccion: string,
+    public paisDireccion: string,
     public genero_id: number,
     public estadoCivil_id: number,
     public vacuna_id: number,
@@ -54,12 +62,20 @@ export class UsuarioModel {
     public gradoAcademico?: GradoAcademicoModel,
     public tipoEmpleo?: TipoEmpleoModel,
     public tipoMiembro?: TipoMiembroModel,
-    public direcciones?: DireccionInterface[],
+    public departamentoDireccion?: string,
+    public codigoPostalDireccion?: string,
+    public direccionPostal?: string,
+    public ciudadPostal?: string,
+    public departamentoPostal?: string,
+    public codigoPostal?: string,
+    public paisPostal?: string,
     public usuarioCongregacion?: CongregacionInterface,
     public usuarioMinisterio?: MinisterioModel[],
     public usuarioVoluntariado?: VoluntariadoModel[],
     public usuarioPermiso?: PermisoModel[],
-    public usuarioFuenteIngreso?: FuenteIngresoModel[]
+    public usuarioFuenteIngreso?: FuenteIngresoModel[],
+    public tipoDocumento_id?: number,
+    public numeroDocumento?: string
   ) {}
 
   get fotoUrl() {
@@ -73,7 +89,7 @@ export class UsuarioModel {
   }
 
   get paisId() {
-    return this.usuarioCongregacion[0]?.UsuarioCongregacion.pais_id;
+    return this.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id;
   }
 
   get congregacion() {
@@ -85,24 +101,24 @@ export class UsuarioModel {
   }
 
   get campoId() {
-    return this.usuarioCongregacion[0]?.UsuarioCongregacion.campo_id;
+    return this.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id;
   }
 
   get ministerios() {
-    return this.usuarioMinisterio.map((ministerio: MinisterioModel) => {
+    return this.usuarioMinisterio?.map((ministerio: MinisterioModel) => {
       return ministerio.id;
     });
   }
 
   get voluntariados() {
-    return this.usuarioVoluntariado.map((voluntariado: VoluntariadoModel) => {
+    return this.usuarioVoluntariado?.map((voluntariado: VoluntariadoModel) => {
       return voluntariado.id;
     });
   }
 
   get fuenteDeIngresos() {
-    return this.usuarioFuenteIngreso.map((fuenteDeIngreso: FuenteIngresoModel) => {
-      return fuenteDeIngreso.id;
+    return this.usuarioFuenteIngreso?.map((fuenteDeIngreso: FuenteIngresoModel) => {
+      return fuenteDeIngreso?.id;
     });
   }
 }

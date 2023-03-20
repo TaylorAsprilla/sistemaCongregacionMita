@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -26,28 +26,28 @@ export class PaisService {
   getPaises() {
     return this.httpClient
       .get(`${base_url}/pais`, this.headers)
-      .pipe(map((pais: { ok: boolean; pais: PaisModel[] }) => pais.pais));
+      .pipe(map((pais: { ok: boolean; pais: CongregacionPaisModel[] }) => pais.pais));
   }
 
   getPais(id: number) {
     return this.httpClient
       .get(`${base_url}/pais/${id}`, this.headers)
-      .pipe(map((pais: { ok: boolean; pais: PaisModel; id: number }) => pais.pais));
+      .pipe(map((pais: { ok: boolean; pais: CongregacionPaisModel; id: number }) => pais.pais));
   }
 
-  crearPais(pais: PaisModel) {
+  crearPais(pais: CongregacionPaisModel) {
     return this.httpClient.post(`${base_url}/pais`, pais, this.headers);
   }
 
-  actualizarPais(pais: PaisModel) {
+  actualizarPais(pais: CongregacionPaisModel) {
     return this.httpClient.put(`${base_url}/pais/${pais.id}`, pais, this.headers);
   }
 
-  eliminarPais(pais: PaisModel) {
+  eliminarPais(pais: CongregacionPaisModel) {
     return this.httpClient.delete(`${base_url}/pais/${pais.id}`, this.headers);
   }
 
-  activarPais(pais: PaisModel) {
+  activarPais(pais: CongregacionPaisModel) {
     return this.httpClient.put(`${base_url}/pais/activar/${pais.id}`, pais, this.headers);
   }
 }

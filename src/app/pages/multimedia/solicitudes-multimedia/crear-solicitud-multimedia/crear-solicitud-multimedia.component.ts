@@ -7,7 +7,7 @@ import { map, startWith } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { OpcionTransporteModel } from 'src/app/core/models/opcion-transporte.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
 import { RAZON_SOLICITUD_ID, SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia';
@@ -25,7 +25,7 @@ import Swal from 'sweetalert2';
 export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   public solicitudForm: FormGroup;
 
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
   public congregaciones: CongregacionModel[] = [];
   public razonSolicitudes: RazonSolicitudModel[] = [];
@@ -87,7 +87,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       (data: {
         nacionalidad: NacionalidadModel[];
         congregacion: CongregacionModel[];
-        pais: PaisModel[];
+        pais: CongregacionPaisModel[];
         razonSolicitud: RazonSolicitudModel[];
         tipoEstudio: TipoEstudioModel[];
         opcionTransporte: OpcionTransporteModel[];

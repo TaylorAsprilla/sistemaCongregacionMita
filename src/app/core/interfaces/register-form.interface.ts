@@ -1,13 +1,3 @@
-import { FuenteIngresoModel } from '../models/fuente-ingreso.model';
-import { MinisterioModel } from '../models/ministerio.model';
-import { VoluntariadoModel } from '../models/voluntariado.model';
-
-export enum TIPO_DIRECCION {
-  DIRECCION_RESIDENCIAL = 1,
-  DIRECCION_POSTAL = 2,
-  DIRECCION_LABORAL = 3,
-}
-
 export interface RegisterFormInterface {
   primerNombre: string;
   segundoNombre: string;
@@ -21,9 +11,18 @@ export interface RegisterFormInterface {
   rolCasa_id: number;
   numeroCelular: string;
   telefonoCasa: string;
-  direcciones: DireccionInterface[];
   email: string;
-  fuentesDeIngreso: FuenteIngresoModel[];
+  direccion: string;
+  ciudadDireccion: string;
+  departamentoDireccion: string;
+  paisDireccion: string;
+  codigoPostalDireccion: string;
+  direccionPostal: string;
+  ciudadPostal: string;
+  departamentoPostal: string;
+  codigoPostal: string;
+  paisPostal: string;
+  fuentesDeIngreso: number[];
   ingresoMensual: string;
   gradoAcademico_id: number;
   tipoEmpleo_id: number;
@@ -31,22 +30,13 @@ export interface RegisterFormInterface {
   tipoMiembro_id: number;
   esJoven: boolean;
   ministerios: number[];
-  voluntariados: VoluntariadoModel[];
+  voluntariados: number[];
   congregacion: CongregacionInterfase;
   vacuna_id: number;
   dosis_id: number;
   numeroDocumento: string;
   terminos: boolean;
   tipoDocumento_id?: number;
-}
-
-export interface DireccionInterface {
-  direccion: string;
-  ciudad: string;
-  departamento?: string;
-  codigoPostal?: string;
-  pais: string;
-  tipoDireccion_id: number;
 }
 
 export interface CongregacionInterfase {

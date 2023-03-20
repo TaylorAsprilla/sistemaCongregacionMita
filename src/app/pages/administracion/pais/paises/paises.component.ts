@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { PaisService } from 'src/app/services/pais/pais.service';
@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class PaisesComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public divisas: DivisaModel[] = [];
   public obreros: UsuarioModel[] = [];
 
@@ -43,13 +43,13 @@ export class PaisesComponent implements OnInit, OnDestroy {
     this.paisSubscription = this.paisService
       .getPaises()
       .pipe(delay(100))
-      .subscribe((pais: PaisModel[]) => {
+      .subscribe((pais: CongregacionPaisModel[]) => {
         this.paises = pais;
         this.cargando = false;
       });
   }
 
-  borrarPais(pais: PaisModel) {
+  borrarPais(pais: CongregacionPaisModel) {
     Swal.fire({
       title: '¿Borrar País?',
       text: `Esta seguro de borrar el país ${pais.pais}`,
@@ -61,7 +61,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.paisService.eliminarPais(pais).subscribe((paisEliminado: PaisModel) => {
+        this.paisService.eliminarPais(pais).subscribe((paisEliminado: CongregacionPaisModel) => {
           Swal.fire('¡Deshabilitado!', `El país ${pais.pais} fue deshabilitado correctamente`, 'success');
 
           this.cargarPaises();
@@ -70,7 +70,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
     });
   }
 
-  activarPais(pais: PaisModel) {
+  activarPais(pais: CongregacionPaisModel) {
     Swal.fire({
       title: 'Activar País',
       text: `Esta seguro de activar el país ${pais.pais}`,
@@ -82,7 +82,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.paisService.activarPais(pais).subscribe((paisActivo: PaisModel) => {
+        this.paisService.activarPais(pais).subscribe((paisActivo: CongregacionPaisModel) => {
           Swal.fire('¡Activado!', `El país ${pais.pais} fue activado correctamente`, 'success');
 
           this.cargarPaises();

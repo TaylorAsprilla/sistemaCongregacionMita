@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { DivisaService } from 'src/app/services/divisa/divisa.service';
@@ -21,12 +21,12 @@ import Swal from 'sweetalert2';
 export class CrearPaisComponent implements OnInit, OnDestroy {
   public paisForm: FormGroup;
 
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public divisas: DivisaModel[] = [];
   public usuarios: UsuarioModel[] = [];
   public obreros: UsuarioModel[] = [];
 
-  public paisSeleccionado: PaisModel;
+  public paisSeleccionado: CongregacionPaisModel;
 
   // Subscription
   public paisSubscription: Subscription;
@@ -78,7 +78,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   }
 
   cargarPaises() {
-    this.paisSubscription = this.paisService.getPaises().subscribe((pais: PaisModel[]) => {
+    this.paisSubscription = this.paisService.getPaises().subscribe((pais: CongregacionPaisModel[]) => {
       this.paises = pais.filter((pais) => pais.estado === true);
     });
   }
@@ -132,7 +132,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
         .getPais(Number(id))
         .pipe(delay(100))
         .subscribe(
-          (paisEncontrado: PaisModel) => {
+          (paisEncontrado: CongregacionPaisModel) => {
             const { pais, idObreroEncargado } = paisEncontrado;
             this.paisSeleccionado = paisEncontrado;
 
