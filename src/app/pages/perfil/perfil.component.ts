@@ -13,7 +13,7 @@ import { GeneroModel } from 'src/app/core/models/genero.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
@@ -35,7 +35,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
   public rolCasa: RolCasaModel[] = [];
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public congregaciones: CongregacionModel[] = [];
   public campos: CampoModel[] = [];
   public vacunas: VacunaModel[] = [];
@@ -75,7 +75,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
         tipoDocumento: TipoDocumentoModel[];
         ministerio: MinisterioModel[];
         voluntariado: VoluntariadoModel[];
-        pais: PaisModel[];
+        pais: CongregacionPaisModel[];
         campo: CampoModel[];
         vacuna: VacunaModel[];
         dosis: DosisModel[];

@@ -4,8 +4,8 @@ import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
-import { CampoModel } from 'src/app/core/models/campo.model';
-import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { CampoModel, CONGREGACION_CAMPO } from 'src/app/core/models/campo.model';
+import { CONGREGACION, CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { DosisModel } from 'src/app/core/models/dosis.model';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
 import { FuenteIngresoModel } from 'src/app/core/models/fuente-ingreso.model';
@@ -13,9 +13,9 @@ import { GeneroModel } from 'src/app/core/models/genero.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel, CONGREGACION_PAIS } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
-import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
+import { TipoDocumentoModel, TIPO_DOCUMENTO, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -46,7 +46,7 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() public generos: GeneroModel[] = [];
   @Input() public estadoCivil: EstadoCivilModel[] = [];
   @Input() public rolCasa: RolCasaModel[] = [];
-  @Input() public paises: PaisModel[] = [];
+  @Input() public paises: CongregacionPaisModel[] = [];
   @Input() public congregaciones: CongregacionModel[] = [];
   @Input() public campos: CampoModel[] = [];
   @Input() public vacunas: VacunaModel[] = [];
@@ -138,11 +138,25 @@ export class InformacionUsuarioComponent implements OnInit {
   congregacionCampo: number;
   vacuna: number;
   dosisUsuario: number;
+  tipoDeDocumento: string;
+  numeroDocumento: string;
 
   // Subscription
   public usuarioSubscription: Subscription;
   public buscarCorreoSubscription: Subscription;
   public buscarCelularSubscription: Subscription;
+
+  get CONGREGACION_CAMPO() {
+    return CONGREGACION_CAMPO;
+  }
+
+  get CONGREGACION() {
+    return CONGREGACION;
+  }
+
+  get CONGREGACION_PAIS() {
+    return CONGREGACION_PAIS;
+  }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -153,9 +167,9 @@ export class InformacionUsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.listarCongregaciones();
     this.listarCampos();
-    this.tieneTipoDocumento();
     this.informacionDelUsuario();
     this.crearFormularios();
+    this.tieneTipoDocumento();
   }
 
   informacionDelUsuario() {
@@ -195,8 +209,13 @@ export class InformacionUsuarioComponent implements OnInit {
     this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
     this.congregacionPais = this.usuario?.paisId ? this.usuario.paisId : null;
     this.congreacionCiudad = this.usuario?.congregacionId ? this.usuario.congregacionId : null;
-
     this.congregacionCampo = this.usuario?.campoId ? this.usuario.campoId : null;
+
+    this.tipoDeDocumento = this.usuario.tipoDocumento_id
+      ? this.usuario.tipoDocumento_id.toString()
+      : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
+
+    this.numeroDocumento = this.usuario.numeroDocumento ? this.usuario.numeroDocumento : '';
 
     this.vacuna = this.usuario?.vacuna_id ? this.usuario?.vacuna_id : null;
     this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : null;
@@ -248,7 +267,7 @@ export class InformacionUsuarioComponent implements OnInit {
       tipoMiembro_id: [this.tipoMiembro, [Validators.required]],
       congregacionPais_id: [this.congregacionPais, [Validators.required]],
       congregacion_id: [this.congreacionCiudad, [Validators.required]],
-      campo_id: [this.congregacionCampo, []],
+      campo_id: [this.congregacionCampo, [Validators.required]],
       esJoven: [this.esjoven, [Validators.required]],
       ejerceMinisterio: [this.ejerMinisterio, [Validators.required]],
       esVoluntario: [this.voluntario, [Validators.required]],
@@ -493,10 +512,11 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   agregarControlTipoDocumento() {
+    debugger;
     this.registroCuatroForm = this.formBuilder.group({
       ...this.registroCuatroForm.controls,
-      tipoDocumento_id: ['', Validators.required],
-      numeroDocumento: ['', Validators.required],
+      tipoDocumento_id: [this.tipoDeDocumento, Validators.required],
+      numeroDocumento: [this.numeroDocumento, Validators.required],
     });
     return true;
   }

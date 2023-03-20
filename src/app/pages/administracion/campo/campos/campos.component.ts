@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { delay } from 'rxjs/operators';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
@@ -18,14 +18,14 @@ export class CamposComponent implements OnInit {
   public cargando: boolean = true;
   public campos: CampoModel[] = [];
   public obreros: UsuarioModel[] = [];
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public congregaciones: CongregacionModel[] = [];
 
   constructor(private router: Router, private campoService: CampoService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
-      (data: { obrero: UsuarioModel[]; pais: PaisModel[]; congregacion: CongregacionModel[] }) => {
+      (data: { obrero: UsuarioModel[]; pais: CongregacionPaisModel[]; congregacion: CongregacionModel[] }) => {
         this.obreros = data.obrero;
         this.paises = data.pais;
         this.congregaciones = data.congregacion;

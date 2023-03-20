@@ -9,7 +9,7 @@ import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-activ
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
@@ -57,7 +57,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   public ministerios: MinisterioModel[] = [];
   public ministerioSubcription: Subscription;
 
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public paisSubscription: Subscription;
 
   public actividadSubcription: Subscription;
@@ -278,7 +278,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   cargarPaises() {
     this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
-      this.paises = pais.filter((pais: PaisModel) => pais.estado === true);
+      this.paises = pais.filter((pais: CongregacionPaisModel) => pais.estado === true);
     });
   }
 
@@ -288,7 +288,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.usuarioService.getUsuario(obreroSeleccionado.id).subscribe((obrero: UsuarioInterface) => {
       obreroInforme = obrero.usuarioCongregacion;
 
-      this.paisObrero = this.paises.find((pais: PaisModel) => pais.id === obreroInforme?.pais_id)?.pais;
+      this.paisObrero = this.paises.find((pais: CongregacionPaisModel) => pais.id === obreroInforme?.pais_id)?.pais;
     });
   }
 

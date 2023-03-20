@@ -1,3 +1,7 @@
+export enum CONGREGACION_CAMPO {
+  SIN_CAMPO = '1',
+}
+
 export class CampoModel {
   constructor(
     public id: number,

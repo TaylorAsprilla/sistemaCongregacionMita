@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 export class TiposDeDocumentosComponent implements OnInit {
   public cargando: boolean = true;
   public tipoDeDocumentos: TipoDocumentoModel[] = [];
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
 
   // Subscription
   public tipoDeDocumentosSubscription: Subscription;
@@ -27,7 +27,7 @@ export class TiposDeDocumentosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { pais: PaisModel[] }) => {
+    this.activatedRoute.data.subscribe((data: { pais: CongregacionPaisModel[] }) => {
       this.paises = data.pais;
     });
 

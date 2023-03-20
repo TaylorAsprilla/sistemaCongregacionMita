@@ -73,7 +73,9 @@ export class UsuarioModel {
     public usuarioMinisterio?: MinisterioModel[],
     public usuarioVoluntariado?: VoluntariadoModel[],
     public usuarioPermiso?: PermisoModel[],
-    public usuarioFuenteIngreso?: FuenteIngresoModel[]
+    public usuarioFuenteIngreso?: FuenteIngresoModel[],
+    public tipoDocumento_id?: number,
+    public numeroDocumento?: string
   ) {}
 
   get fotoUrl() {

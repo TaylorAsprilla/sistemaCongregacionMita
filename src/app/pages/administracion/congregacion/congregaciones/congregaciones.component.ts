@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
@@ -18,7 +18,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
   public congregaciones: CongregacionModel[] = [];
   public obreros: UsuarioModel[] = [];
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
 
   // Subscription
   public congregacionSubscription: Subscription;
@@ -30,7 +30,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[]; pais: PaisModel[] }) => {
+    this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[]; pais: CongregacionPaisModel[] }) => {
       this.obreros = data.obrero;
       this.paises = data.pais;
     });

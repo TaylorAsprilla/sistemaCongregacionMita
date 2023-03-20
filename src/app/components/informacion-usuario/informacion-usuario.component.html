@@ -848,6 +848,7 @@
               #txtPaisCongregacion
             >
               <option value="" disabled>Seleccione el pais de la congregación a la que pertenece</option>
+              <option [value]="CONGREGACION_PAIS.SIN_CONGREGACION_PAIS">Sin Congregación País</option>
               <option *ngFor="let pais of paises" [value]="pais.id">
                 {{ pais.pais }}
               </option>
@@ -872,7 +873,7 @@
               #txtCongregacion
             >
               <option value="" disabled>Seleccione la congregación a la que pertenece</option>
-              <option [value]="sinCongregacion">Sin Congregación</option>
+              <option [value]="CONGREGACION.SIN_CONGREGACION">Sin Congregación</option>
               <option *ngFor="let congregacion of congregacionesFiltradas" [value]="congregacion.id">
                 {{ congregacion.congregacion }}
               </option>
@@ -889,9 +890,10 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group">Campo: </label>
+            <label class="input-group obligatorio">Campo: </label>
             <select class="form-select" formControlName="campo_id">
               <option value="" disabled>Seleccione el campo al que pertenece</option>
+              <option [value]="CONGREGACION_CAMPO.SIN_CAMPO">Sin Campo</option>
               <option *ngFor="let campo of camposFiltrados" [value]="campo.id">
                 {{ campo.campo }}
               </option>

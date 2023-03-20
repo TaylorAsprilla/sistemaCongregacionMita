@@ -5,7 +5,7 @@ import { generarSeccionHome, SeccionHome } from 'src/app/core/interfaces/seccion
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -19,7 +19,7 @@ export class InicioComponent implements OnInit {
   usuarios: UsuarioModel[] = [];
   totalUsuarios: number;
 
-  paises: PaisModel[] = [];
+  paises: CongregacionPaisModel[] = [];
   congregaciones: CongregacionModel[] = [];
   campos: CampoModel[] = [];
   ministerios: MinisterioModel[] = [];
@@ -36,7 +36,7 @@ export class InicioComponent implements OnInit {
     this.activatedRoute.data.subscribe(
       (data: {
         congregacion: CongregacionModel[];
-        pais: PaisModel[];
+        pais: CongregacionPaisModel[];
         campo: CampoModel[];
         ministerio: MinisterioModel[];
       }) => {

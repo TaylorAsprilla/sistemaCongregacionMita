@@ -7,7 +7,7 @@ import { DosisModel } from 'src/app/core/models/dosis.model';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
 import { GeneroModel } from 'src/app/core/models/genero.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { PaisModel } from 'src/app/core/models/pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { OPERACION, UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
@@ -33,7 +33,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
   public rolCasa: RolCasaModel[] = [];
-  public paises: PaisModel[] = [];
+  public paises: CongregacionPaisModel[] = [];
   public congregaciones: CongregacionModel[] = [];
   public campos: CampoModel[] = [];
   public vacunas: VacunaModel[] = [];
@@ -75,7 +75,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         tipoDocumento: TipoDocumentoModel[];
         ministerio: MinisterioModel[];
         voluntariado: VoluntariadoModel[];
-        pais: PaisModel[];
+        pais: CongregacionPaisModel[];
         campo: CampoModel[];
         vacuna: VacunaModel[];
         dosis: DosisModel[];
@@ -115,11 +115,13 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   crearUsuario(usuarioNuevo: RegisterFormInterface) {
     this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
       (usuarioCreado: any) => {
-        Swal.fire('Usuario creado', 'correctamente', 'success');
+        Swal.fire({
+          title: 'Usuario creado',
+          text: 'correctamente',
+          icon: 'success',
+        });
 
-        this.router.navigateByUrl(
-          `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
-        );
+        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.id}`);
       },
       (error) => {
         let errores = error.error.errors;

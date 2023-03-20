@@ -1,3 +1,7 @@
+export enum CONGREGACION {
+  SIN_CONGREGACION = '1',
+}
+
 export class CongregacionModel {
   constructor(
     public id: number,
