@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:production": "ng s --configuration production",
     "build": "ng build",
     "clean": "rm -rf dist",
     "clean-modules": "rm -rf node_modules",
