@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { DosisModel } from 'src/app/core/models/dosis.model';
@@ -22,13 +21,14 @@ import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
+import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 
 @Component({
   selector: 'app-registrar-usuario',
   templateUrl: './registrar-usuario.component.html',
   styleUrls: ['./registrar-usuario.component.scss'],
 })
-export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
+export class RegistrarUsuarioComponent implements OnInit {
   public usuario: UsuarioModel;
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
@@ -47,11 +47,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   public voluntariados: VoluntariadoModel[] = [];
   public tiposDeDocumentos: TipoDocumentoModel[] = [];
 
-  public usuarioSeleccionado: UsuarioModel;
-
-  //Subscription
-  public usuarioSubscription: Subscription;
-
   get OPERACION() {
     return OPERACION;
   }
@@ -59,8 +54,6 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
   constructor(private usuarioService: UsuarioService, private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.usuario = this.usuarioService.usuario;
-
     this.activatedRoute.data.subscribe(
       (data: {
         nacionalidad: NacionalidadModel[];
@@ -79,6 +72,7 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         campo: CampoModel[];
         vacuna: VacunaModel[];
         dosis: DosisModel[];
+        usuario: UsuarioInterface;
       }) => {
         this.nacionalidades = data.nacionalidad;
         this.estadoCivil = data.estadoCivil;
@@ -96,12 +90,14 @@ export class RegistrarUsuarioComponent implements OnInit, OnDestroy {
         this.vacunas = data.vacuna;
         this.dosis = data.dosis;
         this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
+        this.usuario = data?.usuario?.usuario;
       }
     );
   }
 
-  ngOnDestroy(): void {
-    this.usuarioSubscription?.unsubscribe();
+  arrayUsuarioData(dataType: string) {
+    const data = this.usuario?.[dataType];
+    return Array.isArray(data) ? data.map((item: any) => item?.id).filter(Boolean) : [];
   }
 
   realizarOperacion(operacion: string, data: RegisterFormInterface) {

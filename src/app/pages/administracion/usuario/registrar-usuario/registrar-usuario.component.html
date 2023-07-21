@@ -17,5 +17,9 @@
   [generos]="generos"
   [tipoMiembros]="tipoMiembros"
   [codigoDeMarcadoSeparado]="false"
+  [usuario]="usuario"
+  [usuarioFuenteDeIngresos]="arrayUsuarioData('usuarioFuenteIngreso')"
+  [usuarioMinisterios]="arrayUsuarioData('usuarioMinisterio')"
+  [usuarioVoluntariados]="arrayUsuarioData('usuarioVoluntariado')"
   (usuarioNuevo)="realizarOperacion(OPERACION.CREAR_USUARIO, $event)"
 ></app-informacion-usuario>

@@ -15,14 +15,13 @@ import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { CongregacionPaisModel, CONGREGACION_PAIS } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
-import { TipoDocumentoModel, TIPO_DOCUMENTO, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
+import { TipoDocumentoModel, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -41,7 +40,7 @@ export class InformacionUsuarioComponent implements OnInit {
   public registroTres_step = false;
   public step: number = 1;
 
-  @Input() public usuario: UsuarioModel = null;
+  @Input() public usuario: UsuarioModel;
   @Input() public usuarios: UsuarioModel[] = [];
   @Input() public generos: GeneroModel[] = [];
   @Input() public estadoCivil: EstadoCivilModel[] = [];
@@ -158,11 +157,7 @@ export class InformacionUsuarioComponent implements OnInit {
     return CONGREGACION_PAIS;
   }
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private usuarioService: UsuarioService,
-    private buscarCorreoService: BuscarCorreoService
-  ) {}
+  constructor(private formBuilder: FormBuilder, private buscarCorreoService: BuscarCorreoService) {}
 
   ngOnInit(): void {
     this.listarCongregaciones();
@@ -211,11 +206,11 @@ export class InformacionUsuarioComponent implements OnInit {
     this.congreacionCiudad = this.usuario?.congregacionId ? this.usuario.congregacionId : null;
     this.congregacionCampo = this.usuario?.campoId ? this.usuario.campoId : null;
 
-    this.tipoDeDocumento = this.usuario.tipoDocumento_id
+    this.tipoDeDocumento = this.usuario?.tipoDocumento_id
       ? this.usuario.tipoDocumento_id.toString()
       : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
 
-    this.numeroDocumento = this.usuario.numeroDocumento ? this.usuario.numeroDocumento : '';
+    this.numeroDocumento = this.usuario?.numeroDocumento ? this.usuario?.numeroDocumento : '';
 
     this.vacuna = this.usuario?.vacuna_id ? this.usuario?.vacuna_id : null;
     this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : null;

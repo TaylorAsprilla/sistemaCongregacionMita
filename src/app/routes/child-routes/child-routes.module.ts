@@ -47,7 +47,6 @@ import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
 import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
 import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
-import { LinkEventosResolver } from 'src/app/resolvers/link-eventos/link-eventos.resolver';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
 import { ConfirmacionDeRegistroComponent } from 'src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component';
@@ -69,6 +68,7 @@ import { GeneroComponent } from 'src/app/pages/configuracion/genero/genero.compo
 import { TipoDeEstudioComponent } from 'src/app/pages/configuracion/tipo-de-estudio/tipo-de-estudio.component';
 import { RazonDeSolicitudComponent } from 'src/app/pages/configuracion/razon-de-solicitud/razon-de-solicitud.component';
 import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/parentesco.component';
+import { UsuarioResolver } from 'src/app/resolvers/getUsuario/get-usuario.resolver';
 
 const childRoutes: Routes = [
   {
@@ -124,6 +124,7 @@ const childRoutes: Routes = [
       vacuna: VacunaResolver,
       dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
+      usuario: UsuarioResolver,
     },
   },
 
