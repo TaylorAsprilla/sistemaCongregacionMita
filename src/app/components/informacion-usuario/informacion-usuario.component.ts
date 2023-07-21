@@ -202,9 +202,15 @@ export class InformacionUsuarioComponent implements OnInit {
     this.voluntario = this.usuario?.usuarioVoluntariado ? true : false;
     this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
     this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
-    this.congregacionPais = this.usuario?.paisId ? this.usuario.paisId : null;
-    this.congreacionCiudad = this.usuario?.congregacionId ? this.usuario.congregacionId : null;
-    this.congregacionCampo = this.usuario?.campoId ? this.usuario.campoId : null;
+    this.congregacionPais = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id
+      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id
+      : null;
+    this.congreacionCiudad = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.congregacion_id
+      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.congregacion_id
+      : null;
+    this.congregacionCampo = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id
+      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id
+      : null;
 
     this.tipoDeDocumento = this.usuario?.tipoDocumento_id
       ? this.usuario.tipoDocumento_id.toString()
@@ -507,7 +513,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   agregarControlTipoDocumento() {
-    debugger;
     this.registroCuatroForm = this.formBuilder.group({
       ...this.registroCuatroForm.controls,
       tipoDocumento_id: [this.tipoDeDocumento, Validators.required],
