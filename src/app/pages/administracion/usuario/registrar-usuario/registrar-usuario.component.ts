@@ -77,14 +77,14 @@ export class RegistrarUsuarioComponent implements OnInit {
         this.nacionalidades = data.nacionalidad;
         this.estadoCivil = data.estadoCivil;
         this.rolCasa = data.rolCasa;
-        this.generos = data.genero;
+        this.generos = data.genero.filter((genero) => genero.estado === true);
         this.fuenteDeIngresos = data.fuenteDeIngreso;
         this.gradosAcademicos = data.gradoAcademico;
         this.tiposEmpleos = data.tipoEmpleo;
         this.tipoMiembros = data.tipoMiembro;
         this.congregaciones = data.congregacion.filter((congregacion) => congregacion.estado === true);
         this.ministerios = data.ministerio.filter((ministerio) => ministerio.estado === true);
-        this.voluntariados = data.voluntariado;
+        this.voluntariados = data.voluntariado.filter((voluntariado) => voluntariado.estado === true);
         this.paises = data.pais.filter((pais) => pais.estado === true);
         this.campos = data.campo.filter((campo) => campo.estado === true);
         this.vacunas = data.vacuna;

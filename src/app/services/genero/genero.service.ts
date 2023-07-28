@@ -35,10 +35,6 @@ export class GeneroService {
       .pipe(map((respuesta: { ok: boolean; genero: GeneroModel }) => respuesta.genero));
   }
 
-  // crearGenero(genero: GeneroModel) {
-  //   return this.httpClient.post(`${base_url}/genero`, genero, this.headers);
-  // }
-
   crearGenero(genero: string) {
     return this.httpClient.post(`${base_url}/genero`, { genero: genero }, this.headers);
   }

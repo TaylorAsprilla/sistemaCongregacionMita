@@ -97,4 +97,9 @@ export class CambiarPasswordComponent implements OnInit {
       );
     }
   }
+
+  obtenerAnioActual = (): number => {
+    const fechaActual = new Date();
+    return fechaActual.getFullYear();
+  };
 }
