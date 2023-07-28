@@ -49,8 +49,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public voluntariados: VoluntariadoModel[] = [];
   public tiposDeDocumentos: TipoDocumentoModel[] = [];
 
-  public usuarioSeleccionado: UsuarioModel;
-
   //Subscription
   public usuarioSubscription: Subscription;
 
@@ -61,10 +59,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.usuario = this.usuarioService.usuario;
-
-    this.usuarioSeleccionado = this.usuario;
-
     this.activatedRoute.data.subscribe(
       (data: {
         nacionalidad: NacionalidadModel[];
@@ -83,6 +77,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
         campo: CampoModel[];
         vacuna: VacunaModel[];
         dosis: DosisModel[];
+        usuario: UsuarioInterface;
       }) => {
         this.nacionalidades = data.nacionalidad;
         this.estadoCivil = data.estadoCivil;
@@ -100,41 +95,13 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.vacunas = data.vacuna;
         this.dosis = data.dosis;
         this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
+        this.usuario = data.usuario.usuario;
       }
     );
   }
 
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
-  }
-
-  buscarUsuario(id: string) {
-    if (id !== 'nuevo') {
-      this.usuarioService
-        .getUsuario(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (usuarioEncontrado: UsuarioInterface) => {
-            this.usuarioSeleccionado = usuarioEncontrado.usuario;
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-
-            Swal.fire({
-              title: 'Congregacion',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
-          }
-        );
-    }
   }
 
   realizarOperacion(operacion: string, data: RegisterFormInterface) {

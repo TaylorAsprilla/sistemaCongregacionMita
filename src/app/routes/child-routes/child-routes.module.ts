@@ -254,7 +254,7 @@ const childRoutes: Routes = [
 
   // Perfil
   {
-    path: RUTAS.PERFIL,
+    path: `${RUTAS.PERFIL}/:id`,
     component: PerfilComponent,
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -273,6 +273,7 @@ const childRoutes: Routes = [
       vacuna: VacunaResolver,
       dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
+      usuario: UsuarioResolver,
     },
   },
   // Informes
