@@ -143,31 +143,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
     }
   }
 
-  // crearUsuario(usuarioNuevo: RegisterFormInterface) {
-  //   this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
-  //     (usuarioCreado: any) => {
-  //       Swal.fire('Usuario creado', 'correctamente', 'success');
-  //       this.router.navigateByUrl(
-  //         `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
-  //       );
-  //     },
-  //     (error) => {
-  //       let errores = error.error.errors;
-  //       let listaErrores = [];
-  //       if (!!errores) {
-  //         Object.entries(errores).forEach(([key, value]) => {
-  //           listaErrores.push('° ' + value['msg'] + '<br>');
-  //         });
-  //       }
-  //       Swal.fire({
-  //         title: 'El usuario NO ha sido creado',
-  //         icon: 'error',
-  //         html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
-  //       });
-  //     }
-  //   );
-  // }
-
   actualizarPerfil(usuario: RegisterFormInterface) {
     Swal.fire({
       title: 'Actualizar Perfil',
