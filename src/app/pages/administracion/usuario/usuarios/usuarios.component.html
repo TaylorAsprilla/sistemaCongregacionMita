@@ -10,10 +10,7 @@
       </div>
     </div>
 
-    <div class="float-right">
-      <span class="font-weight-bold">Página:</span> {{ pagina }} de {{ totalPaginas }} -
-      <span class="font-weight-bold">Cantidad: </span>{{ paginaDesde + 5 }}
-    </div>
+    <div class="float-right"><span class="font-weight-bold">Página:</span> {{ pagina }} de {{ totalPaginas }} -</div>
   </div>
   <!-- /.card-header -->
   <div class="card-body">
@@ -72,32 +69,39 @@
                 *ngIf="!!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Editar"
-                class="btn bg-info"
+                class="btn bg-info me-1"
                 (click)="actualizarUsuario(usuario.id)"
-                ><i class="fas fa-pencil-alt ml-1"></i
-              ></a>
-              <a
-                *ngIf="!!usuario.estado"
-                data-toggle="tooltip"
-                data-original-title="Borrar"
-                class="btn bg-danger ml-1"
-                (click)="borrarUsuario(usuario)"
-                ><i class="fas fa-trash-alt"></i
-              ></a>
+              >
+                <i class="fas fa-pencil-alt ml-1"></i>
+              </a>
+
               <a
                 *ngIf="!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Activar"
-                class="btn bg-secondary ml-1"
+                class="btn bg-secondary me-1"
                 (click)="activarUsuario(usuario)"
-                ><i class="fas fa-check-square"></i
-              ></a>
-              <a data-toggle="tooltip" data-original-title="trascendió" class="btn bg-warning ml-1">
-                <i class="fa-solid fa-x"></i
-              ></a>
-              <a data-toggle="tooltip" data-original-title="traslado" class="btn bg-success ml-1">
-                <i class="fa fa-right-left"></i
-              ></a>
+              >
+                <i class="fas fa-check-square"></i>
+              </a>
+
+              <a data-toggle="tooltip" data-original-title="traslado" class="btn bg-success me-1">
+                <i class="fa fa-right-left"></i>
+              </a>
+
+              <a data-toggle="tooltip" data-original-title="trascendió" class="btn bg-warning me-1">
+                <i class="fa fa-cloud"></i>
+              </a>
+
+              <a
+                *ngIf="!!usuario.estado"
+                data-toggle="tooltip"
+                data-original-title="Borrar"
+                class="btn bg-danger me-1"
+                (click)="borrarUsuario(usuario)"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </a>
             </td>
           </tr>
         </tbody>

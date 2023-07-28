@@ -15,14 +15,13 @@ import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { CongregacionPaisModel, CONGREGACION_PAIS } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
-import { TipoDocumentoModel, TIPO_DOCUMENTO, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
+import { TipoDocumentoModel, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -41,7 +40,7 @@ export class InformacionUsuarioComponent implements OnInit {
   public registroTres_step = false;
   public step: number = 1;
 
-  @Input() public usuario: UsuarioModel = null;
+  @Input() public usuario: UsuarioModel;
   @Input() public usuarios: UsuarioModel[] = [];
   @Input() public generos: GeneroModel[] = [];
   @Input() public estadoCivil: EstadoCivilModel[] = [];
@@ -87,7 +86,7 @@ export class InformacionUsuarioComponent implements OnInit {
     CountryISO.Venezuela,
   ];
 
-  @Output() usuarioNuevo = new EventEmitter<RegisterFormInterface>();
+  @Output() operacion = new EventEmitter<RegisterFormInterface>();
 
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
 
@@ -141,6 +140,8 @@ export class InformacionUsuarioComponent implements OnInit {
   tipoDeDocumento: string;
   numeroDocumento: string;
 
+  direccionResidenciaValues: any;
+
   // Subscription
   public usuarioSubscription: Subscription;
   public buscarCorreoSubscription: Subscription;
@@ -158,11 +159,7 @@ export class InformacionUsuarioComponent implements OnInit {
     return CONGREGACION_PAIS;
   }
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private usuarioService: UsuarioService,
-    private buscarCorreoService: BuscarCorreoService
-  ) {}
+  constructor(private formBuilder: FormBuilder, private buscarCorreoService: BuscarCorreoService) {}
 
   ngOnInit(): void {
     this.listarCongregaciones();
@@ -207,15 +204,21 @@ export class InformacionUsuarioComponent implements OnInit {
     this.voluntario = this.usuario?.usuarioVoluntariado ? true : false;
     this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
     this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
-    this.congregacionPais = this.usuario?.paisId ? this.usuario.paisId : null;
-    this.congreacionCiudad = this.usuario?.congregacionId ? this.usuario.congregacionId : null;
-    this.congregacionCampo = this.usuario?.campoId ? this.usuario.campoId : null;
+    this.congregacionPais = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id
+      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id
+      : null;
+    this.congreacionCiudad = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.congregacion_id
+      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.congregacion_id
+      : null;
+    this.congregacionCampo = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id
+      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id
+      : null;
 
-    this.tipoDeDocumento = this.usuario.tipoDocumento_id
+    this.tipoDeDocumento = this.usuario?.tipoDocumento_id
       ? this.usuario.tipoDocumento_id.toString()
       : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
 
-    this.numeroDocumento = this.usuario.numeroDocumento ? this.usuario.numeroDocumento : '';
+    this.numeroDocumento = this.usuario?.numeroDocumento ? this.usuario?.numeroDocumento : '';
 
     this.vacuna = this.usuario?.vacuna_id ? this.usuario?.vacuna_id : null;
     this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : null;
@@ -243,11 +246,12 @@ export class InformacionUsuarioComponent implements OnInit {
       rolCasa_id: [this.rolEnCasa, [Validators.required]],
       numeroCelular: [this.celular, [Validators.required, Validators.minLength(3)]],
       telefonoCasa: [this.telefonoCasa, [Validators.minLength(3)]],
-      direccionResidencia: [this.direccion, [Validators.required, Validators.minLength(3)]],
-      ciudadResidencia: [this.ciudadDireccion, [Validators.required, Validators.minLength(3)]],
-      departamentoResidencia: [this.departamentoDireccion, [Validators.minLength(3)]],
-      codigoPostalResidencia: [this.codigoPostalDireccion, [Validators.minLength(3)]],
-      paisResidencia: [this.paisDireccion, [Validators.required, Validators.minLength(3)]],
+      direccion: [this.direccion, [Validators.required, Validators.minLength(3)]],
+      ciudadDireccion: [this.ciudadDireccion, [Validators.required, Validators.minLength(3)]],
+      departamentoDireccion: [this.departamentoDireccion, [Validators.minLength(3)]],
+      codigoPostalDireccion: [this.codigoPostalDireccion, [Validators.minLength(3)]],
+      paisDireccion: [this.paisDireccion, [Validators.required, Validators.minLength(3)]],
+      mismaDireccionPostal: [],
       direccionPostal: [this.direccionPostal, [Validators.minLength(5)]],
       ciudadPostal: [this.ciudadPostal, [Validators.minLength(3)]],
       departamentoPostal: [this.departamentoPostal, [Validators.minLength(3)]],
@@ -427,12 +431,37 @@ export class InformacionUsuarioComponent implements OnInit {
         paisPostal: informacionFormulario.paisPostal,
         departamentoDireccion: informacionFormulario.departamentoDireccion,
       };
-      this.usuarioNuevo.emit(usuarioNuevo);
+      this.operacion.emit(usuarioNuevo);
     } else {
       Swal.fire({
         title: 'El usuario NO ha sido creado',
         icon: 'error',
         html: 'Existen campos obligatorios sin llenar',
+      });
+    }
+  }
+
+  copiarDireccionResidencia() {
+    if (this.registroDosForm.get('mismaDireccionPostal').value) {
+      const direccionResidencia = this.registroDosForm.get('direccion').value;
+      this.registroDosForm.patchValue({
+        direccionPostal: direccionResidencia,
+        ciudadPostal: this.registroDosForm.get('ciudadDireccion').value,
+        departamentoPostal: this.registroDosForm.get('departamentoDireccion').value,
+        codigoPostal: this.registroDosForm.get('codigoPostalDireccion').value,
+        paisPostal: this.registroDosForm.get('paisDireccion').value,
+      });
+    }
+  }
+
+  limpiarDireccionPostal() {
+    if (!this.registroDosForm.get('mismaDireccionPostal').value) {
+      this.registroDosForm.patchValue({
+        direccionPostal: '',
+        ciudadPostal: '',
+        departamentoPostal: '',
+        codigoPostal: '',
+        paisPostal: '',
       });
     }
   }
@@ -512,7 +541,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   agregarControlTipoDocumento() {
-    debugger;
     this.registroCuatroForm = this.formBuilder.group({
       ...this.registroCuatroForm.controls,
       tipoDocumento_id: [this.tipoDeDocumento, Validators.required],

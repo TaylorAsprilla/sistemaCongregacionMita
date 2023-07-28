@@ -18,7 +18,7 @@ import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
-import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { OPERACION, UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -49,18 +49,16 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public voluntariados: VoluntariadoModel[] = [];
   public tiposDeDocumentos: TipoDocumentoModel[] = [];
 
-  public usuarioSeleccionado: UsuarioModel;
-
   //Subscription
   public usuarioSubscription: Subscription;
+
+  get OPERACION() {
+    return OPERACION;
+  }
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.usuario = this.usuarioService.usuario;
-
-    this.usuarioSeleccionado = this.usuario;
-
     this.activatedRoute.data.subscribe(
       (data: {
         nacionalidad: NacionalidadModel[];
@@ -79,6 +77,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
         campo: CampoModel[];
         vacuna: VacunaModel[];
         dosis: DosisModel[];
+        usuario: UsuarioInterface;
       }) => {
         this.nacionalidades = data.nacionalidad;
         this.estadoCivil = data.estadoCivil;
@@ -96,6 +95,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.vacunas = data.vacuna;
         this.dosis = data.dosis;
         this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
+        this.usuario = data.usuario.usuario;
       }
     );
   }
@@ -104,66 +104,10 @@ export class PerfilComponent implements OnInit, OnDestroy {
     this.usuarioSubscription?.unsubscribe();
   }
 
-  buscarUsuario(id: string) {
-    if (id !== 'nuevo') {
-      this.usuarioService
-        .getUsuario(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (usuarioEncontrado: UsuarioInterface) => {
-            this.usuarioSeleccionado = usuarioEncontrado.usuario;
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-
-            Swal.fire({
-              title: 'Congregacion',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
-          }
-        );
-    }
-  }
-
   realizarOperacion(operacion: string, data: RegisterFormInterface) {
-    if (operacion === 'actualizar') {
+    if (operacion === OPERACION.ACTUALIZAR_USUARIO) {
       this.actualizarPerfil(data);
-    } else {
-      this.crearUsuario(data);
     }
-  }
-
-  crearUsuario(usuarioNuevo: RegisterFormInterface) {
-    this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
-      (usuarioCreado: any) => {
-        Swal.fire('Usuario creado', 'correctamente', 'success');
-        this.router.navigateByUrl(
-          `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
-        );
-      },
-      (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
-        if (!!errores) {
-          Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
-          });
-        }
-        Swal.fire({
-          title: 'El usuario NO ha sido creado',
-          icon: 'error',
-          html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
-        });
-      }
-    );
   }
 
   actualizarPerfil(usuario: RegisterFormInterface) {
@@ -199,5 +143,10 @@ export class PerfilComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  arrayUsuarioData(dataType: string) {
+    const data = this.usuario?.[dataType];
+    return Array.isArray(data) ? data.map((item: any) => item?.id).filter(Boolean) : [];
   }
 }

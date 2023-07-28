@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   usuariosSubscription: Subscription;
   loginForm: FormGroup;
 
+  showPassword: boolean = false;
+
   get Rutas() {
     return RUTAS;
   }
@@ -74,5 +76,14 @@ export class LoginComponent implements OnInit {
         Swal.fire({ icon: 'error', html: `${err.error.msg}` });
       }
     );
+  }
+
+  obtenerAnioActual = (): number => {
+    const fechaActual = new Date();
+    return fechaActual.getFullYear();
+  };
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }

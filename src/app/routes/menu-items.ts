@@ -180,7 +180,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [],
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -189,7 +189,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [],
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -198,7 +198,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [],
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -207,7 +207,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [],
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -216,7 +216,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [],
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],
@@ -347,7 +347,7 @@ export const ROUTES: RouteInfo[] = [
     title: 'Supervisor',
     icon: '',
     class: 'nav-small-cap',
-    role: [ROLES.SUPERVISOR],
+    role: [ROLES.SUPERVISOR, ROLES.ADMINISTRADOR],
     extralink: true,
     submenu: [],
   },
@@ -357,7 +357,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-home',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.SUPERVISOR],
+    role: [ROLES.SUPERVISOR, ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: RUTAS.USUARIOS_SUPERVISOR,
@@ -365,7 +365,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [],
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],

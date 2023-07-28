@@ -1,3 +1,10 @@
+::placeholder {
+  color: #999;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 200;
+}
+
 .form {
   width: 80%;
   text-align: center;
@@ -276,4 +283,13 @@ input.form-check-input {
     position: relative;
     letter-spacing: 1px;
   }
+}
+
+.check-label {
+  display: flex;
+  align-items: center;
+}
+
+.check-label .form-check-input {
+  margin-right: 8px;
 }
