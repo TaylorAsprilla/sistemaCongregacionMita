@@ -362,24 +362,18 @@
             <input
               type="text"
               class="form-control"
-              formControlName="direccionResidencia"
+              formControlName="direccion"
               placeholder="Dirección de la residencia"
             />
             <small
               class="form-text text-danger"
-              *ngIf="
-                registroDosForm.get('direccionResidencia').hasError('required') &&
-                registroDosForm.get('direccionResidencia').touched
-              "
+              *ngIf="registroDosForm.get('direccion').hasError('required') && registroDosForm.get('direccion').touched"
             >
               La dirección del feligrés es requerido.
             </small>
             <small
               class="form-text text-danger"
-              *ngIf="
-                registroDosForm.get('direccionResidencia').hasError('minlength') &&
-                registroDosForm.get('direccionResidencia').touched
-              "
+              *ngIf="registroDosForm.get('direccion').hasError('minlength') && registroDosForm.get('direccion').touched"
             >
               La dirección del feligrés no tiene la longitud mínima permitida.
             </small>
@@ -387,12 +381,12 @@
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">Ciudad / Localidad:</label>
-            <input type="text" formControlName="ciudadResidencia" class="form-control" placeholder="Ciudad" />
+            <input type="text" formControlName="ciudadDireccion" class="form-control" placeholder="Ciudad" />
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('ciudadResidencia').hasError('required') &&
-                registroDosForm.get('ciudadResidencia').touched
+                registroDosForm.get('ciudadDireccion').hasError('required') &&
+                registroDosForm.get('ciudadDireccion').touched
               "
             >
               El campo ciudad / localidad es requerido.
@@ -400,8 +394,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('ciudadResidencia').hasError('minlength') &&
-                registroDosForm.get('ciudadResidencia').touched
+                registroDosForm.get('ciudadDireccion').hasError('minlength') &&
+                registroDosForm.get('ciudadDireccion').touched
               "
             >
               El campo ciudad / localidad no tiene la longitud mínima permitida.
@@ -412,7 +406,7 @@
             <label class="input-group">Estado / Provincia / Departamento:</label>
             <input
               type="text"
-              formControlName="departamentoResidencia"
+              formControlName="departamentoDireccion"
               class="form-control"
               placeholder="Departamento"
             />
@@ -420,8 +414,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('departamentoResidencia').hasError('minlength') &&
-                registroDosForm.get('departamentoResidencia').touched
+                registroDosForm.get('departamentoDireccion').hasError('minlength') &&
+                registroDosForm.get('departamentoDireccion').touched
               "
             >
               El campo estado / provincia / departamento no tiene la longitud mínima permitida.
@@ -433,15 +427,15 @@
             <input
               type="number"
               class="form-control"
-              formControlName="codigoPostalResidencia"
+              formControlName="codigoPostalDireccion"
               placeholder="Código Postal"
             />
           </div>
           <small
             class="form-text text-danger"
             *ngIf="
-              registroDosForm.get('codigoPostalResidencia').hasError('minlength') &&
-              registroDosForm.get('codigoPostalResidencia').touched
+              registroDosForm.get('codigoPostalDireccion').hasError('minlength') &&
+              registroDosForm.get('codigoPostalDireccion').touched
             "
           >
             El código postal no tiene la longitud mínima permitida.
@@ -451,10 +445,10 @@
             <input
               type="text"
               placeholder="Pais de Residencia"
-              formControlName="paisResidencia"
+              formControlName="paisDireccion"
               class="form-control"
               [matAutocomplete]="auto"
-              (keypress)="buscarNacionalidad('paisResidencia')"
+              (keypress)="buscarNacionalidad('paisDireccion')"
             />
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let pais of letrasFiltrarNacionalidad | async" [value]="pais.nombre">
@@ -464,8 +458,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('paisResidencia').hasError('required') &&
-                registroDosForm.get('paisResidencia').touched
+                registroDosForm.get('paisDireccion').hasError('required') &&
+                registroDosForm.get('paisDireccion').touched
               "
             >
               El pais de la dirección de residencia es requerida.
@@ -473,12 +467,24 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('paisResidencia').hasError('minlength') &&
-                registroDosForm.get('paisResidencia').touched
+                registroDosForm.get('paisDireccion').hasError('minlength') &&
+                registroDosForm.get('paisDireccion').touched
               "
             >
               El pais de la dirección de residencia no tiene la longitud mínima permitida.
             </small>
+          </div>
+
+          <div class="form-group col-sm-12 col-md-6 col-lg-4 check-label">
+            <input
+              type="checkbox"
+              formControlName="mismaDireccionPostal"
+              (change)="copiarDireccionResidencia(); limpiarDireccionPostal()"
+              class="form-check-input"
+            />
+            <label class="form-check-label" for="mismaDireccionPostal"
+              >La dirección de residencia es la misma que la dirección postal</label
+            >
           </div>
         </div>
 

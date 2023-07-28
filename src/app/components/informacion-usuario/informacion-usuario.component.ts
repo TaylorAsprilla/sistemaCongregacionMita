@@ -86,7 +86,7 @@ export class InformacionUsuarioComponent implements OnInit {
     CountryISO.Venezuela,
   ];
 
-  @Output() usuarioNuevo = new EventEmitter<RegisterFormInterface>();
+  @Output() operacion = new EventEmitter<RegisterFormInterface>();
 
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
 
@@ -139,6 +139,8 @@ export class InformacionUsuarioComponent implements OnInit {
   dosisUsuario: number;
   tipoDeDocumento: string;
   numeroDocumento: string;
+
+  direccionResidenciaValues: any;
 
   // Subscription
   public usuarioSubscription: Subscription;
@@ -244,11 +246,12 @@ export class InformacionUsuarioComponent implements OnInit {
       rolCasa_id: [this.rolEnCasa, [Validators.required]],
       numeroCelular: [this.celular, [Validators.required, Validators.minLength(3)]],
       telefonoCasa: [this.telefonoCasa, [Validators.minLength(3)]],
-      direccionResidencia: [this.direccion, [Validators.required, Validators.minLength(3)]],
-      ciudadResidencia: [this.ciudadDireccion, [Validators.required, Validators.minLength(3)]],
-      departamentoResidencia: [this.departamentoDireccion, [Validators.minLength(3)]],
-      codigoPostalResidencia: [this.codigoPostalDireccion, [Validators.minLength(3)]],
-      paisResidencia: [this.paisDireccion, [Validators.required, Validators.minLength(3)]],
+      direccion: [this.direccion, [Validators.required, Validators.minLength(3)]],
+      ciudadDireccion: [this.ciudadDireccion, [Validators.required, Validators.minLength(3)]],
+      departamentoDireccion: [this.departamentoDireccion, [Validators.minLength(3)]],
+      codigoPostalDireccion: [this.codigoPostalDireccion, [Validators.minLength(3)]],
+      paisDireccion: [this.paisDireccion, [Validators.required, Validators.minLength(3)]],
+      mismaDireccionPostal: [],
       direccionPostal: [this.direccionPostal, [Validators.minLength(5)]],
       ciudadPostal: [this.ciudadPostal, [Validators.minLength(3)]],
       departamentoPostal: [this.departamentoPostal, [Validators.minLength(3)]],
@@ -428,12 +431,37 @@ export class InformacionUsuarioComponent implements OnInit {
         paisPostal: informacionFormulario.paisPostal,
         departamentoDireccion: informacionFormulario.departamentoDireccion,
       };
-      this.usuarioNuevo.emit(usuarioNuevo);
+      this.operacion.emit(usuarioNuevo);
     } else {
       Swal.fire({
         title: 'El usuario NO ha sido creado',
         icon: 'error',
         html: 'Existen campos obligatorios sin llenar',
+      });
+    }
+  }
+
+  copiarDireccionResidencia() {
+    if (this.registroDosForm.get('mismaDireccionPostal').value) {
+      const direccionResidencia = this.registroDosForm.get('direccion').value;
+      this.registroDosForm.patchValue({
+        direccionPostal: direccionResidencia,
+        ciudadPostal: this.registroDosForm.get('ciudadDireccion').value,
+        departamentoPostal: this.registroDosForm.get('departamentoDireccion').value,
+        codigoPostal: this.registroDosForm.get('codigoPostalDireccion').value,
+        paisPostal: this.registroDosForm.get('paisDireccion').value,
+      });
+    }
+  }
+
+  limpiarDireccionPostal() {
+    if (!this.registroDosForm.get('mismaDireccionPostal').value) {
+      this.registroDosForm.patchValue({
+        direccionPostal: '',
+        ciudadPostal: '',
+        departamentoPostal: '',
+        codigoPostal: '',
+        paisPostal: '',
       });
     }
   }

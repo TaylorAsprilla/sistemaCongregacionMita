@@ -18,7 +18,7 @@ import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
-import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { OPERACION, UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -53,6 +53,10 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   //Subscription
   public usuarioSubscription: Subscription;
+
+  get OPERACION() {
+    return OPERACION;
+  }
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}
 
@@ -134,37 +138,35 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
   realizarOperacion(operacion: string, data: RegisterFormInterface) {
-    if (operacion === 'actualizar') {
+    if (operacion === OPERACION.ACTUALIZAR_USUARIO) {
       this.actualizarPerfil(data);
-    } else {
-      this.crearUsuario(data);
     }
   }
 
-  crearUsuario(usuarioNuevo: RegisterFormInterface) {
-    this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
-      (usuarioCreado: any) => {
-        Swal.fire('Usuario creado', 'correctamente', 'success');
-        this.router.navigateByUrl(
-          `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
-        );
-      },
-      (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
-        if (!!errores) {
-          Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
-          });
-        }
-        Swal.fire({
-          title: 'El usuario NO ha sido creado',
-          icon: 'error',
-          html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
-        });
-      }
-    );
-  }
+  // crearUsuario(usuarioNuevo: RegisterFormInterface) {
+  //   this.usuarioService.crearUsuario(usuarioNuevo).subscribe(
+  //     (usuarioCreado: any) => {
+  //       Swal.fire('Usuario creado', 'correctamente', 'success');
+  //       this.router.navigateByUrl(
+  //         `${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.usuarioNuevo.usuario.id}`
+  //       );
+  //     },
+  //     (error) => {
+  //       let errores = error.error.errors;
+  //       let listaErrores = [];
+  //       if (!!errores) {
+  //         Object.entries(errores).forEach(([key, value]) => {
+  //           listaErrores.push('° ' + value['msg'] + '<br>');
+  //         });
+  //       }
+  //       Swal.fire({
+  //         title: 'El usuario NO ha sido creado',
+  //         icon: 'error',
+  //         html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+  //       });
+  //     }
+  //   );
+  // }
 
   actualizarPerfil(usuario: RegisterFormInterface) {
     Swal.fire({
@@ -199,5 +201,10 @@ export class PerfilComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  arrayUsuarioData(dataType: string) {
+    const data = this.usuario?.[dataType];
+    return Array.isArray(data) ? data.map((item: any) => item?.id).filter(Boolean) : [];
   }
 }
