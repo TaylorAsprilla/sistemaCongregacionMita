@@ -9,7 +9,7 @@
     <h5>{{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundoApellido }}</h5>
 
     <div>
-      <a [routerLink]="Rutas.PERFIL" class="" data-toggle="tooltip" title="Email">
+      <a [routerLink]="[Rutas.PERFIL, usuario.id]" data-toggle="tooltip" title="Perfil">
         <i class="fa fa-user"></i> Mi Perfil
       </a>
     </div>
