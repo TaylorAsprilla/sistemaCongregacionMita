@@ -420,17 +420,18 @@ export class InformacionUsuarioComponent implements OnInit {
         tipoDocumento_id: informacionFormulario?.tipoDocumento_id ? informacionFormulario?.tipoDocumento_id : 1,
         numeroDocumento: informacionFormulario.numeroDocumento ? informacionFormulario.numeroDocumento : '',
         terminos: false,
-        direccion: informacionFormulario.direccionResidencia,
-        ciudadDireccion: informacionFormulario.ciudadResidencia,
-        paisDireccion: informacionFormulario.paisResidencia,
-        codigoPostalDireccion: informacionFormulario.codigoPostalResidencia,
-        direccionPostal: informacionFormulario.direccionPostal,
-        ciudadPostal: informacionFormulario.ciudadPostal,
-        departamentoPostal: informacionFormulario.departamentoPostal,
-        codigoPostal: informacionFormulario.codigoPostal,
-        paisPostal: informacionFormulario.paisPostal,
-        departamentoDireccion: informacionFormulario.departamentoDireccion,
+        direccion: informacionFormulario.direccion,
+        ciudadDireccion: informacionFormulario.ciudadDireccion,
+        paisDireccion: informacionFormulario.paisDireccion,
+        codigoPostalDireccion: informacionFormulario?.codigoPostalDireccion,
+        direccionPostal: informacionFormulario?.direccionPostal,
+        ciudadPostal: informacionFormulario?.ciudadPostal,
+        departamentoPostal: informacionFormulario?.departamentoPostal,
+        codigoPostal: informacionFormulario?.codigoPostal,
+        paisPostal: informacionFormulario?.paisPostal,
+        departamentoDireccion: informacionFormulario?.departamentoDireccion,
       };
+
       this.operacion.emit(usuarioNuevo);
     } else {
       Swal.fire({
