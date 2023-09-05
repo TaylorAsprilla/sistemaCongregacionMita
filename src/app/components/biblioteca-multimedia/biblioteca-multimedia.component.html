@@ -19,19 +19,19 @@
           </youtube-player>
         </div>
       </div>
-      <div
-        *ngIf="item.plataforma === PLATAFORMA.VIMEO"
-        class="card-body col-sm-12 col-md-12 col-lg-12 text-center ratio ratio-16x9"
-      >
-        <iframe
-          [src]="domSanitizerVideo(item.link)"
-          width="400"
-          height="255"
-          frameborder="0"
-          webkitallowfullscreen
-          mozallowfullscreen
-          allowfullscreen
-        ></iframe>
+
+      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+        <div class="ratio ratio-16x9">
+          <iframe
+            [src]="domSanitizerVideo(item.link)"
+            width="400"
+            height="255"
+            frameborder="0"
+            webkitallowfullscreen
+            mozallowfullscreen
+            allowfullscreen
+          ></iframe>
+        </div>
       </div>
     </div>
 
@@ -54,19 +54,18 @@
           </youtube-player>
         </div>
       </div>
-      <div
-        *ngIf="item.plataforma === PLATAFORMA.VIMEO"
-        class="card-body col-sm-12 col-md-12 col-lg-12 text-center ratio ratio-16x9"
-      >
-        <iframe
-          [src]="domSanitizerVideo(item.link)"
-          width="400"
-          height="255"
-          frameborder="0"
-          webkitallowfullscreen
-          mozallowfullscreen
-          allowfullscreen
-        ></iframe>
+      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+        <div class="ratio ratio-16x9">
+          <iframe
+            [src]="domSanitizerVideo(item.link)"
+            width="400"
+            height="255"
+            frameborder="0"
+            webkitallowfullscreen
+            mozallowfullscreen
+            allowfullscreen
+          ></iframe>
+        </div>
       </div>
     </div>
     <!-- Evento Especial -->
@@ -89,19 +88,18 @@
           </youtube-player>
         </div>
       </div>
-      <div
-        *ngIf="item.plataforma === PLATAFORMA.VIMEO"
-        class="card-body col-sm-12 col-md-12 col-lg-12 text-center ratio ratio-16x9"
-      >
-        <iframe
-          [src]="domSanitizerVideo(item.link)"
-          width="400"
-          height="255"
-          frameborder="0"
-          webkitallowfullscreen
-          mozallowfullscreen
-          allowfullscreen
-        ></iframe>
+      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+        <div class="ratio ratio-16x9">
+          <iframe
+            [src]="domSanitizerVideo(item.link)"
+            width="400"
+            height="255"
+            frameborder="0"
+            webkitallowfullscreen
+            mozallowfullscreen
+            allowfullscreen
+          ></iframe>
+        </div>
       </div>
     </div>
   </div>
