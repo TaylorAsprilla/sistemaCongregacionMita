@@ -162,8 +162,6 @@ export class InformacionUsuarioComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private buscarCorreoService: BuscarCorreoService) {}
 
   ngOnInit(): void {
-    this.filtrarCongregacionesPorPais();
-    this.filtrarCamposPorCongregacion();
     this.informacionDelUsuario();
     this.crearFormularios();
     this.tieneTipoDocumento();
@@ -268,9 +266,9 @@ export class InformacionUsuarioComponent implements OnInit {
 
     this.registroCuatroForm = this.formBuilder.group({
       tipoMiembro_id: [this.tipoMiembro, [Validators.required]],
-      congregacionPais_id: [this.usuario.usuarioCongregacionPais[0].id, [Validators.required]],
-      congregacion_id: [this.usuario.usuarioCongregacionCongregacion[0].id, [Validators.required]],
-      campo_id: [this.usuario.usuarioCongregacionCampo[0].id, [Validators.required]],
+      congregacionPais_id: [this.usuario?.usuarioCongregacionPais[0]?.id, [Validators.required]],
+      congregacion_id: [this.usuario?.usuarioCongregacionCongregacion[0]?.id, [Validators.required]],
+      campo_id: [this.usuario?.usuarioCongregacionCampo[0]?.id, [Validators.required]],
       esJoven: [this.esjoven, [Validators.required]],
       ejerceMinisterio: [this.ejerMinisterio, [Validators.required]],
       esVoluntario: [this.voluntario, [Validators.required]],
@@ -487,13 +485,13 @@ export class InformacionUsuarioComponent implements OnInit {
     return voluntariadosSelecionados;
   }
 
-  filtrarCongregacionesPorPais(pais: string = this.usuario.usuarioCongregacionPais[0].id) {
+  filtrarCongregacionesPorPais(pais: string) {
     this.congregacionesFiltradas = this.congregaciones?.filter(
       (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
     );
   }
 
-  filtrarCamposPorCongregacion(congregacion: string = this.usuario.usuarioCongregacionCongregacion[0].id) {
+  filtrarCamposPorCongregacion(congregacion: string) {
     this.camposFiltrados = this.campos.filter(
       (campoABuscar) => campoABuscar.congregacion_id === parseInt(congregacion)
     );
