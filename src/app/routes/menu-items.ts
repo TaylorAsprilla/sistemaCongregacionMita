@@ -169,7 +169,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '',
     title: 'Configuración',
-    icon: 'fa fa-lock',
+    icon: 'fa fa-gear',
     class: 'has-arrow',
     extralink: false,
     role: [ROLES.ADMINISTRADOR],

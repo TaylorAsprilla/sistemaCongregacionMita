@@ -23,7 +23,7 @@ export class ConfirmacionDeRegistroComponent implements OnInit {
 
   buscarUsuario(id: string) {
     this.usuarioService
-      .getUsuario(Number(id))
+      .getUsuario(id)
       .pipe(delay(100))
       .subscribe((respuesta: any) => {
         this.usuario = respuesta.usuario;

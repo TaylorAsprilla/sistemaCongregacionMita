@@ -18,7 +18,6 @@
           <tr>
             <th class="w50">Item</th>
             <th>Nombre</th>
-            <th>Nacionalidad</th>
             <th>Celular</th>
             <th class="w100">Email</th>
             <th>Pais</th>
@@ -35,28 +34,29 @@
               <p><td class="link-primary pointer" (click)="masInformacion(solicitud.id)">Ver Más</td></p>
             </td>
 
-            <td>{{ solicitud?.nombre }}</td>
+            <td>
+              {{ solicitud.usuario.primerNombre }} {{ solicitud.usuario.segundoNombre }} <br />
+              {{ solicitud.usuario.primerApellido }} {{ solicitud.usuario.segundoApellido }}
+            </td>
 
-            <td>{{ solicitud?.nacionalidad.nombre }}</td>
+            <td>{{ solicitud?.usuario.numeroCelular }}</td>
 
-            <td>{{ solicitud?.celular }}</td>
+            <td>{{ solicitud?.usuario.email }}</td>
 
-            <td>{{ solicitud?.email }}</td>
+            <td>{{ solicitud?.usuario.paisDireccion }}</td>
 
-            <td>{{ solicitud?.pais }}</td>
+            <td>{{ solicitud?.usuario.ciudadDireccion }}</td>
 
-            <td>{{ solicitud?.ciudad }}</td>
-
-            <td>{{ solicitud?.accesoMultimedia?.login }}</td>
+            <td>{{ solicitud?.usuario?.login }}</td>
 
             <td>
-              <span class="badge badge-primary" *ngIf="!!solicitud?.accesoMultimedia?.estado">Activo</span>
-              <span class="badge badge-danger" *ngIf="!solicitud?.accesoMultimedia?.estado">Deshabilitado</span>
+              <span class="badge badge-primary" *ngIf="!!solicitud?.estado">Activo</span>
+              <span class="badge badge-danger" *ngIf="!solicitud?.estado">Deshabilitado</span>
             </td>
 
             <td>
               <a
-                *ngIf="!solicitud?.accesoMultimedia?.login"
+                *ngIf="!solicitud?.usuario?.login"
                 data-toggle="tooltip"
                 data-original-title="Crear Acceso"
                 class="btn bg-info"
@@ -64,7 +64,7 @@
                 ><i class="fa fa-plus"></i
               ></a>
               <a
-                *ngIf="!!solicitud?.accesoMultimedia?.login"
+                *ngIf="!!solicitud?.usuario?.login"
                 data-toggle="tooltip"
                 data-original-title="Editar Acceso"
                 class="btn bg-warning ms-1"
@@ -72,7 +72,7 @@
                 ><i class="fa fa-pen-to-square"></i
               ></a>
               <a
-                *ngIf="!!solicitud?.accesoMultimedia?.estado"
+                *ngIf="!!solicitud?.estado"
                 data-toggle="tooltip"
                 data-original-title="Eliminar Acceso"
                 class="btn bg-danger ms-1"
@@ -80,7 +80,7 @@
                 ><i class="fa fa-trash"></i
               ></a>
               <a
-                *ngIf="!solicitud?.accesoMultimedia?.estado && !!solicitud?.accesoMultimedia?.login"
+                *ngIf="!solicitud?.estado && !!solicitud?.usuario.login"
                 data-toggle="tooltip"
                 data-original-title="Activar Acceso"
                 class="btn bg-secondary ms-1"
@@ -100,8 +100,7 @@
         <tfoot>
           <th class="w50">id</th>
           <th>Nombre</th>
-          <th>Nacionalidad</th>
-          <th class="w100">Celular</th>
+          <th>Celular</th>
           <th class="w100">Email</th>
           <th>Pais</th>
           <th>Congregación</th>

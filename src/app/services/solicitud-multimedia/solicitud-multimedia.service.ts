@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { SolicitudMultimediaInterface, SolicitudMultimediaModel } from 'src/app/core/models/solicitud-multimedia';
+import { SolicitudMultimediaInterface, SolicitudMultimediaModel } from 'src/app/core/models/solicitud-multimedia.model';
 
 const base_url = environment.base_url;
 
@@ -31,7 +31,8 @@ export class SolicitudMultimediaService {
       .get(`${base_url}/solicitudmultimedia`, this.headers)
       .pipe(
         map(
-          (respuesta: { ok: boolean; solicitudDeAccesos: SolicitudMultimediaModel[] }) => respuesta.solicitudDeAccesos
+          (respuesta: { ok: boolean; solicitudDeAccesos: SolicitudMultimediaInterface[] }) =>
+            respuesta.solicitudDeAccesos
         )
       );
   }
@@ -41,7 +42,7 @@ export class SolicitudMultimediaService {
       .get(`${base_url}/solicitudmultimedia/${id}`, this.headers)
       .pipe(
         map(
-          (respuesta: { ok: boolean; solicitudDeAcceso: SolicitudMultimediaModel; id: number }) =>
+          (respuesta: { ok: boolean; solicitudDeAcceso: SolicitudMultimediaInterface; id: number }) =>
             respuesta.solicitudDeAcceso
         )
       );

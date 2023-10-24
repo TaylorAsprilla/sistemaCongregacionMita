@@ -353,10 +353,8 @@ const childRoutes: Routes = [
     path: RUTAS.SOLICITUDES_MULTIMEDIA,
     component: SolicitudMultimediaComponent,
     resolve: {
+      tipoMiembro: TipoMiembroResolver,
       nacionalidad: NacionalidadResolver,
-      congregacion: CongregacionResolver,
-      pais: PaisResolver,
-      razonSolicitud: RazonSolicitudResolver,
     },
   },
   {

@@ -2,6 +2,7 @@ import { AccesoMultimediaModel } from './acceso-multimedia.model';
 import { NacionalidadModel } from './nacionalidad.model';
 import { RazonSolicitudModel } from './razon-solicitud.model';
 import { TipoAprobacionModel } from './tiempo-aprobacion.model';
+import { TipoMiembroModel } from './tipo.miembro.model';
 import { UsuarioModel } from './usuario.model';
 
 export enum RAZON_SOLICITUD_TEXTO {
@@ -60,6 +61,7 @@ export class SolicitudMultimediaModel {
     public duracionDelPeriodoDeEstudio?: Date,
     public baseMilitar?: string,
     public observaciones?: string,
+    public tiempoAprobacion?: Date,
     public opcionTransporte_id?: number,
     public tipoDeEstudio_id?: number,
     public parentesco_id?: number
@@ -67,22 +69,9 @@ export class SolicitudMultimediaModel {
 }
 
 export interface SolicitudMultimediaInterface {
-  nombre: string;
-  fechaNacimiento: Date;
-  direccion: string;
-  ciudad: string;
-  celular: string;
-  pais: string;
-  email: string;
-  miembroCongregacion: boolean;
-  congregacionCercana: string;
+  id: number;
   estado: boolean;
-  status: boolean;
   razonSolicitud_id: number;
-  nacionalidad_id: number;
-  departamento: string;
-  codigoPostal: string;
-  telefono: string;
   usuarioQueRegistra_id: number;
   tiempoDistancia: string;
   horaTemploMasCercano: string;
@@ -94,9 +83,18 @@ export interface SolicitudMultimediaInterface {
   ciudadDondeEstudia: string;
   duracionDelPeriodoDeEstudio: Date;
   baseMilitar: string;
+  emailVerificado: boolean;
   observaciones: string;
   opcionTransporte_id: number;
   tipoDeEstudio_id: number;
+  razonSolicitud?: RazonSolicitudModel;
   parentesco_id: number;
+  tiempoAprobacion: Date;
+  tipoMiembro: TipoMiembroModel;
+  usuario_id: number;
+  usuario: UsuarioModel;
+  usuarioQueRegistra: UsuarioModel;
   terminos: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

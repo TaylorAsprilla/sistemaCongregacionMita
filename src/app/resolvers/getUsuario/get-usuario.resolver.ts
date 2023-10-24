@@ -14,7 +14,7 @@ export class UsuarioResolver implements Resolve<UsuarioInterface> {
     const id = route.paramMap.get('id');
 
     if (id !== 'nuevo') {
-      return this.usuarioService.getUsuario(Number(id));
+      return this.usuarioService.getUsuario(id);
     } else {
       return null;
     }
