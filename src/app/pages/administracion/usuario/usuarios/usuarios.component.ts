@@ -51,7 +51,6 @@ export class UsuariosComponent implements OnInit {
       this.usuariosTemporales = usuarios;
       this.cargando = false;
       this.totalPaginas = Math.ceil(totalUsuarios / 50);
-      console.log('  this.usuarios = usuarios;', this.usuarios);
     });
   }
 

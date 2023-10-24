@@ -11,17 +11,15 @@
     </div>
   </div>
   <!-- /.card-header -->
-  <div class="card-body">
+  <div class="card-body mx-auto">
     <div class="table-responsive">
-      <table class="table table-bordered table-striped">
+      <table class="table table-bordered table-striped table-responsive">
         <thead>
           <tr>
             <th class="w50">Item</th>
             <th>Nombre</th>
             <th>Celular</th>
             <th class="w100">Email</th>
-            <th>Pais</th>
-            <th>Congregación</th>
             <th class="w100">Login</th>
             <th>Estado</th>
             <th class="w150">Acciones</th>
@@ -42,10 +40,6 @@
             <td>{{ solicitud?.usuario.numeroCelular }}</td>
 
             <td>{{ solicitud?.usuario.email }}</td>
-
-            <td>{{ solicitud?.usuario.usuarioCongregacionPais.pais }}</td>
-
-            <td>{{ solicitud?.usuario.usuarioCongregacionCongregacion.congregacion }}</td>
 
             <td>{{ solicitud?.usuario?.login }}</td>
 
@@ -102,8 +96,6 @@
           <th>Nombre</th>
           <th>Celular</th>
           <th class="w100">Email</th>
-          <th>Pais</th>
-          <th>Congregación</th>
           <th class="w100">Login</th>
           <th>Estado</th>
           <th class="w150">Acciones</th>
