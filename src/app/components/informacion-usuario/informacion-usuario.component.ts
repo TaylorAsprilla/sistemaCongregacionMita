@@ -162,8 +162,8 @@ export class InformacionUsuarioComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private buscarCorreoService: BuscarCorreoService) {}
 
   ngOnInit(): void {
-    this.listarCongregaciones();
-    this.listarCampos();
+    this.filtrarCongregacionesPorPais();
+    this.filtrarCamposPorCongregacion();
     this.informacionDelUsuario();
     this.crearFormularios();
     this.tieneTipoDocumento();
@@ -204,16 +204,15 @@ export class InformacionUsuarioComponent implements OnInit {
     this.voluntario = this.usuario?.usuarioVoluntariado ? true : false;
     this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
     this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
-    this.congregacionPais = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id
-      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id
+    this.congregacionPais = this.usuario?.usuarioCongregacionPais[0]?.pais
+      ? this.usuario?.usuarioCongregacionPais[0]?.pais
       : null;
-    this.congreacionCiudad = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.congregacion_id
-      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.congregacion_id
+    this.congreacionCiudad = this.usuario?.usuarioCongregacionCongregacion[0]?.congregacion
+      ? this.usuario?.usuarioCongregacionCongregacion[0]?.congregacion
       : null;
-    this.congregacionCampo = this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id
-      ? this.usuario?.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id
+    this.congregacionCampo = this.usuario?.usuarioCongregacionCampo[0]?.campo
+      ? this.usuario?.usuarioCongregacionCampo[0]?.campo
       : null;
-
     this.tipoDeDocumento = this.usuario?.tipoDocumento_id
       ? this.usuario.tipoDocumento_id.toString()
       : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
@@ -269,9 +268,9 @@ export class InformacionUsuarioComponent implements OnInit {
 
     this.registroCuatroForm = this.formBuilder.group({
       tipoMiembro_id: [this.tipoMiembro, [Validators.required]],
-      congregacionPais_id: [this.congregacionPais, [Validators.required]],
-      congregacion_id: [this.congreacionCiudad, [Validators.required]],
-      campo_id: [this.congregacionCampo, [Validators.required]],
+      congregacionPais_id: [this.usuario.usuarioCongregacionPais[0].id, [Validators.required]],
+      congregacion_id: [this.usuario.usuarioCongregacionCongregacion[0].id, [Validators.required]],
+      campo_id: [this.usuario.usuarioCongregacionCampo[0].id, [Validators.required]],
       esJoven: [this.esjoven, [Validators.required]],
       ejerceMinisterio: [this.ejerMinisterio, [Validators.required]],
       esVoluntario: [this.voluntario, [Validators.required]],
@@ -488,13 +487,13 @@ export class InformacionUsuarioComponent implements OnInit {
     return voluntariadosSelecionados;
   }
 
-  listarCongregaciones(pais: string = this.usuario?.paisId) {
+  filtrarCongregacionesPorPais(pais: string = this.usuario.usuarioCongregacionPais[0].id) {
     this.congregacionesFiltradas = this.congregaciones?.filter(
       (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
     );
   }
 
-  listarCampos(congregacion: string = this.usuario?.congregacionId) {
+  filtrarCamposPorCongregacion(congregacion: string = this.usuario.usuarioCongregacionCongregacion[0].id) {
     this.camposFiltrados = this.campos.filter(
       (campoABuscar) => campoABuscar.congregacion_id === parseInt(congregacion)
     );

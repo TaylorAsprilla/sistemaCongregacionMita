@@ -12,327 +12,123 @@
           </div>
 
           <form id="msform" autocomplete="off" [formGroup]="solicitudForm" (submit)="crearSolicitud()">
-            <div class="row">
-              <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                <label class="input-group obligatorio">Nombre</label>
+            <div class="row align-items-center">
+              <div class="form-group col-sm-12 col-md-8 col-lg-10">
+                <label class="input-group obligatorio">Número Mita</label>
                 <input
-                  type="text"
-                  formControlName="nombre"
-                  name="nombre"
+                  type="number"
+                  formControlName="numeroMita"
+                  name="numeroMita"
                   class="form-control"
-                  placeholder="Nombre Completo"
+                  #txtNumeroMita
+                  placeholder="Ingrese el número Mita"
                 />
-
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('nombre').hasError('required') && solicitudForm.get('nombre').touched"
-                >
-                  El nombre del feligrés es requerida.
-                </small>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('nombre').hasError('minlength') && solicitudForm.get('nombre').touched"
-                >
-                  El nombre del feligrés no tiene la longitud mínima permitida.
-                </small>
-              </div>
-
-              <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                <label class="input-group obligatorio">Fecha de Nacimiento</label>
-                <input
-                  type="date"
-                  formControlName="fechaNacimiento"
-                  name="fechaNacimiento"
-                  class="form-control"
-                  placeholder="Fecha de Nacimiento"
-                />
-
                 <small
                   class="form-text text-danger"
                   *ngIf="
-                    solicitudForm.get('fechaNacimiento').hasError('required') &&
-                    solicitudForm.get('fechaNacimiento').touched
+                    solicitudForm.get('numeroMita').hasError('required') && solicitudForm.get('numeroMita').touched
                   "
                 >
-                  La Fecha de nacimiento es requerida.
+                  El número Mita del feligrés es requerido.
                 </small>
-              </div>
-
-              <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                <label class="input-group obligatorio">Nacionalidad </label>
-                <input
-                  type="text"
-                  placeholder="Buscar la nacionalidad"
-                  formControlName="nacionalidad"
-                  [matAutocomplete]="autoNacionalidad"
-                  class="form-control"
-                  (keypress)="buscarNacionalidad('nacionalidad')"
-                />
-                <mat-autocomplete #autoNacionalidad="matAutocomplete">
-                  <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
-                    {{ item.nombre }}
-                  </mat-option>
-                </mat-autocomplete>
-
                 <small
                   class="form-text text-danger"
                   *ngIf="
-                    solicitudForm.get('nacionalidad').hasError('required') && solicitudForm.get('nacionalidad').touched
+                    solicitudForm.get('numeroMita').hasError('minlength') && solicitudForm.get('numeroMita').touched
                   "
                 >
-                  La nacionalidad del feligrés es requerida.
+                  El número Mita del feligrés no tiene la longitud mínima permitida.
                 </small>
+              </div>
+              <div class="form-group col-sm-12 col-md-4 col-lg-2">
+                <button
+                  type="button"
+                  class="btn btn-lg btn-primary"
+                  [disabled]="!txtNumeroMita.value"
+                  (click)="buscarFeligres(txtNumeroMita.value)"
+                >
+                  Buscar
+                </button>
               </div>
             </div>
-
             <div class="row">
-              <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                <label class="input-group obligatorio">Dirección de residencia</label>
-                <input type="text" formControlName="direccion" class="form-control" placeholder="Dirección" />
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('direccion').hasError('required') && solicitudForm.get('direccion').touched"
-                >
-                  La dirección de residencia del feligrés es requerida.
-                </small>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('direccion').hasError('minlength') && solicitudForm.get('direccion').touched"
-                >
-                  La dirección de residencia del feligrés no tiene la longitud mínima permitida.
-                </small>
-              </div>
+              <div *ngIf="!!usuario" class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-center align-items-center mb-3">
+                    <div class="mr-3">
+                      <i class="fa fa-user-circle fa-5x"></i>
+                    </div>
+                    <div class="text-center">
+                      <h4 class="card-title">
+                        {{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }}
+                        {{ usuario.segundoApellido }}
+                      </h4>
+                      <h6 class="card-subtitle mb-2">{{ usuario.email }}</h6>
+                      <h6 class="card-subtitle mb-2"><b>Apodo:</b> {{ usuario.apodo }}</h6>
+                      <h6 class="card-subtitle mb-2"><b>Género:</b> {{ usuario.genero.genero }}</h6>
+                      <h6 class="card-subtitle mb-2"><b>Nacionalidad:</b> {{ usuario.nacionalidad.nombre }}</h6>
+                      <h6 class="card-subtitle mb-2"><b>Fecha de Nacimiento:</b> {{ usuario.fechaNacimiento }}</h6>
+                    </div>
+                  </div>
 
-              <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                <label class="input-group obligatorio">Ciudad</label>
-                <input type="text" formControlName="ciudad" class="form-control" placeholder="Ciudad" />
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('ciudad').hasError('required') && solicitudForm.get('ciudad').touched"
-                >
-                  La ciudad de residencia del feligrés es requerida.
-                </small>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('ciudad').hasError('minlength') && solicitudForm.get('ciudad').touched"
-                >
-                  La ciudad de residencia del feligrés no tiene la longitud mínima permitida.
-                </small>
-              </div>
-            </div>
+                  <div class="row">
+                    <div *ngIf="!!usuario" class="col-md-6 mb-4">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4>Congregación</h4>
+                          <p class="card-text text-start">
+                            <b><i class="fa fa-globe-americas"></i> País:</b>
+                            {{ usuario.usuarioCongregacionPais[0].pais }}
+                          </p>
+                          <p class="card-text text-start">
+                            <b> <i class="fa fa-city"></i> Ciudad:</b>
+                            {{ usuario.usuarioCongregacionCongregacion[0].congregacion }}
+                          </p>
+                          <p class="card-text text-start">
+                            <b> <i class="fa fa-map-marker"></i> Campo:</b>
+                            {{ usuario.usuarioCongregacionCampo[0].campo }}
+                          </p>
+                          <p class="card-text text-start">
+                            <b> <i class="fa fa-church"></i> Miembro de la Iglesia:</b>
+                            {{ usuario.tipoMiembro.miembro }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
-            <div class="row">
-              <div class="form-group col-sm-12 col-md-6 col-lg-4">
-                <label class="input-group">Departamento o Estado</label>
-                <input type="text" formControlName="departamento" class="form-control" placeholder="Departamento" />
-                <small
-                  class="form-text text-danger"
-                  *ngIf="
-                    solicitudForm.get('departamento').hasError('minlength') && solicitudForm.get('departamento').touched
-                  "
-                >
-                  El departamento o estado de residencia del feligrés no tiene la longitud mínima permitida.
-                </small>
-              </div>
+                    <div *ngIf="!!usuario" class="col-md-6 mb-4">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Contacto</h4>
+                          <p class="card-text text-start">
+                            <b><i class="fa fa-mobile-alt"></i> Celular: </b>{{ usuario.numeroCelular }}
+                          </p>
+                          <p class="card-text text-start">
+                            <b><i class="fa fa-phone"></i> Teléfono de Casa:</b> {{ usuario.telefonoCasa }}
+                          </p>
 
-              <div class="form-group col-sm-12 col-md-6 col-lg-4">
-                <label class="input-group">Código postal <span class="mensajeExplicativo"> (Si aplica)</span></label>
-                <input type="text" formControlName="codigoPostal" class="form-control" placeholder="Código Postal" />
-                <small
-                  class="form-text text-danger"
-                  *ngIf="
-                    solicitudForm.get('codigoPostal').hasError('minlength') && solicitudForm.get('codigoPostal').touched
-                  "
-                >
-                  El código postal del feligrés no tiene la longitud mínima permitida.
-                </small>
-              </div>
+                          <p class="card-text text-start">
+                            <b><i class="fa fa-map-marker"></i> Dirección de Residencia:</b> {{ usuario.direccion }},
+                            {{ usuario.ciudadDireccion }}, {{ usuario.paisDireccion }}
+                          </p>
 
-              <div class="form-group col-sm-12 col-md-6 col-lg-4">
-                <label class="input-group obligatorio">País </label>
-                <input
-                  type="text"
-                  placeholder="Buscar el pais de residencia"
-                  formControlName="pais"
-                  [matAutocomplete]="autoPais"
-                  class="form-control"
-                  (keypress)="buscarNacionalidad('pais')"
-                />
-                <mat-autocomplete #autoPais="matAutocomplete">
-                  <mat-option *ngFor="let pais of letrasFiltrarNacionalidad | async" [value]="pais.nombre">
-                    {{ pais.nombre }}
-                  </mat-option>
-                </mat-autocomplete>
+                          <p class="card-text text-start">
+                            <b><i class="fa-solid fa-envelopes-bulk"></i> Código Postal:</b>
+                            {{ usuario.codigoPostalDireccion }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('pais').hasError('required') && solicitudForm.get('pais').touched"
-                >
-                  El país de la dirección es requerido.
-                </small>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-12 col-md-6 col-lg-4">
-                <label class="input-group obligatorio">Celular</label>
-                <ngx-intl-tel-input
-                  [cssClass]="'form-control'"
-                  [preferredCountries]="paisesPreferidos"
-                  [enableAutoCountrySelect]="true"
-                  [enablePlaceholder]="true"
-                  [searchCountryFlag]="true"
-                  [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
-                  [selectFirstCountry]="false"
-                  [selectedCountryISO]="paisISO.PuertoRico"
-                  [maxLength]="15"
-                  [phoneValidation]="true"
-                  [separateDialCode]="codigoDeMarcadoSeparado"
-                  [numberFormat]="formatoNumeroTelefonico.International"
-                  name="celular"
-                  formControlName="celular"
-                >
-                </ngx-intl-tel-input>
-
-                <small
-                  class="form-text text-danger"
-                  *ngIf="
-                    !solicitudForm.get('celular').hasError('required') &&
-                    solicitudForm.get('celular').invalid &&
-                    solicitudForm.get('celular').touched
-                  "
-                >
-                  El número de celular no es válido
-                </small>
-                <small class="form-text text-primary" *ngIf="!solicitudForm.get('celular').invalid">
-                  El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
-                </small>
-
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('celular').hasError('required') && solicitudForm.get('celular').touched"
-                >
-                  El número de celular del feligrés es requerido.
-                </small>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('celular').hasError('minlength') && solicitudForm.get('celular').touched"
-                >
-                  El número de celular del feligrés no tiene la longitud mínima permitida.
-                </small>
-              </div>
-
-              <div class="form-group col-sm-12 col-md-6 col-lg-4">
-                <label class="input-group">Teléfono de la Casa</label>
-                <ngx-intl-tel-input
-                  [cssClass]="'form-control'"
-                  [preferredCountries]="paisesPreferidos"
-                  [enableAutoCountrySelect]="true"
-                  [enablePlaceholder]="true"
-                  [searchCountryFlag]="true"
-                  [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
-                  [selectFirstCountry]="false"
-                  [selectedCountryISO]="paisISO.PuertoRico"
-                  [maxLength]="15"
-                  [phoneValidation]="true"
-                  [separateDialCode]="codigoDeMarcadoSeparado"
-                  [numberFormat]="formatoNumeroTelefonico.National"
-                  name="telefono"
-                  formControlName="telefono"
-                >
-                </ngx-intl-tel-input>
-              </div>
-              <div class="form-text text-danger" *ngIf="solicitudForm.get('telefono').invalid">
-                Digitar el número de teléfono con el indicativo de la región local
-              </div>
-              <small
-                class="form-text text-danger"
-                *ngIf="solicitudForm.get('telefono').invalid && solicitudForm.get('telefono').touched"
-              >
-                El número de teléfono de la casa no es válido
-              </small>
-              <small
-                class="form-text text-primary"
-                *ngIf="!solicitudForm.get('telefono').invalid && solicitudForm.get('telefono').value"
-              >
-                El número de teléfono de la casa es válido <i class="fa-solid fa-thumbs-up"></i>
-              </small>
-              <small
-                class="form-text text-danger"
-                *ngIf="solicitudForm.get('telefono').hasError('minlength') && solicitudForm.get('telefono').touched"
-              >
-                El número de teléfono de la casa del feligrés no tiene la longitud mínima permitida.
-              </small>
-
-              <div class="form-group col-sm-12 col-md-6 col-lg-4">
-                <label class="input-group obligatorio">Correo Electrónico</label>
-                <input
-                  type="email"
-                  formControlName="email"
-                  class="form-control"
-                  placeholder="Correo Electrónico"
-                  (blur)="buscarCorreo(txtEmail.value)"
-                  #txtEmail
-                />
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('email').hasError('required') && solicitudForm.get('email').touched"
-                >
-                  El correo electrónico del feligrés es requerido.
-                </small>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('email').hasError('email') && solicitudForm.get('email').touched"
-                >
-                  El valor ingresado no corresponde a un correo electrónico.
-                </small>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="solicitudForm.get('email').hasError('minlength') && solicitudForm.get('email').touched"
-                >
-                  El correo electrónico del feligrés no tiene la longitud mínima permitida.
-                </small>
-
-                <small class="form-text text-danger" *ngIf="!!mensajeBuscarCorreo">
-                  {{ mensajeBuscarCorreo }}
-                </small>
-
-                <small
-                  class="form-text text-primary"
-                  *ngIf="
-                    !solicitudForm.get('email').invalid && solicitudForm.get('email').touched && !mensajeBuscarCorreo
-                  "
-                >
-                  El correo electrónico es válido <i class="fa-solid fa-thumbs-up"></i>
-                </small>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                <label class="input-group obligatorio">¿Eres miembro de la Congregación?</label>
-                <div class="form-check checkbox-lg">
-                  <input
-                    value="1"
-                    class="form-check-input"
-                    type="radio"
-                    name="miembroCongregacion"
-                    formControlName="miembroCongregacion"
-                  />
-                  <label class="form-check-label"> Sí </label>
-                </div>
-                <div class="form-check checkbox-lg">
-                  <input
-                    value="0"
-                    class="form-check-input"
-                    type="radio"
-                    name="miembroCongregacion"
-                    formControlName="miembroCongregacion"
-                  />
-                  <label class="form-check-label"> No </label>
+                  <div class="d-flex justify-content-end mt-3">
+                    <a href="#" class="btn btn-primary mr-2"><i class="fa fa-edit"></i> Editar Feligrés</a>
+                  </div>
                 </div>
               </div>
+            </div>
 
+            <div class="row">
               <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label class="input-group obligatorio">¿Estás cerca a alguna congregación?</label>
 
@@ -424,7 +220,7 @@
                     formControlName="paisDondeEstudia"
                     [matAutocomplete]="autoPaisDondeEstudia"
                     class="form-control"
-                    (keypress)="buscarNacionalidad('paisDondeEstudia')"
+                    (keypress)="buscarPais('paisDondeEstudia')"
                   />
                   <mat-autocomplete #autoPaisDondeEstudia="matAutocomplete">
                     <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
@@ -687,7 +483,7 @@
                       [enableAutoCountrySelect]="true"
                       [enablePlaceholder]="true"
                       [searchCountryFlag]="true"
-                      [searchCountryField]="[buscarPais.Iso2, buscarPais.Name]"
+                      [searchCountryField]="[buscarPaisTelefono.Iso2, buscarPaisTelefono.Name]"
                       [selectFirstCountry]="false"
                       [selectedCountryISO]="paisISO.PuertoRico"
                       [maxLength]="15"
@@ -810,7 +606,7 @@
               <div class="obligatorio text-start mt-2">Campos Obligatorios</div>
               <div class="mt-2"><b>Solicitud creada por:</b> {{ nombreUsuario }}</div>
             </div>
-
+            <!-- disabled="solicitudForm.valid" -->
             <button type="submit" class="submit btn btn-primary mt-4 float-end">
               <i class="fa fa-save"></i> Crear Solicitud
             </button>

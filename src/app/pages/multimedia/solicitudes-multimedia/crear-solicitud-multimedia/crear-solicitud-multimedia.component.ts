@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
@@ -10,12 +10,13 @@ import { OpcionTransporteModel } from 'src/app/core/models/opcion-transporte.mod
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
-import { RAZON_SOLICITUD_ID, SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia';
+import { RAZON_SOLICITUD_ID, SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
 import { TipoEstudioModel } from 'src/app/core/models/tipo-estudio.model';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 
 @Component({
   selector: 'app-crear-solicitud-multimedia',
@@ -33,19 +34,19 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   public opcionTransporte: OpcionTransporteModel[] = [];
   public parentescos: ParentescoModel[] = [];
 
+  public usuario: UsuarioModel;
   public mensajeBuscarCorreo: string = '';
 
   public idUsuario: number;
   public nombreUsuario: string;
+  public usuarioQueRegistra: UsuarioModel;
 
   // Subscription
   public buscarCorreoSubscription: Subscription;
-
-  // time: Date = new Date();
-  time: any;
+  public usuarioSubscription: Subscription;
 
   codigoDeMarcadoSeparado = false;
-  buscarPais = SearchCountryField;
+  buscarPaisTelefono = SearchCountryField;
   paisISO = CountryISO;
   formatoNumeroTelefonico = PhoneNumberFormat;
   paisesPreferidos: CountryISO[] = [
@@ -82,6 +83,13 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     private buscarCorreoService: BuscarCorreoService
   ) {}
 
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  }
+
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
       (data: {
@@ -105,39 +113,67 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
 
     this.idUsuario = this.usuarioService?.usuarioId;
     this.nombreUsuario = this.usuarioService.usuarioNombre;
+    this.usuarioQueRegistra = this.usuarioService.usuario;
 
     this.crearFormularioDeLaSolicitud();
+    this.eliminarControles();
   }
 
   ngOnDestroy(): void {
     this.buscarCorreoSubscription?.unsubscribe();
+    this.usuarioSubscription?.unsubscribe();
   }
 
   crearFormularioDeLaSolicitud() {
     this.solicitudForm = this.formBuilder.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      fechaNacimiento: ['', [Validators.required, Validators.minLength(3)]],
-      direccion: ['', [Validators.required, Validators.minLength(3)]],
-      ciudad: ['', [Validators.required, Validators.minLength(3)]],
-      departamento: ['', [Validators.minLength(3)]],
-      codigoPostal: ['', [Validators.minLength(3)]],
-      pais: ['', [Validators.required, Validators.minLength(3)]],
-      telefono: ['', [Validators.minLength(3)]],
-      celular: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.minLength(3), Validators.email]],
-      miembroCongregacion: ['', [Validators.required]],
+      numeroMita: ['', [Validators.required, Validators.minLength(3)]],
       estaCercaACongregacion: [false, [Validators.required]],
       congregacionCercana: ['', [Validators.minLength(3)]],
       razonSolicitud_id: ['', [Validators.required]],
       otraRazonSolicitud: ['', []],
-      nacionalidad: ['', [Validators.required, Validators.minLength(3)]],
       observaciones: ['', [Validators.minLength(3)]],
       tiempoSugerido: ['', []],
       terminos: ['', [Validators.required, Validators.requiredTrue]],
     });
   }
 
-  buscarNacionalidad(formControlName: string) {
+  buscarFeligres(id: string) {
+    this.usuarioSubscription = this.usuarioService.getUsuario(id).subscribe(
+      (respuesta: any) => {
+        if (!!respuesta.usuario) {
+          this.usuario = respuesta.usuario;
+
+          Swal.fire({
+            position: 'top-end',
+            text: `${this.usuario.primerNombre} ${this.usuario.segundoNombre}
+                ${this.usuario.primerApellido} ${this.usuario.segundoApellido},
+                Número Mita ${this.usuario.id}`,
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            position: 'top-end',
+            text: `${respuesta.msg}`,
+            icon: 'error',
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      },
+      (error) => {
+        let errores = error.error.msg;
+
+        Swal.fire({
+          title: 'Error al encontrar el feligrés',
+          icon: 'error',
+          html: errores,
+        });
+      }
+    );
+  }
+
+  buscarPais(formControlName: string) {
     this.letrasFiltrarNacionalidad;
     this.letrasFiltrarNacionalidad = this.solicitudForm.get(formControlName.toString()).valueChanges.pipe(
       startWith(''),
@@ -168,21 +204,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     );
   }
 
-  buscarIDNacionalidad(nacionalidad: string): number {
-    return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre === nacionalidad)?.id;
-  }
-
-  buscarCorreo(email: string) {
-    this.mensajeBuscarCorreo = '';
-    this.buscarCorreoSubscription = this.buscarCorreoService
-      .buscarCorreoSolicitud(email)
-      .subscribe((respuesta: any) => {
-        if (!respuesta.ok) {
-          this.mensajeBuscarCorreo = respuesta.msg;
-        }
-      });
-  }
-
   estaCercaACongregacion() {
     return this.solicitudForm.controls['estaCercaACongregacion'].value || false;
   }
@@ -193,6 +214,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   tipoDeSolicitud(tipo: string) {
     this.eliminarControles();
+
     if (tipo === RAZON_SOLICITUD_ID.ESTUDIANTE) {
       this.agregarControlEsEstudiante();
     } else if (tipo === RAZON_SOLICITUD_ID.FUERZAS_ARMADAS) {
@@ -269,6 +291,11 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   eliminarControlEnfermedad() {
     this.solicitudForm.removeControl('personaEncamada');
+    this.solicitudForm.removeControl('personaEncargada');
+    this.solicitudForm.removeControl('parentesco_id');
+    this.solicitudForm.removeControl('celularPersonaEncargada');
+    this.solicitudForm.removeControl('enfermedadCronica');
+    this.solicitudForm.removeControl('enfermedadQuePadece');
 
     return true;
   }
@@ -281,69 +308,67 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   }
 
   crearSolicitud() {
-    const formSolicitud = this.solicitudForm.value;
+    if (this.solicitudForm.valid) {
+      const formSolicitud = this.solicitudForm.value;
 
-    const solicitudNueva: SolicitudMultimediaInterface = {
-      nombre: formSolicitud.nombre,
-      fechaNacimiento: formSolicitud.fechaNacimiento,
-      direccion: formSolicitud.direccion,
-      ciudad: formSolicitud.ciudad,
-      departamento: formSolicitud.departamento,
-      codigoPostal: formSolicitud.codigoPostal,
-      pais: formSolicitud.pais,
-      telefono: formSolicitud.telefono?.internationalNumber ? formSolicitud.telefono?.internationalNumber : '',
-      celular: formSolicitud.celular?.internationalNumber,
-      email: formSolicitud.email,
-      miembroCongregacion: formSolicitud.miembroCongregacion,
-      congregacionCercana: formSolicitud.congregacionCercana,
-      razonSolicitud_id: formSolicitud.razonSolicitud_id,
-      nacionalidad_id: this.buscarIDNacionalidad(formSolicitud.nacionalidad),
-      estado: true,
-      status: false,
-      usuarioQueRegistra_id: this.idUsuario,
-      duracionDelPeriodoDeEstudio: formSolicitud.duracionDelPeriodoDeEstudio
-        ? formSolicitud.duracionDelPeriodoDeEstudio
-        : '',
-      baseMilitar: formSolicitud.baseMilitar ? formSolicitud.baseMilitar : '',
-      observaciones: formSolicitud.observaciones ? formSolicitud.observaciones : '',
-      opcionTransporte_id: formSolicitud.opcionTransporte_id ? formSolicitud.opcionTransporte_id : null,
-      tipoDeEstudio_id: formSolicitud.tipoDeEstudio_id ? formSolicitud.tipoDeEstudio_id : null,
-      parentesco_id: formSolicitud.parentesco_id ? formSolicitud.parentesco_id : null,
-      tiempoDistancia: formSolicitud.tiempoDistancia ? formSolicitud.tiempoDistancia : '',
-      horaTemploMasCercano: formSolicitud.horaTemploMasCercano ? formSolicitud.horaTemploMasCercano : '',
-      personaEncamada: formSolicitud.personaEncamada ? formSolicitud.personaEncamada : '',
-      personaEncargada: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
-      enfermedadCronica: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
-      enfermedadQuePadece: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
-      paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
-      ciudadDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
-      terminos: formSolicitud.terminos ? formSolicitud.terminos : false,
-    };
+      const solicitudNueva: SolicitudMultimediaInterface = {
+        usuario_id: this.usuario.id,
+        razonSolicitud_id: formSolicitud.razonSolicitud_id,
+        estado: true,
+        usuarioQueRegistra_id: this.idUsuario,
+        duracionDelPeriodoDeEstudio: formSolicitud.duracionDelPeriodoDeEstudio
+          ? formSolicitud.duracionDelPeriodoDeEstudio
+          : null,
+        baseMilitar: formSolicitud.baseMilitar ? formSolicitud.baseMilitar : '',
+        observaciones: formSolicitud.observaciones ? formSolicitud.observaciones : '',
+        opcionTransporte_id: formSolicitud.opcionTransporte_id ? formSolicitud.opcionTransporte_id : null,
+        tipoDeEstudio_id: formSolicitud.tipoDeEstudio_id ? formSolicitud.tipoDeEstudio_id : null,
+        parentesco_id: formSolicitud.parentesco_id ? formSolicitud.parentesco_id : null,
+        tiempoDistancia: formSolicitud.tiempoDistancia ? formSolicitud.tiempoDistancia : '',
+        horaTemploMasCercano: formSolicitud.horaTemploMasCercano ? formSolicitud.horaTemploMasCercano : '',
+        personaEncamada: formSolicitud.personaEncamada ? formSolicitud.personaEncamada : 0,
+        personaEncargada: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
+        enfermedadCronica: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
+        enfermedadQuePadece: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
+        paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
+        ciudadDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
+        terminos: formSolicitud.terminos ? formSolicitud.terminos : false,
+        id: 0,
+        emailVerificado: false,
+        tiempoAprobacion: null,
+        usuario: this.usuario,
+        usuarioQueRegistra: this.usuarioQueRegistra,
+        tipoMiembro: this.usuario.tipoMiembro,
+      };
 
-    this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(
-      (respuesta: any) => {
-        Swal.fire({
-          title: 'Solicitud Acceso a cmar.live',
-          text: `${respuesta.solicitudDeAcceso.nombre}, por favor revise el correo electrónico ${respuesta.solicitudDeAcceso.email} y realice el proceso de validación para que sea procesada su solicitud`,
-          icon: 'success',
-        });
-        this.resetFormulario();
-      },
-      (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
+      this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(
+        (respuesta: any) => {
+          Swal.fire({
+            title: 'Solicitud Acceso a cmar.live',
+            html: `<b>${this.usuario.primerNombre} ${this.usuario.segundoNombre}
+                ${this.usuario.primerApellido} ${this.usuario.segundoApellido} </b>,
+               por favor revise el correo electrónico <b> ${this.usuario.email} </b> y realice el proceso de validación para que sea procesada su solicitud`,
+            icon: 'success',
+          });
+          this.resetFormulario();
+          this.usuario = null;
+        },
+        (error) => {
+          let errores = error.error.errors;
+          let listaErrores = [];
 
-        Object.entries(errores).forEach(([key, value]) => {
-          listaErrores.push('° ' + value['msg'] + '<br>');
-        });
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
 
-        Swal.fire({
-          title: 'Error al crear la solicitud de acceso a cmar.live',
-          icon: 'error',
-          html: `${listaErrores.join('')}`,
-        });
-      }
-    );
+          Swal.fire({
+            title: 'Error al crear la solicitud de acceso a cmar.live',
+            icon: 'error',
+            html: `${listaErrores.join('')}`,
+          });
+        }
+      );
+    }
   }
 
   resetFormulario() {

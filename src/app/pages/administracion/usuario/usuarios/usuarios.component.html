@@ -51,9 +51,15 @@
             <td>{{ usuario?.numeroCelular }}</td>
 
             <td>
-              <span *ngIf="!!usuario.paisId" class="badge badge-primary"> {{ buscarPais(usuario?.paisId) }} </span>
-              <span *ngIf="!!usuario.congregacion" class="badge badge-danger"> {{ usuario.congregacion }}</span>
-              <span *ngIf="!!usuario.campoId" class="badge badge-success"> {{ buscarCampo(usuario?.campoId) }} </span>
+              <span *ngIf="!!usuario.usuarioCongregacionPais[0]" class="badge badge-primary">
+                {{ this.usuario.usuarioCongregacionPais[0].pais }}
+              </span>
+              <span *ngIf="!!usuario.usuarioCongregacionCongregacion[0]" class="badge badge-danger">
+                {{ this.usuario.usuarioCongregacionCongregacion[0].congregacion }}</span
+              >
+              <span *ngIf="!!usuario.usuarioCongregacionCampo[0]" class="badge badge-success">
+                {{ this.usuario.usuarioCongregacionCampo[0].campo }}
+              </span>
             </td>
 
             <td>

@@ -265,132 +265,71 @@ export class UsuarioService {
   listarUsuarios(desde: number = 0) {
     return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios?desde=${desde}`, this.headers).pipe(
       map((usuariosRespuesta) => {
-        const usuarios = usuariosRespuesta.usuarios.map(
-          (usuario) =>
-            new UsuarioModel(
-              usuario.id,
-              usuario.primerNombre,
-              usuario.primerApellido,
-              usuario.email,
-              usuario.numeroCelular,
-              usuario.fechaNacimiento,
-              usuario.esJoven,
-              usuario.estado,
-              usuario.direccion,
-              usuario.ciudadDireccion,
-              usuario.paisDireccion,
-              usuario.genero_id,
-              usuario.estadoCivil_id,
-              usuario.vacuna_id,
-              usuario.dosis_id,
-              usuario.tipoMiembro_id,
-              usuario.segundoNombre,
-              usuario.segundoApellido,
-              usuario.apodo,
-              usuario.ingresoMensual,
-              usuario.especializacionEmpleo,
-              usuario.telefonoCasa,
-              usuario.login,
-              usuario.password,
-              usuario.foto,
-              usuario.rolCasa_id,
-              usuario.nacionalidad_id,
-              usuario.gradoAcademico_id,
-              usuario.tipoEmpleo_id,
-              usuario.genero,
-              usuario.estadoCivil,
-              usuario.rolCasa,
-              usuario.vacuna,
-              usuario.dosis,
-              usuario.nacionalidad,
-              usuario.gradoAcademico,
-              usuario.tipoEmpleo,
-              usuario.tipoMiembro,
-              usuario.departamentoDireccion,
-              usuario.codigoPostalDireccion,
-              usuario.direccionPostal,
-              usuario.ciudadPostal,
-              usuario.departamentoPostal,
-              usuario.codigoPostal,
-              usuario.paisPostal,
-              usuario.usuarioCongregacion,
-              usuario.usuarioMinisterio,
-              usuario.usuarioVoluntariado,
-              usuario.usuarioPermiso
-            )
-        );
+        // const usuarios = usuariosRespuesta.usuarios.map(
+        //   (usuario) =>
+        //     new UsuarioModel(
+        //       usuario.id,
+        //       usuario.primerNombre,
+        //       usuario.primerApellido,
+        //       usuario.email,
+        //       usuario.numeroCelular,
+        //       usuario.fechaNacimiento,
+        //       usuario.esJoven,
+        //       usuario.estado,
+        //       usuario.direccion,
+        //       usuario.ciudadDireccion,
+        //       usuario.paisDireccion,
+        //       usuario.genero_id,
+        //       usuario.estadoCivil_id,
+        //       usuario.vacuna_id,
+        //       usuario.dosis_id,
+        //       usuario.tipoMiembro_id,
+        //       usuario.segundoNombre,
+        //       usuario.segundoApellido,
+        //       usuario.apodo,
+        //       usuario.ingresoMensual,
+        //       usuario.especializacionEmpleo,
+        //       usuario.telefonoCasa,
+        //       usuario.login,
+        //       usuario.password,
+        //       usuario.foto,
+        //       usuario.rolCasa_id,
+        //       usuario.nacionalidad_id,
+        //       usuario.gradoAcademico_id,
+        //       usuario.tipoEmpleo_id,
+        //       usuario.genero,
+        //       usuario.estadoCivil,
+        //       usuario.rolCasa,
+        //       usuario.vacuna,
+        //       usuario.dosis,
+        //       usuario.nacionalidad,
+        //       usuario.gradoAcademico,
+        //       usuario.tipoEmpleo,
+        //       usuario.tipoMiembro,
+        //       usuario.departamentoDireccion,
+        //       usuario.codigoPostalDireccion,
+        //       usuario.direccionPostal,
+        //       usuario.ciudadPostal,
+        //       usuario.departamentoPostal,
+        //       usuario.codigoPostal,
+        //       usuario.paisPostal,
+        //       usuario.usuarioCongregacion,
+        //       usuario.usuarioMinisterio,
+        //       usuario.usuarioVoluntariado,
+        //       usuario.usuarioPermiso
+        //     )
+        // );
 
-        return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios };
+        return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios: usuariosRespuesta.usuarios };
       })
     );
   }
 
   listarTodosLosUsuarios() {
-    return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios`, this.headers).pipe(
-      map((usuariosRespuesta) => {
-        const usuarios = usuariosRespuesta.usuarios.map(
-          (usuario) =>
-            new UsuarioModel(
-              usuario.id,
-              usuario.primerNombre,
-              usuario.primerApellido,
-              usuario.email,
-              usuario.numeroCelular,
-              usuario.fechaNacimiento,
-              usuario.esJoven,
-              usuario.estado,
-              usuario.direccion,
-              usuario.ciudadDireccion,
-              usuario.paisDireccion,
-              usuario.genero_id,
-              usuario.estadoCivil_id,
-              usuario.vacuna_id,
-              usuario.dosis_id,
-              usuario.tipoMiembro_id,
-              usuario.segundoNombre,
-              usuario.segundoApellido,
-              usuario.apodo,
-              usuario.ingresoMensual,
-              usuario.especializacionEmpleo,
-              usuario.telefonoCasa,
-              usuario.login,
-              usuario.password,
-              usuario.foto,
-              usuario.rolCasa_id,
-              usuario.nacionalidad_id,
-              usuario.gradoAcademico_id,
-              usuario.tipoEmpleo_id,
-              usuario.genero,
-              usuario.estadoCivil,
-              usuario.rolCasa,
-              usuario.vacuna,
-              usuario.dosis,
-              usuario.nacionalidad,
-              usuario.gradoAcademico,
-              usuario.tipoEmpleo,
-              usuario.tipoMiembro,
-              usuario.departamentoDireccion,
-              usuario.codigoPostalDireccion,
-              usuario.direccionPostal,
-              usuario.ciudadPostal,
-              usuario.departamentoPostal,
-              usuario.codigoPostal,
-              usuario.paisPostal,
-              usuario.usuarioCongregacion,
-              usuario.usuarioMinisterio,
-              usuario.usuarioVoluntariado,
-              usuario.usuarioPermiso
-            )
-        );
-        return {
-          totalUsuarios: usuariosRespuesta.totalUsuarios,
-          usuarios,
-        };
-      })
-    );
+    return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios`, this.headers);
   }
 
-  getUsuario(id: number) {
+  getUsuario(id: string) {
     return this.httpClient
       .get<UsuarioInterface>(`${base_url}/usuarios/${id}`, this.headers)
       .pipe(map((usuario) => usuario));

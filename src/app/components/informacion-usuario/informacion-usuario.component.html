@@ -849,9 +849,8 @@
             <select
               class="form-select"
               formControlName="congregacionPais_id"
-              (change)="listarCongregaciones(txtPaisCongregacion.value)"
-              (change)="tieneTipoDocumento(txtPaisCongregacion.value)"
-              #txtPaisCongregacion
+              (ngModelChange)="filtrarCongregacionesPorPais($event)"
+              (ngModelChange)="tieneTipoDocumento($event)"
             >
               <option value="" disabled>Seleccione el pais de la congregación a la que pertenece</option>
               <option [value]="CONGREGACION_PAIS.SIN_CONGREGACION_PAIS">Sin Congregación País</option>
@@ -875,8 +874,7 @@
             <select
               class="form-select"
               formControlName="congregacion_id"
-              (change)="listarCampos(txtCongregacion.value)"
-              #txtCongregacion
+              (ngModelChange)="filtrarCamposPorCongregacion($event)"
             >
               <option value="" disabled>Seleccione la congregación a la que pertenece</option>
               <option [value]="CONGREGACION.SIN_CONGREGACION">Sin Congregación</option>

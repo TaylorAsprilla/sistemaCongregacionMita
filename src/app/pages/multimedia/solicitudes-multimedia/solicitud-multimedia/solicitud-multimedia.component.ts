@@ -4,13 +4,13 @@ import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { LoginUsuarioCmarLiveInterface } from 'src/app/core/models/acceso-multimedia.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
-import { SolicitudMultimediaModel } from 'src/app/core/models/solicitud-multimedia';
+import { SolicitudMultimediaInterface, SolicitudMultimediaModel } from 'src/app/core/models/solicitud-multimedia.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
+import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 
 @Component({
   selector: 'app-solicitud-multimedia',
@@ -18,9 +18,9 @@ import { generate } from 'generate-password-browser';
   styleUrls: ['./solicitud-multimedia.component.scss'],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
-  solicitudesDeAccesos: SolicitudMultimediaModel[] = [];
-  razonSolicitudes: RazonSolicitudModel[] = [];
+  solicitudesDeAccesos: SolicitudMultimediaInterface[] = [];
   nacionalidades: NacionalidadModel[] = [];
+  tipoMiembro: TipoMiembroModel[];
   cargando: boolean = false;
   fieldTextType: boolean;
 
@@ -37,8 +37,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
-      (data: { razonSolicitud: RazonSolicitudModel[]; nacionalidad: NacionalidadModel[] }) => {
-        this.razonSolicitudes = data.razonSolicitud;
+      (data: { tipoMiembro: TipoMiembroModel[]; nacionalidad: NacionalidadModel[] }) => {
+        this.tipoMiembro = data.tipoMiembro;
         this.nacionalidades = data.nacionalidad;
       }
     );
@@ -56,9 +56,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudAccesoSubscription = this.solicitudMultimediaService
       .getSolicitudes()
       .pipe(delay(100))
-      .subscribe((solicitudesDeAcceso: SolicitudMultimediaModel[]) => {
+      .subscribe((solicitudesDeAcceso: SolicitudMultimediaInterface[]) => {
         this.solicitudesDeAccesos = solicitudesDeAcceso.filter(
-          (solicitud: SolicitudMultimediaModel) => solicitud.emailVerificado === true && solicitud.estado === true
+          (solicitud: SolicitudMultimediaInterface) => solicitud.emailVerificado === true && solicitud.estado === true
         );
         this.cargando = false;
       });
@@ -72,44 +72,46 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   masInformacion(idSolicitud: number) {
     this.solicitudMultimediaServiceSubscription = this.solicitudMultimediaService
       .getSolicitud(idSolicitud)
-      .subscribe((informacionSolicitud: SolicitudMultimediaModel) => {
-        const nombre = informacionSolicitud?.nombre;
-        const fecha = informacionSolicitud?.fechaNacimiento ? informacionSolicitud?.fechaNacimiento : '';
-        const login = informacionSolicitud?.accesoMultimedia?.login
-          ? informacionSolicitud?.accesoMultimedia?.login
+      .subscribe((informacionSolicitud: SolicitudMultimediaInterface) => {
+        const nombre = `${informacionSolicitud.usuario.primerNombre} ${informacionSolicitud.usuario.segundoNombre} ${informacionSolicitud.usuario.primerApellido} ${informacionSolicitud.usuario.segundoApellido}`;
+        const fecha = informacionSolicitud?.usuario.fechaNacimiento
+          ? informacionSolicitud?.usuario.fechaNacimiento
           : '';
+        const login = informacionSolicitud?.usuario.login ? informacionSolicitud?.usuario?.login : '';
         const usuarioQueLoRegistro = `${informacionSolicitud.usuarioQueRegistra?.primerNombre}
                                       ${informacionSolicitud?.usuarioQueRegistra?.segundoNombre}
                                       ${informacionSolicitud?.usuarioQueRegistra?.primerApellido}
                                       ${informacionSolicitud?.usuarioQueRegistra?.segundoApellido}`;
-        const tiempoDeAprobacion = informacionSolicitud?.accesoMultimedia?.tiempoAprobacion
-          ? informacionSolicitud?.accesoMultimedia?.tiempoAprobacion
+        const tiempoDeAprobacion = informacionSolicitud?.tiempoAprobacion ? informacionSolicitud?.tiempoAprobacion : '';
+        const direccion = informacionSolicitud?.usuario.direccion ? informacionSolicitud?.usuario.direccion : '';
+        const ciudad = informacionSolicitud?.usuario.ciudadDireccion
+          ? informacionSolicitud?.usuario.ciudadDireccion
           : '';
-        const direccion = informacionSolicitud?.direccion ? informacionSolicitud?.direccion : '';
-        const ciudad = informacionSolicitud?.ciudad ? informacionSolicitud?.ciudad : '';
-        const departamento = informacionSolicitud?.departamento ? informacionSolicitud?.departamento : '';
-        const codigoPostal = informacionSolicitud?.codigoPostal ? informacionSolicitud?.codigoPostal : '';
-        const pais = informacionSolicitud?.pais ? informacionSolicitud?.pais : '';
-        const telefono = informacionSolicitud?.telefono ? informacionSolicitud?.telefono : '';
-        const celular = informacionSolicitud?.celular ? informacionSolicitud?.celular : '';
-        const congregacionCercana = informacionSolicitud?.congregacionCercana
-          ? informacionSolicitud?.congregacionCercana
+        const departamento = informacionSolicitud?.usuario.departamentoDireccion
+          ? informacionSolicitud?.usuario.departamentoDireccion
           : '';
-        const esMiembro = !!informacionSolicitud?.miembroCongregacion ? 'Sí' : 'No';
+        const codigoPostal = informacionSolicitud?.usuario.codigoPostalDireccion
+          ? informacionSolicitud?.usuario.codigoPostalDireccion
+          : '';
+        const pais = informacionSolicitud?.usuario.paisDireccion ? informacionSolicitud?.usuario.paisDireccion : '';
+        const telefono = informacionSolicitud?.usuario.telefonoCasa ? informacionSolicitud?.usuario.telefonoCasa : '';
+        const celular = informacionSolicitud?.usuario.numeroCelular ? informacionSolicitud?.usuario.numeroCelular : '';
+
+        const tipoMiembro = this.buscarTipoMiembro(informacionSolicitud?.usuario.tipoMiembro_id);
         const razonSolicitud =
-          informacionSolicitud?.razonSolicitud?.id !== 5
+          informacionSolicitud?.razonSolicitud_id !== 5
             ? informacionSolicitud?.razonSolicitud?.solicitud
-            : informacionSolicitud?.otraRazon;
-        const nacionalidad = informacionSolicitud?.nacionalidad?.nombre;
+            : informacionSolicitud?.razonSolicitud;
+        const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id);
         const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
         const fechaDeSolicitud = informacionSolicitud.createdAt;
-        const estado = !!informacionSolicitud?.accesoMultimedia?.estado
+        const estado = !!informacionSolicitud?.estado
           ? '<span class="badge badge-primary">Activo</span>'
           : '<span class="badge badge-danger">Deshabilitado</span>';
 
         Swal.fire({
           icon: 'info',
-          text: `${informacionSolicitud.nombre}`,
+          text: `${nombre}`,
           html: ` <table class="table table-hover text-start">
                   <thead>
                     <tr>
@@ -173,13 +175,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                       <td class="col-md-5">Celular:</td>
                       <td class="col-md-7">${celular}</td>
                     </tr>
-                    <tr>
-                      <td class="col-md-5">Congregación:</td>
-                      <td class="col-md-7">${congregacionCercana}</td>
-                    </tr>
                       <tr>
-                      <td class="col-md-5">Es Miembro:</td>
-                      <td class="col-md-7">${esMiembro}</td>
+                      <td class="col-md-5">Tipo Miembro:</td>
+                      <td class="col-md-7">${tipoMiembro}</td>
                     </tr>
                     <tr>
                       <td class="col-md-5">Razón de la solicitud:</td>
@@ -207,11 +205,12 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       });
   }
 
-  crearAccesoMultimedia(solicitud: SolicitudMultimediaModel) {
+  crearAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
+    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
     let password = this.generarPassword();
     Swal.fire({
       title: 'CMAR LIVE',
-      html: `Desea crear acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
+      html: `Desea crear acceso a CMAR LIVE al usuario <b>${nombre}</b>`,
       showCancelButton: true,
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
@@ -222,11 +221,11 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const { value: formValues } = await Swal.fire({
-          text: `Credenciales para ${solicitud.nombre}`,
+          text: `Credenciales para ${nombre}`,
           html:
-            `<p>Credenciales para <b>${solicitud.nombre}</b></p>` +
+            `<p>Credenciales para <b>${nombre}</b></p>` +
             `<label class="input-group obligatorio">Login: </label>
-              <input type="text" id="login" name="login" class="form-control"  value="${solicitud.email}"  required />` +
+              <input type="text" id="login" name="login" class="form-control"  value="${solicitud.usuario.email}"  required />` +
             `<label class="input-group obligatorio">Contraseña: </label>
               <input type="password" id="password" name="password" class="form-control" value="${password}"/>` +
             `<label class="input-group obligatorio">Tiempo de aprobación:</label>
@@ -283,11 +282,12 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  editarAccesoMultimedia(solicitud: SolicitudMultimediaModel) {
+  editarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
+    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
     const password = this.generarPassword();
     Swal.fire({
       title: 'CMAR LIVE',
-      html: `Desea editar las credenciales de ingreso del usuario ${solicitud.nombre}`,
+      html: `Desea editar las credenciales de ingreso del usuario ${nombre}`,
       showCancelButton: true,
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
@@ -298,15 +298,15 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const { value: formValues } = await Swal.fire({
-          text: `Credenciales para ${solicitud.nombre}`,
+          text: `Credenciales para ${nombre}`,
           html:
-            `<p>Credenciales para <b>${solicitud.nombre}</b></p>` +
+            `<p>Credenciales para <b>${nombre}</b></p>` +
             `<label class="input-group obligatorio">Login: </label>
-              <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.accesoMultimedia.login} required/>` +
+              <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.usuario.login} required/>` +
             `<label class="input-group obligatorio">Contraseña: </label>
               <input type="password" id="password" name="password" class="form-control" value="${password}" placeholder="Ingrese la contraseña"  required/>` +
             `<label class="input-group obligatorio">Tiempo de aprobación:</label>
-               <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${solicitud.accesoMultimedia.tiempoAprobacion} required/>` +
+               <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${solicitud.tiempoAprobacion} required/>` +
             `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
           focusConfirm: true,
           allowOutsideClick: false,
@@ -330,34 +330,32 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             estado: true,
           };
 
-          this.accesoMultimediaService
-            .actualizarAccesoMultimedia(dataAcceso, solicitud.accesoMultimedia.solicitud_id)
-            .subscribe(
-              (accesoActualizado: any) => {
-                Swal.fire(
-                  'CMAR LIVE',
-                  `Se han actualizado las credenciales de ingreso correctamente del usuario ${solicitud.nombre}`,
-                  'success'
-                );
-                this.cargarSolicitudDeAccesos();
-              },
-              (error) => {
-                let errores = error.error.errors;
-                let listaErrores = [];
+          this.accesoMultimediaService.actualizarAccesoMultimedia(dataAcceso, solicitud.id).subscribe(
+            (accesoActualizado: any) => {
+              Swal.fire(
+                'CMAR LIVE',
+                `Se han actualizado las credenciales de ingreso correctamente del usuario ${nombre}`,
+                'success'
+              );
+              this.cargarSolicitudDeAccesos();
+            },
+            (error) => {
+              let errores = error.error.errors;
+              let listaErrores = [];
 
-                if (!!errores) {
-                  Object.entries(errores).forEach(([key, value]) => {
-                    listaErrores.push('° ' + value['msg'] + '<br>');
-                  });
-                }
-
-                Swal.fire({
-                  title: 'El acceso NO ha sido creado',
-                  icon: 'error',
-                  html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+              if (!!errores) {
+                Object.entries(errores).forEach(([key, value]) => {
+                  listaErrores.push('° ' + value['msg'] + '<br>');
                 });
               }
-            );
+
+              Swal.fire({
+                title: 'El acceso NO ha sido creado',
+                icon: 'error',
+                html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+              });
+            }
+          );
         }
       } else if (result.isDenied) {
         Swal.fire('No se pudo crear las credeciales de CMAR LIVE', '', 'info');
@@ -365,7 +363,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  eliminarAccesoMultimedia(solicitud: SolicitudMultimediaModel) {
+  eliminarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
+    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
     Swal.fire({
       title: 'CMAR LIVE',
       showCancelButton: true,
@@ -373,40 +372,15 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
       showCloseButton: true,
       icon: 'question',
-      html: `Desea deshabilitar el acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
+      html: `Desea deshabilitar el acceso a CMAR LIVE al usuario ${nombre}`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.accesoMultimediaService
-          .eliminarAccesoMultimedia(solicitud.accesoMultimedia.id)
-          .subscribe((respuesta: any) => {
-            Swal.fire({
-              title: 'CMAR LIVE',
-              icon: 'warning',
-              html: `Se deshabilitó el acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
-              showCloseButton: true,
-            });
-          });
-        this.cargarSolicitudDeAccesos();
-      }
-    });
-  }
-
-  activarAccesoMultimedia(solicitud: SolicitudMultimediaModel) {
-    Swal.fire({
-      title: 'CMAR LIVE',
-      showCancelButton: true,
-      showCloseButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar',
-      icon: 'question',
-      html: `Desea activar el acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.accesoMultimediaService.activarAccesoMultimedia(solicitud.accesoMultimedia).subscribe((respuesta: any) => {
+        this.accesoMultimediaService.eliminarAccesoMultimedia(solicitud.id).subscribe((respuesta: any) => {
           Swal.fire({
             title: 'CMAR LIVE',
             icon: 'warning',
-            html: `Se activo el acceso CMAR LIVE al usuario ${solicitud.nombre}`,
+            html: `Se deshabilitó el acceso a CMAR LIVE al usuario ${nombre}`,
+            showCloseButton: true,
           });
         });
         this.cargarSolicitudDeAccesos();
@@ -414,7 +388,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  denegarAccesoMultimedia(solicitud: SolicitudMultimediaModel) {
+  activarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
+    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
     Swal.fire({
       title: 'CMAR LIVE',
       showCancelButton: true,
@@ -422,19 +397,57 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
       icon: 'question',
-      html: `Desea denegar la solicitud CMAR LIVE al usuario ${solicitud.nombre}`,
+      html: `Desea activar el acceso a CMAR LIVE al usuario ${nombre}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // this.accesoMultimediaService.activarAccesoMultimedia('').subscribe((respuesta: any) => {
+        //   Swal.fire({
+        //     title: 'CMAR LIVE',
+        //     icon: 'warning',
+        //     html: `Se activo el acceso CMAR LIVE al usuario ${nombre}`,
+        //   });
+        // });
+        this.cargarSolicitudDeAccesos();
+      }
+    });
+  }
+
+  denegarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
+    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
+    Swal.fire({
+      title: 'CMAR LIVE',
+      showCancelButton: true,
+      showCloseButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+      icon: 'question',
+      html: `Desea denegar la solicitud CMAR LIVE al usuario ${nombre}`,
     }).then((result) => {
       if (result.isConfirmed) {
         this.solicitudMultimediaService.eliminarSolicitudMultimedia(solicitud.id).subscribe((respuesta: any) => {
           Swal.fire({
             title: 'CMAR LIVE',
             icon: 'warning',
-            html: `Se denego la solicitud de acceso a CMAR LIVE al usuario ${solicitud.nombre}`,
+            html: `Se denego la solicitud de acceso a CMAR LIVE al usuario ${nombre}`,
           });
         });
         this.cargarSolicitudDeAccesos();
       }
     });
+  }
+
+  buscarTipoMiembro(id: number): string {
+    const miembroEncontrado = this.tipoMiembro.find((miembro) => {
+      return miembro.id === id;
+    });
+    return miembroEncontrado.miembro;
+  }
+
+  buscarNacionalidad(id: number): string {
+    const nacionalidadEncontrada = this.nacionalidades.find((nacionalidad) => {
+      return nacionalidad.id === id;
+    });
+    return nacionalidadEncontrada.nombre;
   }
 
   generarPassword() {

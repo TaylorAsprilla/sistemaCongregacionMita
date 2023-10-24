@@ -13,6 +13,11 @@ import { TipoMiembroModel } from './tipo.miembro.model';
 import { CongregacionInterface } from './usuarioCongregacion.model';
 import { VacunaModel } from './vacuna.model';
 import { VoluntariadoModel } from './voluntariado.model';
+import {
+  UsuarioCongregacionCampoInterface,
+  UsuarioCongregacionCiudadInterface,
+  UsuarioCongregacionPaisInterface,
+} from '../interfaces/usuario.interface';
 
 const base_url = environment.base_url;
 
@@ -75,7 +80,10 @@ export class UsuarioModel {
     public usuarioPermiso?: PermisoModel[],
     public usuarioFuenteIngreso?: FuenteIngresoModel[],
     public tipoDocumento_id?: number,
-    public numeroDocumento?: string
+    public numeroDocumento?: string,
+    public usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface,
+    public usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface,
+    public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface
   ) {}
 
   get fotoUrl() {
