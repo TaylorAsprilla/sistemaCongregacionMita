@@ -46,7 +46,12 @@ const lang = 'en-US';
     CargandoInformacionModule,
     BibliotecaMultimediaModule,
   ],
-  exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
+  exports: [
+    SolicitudMultimediaComponent,
+    CrearSolicitudMultimediaComponent,
+    ValidarEmailComponent,
+    ServiciosYVigiliasComponent,
+  ],
   providers: [{ provide: LOCALE_ID, useValue: lang }],
 })
 export class MultimediaModule {}

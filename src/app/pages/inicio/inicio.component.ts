@@ -1,3 +1,4 @@
+import { LinkEventoModel, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -9,6 +10,7 @@ import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.mod
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
 
 @Component({
   selector: 'app-inicio',
@@ -23,14 +25,29 @@ export class InicioComponent implements OnInit {
   congregaciones: CongregacionModel[] = [];
   campos: CampoModel[] = [];
   ministerios: MinisterioModel[] = [];
+  linkEventos: LinkEventoModel[] = [];
+  servicios: LinkEventoModel[] = [];
 
   roles: ROLES[] = [];
 
   public generarSeccionHome: any[] = [];
 
   usuariosSubscription: Subscription;
+  linEventosSubscription: Subscription;
 
-  constructor(private usuarioServices: UsuarioService, private activatedRoute: ActivatedRoute) {}
+  get ROLES() {
+    return ROLES;
+  }
+
+  get TIPOEVENTO_ID() {
+    return TIPOEVENTO_ID;
+  }
+
+  constructor(
+    private usuarioServices: UsuarioService,
+    private activatedRoute: ActivatedRoute,
+    private linkEventosService: LinkEventosService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
@@ -52,6 +69,13 @@ export class InicioComponent implements OnInit {
       this.usuarios = usuarios;
     });
 
+    this.linEventosSubscription = this.linkEventosService.getEventos().subscribe((eventos: LinkEventoModel[]) => {
+      this.linkEventos = eventos;
+      this.servicios = this.linkEventos
+        .filter((eventos) => eventos.tipoEvento_id === TIPOEVENTO_ID.SERVICIO)
+        .slice(0, 1);
+    });
+
     this.generarSeccionHome = generarSeccionHome.filter((seccionInforme) => seccionInforme);
 
     this.roles = [
@@ -65,5 +89,6 @@ export class InicioComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.usuariosSubscription?.unsubscribe();
+    this.linEventosSubscription?.unsubscribe();
   }
 }

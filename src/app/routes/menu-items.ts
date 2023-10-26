@@ -479,7 +479,6 @@ export const ROUTES: RouteInfo[] = [
           ROLES.OBRERO_CIUDAD,
           ROLES.OBRERO_CAMPO,
           ROLES.ADMINISTRADOR_MULTIMEDIA,
-          ROLES.MULTIMEDIA,
           ROLES.ASISTENTE_OOTS,
         ],
         submenu: [
@@ -496,7 +495,6 @@ export const ROUTES: RouteInfo[] = [
               ROLES.OBRERO_CIUDAD,
               ROLES.OBRERO_CAMPO,
               ROLES.ADMINISTRADOR_MULTIMEDIA,
-              ROLES.MULTIMEDIA,
               ROLES.ASISTENTE_OOTS,
             ],
             submenu: [],
@@ -514,7 +512,6 @@ export const ROUTES: RouteInfo[] = [
               ROLES.OBRERO_CIUDAD,
               ROLES.OBRERO_CAMPO,
               ROLES.ADMINISTRADOR_MULTIMEDIA,
-              ROLES.MULTIMEDIA,
               ROLES.ASISTENTE_OOTS,
             ],
             submenu: [],

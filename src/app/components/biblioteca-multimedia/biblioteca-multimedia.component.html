@@ -7,7 +7,7 @@
       <div>
         <div
           *ngIf="item.plataforma === PLATAFORMA.YOUTUBE"
-          class="card-body col-sm-12 col-md-12 col-lg-12 text-center"
+          class="card card-body col-sm-12 col-md-12 col-lg-12 text-center mx-auto"
           #templateYouTubePlayer
         >
           <youtube-player
@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
         <div class="ratio ratio-16x9">
           <iframe
             [src]="domSanitizerVideo(item.link)"
@@ -42,7 +42,7 @@
       <div>
         <div
           *ngIf="item.plataforma === PLATAFORMA.YOUTUBE"
-          class="card-body col-sm-12 col-md-12 col-lg-12 text-center"
+          class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3"
           #templateYouTubePlayer
         >
           <youtube-player
@@ -54,7 +54,7 @@
           </youtube-player>
         </div>
       </div>
-      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
         <div class="ratio ratio-16x9">
           <iframe
             [src]="domSanitizerVideo(item.link)"
@@ -76,7 +76,7 @@
       <div>
         <div
           *ngIf="item.plataforma === PLATAFORMA.YOUTUBE"
-          class="card-body col-sm-12 col-md-12 col-lg-12 text-center"
+          class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3"
           #templateYouTubePlayer
         >
           <youtube-player
@@ -88,7 +88,7 @@
           </youtube-player>
         </div>
       </div>
-      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
         <div class="ratio ratio-16x9">
           <iframe
             [src]="domSanitizerVideo(item.link)"
