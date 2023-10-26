@@ -85,6 +85,10 @@ export class CrearCongregacionComponent implements OnInit {
   crearCongregacion() {
     const congregacionNueva = this.congregacionForm.value;
 
+    if (congregacionNueva.idObreroEncargado === 'null') {
+      delete congregacionNueva.idObreroEncargado;
+    }
+
     if (this.congregacionSeleccionada) {
       const data = {
         ...this.congregacionForm.value,
