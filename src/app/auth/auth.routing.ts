@@ -8,15 +8,18 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    title: 'CMAR LIVE',
   },
 
   {
     path: 'recuperar-cuenta',
     component: RecuperarCuentaComponent,
+    title: 'CMAR LIVE',
   },
   {
     path: 'nueva-contrasena/:token',
     component: CambiarPasswordComponent,
+    title: 'CMAR LIVE',
   },
 ];
 

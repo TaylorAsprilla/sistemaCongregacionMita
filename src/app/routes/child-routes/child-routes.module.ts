@@ -199,57 +199,22 @@ const childRoutes: Routes = [
   {
     path: RUTAS.OPCION_DE_TRANSPORTE,
     component: OpcionDeTransporteComponent,
-    // data: { titulo: 'Usuarios Registrados' },
-    // resolve: {
-    //   congregacion: CongregacionResolver,
-    //   ministerio: MinisterioResolver,
-    //   pais: PaisResolver,
-    //   campo: CampoResolver,
-    // },
   },
   {
     path: RUTAS.GENERO,
     component: GeneroComponent,
-    // data: { titulo: 'Usuarios Registrados' },
-    // resolve: {
-    //   congregacion: CongregacionResolver,
-    //   ministerio: MinisterioResolver,
-    //   pais: PaisResolver,
-    //   campo: CampoResolver,
-    // },
   },
   {
     path: RUTAS.TIPO_DE_ESTUDIO,
     component: TipoDeEstudioComponent,
-    // data: { titulo: 'Usuarios Registrados' },
-    // resolve: {
-    //   congregacion: CongregacionResolver,
-    //   ministerio: MinisterioResolver,
-    //   pais: PaisResolver,
-    //   campo: CampoResolver,
-    // },
   },
   {
     path: RUTAS.RAZON_DE_SOLICITUD,
     component: RazonDeSolicitudComponent,
-    // data: { titulo: 'Usuarios Registrados' },
-    // resolve: {
-    //   congregacion: CongregacionResolver,
-    //   ministerio: MinisterioResolver,
-    //   pais: PaisResolver,
-    //   campo: CampoResolver,
-    // },
   },
   {
     path: RUTAS.PARENTESCO,
     component: ParentescoComponent,
-    // data: { titulo: 'Usuarios Registrados' },
-    // resolve: {
-    //   congregacion: CongregacionResolver,
-    //   ministerio: MinisterioResolver,
-    //   pais: PaisResolver,
-    //   campo: CampoResolver,
-    // },
   },
 
   // Perfil

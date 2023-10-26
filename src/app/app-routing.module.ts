@@ -10,10 +10,12 @@ const routes: Routes = [
     path: '',
     redirectTo: '/sistema/inicio',
     pathMatch: 'full',
+    title: 'CMAR LIVE',
   },
   {
     path: '**',
     component: NopagefoundComponent,
+    title: 'CMAR LIVE',
   },
 ];
 
