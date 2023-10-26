@@ -79,6 +79,10 @@ export class CrearCampoComponent implements OnInit {
   crearCampo() {
     const campoNuevo = this.campoForm.value;
 
+    if (campoNuevo.idObreroEncargado === 'null') {
+      delete campoNuevo.idObreroEncargado;
+    }
+
     if (this.campoSeleccionado) {
       const data = {
         ...this.campoForm.value,

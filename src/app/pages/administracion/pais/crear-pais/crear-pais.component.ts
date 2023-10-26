@@ -72,7 +72,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   crearFormulario() {
     this.paisForm = this.formBuilder.group({
       pais: ['', [Validators.required, Validators.minLength(3)]],
-      // idDivisa: ['', [Validators.required]],
+      idDivisa: [null, [Validators.required]],
       idObreroEncargado: ['', [Validators.required]],
     });
   }
@@ -85,6 +85,10 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
 
   crearPais() {
     const paisNuevo = this.paisForm.value;
+
+    if (paisNuevo.idObreroEncargado === 'null') {
+      delete paisNuevo.idObreroEncargado;
+    }
 
     if (this.paisSeleccionado) {
       const data = {
