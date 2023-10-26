@@ -25,7 +25,7 @@
             <label class="col-form-label">Obrero Encargado</label>
             <select class="form-control" formControlName="idObreroEncargado">
               <option value="" disabled>Seleccione el obrero encargado</option>
-              <option value="NULL">Sin obrero Asignado</option>
+              <option [value]="null">Sin obrero Asignado</option>
               <option *ngFor="let obrero of obreros" [value]="obrero.id">
                 {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
                 {{ obrero.segundoApellido }}
