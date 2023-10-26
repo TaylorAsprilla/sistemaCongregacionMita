@@ -74,3 +74,20 @@
     </ng-container>
   </div>
 </div>
+
+<ng-container
+  *appPermisos="[
+    ROLES.ADMINISTRADOR,
+    ROLES.SUPERVISOR,
+    ROLES.SUPERVISOR_LOCAL,
+    ROLES.OBRERO_CIUDAD,
+    ROLES.ADMINISTRADOR_MULTIMEDIA,
+    ROLES.MULTIMEDIA,
+    ROLES.ASISTENTE_OOTS
+  ]"
+>
+  <app-biblioteca-multimedia
+    [serviciosYvigilias]="servicios"
+    [tipoDeEvento]="TIPOEVENTO_ID.SERVICIO"
+  ></app-biblioteca-multimedia>
+</ng-container>
