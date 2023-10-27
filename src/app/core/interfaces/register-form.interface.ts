@@ -37,6 +37,7 @@ export interface RegisterFormInterface {
   numeroDocumento: string;
   terminos: boolean;
   tipoDocumento_id?: number;
+  anoConocimiento?: string;
 }
 
 export interface CongregacionInterfase {

@@ -139,6 +139,7 @@ export class InformacionUsuarioComponent implements OnInit {
   dosisUsuario: number;
   tipoDeDocumento: string;
   numeroDocumento: string;
+  anoConocimiento: string;
 
   direccionResidenciaValues: any;
 
@@ -219,6 +220,7 @@ export class InformacionUsuarioComponent implements OnInit {
 
     this.vacuna = this.usuario?.vacuna_id ? this.usuario?.vacuna_id : null;
     this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : null;
+    this.anoConocimiento = this.usuario?.anoConocimiento ? this.usuario?.anoConocimiento : '';
   }
 
   crearFormularios() {
@@ -274,6 +276,7 @@ export class InformacionUsuarioComponent implements OnInit {
       esVoluntario: [this.voluntario, [Validators.required]],
       ministerio: this.formBuilder.array(controlMinisterios),
       voluntariado: this.formBuilder.array(controlVoluntariados),
+      anoConocimiento: [this.anoConocimiento, []],
       vacuna_id: [this.vacuna, [Validators.required]],
       dosis_id: [this.dosisUsuario, [Validators.required]],
     });
@@ -427,6 +430,7 @@ export class InformacionUsuarioComponent implements OnInit {
         codigoPostal: informacionFormulario?.codigoPostal,
         paisPostal: informacionFormulario?.paisPostal,
         departamentoDireccion: informacionFormulario?.departamentoDireccion,
+        anoConocimiento: informacionFormulario?.anoConocimiento,
       };
 
       this.operacion.emit(usuarioNuevo);

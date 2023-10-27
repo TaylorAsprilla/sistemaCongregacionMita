@@ -139,6 +139,7 @@ export class UsuarioService {
               usuarioFuenteIngreso,
               tipoDocumento_id,
               numeroDocumento,
+              anoConocimiento,
             } = respuesta.usuario;
 
             this.usuario = new UsuarioModel(
@@ -193,7 +194,8 @@ export class UsuarioService {
               usuarioPermiso,
               usuarioFuenteIngreso,
               tipoDocumento_id,
-              numeroDocumento
+              numeroDocumento,
+              anoConocimiento
             );
 
             localStorage.setItem('token', respuesta.token);
