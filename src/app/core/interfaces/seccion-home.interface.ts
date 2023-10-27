@@ -49,6 +49,13 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-congregacion.png',
     ruta: `../${RUTAS.CONGREGACIONES}`,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    role: [
+      ROLES.ADMINISTRADOR,
+      ROLES.SUPERVISOR,
+      ROLES.SUPERVISOR_LOCAL,
+      ROLES.OBRERO_CIUDAD,
+      ROLES.OBRERO_CAMPO,
+      ROLES.ASISTENTE_OOTS,
+    ],
   },
 ];

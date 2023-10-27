@@ -84,6 +84,7 @@ export class InicioComponent implements OnInit {
       ROLES.SUPERVISOR_LOCAL,
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
+      ROLES.ASISTENTE_OOTS,
     ];
   }
 
