@@ -317,7 +317,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'mdi mdi-apps',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
     submenu: [
       {
         path: RUTAS.PAISES,
@@ -325,7 +325,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: 'menuCongregacion',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -334,7 +334,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: 'menuCongregacion',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -343,7 +343,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: 'menuCongregacion',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
     ],
