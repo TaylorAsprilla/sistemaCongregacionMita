@@ -81,6 +81,7 @@ export class UsuarioModel {
     public usuarioFuenteIngreso?: FuenteIngresoModel[],
     public tipoDocumento_id?: number,
     public numeroDocumento?: string,
+    public anoConocimiento?: string,
     public usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface,
     public usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface,
     public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface

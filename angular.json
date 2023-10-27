@@ -92,6 +92,14 @@
               ],
               "outputHashing": "all"
             },
+            "qa": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.qa.ts"
+                }
+              ]
+            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
@@ -111,6 +119,9 @@
             },
             "development": {
               "browserTarget": "sistemacmi:build:development"
+            },
+            "qa": {
+              "browserTarget": "sistemacmi:build:qa"
             }
           },
           "defaultConfiguration": "development"
