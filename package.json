@@ -13,7 +13,7 @@
     "build:prod": "ng build --configuration production --base-href",
     "build:qa": "ng build --configuration qa --base-href",
     "deploy-front:prod": "rm -rf dist && ng build --configuration production --base-href && aws s3 sync dist s3://sistemacmi --acl public-read",
-    "deploy-front:qa": "rm -rf dist && ng build --configuration qa --base-href && aws s3 sync dist s3//qa-sistemacmi --acl public-read",
+    "deploy-front:qa": "rm -rf dist && ng build --configuration qa --base-href && aws s3 sync dist s3://qa-sistemacmi --acl public-read",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
