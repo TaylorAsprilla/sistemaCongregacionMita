@@ -22,7 +22,6 @@ export const generarSeccionHome: SeccionHome[] = [
       ROLES.SUPERVISOR_LOCAL,
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
-      ROLES.MULTIMEDIA,
       ROLES.ADMINISTRADOR_MULTIMEDIA,
       ROLES.ASISTENTE_OOTS,
     ],
