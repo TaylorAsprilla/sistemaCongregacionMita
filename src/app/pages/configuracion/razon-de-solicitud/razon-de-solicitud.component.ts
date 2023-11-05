@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
-import { RUTAS } from 'src/app/routes/menu-items';
 import { RazonSolicitudService } from 'src/app/services/razon-solicitud/razon-solicitud.service';
 import Swal from 'sweetalert2';
 
@@ -18,11 +16,7 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
 
   public razonSolicitudSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private razonSolicitudService: RazonSolicitudService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private razonSolicitudService: RazonSolicitudService) {}
 
   ngOnInit(): void {
     this.cargarRazonSolicitud();
@@ -43,10 +37,10 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
       });
   }
 
-  async buscarRazonSolicitud(id: number) {
+  buscarRazonSolicitud(id: number) {
     let razonSolicitud = '';
     if (id) {
-      await this.razonSolicitudService
+      this.razonSolicitudService
         .getUnaRazonsolicitud(Number(id))
         .pipe(delay(100))
         .subscribe(
@@ -74,7 +68,7 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
   }
 
   async actualizarRazonSolicitud(id: number) {
-    let opt = await this.buscarRazonSolicitud(id);
+    let opt = this.buscarRazonSolicitud(id);
 
     const { value: opcion } = await Swal.fire({
       title: 'Actualizar',

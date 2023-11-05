@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { usuariosSupervisorModel } from 'src/app/core/models/usuarios-supervisor.model';
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -33,8 +33,7 @@ export class UsuariosSupervisorComponent implements OnInit {
   constructor(
     private router: Router,
     private supervisorCongregacionService: SupervisorCongregacionService,
-    private usuarioService: UsuarioService,
-    private activatedRoute: ActivatedRoute
+    private usuarioService: UsuarioService
   ) {}
 
   ngOnInit(): void {

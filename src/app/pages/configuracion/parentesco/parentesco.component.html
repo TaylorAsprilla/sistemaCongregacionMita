@@ -17,64 +17,65 @@
       </div>
     </div>
 
-    <div class="card-body mx-auto">
-      <table class="table table-bordered table-striped table-responsive">
-        <thead>
-          <tr>
-            <th class="w100">item</th>
-            <th class="w400">Nombre</th>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped mx-auto">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Nombre</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let parentesco of parentescos; index as i">
+              <td>{{ i + 1 }}</td>
+              <td>{{ parentesco.nombre }}</td>
 
-            <th class="w200">Estado</th>
-            <th class="w200">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let parentesco of parentescos; index as i">
-            <td>{{ i + 1 }}</td>
-            <td>{{ parentesco.nombre }}</td>
+              <td>
+                <span *ngIf="parentesco.estado" class="badge badge-primary">Activo</span>
+                <span *ngIf="!parentesco.estado" class="badge badge-danger">Deshabilitado</span>
+              </td>
 
-            <td>
-              <span *ngIf="parentesco.estado" class="badge badge-primary">Activo</span>
-              <span *ngIf="!parentesco.estado" class="badge badge-danger">Deshabilitado</span>
-            </td>
-
-            <td>
-              <a
-                *ngIf="!!parentesco.estado"
-                data-toggle="tooltip"
-                data-original-title="Editar"
-                class="btn bg-info"
-                (click)="actualizarParentesco(parentesco.id)"
-                ><i class="fas fa-pencil-alt ml-1"></i
-              ></a>
-              <a
-                *ngIf="!!parentesco.estado"
-                data-toggle="tooltip"
-                data-original-title="Borrar"
-                class="btn bg-danger ml-1"
-                (click)="borrarParentesco(parentesco)"
-                ><i class="fas fa-trash-alt"></i
-              ></a>
-              <a
-                *ngIf="!parentesco.estado"
-                data-toggle="tooltip"
-                data-original-title="Activar"
-                class="btn bg-secondary ml-1"
-                (click)="activarParentesco(parentesco)"
-                ><i class="fas fa-check-square"></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th class="w100">item</th>
-            <th>Nombre</th>
-            <th class="w200">Estado</th>
-            <th class="w200">Acciones</th>
-          </tr>
-        </tfoot>
-      </table>
+              <td>
+                <a
+                  *ngIf="!!parentesco.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Editar"
+                  class="btn bg-info"
+                  (click)="actualizarParentesco(parentesco.id)"
+                  ><i class="fas fa-pencil-alt ml-1"></i
+                ></a>
+                <a
+                  *ngIf="!!parentesco.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Borrar"
+                  class="btn bg-danger ml-1"
+                  (click)="borrarParentesco(parentesco)"
+                  ><i class="fas fa-trash-alt"></i
+                ></a>
+                <a
+                  *ngIf="!parentesco.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Activar"
+                  class="btn bg-secondary ml-1"
+                  (click)="activarParentesco(parentesco)"
+                  ><i class="fas fa-check-square"></i
+                ></a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Item</th>
+              <th>Nombre</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
 </section>

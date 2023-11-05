@@ -16,76 +16,78 @@
       </div>
     </div>
 
-    <div class="card-body mx-auto">
-      <table class="table table-bordered table-striped table-responsive">
-        <thead>
-          <tr>
-            <th>item</th>
-            <th class="w400">Nombre</th>
-            <th class="w200">Obrero Encargado</th>
-            <th>Pais</th>
-            <th>Congregación</th>
-            <th class="w100">Estado</th>
-            <th class="w200">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let campo of campos; index as i">
-            <td>{{ i + 1 }}</td>
-            <td>{{ campo.campo }}</td>
-            <td>{{ buscarObrero(campo.idObreroEncargado) }}</td>
-            <td>
-              {{ buscarCongregacion(campo.congregacion_id)['congregacion'] }}
-            </td>
-            <td>
-              {{ buscarCongregacion(campo.congregacion_id)['pais'] }}
-            </td>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped mx-auto">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Nombre</th>
+              <th>Obrero Encargado</th>
+              <th>Pais</th>
+              <th>Congregación</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let campo of campos; index as i">
+              <td>{{ i + 1 }}</td>
+              <td>{{ campo.campo }}</td>
+              <td>{{ buscarObrero(campo.idObreroEncargado) }}</td>
+              <td>
+                {{ buscarCongregacion(campo.congregacion_id)['congregacion'] }}
+              </td>
+              <td>
+                {{ buscarCongregacion(campo.congregacion_id)['pais'] }}
+              </td>
 
-            <td>
-              <span *ngIf="campo.estado" class="badge badge-primary">Activo</span>
-              <span *ngIf="!campo.estado" class="badge badge-danger">Deshabilitado</span>
-            </td>
+              <td>
+                <span *ngIf="campo.estado" class="badge badge-primary">Activo</span>
+                <span *ngIf="!campo.estado" class="badge badge-danger">Deshabilitado</span>
+              </td>
 
-            <td>
-              <a
-                *ngIf="!!campo.estado"
-                data-toggle="tooltip"
-                data-original-title="Editar"
-                class="btn bg-info"
-                (click)="actualizarCampo(campo.id)"
-                ><i class="fas fa-pencil-alt ml-1"></i
-              ></a>
-              <a
-                *ngIf="!!campo.estado"
-                data-toggle="tooltip"
-                data-original-title="Borrar"
-                class="btn bg-danger ml-1"
-                (click)="borrarCampo(campo)"
-                ><i class="fas fa-trash-alt"></i
-              ></a>
-              <a
-                *ngIf="!campo.estado"
-                data-toggle="tooltip"
-                data-original-title="Activar"
-                class="btn bg-secondary ml-1"
-                (click)="activarCampo(campo)"
-                ><i class="fas fa-check-square"></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Item</th>
-            <th>Nombre</th>
-            <th>Obrero Encargado</th>
-            <th>Pais</th>
-            <th>Congregación</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </tfoot>
-      </table>
+              <td>
+                <a
+                  *ngIf="!!campo.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Editar"
+                  class="btn bg-info"
+                  (click)="actualizarCampo(campo.id)"
+                  ><i class="fas fa-pencil-alt ml-1"></i
+                ></a>
+                <a
+                  *ngIf="!!campo.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Borrar"
+                  class="btn bg-danger ml-1"
+                  (click)="borrarCampo(campo)"
+                  ><i class="fas fa-trash-alt"></i
+                ></a>
+                <a
+                  *ngIf="!campo.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Activar"
+                  class="btn bg-secondary ml-1"
+                  (click)="activarCampo(campo)"
+                  ><i class="fas fa-check-square"></i
+                ></a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Item</th>
+              <th>Nombre</th>
+              <th>Obrero Encargado</th>
+              <th>Pais</th>
+              <th>Congregación</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
     <div class="md-4 py-2 pl-4">
       <button class="btn btn-secondary">Siguiente</button> &nbsp;

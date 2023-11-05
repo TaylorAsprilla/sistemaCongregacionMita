@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
-import { RUTAS } from 'src/app/routes/menu-items';
 import { ParentescoService } from 'src/app/services/parentesco/parentesco.service';
 import Swal from 'sweetalert2';
 
@@ -18,11 +17,7 @@ export class ParentescoComponent implements OnInit {
 
   public parentescoSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private parentescoService: ParentescoService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private parentescoService: ParentescoService) {}
 
   ngOnInit(): void {
     this.cargarParentescos();
@@ -46,7 +41,7 @@ export class ParentescoComponent implements OnInit {
   async buscarParentesco(id: number) {
     let tipoDeParentesco = '';
     if (id) {
-      await this.parentescoService
+      this.parentescoService
         .getUnParentesco(Number(id))
         .pipe(delay(100))
         .subscribe(
@@ -74,14 +69,14 @@ export class ParentescoComponent implements OnInit {
   }
 
   async actualizarParentesco(id: number) {
-    let opt = await this.buscarParentesco(id);
+    let opcion = await this.buscarParentesco(id);
 
     const { value: parentesco } = await Swal.fire({
       title: 'Actualizar parentesco',
       input: 'text',
       inputLabel: 'Parentesco',
       showCancelButton: true,
-      inputPlaceholder: opt,
+      inputPlaceholder: opcion,
     });
 
     if (parentesco) {
