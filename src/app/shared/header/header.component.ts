@@ -49,4 +49,8 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.usuarioService.logout();
   }
+
+  redirigirAInicio() {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
+  }
 }
