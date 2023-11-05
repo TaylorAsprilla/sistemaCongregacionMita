@@ -5,9 +5,7 @@ import { CongregacionesComponent } from 'src/app/pages/administracion/congregaci
 import { MinisteriosComponent } from 'src/app/pages/administracion/ministerios/ministerios/ministerios.component';
 import { UsuariosComponent } from 'src/app/pages/administracion/usuario/usuarios/usuarios.component';
 import { CrearActividadComponent } from 'src/app/pages/informes/crear-actividad/crear-actividad.component';
-
 import { CrearCampoComponent } from 'src/app/pages/administracion/campo/crear-campo/crear-campo.component';
-
 import { CrearStatusComponent } from 'src/app/pages/informes/crear-status/crear-status.component';
 import { InformeActividadesComponent } from 'src/app/pages/informes/informe-actividades/informe-actividades.component';
 import { InformeContablesComponent } from 'src/app/pages/informes/informe-contables/informe-contables.component';
@@ -18,7 +16,6 @@ import { InformeComponent } from 'src/app/pages/informes/informe/informe.compone
 import { VerInformeComponent } from 'src/app/pages/informes/ver-informe/ver-informe.component';
 import { InicioComponent } from 'src/app/pages/inicio/inicio.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
-
 import { RegistrarUsuarioComponent } from 'src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component';
 import { ROLES, RUTAS } from '../menu-items';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
@@ -69,6 +66,7 @@ import { TipoDeEstudioComponent } from 'src/app/pages/configuracion/tipo-de-estu
 import { RazonDeSolicitudComponent } from 'src/app/pages/configuracion/razon-de-solicitud/razon-de-solicitud.component';
 import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/parentesco.component';
 import { UsuarioResolver } from 'src/app/resolvers/getUsuario/get-usuario.resolver';
+import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministerios/crear-ministerio/crear-ministerio.component';
 
 const childRoutes: Routes = [
   {
@@ -148,6 +146,12 @@ const childRoutes: Routes = [
   {
     path: RUTAS.MINISTERIOS,
     component: MinisteriosComponent,
+  },
+  {
+    path: `${RUTAS.MINISTERIOS}/:id`,
+    component: CrearMinisterioComponent,
+    resolve: { ministerio: MinisterioResolver },
+    data: { titulo: 'Crear Pais' },
   },
 
   {
