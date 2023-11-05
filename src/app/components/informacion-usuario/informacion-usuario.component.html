@@ -30,7 +30,7 @@
 
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Primer Nombre:</label>
+            <label class="input-group obligatorio">Primer Nombre: </label>
             <input type="text" formControlName="primerNombre" class="form-control" placeholder="Primer Nombre" />
             <small
               class="form-text text-danger"
@@ -67,7 +67,7 @@
 
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Primer Apellido:</label>
+            <label class="input-group obligatorio">Primer Apellido: </label>
             <input type="text" formControlName="primerApellido" class="form-control" placeholder="Primer Apellido" />
             <small
               class="form-text text-danger"
@@ -117,7 +117,7 @@
           </div>
 
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Email:</label>
+            <label class="input-group obligatorio">Email: </label>
             <input
               type="email"
               formControlName="email"
@@ -147,7 +147,7 @@
         </div>
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Genero:</label>
+            <label class="input-group obligatorio">Genero: </label>
             <select class="form-select" formControlName="genero_id">
               <option value="" disabled>Seleccione el genero</option>
               <option *ngFor="let genero of generos" [value]="genero.id">
@@ -163,7 +163,7 @@
           </div>
 
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Estado Civil:</label>
+            <label class="input-group obligatorio">Estado Civil: </label>
             <select class="form-select" formControlName="estadoCivil_id">
               <option value="" disabled>Seleccione el Estado Civil</option>
               <option *ngFor="let estadoCivil of estadoCivil" [value]="estadoCivil.id">
@@ -239,7 +239,7 @@
           </div>
 
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Rol en casa:</label>
+            <label class="input-group obligatorio">Rol en casa: </label>
             <select class="form-select" formControlName="rolCasa_id">
               <option value="" disabled>Seleccione el Rol en la Casa</option>
               <option *ngFor="let rolCasa of rolCasa" [value]="rolCasa.id">
@@ -259,7 +259,7 @@
 
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Celular:</label>
+            <label class="input-group obligatorio">Celular: </label>
             <ngx-intl-tel-input
               [cssClass]="'form-control'"
               [preferredCountries]="paisesPreferidos"
@@ -358,7 +358,7 @@
         <div class="row border p-4 rounded bg-light shadow">
           <legend class="fw-semibold fs-title">Dirección de Residencia</legend>
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Dirección:</label>
+            <label class="input-group obligatorio">Dirección: </label>
             <input
               type="text"
               class="form-control"
@@ -380,7 +380,7 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Ciudad / Localidad:</label>
+            <label class="input-group obligatorio">Ciudad / Localidad: </label>
             <input type="text" formControlName="ciudadDireccion" class="form-control" placeholder="Ciudad" />
             <small
               class="form-text text-danger"
@@ -606,28 +606,19 @@
         <h2 class="fs-title">Información Laboral</h2>
 
         <div class="row">
-          <div class="form-group col-sm-12 col-md-6 col-lg-5 px-5">
-            <label class="input-group obligatorio">¿Cuáles son sus fuentes de ingresos mensual?</label>
+          <div class="form-group col-sm-12 col-md-6 col-lg-5 ps-1">
+            <label class="input-group obligatorio">¿Cuáles son sus fuentes de ingresos mensual? </label>
+            <div class="mt-3">
+              <label
+                class="form-check-label form-check checkbox-lg"
+                formArrayName="fuenteIngresos"
+                *ngFor="let fuenteDeIngreso of fuenteDeIngresosArr.controls; index as i"
+              >
+                <input type="checkbox" class="form-check-input" [formControlName]="i" />
 
-            <label
-              class="form-check-label form-check checkbox-lg"
-              formArrayName="fuenteIngresos"
-              *ngFor="let fuenteDeIngreso of fuenteDeIngresosArr.controls; index as i"
-            >
-              <input type="checkbox" class="form-check-input" [formControlName]="i" />
-
-              {{ fuenteDeIngresos[i].fuenteIngreso }}
-            </label>
-
-            <!-- <label
-              class="form-check-label form-check checkbox-lg"
-              formArrayName="ministerio"
-              *ngFor="let ministerio of ministeriosArr.controls; index as i"
-            >
-              <input type="checkbox" class="form-check-input" [formControlName]="i" />
-
-              {{ ministerios[i].ministerio }}
-            </label> -->
+                <span class="ms-2"> {{ fuenteDeIngresos[i].fuenteIngreso }}</span>
+              </label>
+            </div>
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-7">
@@ -724,17 +715,17 @@
           <div class="form-group col-sm-12 col-md-12 col-lg-12">
             <label class="input-group obligatorio">
               ¿Es usted un miembro nuevo <b>(MN)</b>,miembro activo <b>(MA)</b>, miembro no activo <b>(MNA)</b> o
-              miembro enfermo <b>(ME)</b>?</label
-            >
+              miembro enfermo <b>(ME)</b>?
+            </label>
             <div class="form-check checkbox-lg" *ngFor="let tipoMiembro of tipoMiembros">
               <input
                 [value]="tipoMiembro.id"
-                class="form-check-input"
+                class="form-check-input inputRadio"
                 type="radio"
                 name="tipoMiembro_id"
                 formControlName="tipoMiembro_id"
               />
-              <label class="form-check-label">
+              <label class="form-check-label ms-3">
                 {{ tipoMiembro.miembro }}
               </label>
             </div>
@@ -752,14 +743,14 @@
 
         <div class="row">
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio"> ¿Eres miembro de la Juventud?</label>
+            <label class="input-group obligatorio">¿Eres miembro de la Juventud? </label>
             <div class="form-check checkbox-lg">
-              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="1" />
-              <label class="form-check-label">Sí</label>
+              <input type="radio" class="form-check-input inputRadio" formControlName="esJoven" [value]="1" />
+              <label class="form-check-label ms-3">Sí</label>
             </div>
             <div class="form-check checkbox-lg">
-              <input type="radio" class="form-check-input" formControlName="esJoven" [value]="0" />
-              <label class="form-check-label">No</label>
+              <input type="radio" class="form-check-input inputRadio" formControlName="esJoven" [value]="0" />
+              <label class="form-check-label ms-3">No</label>
             </div>
 
             <small
@@ -771,14 +762,24 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio"> ¿Ejerce algún ministerio en la Congregación?</label>
+            <label class="input-group obligatorio">¿Ejerce algún ministerio en la Congregación? </label>
             <div class="form-check checkbox-lg">
-              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="true" />
-              <label class="form-check-label">Sí</label>
+              <input
+                type="radio"
+                class="form-check-input inputRadio"
+                formControlName="ejerceMinisterio"
+                [value]="true"
+              />
+              <label class="form-check-label ms-3">Sí</label>
             </div>
             <div class="form-check checkbox-lg">
-              <input type="radio" class="form-check-input" formControlName="ejerceMinisterio" [value]="false" />
-              <label class="form-check-label">No</label>
+              <input
+                type="radio"
+                class="form-check-input inputRadio"
+                formControlName="ejerceMinisterio"
+                [value]="false"
+              />
+              <label class="form-check-label ms-3">No</label>
             </div>
             <small
               class="form-text text-danger"
@@ -792,14 +793,14 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio"> ¿Realiza labor voluntaria/ministerial?</label>
+            <label class="input-group obligatorio">¿Realiza labor voluntaria/ministerial? </label>
             <div class="form-check checkbox-lg">
-              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="true" />
-              <label class="form-check-label">Sí</label>
+              <input type="radio" class="form-check-input inputRadio" formControlName="esVoluntario" [value]="true" />
+              <label class="form-check-label ms-3">Sí</label>
             </div>
             <div class="form-check checkbox-lg">
-              <input type="radio" class="form-check-input" formControlName="esVoluntario" [value]="false" />
-              <label class="form-check-label">No</label>
+              <input type="radio" class="form-check-input inputRadio" formControlName="esVoluntario" [value]="false" />
+              <label class="form-check-label ms-3">No</label>
             </div>
             <small
               class="form-text text-danger"
@@ -813,33 +814,35 @@
           </div>
         </div>
 
-        <div *ngIf="!!ejerceAlgunMinisterio() || !!esVoluntario()" class="row border p-4 mb-5 rounded bg-light shadow">
+        <div *ngIf="!!ejerceAlgunMinisterio() || !!esVoluntario()" class="row border p-2 mb-5 rounded bg-light shadow">
           <div *ngIf="!!ejerceAlgunMinisterio()" class="form-group col-sm-12 col-md-6 col-lg-6">
-            <label class="input-group">¿A cuál de los cuerpos ministeriales pertenece?</label>
+            <label class="input-group obligatorio">¿A cuál de los cuerpos ministeriales pertenece? </label>
+            <div class="mt-3">
+              <label
+                class="form-check-label form-check checkbox-lg"
+                formArrayName="ministerio"
+                *ngFor="let ministerio of ministeriosArr.controls; index as i"
+              >
+                <input type="checkbox" class="form-check-input" [formControlName]="i" />
 
-            <label
-              class="form-check-label form-check checkbox-lg"
-              formArrayName="ministerio"
-              *ngFor="let ministerio of ministeriosArr.controls; index as i"
-            >
-              <input type="checkbox" class="form-check-input" [formControlName]="i" />
-
-              {{ ministerios[i].ministerio }}
-            </label>
+                <span class="ms-2"> {{ ministerios[i].ministerio }}</span>
+              </label>
+            </div>
           </div>
 
           <div *ngIf="!!esVoluntario()" class="form-group col-sm-12 col-md-6 col-lg-6">
-            <label class="input-group">¿Qué tipo de labor voluntaria/ministerial realiza?</label>
+            <label class="input-group obligatorio">¿Qué tipo de labor voluntaria/ministerial realiza? </label>
+            <div class="mt-3">
+              <label
+                class="form-check-label form-check checkbox-lg"
+                formArrayName="voluntariado"
+                *ngFor="let voluntariado of voluntariadosArr.controls; index as i"
+              >
+                <input type="checkbox" class="form-check-input" [formControlName]="i" />
 
-            <label
-              class="form-check-label form-check checkbox-lg"
-              formArrayName="voluntariado"
-              *ngFor="let voluntariado of voluntariadosArr.controls; index as i"
-            >
-              <input type="checkbox" class="form-check-input" [formControlName]="i" />
-
-              {{ voluntariados[i].nombreVoluntariado }}
-            </label>
+                <span class="ms-2"> {{ voluntariados[i].nombreVoluntariado }} </span>
+              </label>
+            </div>
           </div>
         </div>
 
@@ -907,7 +910,7 @@
 
         <div *ngIf="tipoDeDocumentosFiltrados.length > 0" class="row">
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Tipo de documento:</label>
+            <label class="input-group obligatorio">Tipo de documento: </label>
             <select class="form-select" formControlName="tipoDocumento_id">
               <option value="" disabled>Seleccione el tipo de documento</option>
               <option *ngFor="let tipoDocumento of tipoDeDocumentosFiltrados" [value]="tipoDocumento.id">
@@ -926,7 +929,7 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Número de documento:</label>
+            <label class="input-group obligatorio">Número de documento: </label>
             <input
               type="text"
               formControlName="numeroDocumento"
@@ -968,7 +971,7 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Vacuna:</label>
+            <label class="input-group obligatorio">Vacuna: </label>
             <select class="form-select" formControlName="vacuna_id">
               <option value="" disabled>Seleccione la vacuna</option>
               <option *ngFor="let vacuna of vacunas" [value]="vacuna.id">
@@ -986,7 +989,7 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Dosis:</label>
+            <label class="input-group obligatorio">Dosis: </label>
             <select class="form-select" formControlName="dosis_id">
               <option value="" disabled>Seleccione la dosis</option>
               <option *ngFor="let dosis of dosis" [value]="dosis.id">

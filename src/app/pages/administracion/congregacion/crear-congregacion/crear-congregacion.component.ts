@@ -110,7 +110,7 @@ export class CrearCongregacionComponent implements OnInit {
         (congregacionCreado: any) => {
           Swal.fire({
             title: 'Congregación creada',
-            html: `La congregación ${congregacionCreado.congregacion.congregacion} de creó correctamente`,
+            html: `La congregación ${congregacionCreado.congregacion.congregacion} se creó correctamente`,
             icon: 'success',
           });
 
