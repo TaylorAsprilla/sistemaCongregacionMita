@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { ListarUsuario, UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { ActualizarUsuarioInterface, ListarUsuario, UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -288,6 +288,10 @@ export class UsuarioService {
 
   actualizarUsuario(usuario: RegisterFormInterface, id: number) {
     return this.httpClient.put(`${base_url}/usuarios/${id}`, usuario, this.headers);
+  }
+
+  actualizarPermisos(id: number, usuarioPermiso: number[]) {
+    return this.httpClient.put(`${base_url}/usuarios/actualizarpermisos/${id}`, { usuarioPermiso }, this.headers);
   }
 
   activarUsuario(usuario: UsuarioModel) {

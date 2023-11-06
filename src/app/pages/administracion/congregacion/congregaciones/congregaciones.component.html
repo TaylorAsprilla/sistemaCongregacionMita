@@ -18,71 +18,73 @@
       </div>
     </div>
 
-    <div class="card-body mx-auto">
-      <table class="table table-bordered table-striped table-responsive">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th class="w400">Nombre</th>
-            <th class="w200">Obrero Encargado</th>
-            <th>Pais</th>
-            <th class="w100">Estado</th>
-            <th class="w200">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let congregacion of congregaciones; index as i">
-            <td>{{ i + 1 }}</td>
-            <td>{{ congregacion.congregacion }}</td>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped mx-auto">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Nombre</th>
+              <th>Obrero Encargado</th>
+              <th>Pais</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let congregacion of congregaciones; index as i">
+              <td>{{ i + 1 }}</td>
+              <td>{{ congregacion.congregacion }}</td>
 
-            <td>{{ buscarObrero(congregacion.idObreroEncargado) }}</td>
+              <td>{{ buscarObrero(congregacion.idObreroEncargado) }}</td>
 
-            <td>{{ buscarPais(congregacion.pais_id) }}</td>
+              <td>{{ buscarPais(congregacion.pais_id) }}</td>
 
-            <td>
-              <span *ngIf="congregacion.estado" class="badge badge-primary">Activo</span>
-              <span *ngIf="!congregacion.estado" class="badge badge-danger">Deshabilitado</span>
-            </td>
+              <td>
+                <span *ngIf="congregacion.estado" class="badge badge-primary">Activo</span>
+                <span *ngIf="!congregacion.estado" class="badge badge-danger">Deshabilitado</span>
+              </td>
 
-            <td>
-              <a
-                *ngIf="!!congregacion.estado"
-                data-toggle="tooltip"
-                data-original-title="Editar"
-                class="btn bg-info"
-                (click)="actualizarCongregacion(congregacion.id)"
-                ><i class="fas fa-pencil-alt ml-1"></i
-              ></a>
-              <a
-                *ngIf="!!congregacion.estado"
-                data-toggle="tooltip"
-                data-original-title="Borrar"
-                class="btn bg-danger ml-1"
-                (click)="borrarCongregacion(congregacion)"
-                ><i class="fas fa-trash-alt"></i
-              ></a>
-              <a
-                *ngIf="!congregacion.estado"
-                data-toggle="tooltip"
-                data-original-title="Activar"
-                class="btn bg-secondary ml-1"
-                (click)="activarCongregacion(congregacion)"
-                ><i class="fas fa-check-square"></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>item</th>
-            <th>Nombre</th>
-            <th>Obrero Encargado</th>
-            <th>Pais</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </tfoot>
-      </table>
+              <td>
+                <a
+                  *ngIf="!!congregacion.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Editar"
+                  class="btn bg-info"
+                  (click)="actualizarCongregacion(congregacion.id)"
+                  ><i class="fas fa-pencil-alt ml-1"></i
+                ></a>
+                <a
+                  *ngIf="!!congregacion.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Borrar"
+                  class="btn bg-danger ml-1"
+                  (click)="borrarCongregacion(congregacion)"
+                  ><i class="fas fa-trash-alt"></i
+                ></a>
+                <a
+                  *ngIf="!congregacion.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Activar"
+                  class="btn bg-secondary ml-1"
+                  (click)="activarCongregacion(congregacion)"
+                  ><i class="fas fa-check-square"></i
+                ></a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Item</th>
+              <th>Nombre</th>
+              <th>Obrero Encargado</th>
+              <th>Pais</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
 </section>

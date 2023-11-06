@@ -47,6 +47,7 @@ export enum RUTAS {
   TIPO_DE_ESTUDIO = 'tipo-de-estudio',
   RAZON_DE_SOLICITUD = 'razon-de-solicitud',
   PARENTESCO = 'parentesco',
+  PERMISOS = 'permisos',
 }
 
 export enum ROLES {
@@ -164,6 +165,15 @@ export const ROUTES: RouteInfo[] = [
       {
         path: RUTAS.TIPO_DE_DOCUMENTO,
         title: 'Tipo de Documentos',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR],
+        submenu: [],
+      },
+      {
+        path: RUTAS.PERMISOS,
+        title: 'Asignar Permisos',
         icon: '',
         class: '',
         extralink: false,

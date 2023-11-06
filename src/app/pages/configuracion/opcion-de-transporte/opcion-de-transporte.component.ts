@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { OpcionTransporteModel } from 'src/app/core/models/opcion-transporte.model';
 import { OpcionTransporteService } from 'src/app/services/opcion-transporte/opcion-transporte.service';
-import { RUTAS } from 'src/app/routes/menu-items';
+
 import Swal from 'sweetalert2';
-import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-opcion-de-transporte',
@@ -19,13 +17,7 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
 
   public opcionTransporteSubscription: Subscription;
 
-  private formBuilder: FormBuilder;
-
-  constructor(
-    private router: Router,
-    private opcionTransporteService: OpcionTransporteService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private opcionTransporteService: OpcionTransporteService) {}
 
   ngOnInit(): void {
     this.cargarOpcionesDeTransporte();
@@ -46,10 +38,10 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
       });
   }
 
-  async buscarOpcionDeTransporte(id: number) {
+  buscarOpcionDeTransporte(id: number) {
     let tipoTransporte = '';
     if (id) {
-      await this.opcionTransporteService
+      this.opcionTransporteService
         .getUnaOpcionTransporte(Number(id))
         .pipe(delay(100))
         .subscribe(
@@ -77,7 +69,7 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
   }
 
   async actualizarOpcionDeTransporte(id: number) {
-    let opcionDeTransporte = await this.buscarOpcionDeTransporte(id);
+    let opcionDeTransporte = this.buscarOpcionDeTransporte(id);
 
     const { value: opcion } = await Swal.fire({
       title: 'Actualizar opción de transporte',

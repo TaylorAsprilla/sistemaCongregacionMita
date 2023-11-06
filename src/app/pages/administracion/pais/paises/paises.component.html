@@ -17,71 +17,73 @@
       </div>
     </div>
 
-    <div class="card-body mx-auto">
-      <table class="table table-bordered table-striped table-responsive">
-        <thead>
-          <tr>
-            <th class="w100">Item</th>
-            <th>Nombre</th>
-            <th class="w400">Obrero Encargado</th>
-            <th>Divisa</th>
-            <th class="">Estado</th>
-            <th class="">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let pais of paises; index as i">
-            <td>{{ i + 1 }}</td>
-            <td>{{ pais.pais }}</td>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped mx-auto">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Nombre</th>
+              <th>Obrero Encargado</th>
+              <th>Divisa</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pais of paises; index as i">
+              <td>{{ i + 1 }}</td>
+              <td>{{ pais.pais }}</td>
 
-            <td>{{ buscarObrero(pais.idObreroEncargado) }}</td>
+              <td>{{ buscarObrero(pais.idObreroEncargado) }}</td>
 
-            <td>{{ buscarDivisa(pais.idDivisa) }}</td>
+              <td>{{ buscarDivisa(pais.idDivisa) }}</td>
 
-            <td>
-              <span *ngIf="pais.estado" class="badge badge-primary">Activo</span>
-              <span *ngIf="!pais.estado" class="badge badge-danger">Deshabilitado</span>
-            </td>
+              <td>
+                <span *ngIf="pais.estado" class="badge badge-primary">Activo</span>
+                <span *ngIf="!pais.estado" class="badge badge-danger">Deshabilitado</span>
+              </td>
 
-            <td>
-              <a
-                *ngIf="!!pais.estado"
-                data-toggle="tooltip"
-                data-original-title="Editar"
-                class="btn bg-info"
-                (click)="actualizarPais(pais.id)"
-                ><i class="fas fa-pencil-alt ml-1"></i
-              ></a>
-              <a
-                *ngIf="!!pais.estado"
-                data-toggle="tooltip"
-                data-original-title="Borrar"
-                class="btn bg-danger ml-1"
-                (click)="borrarPais(pais)"
-                ><i class="fas fa-trash-alt"></i
-              ></a>
-              <a
-                *ngIf="!pais.estado"
-                data-toggle="tooltip"
-                data-original-title="Activar"
-                class="btn bg-secondary ml-1"
-                (click)="activarPais(pais)"
-                ><i class="fas fa-check-square"></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Item</th>
-            <th>Nombre</th>
-            <th>Obrero Encargado</th>
-            <th>Divisa</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </tfoot>
-      </table>
+              <td>
+                <a
+                  *ngIf="!!pais.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Editar"
+                  class="btn bg-info"
+                  (click)="actualizarPais(pais.id)"
+                  ><i class="fas fa-pencil-alt ml-1"></i
+                ></a>
+                <a
+                  *ngIf="!!pais.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Borrar"
+                  class="btn bg-danger ml-1"
+                  (click)="borrarPais(pais)"
+                  ><i class="fas fa-trash-alt"></i
+                ></a>
+                <a
+                  *ngIf="!pais.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Activar"
+                  class="btn bg-secondary ml-1"
+                  (click)="activarPais(pais)"
+                  ><i class="fas fa-check-square"></i
+                ></a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Item</th>
+              <th>Nombre</th>
+              <th>Obrero Encargado</th>
+              <th>Divisa</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
 </section>
