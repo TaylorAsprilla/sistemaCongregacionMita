@@ -19,6 +19,7 @@ import { CrearTipoDocumentoComponent } from './tipo-de-documento/crear-tipo-docu
 import { TiposDeDocumentosComponent } from './tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
 import { InformacionUsuarioModule } from 'src/app/components/informacion-usuario/informacion-usuario.module';
 import { UsuarioModule } from './usuario/usuario.module';
+import { AsignarPermisosComponent } from './asignar-permisos/asignar-permisos.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { UsuarioModule } from './usuario/usuario.module';
     CrearMinisterioComponent,
     CrearTipoDocumentoComponent,
     TiposDeDocumentosComponent,
+    AsignarPermisosComponent,
   ],
   imports: [
     CommonModule,

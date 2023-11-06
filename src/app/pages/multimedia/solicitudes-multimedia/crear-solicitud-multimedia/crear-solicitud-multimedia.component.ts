@@ -79,8 +79,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private solicitudMultimediaService: SolicitudMultimediaService,
-    private usuarioService: UsuarioService,
-    private buscarCorreoService: BuscarCorreoService
+    private usuarioService: UsuarioService
   ) {}
 
   @HostListener('keydown', ['$event'])

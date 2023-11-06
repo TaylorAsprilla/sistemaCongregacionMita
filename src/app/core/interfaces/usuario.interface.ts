@@ -1,5 +1,18 @@
+import { DosisModel } from '../models/dosis.model';
+import { EstadoCivilModel } from '../models/estado-civil.model';
+import { FuenteIngresoModel } from '../models/fuente-ingreso.model';
+import { GeneroModel } from '../models/genero.model';
+import { GradoAcademicoModel } from '../models/grado-academico.model';
+import { MinisterioModel } from '../models/ministerio.model';
+import { NacionalidadModel } from '../models/nacionalidad.model';
+import { PermisoModel } from '../models/permisos.model';
+import { RolCasaModel } from '../models/rol-casa.model';
+import { TipoEmpleoModel } from '../models/tipo-empleo.model';
+import { TipoMiembroModel } from '../models/tipo.miembro.model';
 import { UsuarioModel } from '../models/usuario.model';
-import { UsuarioCongregacionModel } from '../models/usuarioCongregacion.model';
+import { CongregacionInterface, UsuarioCongregacionModel } from '../models/usuarioCongregacion.model';
+import { VacunaModel } from '../models/vacuna.model';
+import { VoluntariadoModel } from '../models/voluntariado.model';
 
 export interface ListarUsuario {
   totalUsuarios: number;
@@ -40,4 +53,62 @@ export interface UsuarioCongregacionPaisInterface {
   idObreroEncargado: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ActualizarUsuarioInterface {
+  primerNombre: string;
+  primerApellido: string;
+  email: string;
+  numeroCelular: string;
+  fechaNacimiento: Date;
+  esJoven: boolean;
+  estado: boolean;
+  direccion: string;
+  ciudadDireccion: string;
+  paisDireccion: string;
+  genero_id: number;
+  estadoCivil_id: number;
+  vacuna_id: number;
+  dosis_id: number;
+  tipoMiembro_id: number;
+  segundoNombre?: string;
+  segundoApellido?: string;
+  apodo?: string;
+  ingresoMensual?: string;
+  especializacionEmpleo?: string;
+  telefonoCasa?: string;
+  login?: string;
+  password?: string;
+  foto?: string;
+  rolCasa_id?: number;
+  nacionalidad_id?: number;
+  gradoAcademico_id?: number;
+  tipoEmpleo_id?: number;
+  genero?: GeneroModel;
+  estadoCivil?: EstadoCivilModel;
+  rolCasa?: RolCasaModel;
+  vacuna?: VacunaModel;
+  dosis?: DosisModel;
+  nacionalidad?: NacionalidadModel;
+  gradoAcademico?: GradoAcademicoModel;
+  tipoEmpleo?: TipoEmpleoModel;
+  tipoMiembro?: TipoMiembroModel;
+  departamentoDireccion?: string;
+  codigoPostalDireccion?: string;
+  direccionPostal?: string;
+  ciudadPostal?: string;
+  departamentoPostal?: string;
+  codigoPostal?: string;
+  paisPostal?: string;
+  usuarioCongregacion?: CongregacionInterface;
+  usuarioMinisterio?: MinisterioModel[];
+  usuarioVoluntariado?: VoluntariadoModel[];
+  usuarioPermiso?: PermisoModel[];
+  usuarioFuenteIngreso?: FuenteIngresoModel[];
+  tipoDocumento_id?: number;
+  numeroDocumento?: string;
+  anoConocimiento?: string;
+  usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface;
+  usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface;
+  usuarioCongregacionPais?: UsuarioCongregacionPaisInterface;
 }

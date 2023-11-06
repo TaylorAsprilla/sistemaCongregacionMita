@@ -1,3 +1,3 @@
 export class PermisoModel {
-  constructor(public id: string, public permiso: string) {}
+  constructor(public id: number, public permiso: string) {}
 }

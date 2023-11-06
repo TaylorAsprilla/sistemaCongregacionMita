@@ -67,11 +67,11 @@ import { RazonDeSolicitudComponent } from 'src/app/pages/configuracion/razon-de-
 import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/parentesco.component';
 import { UsuarioResolver } from 'src/app/resolvers/getUsuario/get-usuario.resolver';
 import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministerios/crear-ministerio/crear-ministerio.component';
+import { AsignarPermisosComponent } from 'src/app/pages/administracion/asignar-permisos/asignar-permisos.component';
 
 const childRoutes: Routes = [
   {
     path: 'inicio',
-
     component: InicioComponent,
     data: { titulo: 'Censo' },
     resolve: {
@@ -125,7 +125,10 @@ const childRoutes: Routes = [
       usuario: UsuarioResolver,
     },
   },
-
+  {
+    path: RUTAS.PERMISOS,
+    component: AsignarPermisosComponent,
+  },
   {
     path: RUTAS.RESET_PASSWORD_USUARIO,
     component: CambiarPasswordUsuarioComponent,
