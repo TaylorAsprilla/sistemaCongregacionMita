@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROUTES, RUTAS } from 'src/app/routes/menu-items';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+declare var $: any;
 
 @Component({
   selector: 'app-sidebar',
@@ -43,7 +45,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(private usuarioService: UsuarioService, private modalService: NgbModal) {}
   // End open close
   ngOnInit() {
     this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);

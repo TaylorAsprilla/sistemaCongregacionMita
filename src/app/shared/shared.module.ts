@@ -8,10 +8,11 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DirectiveModule } from '../directive/directive.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [BredcrumbsComponent, FooterComponent, HeaderComponent, SidebarComponent],
   exports: [BredcrumbsComponent, FooterComponent, HeaderComponent, SidebarComponent],
-  imports: [CommonModule, RouterModule, FormsModule, PerfectScrollbarModule, DirectiveModule],
+  imports: [CommonModule, RouterModule, FormsModule, PerfectScrollbarModule, DirectiveModule, NgbModule],
 })
 export class SharedModule {}
