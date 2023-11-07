@@ -1,8 +1,10 @@
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+declare var $: any;
 
 @Component({
   selector: 'app-header',
@@ -25,7 +27,7 @@ export class HeaderComponent implements OnInit {
     return RUTAS;
   }
 
-  constructor(private usuarioService: UsuarioService, private router: Router) {}
+  constructor(private usuarioService: UsuarioService, private router: Router, private modalService: NgbModal) {}
 
   ngOnInit(): void {
     this.usuario = this.usuarioService.usuario;
