@@ -15,13 +15,15 @@ import Swal from 'sweetalert2';
   styleUrls: ['./paises.component.css'],
 })
 export class PaisesComponent implements OnInit, OnDestroy {
-  public cargando: boolean = true;
-  public paises: CongregacionPaisModel[] = [];
-  public divisas: DivisaModel[] = [];
-  public obreros: UsuarioModel[] = [];
+  cargando: boolean = true;
+  paises: CongregacionPaisModel[] = [];
+  divisas: DivisaModel[] = [];
+  obreros: UsuarioModel[] = [];
+
+  filtroNombrePais: string = '';
 
   // Subscription
-  public paisSubscription: Subscription;
+  paisSubscription: Subscription;
 
   constructor(private router: Router, private paisService: PaisService, private activatedRoute: ActivatedRoute) {}
 
@@ -124,5 +126,9 @@ export class PaisesComponent implements OnInit, OnDestroy {
       : 'Sin obrero Asignado';
 
     return nombreObrero;
+  }
+
+  obtenerFiltroNombre(nombre: any) {
+    this.filtroNombrePais = nombre;
   }
 }

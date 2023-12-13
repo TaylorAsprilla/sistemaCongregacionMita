@@ -17,6 +17,9 @@
       </div>
     </div>
 
+    <!-- Campo de búsqueda -->
+    <app-filter (filtroNombreChange)="obtenerFiltroNombre($event)"></app-filter>
+
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-bordered table-striped mx-auto">
@@ -31,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let pais of paises; index as i">
+            <tr *ngFor="let pais of paises | filterByNombrePipe : filtroNombrePais; index as i">
               <td>{{ i + 1 }}</td>
               <td>{{ pais.pais }}</td>
 
