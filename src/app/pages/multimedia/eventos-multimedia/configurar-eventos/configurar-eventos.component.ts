@@ -14,11 +14,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./configurar-eventos.component.scss'],
 })
 export class ConfigurarEventosComponent implements OnInit, OnDestroy {
-  public eventosForm: FormGroup;
-  public vigiliasForm: FormGroup;
+  eventosForm: FormGroup;
 
-  public linkEventos: LinkEventoModel[] = [];
-  public linkEventoSeleccionado: LinkEventoModel[] = [];
+  linkEventos: LinkEventoModel[] = [];
+  linkEventoSeleccionado: LinkEventoModel[] = [];
 
   linkEventosSubscription: Subscription;
 
@@ -97,24 +96,31 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   }
 
   actualizarEvento() {
-    const data = {
-      ...this.eventosForm.value,
-      id: this.linkEventoSeleccionado[0].id,
-      titulo: this.linkEventoSeleccionado[0].titulo,
-      link: this.linkEventoSeleccionado[0].link,
-      fecha: this.linkEventoSeleccionado[0].fecha,
-      tipoEvento_id: this.linkEventoSeleccionado[0].tipoEvento_id,
-      plataforma: this.linkEventoSeleccionado[0].plataforma,
-    };
-    this.linkEventosService.actualizarEvento(data).subscribe((evento: any) => {
-      Swal.fire({
-        title: 'Evento Actualizado',
-        icon: 'success',
-        html: `El evento ${evento.eventoactualizado.titulo} se actualizó correctamente`,
-      });
+    const idEvento = this.linkEventoSeleccionado[0].id;
+    const data = { ...this.eventosForm.value, id: idEvento };
+
+    this.linkEventosService.actualizarEvento(data).subscribe({
+      next: (eventoActualizado: any) => {
+        Swal.fire({
+          title: 'Evento Actualizado',
+          icon: 'success',
+          html: `El evento ${eventoActualizado.eventoactualizado.titulo} se actualizó correctamente`,
+        });
+        this.resetFormulario();
+        this.redirigirAEventos();
+      },
+      error: (error) => {
+        Swal.fire({
+          title: 'Error',
+          icon: 'error',
+          text: 'Hubo un error al actualizar el evento.',
+        });
+        console.error('Error al actualizar el evento:', error);
+      },
     });
-    this.resetFormulario();
-    this.cargarEventos();
+  }
+
+  redirigirAEventos() {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.EVENTOS}`);
   }
 
