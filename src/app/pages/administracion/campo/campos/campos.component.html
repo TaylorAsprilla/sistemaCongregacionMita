@@ -17,6 +17,9 @@
     </div>
 
     <div class="card-body">
+      <!-- Campo de búsqueda -->
+      <app-filtros (onFiltroNombre)="obtenerFiltroNombre($event)"></app-filtros>
+
       <div class="table-responsive">
         <table class="table table-bordered table-striped mx-auto">
           <thead>
@@ -31,7 +34,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let campo of campos; index as i">
+            <tr *ngFor="let campo of campos | filterByNombrePipe : 'campo' : filtroNombre; index as i">
               <td>{{ i + 1 }}</td>
               <td>{{ campo.campo }}</td>
               <td>{{ buscarObrero(campo.idObreroEncargado) }}</td>

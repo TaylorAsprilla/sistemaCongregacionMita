@@ -15,11 +15,12 @@ import Swal from 'sweetalert2';
   styleUrls: ['./campos.component.css'],
 })
 export class CamposComponent implements OnInit {
-  public cargando: boolean = true;
-  public campos: CampoModel[] = [];
-  public obreros: UsuarioModel[] = [];
-  public paises: CongregacionPaisModel[] = [];
-  public congregaciones: CongregacionModel[] = [];
+  cargando: boolean = true;
+  campos: CampoModel[] = [];
+  obreros: UsuarioModel[] = [];
+  paises: CongregacionPaisModel[] = [];
+  congregaciones: CongregacionModel[] = [];
+  filtroNombre: string = '';
 
   constructor(private router: Router, private campoService: CampoService, private activatedRoute: ActivatedRoute) {}
 
@@ -123,5 +124,9 @@ export class CamposComponent implements OnInit {
     this.buscarPais(congregacion?.pais_id);
 
     return { congregacion: congregacion?.congregacion, pais: this.buscarPais(congregacion?.pais_id) };
+  }
+
+  obtenerFiltroNombre(nombre: string) {
+    this.filtroNombre = nombre;
   }
 }

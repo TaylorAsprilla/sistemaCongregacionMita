@@ -1,3 +1,45 @@
-.fa {
-  color: #ffffff;
+/* Estilos CSS */
+.contact-options {
+  display: flex;
+  align-items: center;
+}
+
+.contact-options a {
+  margin-left: 10px;
+  color: #333; /* Color de los iconos */
+  text-decoration: none;
+}
+
+.contact-options a:hover {
+  color: #00a0e4; /* Cambiar el color al pasar el mouse por encima */
+}
+
+/* Estilos para los iconos específicos */
+.phone-icon {
+  color: #007bff; /* Color para el ícono de teléfono */
+}
+
+.whatsapp-icon {
+  color: #25d366; /* Color para el ícono de WhatsApp */
+}
+
+.telegram-icon {
+  color: #0088cc; /* Color para el ícono de Telegram */
+}
+
+.contact-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-icons {
+  display: flex;
+  justify-content: center;
+}
+
+.phone-icon,
+.whatsapp-icon,
+.telegram-icon {
+  margin: 5px;
 }

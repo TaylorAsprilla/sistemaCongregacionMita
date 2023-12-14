@@ -24,7 +24,6 @@ export class InicioComponent implements OnInit {
   paises: CongregacionPaisModel[] = [];
   congregaciones: CongregacionModel[] = [];
   campos: CampoModel[] = [];
-  ministerios: MinisterioModel[] = [];
   linkEventos: LinkEventoModel[] = [];
   servicios: LinkEventoModel[] = [];
 
@@ -51,16 +50,10 @@ export class InicioComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
-      (data: {
-        congregacion: CongregacionModel[];
-        pais: CongregacionPaisModel[];
-        campo: CampoModel[];
-        ministerio: MinisterioModel[];
-      }) => {
+      (data: { congregacion: CongregacionModel[]; pais: CongregacionPaisModel[]; campo: CampoModel[] }) => {
         this.paises = data.pais;
         this.congregaciones = data.congregacion;
         this.campos = data.campo;
-        this.ministerios = data.ministerio;
       }
     );
 

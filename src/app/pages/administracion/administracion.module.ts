@@ -20,6 +20,8 @@ import { TiposDeDocumentosComponent } from './tipo-de-documento/tipos-de-documen
 import { InformacionUsuarioModule } from 'src/app/components/informacion-usuario/informacion-usuario.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { AsignarPermisosComponent } from './asignar-permisos/asignar-permisos.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
+import { FiltrosModule } from 'src/app/components/filtros/filtros.module';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { AsignarPermisosComponent } from './asignar-permisos/asignar-permisos.co
     MatInputModule,
     InformacionUsuarioModule,
     UsuarioModule,
+    FiltrosModule,
+    PipesModule,
   ],
   exports: [
     CamposComponent,

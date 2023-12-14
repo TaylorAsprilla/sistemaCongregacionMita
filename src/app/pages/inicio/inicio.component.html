@@ -4,12 +4,26 @@
       <div class="small-box bg-info">
         <div class="inner">
           <h3>{{ totalUsuarios }}</h3>
-          <p>Feligreses Registrados</p>
+          <p>Feligreses</p>
         </div>
         <div class="icon">
           <i class="ion ion-bag"></i>
         </div>
         <a routerLink="/sistema/usuarios" class="small-box-footer">Ver Más <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-danger">
+        <div class="inner">
+          <h3>{{ paises.length }}</h3>
+
+          <p>Paises</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-pie-graph"></i>
+        </div>
+        <a routerLink="/sistema/paises" class="small-box-footer">Ver Más <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
 
@@ -39,22 +53,6 @@
           <i class="ion ion-person-add"></i>
         </div>
         <a routerLink="/sistema/campos" class="small-box-footer">Ver Más <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-6">
-      <div class="small-box bg-danger">
-        <div class="inner">
-          <h3>{{ ministerios.length }}</h3>
-
-          <p>Ministerios</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-pie-graph"></i>
-        </div>
-        <a routerLink="/sistema/ministerios" class="small-box-footer"
-          >Ver Más <i class="fas fa-arrow-circle-right"></i
-        ></a>
       </div>
     </div>
   </div>

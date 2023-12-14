@@ -6,7 +6,7 @@
     <div class="card-header">
       <div class="row">
         <div class="col-8 px-4 pt-4">
-          <h3 class="card-title">Total de Paises ({{ paises.length }})</h3>
+          <h3 class="card-title">Paises ({{ paises.length }})</h3>
           <p>Paises registrados en la aplicación</p>
         </div>
         <div class="col">
@@ -18,6 +18,8 @@
     </div>
 
     <div class="card-body">
+      <!-- Campo de búsqueda -->
+      <app-filtros (onFiltroNombre)="obtenerFiltroNombre($event)"></app-filtros>
       <div class="table-responsive">
         <table class="table table-bordered table-striped mx-auto">
           <thead>
@@ -31,7 +33,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let pais of paises; index as i">
+            <tr *ngFor="let pais of paises | filterByNombrePipe : 'pais' : filtroNombre; index as i">
               <td>{{ i + 1 }}</td>
               <td>{{ pais.pais }}</td>
 

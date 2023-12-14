@@ -15,13 +15,15 @@ import Swal from 'sweetalert2';
   styleUrls: ['./congregaciones.component.css'],
 })
 export class CongregacionesComponent implements OnInit, OnDestroy {
-  public cargando: boolean = true;
-  public congregaciones: CongregacionModel[] = [];
-  public obreros: UsuarioModel[] = [];
-  public paises: CongregacionPaisModel[] = [];
+  cargando: boolean = true;
+  congregaciones: CongregacionModel[] = [];
+  obreros: UsuarioModel[] = [];
+  paises: CongregacionPaisModel[] = [];
+
+  filtroNombre: string = '';
 
   // Subscription
-  public congregacionSubscription: Subscription;
+  congregacionSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -126,5 +128,9 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
 
   buscarPais(idPais: number): string {
     return this.paises.find((pais) => pais.id === idPais)?.pais;
+  }
+
+  obtenerFiltroNombre(nombre: string) {
+    this.filtroNombre = nombre;
   }
 }
