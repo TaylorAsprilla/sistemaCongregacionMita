@@ -76,7 +76,6 @@ const childRoutes: Routes = [
     data: { titulo: 'Censo' },
     resolve: {
       congregacion: CongregacionResolver,
-      ministerio: MinisterioResolver,
       pais: PaisResolver,
       campo: CampoResolver,
       permiso: PermisosResolver,
