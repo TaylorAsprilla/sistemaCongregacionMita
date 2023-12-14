@@ -24,7 +24,14 @@ import { RazonDeSolicitudComponent } from './configuracion/razon-de-solicitud/ra
 import { ParentescoComponent } from './configuracion/parentesco/parentesco.component';
 
 @NgModule({
-  declarations: [PagesComponent, OpcionDeTransporteComponent, GeneroComponent, TipoDeEstudioComponent, RazonDeSolicitudComponent, ParentescoComponent],
+  declarations: [
+    PagesComponent,
+    OpcionDeTransporteComponent,
+    GeneroComponent,
+    TipoDeEstudioComponent,
+    RazonDeSolicitudComponent,
+    ParentescoComponent,
+  ],
   exports: [PagesComponent],
   imports: [
     CommonModule,

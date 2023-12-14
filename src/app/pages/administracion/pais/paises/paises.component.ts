@@ -20,7 +20,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
   divisas: DivisaModel[] = [];
   obreros: UsuarioModel[] = [];
 
-  filtroNombrePais: string = '';
+  filtroNombre: string = '';
 
   // Subscription
   paisSubscription: Subscription;
@@ -128,7 +128,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
     return nombreObrero;
   }
 
-  obtenerFiltroNombre(nombre: any) {
-    this.filtroNombrePais = nombre;
+  obtenerFiltroNombre(nombre: string) {
+    this.filtroNombre = nombre;
   }
 }

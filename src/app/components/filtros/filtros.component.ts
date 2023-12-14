@@ -6,7 +6,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./filtros.component.scss'],
 })
 export class FiltrosComponent implements OnInit {
-  @Output() filtroNombreChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() onFiltroNombre: EventEmitter<string> = new EventEmitter<string>();
   filtroNombre: string = '';
 
   constructor() {}
@@ -14,6 +14,6 @@ export class FiltrosComponent implements OnInit {
   ngOnInit(): void {}
 
   filtrar() {
-    this.filtroNombreChange.emit(this.filtroNombre);
+    this.onFiltroNombre.emit(this.filtroNombre);
   }
 }
