@@ -18,16 +18,15 @@
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
-            <th class="w100"># Mita</th>
-            <th class="w100">Foto</th>
-            <th class="w250">Nombre</th>
+            <th># Mita</th>
+            <th>Foto</th>
+            <th class="w200">Nombre</th>
             <th>Correo</th>
-            <th class="w100">Fecha de Nacimiento</th>
+            <th>Fecha de Nacimiento</th>
             <th>Teléfono Casa</th>
-            <th>Celular</th>
+            <th class="w150">Celular</th>
             <th class="w100">Congregación</th>
-            <th class="w100">Nacionalidad</th>
-            <th class="w100">Estado</th>
+            <th>Estado</th>
             <th class="w280">Acciones</th>
           </tr>
         </thead>
@@ -43,12 +42,46 @@
               {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
               {{ usuario?.segundoApellido }}
             </td>
-            <td>{{ usuario?.email }}</td>
-            <td>{{ usuario.fechaNacimiento }}</td>
+
+            <td>
+              <a *ngIf="usuario?.email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
+              <span *ngIf="!usuario?.email">No hay correo electrónico</span>
+            </td>
+
+            <td>{{ usuario.fechaNacimiento | date }}</td>
 
             <td>{{ usuario?.telefonoCasa }}</td>
+            <td>
+              <div class="contact-container">
+                <span>{{ usuario.numeroCelular }}</span>
 
-            <td>{{ usuario?.numeroCelular }}</td>
+                <div class="contact-icons">
+                  <a
+                    *ngIf="usuario?.numeroCelular"
+                    href="tel:{{ usuario.numeroCelular | removerEspacios }}"
+                    class="phone-icon"
+                  >
+                    <i class="fa fa-phone"></i>
+                  </a>
+                  <a
+                    *ngIf="usuario?.numeroCelular"
+                    href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | removerEspacios }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="whatsapp-icon"
+                  >
+                    <i class="fa fa-whatsapp"></i>
+                  </a>
+                  <a
+                    *ngIf="usuario?.numeroCelular"
+                    href="tg://msg?text=Tu%20mensaje&to={{ usuario.numeroCelular | removerEspacios }}"
+                    class="telegram-icon"
+                  >
+                    <i class="fa fa-telegram"></i>
+                  </a>
+                </div>
+              </div>
+            </td>
 
             <td>
               <span *ngIf="!!usuario.usuarioCongregacionPais[0]" class="badge badge-primary">
@@ -60,10 +93,6 @@
               <span *ngIf="!!usuario.usuarioCongregacionCampo[0]" class="badge badge-success">
                 {{ this.usuario.usuarioCongregacionCampo[0].campo }}
               </span>
-            </td>
-
-            <td>
-              {{ usuario.nacionalidad?.nombre }}
             </td>
 
             <td>
@@ -112,17 +141,16 @@
           </tr>
         </tbody>
         <tfoot>
-          <th class="w100"># Mita</th>
-          <th class="w100">Foto</th>
+          <th># Mita</th>
+          <th>Foto</th>
           <th>Nombre</th>
           <th>Correo</th>
-          <th class="w100">Fecha de Nacimiento</th>
+          <th>Fecha de Nacimiento</th>
           <th>Teléfono Casa</th>
           <th>Celular</th>
-          <th class="w100">Congregación</th>
-          <th>Nacionalidad</th>
-          <th class="w100">Estado</th>
-          <th class="w200">Acciones</th>
+          <th>Congregación</th>
+          <th>Estado</th>
+          <th>Acciones</th>
         </tfoot>
       </table>
     </div>

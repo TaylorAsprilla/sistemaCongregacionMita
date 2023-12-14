@@ -9,6 +9,7 @@ import { CambiarPasswordUsuarioComponent } from './cambiar-password-usuario/camb
 import { ConfirmacionDeRegistroComponent } from './confirmacion-de-registro/confirmacion-de-registro.component';
 import { RegistrarUsuarioComponent } from './registrar-usuario/registrar-usuario.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
     BrowserModule,
     InformacionUsuarioModule,
     CargandoInformacionModule,
+    PipesModule,
   ],
   exports: [
     ConfirmacionDeRegistroComponent,
