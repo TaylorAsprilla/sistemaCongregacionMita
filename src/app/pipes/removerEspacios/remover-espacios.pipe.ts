@@ -9,6 +9,6 @@ export class RemoverEspaciosPipe implements PipeTransform {
       return '';
     }
 
-    return value.replace(/\s/g, '');
+    return value.replace(/[\s+]/g, '');
   }
 }
