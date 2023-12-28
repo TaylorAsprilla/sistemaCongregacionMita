@@ -130,8 +130,9 @@
               </div>
             </div>
           </form>
-
-          <div *ngIf="!!usuarioEncontrado" class="px-5">
+        </div>
+        <div *ngIf="!!usuarioEncontrado" class="row p-5">
+          <div class="col-md-6 px-5">
             <form [formGroup]="permisosForm" (ngSubmit)="agregarPermisos()">
               <div class="form-group col-sm-12 col-md-6 col-lg-5 ps-1">
                 <label class="input-group obligatorio"><h4 class="card-title">Agregar Permisos</h4></label>
@@ -148,6 +149,65 @@
               </div>
 
               <button type="submit" class="btn btn-primary" [disabled]="permisosForm.invalid">Agregar Permisos</button>
+            </form>
+          </div>
+
+          <div class="col-md-6 px-5">
+            <form [formGroup]="passwordUsuarioForm" (ngSubmit)="resetPassword()">
+              <div class="form-group col-sm-12 col-md-8 col-lg-8 ps-1">
+                <label class="input-group obligatorio"><h4 class="card-title">Cambiar Password</h4></label>
+                <div class="form-outline mb-3">
+                  <input
+                    type="password"
+                    formControlName="passwordNuevoUno"
+                    class="form-control form-control-lg mt-3"
+                    placeholder="Contraseña Nueva"
+                  />
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      passwordUsuarioForm.get('passwordNuevoUno').hasError('required') &&
+                      passwordUsuarioForm.get('passwordNuevoUno').touched
+                    "
+                  >
+                    La contraseña actual es requerida.
+                  </small>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      passwordUsuarioForm.get('passwordNuevoUno').hasError('minlength') &&
+                      passwordUsuarioForm.get('passwordNuevoUno').touched
+                    "
+                  >
+                    La contraseña debe tener al menos 8 caracteres.
+                  </small>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="
+                      passwordUsuarioForm.get('passwordNuevoUno').hasError('pattern') &&
+                      passwordUsuarioForm.get('passwordNuevoUno').touched
+                    "
+                  >
+                    La contraseña debe contener al menos una letra mayúscula.
+                  </small>
+                </div>
+
+                <div class="form-outline mb-3">
+                  <input
+                    type="password"
+                    formControlName="passwordNuevoDos"
+                    class="form-control form-control-lg"
+                    placeholder="Confirma la contraseña nueva"
+                  />
+                </div>
+
+                <p class="form-text text-danger" *ngIf="passwordNoValidos()">Las contraseñas deben ser iguales</p>
+              </div>
+
+              <button type="submit" class="btn btn-primary" [disabled]="passwordUsuarioForm.invalid">
+                Cambiar Contraseña
+              </button>
             </form>
           </div>
         </div>
