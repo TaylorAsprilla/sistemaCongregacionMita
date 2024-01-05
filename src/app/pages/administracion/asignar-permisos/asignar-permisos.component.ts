@@ -1,13 +1,14 @@
 import Swal from 'sweetalert2';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControlOptions, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PermisoService } from 'src/app/services/permiso/permiso.service';
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { generate } from 'generate-password-browser';
 
 @Component({
   selector: 'app-asignar-permisos',
@@ -26,9 +27,12 @@ export class AsignarPermisosComponent implements OnInit {
   permisosUsuario: number[];
 
   formSubmitted: boolean = false;
+  asignarPermisos: boolean = false;
 
   usuarioSubscription: Subscription;
   permisoSubscription: Subscription;
+
+  @ViewChild('verPermisos') verPermisos: ElementRef;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -136,6 +140,7 @@ export class AsignarPermisosComponent implements OnInit {
   }
 
   buscarFeligres(id: string) {
+    this.asignarPermisos = false;
     this.usuarioSubscription = this.usuarioService.getUsuario(id).subscribe(
       (respuesta: any) => {
         if (!!respuesta.usuario) {
@@ -146,7 +151,7 @@ export class AsignarPermisosComponent implements OnInit {
             text: `${this.usuarioEncontrado.primerNombre} ${this.usuarioEncontrado.segundoNombre}
                 ${this.usuarioEncontrado.primerApellido} ${this.usuarioEncontrado.segundoApellido},
                 Número Mita ${this.usuarioEncontrado.id}`,
-            timer: 1500,
+            timer: 1000,
             showConfirmButton: false,
           });
           this.crearFormularioPermisos();
@@ -156,7 +161,7 @@ export class AsignarPermisosComponent implements OnInit {
             position: 'top-end',
             text: `${respuesta.msg}`,
             icon: 'error',
-            timer: 1500,
+            timer: 1000,
             showConfirmButton: false,
           });
         }
@@ -235,7 +240,102 @@ export class AsignarPermisosComponent implements OnInit {
     );
   }
 
-  actualizarUsuario(id: number) {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${id}`);
+  actualizarUsuario() {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${this.usuarioEncontrado.id}`);
+  }
+
+  crearAcceso() {
+    const nombre = `${this.usuarioEncontrado.primerNombre} ${this.usuarioEncontrado.segundoNombre} ${this.usuarioEncontrado.primerApellido} ${this.usuarioEncontrado.segundoApellido}`;
+    let password = this.generarPassword();
+    Swal.fire({
+      title: 'CMAR LIVE',
+      html: `Desea crear acceso a CMAR LIVE al usuario <b>${nombre}</b>`,
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+      showCloseButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      icon: 'question',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const { value: formValues } = await Swal.fire({
+          text: `Credenciales para ${nombre}`,
+          html:
+            `<p>Credenciales para <b>${nombre}</b></p>` +
+            `<label class="input-group obligatorio">Login: </label>
+              <input type="text" id="login" name="login" class="form-control"  value="${this.usuarioEncontrado.email}"  required />` +
+            `<label class="input-group obligatorio">Contraseña: </label>
+              <input type="password" id="password" name="password" class="form-control" value="${password}" required />`,
+
+          focusConfirm: true,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showCloseButton: true,
+          preConfirm: () => {
+            return [
+              (document.getElementById('login') as HTMLInputElement).value,
+              (document.getElementById('password') as HTMLInputElement).value,
+            ];
+          },
+        });
+
+        if (formValues) {
+          const login = (document.getElementById('login') as HTMLInputElement).value;
+
+          this.usuarioService.crearAcceso(this.usuarioEncontrado.id, login, password).subscribe(
+            (accesoCreado: any) => {
+              this.asignarPermisos = accesoCreado.ok;
+              Swal.fire({
+                title: 'Acceso creado',
+                text: 'Por favor asignele al feligrez los permisos correspondientes',
+                icon: 'success',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.scrollToSection();
+                }
+              });
+            },
+            (error) => {
+              let errores = error.error.errors;
+              let listaErrores = [];
+
+              if (!!errores) {
+                Object.entries(errores).forEach(([key, value]) => {
+                  listaErrores.push('° ' + value['msg'] + '<br>');
+                });
+              }
+
+              Swal.fire({
+                title: 'El acceso NO ha sido creado',
+                icon: 'error',
+                html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+              });
+            }
+          );
+        }
+      } else if (result.isDenied) {
+        Swal.fire('No se pudo crear las credeciales de CMAR LIVE', '', 'info');
+      }
+    });
+  }
+
+  generarPassword() {
+    const password = generate({
+      length: 10,
+      numbers: true,
+    });
+
+    return password;
+  }
+
+  scrollToSection() {
+    setTimeout(() => {
+      const permissionsElement = this.verPermisos?.nativeElement;
+
+      if (permissionsElement && permissionsElement.scrollIntoView) {
+        permissionsElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+      }
+    }, 200);
   }
 }

@@ -272,6 +272,10 @@ export class UsuarioService {
     );
   }
 
+  crearAcceso(idUsuario: number, login: string, password: string) {
+    return this.httpClient.put(`${base_url}/login/crearlogin`, { idUsuario, login, password }, this.headers);
+  }
+
   listarUsuarios(desde: number = 0) {
     return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios?desde=${desde}`, this.headers).pipe(
       map((usuariosRespuesta) => {
