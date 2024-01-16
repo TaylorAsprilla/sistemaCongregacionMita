@@ -50,6 +50,12 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
 
+    this.sidebarnavItems
+      .filter((item) => item.submenu.length > 0)
+      .forEach((item) => {
+        item.submenu.sort((a: any, b: any) => (a.title.toUpperCase() > b.title.toUpperCase() ? 1 : -1));
+      });
+
     this.usuario = this.usuarioService.usuario;
 
     this.primerNombre = this.usuario?.primerNombre;

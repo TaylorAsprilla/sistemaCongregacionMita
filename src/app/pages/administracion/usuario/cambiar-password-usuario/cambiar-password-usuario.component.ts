@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
@@ -20,12 +20,7 @@ export class CambiarPasswordUsuarioComponent implements OnInit {
     return RUTAS;
   }
 
-  constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private usuarioservice: UsuarioService,
-    private activatedRouter: ActivatedRoute
-  ) {}
+  constructor(private router: Router, private formBuilder: FormBuilder, private usuarioservice: UsuarioService) {}
 
   ngOnInit(): void {
     this.idusuario = this.usuarioservice.usuarioId;

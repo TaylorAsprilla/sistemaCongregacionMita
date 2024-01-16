@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CampoModel } from 'src/app/core/models/campo.model';
@@ -13,25 +13,24 @@ import Swal from 'sweetalert2';
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css'],
 })
-export class UsuariosComponent implements OnInit {
-  public totalUsuarios: number = 0;
-  public usuarios: UsuarioModel[] = [];
+export class UsuariosComponent implements OnInit, OnDestroy {
+  totalUsuarios: number = 0;
+  usuarios: UsuarioModel[] = [];
 
-  public usuariosTemporales: UsuarioModel[] = [];
-  public campos: CampoModel[] = [];
-  public paises: CongregacionPaisModel[] = [];
+  usuariosTemporales: UsuarioModel[] = [];
+  campos: CampoModel[] = [];
+  paises: CongregacionPaisModel[] = [];
 
-  public paginaDesde: number = 0;
-  public pagina: number = 1;
-  public totalPaginas: number = 0;
+  paginaDesde: number = 0;
+  pagina: number = 1;
+  totalPaginas: number = 0;
 
-  public cargando: boolean = true;
+  cargando: boolean = true;
+  showIcons: boolean = false;
+  selectedContact: number;
 
   // Subscription
-  public usuarioSubscription: Subscription;
-  public paisSubscription: Subscription;
-  public congregacionSubscription: Subscription;
-  public campoSubscription: Subscription;
+  usuarioSubscription: Subscription;
 
   constructor(private router: Router, private usuarioService: UsuarioService, private activatedRoute: ActivatedRoute) {}
 
@@ -43,15 +42,21 @@ export class UsuariosComponent implements OnInit {
     this.cargarUsuarios();
   }
 
+  ngOnDestroy(): void {
+    this.usuarioSubscription?.unsubscribe();
+  }
+
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioService.listarUsuarios(this.paginaDesde).subscribe(({ totalUsuarios, usuarios }) => {
-      this.totalUsuarios = totalUsuarios;
-      this.usuarios = usuarios;
-      this.usuariosTemporales = usuarios;
-      this.cargando = false;
-      this.totalPaginas = Math.ceil(totalUsuarios / 50);
-    });
+    this.usuarioSubscription = this.usuarioService
+      .listarUsuarios(this.paginaDesde)
+      .subscribe(({ totalUsuarios, usuarios }) => {
+        this.totalUsuarios = totalUsuarios;
+        this.usuarios = usuarios;
+        this.usuariosTemporales = usuarios;
+        this.cargando = false;
+        this.totalPaginas = Math.ceil(totalUsuarios / 50);
+      });
   }
 
   cambiarPagina(valor: number, numeroPagina: number) {
@@ -137,5 +142,9 @@ export class UsuariosComponent implements OnInit {
 
   buscarCampo(idCampo: number): string {
     return this.campos.find((campo) => campo.id === idCampo)?.campo;
+  }
+
+  toggleIcons(usuario: UsuarioModel) {
+    this.selectedContact = this.selectedContact === usuario.id ? null : usuario.id;
   }
 }

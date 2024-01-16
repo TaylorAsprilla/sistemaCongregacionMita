@@ -1,13 +1,14 @@
 import Swal from 'sweetalert2';
-import { Component, HostListener, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AbstractControlOptions, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PermisoService } from 'src/app/services/permiso/permiso.service';
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { generate } from 'generate-password-browser';
 
 @Component({
   selector: 'app-asignar-permisos',
@@ -17,6 +18,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 export class AsignarPermisosComponent implements OnInit {
   permisosForm: FormGroup;
   numeroMitaForm: FormGroup;
+  passwordUsuarioForm: FormGroup;
 
   usuarios: UsuarioModel[] = [];
   usuarioEncontrado: UsuarioModel;
@@ -24,8 +26,13 @@ export class AsignarPermisosComponent implements OnInit {
 
   permisosUsuario: number[];
 
+  formSubmitted: boolean = false;
+  asignarPermisos: boolean = false;
+
   usuarioSubscription: Subscription;
   permisoSubscription: Subscription;
+
+  @ViewChild('verPermisos') verPermisos: ElementRef;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -46,11 +53,16 @@ export class AsignarPermisosComponent implements OnInit {
 
     this.crearFormularioNumeroMita();
     this.crearFormularioPermisos();
+    this.crearFormularioPassword();
   }
 
   ngOnDestroy(): void {
     this.permisoSubscription?.unsubscribe();
     this.usuarioSubscription?.unsubscribe();
+  }
+
+  get permisosArr() {
+    return this.permisosForm?.get('permisos') as FormArray;
   }
 
   crearFormularioNumeroMita() {
@@ -66,11 +78,69 @@ export class AsignarPermisosComponent implements OnInit {
     });
   }
 
-  get permisosArr() {
-    return this.permisosForm?.get('permisos') as FormArray;
+  crearFormularioPassword() {
+    this.passwordUsuarioForm = this.formBuilder.group(
+      {
+        passwordNuevoUno: ['', [Validators.required, Validators.minLength(5), Validators.pattern(/^(?=.*[A-Z])/)]],
+        passwordNuevoDos: ['', [Validators.required, Validators.minLength(5), Validators.pattern(/^(?=.*[A-Z])/)]],
+      },
+      {
+        validators: this.passwordsIguales('passwordNuevoUno', 'passwordNuevoDos'),
+      } as AbstractControlOptions
+    );
+  }
+
+  passwordsIguales(passwordNuevoUno: string, passwordNuevoDos: string) {
+    return (formGroup: FormGroup) => {
+      const passwordNuevoUnoControl = formGroup.controls[passwordNuevoUno];
+      const passwordNuevoDosControl = formGroup.controls[passwordNuevoDos];
+
+      if (passwordNuevoUnoControl.value === passwordNuevoDosControl.value) {
+        passwordNuevoDosControl.setErrors(null);
+      } else {
+        passwordNuevoDosControl.setErrors({ noEsIgual: true });
+      }
+    };
+  }
+
+  passwordNoValidos() {
+    const passwordNuevoUno = this.passwordUsuarioForm.controls['passwordNuevoUno'];
+    const passwordNuevoDos = this.passwordUsuarioForm.controls['passwordNuevoDos'];
+
+    if (passwordNuevoUno !== passwordNuevoDos && this.formSubmitted && !this.passwordUsuarioForm.valid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  resetPassword() {
+    this.formSubmitted = true;
+    const { passwordNuevoUno, passwordNuevoDos } = this.passwordUsuarioForm.value;
+
+    this.usuarioService.resetPassword(this.usuarioEncontrado.login, passwordNuevoUno).subscribe(
+      (usuarioActualizado) => {
+        Swal.fire('Actualizado', 'Se creo una nueva contraseña', 'success');
+      },
+      (error) => {
+        let errores = error.error.errors;
+        let listaErrores = [];
+
+        Object.entries(errores).forEach(([key, value]) => {
+          listaErrores.push('° ' + value['msg'] + '<br>');
+        });
+
+        Swal.fire({
+          title: 'Error',
+          icon: 'error',
+          html: `Error al crear una nueva contraseña <p> ${listaErrores.join('')}`,
+        });
+      }
+    );
   }
 
   buscarFeligres(id: string) {
+    this.asignarPermisos = false;
     this.usuarioSubscription = this.usuarioService.getUsuario(id).subscribe(
       (respuesta: any) => {
         if (!!respuesta.usuario) {
@@ -81,7 +151,7 @@ export class AsignarPermisosComponent implements OnInit {
             text: `${this.usuarioEncontrado.primerNombre} ${this.usuarioEncontrado.segundoNombre}
                 ${this.usuarioEncontrado.primerApellido} ${this.usuarioEncontrado.segundoApellido},
                 Número Mita ${this.usuarioEncontrado.id}`,
-            timer: 1500,
+            timer: 1000,
             showConfirmButton: false,
           });
           this.crearFormularioPermisos();
@@ -91,7 +161,7 @@ export class AsignarPermisosComponent implements OnInit {
             position: 'top-end',
             text: `${respuesta.msg}`,
             icon: 'error',
-            timer: 1500,
+            timer: 1000,
             showConfirmButton: false,
           });
         }
@@ -170,7 +240,102 @@ export class AsignarPermisosComponent implements OnInit {
     );
   }
 
-  actualizarUsuario(id: number) {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${id}`);
+  actualizarUsuario() {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${this.usuarioEncontrado.id}`);
+  }
+
+  crearAcceso() {
+    const nombre = `${this.usuarioEncontrado.primerNombre} ${this.usuarioEncontrado.segundoNombre} ${this.usuarioEncontrado.primerApellido} ${this.usuarioEncontrado.segundoApellido}`;
+    let password = this.generarPassword();
+    Swal.fire({
+      title: 'CMAR LIVE',
+      html: `Desea crear acceso a CMAR LIVE al usuario <b>${nombre}</b>`,
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+      showCloseButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      icon: 'question',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const { value: formValues } = await Swal.fire({
+          text: `Credenciales para ${nombre}`,
+          html:
+            `<p>Credenciales para <b>${nombre}</b></p>` +
+            `<label class="input-group obligatorio">Login: </label>
+              <input type="text" id="login" name="login" class="form-control"  value="${this.usuarioEncontrado.email}"  required />` +
+            `<label class="input-group obligatorio">Contraseña: </label>
+              <input type="password" id="password" name="password" class="form-control" value="${password}" required />`,
+
+          focusConfirm: true,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showCloseButton: true,
+          preConfirm: () => {
+            return [
+              (document.getElementById('login') as HTMLInputElement).value,
+              (document.getElementById('password') as HTMLInputElement).value,
+            ];
+          },
+        });
+
+        if (formValues) {
+          const login = (document.getElementById('login') as HTMLInputElement).value;
+
+          this.usuarioService.crearAcceso(this.usuarioEncontrado.id, login, password).subscribe(
+            (accesoCreado: any) => {
+              this.asignarPermisos = accesoCreado.ok;
+              Swal.fire({
+                title: 'Acceso creado',
+                text: 'Por favor asignele al feligrez los permisos correspondientes',
+                icon: 'success',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.scrollToSection();
+                }
+              });
+            },
+            (error) => {
+              let errores = error.error.errors;
+              let listaErrores = [];
+
+              if (!!errores) {
+                Object.entries(errores).forEach(([key, value]) => {
+                  listaErrores.push('° ' + value['msg'] + '<br>');
+                });
+              }
+
+              Swal.fire({
+                title: 'El acceso NO ha sido creado',
+                icon: 'error',
+                html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+              });
+            }
+          );
+        }
+      } else if (result.isDenied) {
+        Swal.fire('No se pudo crear las credeciales de CMAR LIVE', '', 'info');
+      }
+    });
+  }
+
+  generarPassword() {
+    const password = generate({
+      length: 10,
+      numbers: true,
+    });
+
+    return password;
+  }
+
+  scrollToSection() {
+    setTimeout(() => {
+      const permissionsElement = this.verPermisos?.nativeElement;
+
+      if (permissionsElement && permissionsElement.scrollIntoView) {
+        permissionsElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+      }
+    }, 200);
   }
 }

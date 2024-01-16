@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       login: [localStorage.getItem('login') || '', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3)]],
-      remember: [false],
+      remember: [localStorage.getItem('login') || false],
     });
   }
 
@@ -58,6 +58,7 @@ export class LoginComponent implements OnInit {
 
           if (this.loginForm.get('remember').value) {
             localStorage.setItem('login', this.loginForm.get('login').value);
+            localStorage.setItem('remember', this.loginForm.get('remember').value);
           } else {
             localStorage.removeItem('login');
           }

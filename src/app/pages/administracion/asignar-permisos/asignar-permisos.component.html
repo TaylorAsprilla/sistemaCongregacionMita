@@ -45,110 +45,194 @@
                 </button>
               </div>
             </div>
+          </form>
 
-            <div *ngIf="!!usuarioEncontrado" class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-end mt-3">
-                  <a
-                    data-toggle="tooltip"
-                    data-original-title="Editar"
-                    title="Editar Feligres"
-                    class="btn bg-info me-1"
-                    (click)="actualizarUsuario(usuarioEncontrado.id)"
-                  >
-                    <i class="fas fa-pencil-alt ml-1"></i>
-                  </a>
+          <div *ngIf="!!usuarioEncontrado" class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-end mt-3">
+                <a
+                  data-toggle="tooltip"
+                  data-original-title="Editar"
+                  title="Editar Feligres"
+                  class="btn bg-info me-1"
+                  (click)="actualizarUsuario()"
+                >
+                  <i class="fas fa-pencil-alt ml-1"></i>
+                </a>
+                <a
+                  *ngIf="!usuarioEncontrado.login && !usuarioEncontrado.password"
+                  data-toggle="tooltip"
+                  data-original-title="Editar"
+                  title="Crear Acceso"
+                  class="btn bg-info me-1"
+                  (click)="crearAcceso()"
+                >
+                  <i class="fa-solid fa-check-to-slot ml-1"></i>
+                </a>
+                <a
+                  *ngIf="!!usuarioEncontrado.login && !!usuarioEncontrado.password"
+                  data-toggle="tooltip"
+                  data-original-title="Editar"
+                  title="Reestablecer contraseña"
+                  class="btn bg-info me-1"
+                  (click)="scrollToSection()"
+                >
+                  <i class="fa-solid fa-lock ml-1"></i>
+                </a>
+              </div>
+              <div class="d-flex justify-content-center align-items-center mb-3">
+                <div class="mr-3">
+                  <i class="fa fa-user-circle fa-5x"></i>
                 </div>
-                <div class="d-flex justify-content-center align-items-center mb-3">
-                  <div class="mr-3">
-                    <i class="fa fa-user-circle fa-5x"></i>
-                  </div>
-                  <div class="text-center">
-                    <h4 class="card-title">
-                      {{ usuarioEncontrado.primerNombre }} {{ usuarioEncontrado.segundoNombre }}
-                      {{ usuarioEncontrado.primerApellido }}
-                      {{ usuarioEncontrado.segundoApellido }}
-                    </h4>
-                    <h6 class="card-subtitle mb-2">{{ usuarioEncontrado.email }}</h6>
-                    <h6 class="card-subtitle mb-2"><b>Apodo:</b> {{ usuarioEncontrado.apodo }}</h6>
-                    <h6 class="card-subtitle mb-2"><b>Género:</b> {{ usuarioEncontrado.genero.genero }}</h6>
-                    <h6 class="card-subtitle mb-2"><b>Nacionalidad:</b> {{ usuarioEncontrado.nacionalidad.nombre }}</h6>
-                    <h6 class="card-subtitle mb-2">
-                      <b>Fecha de Nacimiento:</b> {{ usuarioEncontrado.fechaNacimiento }}
-                    </h6>
-                  </div>
+                <div class="text-center">
+                  <h4 class="card-title">
+                    {{ usuarioEncontrado.primerNombre }} {{ usuarioEncontrado.segundoNombre }}
+                    {{ usuarioEncontrado.primerApellido }}
+                    {{ usuarioEncontrado.segundoApellido }}
+                  </h4>
+                  <h6 class="card-subtitle mb-2">{{ usuarioEncontrado.email }}</h6>
+                  <h6 class="card-subtitle mb-2"><b>Apodo:</b> {{ usuarioEncontrado.apodo }}</h6>
+                  <h6 class="card-subtitle mb-2"><b>Género:</b> {{ usuarioEncontrado.genero.genero }}</h6>
+                  <h6 class="card-subtitle mb-2"><b>Nacionalidad:</b> {{ usuarioEncontrado.nacionalidad.nombre }}</h6>
+                  <h6 class="card-subtitle mb-2">
+                    <b>Fecha de Nacimiento:</b> {{ usuarioEncontrado.fechaNacimiento }}
+                  </h6>
                 </div>
+              </div>
 
-                <div class="row">
-                  <div class="col-md-6 mb-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <h4 class="card-title">Congregación</h4>
-                        <p class="card-text text-start">
-                          <b><i class="fa fa-globe-americas"></i> País:</b>
-                          {{ usuarioEncontrado.usuarioCongregacionPais[0].pais }}
-                        </p>
-                        <p class="card-text text-start">
-                          <b><i class="fa fa-city"></i> Ciudad:</b>
-                          {{ usuarioEncontrado.usuarioCongregacionCongregacion[0].congregacion }}
-                        </p>
-                        <p class="card-text text-start">
-                          <b><i class="fa fa-map-marker"></i> Campo:</b>
-                          {{ usuarioEncontrado.usuarioCongregacionCampo[0].campo }}
-                        </p>
-                        <p class="card-text text-start">
-                          <b><i class="fa fa-church"></i> Miembro de la Iglesia:</b>
-                          {{ usuarioEncontrado.tipoMiembro.miembro }}
-                        </p>
-                      </div>
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Congregación</h4>
+                      <p class="card-text text-start">
+                        <b><i class="fa fa-globe-americas"></i> País:</b>
+                        {{ usuarioEncontrado.usuarioCongregacionPais[0].pais }}
+                      </p>
+                      <p class="card-text text-start">
+                        <b><i class="fa fa-city"></i> Ciudad:</b>
+                        {{ usuarioEncontrado.usuarioCongregacionCongregacion[0].congregacion }}
+                      </p>
+                      <p class="card-text text-start">
+                        <b><i class="fa fa-map-marker"></i> Campo:</b>
+                        {{ usuarioEncontrado.usuarioCongregacionCampo[0].campo }}
+                      </p>
+                      <p class="card-text text-start">
+                        <b><i class="fa fa-church"></i> Miembro de la Iglesia:</b>
+                        {{ usuarioEncontrado.tipoMiembro.miembro }}
+                      </p>
                     </div>
                   </div>
+                </div>
 
-                  <div class="col-md-6 mb-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <h4 class="card-title">Contacto</h4>
-                        <p class="card-text text-start">
-                          <b><i class="fa fa-mobile-alt"></i> Celular: </b>{{ usuarioEncontrado.numeroCelular }}
-                        </p>
-                        <p class="card-text text-start">
-                          <b><i class="fa fa-phone"></i> Teléfono de Casa:</b> {{ usuarioEncontrado.telefonoCasa }}
-                        </p>
-                        <p class="card-text text-start">
-                          <b><i class="fa fa-map-marker"></i> Dirección de Residencia:</b>
-                          {{ usuarioEncontrado.direccion }}, {{ usuarioEncontrado.ciudadDireccion }},
-                          {{ usuarioEncontrado.paisDireccion }}
-                        </p>
-                        <p class="card-text text-start">
-                          <b><i class="fa-solid fa-envelopes-bulk"></i> Código Postal:</b>
-                          {{ usuarioEncontrado.codigoPostalDireccion }}
-                        </p>
-                      </div>
+                <div class="col-md-6 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Contacto</h4>
+                      <p class="card-text text-start">
+                        <b><i class="fa fa-mobile-alt"></i> Celular: </b>{{ usuarioEncontrado.numeroCelular }}
+                      </p>
+                      <p class="card-text text-start">
+                        <b><i class="fa fa-phone"></i> Teléfono de Casa:</b> {{ usuarioEncontrado.telefonoCasa }}
+                      </p>
+                      <p class="card-text text-start">
+                        <b><i class="fa fa-map-marker"></i> Dirección de Residencia:</b>
+                        {{ usuarioEncontrado.direccion }}, {{ usuarioEncontrado.ciudadDireccion }},
+                        {{ usuarioEncontrado.paisDireccion }}
+                      </p>
+                      <p class="card-text text-start">
+                        <b><i class="fa-solid fa-envelopes-bulk"></i> Código Postal:</b>
+                        {{ usuarioEncontrado.codigoPostalDireccion }}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </form>
-
-          <div *ngIf="!!usuarioEncontrado" class="px-5">
-            <form [formGroup]="permisosForm" (ngSubmit)="agregarPermisos()">
-              <div class="form-group col-sm-12 col-md-6 col-lg-5 ps-1">
-                <label class="input-group obligatorio"><h4 class="card-title">Agregar Permisos</h4></label>
-                <div class="mt-3">
-                  <label
-                    class="form-check-label form-check checkbox-lg"
-                    formArrayName="permisos"
-                    *ngFor="let permiso of permisosArr.controls; index as i"
-                  >
-                    <input type="checkbox" class="form-check-input" [formControlName]="i" />
-                    <span class="ms-2">{{ permisos[i]?.permiso }}</span>
-                  </label>
+          </div>
+        </div>
+        <div #verPermisos>
+          <div *ngIf="!!usuarioEncontrado" class="row p-5">
+            <div *ngIf="!!asignarPermisos || usuarioEncontrado.login" class="col-md-6 px-5">
+              <form [formGroup]="permisosForm" (ngSubmit)="agregarPermisos()">
+                <div class="form-group col-sm-12 col-md-6 col-lg-5 ps-1">
+                  <label class="input-group obligatorio"><h4 class="card-title">Asignar Permisos</h4></label>
+                  <div class="mt-3">
+                    <label
+                      class="form-check-label form-check checkbox-lg"
+                      formArrayName="permisos"
+                      *ngFor="let permiso of permisosArr.controls; index as i"
+                    >
+                      <input type="checkbox" class="form-check-input" [formControlName]="i" />
+                      <span class="ms-2">{{ permisos[i]?.permiso }}</span>
+                    </label>
+                  </div>
                 </div>
-              </div>
 
-              <button type="submit" class="btn btn-primary" [disabled]="permisosForm.invalid">Agregar Permisos</button>
-            </form>
+                <button type="submit" class="btn btn-primary" [disabled]="permisosForm.invalid">
+                  Agregar Permisos
+                </button>
+              </form>
+            </div>
+
+            <div *ngIf="!!usuarioEncontrado.login && !!usuarioEncontrado.password" class="col-md-6 px-5">
+              <form [formGroup]="passwordUsuarioForm" (ngSubmit)="resetPassword()">
+                <div class="form-group col-sm-12 col-md-8 col-lg-8 ps-1">
+                  <label class="input-group obligatorio"><h4 class="card-title">Restablecer la Contraseña</h4></label>
+                  <div class="form-outline mb-3">
+                    <input
+                      type="password"
+                      formControlName="passwordNuevoUno"
+                      class="form-control form-control-lg mt-3"
+                      placeholder="Contraseña Nueva"
+                    />
+
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        passwordUsuarioForm.get('passwordNuevoUno').hasError('required') &&
+                        passwordUsuarioForm.get('passwordNuevoUno').touched
+                      "
+                    >
+                      La contraseña actual es requerida.
+                    </small>
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        passwordUsuarioForm.get('passwordNuevoUno').hasError('minlength') &&
+                        passwordUsuarioForm.get('passwordNuevoUno').touched
+                      "
+                    >
+                      La contraseña debe tener al menos 8 caracteres.
+                    </small>
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="
+                        passwordUsuarioForm.get('passwordNuevoUno').hasError('pattern') &&
+                        passwordUsuarioForm.get('passwordNuevoUno').touched
+                      "
+                    >
+                      La contraseña debe contener al menos una letra mayúscula.
+                    </small>
+                  </div>
+
+                  <div class="form-outline mb-3">
+                    <input
+                      type="password"
+                      formControlName="passwordNuevoDos"
+                      class="form-control form-control-lg"
+                      placeholder="Confirma la Contraseña Nueva"
+                    />
+                  </div>
+
+                  <p class="form-text text-danger" *ngIf="passwordNoValidos()">Las contraseñas deben ser iguales</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="passwordUsuarioForm.invalid">
+                  Cambiar Contraseña
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
