@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div class="float-right"><span class="font-weight-bold">Página:</span> {{ pagina }} de {{ totalPaginas }}</div>
+    <div>Página: {{ pagina }} de {{ totalPaginas }}</div>
   </div>
   <!-- /.card-header -->
   <div class="card-body">
@@ -44,7 +44,7 @@
             </td>
 
             <td>
-              <a *ngIf="usuario?.email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
+              <a *ngIf="usuario?.email" class="email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
               <span *ngIf="!usuario?.email">No hay correo electrónico</span>
             </td>
 
@@ -62,15 +62,15 @@
                 <div class="phone-number">
                   <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
                     <a
-                      href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | removerEspacios }}"
+                      href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | telefono }}"
                       target="_blank"
                     >
                       <i class="fab fa-whatsapp mx-2"></i>
                     </a>
-                    <a href="https://telegram.me/{{ usuario.numeroCelular | removerEspacios }}" target="_blank">
+                    <a href="https://t.me/{{ usuario.numeroCelular | telefono }}" target="_blank">
                       <i class="fab fa-telegram mx-2"></i>
                     </a>
-                    <a href="tel:{{ usuario.numeroCelular | removerEspacios }}" target="_blank">
+                    <a href="tel:{{ usuario.numeroCelular | telefono }}" target="_blank">
                       <i class="fa fa-phone mx-2"></i>
                     </a>
                   </div>
@@ -150,7 +150,7 @@
       </table>
     </div>
   </div>
-  <div class="col-md-4 mb-4 ml-2 px-4">
+  <div class="col-md-12 mb-4 ml-2 px-4">
     <button class="btn btn-secondary" (click)="cambiarPagina(-50, -1)" [disabled]="pagina == 1 ? true : false">
       Anterior
     </button>
@@ -162,5 +162,7 @@
     >
       Siguiente
     </button>
+
+    <div class="float-end">Página: {{ pagina }} de {{ totalPaginas }}</div>
   </div>
 </div>

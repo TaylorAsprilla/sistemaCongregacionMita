@@ -4,11 +4,11 @@ import { ImagenPipe } from './imagen/imagen.pipe';
 import { VimeoUrlPipePipe } from './vimeo/vimeo-url-pipe.pipe';
 import { YoutubePipe } from './youtube/youtube.pipe';
 import { FilterByNombrePipePipe } from './FilterByNombrePipe/filter-by-nombre-pipe.pipe';
-import { RemoverEspaciosPipe } from './removerEspacios/remover-espacios.pipe';
+import { TelefonoPipe } from './telefono/telefono.pipe';
 
 @NgModule({
-  declarations: [ImagenPipe, VimeoUrlPipePipe, YoutubePipe, FilterByNombrePipePipe, RemoverEspaciosPipe],
+  declarations: [ImagenPipe, VimeoUrlPipePipe, YoutubePipe, FilterByNombrePipePipe, TelefonoPipe],
   imports: [CommonModule],
-  exports: [ImagenPipe, VimeoUrlPipePipe, YoutubePipe, FilterByNombrePipePipe, RemoverEspaciosPipe],
+  exports: [ImagenPipe, VimeoUrlPipePipe, YoutubePipe, FilterByNombrePipePipe, TelefonoPipe],
 })
 export class PipesModule {}

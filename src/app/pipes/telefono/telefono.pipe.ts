@@ -1,14 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'removerEspacios',
+  name: 'telefono',
 })
-export class RemoverEspaciosPipe implements PipeTransform {
+export class TelefonoPipe implements PipeTransform {
   transform(value: string): string {
     if (!value) {
       return '';
     }
 
-    return value.replace(/[\s+]/g, '');
+    return value.replace(/[-\s]/g, '');
   }
 }
