@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
   crearFormularioLogin() {
     this.loginForm = this.formBuilder.group({
       login: [localStorage.getItem('login') || '', [Validators.required, Validators.email]],
-      password: ['123456', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
       remember: [localStorage.getItem('login') || false],
     });
   }

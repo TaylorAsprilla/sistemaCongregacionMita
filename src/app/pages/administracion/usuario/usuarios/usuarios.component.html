@@ -23,8 +23,8 @@
             <th class="w200">Nombre</th>
             <th>Correo</th>
             <th>Fecha de Nacimiento</th>
-            <th>Teléfono Casa</th>
-            <th class="w150">Celular</th>
+            <th class="w200">Teléfono Casa</th>
+            <th class="w200">Celular</th>
             <th class="w100">Congregación</th>
             <th>Estado</th>
             <th class="w280">Acciones</th>
@@ -53,32 +53,27 @@
             <td>{{ usuario?.telefonoCasa }}</td>
             <td>
               <div class="contact-container">
-                <span>{{ usuario.numeroCelular }}</span>
+                <span
+                  >{{ usuario.numeroCelular }}
+                  <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(usuario)"></i
+                ></span>
+                <span> </span>
 
-                <div class="contact-icons">
-                  <a
-                    *ngIf="usuario?.numeroCelular"
-                    href="tel:{{ usuario.numeroCelular | removerEspacios }}"
-                    class="phone-icon"
-                  >
-                    <i class="fa fa-phone"></i>
-                  </a>
-                  <a
-                    *ngIf="usuario?.numeroCelular"
-                    href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | removerEspacios }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="whatsapp-icon"
-                  >
-                    <i class="fa fa-whatsapp"></i>
-                  </a>
-                  <a
-                    *ngIf="usuario?.numeroCelular"
-                    href="tg://msg?text=Tu%20mensaje&to={{ usuario.numeroCelular | removerEspacios }}"
-                    class="telegram-icon"
-                  >
-                    <i class="fa fa-telegram"></i>
-                  </a>
+                <div class="phone-number">
+                  <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
+                    <a
+                      href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | removerEspacios }}"
+                      target="_blank"
+                    >
+                      <i class="fab fa-whatsapp mx-2"></i>
+                    </a>
+                    <a href="https://telegram.me/{{ usuario.numeroCelular | removerEspacios }}" target="_blank">
+                      <i class="fab fa-telegram mx-2"></i>
+                    </a>
+                    <a href="tel:{{ usuario.numeroCelular | removerEspacios }}" target="_blank">
+                      <i class="fa fa-phone mx-2"></i>
+                    </a>
+                  </div>
                 </div>
               </div>
             </td>

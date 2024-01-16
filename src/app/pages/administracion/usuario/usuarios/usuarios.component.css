@@ -1,7 +1,28 @@
-/* Estilos CSS */
-.contact-options {
+/* Estilos generales */
+.phone-number {
+  position: relative;
   display: flex;
   align-items: center;
+  cursor: pointer;
+}
+
+.toggle-icons {
+  margin-left: 5px;
+  font-size: 30px;
+}
+
+/* Estilos para los íconos de WhatsApp y Telegram */
+.contact-icons {
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  background-color: #333;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  font-size: 20px;
+  z-index: 10;
 }
 
 .contact-options a {
@@ -10,36 +31,28 @@
   text-decoration: none;
 }
 
-.contact-options a:hover {
-  color: #00a0e4; /* Cambiar el color al pasar el mouse por encima */
-}
-
-/* Estilos para los iconos específicos */
-.phone-icon {
-  color: #007bff; /* Color para el ícono de teléfono */
-}
-
-.whatsapp-icon {
-  color: #25d366; /* Color para el ícono de WhatsApp */
-}
-
-.telegram-icon {
-  color: #0088cc; /* Color para el ícono de Telegram */
-}
-
-.contact-container {
+.contact-icons.show {
   display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.contact-icons {
-  display: flex;
-  justify-content: center;
+.contact-icons a {
+  margin-right: 5px;
+  color: #000; /* Color de los íconos */
 }
 
-.phone-icon,
-.whatsapp-icon,
-.telegram-icon {
-  margin: 5px;
+.fa-whatsapp {
+  color: #25d366;
+}
+
+.fa-telegram {
+  color: #229ed9;
+}
+
+.fa-phone {
+  color: #ffffff;
+}
+
+.fa-chevron-circle-down {
+  color: #333;
+  font-size: 14px;
 }
