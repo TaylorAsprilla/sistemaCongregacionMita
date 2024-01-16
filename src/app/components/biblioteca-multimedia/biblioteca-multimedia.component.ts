@@ -26,7 +26,6 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
   videoHeight: number | undefined;
 
   linkEventos: LinkEventoModel[] = [];
-  urlVideo: SafeResourceUrl;
 
   get PLATAFORMA() {
     return PLATAFORMA;
@@ -36,7 +35,7 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
     return TIPOEVENTO_ID;
   }
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, public sanitizer: DomSanitizer) {}
+  constructor(private changeDetectorRef: ChangeDetectorRef, public domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const tag = document.createElement('script');
@@ -61,7 +60,7 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
     this.changeDetectorRef.detectChanges();
   };
 
-  domSanitizerVideo(linkVideo: string) {
-    return (this.urlVideo = this.sanitizer.bypassSecurityTrustResourceUrl(linkVideo));
+  domSanitizerVideo(linkVideo: string): SafeResourceUrl {
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(linkVideo);
   }
 }

@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'telefono',
+  name: 'telegram',
 })
-export class TelefonoPipe implements PipeTransform {
+export class TelegramPipe implements PipeTransform {
   transform(value: string): string {
     if (!value) {
       return '';

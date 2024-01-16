@@ -62,15 +62,15 @@
                 <div class="phone-number">
                   <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
                     <a
-                      href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | telefono }}"
+                      href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
                       target="_blank"
                     >
                       <i class="fab fa-whatsapp mx-2"></i>
                     </a>
-                    <a href="https://t.me/{{ usuario.numeroCelular | telefono }}" target="_blank">
+                    <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
                       <i class="fab fa-telegram mx-2"></i>
                     </a>
-                    <a href="tel:{{ usuario.numeroCelular | telefono }}" target="_blank">
+                    <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank">
                       <i class="fa fa-phone mx-2"></i>
                     </a>
                   </div>
