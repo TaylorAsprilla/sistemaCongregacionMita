@@ -52,7 +52,6 @@ import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de
 import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
 import { DocumentoResolver } from 'src/app/resolvers/tipo-documento/documento.resolver';
 import { PermisosResolver } from 'src/app/resolvers/permisos/permisos.resolver';
-import { UsuariosSupervisorComponent } from 'src/app/pages/supervisor/usuarios-supervisor/usuarios-supervisor.component';
 import { TipoEstudioResolver } from 'src/app/resolvers/tipo-estudio/tipo-estudio.resolver';
 import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/opcion-transporte.resolver';
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
@@ -68,6 +67,9 @@ import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/pare
 import { UsuarioResolver } from 'src/app/resolvers/getUsuario/get-usuario.resolver';
 import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministerios/crear-ministerio/crear-ministerio.component';
 import { AsignarPermisosComponent } from 'src/app/pages/administracion/asignar-permisos/asignar-permisos.component';
+import { UsuariosSupervisorComponent } from 'src/app/pages/obreros/supervisor/usuarios-supervisor/usuarios-supervisor.component';
+import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
+import { CensoComponent } from 'src/app/pages/obreros/censo/censo.component';
 
 const childRoutes: Routes = [
   {
@@ -122,6 +124,22 @@ const childRoutes: Routes = [
       dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
       usuario: UsuarioResolver,
+    },
+  },
+
+  {
+    path: RUTAS.CENSO,
+    component: CensoComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Censo',
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    },
+    resolve: {
+      congregacion: CongregacionResolver,
+      ministerio: MinisterioResolver,
+      pais: PaisResolver,
+      campo: CampoResolver,
     },
   },
   {

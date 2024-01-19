@@ -16,6 +16,7 @@ export enum RUTAS {
   CREAR_EVENTO = 'crear-evento',
   CREAR_PAIS = 'crear-pais',
   CREAR_ESTATUS = 'crear-estatus',
+  CENSO = 'censo',
   EVENTOS = 'eventos',
   INICIO = 'inicio',
   INFORME = 'informe',
@@ -234,7 +235,7 @@ export const ROUTES: RouteInfo[] = [
     ],
     submenu: [
       {
-        path: RUTAS.USUARIOS,
+        path: RUTAS.CENSO,
         title: 'Feligreses',
         icon: '',
         class: '',

@@ -284,6 +284,16 @@ export class UsuarioService {
     );
   }
 
+  listarUsuariosPorCongregacion(congregacionId: number, desde: number = 0) {
+    return this.httpClient
+      .get<ListarUsuario>(`${base_url}/usuarios/usuarioscongregacion/${congregacionId}?desde=${desde}`, this.headers)
+      .pipe(
+        map((respuesta) => {
+          return { totalUsuarios: respuesta.totalUsuarios, usuarios: respuesta.usuarios };
+        })
+      );
+  }
+
   listarTodosLosUsuarios() {
     return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios`, this.headers);
   }

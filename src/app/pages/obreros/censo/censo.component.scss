@@ -1,0 +1,68 @@
+/* Estilos generales */
+.phone-number {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle-icons {
+  margin-left: 5px;
+  font-size: 30px;
+}
+
+/* Estilos para los íconos de WhatsApp y Telegram */
+.contact-icons {
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  background-color: #333;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  font-size: 20px;
+  z-index: 10;
+}
+
+.contact-options a {
+  margin-left: 10px;
+  color: #333; /* Color de los iconos */
+  text-decoration: none;
+}
+
+.contact-icons.show {
+  display: flex;
+}
+
+.contact-icons a {
+  margin-right: 5px;
+  color: #000; /* Color de los íconos */
+}
+
+.fa-whatsapp {
+  color: #25d366;
+}
+
+.fa-telegram {
+  color: #229ed9;
+}
+
+.fa-phone {
+  color: #ffffff;
+}
+
+.fa-chevron-circle-down {
+  color: #333;
+  font-size: 14px;
+}
+
+a.email {
+  text-decoration: none;
+  color: inherit;
+}
+
+a.email:hover {
+  color: #1976d2;
+  text-decoration: none;
+}
