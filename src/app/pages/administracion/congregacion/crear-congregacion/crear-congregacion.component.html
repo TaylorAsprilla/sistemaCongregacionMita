@@ -5,7 +5,7 @@
         <h3 class="card-title">Agregar Congregación</h3>
       </div>
       <div class="card-body">
-        <form class="form-signin" autocomplete="off" [formGroup]="congregacionForm">
+        <form class="form-signin" autocomplete="off" [formGroup]="congregacionForm" (submit)="crearCongregacion()">
           <div class="form-group">
             <label for="inputCongregacion" class="col-form-label">Congregación:</label>
             <input
@@ -39,12 +39,7 @@
           </div>
 
           <div class="card">
-            <button
-              type="submit"
-              class="submit btn btn-primary"
-              (click)="crearCongregacion()"
-              [disabled]="congregacionForm.invalid"
-            >
+            <button type="submit" class="submit btn btn-primary" [disabled]="congregacionForm.invalid">
               <i class="fa fa-save"></i> Guardar
             </button>
           </div>
