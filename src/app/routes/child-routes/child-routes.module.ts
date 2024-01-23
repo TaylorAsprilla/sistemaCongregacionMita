@@ -76,12 +76,6 @@ const childRoutes: Routes = [
     path: 'inicio',
     component: InicioComponent,
     data: { titulo: 'Censo' },
-    resolve: {
-      congregacion: CongregacionResolver,
-      pais: PaisResolver,
-      campo: CampoResolver,
-      permiso: PermisosResolver,
-    },
   },
 
   // Administración

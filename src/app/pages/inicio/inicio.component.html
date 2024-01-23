@@ -1,63 +1,3 @@
-<ng-container *appPermisos="roles">
-  <div class="row">
-    <div class="col-lg-3 col-6">
-      <div class="small-box bg-info">
-        <div class="inner">
-          <h3>{{ totalUsuarios }}</h3>
-          <p>Feligreses</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-bag"></i>
-        </div>
-        <a routerLink="/sistema/usuarios" class="small-box-footer">Ver Más <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-6">
-      <div class="small-box bg-danger">
-        <div class="inner">
-          <h3>{{ paises.length }}</h3>
-
-          <p>Paises</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-pie-graph"></i>
-        </div>
-        <a routerLink="/sistema/paises" class="small-box-footer">Ver Más <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-6">
-      <div class="small-box bg-success">
-        <div class="inner">
-          <h3>{{ congregaciones.length }}</h3>
-          <p>Congregaciones</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a routerLink="/sistema/congregaciones" class="small-box-footer"
-          >Ver Más <i class="fas fa-arrow-circle-right"></i
-        ></a>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-6">
-      <div class="small-box bg-warning">
-        <div class="inner">
-          <h3>{{ campos.length }}</h3>
-
-          <p>Campos</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-person-add"></i>
-        </div>
-        <a routerLink="/sistema/campos" class="small-box-footer">Ver Más <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-  </div>
-</ng-container>
-
 <div class="row">
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3" *ngFor="let seccionHome of generarSeccionHome">
     <ng-container *appPermisos="seccionHome.role">
@@ -85,7 +25,7 @@
   ]"
 >
   <app-biblioteca-multimedia
-    [serviciosYvigilias]="servicios"
+    [serviciosYvigilias]="servicio"
     [tipoDeEvento]="TIPOEVENTO_ID.SERVICIO"
   ></app-biblioteca-multimedia>
 </ng-container>
