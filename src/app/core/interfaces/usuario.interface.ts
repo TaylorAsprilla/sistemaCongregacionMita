@@ -112,3 +112,29 @@ export interface ActualizarUsuarioInterface {
   usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface;
   usuarioCongregacionPais?: UsuarioCongregacionPaisInterface;
 }
+
+export interface UsuariosPorCongregacionInterface {
+  readonly id: number;
+  primerNombre: string;
+  primerApellido: string;
+  segundoNombre?: string;
+  segundoApellido?: string;
+  apodo?: string;
+  fechaNacimiento: Date;
+  email: string;
+  numeroCelular: string;
+  pais: string;
+  congregacion: string;
+  campo: string;
+  estado: boolean;
+}
+
+export interface UsuariosPorCongregacionRespuesta {
+  totalUsuarios: number;
+  usuarios: UsuariosPorCongregacionInterface[];
+}
+
+export interface CambioPaginaEvent {
+  valor: number;
+  numeroPagina: number;
+}

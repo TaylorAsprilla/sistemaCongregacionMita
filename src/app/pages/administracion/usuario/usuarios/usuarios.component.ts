@@ -89,7 +89,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.usuarioService.eliminarUsuario(usuario).subscribe((usuarioEliminado) => {
+        this.usuarioService.eliminarUsuario(usuario.id).subscribe((usuarioEliminado) => {
           Swal.fire(
             '¡Deshabilitado!',
             `${usuario.primerNombre} ${usuario.primerApellido} fue deshabilitado correctamente`,

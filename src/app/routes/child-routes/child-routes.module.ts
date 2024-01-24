@@ -68,8 +68,7 @@ import { UsuarioResolver } from 'src/app/resolvers/getUsuario/get-usuario.resolv
 import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministerios/crear-ministerio/crear-ministerio.component';
 import { AsignarPermisosComponent } from 'src/app/pages/administracion/asignar-permisos/asignar-permisos.component';
 import { UsuariosSupervisorComponent } from 'src/app/pages/obreros/supervisor/usuarios-supervisor/usuarios-supervisor.component';
-import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
-import { CensoComponent } from 'src/app/pages/obreros/censo/censo.component';
+import { CensoObreroComponent } from 'src/app/pages/obreros/censo-obrero/censo-obrero.component';
 
 const childRoutes: Routes = [
   {
@@ -123,17 +122,11 @@ const childRoutes: Routes = [
 
   {
     path: RUTAS.CENSO,
-    component: CensoComponent,
+    component: CensoObreroComponent,
     canActivate: [RolesGuard],
     data: {
       titulo: 'Censo',
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
-    },
-    resolve: {
-      congregacion: CongregacionResolver,
-      ministerio: MinisterioResolver,
-      pais: PaisResolver,
-      campo: CampoResolver,
     },
   },
   {

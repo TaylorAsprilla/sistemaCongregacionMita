@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { ActualizarUsuarioInterface, ListarUsuario, UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { ListarUsuario, UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -35,6 +35,14 @@ export class UsuarioService {
 
   get usuarioNombre(): string {
     return `${this.usuario.primerNombre} ${this.usuario.segundoNombre} ${this.usuario.primerApellido} ${this.usuario.segundoApellido}`;
+  }
+
+  get usuarioIdCongregacion(): number {
+    return this.usuario.usuarioCongregacion.congregacion_id;
+  }
+
+  get nombreCongregacion(): string {
+    return `${this.usuario?.usuarioCongregacionCongregacion[0].congregacion}, ${this.usuario?.usuarioCongregacionPais[0].pais} `;
   }
 
   get role() {
@@ -140,6 +148,9 @@ export class UsuarioService {
               tipoDocumento_id,
               numeroDocumento,
               anoConocimiento,
+              usuarioCongregacionCongregacion,
+              usuarioCongregacionCampo,
+              usuarioCongregacionPais,
             } = respuesta.usuario;
 
             this.usuario = new UsuarioModel(
@@ -166,7 +177,7 @@ export class UsuarioService {
               especializacionEmpleo,
               telefonoCasa,
               login,
-              password,
+              '',
               foto,
               rolCasa_id,
               nacionalidad_id,
@@ -195,7 +206,10 @@ export class UsuarioService {
               usuarioFuenteIngreso,
               tipoDocumento_id,
               numeroDocumento,
-              anoConocimiento
+              anoConocimiento,
+              usuarioCongregacionCongregacion,
+              usuarioCongregacionCampo,
+              usuarioCongregacionPais
             );
 
             localStorage.setItem('token', respuesta.token);
@@ -284,28 +298,18 @@ export class UsuarioService {
     );
   }
 
-  listarUsuariosPorCongregacion(congregacionId: number, desde: number = 0) {
-    return this.httpClient
-      .get<ListarUsuario>(`${base_url}/usuarios/usuarioscongregacion/${congregacionId}?desde=${desde}`, this.headers)
-      .pipe(
-        map((respuesta) => {
-          return { totalUsuarios: respuesta.totalUsuarios, usuarios: respuesta.usuarios };
-        })
-      );
-  }
-
   listarTodosLosUsuarios() {
     return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios`, this.headers);
   }
 
-  getUsuario(id: string) {
+  getUsuario(id: number) {
     return this.httpClient
       .get<UsuarioInterface>(`${base_url}/usuarios/${id}`, this.headers)
       .pipe(map((usuario) => usuario));
   }
 
-  eliminarUsuario(usuario: UsuarioModel) {
-    return this.httpClient.delete(`${base_url}/usuarios/${usuario.id}`, this.headers);
+  eliminarUsuario(idUsuario: number) {
+    return this.httpClient.delete(`${base_url}/usuarios/${idUsuario}`, this.headers);
   }
 
   actualizarUsuario(usuario: RegisterFormInterface, id: number) {

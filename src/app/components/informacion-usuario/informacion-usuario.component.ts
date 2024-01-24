@@ -23,6 +23,8 @@ import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { RUTAS } from 'src/app/routes/menu-items';
 
 @Component({
   selector: 'app-informacion-usuario',
@@ -160,7 +162,11 @@ export class InformacionUsuarioComponent implements OnInit {
     return CONGREGACION_PAIS;
   }
 
-  constructor(private formBuilder: FormBuilder, private buscarCorreoService: BuscarCorreoService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private buscarCorreoService: BuscarCorreoService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.informacionDelUsuario();
@@ -595,5 +601,9 @@ export class InformacionUsuarioComponent implements OnInit {
     if (this.step == 3) {
       this.registroTres_step = false;
     }
+  }
+
+  cancelar() {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CENSO}`);
   }
 }

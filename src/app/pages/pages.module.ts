@@ -21,8 +21,8 @@ import { GeneroComponent } from './configuracion/genero/genero.component';
 import { TipoDeEstudioComponent } from './configuracion/tipo-de-estudio/tipo-de-estudio.component';
 import { RazonDeSolicitudComponent } from './configuracion/razon-de-solicitud/razon-de-solicitud.component';
 import { ParentescoComponent } from './configuracion/parentesco/parentesco.component';
+import { CensoObreroComponent } from './obreros/censo-obrero/censo-obrero.component';
 import { SupervisorModule } from './obreros/supervisor/supervisor.module';
-import { CensoComponent } from './obreros/censo/censo.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,8 @@ import { CensoComponent } from './obreros/censo/censo.component';
     TipoDeEstudioComponent,
     RazonDeSolicitudComponent,
     ParentescoComponent,
-    CensoComponent,
+
+    CensoObreroComponent,
   ],
   exports: [PagesComponent],
   imports: [

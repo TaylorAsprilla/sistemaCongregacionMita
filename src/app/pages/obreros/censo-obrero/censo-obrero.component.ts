@@ -1,49 +1,47 @@
 import Swal from 'sweetalert2';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { UsuariosPorCongregacionInterface } from './../../../core/interfaces/usuario.interface';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CampoModel } from 'src/app/core/models/campo.model';
-import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
 
 @Component({
-  selector: 'app-censo',
-  templateUrl: './censo.component.html',
-  styleUrls: ['./censo.component.scss'],
+  selector: 'app-censo-obrero',
+  templateUrl: './censo-obrero.component.html',
+  styleUrls: ['./censo-obrero.component.scss'],
 })
-export class CensoComponent implements OnInit {
+export class CensoObreroComponent implements OnInit, OnDestroy {
   totalUsuarios: number = 0;
-  usuarios: UsuarioModel[] = [];
-  usuario: UsuarioModel;
+  usuarios: UsuariosPorCongregacionInterface[] = [];
 
-  usuariosTemporales: UsuarioModel[] = [];
-  campos: CampoModel[] = [];
-  paises: CongregacionPaisModel[] = [];
+  idCongregacionObrero: number;
 
   paginaDesde: number = 0;
   pagina: number = 1;
   totalPaginas: number = 0;
 
-  cargando: boolean = true;
   showIcons: boolean = false;
   selectedContact: number;
+
+  congregacion: string;
+
+  cargando: boolean = true;
 
   // Subscription
   usuarioSubscription: Subscription;
 
-  constructor(private router: Router, private usuarioService: UsuarioService, private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private usuarioService: UsuarioService,
+    private usuariosPorCongregacionService: UsuariosPorCongregacionService
+  ) {}
 
   ngOnInit(): void {
-    this.usuario = this.usuarioService.usuario;
-
-    console.log(this.usuario);
-
-    this.activatedRoute.data.subscribe((data: { pais: CongregacionPaisModel[]; campo: CampoModel[] }) => {
-      this.paises = data.pais.filter((pais) => pais.estado === true);
-      this.campos = data.campo.filter((campo) => campo.estado === true);
-    });
+    this.idCongregacionObrero = this.usuarioService.usuarioIdCongregacion;
+    this.congregacion = this.usuarioService.nombreCongregacion;
     this.cargarUsuarios();
   }
 
@@ -52,14 +50,12 @@ export class CensoComponent implements OnInit {
   }
 
   cargarUsuarios() {
-    console.log('Entrandooo....');
     this.cargando = true;
-    this.usuarioSubscription = this.usuarioService
-      .listarUsuariosPorCongregacion(5, this.paginaDesde)
+    this.usuarioSubscription = this.usuariosPorCongregacionService
+      .listarUsuariosPorCongregacion(this.paginaDesde, this.idCongregacionObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
         this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;
-        this.usuariosTemporales = usuarios;
         this.cargando = false;
         this.totalPaginas = Math.ceil(totalUsuarios / 50);
       });
@@ -80,7 +76,7 @@ export class CensoComponent implements OnInit {
     this.cargarUsuarios();
   }
 
-  borrarUsuario(usuario: UsuarioModel) {
+  borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
     if (usuario.id === this.usuarioService.usuarioId) {
       return Swal.fire('Error', 'No puede borrarse a si mismo', 'error');
     }
@@ -95,7 +91,7 @@ export class CensoComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.usuarioService.eliminarUsuario(usuario).subscribe((usuarioEliminado) => {
+        this.usuarioService.eliminarUsuario(usuario.id).subscribe((usuarioEliminado) => {
           Swal.fire(
             '¡Deshabilitado!',
             `${usuario.primerNombre} ${usuario.primerApellido} fue deshabilitado correctamente`,
@@ -109,8 +105,10 @@ export class CensoComponent implements OnInit {
     return usuario;
   }
 
-  activarUsuario(usuario: UsuarioModel) {
-    Swal.fire({
+  async activarUsuario(usuario: UsuariosPorCongregacionInterface) {
+    const usuarioEncontrado: UsuarioModel = await this.buscarUsuario(usuario.id);
+
+    await Swal.fire({
       title: 'Activar Congregación',
       text: `Esta seguro de activar el usuario ${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido}`,
       icon: 'question',
@@ -121,7 +119,7 @@ export class CensoComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.usuarioService.activarUsuario(usuario).subscribe((usuarioActivo: any) => {
+        this.usuarioService.activarUsuario(usuarioEncontrado).subscribe((usuarioActivo: any) => {
           Swal.fire(
             '¡Activado!',
             `El usuario ${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido} fue activado correctamente`,
@@ -142,15 +140,17 @@ export class CensoComponent implements OnInit {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
   }
 
-  buscarPais(idPais: number): string {
-    return this.paises.find((pais) => pais.id === idPais)?.pais;
+  async buscarUsuario(id: number): Promise<UsuarioModel> {
+    try {
+      const respuesta: any = await this.usuarioService.getUsuario(id).toPromise();
+      return respuesta.usuario;
+    } catch (error) {
+      console.error('Error al buscar usuario:', error);
+      throw error; // o manejar el error según tus necesidades
+    }
   }
 
-  buscarCampo(idCampo: number): string {
-    return this.campos.find((campo) => campo.id === idCampo)?.campo;
-  }
-
-  toggleIcons(usuario: UsuarioModel) {
+  toggleIcons(usuario: UsuariosPorCongregacionInterface) {
     this.selectedContact = this.selectedContact === usuario.id ? null : usuario.id;
   }
 }

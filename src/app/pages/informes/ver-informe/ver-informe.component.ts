@@ -285,7 +285,7 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   seleccionarObrero(obreroSeleccionado: UsuarioModel) {
     let obreroInforme: UsuarioCongregacionModel;
 
-    this.usuarioService.getUsuario(obreroSeleccionado.id.toString()).subscribe((obrero: UsuarioInterface) => {
+    this.usuarioService.getUsuario(obreroSeleccionado.id).subscribe((obrero: UsuarioInterface) => {
       obreroInforme = obrero.usuarioCongregacion;
 
       this.paisObrero = this.paises.find((pais: CongregacionPaisModel) => pais.id === obreroInforme?.pais_id)?.pais;

@@ -10,7 +10,7 @@ import { PermisoModel } from './permisos.model';
 import { RolCasaModel } from './rol-casa.model';
 import { TipoEmpleoModel } from './tipo-empleo.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
-import { CongregacionInterface } from './usuarioCongregacion.model';
+import { UsuarioCongregacionModel } from './usuarioCongregacion.model';
 import { VacunaModel } from './vacuna.model';
 import { VoluntariadoModel } from './voluntariado.model';
 import {
@@ -74,7 +74,7 @@ export class UsuarioModel {
     public departamentoPostal?: string,
     public codigoPostal?: string,
     public paisPostal?: string,
-    public usuarioCongregacion?: CongregacionInterface,
+    public usuarioCongregacion?: UsuarioCongregacionModel,
     public usuarioMinisterio?: MinisterioModel[],
     public usuarioVoluntariado?: VoluntariadoModel[],
     public usuarioPermiso?: PermisoModel[],
