@@ -3,10 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import {
-  UsuariosPorCongregacionInterface,
-  UsuariosPorCongregacionRespuesta,
-} from 'src/app/core/interfaces/usuario.interface';
+import { UsuariosPorCongregacionRespuesta } from 'src/app/core/interfaces/usuario.interface';
 
 const base_url = environment.base_url;
 
@@ -28,10 +25,36 @@ export class UsuariosPorCongregacionService {
     };
   }
 
+  listarUsuariosPorPais(desde: number = 0, idPais: number) {
+    return this.httpClient
+      .get<UsuariosPorCongregacionRespuesta>(
+        `${base_url}/usuariocongregacion/pais/?desde=${desde}&idPais=${idPais}`,
+        this.headers
+      )
+      .pipe(
+        map((respuesta) => {
+          return { totalUsuarios: respuesta.totalUsuarios, usuarios: respuesta.usuarios };
+        })
+      );
+  }
+
   listarUsuariosPorCongregacion(desde: number = 0, idCongregacion: number) {
     return this.httpClient
       .get<UsuariosPorCongregacionRespuesta>(
-        `${base_url}/usuariocongregacion/?desde=${desde}&idCongregacion=${idCongregacion}`,
+        `${base_url}/usuariocongregacion/congregacion/?desde=${desde}&idCongregacion=${idCongregacion}`,
+        this.headers
+      )
+      .pipe(
+        map((respuesta) => {
+          return { totalUsuarios: respuesta.totalUsuarios, usuarios: respuesta.usuarios };
+        })
+      );
+  }
+
+  listarUsuariosPorCampo(desde: number = 0, idCongregacion: number) {
+    return this.httpClient
+      .get<UsuariosPorCongregacionRespuesta>(
+        `${base_url}/usuariocongregacion/campo/?desde=${desde}&idCongregacion=${idCongregacion}`,
         this.headers
       )
       .pipe(

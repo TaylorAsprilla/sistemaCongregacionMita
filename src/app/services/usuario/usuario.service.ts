@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { ListarUsuario, UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import {
+  ListarUsuario,
+  UsuarioInterface,
+  UsuariosPorCongregacionRespuesta,
+} from 'src/app/core/interfaces/usuario.interface';
 import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -37,8 +41,16 @@ export class UsuarioService {
     return `${this.usuario.primerNombre} ${this.usuario.segundoNombre} ${this.usuario.primerApellido} ${this.usuario.segundoApellido}`;
   }
 
+  get usuarioIdCongregacionPais(): number {
+    return this.usuario.usuarioCongregacion.pais_id;
+  }
+
   get usuarioIdCongregacion(): number {
     return this.usuario.usuarioCongregacion.congregacion_id;
+  }
+
+  get nombreCongregacionPais(): string {
+    return this.usuario?.usuarioCongregacionPais[0].pais;
   }
 
   get nombreCongregacion(): string {
@@ -291,11 +303,13 @@ export class UsuarioService {
   }
 
   listarUsuarios(desde: number = 0) {
-    return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios?desde=${desde}`, this.headers).pipe(
-      map((usuariosRespuesta) => {
-        return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios: usuariosRespuesta.usuarios };
-      })
-    );
+    return this.httpClient
+      .get<UsuariosPorCongregacionRespuesta>(`${base_url}/usuarios?desde=${desde}`, this.headers)
+      .pipe(
+        map((usuariosRespuesta) => {
+          return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios: usuariosRespuesta.usuarios };
+        })
+      );
   }
 
   listarTodosLosUsuarios() {

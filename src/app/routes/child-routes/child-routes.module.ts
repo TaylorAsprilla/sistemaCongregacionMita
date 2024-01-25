@@ -67,8 +67,8 @@ import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/pare
 import { UsuarioResolver } from 'src/app/resolvers/getUsuario/get-usuario.resolver';
 import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministerios/crear-ministerio/crear-ministerio.component';
 import { AsignarPermisosComponent } from 'src/app/pages/administracion/asignar-permisos/asignar-permisos.component';
-import { UsuariosSupervisorComponent } from 'src/app/pages/obreros/supervisor/usuarios-supervisor/usuarios-supervisor.component';
 import { CensoObreroComponent } from 'src/app/pages/obreros/censo-obrero/censo-obrero.component';
+import { CensoSupervisorComponent } from 'src/app/pages/obreros/censo-supervisor/censo-supervisor.component';
 
 const childRoutes: Routes = [
   {
@@ -140,7 +140,7 @@ const childRoutes: Routes = [
 
   {
     path: RUTAS.USUARIOS_SUPERVISOR,
-    component: UsuariosSupervisorComponent,
+    component: CensoSupervisorComponent,
     data: {
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
     },

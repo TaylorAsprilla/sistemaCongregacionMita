@@ -1,30 +1,28 @@
 <app-cargando-informacion *ngIf="!!cargando"></app-cargando-informacion>
 
-<div class="card" *ngIf="!cargando">
+<div *ngIf="!cargando && usuarios.length > 0; else sinFeligreses" class="card">
   <div class="card-header">
     <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
+    <span>{{ nombreCongregacionPais }}</span>
 
-    <div class="col">
-      <div class="text-right mb-4 float-end">
-        <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
-      </div>
+    <div class="text-right mb-4 float-end">
+      <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
     </div>
 
     <div>Página: {{ pagina }} de {{ totalPaginas }}</div>
   </div>
-  <!-- /.card-header -->
+
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
             <th># Mita</th>
-            <th>Foto</th>
             <th class="w200">Nombre</th>
             <th>Correo</th>
             <th>Fecha de Nacimiento</th>
             <th class="w200">Celular</th>
-            <th class="w100">Congregación</th>
+            <th>Congregación</th>
             <th>Estado</th>
             <th class="w280">Acciones</th>
           </tr>
@@ -33,9 +31,6 @@
           <tr *ngFor="let usuario of usuarios">
             <td>
               {{ usuario.id }}
-            </td>
-            <td class="text-center">
-              <img src="assets/images/users/perfil.png" alt="user" class="avatar pointer" />
             </td>
             <td>
               {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
@@ -133,7 +128,6 @@
         </tbody>
         <tfoot>
           <th># Mita</th>
-          <th>Foto</th>
           <th>Nombre</th>
           <th>Correo</th>
           <th>Fecha de Nacimiento</th>
@@ -157,7 +151,11 @@
     >
       Siguiente
     </button>
-
-    <div class="float-end">Página: {{ pagina }} de {{ totalPaginas }}</div>
   </div>
 </div>
+
+<ng-template #sinFeligreses>
+  <div class="card">
+    <div class="card-body">No existen feligreses registrados bajo su jerarquía</div>
+  </div>
+</ng-template>

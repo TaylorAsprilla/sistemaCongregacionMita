@@ -1,44 +1,47 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
-import { CampoModel } from 'src/app/core/models/campo.model';
-import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css'],
+  selector: 'app-censo-supervisor',
+  templateUrl: './censo-supervisor.component.html',
+  styleUrls: ['./censo-supervisor.component.scss'],
 })
-export class UsuariosComponent implements OnInit, OnDestroy {
+export class CensoSupervisorComponent implements OnInit {
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
 
-  campos: CampoModel[] = [];
-  paises: CongregacionPaisModel[] = [];
+  idPaisObrero: number;
 
   paginaDesde: number = 0;
   pagina: number = 1;
   totalPaginas: number = 0;
 
-  cargando: boolean = true;
   showIcons: boolean = false;
   selectedContact: number;
+
+  nombreCongregacionPais: string;
+
+  cargando: boolean = true;
 
   // Subscription
   usuarioSubscription: Subscription;
 
-  constructor(private router: Router, private usuarioService: UsuarioService, private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private usuarioService: UsuarioService,
+    private usuariosPorCongregacionService: UsuariosPorCongregacionService
+  ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { pais: CongregacionPaisModel[]; campo: CampoModel[] }) => {
-      this.paises = data.pais.filter((pais) => pais.estado === true);
-      this.campos = data.campo.filter((campo) => campo.estado === true);
-    });
+    this.idPaisObrero = this.usuarioService.usuarioIdCongregacionPais;
+    this.nombreCongregacionPais = this.usuarioService.nombreCongregacionPais;
     this.cargarUsuarios();
   }
 
@@ -48,12 +51,11 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioSubscription = this.usuarioService
-      .listarUsuarios(this.paginaDesde)
+    this.usuarioSubscription = this.usuariosPorCongregacionService
+      .listarUsuariosPorPais(this.paginaDesde, this.idPaisObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
         this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;
-
         this.cargando = false;
         this.totalPaginas = Math.ceil(totalUsuarios / 50);
       });
@@ -136,14 +138,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   crearUsuario() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
-  }
-
-  buscarPais(idPais: number): string {
-    return this.paises.find((pais) => pais.id === idPais)?.pais;
-  }
-
-  buscarCampo(idCampo: number): string {
-    return this.campos.find((campo) => campo.id === idCampo)?.campo;
   }
 
   async buscarUsuario(id: number): Promise<UsuarioModel> {

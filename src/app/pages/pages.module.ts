@@ -21,8 +21,7 @@ import { GeneroComponent } from './configuracion/genero/genero.component';
 import { TipoDeEstudioComponent } from './configuracion/tipo-de-estudio/tipo-de-estudio.component';
 import { RazonDeSolicitudComponent } from './configuracion/razon-de-solicitud/razon-de-solicitud.component';
 import { ParentescoComponent } from './configuracion/parentesco/parentesco.component';
-import { CensoObreroComponent } from './obreros/censo-obrero/censo-obrero.component';
-import { SupervisorModule } from './obreros/supervisor/supervisor.module';
+import { ObrerosModule } from './obreros/obreros.module';
 
 @NgModule({
   declarations: [
@@ -32,8 +31,6 @@ import { SupervisorModule } from './obreros/supervisor/supervisor.module';
     TipoDeEstudioComponent,
     RazonDeSolicitudComponent,
     ParentescoComponent,
-
-    CensoObreroComponent,
   ],
   exports: [PagesComponent],
   imports: [
@@ -52,7 +49,7 @@ import { SupervisorModule } from './obreros/supervisor/supervisor.module';
     MultimediaModule,
     InicioModule,
     SpinnerModule,
-    SupervisorModule,
+    ObrerosModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true }],
 })
