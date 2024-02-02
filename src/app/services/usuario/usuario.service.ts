@@ -12,7 +12,7 @@ import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
-import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
+import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -21,7 +21,7 @@ const base_url = environment.base_url;
 export class UsuarioService {
   public usuario: UsuarioModel;
   public idUsuario: number;
-  public usuarioMultimedia: MultimediaCmarLiveModel;
+  public multimediaCongregacion: MultimediaCongregacionModel;
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
@@ -30,11 +30,11 @@ export class UsuarioService {
   }
 
   get usuarioId(): number {
-    return this.usuario?.id || this.usuarioMultimedia?.id;
+    return this.usuario?.id || this.multimediaCongregacion?.id;
   }
 
   get usuarioLogin() {
-    return this.usuario?.login || this.usuarioMultimedia?.email;
+    return this.usuario?.login || this.multimediaCongregacion?.email;
   }
 
   get usuarioNombre(): string {
@@ -86,21 +86,16 @@ export class UsuarioService {
       })
       .pipe(
         map((respuesta: any) => {
-          if (!!respuesta.accesoMultimedia) {
-            const { id, nombre, celular, email, direccion, ciudad, departamento, solicitud_id, tiempoAprobacion_id } =
-              respuesta.usuario;
+          if (!!respuesta.congregacion) {
+            const { id, congregacion, email, pais_id, idObreroEncargado } = respuesta.congregacion;
             this.usuario = null;
 
-            this.usuarioMultimedia = new MultimediaCmarLiveModel(
+            this.multimediaCongregacion = new MultimediaCongregacionModel(
               id,
-              nombre,
-              celular,
+              congregacion,
               email,
-              direccion,
-              ciudad,
-              departamento,
-              solicitud_id,
-              tiempoAprobacion_id
+              pais_id,
+              idObreroEncargado
             );
 
             localStorage.setItem('token', respuesta.token);
@@ -120,13 +115,10 @@ export class UsuarioService {
               paisDireccion,
               genero_id,
               estadoCivil_id,
-              vacuna_id,
-              dosis_id,
               tipoMiembro_id,
               segundoNombre,
               segundoApellido,
               apodo,
-              ingresoMensual,
               especializacionEmpleo,
               telefonoCasa,
               login,
@@ -139,8 +131,6 @@ export class UsuarioService {
               genero,
               estadoCivil,
               rolCasa,
-              vacuna,
-              dosis,
               nacionalidad,
               gradoAcademico,
               tipoEmpleo,
@@ -156,7 +146,6 @@ export class UsuarioService {
               usuarioMinisterio,
               usuarioVoluntariado,
               usuarioPermiso,
-              usuarioFuenteIngreso,
               tipoDocumento_id,
               numeroDocumento,
               anoConocimiento,
@@ -179,13 +168,10 @@ export class UsuarioService {
               paisDireccion,
               genero_id,
               estadoCivil_id,
-              vacuna_id,
-              dosis_id,
               tipoMiembro_id,
               segundoNombre,
               segundoApellido,
               apodo,
-              ingresoMensual,
               especializacionEmpleo,
               telefonoCasa,
               login,
@@ -198,8 +184,6 @@ export class UsuarioService {
               genero,
               estadoCivil,
               rolCasa,
-              vacuna,
-              dosis,
               nacionalidad,
               gradoAcademico,
               tipoEmpleo,
@@ -215,7 +199,6 @@ export class UsuarioService {
               usuarioMinisterio,
               usuarioVoluntariado,
               usuarioPermiso,
-              usuarioFuenteIngreso,
               tipoDocumento_id,
               numeroDocumento,
               anoConocimiento,
@@ -248,12 +231,11 @@ export class UsuarioService {
   login(formData: LoginForm) {
     return this.httpClient.post(`${base_url}/login`, formData).pipe(
       tap((resp: any) => {
-        if (!!resp.loginUsuarioCmarLive) {
-          sessionStorage.setItem('nombre', resp.usuario.nombre);
-          sessionStorage.setItem('email', resp.usuario.email);
-          sessionStorage.setItem('celular', resp.usuario.celular);
+        if (!!resp.congregacion) {
+          sessionStorage.setItem('congregacion', resp.congregacion.congregacion);
+          sessionStorage.setItem('email', resp.congregacion.email);
           localStorage.setItem('token', resp.token);
-          this.idUsuario = resp.usuario.id;
+          this.idUsuario = resp.congregacion.id;
         } else {
           sessionStorage.setItem('primerNombre', resp.usuario.primerNombre);
           sessionStorage.setItem('segundoNombre', resp.usuario.segundoNombre);

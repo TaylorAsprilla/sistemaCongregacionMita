@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -10,6 +9,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import Swal from 'sweetalert2';
+import { generate } from 'generate-password-browser';
 
 @Component({
   selector: 'app-crear-congregacion',
@@ -51,6 +51,8 @@ export class CrearCongregacionComponent implements OnInit {
       congregacion: ['', [Validators.required, Validators.minLength(3)]],
       pais_id: ['', [Validators.required]],
       idObreroEncargado: ['', [Validators.required]],
+      email: ['', []],
+      password: [{ value: '' }, [Validators.required]],
     });
 
     this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
@@ -81,8 +83,9 @@ export class CrearCongregacionComponent implements OnInit {
     }
 
     if (this.congregacionSeleccionada) {
-      const data = {
+      const data: CongregacionModel = {
         ...this.congregacionForm.value,
+
         id: this.congregacionSeleccionada.id,
       };
 
@@ -130,10 +133,16 @@ export class CrearCongregacionComponent implements OnInit {
     if (id !== 'nuevo') {
       this.congregacionService.getCongregacion(Number(id)).subscribe(
         (congregacionEncontrada: CongregacionModel) => {
-          const { congregacion, pais_id, idObreroEncargado } = congregacionEncontrada;
+          const { congregacion, pais_id, idObreroEncargado, email, password } = congregacionEncontrada;
           this.congregacionSeleccionada = congregacionEncontrada;
 
-          this.congregacionForm.setValue({ congregacion, pais_id, idObreroEncargado });
+          this.congregacionForm.setValue({
+            congregacion,
+            pais_id,
+            idObreroEncargado,
+            email,
+            password: password ?? this.generarPassword(),
+          });
         },
         (error) => {
           let errores = error.error.errors;
@@ -153,6 +162,15 @@ export class CrearCongregacionComponent implements OnInit {
         }
       );
     }
+  }
+
+  generarPassword() {
+    const password = generate({
+      length: 10,
+      numbers: true,
+    });
+
+    return password;
   }
 
   resetFormulario() {

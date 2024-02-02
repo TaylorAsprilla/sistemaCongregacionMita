@@ -31,7 +31,6 @@ import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitud
 import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil.resolver';
 import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
 import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
-import { FuenteIngresoResolver } from 'src/app/resolvers/fuente-ingreso/fuente-ingreso.resolver';
 import { GradoAcademicoResolver } from 'src/app/resolvers/grado-academico/grado-academico.resolver';
 import { TipoEmpleoResolver } from 'src/app/resolvers/tipo-empleo/tipo-empleo.resolver';
 import { CongregacionResolver } from 'src/app/resolvers/congregacion/congregacion.resolver';
@@ -40,8 +39,6 @@ import { MinisterioResolver } from 'src/app/resolvers/ministerio/ministerio.reso
 import { VoluntariadoResolver } from 'src/app/resolvers/voluntariado/voluntariado.resolver';
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
-import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
-import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
 import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
@@ -104,7 +101,6 @@ const childRoutes: Routes = [
       estadoCivil: EstadoCivilResolver,
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
-      fuenteDeIngreso: FuenteIngresoResolver,
       gradoAcademico: GradoAcademicoResolver,
       tipoEmpleo: TipoEmpleoResolver,
       congregacion: CongregacionResolver,
@@ -113,8 +109,6 @@ const childRoutes: Routes = [
       voluntariado: VoluntariadoResolver,
       pais: PaisResolver,
       campo: CampoResolver,
-      vacuna: VacunaResolver,
-      dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
       usuario: UsuarioResolver,
     },
@@ -237,7 +231,6 @@ const childRoutes: Routes = [
       estadoCivil: EstadoCivilResolver,
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
-      fuenteDeIngreso: FuenteIngresoResolver,
       gradoAcademico: GradoAcademicoResolver,
       tipoEmpleo: TipoEmpleoResolver,
       congregacion: CongregacionResolver,
@@ -246,8 +239,6 @@ const childRoutes: Routes = [
       voluntariado: VoluntariadoResolver,
       pais: PaisResolver,
       campo: CampoResolver,
-      vacuna: VacunaResolver,
-      dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
       usuario: UsuarioResolver,
     },

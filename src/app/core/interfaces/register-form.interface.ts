@@ -22,8 +22,6 @@ export interface RegisterFormInterface {
   departamentoPostal: string;
   codigoPostal: string;
   paisPostal: string;
-  fuentesDeIngreso: number[];
-  ingresoMensual: string;
   gradoAcademico_id: number;
   tipoEmpleo_id: number;
   especializacionEmpleo: string;
@@ -32,8 +30,6 @@ export interface RegisterFormInterface {
   ministerios: number[];
   voluntariados: number[];
   congregacion: CongregacionInterfase;
-  vacuna_id: number;
-  dosis_id: number;
   numeroDocumento: string;
   terminos: boolean;
   tipoDocumento_id?: number;

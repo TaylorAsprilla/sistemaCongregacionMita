@@ -1,7 +1,5 @@
 import { environment } from 'environment';
-import { DosisModel } from './dosis.model';
 import { EstadoCivilModel } from './estado-civil.model';
-import { FuenteIngresoModel } from './fuente-ingreso.model';
 import { GeneroModel } from './genero.model';
 import { GradoAcademicoModel } from './grado-academico.model';
 import { MinisterioModel } from './ministerio.model';
@@ -11,7 +9,6 @@ import { RolCasaModel } from './rol-casa.model';
 import { TipoEmpleoModel } from './tipo-empleo.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
 import { UsuarioCongregacionModel } from './usuarioCongregacion.model';
-import { VacunaModel } from './vacuna.model';
 import { VoluntariadoModel } from './voluntariado.model';
 import {
   UsuarioCongregacionCampoInterface,
@@ -42,13 +39,10 @@ export class UsuarioModel {
     public paisDireccion: string,
     public genero_id: number,
     public estadoCivil_id: number,
-    public vacuna_id: number,
-    public dosis_id: number,
     public tipoMiembro_id: number,
     public segundoNombre?: string,
     public segundoApellido?: string,
     public apodo?: string,
-    public ingresoMensual?: string,
     public especializacionEmpleo?: string,
     public telefonoCasa?: string,
     public login?: string,
@@ -61,8 +55,6 @@ export class UsuarioModel {
     public genero?: GeneroModel,
     public estadoCivil?: EstadoCivilModel,
     public rolCasa?: RolCasaModel,
-    public vacuna?: VacunaModel,
-    public dosis?: DosisModel,
     public nacionalidad?: NacionalidadModel,
     public gradoAcademico?: GradoAcademicoModel,
     public tipoEmpleo?: TipoEmpleoModel,
@@ -78,7 +70,6 @@ export class UsuarioModel {
     public usuarioMinisterio?: MinisterioModel[],
     public usuarioVoluntariado?: VoluntariadoModel[],
     public usuarioPermiso?: PermisoModel[],
-    public usuarioFuenteIngreso?: FuenteIngresoModel[],
     public tipoDocumento_id?: number,
     public numeroDocumento?: string,
     public anoConocimiento?: string,
@@ -122,12 +113,6 @@ export class UsuarioModel {
   get voluntariados() {
     return this.usuarioVoluntariado?.map((voluntariado: VoluntariadoModel) => {
       return voluntariado.id;
-    });
-  }
-
-  get fuenteDeIngresos() {
-    return this.usuarioFuenteIngreso?.map((fuenteDeIngreso: FuenteIngresoModel) => {
-      return fuenteDeIngreso?.id;
     });
   }
 }

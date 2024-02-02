@@ -212,7 +212,7 @@
             <label class="input-group obligatorio">Pais de Nacimiento: </label>
             <input
               type="text"
-              placeholder="Buscar la nacionalidad"
+              placeholder="Buscar el país"
               formControlName="nacionalidad"
               [matAutocomplete]="nacionalidad"
               (keypress)="buscarNacionalidad('nacionalidad')"
@@ -611,28 +611,6 @@
         <h2 class="fs-title">Información Laboral</h2>
 
         <div class="row">
-          <div class="form-group col-sm-12 col-md-6 col-lg-5 ps-1">
-            <label class="input-group obligatorio">¿Cuáles son sus fuentes de ingresos mensual? </label>
-            <div class="mt-3">
-              <label
-                class="form-check-label form-check checkbox-lg"
-                formArrayName="fuenteIngresos"
-                *ngFor="let fuenteDeIngreso of fuenteDeIngresosArr.controls; index as i"
-              >
-                <input type="checkbox" class="form-check-input" [formControlName]="i" />
-
-                <span class="ms-2"> {{ fuenteDeIngresos[i].fuenteIngreso }}</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group col-sm-12 col-md-6 col-lg-7">
-            <label class="input-group">Aproximadamente ¿cuál es su ingreso mensual?</label>
-            <p class="input-group">Por favor incluya las iniciales de la moneda de su país (ej. USD, CAD)</p>
-            <input type="text" formControlName="ingresoMensual" class="form-control" placeholder="Ingreso Mensual" />
-          </div>
-        </div>
-        <div class="row">
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">¿Cuál es el grado académico más alto alcanzado? </label>
             <select class="form-select" formControlName="gradoAcademico_id">
@@ -973,42 +951,6 @@
               min="1940"
               max="5000"
             />
-          </div>
-
-          <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Vacuna: </label>
-            <select class="form-select" formControlName="vacuna_id">
-              <option value="" disabled>Seleccione la vacuna</option>
-              <option *ngFor="let vacuna of vacunas" [value]="vacuna.id">
-                {{ vacuna.vacuna }}
-              </option>
-            </select>
-            <small
-              class="form-text text-danger"
-              *ngIf="
-                registroCuatroForm.get('vacuna_id').hasError('required') && registroCuatroForm.get('vacuna_id').touched
-              "
-            >
-              La vanuna del feligrés es requerida.
-            </small>
-          </div>
-
-          <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Dosis: </label>
-            <select class="form-select" formControlName="dosis_id">
-              <option value="" disabled>Seleccione la dosis</option>
-              <option *ngFor="let dosis of dosis" [value]="dosis.id">
-                {{ dosis.dosis }}
-              </option>
-            </select>
-            <small
-              class="form-text text-danger"
-              *ngIf="
-                registroCuatroForm.get('dosis_id').hasError('required') && registroCuatroForm.get('dosis_id').touched
-              "
-            >
-              Las dosis del feligrés es requerida.
-            </small>
           </div>
         </div>
         <div class="float-end">

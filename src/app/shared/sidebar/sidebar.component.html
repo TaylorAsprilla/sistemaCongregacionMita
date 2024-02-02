@@ -2,13 +2,13 @@
 <div class="user-profile mt-4">
   <!-- User profile image -->
   <div class="profile-img">
-    <a [routerLink]="[Rutas.PERFIL, usuario.id]"><img src="assets/images/users/perfil.png" alt="user" /></a>
+    <a [routerLink]="[Rutas.PERFIL, usuario?.id]"><img src="assets/images/users/perfil.png" alt="user" /></a>
   </div>
   <!-- User profile text-->
   <div class="profile-text">
     <h5>{{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundoApellido }}</h5>
-    <h5>Número Mita {{ usuario.id }}</h5>
-    <div>
+    <h5>Número Mita {{ usuario?.id }}</h5>
+    <div *ngIf="usuario">
       <a [routerLink]="[Rutas.PERFIL, usuario.id]" data-toggle="tooltip" title="Perfil">
         <i class="fa fa-user"></i> Mi Perfil
       </a>

@@ -19,14 +19,13 @@
         <thead>
           <tr>
             <th># Mita</th>
-            <th>Foto</th>
             <th class="w200">Nombre</th>
             <th>Correo</th>
             <th>Fecha de Nacimiento</th>
             <th class="w200">Celular</th>
-            <th class="w100">Congregación</th>
+            <th>Congregación</th>
             <th>Estado</th>
-            <th class="w280">Acciones</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -34,9 +33,7 @@
             <td>
               {{ usuario.id }}
             </td>
-            <td class="text-center">
-              <img src="assets/images/users/perfil.png" alt="user" class="avatar pointer" />
-            </td>
+
             <td>
               {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
               {{ usuario?.segundoApellido }}
@@ -95,7 +92,8 @@
                 *ngIf="!!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Editar"
-                class="btn bg-info me-1"
+                title="Editar Feligrés"
+                class="btn btn-sm bg-info me-1 mb-1"
                 (click)="actualizarUsuario(usuario.id)"
               >
                 <i class="fas fa-pencil-alt ml-1"></i>
@@ -105,17 +103,28 @@
                 *ngIf="!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Activar"
-                class="btn bg-secondary me-1"
+                title="Activar Feligrés"
+                class="btn btn-sm bg-secondary me-1 mb-1"
                 (click)="activarUsuario(usuario)"
               >
                 <i class="fas fa-check-square"></i>
               </a>
 
-              <a data-toggle="tooltip" data-original-title="traslado" class="btn bg-success me-1">
+              <a
+                data-toggle="tooltip"
+                data-original-title="traslado"
+                class="btn btn-sm bg-success me-1 mb-1"
+                title="Transladar Feligrés"
+              >
                 <i class="fa fa-right-left"></i>
               </a>
 
-              <a data-toggle="tooltip" data-original-title="trascendió" class="btn bg-warning me-1">
+              <a
+                data-toggle="tooltip"
+                data-original-title="trascendió"
+                class="btn btn-sm bg-warning me-1 mb-1"
+                title="Trascendió"
+              >
                 <i class="fa fa-cloud"></i>
               </a>
 
@@ -123,7 +132,8 @@
                 *ngIf="!!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Borrar"
-                class="btn bg-danger me-1"
+                title="Eliminar Feligrés"
+                class="btn btn-sm bg-danger me-1 mb-1"
                 (click)="borrarUsuario(usuario)"
               >
                 <i class="fas fa-trash-alt"></i>
@@ -133,7 +143,6 @@
         </tbody>
         <tfoot>
           <th># Mita</th>
-          <th>Foto</th>
           <th>Nombre</th>
           <th>Correo</th>
           <th>Fecha de Nacimiento</th>

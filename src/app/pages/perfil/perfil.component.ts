@@ -8,7 +8,6 @@ import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { DosisModel } from 'src/app/core/models/dosis.model';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
-import { FuenteIngresoModel } from 'src/app/core/models/fuente-ingreso.model';
 import { GeneroModel } from 'src/app/core/models/genero.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
@@ -19,7 +18,6 @@ import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { OPERACION, UsuarioModel } from 'src/app/core/models/usuario.model';
-import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -38,10 +36,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public paises: CongregacionPaisModel[] = [];
   public congregaciones: CongregacionModel[] = [];
   public campos: CampoModel[] = [];
-  public vacunas: VacunaModel[] = [];
-  public dosis: DosisModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
-  public fuenteDeIngresos: FuenteIngresoModel[] = [];
   public gradosAcademicos: GradoAcademicoModel[] = [];
   public tiposEmpleos: TipoEmpleoModel[] = [];
   public tipoMiembros: TipoMiembroModel[] = [];
@@ -65,7 +60,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
         estadoCivil: EstadoCivilModel[];
         rolCasa: RolCasaModel[];
         genero: GeneroModel[];
-        fuenteDeIngreso: FuenteIngresoModel[];
         gradoAcademico: GradoAcademicoModel[];
         tipoEmpleo: TipoEmpleoModel[];
         congregacion: CongregacionModel[];
@@ -75,15 +69,12 @@ export class PerfilComponent implements OnInit, OnDestroy {
         voluntariado: VoluntariadoModel[];
         pais: CongregacionPaisModel[];
         campo: CampoModel[];
-        vacuna: VacunaModel[];
-        dosis: DosisModel[];
         usuario: UsuarioInterface;
       }) => {
         this.nacionalidades = data.nacionalidad;
         this.estadoCivil = data.estadoCivil;
         this.rolCasa = data.rolCasa;
         this.generos = data.genero;
-        this.fuenteDeIngresos = data.fuenteDeIngreso;
         this.gradosAcademicos = data.gradoAcademico;
         this.tiposEmpleos = data.tipoEmpleo;
         this.tipoMiembros = data.tipoMiembro;
@@ -92,8 +83,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.voluntariados = data.voluntariado;
         this.paises = data.pais.filter((pais) => pais.estado === true);
         this.campos = data.campo.filter((campo) => campo.estado === true);
-        this.vacunas = data.vacuna;
-        this.dosis = data.dosis;
         this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
         this.usuario = data.usuario.usuario;
       }

@@ -1,3 +1,18 @@
+<div class="row">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3" *ngFor="let seccionHome of generarSeccionHome">
+    <ng-container *appPermisos="seccionHome.role">
+      <app-seccion-home
+        [permisos]="seccionHome.role"
+        [nombreSeccion]="seccionHome.nombreSeccion"
+        [nombreResponsable]="seccionHome.nombreResponsable"
+        [email]="seccionHome.email"
+        [logo]="seccionHome.logo"
+        [ruta]="seccionHome.ruta"
+      ></app-seccion-home>
+    </ng-container>
+  </div>
+</div>
+
 <ng-container
   *appPermisos="[
     ROLES.ADMINISTRADOR,
@@ -14,18 +29,3 @@
     [tipoDeEvento]="TIPOEVENTO_ID.SERVICIO"
   ></app-biblioteca-multimedia>
 </ng-container>
-
-<div class="row">
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3" *ngFor="let seccionHome of generarSeccionHome">
-    <ng-container *appPermisos="seccionHome.role">
-      <app-seccion-home
-        [permisos]="seccionHome.role"
-        [nombreSeccion]="seccionHome.nombreSeccion"
-        [nombreResponsable]="seccionHome.nombreResponsable"
-        [email]="seccionHome.email"
-        [logo]="seccionHome.logo"
-        [ruta]="seccionHome.ruta"
-      ></app-seccion-home>
-    </ng-container>
-  </div>
-</div>

@@ -3,6 +3,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROUTES, RUTAS } from 'src/app/routes/menu-items';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 declare var $: any;
 
 @Component({
@@ -13,6 +14,7 @@ declare var $: any;
 export class SidebarComponent implements OnInit {
   menuItems: any[] = [];
   usuario: UsuarioModel;
+  multimediaCongregacion: MultimediaCongregacionModel;
 
   primerNombre: string = '';
   segundoNombre: string = '';
@@ -57,13 +59,19 @@ export class SidebarComponent implements OnInit {
       });
 
     this.usuario = this.usuarioService.usuario;
+    this.multimediaCongregacion = this.usuarioService.multimediaCongregacion;
 
-    this.primerNombre = this.usuario?.primerNombre;
-    this.segundoNombre = this.usuario?.segundoNombre;
-    this.primerApellido = this.usuario?.primerApellido;
-    this.segundoApellido = this.usuario?.segundoApellido;
-    this.email = this.usuario?.email;
-    this.numeroCelular = this.usuario?.numeroCelular;
+    if (this.usuario) {
+      this.primerNombre = this.usuario?.primerNombre;
+      this.segundoNombre = this.usuario?.segundoNombre;
+      this.primerApellido = this.usuario?.primerApellido;
+      this.segundoApellido = this.usuario?.segundoApellido;
+      this.email = this.usuario?.email;
+      this.numeroCelular = this.usuario?.numeroCelular;
+    } else if (this.multimediaCongregacion) {
+      this.primerNombre = this.multimediaCongregacion.congregacion;
+      this.email = this.multimediaCongregacion?.email;
+    }
   }
 
   logout() {

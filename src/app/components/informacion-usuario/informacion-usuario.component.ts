@@ -8,7 +8,6 @@ import { CampoModel, CONGREGACION_CAMPO } from 'src/app/core/models/campo.model'
 import { CONGREGACION, CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { DosisModel } from 'src/app/core/models/dosis.model';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
-import { FuenteIngresoModel } from 'src/app/core/models/fuente-ingreso.model';
 import { GeneroModel } from 'src/app/core/models/genero.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
@@ -19,7 +18,6 @@ import { TipoDocumentoModel, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-
 import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { VacunaModel } from 'src/app/core/models/vacuna.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import Swal from 'sweetalert2';
@@ -50,10 +48,8 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() public paises: CongregacionPaisModel[] = [];
   @Input() public congregaciones: CongregacionModel[] = [];
   @Input() public campos: CampoModel[] = [];
-  @Input() public vacunas: VacunaModel[] = [];
   @Input() public dosis: DosisModel[] = [];
   @Input() public nacionalidades: NacionalidadModel[] = [];
-  @Input() public fuenteDeIngresos: FuenteIngresoModel[] = [];
   @Input() public gradosAcademicos: GradoAcademicoModel[] = [];
   @Input() public tiposEmpleos: TipoEmpleoModel[] = [];
   @Input() public tipoMiembros: TipoMiembroModel[] = [];
@@ -63,7 +59,6 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() public tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
   @Input() public usuarioMinisterios: number[] = [];
   @Input() public usuarioVoluntariados: number[] = [];
-  @Input() public usuarioFuenteDeIngresos: number[] = [];
 
   @Input() usuarioForm: FormGroup;
   @Input() codigoDeMarcadoSeparado = false;
@@ -123,8 +118,6 @@ export class InformacionUsuarioComponent implements OnInit {
   departamentoPostal: string;
   codigoPostal: string;
   paisPostal: string;
-  fuentedeIngresoUsuario: number[];
-  ingresoMensual: string;
   gradoAcademico: number;
   tipoEmpleo: number;
   especializacionEmpleo: string;
@@ -137,7 +130,6 @@ export class InformacionUsuarioComponent implements OnInit {
   congregacionPais: number;
   congreacionCiudad: number;
   congregacionCampo: number;
-  vacuna: number;
   dosisUsuario: number;
   tipoDeDocumento: string;
   numeroDocumento: string;
@@ -198,8 +190,6 @@ export class InformacionUsuarioComponent implements OnInit {
     this.departamentoPostal = this.usuario?.departamentoPostal;
     this.codigoPostal = this.usuario?.codigoPostal;
     this.paisPostal = this.usuario?.paisPostal;
-    this.fuentedeIngresoUsuario = this.usuarioFuenteDeIngresos ? this.usuarioFuenteDeIngresos : null;
-    this.ingresoMensual = this.usuario?.ingresoMensual ? this.usuario.ingresoMensual : '';
     this.gradoAcademico = this.usuario?.gradoAcademico_id ? this.usuario.gradoAcademico_id : null;
     this.tipoEmpleo = this.usuario?.tipoEmpleo_id ? this.usuario.tipoEmpleo_id : null;
     this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : null;
@@ -221,18 +211,13 @@ export class InformacionUsuarioComponent implements OnInit {
     this.tipoDeDocumento = this.usuario?.tipoDocumento_id
       ? this.usuario.tipoDocumento_id.toString()
       : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
-
     this.numeroDocumento = this.usuario?.numeroDocumento ? this.usuario?.numeroDocumento : '';
-
-    this.vacuna = this.usuario?.vacuna_id ? this.usuario?.vacuna_id : null;
-    this.dosisUsuario = this.usuario?.dosis_id ? this.usuario?.dosis_id : null;
     this.anoConocimiento = this.usuario?.anoConocimiento ? this.usuario?.anoConocimiento : '';
   }
 
   crearFormularios() {
     const controlMinisterios = this.ministerios.map((control) => this.formBuilder.control(false));
     const controlVoluntariados = this.voluntariados.map((control) => this.formBuilder.control(false));
-    const controlFuenteDeIngresos = this.fuenteDeIngresos.map((control) => this.formBuilder.control(false));
 
     this.registroUnoForm = this.formBuilder.group({
       fechaNacimiento: [this.fechaDeNacimiento, [Validators.required]],
@@ -265,8 +250,6 @@ export class InformacionUsuarioComponent implements OnInit {
     });
 
     this.registroTresForm = this.formBuilder.group({
-      fuenteIngresos: this.formBuilder.array(controlFuenteDeIngresos),
-      ingresoMensual: [this.ingresoMensual, [Validators.minLength(3)]],
       gradoAcademico_id: [this.gradoAcademico, [Validators.required]],
       tipoEmpleo_id: [this.tipoEmpleo, [Validators.required]],
       especializacionEmpleo: [this.especializacionEmpleo, [Validators.minLength(3)]],
@@ -283,17 +266,10 @@ export class InformacionUsuarioComponent implements OnInit {
       ministerio: this.formBuilder.array(controlMinisterios),
       voluntariado: this.formBuilder.array(controlVoluntariados),
       anoConocimiento: [this.anoConocimiento, []],
-      vacuna_id: [this.vacuna, [Validators.required]],
-      dosis_id: [this.dosisUsuario, [Validators.required]],
     });
 
     this.patchValueMinisterios();
     this.patchValueVoluntariados();
-    this.patchValueFuenteDeIngresos();
-  }
-
-  get fuenteDeIngresosArr() {
-    return this.registroTresForm.get('fuenteIngresos') as FormArray;
   }
 
   get ministeriosArr() {
@@ -318,25 +294,6 @@ export class InformacionUsuarioComponent implements OnInit {
         this.voluntariadosArr.at(i)?.patchValue(true);
       }
     });
-  }
-
-  patchValueFuenteDeIngresos() {
-    this.fuenteDeIngresos.map((fuenteDeIngreso: FuenteIngresoModel, i: number) => {
-      if (this.fuentedeIngresoUsuario?.indexOf(fuenteDeIngreso.id) !== -1) {
-        this.fuenteDeIngresosArr.at(i)?.patchValue(true);
-      }
-    });
-  }
-
-  onCheckboxFuenteDeIngresosChange(event: any) {
-    const selectedFuenteDeIngresos = this.registroTresForm.controls['fuenteIngresos'] as FormArray;
-
-    if (event.target.checked) {
-      selectedFuenteDeIngresos.push(new FormControl(event.target.value));
-    } else {
-      const index = selectedFuenteDeIngresos.controls.findIndex((x) => x.value === event.target.value);
-      selectedFuenteDeIngresos.removeAt(index);
-    }
   }
 
   onCheckboxMinisteriosChange(event: any) {
@@ -405,11 +362,6 @@ export class InformacionUsuarioComponent implements OnInit {
         fechaNacimiento: informacionFormulario?.fechaNacimiento,
         genero_id: informacionFormulario?.genero_id,
         estadoCivil_id: informacionFormulario?.estadoCivil_id,
-        vacuna_id: informacionFormulario?.vacuna_id,
-        dosis_id: informacionFormulario?.dosis_id,
-
-        fuentesDeIngreso: this.fuenteDeIngresosSelecionados(),
-        ingresoMensual: informacionFormulario.ingresoMensual,
         gradoAcademico_id: informacionFormulario.gradoAcademico_id,
         tipoEmpleo_id: informacionFormulario.tipoEmpleo_id,
         especializacionEmpleo: informacionFormulario.especializacionEmpleo,
@@ -479,13 +431,6 @@ export class InformacionUsuarioComponent implements OnInit {
       .map((checked: any, i: number) => (checked ? this.ministerios[i].id : null))
       .filter((value: any) => value !== null);
     return ministeriosSeleccionados;
-  }
-
-  fuenteDeIngresosSelecionados(): number[] {
-    const fuenteDeIngresosSelecionados = this.registroTresForm.value.fuenteIngresos
-      .map((checked: any, i: number) => (checked ? this.fuenteDeIngresos[i].id : null))
-      .filter((value: any) => value !== null);
-    return fuenteDeIngresosSelecionados;
   }
 
   voluntariadosSelecionados(): number[] {

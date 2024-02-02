@@ -2,6 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { RUTAS } from '../routes/menu-items';
+import { MultimediaCongregacionModel } from '../core/models/acceso-multimedia.model';
+import { UsuarioService } from '../services/usuario/usuario.service';
 
 @Component({
   selector: 'app-pages',
@@ -15,16 +17,24 @@ export class PagesComponent implements OnInit {
   showDarktheme = false;
   showRtl = false;
 
+  multimediaCongregacion: MultimediaCongregacionModel;
+
   public innerWidth: any;
 
   public config: PerfectScrollbarConfigInterface = {};
-  constructor(public router: Router) {}
+  constructor(private router: Router, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     if (this.router.url === '/') {
       this.router.navigate([RUTAS.INICIO]);
     }
     this.handleLayout();
+
+    this.multimediaCongregacion = this.usuarioService.multimediaCongregacion;
+
+    if (this.multimediaCongregacion) {
+      this.showMinisidebar = !this.showMinisidebar;
+    }
   }
 
   @HostListener('window:resize', ['$event'])
