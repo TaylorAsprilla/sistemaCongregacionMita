@@ -31,7 +31,6 @@ import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitud
 import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil.resolver';
 import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
 import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
-import { FuenteIngresoResolver } from 'src/app/resolvers/fuente-ingreso/fuente-ingreso.resolver';
 import { GradoAcademicoResolver } from 'src/app/resolvers/grado-academico/grado-academico.resolver';
 import { TipoEmpleoResolver } from 'src/app/resolvers/tipo-empleo/tipo-empleo.resolver';
 import { CongregacionResolver } from 'src/app/resolvers/congregacion/congregacion.resolver';
@@ -40,8 +39,6 @@ import { MinisterioResolver } from 'src/app/resolvers/ministerio/ministerio.reso
 import { VoluntariadoResolver } from 'src/app/resolvers/voluntariado/voluntariado.resolver';
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
-import { VacunaResolver } from 'src/app/resolvers/vacuna/vacuna.resolver';
-import { DosisResolver } from 'src/app/resolvers/dosis/dosis.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
 import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
@@ -52,7 +49,6 @@ import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de
 import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
 import { DocumentoResolver } from 'src/app/resolvers/tipo-documento/documento.resolver';
 import { PermisosResolver } from 'src/app/resolvers/permisos/permisos.resolver';
-import { UsuariosSupervisorComponent } from 'src/app/pages/supervisor/usuarios-supervisor/usuarios-supervisor.component';
 import { TipoEstudioResolver } from 'src/app/resolvers/tipo-estudio/tipo-estudio.resolver';
 import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/opcion-transporte.resolver';
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
@@ -68,18 +64,14 @@ import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/pare
 import { UsuarioResolver } from 'src/app/resolvers/getUsuario/get-usuario.resolver';
 import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministerios/crear-ministerio/crear-ministerio.component';
 import { AsignarPermisosComponent } from 'src/app/pages/administracion/asignar-permisos/asignar-permisos.component';
+import { CensoObreroComponent } from 'src/app/pages/obreros/censo-obrero/censo-obrero.component';
+import { CensoSupervisorComponent } from 'src/app/pages/obreros/censo-supervisor/censo-supervisor.component';
 
 const childRoutes: Routes = [
   {
     path: 'inicio',
     component: InicioComponent,
     data: { titulo: 'Censo' },
-    resolve: {
-      congregacion: CongregacionResolver,
-      pais: PaisResolver,
-      campo: CampoResolver,
-      permiso: PermisosResolver,
-    },
   },
 
   // Administración
@@ -109,7 +101,6 @@ const childRoutes: Routes = [
       estadoCivil: EstadoCivilResolver,
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
-      fuenteDeIngreso: FuenteIngresoResolver,
       gradoAcademico: GradoAcademicoResolver,
       tipoEmpleo: TipoEmpleoResolver,
       congregacion: CongregacionResolver,
@@ -118,10 +109,18 @@ const childRoutes: Routes = [
       voluntariado: VoluntariadoResolver,
       pais: PaisResolver,
       campo: CampoResolver,
-      vacuna: VacunaResolver,
-      dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
       usuario: UsuarioResolver,
+    },
+  },
+
+  {
+    path: RUTAS.CENSO,
+    component: CensoObreroComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Censo',
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
     },
   },
   {
@@ -135,7 +134,7 @@ const childRoutes: Routes = [
 
   {
     path: RUTAS.USUARIOS_SUPERVISOR,
-    component: UsuariosSupervisorComponent,
+    component: CensoSupervisorComponent,
     data: {
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
     },
@@ -232,7 +231,6 @@ const childRoutes: Routes = [
       estadoCivil: EstadoCivilResolver,
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
-      fuenteDeIngreso: FuenteIngresoResolver,
       gradoAcademico: GradoAcademicoResolver,
       tipoEmpleo: TipoEmpleoResolver,
       congregacion: CongregacionResolver,
@@ -241,8 +239,6 @@ const childRoutes: Routes = [
       voluntariado: VoluntariadoResolver,
       pais: PaisResolver,
       campo: CampoResolver,
-      vacuna: VacunaResolver,
-      dosis: DosisResolver,
       tipoDocumento: DocumentoResolver,
       usuario: UsuarioResolver,
     },

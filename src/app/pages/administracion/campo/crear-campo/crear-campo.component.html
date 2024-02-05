@@ -5,7 +5,7 @@
         <h3 class="card-title">Nuevo Campo</h3>
       </div>
       <div class="card-body">
-        <form class="form-signin" autocomplete="off" [formGroup]="campoForm">
+        <form class="form-signin" autocomplete="off" [formGroup]="campoForm" (submit)="crearCampo()">
           <div class="form-group">
             <label>Campo:</label>
             <input type="text" formControlName="campo" class="form-control" placeholder="Campo" />
@@ -34,7 +34,7 @@
           </div>
 
           <div class="card">
-            <button type="submit" class="submit btn btn-primary" (click)="crearCampo()" [disabled]="campoForm.invalid">
+            <button type="submit" class="submit btn btn-primary" [disabled]="campoForm.invalid">
               <i class="fa fa-save"></i> Guardar
             </button>
           </div>

@@ -30,3 +30,13 @@ export class MultimediaCmarLiveModel {
     public tiempoAprobacion: Date
   ) {}
 }
+
+export class MultimediaCongregacionModel {
+  constructor(
+    public id: number,
+    public congregacion: string,
+    public email: string,
+    public pais_id: number,
+    public idObreroEncargado: number
+  ) {}
+}

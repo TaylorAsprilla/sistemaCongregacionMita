@@ -2,16 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { generate } from 'generate-password-browser';
 
 @Component({
   selector: 'app-crear-congregacion',
@@ -23,7 +21,7 @@ export class CrearCongregacionComponent implements OnInit {
 
   public congregaciones: CongregacionModel[] = [];
   public paises: CongregacionPaisModel[] = [];
-  public usuarios: UsuarioModel[] = [];
+
   public obreros: UsuarioModel[] = [];
 
   public congregacionSeleccionada: CongregacionModel;
@@ -31,15 +29,13 @@ export class CrearCongregacionComponent implements OnInit {
   // Subscription
   public congregacionSubscription: Subscription;
   public paisSubscription: Subscription;
-  public usuariosSubscription: Subscription;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private congregacionService: CongregacionService,
-    private paisService: PaisService,
-    private usuariosService: UsuarioService
+    private paisService: PaisService
   ) {}
 
   ngOnInit(): void {
@@ -55,14 +51,12 @@ export class CrearCongregacionComponent implements OnInit {
       congregacion: ['', [Validators.required, Validators.minLength(3)]],
       pais_id: ['', [Validators.required]],
       idObreroEncargado: ['', [Validators.required]],
+      email: ['', []],
+      password: [{ value: '' }, [Validators.required]],
     });
 
     this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
       this.paises = pais.filter((pais: CongregacionPaisModel) => pais.estado === true);
-    });
-
-    this.usuariosSubscription = this.usuariosService.listarTodosLosUsuarios().subscribe((usuarios: ListarUsuario) => {
-      this.usuarios = usuarios.usuarios;
     });
 
     this.cargarCongregaciones();
@@ -71,7 +65,6 @@ export class CrearCongregacionComponent implements OnInit {
   ngOnDestroy(): void {
     this.paisSubscription?.unsubscribe();
     this.congregacionSubscription?.unsubscribe();
-    this.usuariosSubscription?.unsubscribe();
   }
 
   cargarCongregaciones() {
@@ -90,8 +83,9 @@ export class CrearCongregacionComponent implements OnInit {
     }
 
     if (this.congregacionSeleccionada) {
-      const data = {
+      const data: CongregacionModel = {
         ...this.congregacionForm.value,
+
         id: this.congregacionSeleccionada.id,
       };
 
@@ -137,34 +131,46 @@ export class CrearCongregacionComponent implements OnInit {
 
   buscarCongregacion(id: string) {
     if (id !== 'nuevo') {
-      this.congregacionService
-        .getCongregacion(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (congregacionEncontrada: CongregacionModel) => {
-            const { congregacion, pais_id, idObreroEncargado } = congregacionEncontrada;
-            this.congregacionSeleccionada = congregacionEncontrada;
+      this.congregacionService.getCongregacion(Number(id)).subscribe(
+        (congregacionEncontrada: CongregacionModel) => {
+          const { congregacion, pais_id, idObreroEncargado, email, password } = congregacionEncontrada;
+          this.congregacionSeleccionada = congregacionEncontrada;
 
-            this.congregacionForm.setValue({ congregacion, pais_id, idObreroEncargado });
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
+          this.congregacionForm.setValue({
+            congregacion,
+            pais_id,
+            idObreroEncargado,
+            email,
+            password: password ?? this.generarPassword(),
+          });
+        },
+        (error) => {
+          let errores = error.error.errors;
+          let listaErrores = [];
 
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
 
-            Swal.fire({
-              title: 'Congregacion',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
+          Swal.fire({
+            title: 'Congregacion',
+            icon: 'error',
+            html: `${listaErrores.join('')}`,
+          });
 
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
-          }
-        );
+          return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
+        }
+      );
     }
+  }
+
+  generarPassword() {
+    const password = generate({
+      length: 10,
+      numbers: true,
+    });
+
+    return password;
   }
 
   resetFormulario() {

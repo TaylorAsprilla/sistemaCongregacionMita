@@ -1,5 +1,5 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { MultimediaCmarLiveModel } from 'src/app/core/models/acceso-multimedia.model';
+import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES } from 'src/app/routes/menu-items';
@@ -11,7 +11,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 export class PermisosDirective {
   private permisos = [];
   private usuario: UsuarioModel;
-  private usuarioMultimedia: MultimediaCmarLiveModel;
+  private multimediaCongregacion: MultimediaCongregacionModel;
 
   constructor(
     private templateRef: TemplateRef<any>,
@@ -21,7 +21,7 @@ export class PermisosDirective {
 
   ngOnInit(): void {
     this.usuario = this.usuarioServices.usuario;
-    this.usuarioMultimedia = this.usuarioServices.usuarioMultimedia;
+    this.multimediaCongregacion = this.usuarioServices.multimediaCongregacion;
 
     this.actualizarVista();
   }
@@ -43,7 +43,7 @@ export class PermisosDirective {
   private validarPermisos(): boolean {
     let tienePermiso = false;
 
-    if (this.usuario || this.usuarioMultimedia) {
+    if (this.usuario || this.multimediaCongregacion) {
       for (let [index, permiso] of this.permisos.entries()) {
         //TODO Solo tienen permiso Multimedia los que solicitaron acceso a CMAR.live
         if (!this.usuario?.usuarioPermiso && permiso === ROLES.MULTIMEDIA) {

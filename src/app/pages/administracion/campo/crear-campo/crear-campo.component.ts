@@ -2,16 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
-import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
-import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,7 +19,6 @@ export class CrearCampoComponent implements OnInit {
 
   public campos: CampoModel[] = [];
   public congregaciones: CongregacionModel[] = [];
-  public usuarios: UsuarioModel[] = [];
   public obreros: UsuarioModel[] = [];
 
   // Subscription
@@ -38,8 +32,7 @@ export class CrearCampoComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
     private router: Router,
     private campoService: CampoService,
-    private activatedRoute: ActivatedRoute,
-    private usuariosService: UsuarioService
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -58,16 +51,11 @@ export class CrearCampoComponent implements OnInit {
       idObreroEncargado: ['', [Validators.required]],
     });
 
-    this.usuariosSubscription = this.usuariosService.listarTodosLosUsuarios().subscribe((usuarios: ListarUsuario) => {
-      this.usuarios = usuarios.usuarios;
-    });
-
     this.cargarCampos();
   }
 
   ngOnDestroy(): void {
     this.campoSubscription?.unsubscribe();
-    this.usuariosSubscription?.unsubscribe();
   }
 
   cargarCampos() {
@@ -88,6 +76,7 @@ export class CrearCampoComponent implements OnInit {
         ...this.campoForm.value,
         id: this.campoSeleccionado.id,
       };
+
       this.campoService.actualizarCampo(data).subscribe((campo: any) => {
         Swal.fire({
           title: 'Campo Actualizado',
@@ -125,33 +114,30 @@ export class CrearCampoComponent implements OnInit {
 
   buscarCampo(id: string) {
     if (id !== 'nuevo') {
-      this.campoService
-        .getCampo(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (campoActualizado: CampoModel) => {
-            const { campo, congregacion_id, idObreroEncargado } = campoActualizado;
-            this.campoSeleccionado = campoActualizado;
+      this.campoService.getCampo(Number(id)).subscribe(
+        (campoActualizado: CampoModel) => {
+          const { campo, congregacion_id, idObreroEncargado } = campoActualizado;
+          this.campoSeleccionado = campoActualizado;
 
-            this.campoForm.setValue({ campo, congregacion_id, idObreroEncargado });
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
+          this.campoForm.setValue({ campo, congregacion_id, idObreroEncargado });
+        },
+        (error) => {
+          let errores = error.error.errors;
+          let listaErrores = [];
 
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
 
-            Swal.fire({
-              title: 'Campo',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
+          Swal.fire({
+            title: 'Campo',
+            icon: 'error',
+            html: `${listaErrores.join('')}`,
+          });
 
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
-          }
-        );
+          return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
+        }
+      );
     }
   }
 

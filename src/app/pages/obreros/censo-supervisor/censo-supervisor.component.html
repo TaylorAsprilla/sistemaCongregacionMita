@@ -1,18 +1,17 @@
 <app-cargando-informacion *ngIf="!!cargando"></app-cargando-informacion>
 
-<div class="card" *ngIf="!cargando">
+<div *ngIf="!cargando && usuarios.length > 0; else sinFeligreses" class="card">
   <div class="card-header">
     <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
+    <span>{{ nombreCongregacionPais }}</span>
 
-    <div class="col">
-      <div class="text-right mb-4 float-end">
-        <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
-      </div>
+    <div class="text-right mb-4 float-end">
+      <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
     </div>
 
     <div>Página: {{ pagina }} de {{ totalPaginas }}</div>
   </div>
-  <!-- /.card-header -->
+
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-bordered table-striped">
@@ -25,7 +24,7 @@
             <th class="w200">Celular</th>
             <th>Congregación</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th class="w280">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +32,6 @@
             <td>
               {{ usuario.id }}
             </td>
-
             <td>
               {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
               {{ usuario?.segundoApellido }}
@@ -92,8 +90,7 @@
                 *ngIf="!!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Editar"
-                title="Editar Feligrés"
-                class="btn btn-sm bg-info me-1 mb-1"
+                class="btn bg-info me-1"
                 (click)="actualizarUsuario(usuario.id)"
               >
                 <i class="fas fa-pencil-alt ml-1"></i>
@@ -103,28 +100,17 @@
                 *ngIf="!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Activar"
-                title="Activar Feligrés"
-                class="btn btn-sm bg-secondary me-1 mb-1"
+                class="btn bg-secondary me-1"
                 (click)="activarUsuario(usuario)"
               >
                 <i class="fas fa-check-square"></i>
               </a>
 
-              <a
-                data-toggle="tooltip"
-                data-original-title="traslado"
-                class="btn btn-sm bg-success me-1 mb-1"
-                title="Transladar Feligrés"
-              >
+              <a data-toggle="tooltip" data-original-title="traslado" class="btn bg-success me-1">
                 <i class="fa fa-right-left"></i>
               </a>
 
-              <a
-                data-toggle="tooltip"
-                data-original-title="trascendió"
-                class="btn btn-sm bg-warning me-1 mb-1"
-                title="Trascendió"
-              >
+              <a data-toggle="tooltip" data-original-title="trascendió" class="btn bg-warning me-1">
                 <i class="fa fa-cloud"></i>
               </a>
 
@@ -132,8 +118,7 @@
                 *ngIf="!!usuario.estado"
                 data-toggle="tooltip"
                 data-original-title="Borrar"
-                title="Eliminar Feligrés"
-                class="btn btn-sm bg-danger me-1 mb-1"
+                class="btn bg-danger me-1"
                 (click)="borrarUsuario(usuario)"
               >
                 <i class="fas fa-trash-alt"></i>
@@ -166,7 +151,11 @@
     >
       Siguiente
     </button>
-
-    <div class="float-end">Página: {{ pagina }} de {{ totalPaginas }}</div>
   </div>
 </div>
+
+<ng-template #sinFeligreses>
+  <div class="card">
+    <div class="card-body">No existen feligreses registrados bajo su jerarquía</div>
+  </div>
+</ng-template>

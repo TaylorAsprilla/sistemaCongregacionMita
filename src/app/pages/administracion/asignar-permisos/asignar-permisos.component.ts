@@ -141,7 +141,7 @@ export class AsignarPermisosComponent implements OnInit {
 
   buscarFeligres(id: string) {
     this.asignarPermisos = false;
-    this.usuarioSubscription = this.usuarioService.getUsuario(id).subscribe(
+    this.usuarioSubscription = this.usuarioService.getUsuario(Number(id)).subscribe(
       (respuesta: any) => {
         if (!!respuesta.usuario) {
           this.usuarioEncontrado = respuesta.usuario;

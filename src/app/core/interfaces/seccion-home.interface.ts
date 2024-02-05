@@ -31,7 +31,7 @@ export const generarSeccionHome: SeccionHome[] = [
     nombreResponsable: '',
     email: '',
     logo: 'assets/images/vista-principal/censo.png',
-    ruta: `../${RUTAS.USUARIOS}`,
+    ruta: `../${RUTAS.CENSO}`,
     role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
   },
   {

@@ -47,11 +47,11 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.usuarioService.login(this.loginForm.value).subscribe(
-      (loginUsuario: any) => {
-        const usuario: UsuarioModel = loginUsuario.usuario;
+      (login: any) => {
+        const usuario: UsuarioModel = login.usuario;
 
         if (!!usuario) {
-          const primerNombre: string = usuario.primerNombre ? usuario.primerNombre : loginUsuario.usuario.nombre;
+          const primerNombre: string = usuario.primerNombre ? usuario.primerNombre : login.usuario.nombre;
           const segundoNombre: string = usuario.segundoNombre ? usuario.segundoNombre : '';
           const primerApellido: string = usuario.primerApellido ? usuario.primerApellido : '';
           const segundoApellido: string = usuario.segundoApellido ? usuario.segundoApellido : '';
@@ -69,6 +69,24 @@ export class LoginComponent implements OnInit {
             timer: 1500,
           });
 
+          // Navegar al Dashboard
+          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
+        } else if (login.congregacion) {
+          const congregacion = login.congregacion;
+          const nombreCongregacion: string = congregacion.congregacion;
+
+          if (this.loginForm.get('remember').value) {
+            localStorage.setItem('login', this.loginForm.get('login').value);
+            localStorage.setItem('remember', this.loginForm.get('remember').value);
+          } else {
+            localStorage.removeItem('login');
+          }
+          Swal.fire({
+            position: 'bottom-end',
+            html: `Bienvenido ${nombreCongregacion} `,
+            showConfirmButton: false,
+            timer: 1500,
+          });
           // Navegar al Dashboard
           this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
         }

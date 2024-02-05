@@ -1,6 +1,4 @@
-import { DosisModel } from '../models/dosis.model';
 import { EstadoCivilModel } from '../models/estado-civil.model';
-import { FuenteIngresoModel } from '../models/fuente-ingreso.model';
 import { GeneroModel } from '../models/genero.model';
 import { GradoAcademicoModel } from '../models/grado-academico.model';
 import { MinisterioModel } from '../models/ministerio.model';
@@ -11,7 +9,6 @@ import { TipoEmpleoModel } from '../models/tipo-empleo.model';
 import { TipoMiembroModel } from '../models/tipo.miembro.model';
 import { UsuarioModel } from '../models/usuario.model';
 import { CongregacionInterface, UsuarioCongregacionModel } from '../models/usuarioCongregacion.model';
-import { VacunaModel } from '../models/vacuna.model';
 import { VoluntariadoModel } from '../models/voluntariado.model';
 
 export interface ListarUsuario {
@@ -68,13 +65,10 @@ export interface ActualizarUsuarioInterface {
   paisDireccion: string;
   genero_id: number;
   estadoCivil_id: number;
-  vacuna_id: number;
-  dosis_id: number;
   tipoMiembro_id: number;
   segundoNombre?: string;
   segundoApellido?: string;
   apodo?: string;
-  ingresoMensual?: string;
   especializacionEmpleo?: string;
   telefonoCasa?: string;
   login?: string;
@@ -87,8 +81,6 @@ export interface ActualizarUsuarioInterface {
   genero?: GeneroModel;
   estadoCivil?: EstadoCivilModel;
   rolCasa?: RolCasaModel;
-  vacuna?: VacunaModel;
-  dosis?: DosisModel;
   nacionalidad?: NacionalidadModel;
   gradoAcademico?: GradoAcademicoModel;
   tipoEmpleo?: TipoEmpleoModel;
@@ -104,11 +96,36 @@ export interface ActualizarUsuarioInterface {
   usuarioMinisterio?: MinisterioModel[];
   usuarioVoluntariado?: VoluntariadoModel[];
   usuarioPermiso?: PermisoModel[];
-  usuarioFuenteIngreso?: FuenteIngresoModel[];
   tipoDocumento_id?: number;
   numeroDocumento?: string;
   anoConocimiento?: string;
   usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface;
   usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface;
   usuarioCongregacionPais?: UsuarioCongregacionPaisInterface;
+}
+
+export interface UsuariosPorCongregacionInterface {
+  readonly id: number;
+  primerNombre: string;
+  primerApellido: string;
+  segundoNombre?: string;
+  segundoApellido?: string;
+  apodo?: string;
+  fechaNacimiento: Date;
+  email: string;
+  numeroCelular: string;
+  pais: string;
+  congregacion: string;
+  campo: string;
+  estado: boolean;
+}
+
+export interface UsuariosPorCongregacionRespuesta {
+  totalUsuarios: number;
+  usuarios: UsuariosPorCongregacionInterface[];
+}
+
+export interface CambioPaginaEvent {
+  valor: number;
+  numeroPagina: number;
 }

@@ -16,6 +16,7 @@ export enum RUTAS {
   CREAR_EVENTO = 'crear-evento',
   CREAR_PAIS = 'crear-pais',
   CREAR_ESTATUS = 'crear-estatus',
+  CENSO = 'censo',
   EVENTOS = 'eventos',
   INICIO = 'inicio',
   INFORME = 'informe',
@@ -118,7 +119,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: RUTAS.USUARIOS,
-        title: 'Usuarios',
+        title: 'Feligreses General',
         icon: '',
         class: '',
         extralink: false,
@@ -234,7 +235,7 @@ export const ROUTES: RouteInfo[] = [
     ],
     submenu: [
       {
-        path: RUTAS.USUARIOS,
+        path: RUTAS.CENSO,
         title: 'Feligreses',
         icon: '',
         class: '',
@@ -485,6 +486,7 @@ export const ROUTES: RouteInfo[] = [
           ROLES.OBRERO_CAMPO,
           ROLES.ADMINISTRADOR_MULTIMEDIA,
           ROLES.ASISTENTE_OOTS,
+          ROLES.MULTIMEDIA,
         ],
         submenu: [
           {
@@ -501,6 +503,7 @@ export const ROUTES: RouteInfo[] = [
               ROLES.OBRERO_CAMPO,
               ROLES.ADMINISTRADOR_MULTIMEDIA,
               ROLES.ASISTENTE_OOTS,
+              ROLES.MULTIMEDIA,
             ],
             submenu: [],
           },
@@ -518,6 +521,7 @@ export const ROUTES: RouteInfo[] = [
               ROLES.OBRERO_CAMPO,
               ROLES.ADMINISTRADOR_MULTIMEDIA,
               ROLES.ASISTENTE_OOTS,
+              ROLES.MULTIMEDIA,
             ],
             submenu: [],
           },

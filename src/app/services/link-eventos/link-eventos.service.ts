@@ -36,6 +36,12 @@ export class LinkEventosService {
       .pipe(map((respuesta: { ok: boolean; linkEvento: LinkEventoModel }) => respuesta.linkEvento));
   }
 
+  getLinkServicio() {
+    return this.httpClient
+      .get(`${base_url}/evento/link/servicio`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; linkEvento: LinkEventoModel }) => respuesta.linkEvento));
+  }
+
   crearEvento(evento: LinkEventoModel) {
     return this.httpClient.post(`${base_url}/evento`, evento, this.headers);
   }

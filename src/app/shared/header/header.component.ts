@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 declare var $: any;
 
 @Component({
@@ -15,6 +16,7 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSidebar = new EventEmitter<void>();
 
   public usuario: UsuarioModel;
+  multimediaCongregacion: MultimediaCongregacionModel;
 
   public primerNombre: string = '';
   public segundoNombre: string = '';
@@ -31,13 +33,19 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.usuario = this.usuarioService.usuario;
+    this.multimediaCongregacion = this.usuarioService.multimediaCongregacion;
 
-    this.primerNombre = this.usuario?.primerNombre;
-    this.segundoNombre = this.usuario?.segundoNombre;
-    this.primerApellido = this.usuario?.primerApellido;
-    this.segundoApellido = this.usuario?.segundoApellido;
-    this.email = this.usuario?.email;
-    this.numeroCelular = this.usuario?.numeroCelular;
+    if (this.usuario) {
+      this.primerNombre = this.usuario?.primerNombre;
+      this.segundoNombre = this.usuario?.segundoNombre;
+      this.primerApellido = this.usuario?.primerApellido;
+      this.segundoApellido = this.usuario?.segundoApellido;
+      this.email = this.usuario?.email;
+      this.numeroCelular = this.usuario?.numeroCelular;
+    } else if (this.multimediaCongregacion) {
+      this.primerNombre = this.multimediaCongregacion.congregacion;
+      this.email = this.multimediaCongregacion?.email;
+    }
   }
 
   ngAfterViewInit() {}

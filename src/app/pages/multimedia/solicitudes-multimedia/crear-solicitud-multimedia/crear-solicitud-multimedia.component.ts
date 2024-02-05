@@ -12,7 +12,6 @@ import { ParentescoModel } from 'src/app/core/models/parentesco.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
 import { RAZON_SOLICITUD_ID, SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
 import { TipoEstudioModel } from 'src/app/core/models/tipo-estudio.model';
-import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
@@ -137,7 +136,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   }
 
   buscarFeligres(id: string) {
-    this.usuarioSubscription = this.usuarioService.getUsuario(id).subscribe(
+    this.usuarioSubscription = this.usuarioService.getUsuario(Number(id)).subscribe(
       (respuesta: any) => {
         if (!!respuesta.usuario) {
           this.usuario = respuesta.usuario;
