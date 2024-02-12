@@ -11,5 +11,6 @@ import { WhatsappPipe } from './whatsapp/whatsapp.pipe';
   declarations: [ImagenPipe, VimeoUrlPipePipe, YoutubePipe, FilterByNombrePipePipe, TelegramPipe, WhatsappPipe],
   imports: [CommonModule],
   exports: [ImagenPipe, VimeoUrlPipePipe, YoutubePipe, FilterByNombrePipePipe, TelegramPipe, WhatsappPipe],
+  providers: [FilterByNombrePipePipe],
 })
 export class PipesModule {}

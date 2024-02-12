@@ -77,6 +77,7 @@
     "ng-multiselect-dropdown": "^0.3.8",
     "ng2-archwizard": "^2.1.0",
     "ng2-completer": "^9.0.1",
+    "ng2-search-filter": "^0.5.1",
     "ngx-bootstrap": "^9.0.0",
     "ngx-custom-validators": "^11.0.1",
     "ngx-intl-tel-input": "^3.2.0",
@@ -88,7 +89,8 @@
     "randomatic": "^3.1.1",
     "rxjs": "^6.5.4",
     "rxjs-compat": "^6.5.4",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.6",

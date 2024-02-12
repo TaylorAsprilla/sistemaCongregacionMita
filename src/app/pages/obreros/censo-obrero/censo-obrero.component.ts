@@ -7,6 +7,7 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-censo-obrero',
@@ -14,8 +15,12 @@ import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-co
   styleUrls: ['./censo-obrero.component.scss'],
 })
 export class CensoObreroComponent implements OnInit, OnDestroy {
+  _filterText: string = '';
+  usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
+
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
+  usuariosCompletos: UsuariosPorCongregacionInterface[] = [];
 
   idCongregacionObrero: number;
 
@@ -33,6 +38,17 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   // Subscription
   usuarioSubscription: Subscription;
 
+  fileName = 'SampleSheet.xlsx';
+
+  get filterText() {
+    return this._filterText;
+  }
+
+  set filterText(value: string) {
+    this._filterText = value;
+    this.usuariosFiltrados = this.filterUsuarios(value);
+  }
+
   constructor(
     private router: Router,
     private usuarioService: UsuarioService,
@@ -43,6 +59,8 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.idCongregacionObrero = this.usuarioService.usuarioIdCongregacion;
     this.congregacion = this.usuarioService.nombreCongregacion;
     this.cargarUsuarios();
+    this.cargarUsuariosCompletos();
+    this.usuariosFiltrados = this.usuarios;
   }
 
   ngOnDestroy(): void {
@@ -58,6 +76,18 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
         this.usuarios = usuarios;
         this.cargando = false;
         this.totalPaginas = Math.ceil(totalUsuarios / 50);
+      });
+  }
+
+  cargarUsuariosCompletos() {
+    // this.cargando = true;
+    this.usuarioSubscription = this.usuariosPorCongregacionService
+      // como hacer que sean todos?
+      .listarUsuariosPorCongregacion(0, this.idCongregacionObrero)
+      .subscribe(({ totalUsuarios, usuarios }) => {
+        this.usuariosCompletos = usuarios;
+        console.log('cargar usuarios completos ' + totalUsuarios);
+        // this.cargando = false;
       });
   }
 
@@ -152,5 +182,28 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   toggleIcons(usuario: UsuariosPorCongregacionInterface) {
     this.selectedContact = this.selectedContact === usuario.id ? null : usuario.id;
+  }
+
+  exportExcel(): void {
+    // console.log(this.usuarios);
+    console.log(this.totalUsuarios);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.usuariosCompletos);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // const filename = 'Report_' + moment().format('YYYYMMDD-HHmmss') + '.xlsx';
+    XLSX.writeFile(wb, this.fileName);
+  }
+
+  filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
+    filterTerm = filterTerm.toLocaleLowerCase();
+    return this.usuarios.filter(
+      (user: UsuariosPorCongregacionInterface) =>
+        user.primerNombre.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+        user.primerApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+        user.email.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+        user.congregacion.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+        user.numeroCelular.indexOf(filterTerm) !== -1 ||
+        user.id.toString().indexOf(filterTerm) !== -1
+    );
   }
 }

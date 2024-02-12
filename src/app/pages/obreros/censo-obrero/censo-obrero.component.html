@@ -6,15 +6,19 @@
     <span>{{ congregacion }}</span>
 
     <div class="text-right mb-4 float-end">
+      <div class="">
+        <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+      </div>
+
       <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+      <a class="btn btn-primary" (click)="exportExcel()"> <i class="fas fa-user"></i> Exportar a Excel </a>
     </div>
 
     <div>Página: {{ pagina }} de {{ totalPaginas }}</div>
   </div>
-
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered table-striped">
+      <table class="table table-bordered table-striped" id="excel-table">
         <thead>
           <tr>
             <th># Mita</th>
@@ -28,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let usuario of usuarios">
+          <tr *ngFor="let usuario of usuariosFiltrados">
             <td>
               {{ usuario.id }}
             </td>
