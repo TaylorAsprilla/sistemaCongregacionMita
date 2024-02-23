@@ -14,7 +14,15 @@
       <a class="btn btn-primary" (click)="exportExcel()"> <i class="fas fa-user"></i> Exportar a Excel </a>
     </div>
 
-    <div>Página: {{ pagina }} de {{ totalPaginas }}</div>
+    <!-- <div>Página: {{ pagina }} de {{ totalPaginas }}</div> -->
+
+    <div>
+      <select (change)="onTableSizeChange($event)">
+        <option *ngFor="let size of tableSizes">
+          {{ size }}
+        </option>
+      </select>
+    </div>
   </div>
   <div class="card-body">
     <div class="table-responsive">
@@ -32,7 +40,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let usuario of usuariosFiltrados">
+          <tr
+            *ngFor="
+              let usuario of usuariosFiltrados
+                | paginate
+                  : {
+                      itemsPerPage: tableSize,
+                      currentPage: pagina,
+                      totalItems: totalUsuarios
+                    };
+              let i = index
+            "
+          >
             <td>
               {{ usuario.id }}
             </td>
@@ -156,6 +175,10 @@
       </table>
     </div>
   </div>
+
+  <pagination-controls previousLabel="Anterior" nextLabel="Próximo" (pageChange)="onTableDataChange($event)">
+  </pagination-controls>
+
   <div class="col-md-12 mb-4 ml-2 px-4">
     <button class="btn btn-secondary" (click)="cambiarPagina(-50, -1)" [disabled]="pagina == 1 ? true : false">
       Anterior

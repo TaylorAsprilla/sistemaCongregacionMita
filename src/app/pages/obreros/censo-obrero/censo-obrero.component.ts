@@ -20,13 +20,14 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
-  usuariosCompletos: UsuariosPorCongregacionInterface[] = [];
 
   idCongregacionObrero: number;
 
   paginaDesde: number = 0;
   pagina: number = 1;
   totalPaginas: number = 0;
+  tableSize: number = 5;
+  tableSizes: any = [5, 10, 15, 20, 100];
 
   showIcons: boolean = false;
   selectedContact: number;
@@ -46,7 +47,10 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   set filterText(value: string) {
     this._filterText = value;
+    console.log('value: ' + value);
     this.usuariosFiltrados = this.filterUsuarios(value);
+    console.log(this.usuariosFiltrados);
+    this.pagina = 1;
   }
 
   constructor(
@@ -59,8 +63,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.idCongregacionObrero = this.usuarioService.usuarioIdCongregacion;
     this.congregacion = this.usuarioService.nombreCongregacion;
     this.cargarUsuarios();
-    this.cargarUsuariosCompletos();
-    this.usuariosFiltrados = this.usuarios;
+    // this.usuarios = this.cargarUsuariosFilter('');
   }
 
   ngOnDestroy(): void {
@@ -72,22 +75,24 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.usuarioSubscription = this.usuariosPorCongregacionService
       .listarUsuariosPorCongregacion(this.paginaDesde, this.idCongregacionObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
-        this.totalUsuarios = totalUsuarios;
+        // this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;
+        this.usuariosFiltrados = usuarios;
         this.cargando = false;
-        this.totalPaginas = Math.ceil(totalUsuarios / 50);
+        // this.totalPaginas = Math.ceil(totalUsuarios / this.tableSize);
       });
   }
 
-  cargarUsuariosCompletos() {
-    // this.cargando = true;
+  cargarUsuariosNext() {
+    this.cargando = true;
     this.usuarioSubscription = this.usuariosPorCongregacionService
-      // como hacer que sean todos?
-      .listarUsuariosPorCongregacion(0, this.idCongregacionObrero)
+      .listarUsuariosPorCongregacion(25, this.idCongregacionObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
-        this.usuariosCompletos = usuarios;
-        console.log('cargar usuarios completos ' + totalUsuarios);
-        // this.cargando = false;
+        // this.totalUsuarios = totalUsuarios;
+        this.usuarios = usuarios;
+        this.usuariosFiltrados = usuarios;
+        this.cargando = false;
+        // this.totalPaginas = Math.ceil(totalUsuarios / this.tableSize);
       });
   }
 
@@ -103,7 +108,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
       this.paginaDesde -= valor;
     }
 
-    this.cargarUsuarios();
+    this.cargarUsuariosNext();
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
@@ -132,6 +137,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.filterUsuarios(this._filterText);
     return usuario;
   }
 
@@ -163,11 +169,13 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   actualizarUsuario(id: number) {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${id}`);
+    this.filterUsuarios(this._filterText);
   }
 
   crearUsuario() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
+    this.filterUsuarios(this._filterText);
   }
 
   async buscarUsuario(id: number): Promise<UsuarioModel> {
@@ -187,7 +195,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   exportExcel(): void {
     // console.log(this.usuarios);
     console.log(this.totalUsuarios);
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.usuariosCompletos);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.usuarios);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     // const filename = 'Report_' + moment().format('YYYYMMDD-HHmmss') + '.xlsx';
@@ -196,14 +204,31 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
     filterTerm = filterTerm.toLocaleLowerCase();
-    return this.usuarios.filter(
-      (user: UsuariosPorCongregacionInterface) =>
-        user.primerNombre.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-        user.primerApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-        user.email.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-        user.congregacion.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-        user.numeroCelular.indexOf(filterTerm) !== -1 ||
-        user.id.toString().indexOf(filterTerm) !== -1
-    );
+    if (this.usuarios.length.toString() === '0' || this.filterText === '') {
+      console.log(this.usuarios.length);
+      return this.usuarios;
+    } else {
+      return this.usuarios.filter(
+        (user: UsuariosPorCongregacionInterface) =>
+          user.primerNombre.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.primerApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.segundoApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.email.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.congregacion.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.numeroCelular.indexOf(filterTerm) !== -1 ||
+          user.id.toString().indexOf(filterTerm) !== -1
+      );
+    }
+  }
+
+  onTableDataChange(event: any) {
+    this.pagina = event;
+    this.cargarUsuarios();
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.pagina = 1;
+    this.cargarUsuarios();
   }
 }
