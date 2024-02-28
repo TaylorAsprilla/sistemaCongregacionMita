@@ -9,6 +9,10 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
 import * as XLSX from 'xlsx';
 
+import { registerLocaleData } from '@angular/common';
+import localeES from '@angular/common/locales/es';
+import { formatDate } from '@angular/common';
+
 @Component({
   selector: 'app-censo-obrero',
   templateUrl: './censo-obrero.component.html',
@@ -26,8 +30,8 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   paginaDesde: number = 0;
   pagina: number = 1;
   totalPaginas: number = 0;
-  tableSize: number = 5;
-  tableSizes: any = [5, 10, 15, 20, 100];
+  tableSize: number = 50;
+  tableSizes: any = [5, 10, 15, 20, 50, 100];
 
   showIcons: boolean = false;
   selectedContact: number;
@@ -38,8 +42,6 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   // Subscription
   usuarioSubscription: Subscription;
-
-  fileName = 'SampleSheet.xlsx';
 
   get filterText() {
     return this._filterText;
@@ -63,7 +65,6 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.idCongregacionObrero = this.usuarioService.usuarioIdCongregacion;
     this.congregacion = this.usuarioService.nombreCongregacion;
     this.cargarUsuarios();
-    // this.usuarios = this.cargarUsuariosFilter('');
   }
 
   ngOnDestroy(): void {
@@ -75,40 +76,11 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.usuarioSubscription = this.usuariosPorCongregacionService
       .listarUsuariosPorCongregacion(this.paginaDesde, this.idCongregacionObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
-        // this.totalUsuarios = totalUsuarios;
+        this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;
         this.usuariosFiltrados = usuarios;
         this.cargando = false;
-        // this.totalPaginas = Math.ceil(totalUsuarios / this.tableSize);
       });
-  }
-
-  cargarUsuariosNext() {
-    this.cargando = true;
-    this.usuarioSubscription = this.usuariosPorCongregacionService
-      .listarUsuariosPorCongregacion(25, this.idCongregacionObrero)
-      .subscribe(({ totalUsuarios, usuarios }) => {
-        // this.totalUsuarios = totalUsuarios;
-        this.usuarios = usuarios;
-        this.usuariosFiltrados = usuarios;
-        this.cargando = false;
-        // this.totalPaginas = Math.ceil(totalUsuarios / this.tableSize);
-      });
-  }
-
-  cambiarPagina(valor: number, numeroPagina: number) {
-    this.paginaDesde += valor;
-    this.pagina += numeroPagina;
-
-    if (this.paginaDesde < 0) {
-      this.pagina = 1;
-      this.paginaDesde = 0;
-    } else if (this.paginaDesde >= this.totalUsuarios) {
-      this.pagina += numeroPagina;
-      this.paginaDesde -= valor;
-    }
-
-    this.cargarUsuariosNext();
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
@@ -193,13 +165,17 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   }
 
   exportExcel(): void {
-    // console.log(this.usuarios);
     console.log(this.totalUsuarios);
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.usuarios);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    // const filename = 'Report_' + moment().format('YYYYMMDD-HHmmss') + '.xlsx';
-    XLSX.writeFile(wb, this.fileName);
+    // crear fecha
+    const format = 'dd/MM/yyyy';
+    const myDate = new Date();
+    const locale = 'en-US';
+    const formattedDate = formatDate(myDate, format, locale);
+    const filename = 'Censo ' + this.congregacion + formattedDate + '.xlsx';
+    XLSX.writeFile(wb, filename);
   }
 
   filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {

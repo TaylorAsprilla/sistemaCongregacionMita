@@ -6,17 +6,12 @@
     <span>{{ congregacion }}</span>
 
     <div class="text-right mb-4 float-end">
-      <div class="">
-        <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
-      </div>
-
       <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+      &nbsp;
       <a class="btn btn-primary" (click)="exportExcel()"> <i class="fas fa-user"></i> Exportar a Excel </a>
     </div>
 
-    <!-- <div>Página: {{ pagina }} de {{ totalPaginas }}</div> -->
-
-    <div>
+    <div hidden>
       <select (change)="onTableSizeChange($event)">
         <option *ngFor="let size of tableSizes">
           {{ size }}
@@ -25,6 +20,9 @@
     </div>
   </div>
   <div class="card-body">
+    <div class="color">
+      <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+    </div>
     <div class="table-responsive">
       <table class="table table-bordered table-striped" id="excel-table">
         <thead>
@@ -178,20 +176,6 @@
 
   <pagination-controls previousLabel="Anterior" nextLabel="Próximo" (pageChange)="onTableDataChange($event)">
   </pagination-controls>
-
-  <div class="col-md-12 mb-4 ml-2 px-4">
-    <button class="btn btn-secondary" (click)="cambiarPagina(-50, -1)" [disabled]="pagina == 1 ? true : false">
-      Anterior
-    </button>
-    &nbsp;
-    <button
-      class="btn btn-secondary"
-      (click)="cambiarPagina(50, 1)"
-      [disabled]="pagina === totalPaginas ? true : false"
-    >
-      Siguiente
-    </button>
-  </div>
 </div>
 
 <ng-template #sinFeligreses>
