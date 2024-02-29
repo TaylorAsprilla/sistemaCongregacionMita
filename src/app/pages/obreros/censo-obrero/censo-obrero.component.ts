@@ -16,7 +16,7 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./censo-obrero.component.scss'],
 })
 export class CensoObreroComponent implements OnInit, OnDestroy {
-  _filterText: string = '';
+  filtrarTexto: string = '';
   usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
 
   totalUsuarios: number = 0;
@@ -29,10 +29,9 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   totalPaginas: number = 0;
 
   tableSize: number = 50;
-  tableSizes: any = [5, 10, 15, 20, 50, 100];
 
   showIcons: boolean = false;
-  selectedContact: number;
+  seleccionarContacto: number;
 
   congregacion: string;
 
@@ -42,11 +41,11 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   usuarioSubscription: Subscription;
 
   get filterText() {
-    return this._filterText;
+    return this.filtrarTexto;
   }
 
   set filterText(value: string) {
-    this._filterText = value;
+    this.filtrarTexto = value;
     this.usuariosFiltrados = this.filterUsuarios(value);
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -106,7 +105,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
         });
       }
     });
-    this.filterUsuarios(this._filterText);
+    this.filterUsuarios(this.filtrarTexto);
     return usuario;
   }
 
@@ -138,13 +137,13 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   actualizarUsuario(id: number) {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${id}`);
-    this.filterUsuarios(this._filterText);
+    this.filterUsuarios(this.filtrarTexto);
   }
 
   crearUsuario() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
-    this.filterUsuarios(this._filterText);
+    this.filterUsuarios(this.filtrarTexto);
   }
 
   async buscarUsuario(id: number): Promise<UsuarioModel> {
@@ -158,14 +157,13 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   }
 
   toggleIcons(usuario: UsuariosPorCongregacionInterface) {
-    this.selectedContact = this.selectedContact === usuario.id ? null : usuario.id;
+    this.seleccionarContacto = this.seleccionarContacto === usuario.id ? null : usuario.id;
   }
 
   exportExcel(): void {
-    console.log(this.totalUsuarios);
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.usuarios);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.utils.book_append_sheet(wb, ws, this.congregacion);
     // crear fecha
     const format = 'dd/MM/yyyy';
     const myDate = new Date();
@@ -178,7 +176,6 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
     filterTerm = filterTerm.toLocaleLowerCase();
     if (this.usuarios.length.toString() === '0' || this.filterText === '') {
-      console.log(this.usuarios.length);
       return this.usuarios;
     } else {
       return this.usuarios.filter(
@@ -197,11 +194,5 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   // pasar pagina
   onTableDataChange(event: any) {
     this.pagina = event;
-  }
-
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.pagina = 1;
-    this.cargarUsuarios();
   }
 }
