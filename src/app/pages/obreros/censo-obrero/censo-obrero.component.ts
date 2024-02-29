@@ -8,9 +8,6 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
 import * as XLSX from 'xlsx';
-
-import { registerLocaleData } from '@angular/common';
-import localeES from '@angular/common/locales/es';
 import { formatDate } from '@angular/common';
 
 @Component({
@@ -50,9 +47,8 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   set filterText(value: string) {
     this._filterText = value;
-    console.log('value: ' + value);
     this.usuariosFiltrados = this.filterUsuarios(value);
-    console.log(this.usuariosFiltrados);
+    this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
   }
 
@@ -77,7 +73,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.usuarioSubscription = this.usuariosPorCongregacionService
       .listarUsuariosPorCongregacion(this.paginaDesde, this.idCongregacionObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
-        this.totalUsuarios = totalUsuarios;
+        this.totalUsuarios = usuarios.length;
         this.usuarios = usuarios;
         this.usuariosFiltrados = usuarios;
         this.cargando = false;
@@ -198,9 +194,9 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     }
   }
 
+  // pasar pagina
   onTableDataChange(event: any) {
     this.pagina = event;
-    this.cargarUsuarios();
   }
 
   onTableSizeChange(event: any): void {
