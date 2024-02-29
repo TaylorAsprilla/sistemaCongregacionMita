@@ -30,6 +30,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   paginaDesde: number = 0;
   pagina: number = 1;
   totalPaginas: number = 0;
+
   tableSize: number = 50;
   tableSizes: any = [5, 10, 15, 20, 50, 100];
 

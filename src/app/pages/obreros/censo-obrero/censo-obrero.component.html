@@ -6,9 +6,11 @@
     <span>{{ congregacion }}</span>
 
     <div class="text-right mb-4 float-end">
-      <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+      <a title="Exportar a Excel" class="btn btn-primary" (click)="exportExcel()">
+        <i class="fa fa-download" aria-hidden="true"></i>
+      </a>
       &nbsp;
-      <a class="btn btn-primary" (click)="exportExcel()"> <i class="fas fa-user"></i> Exportar a Excel </a>
+      <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
     </div>
 
     <div hidden>
