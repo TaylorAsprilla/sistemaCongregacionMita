@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { CargandoInformacionModule } from 'src/app/components/cargando-informacion/cargando-informacion.module';
 import { CensoSupervisorComponent } from './censo-supervisor/censo-supervisor.component';
+import { NgxPaginationModule } from 'ngx-pagination'; //Imports NgxPaginationModule
 
 @NgModule({
   declarations: [CensoObreroComponent, CensoSupervisorComponent],
@@ -18,6 +19,7 @@ import { CensoSupervisorComponent } from './censo-supervisor/censo-supervisor.co
     BrowserModule,
     PipesModule,
     CargandoInformacionModule,
+    NgxPaginationModule,
   ],
 })
 export class ObrerosModule {}

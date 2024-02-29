@@ -6,29 +6,44 @@
     <span>{{ congregacion }}</span>
 
     <div class="text-right mb-4 float-end">
-      <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+      <a class="btn btn-primary mx-1" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+
+      <a class="btn btn-outline-primary mx-1" (click)="exportExcel()" title="Exportar a Excel">
+        <i class="fa fa-download" aria-hidden="true"></i>
+      </a>
     </div>
-
-    <div>Página: {{ pagina }} de {{ totalPaginas }}</div>
   </div>
-
   <div class="card-body">
+    <div class="inputBuscqueda">
+      <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+    </div>
     <div class="table-responsive">
-      <table class="table table-bordered table-striped">
+      <table class="table table-bordered table-striped" id="excel-table">
         <thead>
           <tr>
-            <th># Mita</th>
-            <th class="w200">Nombre</th>
-            <th>Correo</th>
-            <th>Fecha de Nacimiento</th>
-            <th class="w200">Celular</th>
-            <th>Congregación</th>
-            <th>Estado</th>
-            <th>Acciones</th>
+            <th scope="col"># Mita</th>
+            <th class="w200 text-center">Nombre</th>
+            <th class="w200 text-center">Correo</th>
+            <th class="col-auto text-center">Edad</th>
+            <th class="col-auto text-center">Celular</th>
+            <th class="col-auto text-center">Congregación</th>
+            <th class="col-auto text-center">Estado</th>
+            <th class="col-auto text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let usuario of usuarios">
+          <tr
+            *ngFor="
+              let usuario of usuariosFiltrados
+                | paginate
+                  : {
+                      itemsPerPage: tableSize,
+                      currentPage: pagina,
+                      totalItems: totalUsuarios
+                    };
+              let i = index
+            "
+          >
             <td>
               {{ usuario.id }}
             </td>
@@ -42,7 +57,7 @@
               <span *ngIf="!usuario?.email">No hay correo electrónico</span>
             </td>
 
-            <td>{{ usuario.fechaNacimiento | date }}</td>
+            <td class="text-center">{{ usuario.fechaNacimiento | calcularEdad }}</td>
 
             <td>
               <div class="contact-container">
@@ -53,7 +68,7 @@
                 <span> </span>
 
                 <div class="phone-number">
-                  <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
+                  <div class="contact-icons" [ngClass]="{ show: seleccionarContacto === usuario.id }">
                     <a
                       href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
                       target="_blank"
@@ -140,30 +155,28 @@
           </tr>
         </tbody>
         <tfoot>
-          <th># Mita</th>
-          <th>Nombre</th>
-          <th>Correo</th>
-          <th>Fecha de Nacimiento</th>
-          <th>Celular</th>
-          <th>Congregación</th>
-          <th>Estado</th>
-          <th>Acciones</th>
+          <th scope="col"># Mita</th>
+          <th class="text-center">Nombre</th>
+          <th class="text-center">Correo</th>
+          <th class="text-center">Edad</th>
+          <th class="text-center">Celular</th>
+          <th class="text-center">Congregación</th>
+          <th class="text-center">Estado</th>
+          <th class="text-center">Acciones</th>
         </tfoot>
       </table>
     </div>
   </div>
-  <div class="col-md-12 mb-4 ml-2 px-4">
-    <button class="btn btn-secondary" (click)="cambiarPagina(-50, -1)" [disabled]="pagina == 1 ? true : false">
-      Anterior
-    </button>
-    &nbsp;
-    <button
-      class="btn btn-secondary"
-      (click)="cambiarPagina(50, 1)"
-      [disabled]="pagina === totalPaginas ? true : false"
+
+  <div class="d-flex justify-content-center mt-2 mb-2">
+    <pagination-controls
+      (pageChange)="onTableDataChange($event)"
+      previousLabel="Anterior"
+      nextLabel="Próximo"
+      [autoHide]="true"
+      [responsive]="true"
     >
-      Siguiente
-    </button>
+    </pagination-controls>
   </div>
 </div>
 

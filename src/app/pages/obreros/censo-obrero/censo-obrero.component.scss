@@ -1,4 +1,3 @@
-/* Estilos generales */
 .phone-number {
   position: relative;
   display: flex;
@@ -11,7 +10,6 @@
   font-size: 30px;
 }
 
-/* Estilos para los íconos de WhatsApp y Telegram */
 .contact-icons {
   display: none;
   position: absolute;
@@ -27,7 +25,7 @@
 
 .contact-options a {
   margin-left: 10px;
-  color: #333; /* Color de los iconos */
+  color: #333;
   text-decoration: none;
 }
 
@@ -37,7 +35,7 @@
 
 .contact-icons a {
   margin-right: 5px;
-  color: #000; /* Color de los íconos */
+  color: #000;
 }
 
 .fa-whatsapp {
@@ -65,4 +63,10 @@ a.email {
 a.email:hover {
   color: #1976d2;
   text-decoration: none;
+}
+
+.inputBuscqueda {
+  padding-bottom: 10px;
+  width: 30%;
+  float: right;
 }

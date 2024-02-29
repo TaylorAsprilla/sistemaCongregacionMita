@@ -7,6 +7,8 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
+import * as XLSX from 'xlsx';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-censo-obrero',
@@ -14,6 +16,9 @@ import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-co
   styleUrls: ['./censo-obrero.component.scss'],
 })
 export class CensoObreroComponent implements OnInit, OnDestroy {
+  filtrarTexto: string = '';
+  usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
+
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
 
@@ -23,8 +28,10 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   pagina: number = 1;
   totalPaginas: number = 0;
 
+  tableSize: number = 50;
+
   showIcons: boolean = false;
-  selectedContact: number;
+  seleccionarContacto: number;
 
   congregacion: string;
 
@@ -32,6 +39,17 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   // Subscription
   usuarioSubscription: Subscription;
+
+  get filterText() {
+    return this.filtrarTexto;
+  }
+
+  set filterText(value: string) {
+    this.filtrarTexto = value;
+    this.usuariosFiltrados = this.filterUsuarios(value);
+    this.totalUsuarios = this.usuariosFiltrados.length;
+    this.pagina = 1;
+  }
 
   constructor(
     private router: Router,
@@ -54,26 +72,11 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.usuarioSubscription = this.usuariosPorCongregacionService
       .listarUsuariosPorCongregacion(this.paginaDesde, this.idCongregacionObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
-        this.totalUsuarios = totalUsuarios;
+        this.totalUsuarios = usuarios.length;
         this.usuarios = usuarios;
+        this.usuariosFiltrados = usuarios;
         this.cargando = false;
-        this.totalPaginas = Math.ceil(totalUsuarios / 50);
       });
-  }
-
-  cambiarPagina(valor: number, numeroPagina: number) {
-    this.paginaDesde += valor;
-    this.pagina += numeroPagina;
-
-    if (this.paginaDesde < 0) {
-      this.pagina = 1;
-      this.paginaDesde = 0;
-    } else if (this.paginaDesde >= this.totalUsuarios) {
-      this.pagina += numeroPagina;
-      this.paginaDesde -= valor;
-    }
-
-    this.cargarUsuarios();
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
@@ -102,6 +105,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.filterUsuarios(this.filtrarTexto);
     return usuario;
   }
 
@@ -133,11 +137,13 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   actualizarUsuario(id: number) {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${id}`);
+    this.filterUsuarios(this.filtrarTexto);
   }
 
   crearUsuario() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
+    this.filterUsuarios(this.filtrarTexto);
   }
 
   async buscarUsuario(id: number): Promise<UsuarioModel> {
@@ -151,6 +157,42 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   }
 
   toggleIcons(usuario: UsuariosPorCongregacionInterface) {
-    this.selectedContact = this.selectedContact === usuario.id ? null : usuario.id;
+    this.seleccionarContacto = this.seleccionarContacto === usuario.id ? null : usuario.id;
+  }
+
+  exportExcel(): void {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.usuarios);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, this.congregacion);
+    // crear fecha
+    const format = 'dd/MM/yyyy';
+    const myDate = new Date();
+    const locale = 'en-US';
+    const formattedDate = formatDate(myDate, format, locale);
+    const filename = 'Censo ' + this.congregacion + formattedDate + '.xlsx';
+    XLSX.writeFile(wb, filename);
+  }
+
+  filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
+    filterTerm = filterTerm.toLocaleLowerCase();
+    if (this.usuarios.length.toString() === '0' || this.filterText === '') {
+      return this.usuarios;
+    } else {
+      return this.usuarios.filter(
+        (user: UsuariosPorCongregacionInterface) =>
+          user.primerNombre.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.primerApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.segundoApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.email.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.congregacion.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.numeroCelular.indexOf(filterTerm) !== -1 ||
+          user.id.toString().indexOf(filterTerm) !== -1
+      );
+    }
+  }
+
+  // pasar pagina
+  onTableDataChange(event: any) {
+    this.pagina = event;
   }
 }
