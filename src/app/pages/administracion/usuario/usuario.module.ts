@@ -10,6 +10,7 @@ import { ConfirmacionDeRegistroComponent } from './confirmacion-de-registro/conf
 import { RegistrarUsuarioComponent } from './registrar-usuario/registrar-usuario.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { NgxPaginationModule } from 'ngx-pagination'; //Imports NgxPaginationModule
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     InformacionUsuarioModule,
     CargandoInformacionModule,
     PipesModule,
+    NgxPaginationModule,
   ],
   exports: [
     ConfirmacionDeRegistroComponent,

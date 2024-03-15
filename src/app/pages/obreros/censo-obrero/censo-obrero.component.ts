@@ -169,7 +169,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     const myDate = new Date();
     const locale = 'en-US';
     const formattedDate = formatDate(myDate, format, locale);
-    const filename = 'Censo ' + this.congregacion + formattedDate + '.xlsx';
+    const filename = 'Censo ' + this.congregacion + ' ' + formattedDate + '.xlsx';
     XLSX.writeFile(wb, filename);
   }
 

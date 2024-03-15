@@ -8,17 +8,23 @@
     <div class="text-right mb-4 float-end">
       <a class="btn btn-primary mx-1" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
 
+      <!-- cambio boton excel -->
       <a class="btn btn-outline-primary mx-1" (click)="exportExcel()" title="Exportar a Excel">
         <i class="fa fa-download" aria-hidden="true"></i>
       </a>
+      <!-- cambio boton excel -->
     </div>
   </div>
   <div class="card-body">
+    <!-- cambio input busqueda -->
     <div class="inputBuscqueda">
       <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
     </div>
+    <!-- cambio input busqueda -->
     <div class="table-responsive">
+      <!-- cambio id excel -->
       <table class="table table-bordered table-striped" id="excel-table">
+        <!-- cambio id excel -->
         <thead>
           <tr>
             <th scope="col"># Mita</th>
@@ -32,6 +38,7 @@
           </tr>
         </thead>
         <tbody>
+          <!-- cambio ngfor -->
           <tr
             *ngFor="
               let usuario of usuariosFiltrados
@@ -44,6 +51,7 @@
               let i = index
             "
           >
+            <!-- cambio ngfor -->
             <td>
               {{ usuario.id }}
             </td>
@@ -168,6 +176,7 @@
     </div>
   </div>
 
+  <!-- cambio pagination -->
   <div class="d-flex justify-content-center mt-2 mb-2">
     <pagination-controls
       (pageChange)="onTableDataChange($event)"
@@ -178,6 +187,7 @@
     >
     </pagination-controls>
   </div>
+  <!-- cambio pagination -->
 </div>
 
 <ng-template #sinFeligreses>

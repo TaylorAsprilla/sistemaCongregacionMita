@@ -7,6 +7,8 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
+import * as XLSX from 'xlsx';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-censo-supervisor',
@@ -30,8 +32,23 @@ export class CensoSupervisorComponent implements OnInit {
 
   cargando: boolean = true;
 
+  filtrarTexto: string = '';
+  usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
+  tableSize: number = 50;
+
   // Subscription
   usuarioSubscription: Subscription;
+
+  get filterText() {
+    return this.filtrarTexto;
+  }
+
+  set filterText(value: string) {
+    this.filtrarTexto = value;
+    this.usuariosFiltrados = this.filterUsuarios(value);
+    this.totalUsuarios = this.usuariosFiltrados.length;
+    this.pagina = 1;
+  }
 
   constructor(
     private router: Router,
@@ -54,10 +71,10 @@ export class CensoSupervisorComponent implements OnInit {
     this.usuarioSubscription = this.usuariosPorCongregacionService
       .listarUsuariosPorPais(this.paginaDesde, this.idPaisObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
-        this.totalUsuarios = totalUsuarios;
+        this.totalUsuarios = usuarios.length;
         this.usuarios = usuarios;
+        this.usuariosFiltrados = usuarios;
         this.cargando = false;
-        this.totalPaginas = Math.ceil(totalUsuarios / 50);
       });
   }
 
@@ -152,5 +169,40 @@ export class CensoSupervisorComponent implements OnInit {
 
   toggleIcons(usuario: UsuariosPorCongregacionInterface) {
     this.selectedContact = this.selectedContact === usuario.id ? null : usuario.id;
+  }
+  exportExcel(): void {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.usuarios);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, this.nombreCongregacionPais);
+    // crear fecha
+    const format = 'dd/MM/yyyy';
+    const myDate = new Date();
+    const locale = 'en-US';
+    const formattedDate = formatDate(myDate, format, locale);
+    const filename = 'Censo ' + this.nombreCongregacionPais + ' ' + formattedDate + '.xlsx';
+    XLSX.writeFile(wb, filename);
+  }
+
+  filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
+    filterTerm = filterTerm.toLocaleLowerCase();
+    if (this.usuarios.length.toString() === '0' || this.filterText === '') {
+      return this.usuarios;
+    } else {
+      return this.usuarios.filter(
+        (user: UsuariosPorCongregacionInterface) =>
+          user.primerNombre.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.primerApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.segundoApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.email.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.congregacion.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
+          user.numeroCelular.indexOf(filterTerm) !== -1 ||
+          user.id.toString().indexOf(filterTerm) !== -1
+      );
+    }
+  }
+
+  // pasar pagina
+  onTableDataChange(event: any) {
+    this.pagina = event;
   }
 }
