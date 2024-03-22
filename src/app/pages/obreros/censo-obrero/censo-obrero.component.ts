@@ -7,8 +7,6 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
-import * as XLSX from 'xlsx';
-import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-censo-obrero',
@@ -16,40 +14,19 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./censo-obrero.component.scss'],
 })
 export class CensoObreroComponent implements OnInit, OnDestroy {
-  filtrarTexto: string = '';
-  usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
-
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
 
   idCongregacionObrero: number;
 
   paginaDesde: number = 0;
-  pagina: number = 1;
-  totalPaginas: number = 0;
-
-  tableSize: number = 50;
-
-  showIcons: boolean = false;
-  seleccionarContacto: number;
-
   congregacion: string;
+  nombreArchivo: string;
 
   cargando: boolean = true;
 
   // Subscription
   usuarioSubscription: Subscription;
-
-  get filterText() {
-    return this.filtrarTexto;
-  }
-
-  set filterText(value: string) {
-    this.filtrarTexto = value;
-    this.usuariosFiltrados = this.filterUsuarios(value);
-    this.totalUsuarios = this.usuariosFiltrados.length;
-    this.pagina = 1;
-  }
 
   constructor(
     private router: Router,
@@ -60,6 +37,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.idCongregacionObrero = this.usuarioService.usuarioIdCongregacion;
     this.congregacion = this.usuarioService.nombreCongregacion;
+    this.nombreArchivo = `Censo - ${this.congregacion}`;
     this.cargarUsuarios();
   }
 
@@ -72,9 +50,9 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.usuarioSubscription = this.usuariosPorCongregacionService
       .listarUsuariosPorCongregacion(this.paginaDesde, this.idCongregacionObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
-        this.totalUsuarios = usuarios.length;
+        console.log(totalUsuarios, usuarios.length);
+        this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;
-        this.usuariosFiltrados = usuarios;
         this.cargando = false;
       });
   }
@@ -105,16 +83,16 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
         });
       }
     });
-    this.filterUsuarios(this.filtrarTexto);
+
     return usuario;
   }
 
-  async activarUsuario(usuario: UsuariosPorCongregacionInterface) {
-    const usuarioEncontrado: UsuarioModel = await this.buscarUsuario(usuario.id);
+  async activarUsuario(usuarioId: number) {
+    const usuarioEncontrado: UsuarioModel = await this.buscarUsuario(usuarioId);
 
     await Swal.fire({
       title: 'Activar Congregación',
-      text: `Esta seguro de activar el usuario ${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido}`,
+      text: `Esta seguro de activar el usuario ${usuarioEncontrado.primerNombre} ${usuarioEncontrado.segundoNombre} ${usuarioEncontrado.primerApellido}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -126,7 +104,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
         this.usuarioService.activarUsuario(usuarioEncontrado).subscribe((usuarioActivo: any) => {
           Swal.fire(
             '¡Activado!',
-            `El usuario ${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido} fue activado correctamente`,
+            `El usuario ${usuarioEncontrado.primerNombre} ${usuarioEncontrado.segundoNombre} ${usuarioEncontrado.primerApellido} fue activado correctamente`,
             'success'
           );
           this.cargarUsuarios();
@@ -137,13 +115,11 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
 
   actualizarUsuario(id: number) {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${id}`);
-    this.filterUsuarios(this.filtrarTexto);
   }
 
   crearUsuario() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
-    this.filterUsuarios(this.filtrarTexto);
   }
 
   async buscarUsuario(id: number): Promise<UsuarioModel> {
@@ -154,45 +130,5 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
       console.error('Error al buscar usuario:', error);
       throw error; // o manejar el error según tus necesidades
     }
-  }
-
-  toggleIcons(usuario: UsuariosPorCongregacionInterface) {
-    this.seleccionarContacto = this.seleccionarContacto === usuario.id ? null : usuario.id;
-  }
-
-  exportExcel(): void {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.usuarios);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.congregacion);
-    // crear fecha
-    const format = 'dd/MM/yyyy';
-    const myDate = new Date();
-    const locale = 'en-US';
-    const formattedDate = formatDate(myDate, format, locale);
-    const filename = 'Censo ' + this.congregacion + ' ' + formattedDate + '.xlsx';
-    XLSX.writeFile(wb, filename);
-  }
-
-  filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
-    filterTerm = filterTerm.toLocaleLowerCase();
-    if (this.usuarios.length.toString() === '0' || this.filterText === '') {
-      return this.usuarios;
-    } else {
-      return this.usuarios.filter(
-        (user: UsuariosPorCongregacionInterface) =>
-          user.primerNombre.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-          user.primerApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-          user.segundoApellido.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-          user.email.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-          user.congregacion.toLocaleLowerCase().indexOf(filterTerm) !== -1 ||
-          user.numeroCelular.indexOf(filterTerm) !== -1 ||
-          user.id.toString().indexOf(filterTerm) !== -1
-      );
-    }
-  }
-
-  // pasar pagina
-  onTableDataChange(event: any) {
-    this.pagina = event;
   }
 }

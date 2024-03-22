@@ -11,6 +11,8 @@ import { RegistrarUsuarioComponent } from './registrar-usuario/registrar-usuario
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { NgxPaginationModule } from 'ngx-pagination'; //Imports NgxPaginationModule
+import { VerCensoModule } from 'src/app/components/ver-censo/ver-censo.module';
+import { ExportarExcelModule } from 'src/app/components/exportar-excel/exportar-excel.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { NgxPaginationModule } from 'ngx-pagination'; //Imports NgxPaginationMod
     CargandoInformacionModule,
     PipesModule,
     NgxPaginationModule,
+    VerCensoModule,
+    ExportarExcelModule,
   ],
   exports: [
     ConfirmacionDeRegistroComponent,

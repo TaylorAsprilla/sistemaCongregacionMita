@@ -1,0 +1,185 @@
+<div *ngIf="usuarios.length > 0; else sinFeligreses" class="card">
+  <div class="card-header">
+    <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
+    <span>{{ nombreCongregacion }}</span>
+
+    <div class="text-right mb-4 float-end">
+      <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+      <app-exportar-excel [usuarios]="usuarios" [nombreArchivo]="nombreArchivo"></app-exportar-excel>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="inputBuscqueda">
+      <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped" id="excel-table">
+        <thead>
+          <tr>
+            <th scope="col"># Mita</th>
+            <th class="w200 text-center">Nombre</th>
+            <th class="w200 text-center">Correo</th>
+            <th class="col-auto text-center">Edad</th>
+            <th class="col-auto text-center">Celular</th>
+            <th class="col-auto text-center">Congregación</th>
+            <th class="col-auto text-center">Estado</th>
+            <th class="col-auto text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let usuario of usuariosFiltrados
+                | paginate
+                  : {
+                      itemsPerPage: tableSize,
+                      currentPage: pagina,
+                      totalItems: totalUsuarios
+                    };
+              let i = index
+            "
+          >
+            <td>
+              {{ usuario.id }}
+            </td>
+
+            <td>
+              {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
+              {{ usuario?.segundoApellido }}
+            </td>
+
+            <td>
+              <a *ngIf="usuario?.email" class="email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
+              <span *ngIf="!usuario?.email">No hay correo electrónico</span>
+            </td>
+
+            <td class="text-center">{{ usuario.fechaNacimiento | calcularEdad }}</td>
+
+            <td>
+              <div class="contact-container">
+                <span
+                  >{{ usuario.numeroCelular }}
+                  <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(usuario)"></i
+                ></span>
+                <span> </span>
+
+                <div class="phone-number">
+                  <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
+                    <a
+                      href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
+                      target="_blank"
+                    >
+                      <i class="fab fa-whatsapp mx-2"></i>
+                    </a>
+                    <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
+                      <i class="fab fa-telegram mx-2"></i>
+                    </a>
+                    <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank">
+                      <i class="fa fa-phone mx-2"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <span *ngIf="!!usuario.pais" class="badge badge-primary">
+                {{ this.usuario.pais }}
+              </span>
+              <span *ngIf="!!usuario.congregacion" class="badge badge-danger"> {{ this.usuario.congregacion }}</span>
+              <p>
+                <span *ngIf="!!usuario.campo" class="badge badge-success">
+                  {{ this.usuario.campo }}
+                </span>
+              </p>
+            </td>
+
+            <td>
+              <span *ngIf="usuario.estado" class="badge badge-primary">Activo</span>
+              <span *ngIf="!usuario.estado" class="badge badge-danger">Deshabilitado</span>
+            </td>
+            <td>
+              <a
+                *ngIf="!!usuario.estado"
+                data-toggle="tooltip"
+                data-original-title="Editar"
+                title="Editar Feligrés"
+                class="btn btn-sm bg-info me-1 mb-1"
+                (click)="actualizarUsuario(usuario.id)"
+              >
+                <i class="fas fa-pencil-alt ml-1"></i>
+              </a>
+
+              <a
+                *ngIf="!usuario.estado"
+                data-toggle="tooltip"
+                data-original-title="Activar"
+                title="Activar Feligrés"
+                class="btn btn-sm bg-secondary me-1 mb-1"
+                (click)="activarUsuario(usuario.id)"
+              >
+                <i class="fas fa-check-square"></i>
+              </a>
+
+              <a
+                data-toggle="tooltip"
+                data-original-title="traslado"
+                class="btn btn-sm bg-success me-1 mb-1"
+                title="Transladar Feligrés"
+              >
+                <i class="fa fa-right-left"></i>
+              </a>
+
+              <a
+                data-toggle="tooltip"
+                data-original-title="trascendió"
+                class="btn btn-sm bg-warning me-1 mb-1"
+                title="Trascendió"
+              >
+                <i class="fa fa-cloud"></i>
+              </a>
+
+              <a
+                *ngIf="!!usuario.estado"
+                data-toggle="tooltip"
+                data-original-title="Borrar"
+                title="Eliminar Feligrés"
+                class="btn btn-sm bg-danger me-1 mb-1"
+                (click)="borrarUsuario(usuario)"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <th scope="col"># Mita</th>
+          <th class="text-center">Nombre</th>
+          <th class="text-center">Correo</th>
+          <th class="text-center">Edad</th>
+          <th class="text-center">Celular</th>
+          <th class="text-center">Congregación</th>
+          <th class="text-center">Estado</th>
+          <th class="text-center">Acciones</th>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center mt-2 mb-2">
+    <pagination-controls
+      (pageChange)="onTableDataChange($event)"
+      previousLabel="Anterior"
+      nextLabel="Próximo"
+      [autoHide]="true"
+      [responsive]="true"
+    >
+    </pagination-controls>
+  </div>
+</div>
+
+<ng-template #sinFeligreses>
+  <div class="card">
+    <div class="card-body">No existen feligreses registrados bajo su jerarquía</div>
+  </div>
+</ng-template>
