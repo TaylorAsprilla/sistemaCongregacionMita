@@ -1,9 +1,18 @@
 @import '~perfect-scrollbar/css/perfect-scrollbar.css';
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
-placeholder {
-  color: #939ba2;
-  opacity: 1;
+::placeholder {
+  color: #999;
+  font-size: 12px;
+  font-weight: 100;
+  opacity: 0.5;
+}
+
+input#phone::placeholder {
+  color: #999;
+  font-size: 11px;
+  font-weight: 100;
+  opacity: 0.5 !important;
 }
 
 .ps .ps__scrollbar-y-rail {
