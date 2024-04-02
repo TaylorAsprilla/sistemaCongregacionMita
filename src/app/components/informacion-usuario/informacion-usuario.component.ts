@@ -173,7 +173,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.primerApellido = this.usuario?.primerApellido ? this.usuario.primerApellido : '';
     this.segundoApellio = this.usuario?.segundoApellido ? this.usuario.segundoApellido : '';
     this.apodo = this.usuario?.apodo ? this.usuario.apodo : '';
-    this.email = this.usuario?.email ? this.usuario.email : '';
+    this.email = this.usuario?.email ? this.usuario.email : null;
     this.genero_id = this.usuario?.genero_id ? this.usuario.genero_id : null;
     this.estadoCivil_id = this.usuario?.estadoCivil_id ? this.usuario.estadoCivil_id : null;
     this.nacionalidad = this.usuario?.nacionalidad?.nombre ? this.usuario.nacionalidad?.nombre : '';
@@ -226,7 +226,7 @@ export class InformacionUsuarioComponent implements OnInit {
       primerApellido: [this.primerApellido, [Validators.required, Validators.minLength(3)]],
       segundoApellido: [this.segundoApellio, [Validators.minLength(3)]],
       apodo: [this.apodo, [Validators.minLength(3)]],
-      email: [this.email, [Validators.required, Validators.email]],
+      email: [this.email, [Validators.email]],
       genero_id: [this.genero_id, [Validators.required]],
       estadoCivil_id: [this.estadoCivil_id, [Validators.required]],
     });
@@ -356,7 +356,7 @@ export class InformacionUsuarioComponent implements OnInit {
         segundoApellido: informacionFormulario.segundoApellido ? informacionFormulario.segundoApellido : '',
         apodo: informacionFormulario.apodo ? informacionFormulario.apodo : '',
         nacionalidad_id: this.buscarIDNacionalidad(informacionFormulario.nacionalidad),
-        email: informacionFormulario.email ? informacionFormulario.email : '',
+        email: informacionFormulario.email ? informacionFormulario.email : null,
         numeroCelular: informacionFormulario.numeroCelular?.internationalNumber,
         telefonoCasa: informacionFormulario.telefonoCasa?.internationalNumber,
         fechaNacimiento: informacionFormulario?.fechaNacimiento,
