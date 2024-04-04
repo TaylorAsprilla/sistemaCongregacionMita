@@ -410,6 +410,7 @@
                       type="radio"
                       name="personaEncamada"
                       formControlName="personaEncamada"
+                      (change)="agregarControlPersonaEncamada()"
                     />
                     <label class="form-check-label"> Sí </label>
                   </div>
@@ -420,6 +421,7 @@
                       type="radio"
                       name="personaEncamada"
                       formControlName="personaEncamada"
+                      (change)="eliminarControlPersonaEncamada()"
                     />
                     <label class="form-check-label"> No </label>
                   </div>

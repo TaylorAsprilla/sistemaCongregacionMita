@@ -278,6 +278,14 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudForm = this.formBuilder.group({
       ...this.solicitudForm.controls,
       personaEncamada: ['', [Validators.required]],
+      enfermedadQuePadece: ['', [Validators.minLength(3)]],
+    });
+    return true;
+  }
+
+  agregarControlPersonaEncamada() {
+    this.solicitudForm = this.formBuilder.group({
+      ...this.solicitudForm.controls,
       personaEncargada: ['', [Validators.minLength(3), Validators.required]],
       parentesco_id: ['', [Validators.required]],
       celularPersonaEncargada: ['', [Validators.minLength(3), Validators.required]],
@@ -289,11 +297,16 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   eliminarControlEnfermedad() {
     this.solicitudForm.removeControl('personaEncamada');
+    this.solicitudForm.removeControl('enfermedadQuePadece');
+
+    return true;
+  }
+
+  eliminarControlPersonaEncamada() {
     this.solicitudForm.removeControl('personaEncargada');
     this.solicitudForm.removeControl('parentesco_id');
     this.solicitudForm.removeControl('celularPersonaEncargada');
     this.solicitudForm.removeControl('enfermedadCronica');
-    this.solicitudForm.removeControl('enfermedadQuePadece');
 
     return true;
   }
@@ -303,6 +316,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.eliminarControlBaseMilitar();
     this.eliminarControlOpcionesDeTransporte();
     this.eliminarControlEnfermedad();
+    this.eliminarControlPersonaEncamada();
   }
 
   crearSolicitud() {
