@@ -141,9 +141,9 @@
         </div>
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Genero: </label>
+            <label class="input-group obligatorio">Género: </label>
             <select class="form-select" formControlName="genero_id">
-              <option value="" disabled>Seleccione el genero</option>
+              <option value="" disabled>Seleccione el género</option>
               <option *ngFor="let genero of generos" [value]="genero.id">
                 {{ genero.genero }}
               </option>
@@ -203,7 +203,7 @@
         <h2 class="fs-title">Información de Locación</h2>
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Pais de Nacimiento: </label>
+            <label class="input-group obligatorio">País de Nacimiento: </label>
             <input
               type="text"
               placeholder="Buscar el país"
@@ -440,10 +440,10 @@
             El código postal no tiene la longitud mínima permitida.
           </small>
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">Pais: </label>
+            <label class="input-group obligatorio">País: </label>
             <input
               type="text"
-              placeholder="Pais de Residencia"
+              placeholder="País de Residencia"
               formControlName="paisDireccion"
               class="form-control"
               [matAutocomplete]="auto"
@@ -461,7 +461,7 @@
                 registroDosForm.get('paisDireccion').touched
               "
             >
-              El pais de la dirección de residencia es requerida.
+              El país de la dirección de residencia es requerida.
             </small>
             <small
               class="form-text text-danger"
@@ -470,7 +470,7 @@
                 registroDosForm.get('paisDireccion').touched
               "
             >
-              El pais de la dirección de residencia no tiene la longitud mínima permitida.
+              El país de la dirección de residencia no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -557,7 +557,7 @@
             <label class="input-group">Pais: </label>
             <input
               type="text"
-              placeholder="Pais de la dirección postal"
+              placeholder="País de la dirección postal"
               formControlName="paisPostal"
               [matAutocomplete]="auto"
               class="form-control"
@@ -832,7 +832,7 @@
               (ngModelChange)="filtrarCongregacionesPorPais($event)"
               (ngModelChange)="tieneTipoDocumento($event)"
             >
-              <option value="" disabled>Seleccione el pais de la congregación a la que pertenece</option>
+              <option value="" disabled>Seleccione el país de la congregación a la que pertenece</option>
               <option [value]="CONGREGACION_PAIS.SIN_CONGREGACION_PAIS">Sin Congregación País</option>
               <option *ngFor="let pais of paises" [value]="pais.id">
                 {{ pais.pais }}

@@ -50,7 +50,6 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
     this.usuarioSubscription = this.usuariosPorCongregacionService
       .listarUsuariosPorCongregacion(this.paginaDesde, this.idCongregacionObrero)
       .subscribe(({ totalUsuarios, usuarios }) => {
-        console.log(totalUsuarios, usuarios.length);
         this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;
         this.cargando = false;
