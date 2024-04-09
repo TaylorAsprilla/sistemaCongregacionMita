@@ -147,6 +147,7 @@ export class UsuarioService {
               usuarioVoluntariado,
               usuarioPermiso,
               tipoDocumento_id,
+              tipoDocumento,
               numeroDocumento,
               anoConocimiento,
               usuarioCongregacionCongregacion,
@@ -200,6 +201,7 @@ export class UsuarioService {
               usuarioVoluntariado,
               usuarioPermiso,
               tipoDocumento_id,
+              tipoDocumento,
               numeroDocumento,
               anoConocimiento,
               usuarioCongregacionCongregacion,
@@ -299,9 +301,11 @@ export class UsuarioService {
   }
 
   getUsuario(id: number) {
-    return this.httpClient
-      .get<UsuarioInterface>(`${base_url}/usuarios/${id}`, this.headers)
-      .pipe(map((usuario) => usuario));
+    return this.httpClient.get<UsuarioInterface>(`${base_url}/usuarios/${id}`, this.headers).pipe(
+      map((usuario) => {
+        return usuario;
+      })
+    );
   }
 
   eliminarUsuario(idUsuario: number) {

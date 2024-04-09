@@ -15,6 +15,7 @@ import {
   UsuarioCongregacionCiudadInterface,
   UsuarioCongregacionPaisInterface,
 } from '../interfaces/usuario.interface';
+import { TipoDocumentoModel } from './tipo-documento.model';
 
 const base_url = environment.base_url;
 
@@ -71,6 +72,7 @@ export class UsuarioModel {
     public usuarioVoluntariado?: VoluntariadoModel[],
     public usuarioPermiso?: PermisoModel[],
     public tipoDocumento_id?: number,
+    public tipoDocumento?: TipoDocumentoModel,
     public numeroDocumento?: string,
     public anoConocimiento?: string,
     public usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface,
