@@ -418,7 +418,6 @@ export const ROUTES: RouteInfo[] = [
       ROLES.OBRERO_CAMPO,
       ROLES.ADMINISTRADOR_MULTIMEDIA,
       ROLES.MULTIMEDIA,
-      ROLES.ASISTENTE_OOTS,
     ],
     submenu: [
       {
@@ -434,7 +433,6 @@ export const ROUTES: RouteInfo[] = [
           ROLES.OBRERO_CIUDAD,
           ROLES.ADMINISTRADOR_MULTIMEDIA,
           ROLES.MULTIMEDIA,
-          ROLES.ASISTENTE_OOTS,
         ],
         submenu: [],
       },
@@ -451,7 +449,6 @@ export const ROUTES: RouteInfo[] = [
           ROLES.OBRERO_CIUDAD,
           ROLES.OBRERO_CAMPO,
           ROLES.ADMINISTRADOR_MULTIMEDIA,
-          ROLES.ASISTENTE_OOTS,
           ROLES.MULTIMEDIA,
         ],
         submenu: [
@@ -468,7 +465,6 @@ export const ROUTES: RouteInfo[] = [
               ROLES.OBRERO_CIUDAD,
               ROLES.OBRERO_CAMPO,
               ROLES.ADMINISTRADOR_MULTIMEDIA,
-              ROLES.ASISTENTE_OOTS,
               ROLES.MULTIMEDIA,
             ],
             submenu: [],
@@ -486,7 +482,7 @@ export const ROUTES: RouteInfo[] = [
               ROLES.OBRERO_CIUDAD,
               ROLES.OBRERO_CAMPO,
               ROLES.ADMINISTRADOR_MULTIMEDIA,
-              ROLES.ASISTENTE_OOTS,
+
               ROLES.MULTIMEDIA,
             ],
             submenu: [],
@@ -499,13 +495,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [
-          ROLES.ADMINISTRADOR,
-          ROLES.OBRERO_CIUDAD,
-          ROLES.SUPERVISOR,
-          ROLES.SUPERVISOR_LOCAL,
-          ROLES.ASISTENTE_OOTS,
-        ],
+        role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_CIUDAD, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
         submenu: [],
       },
     ],
