@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TipoEstudioModel } from 'src/app/core/models/tipo-estudio.model';
-import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoEstudioService } from 'src/app/services/tipo-estudio/tipo-estudio.service';
 import Swal from 'sweetalert2';
 
@@ -18,11 +17,7 @@ export class TipoDeEstudioComponent implements OnInit {
 
   public tipoEstudioSubscription: Subscription;
 
-  constructor(
-    private router: Router,
-    private tipoEstudioService: TipoEstudioService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private tipoEstudioService: TipoEstudioService) {}
 
   ngOnInit(): void {
     this.cargartipoEstudios();
@@ -43,44 +38,13 @@ export class TipoDeEstudioComponent implements OnInit {
       });
   }
 
-  async buscarTipoEstudio(id: number) {
-    let tipoEstudio = '';
-    if (id) {
-      await this.tipoEstudioService
-        .getUnTipoEstudio(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (tipoEstudioEncontrado: TipoEstudioModel) => {
-            tipoEstudio = tipoEstudioEncontrado.estudio;
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-
-            Swal.fire({
-              title: 'Congregacion',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-          }
-        );
-    }
-    return tipoEstudio;
-  }
-
-  async actualizartipoEstudio(id: number) {
-    let opt = await this.buscarTipoEstudio(id);
-
+  async actualizartipoEstudio(id: number, value: string) {
     const { value: tipoEstudioNombre } = await Swal.fire({
       title: 'Actualizar',
       input: 'text',
       inputLabel: 'Tipo de Estudio',
       showCancelButton: true,
-      inputPlaceholder: opt,
+      inputValue: value,
     });
 
     if (tipoEstudioNombre) {
@@ -89,8 +53,12 @@ export class TipoDeEstudioComponent implements OnInit {
         id: id,
         estado: true,
       };
-      this.tipoEstudioService.actualizarTipoEstudio(data).subscribe((tipoEstudiaActiva: TipoEstudioModel) => {
-        Swal.fire('Creada!', `El tipo de estudio ${tipoEstudioNombre.estudio} fue creado correctamente`, 'success');
+      this.tipoEstudioService.actualizarTipoEstudio(data).subscribe((tipoEstudio: TipoEstudioModel) => {
+        Swal.fire(
+          'Creada!',
+          `El tipo de estudio ${tipoEstudioNombre.estudio} fue actualizado correctamente`,
+          'success'
+        );
 
         this.cargartipoEstudios();
       });

@@ -11,7 +11,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     canLoad: [AuthGuard],
     resolve: { permisos: PermisosResolver },
-    title: 'CMAR LIVE',
 
     loadChildren: () => import('../routes/child-routes/child-routes.module').then((m) => m.ChildRoutesModule),
   },
