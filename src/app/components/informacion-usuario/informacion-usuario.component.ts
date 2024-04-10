@@ -192,7 +192,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.paisPostal = this.usuario?.paisPostal;
     this.gradoAcademico = this.usuario?.gradoAcademico_id ? this.usuario.gradoAcademico_id : null;
     this.tipoEmpleo = this.usuario?.tipoEmpleo_id ? this.usuario.tipoEmpleo_id : null;
-    this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : null;
+    this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
     this.tipoMiembro = this.usuario?.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
     this.esjoven = this.usuario?.esJoven ? 1 : 0;
     this.ejerMinisterio = this.usuario?.usuarioMinisterio ? true : false;
