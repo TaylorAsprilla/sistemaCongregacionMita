@@ -97,7 +97,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         const primerApellido = usuario.primerApellido ? usuario.primerApellido.toLocaleLowerCase() : '';
         const segundoApellido = usuario.segundoApellido ? usuario.segundoApellido.toLocaleLowerCase() : '';
         const email = usuario.email ? usuario.email.toLocaleLowerCase() : '';
-        const congregacion = usuario.congregacion ? usuario.congregacion.toLocaleLowerCase() : '';
+        const congregacion = usuario.usuarioCongregacionCongregacion[0].congregacion
+          ? usuario.usuarioCongregacionCongregacion[0].congregacion.toLocaleLowerCase()
+          : '';
         const numeroCelular = usuario.numeroCelular ? usuario.numeroCelular : '';
 
         // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
