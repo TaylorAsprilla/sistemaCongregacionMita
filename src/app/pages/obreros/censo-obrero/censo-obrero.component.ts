@@ -17,7 +17,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
 
-  idCongregacionObrero: number;
+  idUsuario: number;
 
   paginaDesde: number = 0;
   congregacion: string;
@@ -35,7 +35,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.idCongregacionObrero = this.usuarioService.usuarioIdCongregacion;
+    this.idUsuario = this.usuarioService.usuarioId;
     this.congregacion = this.usuarioService.nombreCongregacion;
     this.nombreArchivo = `Censo - ${this.congregacion}`;
     this.cargarUsuarios();
@@ -48,7 +48,7 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   cargarUsuarios() {
     this.cargando = true;
     this.usuarioSubscription = this.usuariosPorCongregacionService
-      .listarUsuariosPorCongregacion(this.paginaDesde, this.idCongregacionObrero)
+      .listarUsuariosPorCongregacion(this.idUsuario)
       .subscribe(({ totalUsuarios, usuarios }) => {
         this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;

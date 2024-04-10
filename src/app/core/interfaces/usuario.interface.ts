@@ -115,11 +115,40 @@ export interface UsuariosPorCongregacionInterface {
   email: string;
   numeroCelular: string;
   pais: string;
-  congregacion: string;
+  usuarioCongregacionPais?: usuarioCongregacionPaisInterface[];
+  usuarioCongregacionCongregacion?: usuarioCongregacionCongregacionInterface[];
+  usuarioCongregacionCampo?: usuarioCongregacionCampoInterface;
   campo: string;
   estado: boolean;
 }
 
+export interface usuarioCongregacionPaisInterface {
+  pais: string;
+  UsuarioCongregacion: {
+    usuario_id: number;
+    pais_id: number;
+    congregacion_id: number;
+    campo_id: number;
+  };
+}
+export interface usuarioCongregacionCongregacionInterface {
+  congregacion: string;
+  UsuarioCongregacion: {
+    usuario_id: number;
+    pais_id: number;
+    congregacion_id: number;
+    campo_id: number;
+  };
+}
+export interface usuarioCongregacionCampoInterface {
+  campo: string;
+  UsuarioCongregacion: {
+    usuario_id: number;
+    pais_id: number;
+    congregacion_id: number;
+    campo_id: number;
+  };
+}
 export interface UsuariosPorCongregacionRespuesta {
   totalUsuarios: number;
   usuarios: UsuariosPorCongregacionInterface[];

@@ -84,13 +84,15 @@
             </td>
 
             <td>
-              <span *ngIf="!!usuario.pais" class="badge badge-primary">
-                {{ this.usuario.pais }}
+              <span *ngIf="!!usuario.usuarioCongregacionPais[0].pais" class="badge badge-primary">
+                {{ this.usuario.usuarioCongregacionPais[0].pais }}
               </span>
-              <span *ngIf="!!usuario.congregacion" class="badge badge-danger"> {{ this.usuario.congregacion }}</span>
+              <span *ngIf="!!usuario.usuarioCongregacionCongregacion[0].congregacion" class="badge badge-danger">
+                {{ this.usuario.usuarioCongregacionCongregacion[0].congregacion }}</span
+              >
               <p>
-                <span *ngIf="!!usuario.campo" class="badge badge-success">
-                  {{ this.usuario.campo }}
+                <span *ngIf="!!usuario.usuarioCongregacionCampo[0].campo" class="badge badge-success">
+                  {{ this.usuario.usuarioCongregacionCampo[0].campo }}
                 </span>
               </p>
             </td>

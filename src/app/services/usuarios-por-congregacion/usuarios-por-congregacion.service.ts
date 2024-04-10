@@ -38,10 +38,10 @@ export class UsuariosPorCongregacionService {
       );
   }
 
-  listarUsuariosPorCongregacion(desde: number = 0, idCongregacion: number) {
+  listarUsuariosPorCongregacion(idUsuario: number) {
     return this.httpClient
       .get<UsuariosPorCongregacionRespuesta>(
-        `${base_url}/usuariocongregacion/congregacion/?desde=${desde}&idCongregacion=${idCongregacion}`,
+        `${base_url}/usuariocongregacion/congregacion?idUsuario=${idUsuario}`,
         this.headers
       )
       .pipe(
