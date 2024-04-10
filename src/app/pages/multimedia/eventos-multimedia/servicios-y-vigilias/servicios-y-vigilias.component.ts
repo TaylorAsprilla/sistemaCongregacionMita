@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
+import { LinkEventoModel, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
 
 @Component({
@@ -22,7 +21,7 @@ export class ServiciosYVigiliasComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.linEventosSubscription = this.linkEventosService.getEventos().subscribe((eventos: LinkEventoModel[]) => {
-      this.linkEventos = eventos;
+      this.linkEventos = eventos.filter((evento) => evento.estado === true);
     });
   }
 
