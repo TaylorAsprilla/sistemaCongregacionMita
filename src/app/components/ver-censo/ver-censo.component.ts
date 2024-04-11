@@ -22,6 +22,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() nombreCongregacion: string = '';
   @Input() nombreArchivo: string = '';
+  @Input() ocultarNombreCampo: boolean = false;
 
   @Output() onCrearUsuario = new EventEmitter<void>();
   @Output() onActualizaUsuario: EventEmitter<number> = new EventEmitter<number>();

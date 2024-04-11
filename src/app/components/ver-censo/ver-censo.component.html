@@ -4,7 +4,7 @@
     <div>
       <span><b> Pais:</b> {{ nombrePais }} - </span>
       <span><b> Congregacion:</b> {{ nombreCongregacion }} </span>
-      <span *ngIf="nombreCampo !== 'Sin Campo'"><b> - Campo:</b> {{ nombreCampo }}</span>
+      <span *ngIf="!ocultarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
     </div>
 
     <div class="text-right mb-4 float-end">
