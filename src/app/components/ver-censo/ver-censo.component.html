@@ -1,7 +1,11 @@
 <div *ngIf="usuarios.length > 0; else sinFeligreses" class="card">
   <div class="card-header">
     <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
-    <span>{{ nombreCongregacion }}</span>
+    <div>
+      <span><b> Pais:</b> {{ nombrePais }} - </span>
+      <span><b> Congregacion:</b> {{ nombreCongregacion }} </span>
+      <span *ngIf="nombreCampo !== 'Sin Campo'"><b> - Campo:</b> {{ nombreCampo }}</span>
+    </div>
 
     <div class="text-right mb-4 float-end">
       <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
