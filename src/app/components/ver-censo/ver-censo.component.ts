@@ -19,8 +19,10 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() campos: CampoModel[] = [];
   @Input() paises: CongregacionPaisModel[] = [];
   @Input() totalUsuarios: number = 0;
+
   @Input() nombreCongregacion: string = '';
   @Input() nombreArchivo: string = '';
+  @Input() ocultarNombreCampo: boolean = false;
 
   @Output() onCrearUsuario = new EventEmitter<void>();
   @Output() onActualizaUsuario: EventEmitter<number> = new EventEmitter<number>();
@@ -28,6 +30,8 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Output() onBorrarUsuario: EventEmitter<UsuariosPorCongregacionInterface> =
     new EventEmitter<UsuariosPorCongregacionInterface>();
 
+  nombrePais: string = '';
+  nombreCampo: string = '';
   usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
   selectedContact: number;
   tableSize: number = 50;
@@ -55,6 +59,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['usuarios']?.currentValue) {
       this.usuariosFiltrados = this.usuarios;
+      this.nombrePais = this.usuarios[0].usuarioCongregacionPais[0].pais;
+      this.nombreCongregacion = this.usuarios[0].usuarioCongregacionCongregacion[0].congregacion;
+      this.nombreCampo = this.usuarios[0].usuarioCongregacionCampo[0].campo;
     }
   }
 
