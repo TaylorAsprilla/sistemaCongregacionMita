@@ -19,6 +19,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   nombreArchivo: string;
   paginaDesde: number = 0;
   cargando: boolean = true;
+  titulo: string = 'Feligreses en General';
 
   // Subscription
   usuarioSubscription: Subscription;
