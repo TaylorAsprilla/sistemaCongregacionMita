@@ -81,13 +81,7 @@ const childRoutes: Routes = [
     canActivate: [RolesGuard],
     data: {
       titulo: 'Usuarios Registrados',
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
-    },
-    resolve: {
-      congregacion: CongregacionResolver,
-      ministerio: MinisterioResolver,
-      pais: PaisResolver,
-      campo: CampoResolver,
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
     },
   },
   {

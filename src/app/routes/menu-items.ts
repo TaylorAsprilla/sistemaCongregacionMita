@@ -105,7 +105,7 @@ export const ROUTES: RouteInfo[] = [
     title: 'Administración',
     icon: '',
     class: 'nav-small-cap',
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
     extralink: true,
     submenu: [],
   },
@@ -115,7 +115,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-lock',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
     submenu: [
       {
         path: RUTAS.USUARIOS,
@@ -123,7 +123,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -132,7 +132,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
