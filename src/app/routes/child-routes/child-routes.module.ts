@@ -83,12 +83,6 @@ const childRoutes: Routes = [
       titulo: 'Usuarios Registrados',
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
     },
-    resolve: {
-      congregacion: CongregacionResolver,
-      ministerio: MinisterioResolver,
-      pais: PaisResolver,
-      campo: CampoResolver,
-    },
   },
   {
     path: `${RUTAS.USUARIOS}/:id`,

@@ -31,7 +31,6 @@
       <ng-container
         class="fondo pointer"
         [class.active]="showMenu === sidebarnavItem.title"
-        [routerLinkActive]="sidebarnavItem.submenu.length != 0 ? '' : 'active'"
         *appPermisos="sidebarnavItem.role"
       >
         <div class="nav-small-cap pointer" *ngIf="sidebarnavItem.extralink === true">{{ sidebarnavItem.title }}</div>
