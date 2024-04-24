@@ -48,7 +48,6 @@ import { ObreroResolver } from 'src/app/resolvers/obrero/obrero.resolver';
 import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
 import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
 import { DocumentoResolver } from 'src/app/resolvers/tipo-documento/documento.resolver';
-import { PermisosResolver } from 'src/app/resolvers/permisos/permisos.resolver';
 import { TipoEstudioResolver } from 'src/app/resolvers/tipo-estudio/tipo-estudio.resolver';
 import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/opcion-transporte.resolver';
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
@@ -73,7 +72,6 @@ const childRoutes: Routes = [
     component: InicioComponent,
     data: { titulo: 'Censo' },
   },
-
   // Administración
   {
     path: RUTAS.USUARIOS,
