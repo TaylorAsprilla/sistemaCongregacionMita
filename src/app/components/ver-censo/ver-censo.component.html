@@ -113,9 +113,19 @@
               <a
                 *ngIf="!!usuario.estado"
                 data-toggle="tooltip"
+                data-original-title="Información"
+                title="Más Información"
+                class="btn btn-sm bg-info me-1 mb-1"
+                (click)="masInformacion(usuario.id)"
+              >
+                <i class="fa-solid fa-circle-info ml-1"></i>
+              </a>
+              <a
+                *ngIf="!!usuario.estado"
+                data-toggle="tooltip"
                 data-original-title="Editar"
                 title="Editar Feligrés"
-                class="btn btn-sm bg-info me-1 mb-1"
+                class="btn btn-sm bg-primary me-1 mb-1"
                 (click)="actualizarUsuario(usuario.id)"
               >
                 <i class="fas fa-pencil-alt ml-1"></i>
