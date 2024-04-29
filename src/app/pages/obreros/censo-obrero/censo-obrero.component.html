@@ -1,4 +1,4 @@
-<app-cargando-informacion *ngIf="!!cargando"></app-cargando-informacion>
+<app-cargando-informacion *ngIf="!!cargando && totalUsuarios > 0"></app-cargando-informacion>
 
 <app-ver-censo
   [usuarios]="usuarios"

@@ -119,7 +119,7 @@ export class InformacionUsuarioComponent implements OnInit {
   codigoPostal: string;
   paisPostal: string;
   gradoAcademico: number;
-  tipoEmpleo: number;
+  ocupacion: string;
   especializacionEmpleo: string;
   tipoMiembro: number;
   esjoven: number;
@@ -191,7 +191,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.codigoPostal = this.usuario?.codigoPostal;
     this.paisPostal = this.usuario?.paisPostal;
     this.gradoAcademico = this.usuario?.gradoAcademico_id ? this.usuario.gradoAcademico_id : null;
-    this.tipoEmpleo = this.usuario?.tipoEmpleo_id ? this.usuario.tipoEmpleo_id : null;
+    this.ocupacion = this.usuario?.ocupacion ? this.usuario?.ocupacion : '';
     this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
     this.tipoMiembro = this.usuario?.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
     this.esjoven = this.usuario?.esJoven ? 1 : 0;
@@ -251,7 +251,7 @@ export class InformacionUsuarioComponent implements OnInit {
 
     this.registroTresForm = this.formBuilder.group({
       gradoAcademico_id: [this.gradoAcademico, [Validators.required]],
-      tipoEmpleo_id: [this.tipoEmpleo, [Validators.required]],
+      ocupacion: [this.ocupacion, [Validators.minLength(3), Validators.required]],
       especializacionEmpleo: [this.especializacionEmpleo, [Validators.minLength(3)]],
     });
 
@@ -363,7 +363,7 @@ export class InformacionUsuarioComponent implements OnInit {
         genero_id: informacionFormulario?.genero_id,
         estadoCivil_id: informacionFormulario?.estadoCivil_id,
         gradoAcademico_id: informacionFormulario.gradoAcademico_id,
-        tipoEmpleo_id: informacionFormulario.tipoEmpleo_id,
+        ocupacion: informacionFormulario.ocupacion,
         especializacionEmpleo: informacionFormulario.especializacionEmpleo,
         tipoMiembro_id: informacionFormulario?.tipoMiembro_id,
         esJoven: informacionFormulario.esJoven,

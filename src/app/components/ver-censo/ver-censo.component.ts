@@ -156,7 +156,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         ? `${usuario?.direccionPostal}, ${usuario?.ciudadPostal}, ${usuario?.departamentoPostal}, ${usuario?.paisPostal}, ${usuario?.codigoPostal}`
         : '';
       const gradoAcademico = usuario.gradoAcademico.gradoAcademico ? usuario.gradoAcademico.gradoAcademico : '';
-      const ocupacion = usuario?.tipoEmpleo.estado ? usuario.tipoEmpleo.nombreEmpleo : '';
+      const ocupacion = usuario.ocupacion || '';
       const especializacionEmpleo = usuario.especializacionEmpleo ? usuario.especializacionEmpleo : '';
       const tipoMiembro = usuario?.tipoMiembro.miembro ? usuario.tipoMiembro.miembro : '';
       const esjoven = usuario.esJoven ? 'Sí' : 'No';
@@ -246,7 +246,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
                       <td class="col-md-7">${gradoAcademico}</td>
                     </tr>
                      <tr>
-                      <td class="col-md-5">¿Cuál es su ocupación?:</td>
+                      <td class="col-md-5">Ocupación:</td>
                       <td class="col-md-7">${ocupacion}</td>
                     </tr>
                       <tr>

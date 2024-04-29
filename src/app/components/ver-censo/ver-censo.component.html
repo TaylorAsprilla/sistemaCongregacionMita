@@ -1,4 +1,4 @@
-<div *ngIf="usuarios.length > 0; else sinFeligreses" class="card">
+<div class="card">
   <div class="card-header">
     <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
     <div *ngIf="!nombreCongregacion; else sinNombre">
@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="card-body">
+  <div *ngIf="usuarios.length > 0; else sinFeligreses" class="card-body">
     <div class="inputBuscqueda">
       <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
     </div>
@@ -200,6 +200,6 @@
 
 <ng-template #sinFeligreses>
   <div class="card">
-    <div class="card-body">No existen feligreses registrados bajo su jerarquía</div>
+    <div class="card-body">No existen feligreses registrados en su congregación a cargo</div>
   </div>
 </ng-template>
