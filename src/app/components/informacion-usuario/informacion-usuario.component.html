@@ -625,21 +625,29 @@
           </div>
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
-            <label class="input-group obligatorio">¿A qué se dedica? </label>
-            <select class="form-select" formControlName="tipoEmpleo_id">
-              <option value="0" selected>Seleccione un tipo de empleo</option>
-              <option *ngFor="let empleo of tiposEmpleos" [value]="empleo.id">
-                {{ empleo.nombreEmpleo }}
-              </option>
-            </select>
+            <label class="input-group obligatorio">Ocupación </label>
+            <input
+              type="text"
+              formControlName="ocupacion"
+              class="form-control"
+              placeholder="Ingrese su ocupación (por ejemplo: Ingeniero, Profesor, Estudiante)"
+            />
+
             <small
               class="form-text text-danger"
               *ngIf="
-                registroTresForm.get('tipoEmpleo_id').hasError('required') &&
-                registroTresForm.get('tipoEmpleo_id').touched
+                registroTresForm.get('ocupacion').hasError('required') && registroTresForm.get('ocupacion').touched
               "
             >
-              Seleccione una opción.
+              La ocupación es obligatoria
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroTresForm.get('ocupacion').hasError('minlength') && registroTresForm.get('ocupacion').touched
+              "
+            >
+              El campo ocupación no tiene la longitud mínima permitida.
             </small>
           </div>
 
@@ -652,16 +660,16 @@
               class="form-control"
               placeholder="(Ejemplo: Cirujano, Mecánico de equipo pesado)"
             />
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroTresForm.get('especializacionEmpleo').hasError('minlength') &&
+                registroTresForm.get('especializacionEmpleo').touched
+              "
+            >
+              El campo especialización de empleo no tiene la longitud mínima permitida.
+            </small>
           </div>
-          <small
-            class="form-text text-danger"
-            *ngIf="
-              registroTresForm.get('especializacionEmpleo').hasError('minlength') &&
-              registroTresForm.get('especializacionEmpleo').touched
-            "
-          >
-            El campo especialización de empleo no tiene la longitud mínima permitida.
-          </small>
         </div>
 
         <div class="float-end">

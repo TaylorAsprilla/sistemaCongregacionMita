@@ -23,7 +23,7 @@ export interface RegisterFormInterface {
   codigoPostal: string;
   paisPostal: string;
   gradoAcademico_id: number;
-  tipoEmpleo_id: number;
+  ocupacion: string;
   especializacionEmpleo: string;
   tipoMiembro_id: number;
   esJoven: boolean;

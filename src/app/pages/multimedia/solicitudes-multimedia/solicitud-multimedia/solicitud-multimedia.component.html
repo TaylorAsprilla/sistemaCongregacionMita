@@ -50,7 +50,7 @@
 
             <td>
               <a
-                *ngIf="!solicitud?.usuario?.login"
+                *ngIf="!solicitud?.usuario?.password"
                 data-toggle="tooltip"
                 data-original-title="Crear Acceso"
                 class="btn bg-info"
@@ -58,7 +58,7 @@
                 ><i class="fa fa-plus"></i
               ></a>
               <a
-                *ngIf="!!solicitud?.usuario?.login"
+                *ngIf="!!solicitud?.usuario?.password"
                 data-toggle="tooltip"
                 data-original-title="Editar Acceso"
                 class="btn bg-warning ms-1"
