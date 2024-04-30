@@ -266,6 +266,7 @@ export class InformacionUsuarioComponent implements OnInit {
       ministerio: this.formBuilder.array(controlMinisterios),
       voluntariado: this.formBuilder.array(controlVoluntariados),
       anoConocimiento: [this.anoConocimiento, []],
+      mismaFechaDeNacimiento: [],
     });
 
     this.patchValueMinisterios();
@@ -422,6 +423,24 @@ export class InformacionUsuarioComponent implements OnInit {
         departamentoPostal: '',
         codigoPostal: '',
         paisPostal: '',
+      });
+    }
+  }
+
+  copiarFechaDeNacimiento() {
+    if (this.registroCuatroForm.get('mismaFechaDeNacimiento').value) {
+      let fecha = this.registroUnoForm.get('fechaNacimiento').value.substring(0, 4);
+      this.registroCuatroForm.patchValue({
+        anoConocimiento: fecha,
+      });
+    }
+  }
+
+  limpiarAnoConocimiento() {
+    console.log(this.registroCuatroForm.get('mismaFechaDeNacimiento').value);
+    if (!this.registroCuatroForm.get('mismaFechaDeNacimiento').value) {
+      this.registroCuatroForm.patchValue({
+        anoConocimiento: '',
       });
     }
   }
