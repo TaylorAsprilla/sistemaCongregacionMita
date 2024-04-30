@@ -18,6 +18,8 @@ import { VigiliasComponent } from './biblioteca-multimedia/vigilias/vigilias.com
 import { BibliotecaMultimediaModule } from 'src/app/components/biblioteca-multimedia/biblioteca-multimedia.module';
 import { ConfigurarEventosComponent } from './eventos-multimedia/configurar-eventos/configurar-eventos.component';
 import { EventosComponent } from './eventos-multimedia/eventos/eventos.component';
+import { PipesModule } from 'src/app/pipes/pipes.module';
+import { BuscarUsuarioModule } from 'src/app/components/buscar-usuario/buscar-usuario.module';
 
 const lang = 'en-US';
 
@@ -45,6 +47,8 @@ const lang = 'en-US';
     NgxIntlTelInputModule,
     CargandoInformacionModule,
     BibliotecaMultimediaModule,
+    PipesModule,
+    BuscarUsuarioModule,
   ],
   exports: [
     SolicitudMultimediaComponent,
