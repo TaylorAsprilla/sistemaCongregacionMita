@@ -1,6 +1,7 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { UsuarioService } from './../../../../services/usuario/usuario.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -13,9 +14,9 @@ import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
 import { RAZON_SOLICITUD_ID, SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
 import { TipoEstudioModel } from 'src/app/core/models/tipo-estudio.model';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { RUTAS } from 'src/app/routes/menu-items';
 
 @Component({
   selector: 'app-crear-solicitud-multimedia',
@@ -78,15 +79,9 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private solicitudMultimediaService: SolicitudMultimediaService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private router: Router
   ) {}
-
-  @HostListener('keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
@@ -135,40 +130,8 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  buscarFeligres(id: string) {
-    this.usuarioSubscription = this.usuarioService.getUsuario(Number(id)).subscribe(
-      (respuesta: any) => {
-        if (!!respuesta.usuario) {
-          this.usuario = respuesta.usuario;
-
-          Swal.fire({
-            position: 'top-end',
-            text: `${this.usuario.primerNombre} ${this.usuario.segundoNombre}
-                ${this.usuario.primerApellido} ${this.usuario.segundoApellido},
-                Número Mita ${this.usuario.id}`,
-            timer: 1500,
-            showConfirmButton: false,
-          });
-        } else {
-          Swal.fire({
-            position: 'top-end',
-            text: `${respuesta.msg}`,
-            icon: 'error',
-            timer: 1500,
-            showConfirmButton: false,
-          });
-        }
-      },
-      (error) => {
-        let errores = error.error.msg;
-
-        Swal.fire({
-          title: 'Error al encontrar el feligrés',
-          icon: 'error',
-          html: errores,
-        });
-      }
-    );
+  buscarFeligres(usuario: UsuarioModel) {
+    this.usuario = usuario;
   }
 
   buscarPais(formControlName: string) {
@@ -381,6 +344,10 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         }
       );
     }
+  }
+
+  actualizarUsuario(usuario: UsuarioModel) {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${usuario.id}`);
   }
 
   resetFormulario() {
