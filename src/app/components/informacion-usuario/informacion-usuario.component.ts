@@ -189,7 +189,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.estadoCivil_id = this.usuario?.estadoCivil_id ? this.usuario.estadoCivil_id : null;
     this.nacionalidad = this.usuario?.nacionalidad?.nombre ? this.usuario.nacionalidad?.nombre : '';
     this.rolEnCasa = this.usuario?.rolCasa_id ? this.usuario.rolCasa_id : null;
-    this.celular = this.usuario?.numeroCelular ? this.usuario.numeroCelular : '';
+    this.celular = this.usuario?.numeroCelular ? this.usuario.numeroCelular : null;
     this.telefonoCasa = this.usuario?.telefonoCasa ? this.usuario.telefonoCasa : '';
     this.direccion = this.usuario?.direccion;
     this.ciudadDireccion = this.usuario?.ciudadDireccion;
