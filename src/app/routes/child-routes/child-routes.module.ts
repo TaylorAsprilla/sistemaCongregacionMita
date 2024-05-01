@@ -32,7 +32,6 @@ import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil
 import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
 import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
 import { GradoAcademicoResolver } from 'src/app/resolvers/grado-academico/grado-academico.resolver';
-import { TipoEmpleoResolver } from 'src/app/resolvers/tipo-empleo/tipo-empleo.resolver';
 import { CongregacionResolver } from 'src/app/resolvers/congregacion/congregacion.resolver';
 import { TipoMiembroResolver } from 'src/app/resolvers/tipo-miembro/tipo-miembro.resolver';
 import { MinisterioResolver } from 'src/app/resolvers/ministerio/ministerio.resolver';
@@ -94,7 +93,6 @@ const childRoutes: Routes = [
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
       gradoAcademico: GradoAcademicoResolver,
-      tipoEmpleo: TipoEmpleoResolver,
       congregacion: CongregacionResolver,
       tipoMiembro: TipoMiembroResolver,
       ministerio: MinisterioResolver,
@@ -224,7 +222,6 @@ const childRoutes: Routes = [
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
       gradoAcademico: GradoAcademicoResolver,
-      tipoEmpleo: TipoEmpleoResolver,
       congregacion: CongregacionResolver,
       tipoMiembro: TipoMiembroResolver,
       ministerio: MinisterioResolver,

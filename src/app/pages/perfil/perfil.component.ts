@@ -15,7 +15,6 @@ import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
-import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { OPERACION, UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
@@ -38,7 +37,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public campos: CampoModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
   public gradosAcademicos: GradoAcademicoModel[] = [];
-  public tiposEmpleos: TipoEmpleoModel[] = [];
   public tipoMiembros: TipoMiembroModel[] = [];
   public ministerios: MinisterioModel[] = [];
   public voluntariados: VoluntariadoModel[] = [];
@@ -61,7 +59,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
         rolCasa: RolCasaModel[];
         genero: GeneroModel[];
         gradoAcademico: GradoAcademicoModel[];
-        tipoEmpleo: TipoEmpleoModel[];
         congregacion: CongregacionModel[];
         tipoMiembro: TipoMiembroModel[];
         tipoDocumento: TipoDocumentoModel[];
@@ -76,7 +73,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.rolCasa = data.rolCasa;
         this.generos = data.genero;
         this.gradosAcademicos = data.gradoAcademico;
-        this.tiposEmpleos = data.tipoEmpleo;
         this.tipoMiembros = data.tipoMiembro;
         this.congregaciones = data.congregacion.filter((congregacion) => congregacion.estado === true);
         this.ministerios = data.ministerio.filter((ministerio) => ministerio.estado === true);

@@ -6,7 +6,6 @@ import { MinisterioModel } from './ministerio.model';
 import { NacionalidadModel } from './nacionalidad.model';
 import { PermisoModel } from './permisos.model';
 import { RolCasaModel } from './rol-casa.model';
-import { TipoEmpleoModel } from './tipo-empleo.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
 import { UsuarioCongregacionModel } from './usuarioCongregacion.model';
 import { VoluntariadoModel } from './voluntariado.model';

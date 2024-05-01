@@ -59,36 +59,41 @@
 
             <td>
               <a *ngIf="usuario?.email" class="email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
-              <span *ngIf="!usuario?.email">No hay correo electrónico</span>
+              <span *ngIf="!usuario?.email">Sin correo electrónico</span>
             </td>
 
             <td class="text-center">{{ usuario.fechaNacimiento | calcularEdad }}</td>
 
             <td>
-              <div class="contact-container">
-                <span
-                  >{{ usuario.numeroCelular }}
-                  <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(usuario)"></i
-                ></span>
-                <span> </span>
+              <ng-container *ngIf="!!usuario.numeroCelular; else noCelular">
+                <div class="contact-container">
+                  <span>
+                    {{ usuario.numeroCelular }}
+                    <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(usuario)"></i>
+                  </span>
 
-                <div class="phone-number">
-                  <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
-                    <a
-                      href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
-                      target="_blank"
-                    >
-                      <i class="fab fa-whatsapp mx-2"></i>
-                    </a>
-                    <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
-                      <i class="fab fa-telegram mx-2"></i>
-                    </a>
-                    <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank">
-                      <i class="fa fa-phone mx-2"></i>
-                    </a>
+                  <div class="phone-number">
+                    <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
+                      <a
+                        href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
+                        target="_blank"
+                      >
+                        <i class="fab fa-whatsapp mx-2"></i>
+                      </a>
+                      <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
+                        <i class="fab fa-telegram mx-2"></i>
+                      </a>
+                      <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank">
+                        <i class="fa fa-phone mx-2"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
+
+              <ng-template #noCelular>
+                <td>Sin número de celular</td>
+              </ng-template>
             </td>
 
             <td>

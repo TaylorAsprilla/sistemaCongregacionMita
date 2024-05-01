@@ -258,7 +258,7 @@
 
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
-            <label class="input-group obligatorio">Celular: </label>
+            <label class="input-group">Celular: </label>
             <ngx-intl-tel-input
               [cssClass]="'form-control'"
               [preferredCountries]="paisesPreferidos"
@@ -274,20 +274,14 @@
               [numberFormat]="formatoNumeroTelefonico.International"
               name="numeroCelular"
               formControlName="numeroCelular"
+              #txtNumeroCelular
             >
             </ngx-intl-tel-input>
 
             <small
-              class="form-text text-danger"
-              *ngIf="
-                !registroDosForm.get('numeroCelular').hasError('required') &&
-                registroDosForm.get('numeroCelular').invalid &&
-                registroDosForm.get('numeroCelular').touched
-              "
+              class="form-text text-primary"
+              *ngIf="!registroDosForm.get('numeroCelular').errors && txtNumeroCelular.value"
             >
-              El número de celular no es válido
-            </small>
-            <small class="form-text text-primary" *ngIf="!registroDosForm.get('numeroCelular').invalid">
               El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
             </small>
             <small
@@ -307,6 +301,10 @@
               "
             >
               El número de celular del feligrés no tiene la longitud mínima permitida.
+            </small>
+
+            <small class="form-text text-danger" *ngIf="!!mensajeBuscarCelular">
+              {{ mensajeBuscarCelular }}
             </small>
           </div>
 
@@ -339,7 +337,10 @@
             >
               El número de teléfono de la casa no es válido
             </small>
-            <small class="form-text text-primary" *ngIf="!registroDosForm.get('telefonoCasa').invalid">
+            <small
+              class="form-text text-primary"
+              *ngIf="!registroDosForm.get('telefonoCasa').invalid && registroDosForm.get('telefonoCasa').value"
+            >
               El número de teléfono de la casa es válido <i class="fa-solid fa-thumbs-up"></i>
             </small>
 

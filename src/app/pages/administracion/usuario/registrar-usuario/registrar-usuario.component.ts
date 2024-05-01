@@ -12,7 +12,6 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
-import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
@@ -35,7 +34,7 @@ export class RegistrarUsuarioComponent implements OnInit {
   public campos: CampoModel[] = [];
   public nacionalidades: NacionalidadModel[] = [];
   public gradosAcademicos: GradoAcademicoModel[] = [];
-  public tiposEmpleos: TipoEmpleoModel[] = [];
+
   public tipoMiembros: TipoMiembroModel[] = [];
   public ministerios: MinisterioModel[] = [];
   public voluntariados: VoluntariadoModel[] = [];
@@ -55,7 +54,6 @@ export class RegistrarUsuarioComponent implements OnInit {
         rolCasa: RolCasaModel[];
         genero: GeneroModel[];
         gradoAcademico: GradoAcademicoModel[];
-        tipoEmpleo: TipoEmpleoModel[];
         congregacion: CongregacionModel[];
         tipoMiembro: TipoMiembroModel[];
         tipoDocumento: TipoDocumentoModel[];
@@ -71,7 +69,6 @@ export class RegistrarUsuarioComponent implements OnInit {
         this.generos = data.genero.filter((genero) => genero.estado === true);
 
         this.gradosAcademicos = data.gradoAcademico;
-        this.tiposEmpleos = data.tipoEmpleo;
         this.tipoMiembros = data.tipoMiembro;
         this.congregaciones = data.congregacion.filter((congregacion) => congregacion.estado === true);
         this.ministerios = data.ministerio.filter((ministerio) => ministerio.estado === true);
