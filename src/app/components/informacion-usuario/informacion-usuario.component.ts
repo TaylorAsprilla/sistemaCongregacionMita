@@ -347,8 +347,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   guardarUsuario() {
-    this.registroCuatroForm;
-
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&
@@ -501,10 +499,10 @@ export class InformacionUsuarioComponent implements OnInit {
   buscarCelular(): ValidatorFn {
     this.mensajeBuscarCelular = '';
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      const numeroCelular = control.value; // Obtener el valor del número de celular
+      const numeroCelular = control.value;
 
       if (!numeroCelular) {
-        return null;
+        return of(null);
       }
 
       const celularNumber = numeroCelular.internationalNumber;
@@ -513,24 +511,18 @@ export class InformacionUsuarioComponent implements OnInit {
         return of(null);
       }
 
-      if (celularNumber !== this.celular) {
-        return this.buscarCelularService.buscarcelular(numeroCelular.internationalNumber).pipe(
-          map((respuesta: any) => {
-            if (!respuesta.ok) {
-              this.mensajeBuscarCelular = respuesta.msg;
-              return { celularRegistrado: true, message: respuesta.msg };
-            } else {
-              this.mensajeBuscarCelular = '';
-              return null;
-            }
-          }),
-          catchError(() => {
-            return of(null);
-          })
-        );
-      } else {
-        return null;
-      }
+      return this.buscarCelularService.buscarcelular(celularNumber).pipe(
+        map((respuesta: any) => {
+          if (!respuesta.ok) {
+            this.mensajeBuscarCelular = respuesta.msg;
+            const error: ValidationErrors = { celularRegistrado: true, message: respuesta.msg };
+            return error;
+          } else {
+            return null;
+          }
+        }),
+        catchError(() => of(null))
+      );
     };
   }
 
