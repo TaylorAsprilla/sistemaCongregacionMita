@@ -40,15 +40,15 @@ import { BuscarCelularService } from 'src/app/services/buscar-celular/buscar-cel
   styleUrls: ['./informacion-usuario.component.scss'],
 })
 export class InformacionUsuarioComponent implements OnInit {
-  public registroUnoForm!: FormGroup;
-  public registroDosForm!: FormGroup;
-  public registroTresForm!: FormGroup;
-  public registroCuatroForm!: FormGroup;
+  registroUnoForm!: FormGroup;
+  registroDosForm!: FormGroup;
+  registroTresForm!: FormGroup;
+  registroCuatroForm!: FormGroup;
 
-  public registroUno_step = false;
-  public registroDos_step = false;
-  public registroTres_step = false;
-  public step: number = 1;
+  registroUno_step = false;
+  registroDos_step = false;
+  registroTres_step = false;
+  step: number = 1;
 
   @Input() public usuario: UsuarioModel;
   @Input() public usuarios: UsuarioModel[] = [];
@@ -347,8 +347,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   guardarUsuario() {
-    this.registroCuatroForm;
-
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&
@@ -373,10 +371,10 @@ export class InformacionUsuarioComponent implements OnInit {
         email: informacionFormulario.email ? informacionFormulario.email : null,
         numeroCelular: informacionFormulario.numeroCelular?.internationalNumber
           ? informacionFormulario.numeroCelular?.internationalNumber
-          : '',
+          : null,
         telefonoCasa: informacionFormulario.telefonoCasa?.internationalNumber
           ? informacionFormulario.telefonoCasa?.internationalNumber
-          : '',
+          : null,
         fechaNacimiento: informacionFormulario?.fechaNacimiento,
         genero_id: informacionFormulario?.genero_id,
         estadoCivil_id: informacionFormulario?.estadoCivil_id,
@@ -501,10 +499,10 @@ export class InformacionUsuarioComponent implements OnInit {
   buscarCelular(): ValidatorFn {
     this.mensajeBuscarCelular = '';
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      const numeroCelular = control.value; // Obtener el valor del número de celular
+      const numeroCelular = control.value;
 
       if (!numeroCelular) {
-        return null;
+        return of(null);
       }
 
       const celularNumber = numeroCelular.internationalNumber;
@@ -513,24 +511,18 @@ export class InformacionUsuarioComponent implements OnInit {
         return of(null);
       }
 
-      if (celularNumber !== this.celular) {
-        return this.buscarCelularService.buscarcelular(numeroCelular.internationalNumber).pipe(
-          map((respuesta: any) => {
-            if (!respuesta.ok) {
-              this.mensajeBuscarCelular = respuesta.msg;
-              return { celularRegistrado: true, message: respuesta.msg };
-            } else {
-              this.mensajeBuscarCelular = '';
-              return null;
-            }
-          }),
-          catchError(() => {
-            return of(null);
-          })
-        );
-      } else {
-        return null;
-      }
+      return this.buscarCelularService.buscarcelular(celularNumber).pipe(
+        map((respuesta: any) => {
+          if (!respuesta.ok) {
+            this.mensajeBuscarCelular = respuesta.msg;
+            const error: ValidationErrors = { celularRegistrado: true, message: respuesta.msg };
+            return error;
+          } else {
+            return null;
+          }
+        }),
+        catchError(() => of(null))
+      );
     };
   }
 
