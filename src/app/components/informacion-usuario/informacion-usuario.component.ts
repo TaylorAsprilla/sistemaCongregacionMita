@@ -437,7 +437,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   limpiarAnoConocimiento() {
-    console.log(this.registroCuatroForm.get('mismaFechaDeNacimiento').value);
     if (!this.registroCuatroForm.get('mismaFechaDeNacimiento').value) {
       this.registroCuatroForm.patchValue({
         anoConocimiento: '',
