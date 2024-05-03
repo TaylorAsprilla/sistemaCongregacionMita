@@ -462,12 +462,25 @@
                 </div>
               </div>
               <hr />
+
               <div class="form-group col-sm-12 col-md-12 col-lg-12">
                 <label class="input-group text-start"
                   >Según la necesidad detectada ¿Qué periodo de tiempo sugieres que se le de acceso al
                   solicitante?:</label
                 >
-                <input type="date" formControlName="tiempoSugerido" name="tiempoSugerido" class="form-control" />
+
+                <div class="col-sm-12">
+                  <div *ngFor="let tiempo of tiempoSugerido" class="form-check checkbox-lg me-4 col-sm-12">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      [id]="tiempo.value"
+                      [value]="tiempo.value"
+                      formControlName="tiempoSugerido"
+                    />
+                    <label class="form-check-label" [for]="tiempo.value">{{ tiempo.label }}</label>
+                  </div>
+                </div>
               </div>
 
               <div class="form-group col-sm-12 col-md-12 col-lg-12">

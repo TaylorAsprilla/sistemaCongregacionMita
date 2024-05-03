@@ -21,6 +21,14 @@ export enum RAZON_SOLICITUD_ID {
   OTRA = '5',
 }
 
+export enum TIEMPO_SUGERIDO {
+  QUINCE_DIAS = '15 Días',
+  UN_MES = '1 Mes',
+  SEIS_MESES = '6 Meses',
+  UN_ANO = '1 Año',
+  ACCESO_PERMANENTE = 'Acceso Permanente',
+}
+
 export class SolicitudMultimediaModel {
   constructor(
     public id: number,
@@ -64,7 +72,8 @@ export class SolicitudMultimediaModel {
     public tiempoAprobacion?: Date,
     public opcionTransporte_id?: number,
     public tipoDeEstudio_id?: number,
-    public parentesco_id?: number
+    public parentesco_id?: number,
+    public tiempoSugerido?: string
   ) {}
 }
 
@@ -94,6 +103,38 @@ export interface SolicitudMultimediaInterface {
   usuario_id: number;
   usuario: UsuarioModel;
   usuarioQueRegistra: UsuarioModel;
+  tiempoSugerido: string;
+  terminos: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface crearSolicitudMultimediaInterface {
+  estado: boolean;
+  razonSolicitud_id: number;
+  usuarioQueRegistra_id: number;
+  tiempoDistancia: string;
+  horaTemploMasCercano: string;
+  personaEncamada: boolean;
+  personaEncargada: string;
+  enfermedadCronica: boolean;
+  enfermedadQuePadece: string;
+  paisDondeEstudia: string;
+  ciudadDondeEstudia: string;
+  duracionDelPeriodoDeEstudio: Date;
+  baseMilitar: string;
+  emailVerificado: boolean;
+  observaciones: string;
+  opcionTransporte_id: number;
+  tipoDeEstudio_id: number;
+  razonSolicitud?: RazonSolicitudModel;
+  parentesco_id: number;
+  tiempoAprobacion: Date;
+  tipoMiembro: TipoMiembroModel;
+  usuario_id: number;
+  usuario: UsuarioModel;
+  usuarioQueRegistra: UsuarioModel;
+  tiempoSugerido: string;
   terminos: boolean;
   createdAt?: Date;
   updatedAt?: Date;
