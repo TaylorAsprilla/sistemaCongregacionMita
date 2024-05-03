@@ -65,8 +65,19 @@ a.email:hover {
   text-decoration: none;
 }
 
-.inputBuscqueda {
+.inputBusqueda {
+  padding-bottom: 10px;
+  width:30%;
+  float: right;
+
+}
+
+.inputSelect {
   padding-bottom: 10px;
   width: 30%;
-  float: right;
+  float: left;
+}
+
+.tabla{
+  width: 100%;
 }

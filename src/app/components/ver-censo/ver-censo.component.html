@@ -18,9 +18,30 @@
   </div>
 
   <div *ngIf="usuarios.length > 0; else sinFeligreses" class="card-body">
-    <div class="inputBuscqueda">
-      <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
-    </div>
+    <table class="tabla">
+      <tr>
+        <td>
+          <label class="input-group">Congregación </label>
+        </td>
+        <td class="inputSelect">
+          <div>
+            <select class="form-select" [(ngModel)]="filtrarCongre">
+              <option value="">Seleccione congregación</option>
+              <option [value]="">Sin Congregación</option>
+              <option *ngFor="let congregacion of congregaciones">
+                {{ congregacion.congregacion }}
+              </option>
+            </select>
+          </div>
+        </td>
+        <td class="inputBusqueda">
+          <div class="">
+            <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+          </div>
+        </td>
+      </tr>
+    </table>
+
     <div class="table-responsive">
       <table class="table table-bordered table-striped" id="excel-table">
         <thead>

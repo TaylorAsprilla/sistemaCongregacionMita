@@ -8,6 +8,9 @@ import { TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
 import Swal from 'sweetalert2';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ver-censo',
@@ -37,8 +40,13 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   selectedContact: number;
   tableSize: number = 50;
 
+  cargando: boolean = true;
+  public congregaciones: CongregacionModel[] = [];
+  public congregacionSubscription: Subscription;
+
   pagina: number = 1;
   filtrarTexto: string = '';
+  filtrarCongreTexto: string = '';
 
   usuarioSubscription: Subscription;
 
@@ -48,14 +56,39 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   set filterText(value: string) {
     this.filtrarTexto = value;
-    this.usuariosFiltrados = this.filterUsuarios(value);
+    //this.usuariosFiltrados = this.filterUsuarios(value);
+    this.usuariosFiltrados = this.filterUsuarios(this.filterText, this.filtrarCongreTexto);
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
   }
 
-  constructor(private usuarioService: UsuarioService) {}
+  set filtrarCongre(value: string) {
+    this.filtrarCongreTexto = value;
+    console.log('filtrarCongre ' + this.filtrarCongreTexto);
+    console.log(this.usuariosFiltrados);
+    this.usuariosFiltrados = this.filterUsuarios(this.filterText, this.filtrarCongreTexto);
+    console.log(this.usuariosFiltrados);
+    this.totalUsuarios = this.usuariosFiltrados.length;
+    this.pagina = 1;
+  }
 
-  ngOnInit(): void {}
+  constructor(private usuarioService: UsuarioService, private congregacionService: CongregacionService) {}
+
+  ngOnInit(): void {
+    this.cargarCongregaciones();
+  }
+
+  cargarCongregaciones() {
+    this.cargando = true;
+    this.congregacionSubscription = this.congregacionService
+      .getCongregaciones()
+      .pipe(delay(100))
+      .subscribe((congregaciones: CongregacionModel[]) => {
+        this.congregaciones = congregaciones;
+        console.log(congregaciones);
+        this.cargando = false;
+      });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['usuarios']?.currentValue) {
@@ -68,6 +101,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
+    this.congregacionSubscription?.unsubscribe();
   }
 
   onTableDataChange(event: any) {
@@ -94,10 +128,40 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedContact = this.selectedContact === usuario.id ? null : usuario.id;
   }
 
-  filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
-    filterTerm = filterTerm.toLocaleLowerCase();
+  // filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
+  //   filterTerm = filterTerm.toLocaleLowerCase();
+  //   if (this.usuarios.length === 0 || this.filterText === '') {
+  //     return this.usuarios;
+  //   } else {
+  //     return this.usuarios.filter((usuario: UsuariosPorCongregacionInterface) => {
+  //       const primerNombre = usuario.primerNombre ? usuario.primerNombre.toLocaleLowerCase() : '';
+  //       const primerApellido = usuario.primerApellido ? usuario.primerApellido.toLocaleLowerCase() : '';
+  //       const segundoApellido = usuario.segundoApellido ? usuario.segundoApellido.toLocaleLowerCase() : '';
+  //       const email = usuario.email ? usuario.email.toLocaleLowerCase() : '';
+  //       const congregacion = usuario.usuarioCongregacionCongregacion[0].congregacion
+  //         ? usuario.usuarioCongregacionCongregacion[0].congregacion.toLocaleLowerCase()
+  //         : '';
+  //       const numeroCelular = usuario.numeroCelular ? usuario.numeroCelular : '';
 
-    if (this.usuarios.length === 0 || this.filterText === '') {
+  //       // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
+  //       return (
+  //         primerNombre.includes(filterTerm) ||
+  //         primerApellido.includes(filterTerm) ||
+  //         segundoApellido.includes(filterTerm) ||
+  //         email.includes(filterTerm) ||
+  //         congregacion.includes(filterTerm) ||
+  //         numeroCelular.includes(filterTerm) ||
+  //         usuario.id.toString().includes(filterTerm)
+  //       );
+  //     });
+  //   }
+  // }
+
+  filterUsuarios(filterTerm: string, congre: string): UsuariosPorCongregacionInterface[] {
+    congre = congre.toLocaleLowerCase();
+    filterTerm = filterTerm.toLocaleLowerCase();
+    if (this.usuarios.length === 0 && (filterTerm === '' || congre === '')) {
+      console.log('true');
       return this.usuarios;
     } else {
       return this.usuarios.filter((usuario: UsuariosPorCongregacionInterface) => {
@@ -112,13 +176,13 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
         // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
         return (
-          primerNombre.includes(filterTerm) ||
-          primerApellido.includes(filterTerm) ||
-          segundoApellido.includes(filterTerm) ||
-          email.includes(filterTerm) ||
-          congregacion.includes(filterTerm) ||
-          numeroCelular.includes(filterTerm) ||
-          usuario.id.toString().includes(filterTerm)
+          (primerNombre.includes(filterTerm) ||
+            primerApellido.includes(filterTerm) ||
+            segundoApellido.includes(filterTerm) ||
+            email.includes(filterTerm) ||
+            numeroCelular.includes(filterTerm) ||
+            usuario.id.toString().includes(filterTerm)) &&
+          congregacion.includes(congre)
         );
       });
     }
