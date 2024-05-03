@@ -507,6 +507,10 @@ export class InformacionUsuarioComponent implements OnInit {
 
   buscarCorreo(email: string) {
     this.mensajeBuscarCorreo = '';
+
+    if (!email) {
+      return;
+    }
     this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreoUsuario(email).subscribe((respuesta: any) => {
       if (!respuesta.ok) {
         this.mensajeBuscarCorreo = respuesta.msg;
