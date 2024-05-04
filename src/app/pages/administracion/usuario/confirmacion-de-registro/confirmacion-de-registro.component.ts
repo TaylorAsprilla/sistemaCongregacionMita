@@ -27,7 +27,6 @@ export class ConfirmacionDeRegistroComponent implements OnInit {
       .pipe(delay(100))
       .subscribe((respuesta: any) => {
         this.usuario = respuesta.usuario;
-        console.info(respuesta);
       });
   }
 

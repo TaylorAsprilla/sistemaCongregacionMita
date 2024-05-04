@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
-  AbstractControlOptions,
   FormArray,
   FormBuilder,
   FormControl,
@@ -502,7 +501,18 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   buscarIDNacionalidad(nacionalidad: string): number {
-    return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre == nacionalidad).id;
+    const nacionalidadEncontrada = this.nacionalidades.find(
+      (nacionalidades) => nacionalidades.nombre.toLowerCase() === nacionalidad.toLowerCase()
+    );
+
+    if (nacionalidadEncontrada) {
+      return nacionalidadEncontrada.id;
+    } else {
+      const controlNacionalidad = this.registroDosForm.get('nacionalidad');
+      controlNacionalidad.setErrors({ incorrecto: true });
+
+      return undefined;
+    }
   }
 
   buscarCorreo(email: string) {
@@ -520,6 +530,7 @@ export class InformacionUsuarioComponent implements OnInit {
 
   buscarCelular(): ValidatorFn {
     this.mensajeBuscarCelular = '';
+
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       const numeroCelular = control.value;
 

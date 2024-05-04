@@ -210,8 +210,10 @@
               formControlName="nacionalidad"
               [matAutocomplete]="nacionalidad"
               (keypress)="buscarNacionalidad('nacionalidad')"
+              (blur)="buscarIDNacionalidad(txtNacionalidad.value)"
               matInput
               class="form-control"
+              #txtNacionalidad
             />
             <mat-autocomplete #nacionalidad="matAutocomplete">
               <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
@@ -225,7 +227,7 @@
                 registroDosForm.get('nacionalidad').hasError('required') && registroDosForm.get('nacionalidad').touched
               "
             >
-              La nacionalidad del feligrés es requerida.
+              El país de nacimiento del feligrés es requerida.
             </small>
             <small
               class="form-text text-danger"
@@ -233,7 +235,16 @@
                 registroDosForm.get('nacionalidad').hasError('minlength') && registroDosForm.get('nacionalidad').touched
               "
             >
-              La nacionalidad del feligrés no tiene la longitud mínima permitida.
+              El país de nacimiento del feligrés no tiene la longitud mínima permitida.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="
+                registroDosForm.get('nacionalidad').hasError('incorrecto') &&
+                registroDosForm.get('nacionalidad').touched
+              "
+            >
+              El país de nacimiento no se encuentra. Por favor, seleccione un país adecuado.
             </small>
           </div>
 
@@ -287,15 +298,6 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('numeroCelular').hasError('required') &&
-                registroDosForm.get('numeroCelular').touched
-              "
-            >
-              El número de celular del feligrés es requerido.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="
                 registroDosForm.get('numeroCelular').hasError('minlength') &&
                 registroDosForm.get('numeroCelular').touched
               "
@@ -309,6 +311,15 @@
             >
               {{ mensajeBuscarCelular }}
             </small>
+
+            <div>
+              <small
+                class="form-text text-danger"
+                *ngIf="registroDosForm.get('numeroCelular').invalid && registroDosForm.get('numeroCelular').touched"
+              >
+                El número de celular no es válido
+              </small>
+            </div>
           </div>
 
           <div class="form-group col-md-6 col-sm-12">
