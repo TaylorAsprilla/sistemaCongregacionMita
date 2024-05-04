@@ -10,12 +10,12 @@ a {
   display: block;
   margin-bottom: 20px;
   position: relative;
-  color: #ffffff;
+  color: $white;
 }
 
 .small-box > .inner {
   padding: 10px;
-  color: #ffffff;
+  color: $white;
 }
 
 .small-box > .small-box-footer {
@@ -31,7 +31,7 @@ a {
 
 .small-box > .small-box-footer:hover {
   background-color: rgba(0, 0, 0, 0.15);
-  color: #fff;
+  color: $white;
 }
 
 .small-box h3 {
@@ -40,7 +40,7 @@ a {
   margin: 0 0 10px;
   padding: 0;
   white-space: nowrap;
-  color: #ffffff;
+  color: $white;
 }
 
 .avatar-lg {

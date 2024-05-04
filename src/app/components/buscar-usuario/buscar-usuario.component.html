@@ -69,7 +69,7 @@
         </a>
       </div>
       <div class="d-flex justify-content-center align-items-center mb-3">
-        <div class="mr-3">
+        <div class="me-3">
           <i class="fa fa-user-circle fa-5x"></i>
         </div>
         <div class="text-center">
@@ -79,10 +79,9 @@
             {{ usuario.segundoApellido }}
           </h4>
           <h6 class="card-subtitle mb-2">{{ usuario.email }}</h6>
-          <h6 class="card-subtitle mb-2"><b>Apodo:</b> {{ usuario.apodo }}</h6>
           <h6 class="card-subtitle mb-2"><b>Género:</b> {{ usuario.genero.genero }}</h6>
-          <h6 class="card-subtitle mb-2"><b>Nacionalidad:</b> {{ usuario.nacionalidad.nombre }}</h6>
-          <h6 class="card-subtitle mb-2"><b>Fecha de Nacimiento:</b> {{ usuario.fechaNacimiento }}</h6>
+          <h6 *ngIf="usuario.apodo" class="card-subtitle mb-2"><b>Apodo:</b> {{ usuario.apodo }}</h6>
+          <h6 class="card-subtitle mb-2"><b>Edad:</b> {{ usuario.fechaNacimiento | calcularEdad }} años</h6>
         </div>
       </div>
 
@@ -91,20 +90,27 @@
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Congregación</h4>
+
               <p class="card-text text-start">
                 <b><i class="fa fa-globe-americas"></i> País:</b>
                 {{ usuario.usuarioCongregacionPais[0].pais }}
               </p>
+
               <p class="card-text text-start">
                 <b><i class="fa fa-city"></i> Ciudad:</b>
                 {{ usuario.usuarioCongregacionCongregacion[0].congregacion }}
               </p>
+
               <p class="card-text text-start">
                 <b><i class="fa fa-map-marker"></i> Campo:</b>
                 {{ usuario.usuarioCongregacionCampo[0].campo }}
               </p>
+
               <p class="card-text text-start">
-                <b><i class="fa fa-church"></i> Miembro de la Iglesia:</b>
+                <b
+                  ><img src="./assets/images/icon/escudo.png" class="img-fluid" alt="Congregación Mita" /> Miembro de la
+                  Iglesia:</b
+                >
                 {{ usuario.tipoMiembro.miembro }}
               </p>
             </div>

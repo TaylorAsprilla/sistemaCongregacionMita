@@ -258,7 +258,7 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         path: RUTAS.SOLICITUDES_MULTIMEDIA,
-        title: 'Solicitud de Acceso',
+        title: 'Solicitudes de Acceso',
         icon: '',
         class: '',
         extralink: false,
