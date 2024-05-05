@@ -39,6 +39,7 @@ export enum RUTAS {
   SERVICIOS_Y_VIGILIAS = 'servicios-y-vigilias',
   SISTEMA = 'sistema',
   SITUACION_VISITA = 'situacion-visita',
+  SOLICITUD = 'solicitud',
   SOLICITUD_MULTIMEDIA = 'solicitud-multimedia',
   SOLICITUDES_MULTIMEDIA = 'solicitudes-multimedia',
   TIPO_DE_DOCUMENTO = 'tipo-de-documento',

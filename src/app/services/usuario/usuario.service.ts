@@ -214,7 +214,6 @@ export class UsuarioService {
         }),
 
         catchError((error) => {
-          console.log(error);
           return of(false);
         })
       );
