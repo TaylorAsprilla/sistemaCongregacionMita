@@ -12,7 +12,6 @@ export class SeccionHomeComponent implements OnInit {
   @Input() email: string = '';
   @Input() logo: string = '';
   @Input() ruta: string = '';
-  @Input() permisos: ROLES[] = [];
 
   constructor() {}
 

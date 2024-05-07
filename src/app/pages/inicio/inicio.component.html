@@ -1,14 +1,15 @@
-<div class="row">
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3" *ngFor="let seccionHome of generarSeccionHome">
-    <ng-container *appPermisos="seccionHome.role">
-      <app-seccion-home
-        [permisos]="seccionHome.role"
-        [nombreSeccion]="seccionHome.nombreSeccion"
-        [nombreResponsable]="seccionHome.nombreResponsable"
-        [email]="seccionHome.email"
-        [logo]="seccionHome.logo"
-        [ruta]="seccionHome.ruta"
-      ></app-seccion-home>
+<div class="container-fluid">
+  <div class="row no-gutters justify-content-start">
+    <ng-container *ngFor="let seccionHome of generarSeccionHome">
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3" *appPermisos="seccionHome.role">
+        <app-seccion-home
+          [nombreSeccion]="seccionHome.nombreSeccion"
+          [nombreResponsable]="seccionHome.nombreResponsable"
+          [email]="seccionHome.email"
+          [logo]="seccionHome.logo"
+          [ruta]="seccionHome.ruta"
+        ></app-seccion-home>
+      </div>
     </ng-container>
   </div>
 </div>
