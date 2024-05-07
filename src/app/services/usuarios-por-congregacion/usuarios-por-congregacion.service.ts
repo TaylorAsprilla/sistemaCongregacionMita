@@ -11,7 +11,7 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class UsuariosPorCongregacionService {
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(private httpClient: HttpClient) {}
 
   get token(): string {
     return localStorage.getItem('token') || '';

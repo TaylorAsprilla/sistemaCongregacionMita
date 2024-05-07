@@ -24,6 +24,7 @@ export const generarSeccionHome: SeccionHome[] = [
       ROLES.OBRERO_CAMPO,
       ROLES.ADMINISTRADOR_MULTIMEDIA,
       ROLES.ASISTENTE_OOTS,
+      ROLES.AYUDANTE,
     ],
   },
   {
@@ -32,7 +33,15 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/censo.png',
     ruta: `../${RUTAS.CENSO}`,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    role: [
+      ROLES.ADMINISTRADOR,
+      ROLES.SUPERVISOR,
+      ROLES.SUPERVISOR_LOCAL,
+      ROLES.OBRERO_CIUDAD,
+      ROLES.OBRERO_CAMPO,
+      ROLES.ASISTENTE_OOTS,
+      ROLES.AYUDANTE,
+    ],
   },
   {
     nombreSeccion: 'Informes',
@@ -55,6 +64,7 @@ export const generarSeccionHome: SeccionHome[] = [
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
       ROLES.ASISTENTE_OOTS,
+      ROLES.AYUDANTE,
     ],
   },
 ];

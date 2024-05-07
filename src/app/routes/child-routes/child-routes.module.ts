@@ -64,6 +64,7 @@ import { AsignarPermisosComponent } from 'src/app/pages/administracion/asignar-p
 import { CensoObreroComponent } from 'src/app/pages/obreros/censo-obrero/censo-obrero.component';
 import { CensoSupervisorComponent } from 'src/app/pages/obreros/censo-supervisor/censo-supervisor.component';
 import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
+import { CensoAyudanteComponent } from 'src/app/pages/ayudantes/censo-ayudante/censo-ayudante.component';
 
 const childRoutes: Routes = [
   {
@@ -103,7 +104,15 @@ const childRoutes: Routes = [
       usuario: UsuarioResolver,
     },
   },
-
+  {
+    path: RUTAS.USUARIOS_AYUDANTE,
+    component: CensoAyudanteComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Censo Ayudante',
+      role: [ROLES.AYUDANTE],
+    },
+  },
   {
     path: RUTAS.CENSO,
     component: CensoObreroComponent,
@@ -316,6 +325,11 @@ const childRoutes: Routes = [
   {
     path: RUTAS.SERVICIOS_Y_VIGILIAS,
     component: ServiciosYVigiliasComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Servicios y Vigilias',
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    },
   },
   {
     path: `${RUTAS.EVENTOS}/:id`,
