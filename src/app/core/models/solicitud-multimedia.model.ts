@@ -21,12 +21,20 @@ export enum RAZON_SOLICITUD_ID {
   OTRA = '5',
 }
 
-export enum TIEMPO_SUGERIDO {
+export enum TIEMPO_SUGERIDO_TEXT {
   QUINCE_DIAS = '15 Días',
   UN_MES = '1 Mes',
   SEIS_MESES = '6 Meses',
   UN_ANO = '1 Año',
-  ACCESO_PERMANENTE = 'Acceso Permanente',
+  DOS_ANOS = '2 Años',
+}
+
+export enum TIEMPO_SUGERIDO_DIAS {
+  QUINCE_DIAS = '15',
+  UN_MES = '30',
+  SEIS_MESES = '180',
+  UN_ANO = '365',
+  DOS_ANOS = '730',
 }
 
 export class SolicitudMultimediaModel {

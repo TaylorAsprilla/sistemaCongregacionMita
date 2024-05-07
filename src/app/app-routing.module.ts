@@ -4,12 +4,14 @@ import { AuthRoutingModule } from './auth/auth.routing';
 import { SolicitudRoutingModule } from './pages/multimedia/multimedia.routing';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
 import { PagesRoutingModule } from './pages/pages.routing';
+import { CONFIGURACION } from './core/enums/config.enum';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: '/sistema/inicio',
     pathMatch: 'full',
+    title: CONFIGURACION.TITLE,
   },
   {
     path: '**',

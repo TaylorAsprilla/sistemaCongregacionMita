@@ -75,7 +75,8 @@ export class UsuarioModel {
     public anoConocimiento?: string,
     public usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface,
     public usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface,
-    public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface
+    public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface,
+    public idUsuarioQueRegistra?: number
   ) {}
 
   get fotoUrl() {

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CambiarPasswordComponent } from './cambiar-password/cambiar-password.component';
 import { LoginComponent } from './login/login.component';
 import { RecuperarCuentaComponent } from './recuperar-cuenta/recuperar-cuenta.component';
+import { CONFIGURACION } from '../core/enums/config.enum';
 
 const routes: Routes = [
   {
@@ -13,10 +14,12 @@ const routes: Routes = [
   {
     path: 'recuperar-cuenta',
     component: RecuperarCuentaComponent,
+    title: CONFIGURACION.TITLE,
   },
   {
     path: 'nueva-contrasena/:token',
     component: CambiarPasswordComponent,
+    title: CONFIGURACION.TITLE,
   },
 ];
 

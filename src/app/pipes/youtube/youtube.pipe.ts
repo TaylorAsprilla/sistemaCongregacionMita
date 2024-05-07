@@ -15,7 +15,7 @@ export class YoutubePipe implements PipeTransform {
     if (match && match[8].length == 11) {
       this.currentVideoId = match[8];
     } else {
-      console.log('Error');
+      console.error('Error');
     }
 
     return this.currentVideoId;

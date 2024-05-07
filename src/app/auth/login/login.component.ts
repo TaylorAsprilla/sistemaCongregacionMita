@@ -25,11 +25,6 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private formBuilder: FormBuilder, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.usuariosSubscription = this.usuarioService.listarUsuarios().subscribe(
-      (res) => console.log(res),
-      (err) => console.error(err)
-    );
-
     this.crearFormularioLogin();
   }
 

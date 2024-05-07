@@ -22,6 +22,7 @@ import { TipoDeEstudioComponent } from './configuracion/tipo-de-estudio/tipo-de-
 import { RazonDeSolicitudComponent } from './configuracion/razon-de-solicitud/razon-de-solicitud.component';
 import { ParentescoComponent } from './configuracion/parentesco/parentesco.component';
 import { ObrerosModule } from './obreros/obreros.module';
+import { AyudantesModule } from './ayudantes/ayudantes.module';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { ObrerosModule } from './obreros/obreros.module';
     InicioModule,
     SpinnerModule,
     ObrerosModule,
+    AyudantesModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true }],
 })

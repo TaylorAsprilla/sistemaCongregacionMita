@@ -67,6 +67,7 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() public tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
   @Input() public usuarioMinisterios: number[] = [];
   @Input() public usuarioVoluntariados: number[] = [];
+  @Input() idUsuarioQueRegistra: number;
 
   @Input() usuarioForm: FormGroup;
   @Input() codigoDeMarcadoSeparado = false;
@@ -405,6 +406,7 @@ export class InformacionUsuarioComponent implements OnInit {
         paisPostal: informacionFormulario?.paisPostal,
         departamentoDireccion: informacionFormulario?.departamentoDireccion,
         anoConocimiento: informacionFormulario?.anoConocimiento,
+        idUsuarioQueRegistra: this.idUsuarioQueRegistra,
       };
 
       this.operacion.emit(usuarioNuevo);

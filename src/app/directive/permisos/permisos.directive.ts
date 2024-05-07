@@ -1,4 +1,4 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -8,7 +8,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 @Directive({
   selector: '[appPermisos]',
 })
-export class PermisosDirective {
+export class PermisosDirective implements OnInit {
   private permisos = [];
   private usuario: UsuarioModel;
   private multimediaCongregacion: MultimediaCongregacionModel;
