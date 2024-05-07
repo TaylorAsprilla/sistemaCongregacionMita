@@ -85,8 +85,17 @@ const childRoutes: Routes = [
   {
     path: `${RUTAS.USUARIOS}/:id`,
     component: RegistrarUsuarioComponent,
+    canActivate: [RolesGuard],
     data: {
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+        ROLES.AYUDANTE,
+      ],
     },
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -134,6 +143,7 @@ const childRoutes: Routes = [
   {
     path: RUTAS.USUARIOS_SUPERVISOR,
     component: CensoSupervisorComponent,
+    canActivate: [RolesGuard],
     data: {
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
     },
@@ -169,23 +179,68 @@ const childRoutes: Routes = [
   {
     path: RUTAS.CONGREGACIONES,
     component: CongregacionesComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Congregaciones',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver, pais: PaisResolver },
-    data: { titulo: 'Congregaciones' },
   },
   {
     path: `${RUTAS.CONGREGACIONES}/:id`,
     component: CrearCongregacionComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Congregaciones',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver, pais: PaisResolver },
   },
   {
     path: RUTAS.CAMPOS,
     component: CamposComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Campos',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
-    data: { titulo: 'Campos' },
   },
   {
     path: `${RUTAS.CAMPOS}/:id`,
     component: CrearCampoComponent,
+    data: {
+      titulo: 'Campos',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
   },
   {

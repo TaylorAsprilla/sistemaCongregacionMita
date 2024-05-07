@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header">
     <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
-    <div *ngIf="!nombreCongregacion; else sinNombre">
+    <div *ngIf="nombreCongregacion; else sinNombre">
       <span><b> Pais:</b> {{ nombrePais }} - </span>
       <span><b> Congregacion:</b> {{ nombreCongregacion }} </span>
       <span *ngIf="!ocultarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
