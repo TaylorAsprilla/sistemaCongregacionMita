@@ -35,6 +35,7 @@ export interface RegisterFormInterface {
   tipoDocumento_id?: number;
   anoConocimiento?: string;
   permisos?: number[];
+  idUsuarioQueRegistra: number;
 }
 
 export interface CongregacionInterfase {

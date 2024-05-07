@@ -152,6 +152,7 @@ export class UsuarioService {
               usuarioCongregacionCongregacion,
               usuarioCongregacionCampo,
               usuarioCongregacionPais,
+              idUsuarioQueRegistra,
             } = respuesta.usuario;
 
             this.usuario = new UsuarioModel(
@@ -204,7 +205,8 @@ export class UsuarioService {
               anoConocimiento,
               usuarioCongregacionCongregacion,
               usuarioCongregacionCampo,
-              usuarioCongregacionPais
+              usuarioCongregacionPais,
+              idUsuarioQueRegistra
             );
 
             localStorage.setItem('token', respuesta.token);

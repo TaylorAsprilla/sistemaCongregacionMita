@@ -25,20 +25,21 @@ import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
   styleUrls: ['./registrar-usuario.component.scss'],
 })
 export class RegistrarUsuarioComponent implements OnInit {
-  public usuario: UsuarioModel;
-  public generos: GeneroModel[] = [];
-  public estadoCivil: EstadoCivilModel[] = [];
-  public rolCasa: RolCasaModel[] = [];
-  public paises: CongregacionPaisModel[] = [];
-  public congregaciones: CongregacionModel[] = [];
-  public campos: CampoModel[] = [];
-  public nacionalidades: NacionalidadModel[] = [];
-  public gradosAcademicos: GradoAcademicoModel[] = [];
+  usuario: UsuarioModel;
+  generos: GeneroModel[] = [];
+  estadoCivil: EstadoCivilModel[] = [];
+  rolCasa: RolCasaModel[] = [];
+  paises: CongregacionPaisModel[] = [];
+  congregaciones: CongregacionModel[] = [];
+  campos: CampoModel[] = [];
+  nacionalidades: NacionalidadModel[] = [];
+  gradosAcademicos: GradoAcademicoModel[] = [];
 
-  public tipoMiembros: TipoMiembroModel[] = [];
-  public ministerios: MinisterioModel[] = [];
-  public voluntariados: VoluntariadoModel[] = [];
-  public tiposDeDocumentos: TipoDocumentoModel[] = [];
+  tipoMiembros: TipoMiembroModel[] = [];
+  ministerios: MinisterioModel[] = [];
+  voluntariados: VoluntariadoModel[] = [];
+  tiposDeDocumentos: TipoDocumentoModel[] = [];
+  idUsuarioQueRegistra: number;
 
   get OPERACION() {
     return OPERACION;
@@ -79,6 +80,7 @@ export class RegistrarUsuarioComponent implements OnInit {
         this.usuario = data?.usuario?.usuario;
       }
     );
+    this.idUsuarioQueRegistra = this.usuarioService.usuarioId;
   }
 
   arrayUsuarioData(dataType: string) {
