@@ -1,4 +1,4 @@
-import { tiempoSugerido } from './../../../../../environments/config/config';
+import { configuracion } from 'src/environments/config/config';
 import { UsuarioService } from './../../../../services/usuario/usuario.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -42,7 +42,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   nombreUsuario: string;
   usuarioQueRegistra: UsuarioModel;
 
-  tiempoSugerido = tiempoSugerido;
+  tiempoSugerido = configuracion.tiempoSugerido;
 
   // Subscription
   buscarCorreoSubscription: Subscription;
