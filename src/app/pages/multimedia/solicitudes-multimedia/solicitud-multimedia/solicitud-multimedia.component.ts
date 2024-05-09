@@ -1,3 +1,4 @@
+import { configuracion } from 'src/environments/config/config';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,7 +12,6 @@ import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedi
 import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
-import { tiempoSugerido } from 'src/environments/config/config';
 
 @Component({
   selector: 'app-solicitud-multimedia',
@@ -243,7 +243,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             <label class="input-group obligatorio">Tiempo de aprobación:</label>
             <select id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" required>
               <option value="" disabled selected>Seleccionar tiempo de aprobación</option>
-              ${tiempoSugerido.map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`).join('')}
+              ${configuracion.tiempoSugerido
+                .map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`)
+                .join('')}
             </select>
           </div>
         `,
