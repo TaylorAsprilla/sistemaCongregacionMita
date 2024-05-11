@@ -1,4 +1,4 @@
-import { TIEMPO_SUGERIDO_DIAS, TIEMPO_SUGERIDO_TEXT } from './../../app/core/models/solicitud-multimedia.model';
+import { TIEMPO_SUGERIDO_DIAS, TIEMPO_SUGERIDO_TEXT } from '../../app/core/models/solicitud-multimedia.model';
 
 export const configuracion = {
   inactividad: {

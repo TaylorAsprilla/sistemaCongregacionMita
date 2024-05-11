@@ -14,7 +14,7 @@ import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.int
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
-import { configuracion } from 'src/environments/config/config';
+import { configuracion } from 'src/environments/config/configuration';
 
 const base_url = environment.base_url;
 @Injectable({

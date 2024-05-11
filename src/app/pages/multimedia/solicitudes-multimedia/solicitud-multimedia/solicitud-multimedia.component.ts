@@ -1,4 +1,4 @@
-import { configuracion } from 'src/environments/config/config';
+import { configuracion } from 'src/environments/config/configuration';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';

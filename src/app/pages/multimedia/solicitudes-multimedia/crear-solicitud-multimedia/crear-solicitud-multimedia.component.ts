@@ -1,4 +1,4 @@
-import { configuracion } from 'src/environments/config/config';
+import { configuracion } from 'src/environments/config/configuration';
 import { UsuarioService } from './../../../../services/usuario/usuario.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
