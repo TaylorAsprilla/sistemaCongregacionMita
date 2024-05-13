@@ -65,6 +65,10 @@ import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministeri
 import { AsignarPermisosComponent } from 'src/app/pages/administracion/asignar-permisos/asignar-permisos.component';
 import { CensoObreroComponent } from 'src/app/pages/obreros/censo-obrero/censo-obrero.component';
 import { CensoSupervisorComponent } from 'src/app/pages/obreros/censo-supervisor/censo-supervisor.component';
+import { EstadoCivilComponent } from 'src/app/pages/configuracion/estado-civil/estado-civil.component';
+import { GradoAlcanzadoComponent } from 'src/app/pages/configuracion/grado-alcanzado/grado-alcanzado.component';
+import { RolEnCasaComponent } from 'src/app/pages/configuracion/rol-en-casa/rol-en-casa.component';
+import { VoluntarioComponent } from 'src/app/pages/configuracion/voluntario/voluntario.component';
 
 const childRoutes: Routes = [
   {
@@ -200,6 +204,22 @@ const childRoutes: Routes = [
   {
     path: RUTAS.GENERO,
     component: GeneroComponent,
+  },
+  {
+    path: RUTAS.ESTADO_CIVIL,
+    component: EstadoCivilComponent,
+  },
+  {
+    path: RUTAS.GRADO_ALCANZADO,
+    component: GradoAlcanzadoComponent,
+  },
+  {
+    path: RUTAS.ROL_EN_CASA,
+    component: RolEnCasaComponent,
+  },
+  {
+    path: RUTAS.VOLUNTARIO,
+    component: VoluntarioComponent,
   },
   {
     path: RUTAS.TIPO_DE_ESTUDIO,
