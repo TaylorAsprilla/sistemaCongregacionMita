@@ -22,8 +22,7 @@ export class InicioComponent implements OnInit {
   paises: CongregacionPaisModel[] = [];
   congregaciones: CongregacionModel[] = [];
   campos: CampoModel[] = [];
-  linkServicio: LinkEventoModel;
-  servicio: LinkEventoModel[] = [];
+  servicio: LinkEventoModel;
 
   roles: ROLES[] = [];
 
@@ -44,8 +43,7 @@ export class InicioComponent implements OnInit {
 
   ngOnInit(): void {
     this.linEventosSubscription = this.linkEventosService.getLinkServicio().subscribe((evento: LinkEventoModel) => {
-      this.linkServicio = evento;
-      this.servicio[0] = this.linkServicio;
+      this.servicio = evento;
     });
 
     this.generarSeccionHome = generarSeccionHome.filter((seccionInforme) => seccionInforme);

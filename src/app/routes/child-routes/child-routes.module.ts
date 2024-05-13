@@ -38,7 +38,6 @@ import { VoluntariadoResolver } from 'src/app/resolvers/voluntariado/voluntariad
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
-import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
 import { ConfirmacionDeRegistroComponent } from 'src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component';
@@ -375,15 +374,6 @@ const childRoutes: Routes = [
     resolve: {
       tipoMiembro: TipoMiembroResolver,
       nacionalidad: NacionalidadResolver,
-    },
-  },
-  {
-    path: RUTAS.SERVICIOS_Y_VIGILIAS,
-    component: ServiciosYVigiliasComponent,
-    canActivate: [RolesGuard],
-    data: {
-      titulo: 'Servicios y Vigilias',
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
     },
   },
   {

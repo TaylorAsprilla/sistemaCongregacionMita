@@ -463,22 +463,6 @@ export const ROUTES: RouteInfo[] = [
     ],
     submenu: [
       {
-        path: RUTAS.SERVICIOS_Y_VIGILIAS,
-        title: 'Servicios y Vigilias en Vivo',
-        icon: '',
-        class: '',
-        extralink: false,
-        role: [
-          ROLES.ADMINISTRADOR,
-          ROLES.SUPERVISOR,
-          ROLES.SUPERVISOR_LOCAL,
-          ROLES.OBRERO_CIUDAD,
-          ROLES.ADMINISTRADOR_MULTIMEDIA,
-          ROLES.MULTIMEDIA,
-        ],
-        submenu: [],
-      },
-      {
         path: '',
         title: 'Biblioteca Multimedia',
         icon: '',
