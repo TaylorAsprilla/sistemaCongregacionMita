@@ -12,7 +12,6 @@ import { CargandoInformacionModule } from 'src/app/components/cargando-informaci
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidarEmailComponent } from './solicitudes-multimedia/validar-email/validar-email.component';
-import { ServiciosYVigiliasComponent } from './eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
 import { ServiciosComponent } from './biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from './biblioteca-multimedia/vigilias/vigilias.component';
 import { BibliotecaMultimediaModule } from 'src/app/components/biblioteca-multimedia/biblioteca-multimedia.module';
@@ -28,7 +27,6 @@ const lang = 'en-US';
     SolicitudMultimediaComponent,
     CrearSolicitudMultimediaComponent,
     ValidarEmailComponent,
-    ServiciosYVigiliasComponent,
     ConfigurarEventosComponent,
     ServiciosComponent,
     VigiliasComponent,
@@ -50,12 +48,7 @@ const lang = 'en-US';
     PipesModule,
     BuscarUsuarioModule,
   ],
-  exports: [
-    SolicitudMultimediaComponent,
-    CrearSolicitudMultimediaComponent,
-    ValidarEmailComponent,
-    ServiciosYVigiliasComponent,
-  ],
+  exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
   providers: [{ provide: LOCALE_ID, useValue: lang }],
 })
 export class MultimediaModule {}
