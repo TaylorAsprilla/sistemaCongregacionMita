@@ -64,6 +64,7 @@ import { CensoObreroComponent } from 'src/app/pages/obreros/censo-obrero/censo-o
 import { CensoSupervisorComponent } from 'src/app/pages/obreros/censo-supervisor/censo-supervisor.component';
 import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 import { CensoAyudanteComponent } from 'src/app/pages/ayudantes/censo-ayudante/censo-ayudante.component';
+import { EventosEnVivoComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
 
 const childRoutes: Routes = [
   {
@@ -391,6 +392,10 @@ const childRoutes: Routes = [
   {
     path: RUTAS.BIBLIOTECA_VIGILIAS,
     component: VigiliasComponent,
+  },
+  {
+    path: RUTAS.EVENTOS_EN_VIVO,
+    component: EventosEnVivoComponent,
   },
 ];
 

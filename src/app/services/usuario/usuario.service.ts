@@ -108,13 +108,13 @@ export class UsuarioService {
     if (this.token != '') {
       let timerInterval: any;
       Swal.fire({
-        title: 'Attention!',
-        html: 'Your session will be automatically logged out due to inactivity in <b></b>',
+        title: '¡Atención!',
+        html: 'Su sesión se cerrará automáticamente debido a inactividad en <b></b>',
         icon: 'warning',
         timer: this.timerModal,
         timerProgressBar: true,
         showCancelButton: true,
-        cancelButtonText: 'Continue session',
+        cancelButtonText: 'Continuar en la sesión',
         showConfirmButton: false,
         allowOutsideClick: false,
         didOpen: () => {

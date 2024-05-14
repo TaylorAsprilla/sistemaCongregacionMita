@@ -19,6 +19,8 @@ import { ConfigurarEventosComponent } from './eventos-multimedia/configurar-even
 import { EventosComponent } from './eventos-multimedia/eventos/eventos.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { BuscarUsuarioModule } from 'src/app/components/buscar-usuario/buscar-usuario.module';
+import { ServiciosEnVivoModule } from 'src/app/components/servicios-en-vivo/servicios-en-vivo.module';
+import { EventosEnVivoComponent } from './eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
 
 const lang = 'en-US';
 
@@ -31,6 +33,7 @@ const lang = 'en-US';
     ServiciosComponent,
     VigiliasComponent,
     EventosComponent,
+    EventosEnVivoComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +50,7 @@ const lang = 'en-US';
     BibliotecaMultimediaModule,
     PipesModule,
     BuscarUsuarioModule,
+    ServiciosEnVivoModule,
   ],
   exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
   providers: [{ provide: LOCALE_ID, useValue: lang }],
