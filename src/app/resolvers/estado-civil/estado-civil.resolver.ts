@@ -11,7 +11,7 @@ export class EstadoCivilResolver implements Resolve<boolean> {
   constructor(private estadoCivilServices: EstadoCivilService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    return this.estadoCivilServices.getEstadoCivil().pipe(
+    return this.estadoCivilServices.getEstadoCiviles().pipe(
       catchError((error) => {
         return of('No data');
       })

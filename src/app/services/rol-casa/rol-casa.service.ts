@@ -28,11 +28,25 @@ export class RolCasaService {
       .pipe(map((rolCasa: { ok: boolean; rolCasa: RolCasaModel[] }) => rolCasa.rolCasa));
   }
 
-  crearRolCasa(rolCasa: RolCasaModel) {
-    return this.httpClient.post(`${base_url}/rolcasa`, rolCasa, this.headers);
+  getUnRolCasa(id: number) {
+    return this.httpClient
+      .get(`${base_url}/rolcasa/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; rolcasa: RolCasaModel }) => respuesta.rolcasa));
+  }
+
+  crearRolCasa(rolCasa: string) {
+    return this.httpClient.post(`${base_url}/rolCasa`, { rolCasa: rolCasa }, this.headers);
   }
 
   actualizarRolCasa(rolCasa: RolCasaModel) {
     return this.httpClient.put(`${base_url}/rolcasa/${rolCasa.id}`, rolCasa, this.headers);
+  }
+
+  elimiminarRolCasa(rolCasa: RolCasaModel) {
+    return this.httpClient.delete(`${base_url}/rolcasa/${rolCasa.id}`, this.headers);
+  }
+
+  activarRolCasa(rolCasa: RolCasaModel) {
+    return this.httpClient.put(`${base_url}/rolcasa/activar/${rolCasa.id}`, rolCasa, this.headers);
   }
 }

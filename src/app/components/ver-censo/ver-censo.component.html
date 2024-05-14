@@ -18,9 +18,58 @@
   </div>
 
   <div *ngIf="usuarios.length > 0; else sinFeligreses" class="card-body">
-    <div class="inputBuscqueda">
-      <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
-    </div>
+    <table class="tabla">
+      <tr>
+        <td class="inputSelect">
+          <div>
+            <label class="input-group">País</label>
+            <select class="form-select" (ngModelChange)="filtrarPais($event)" [(ngModel)]="originalPais">
+              <option value="">Seleccione País</option>
+              <option [value]="">Sin País</option>
+              <option *ngFor="let pais of paises" [ngValue]="pais">
+                {{ pais.pais }}
+              </option>
+            </select>
+          </div>
+        </td>
+
+        <td class="inputSelect">
+          <div>
+            <label class="input-group">Congregación </label>
+            <select class="form-select" (ngModelChange)="filtrarCongre($event)" [(ngModel)]="originalCongre">
+              <option value="">Seleccione Congregación</option>
+              <option [value]="">Sin Congregación</option>
+              <option *ngFor="let congregacion of congregacionesFiltradas" [ngValue]="congregacion">
+                {{ congregacion.congregacion }}
+              </option>
+            </select>
+          </div>
+        </td>
+        <td class="inputSelect">
+          <div>
+            <label class="input-group">Campos</label>
+            <select class="form-select" (ngModelChange)="filtrarCampo($event)" [(ngModel)]="filtrarCampoTexto">
+              <option value="">Seleccione Campo</option>
+              <option [value]="">Sin Campo</option>
+              <option *ngFor="let campo of camposFiltrados">
+                {{ campo.campo }}
+              </option>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="text-right mb-4 btnDiv">
+            <a class="btn btn-primary btnIn" (click)="resetFiltros()"> Reset Filtros </a>
+          </div>
+        </td>
+        <td class="inputBusqueda">
+          <div class="">
+            <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+          </div>
+        </td>
+      </tr>
+    </table>
+
     <div class="table-responsive">
       <table class="table table-bordered table-striped" id="excel-table">
         <thead>

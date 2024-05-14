@@ -23,17 +23,31 @@ export class EstadoCivilService {
     };
   }
 
-  getEstadoCivil() {
+  getEstadoCiviles() {
     return this.httpClient
       .get(`${base_url}/estadocivil`, this.headers)
       .pipe(map((estadoCivil: { ok: boolean; estadoCivil: EstadoCivilModel[] }) => estadoCivil.estadoCivil));
   }
 
-  crearGenero(estadoCivil: EstadoCivilModel) {
-    return this.httpClient.post(`${base_url}/estadocivil`, estadoCivil, this.headers);
+  getEstadoCivil(id: number) {
+    return this.httpClient
+      .get(`${base_url}/estadocivil/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; estadocivil: EstadoCivilModel }) => respuesta.estadocivil));
   }
 
-  actualizarGenero(estadoCivil: EstadoCivilModel) {
+  crearEstadoCivil(estadoCivil: string) {
+    return this.httpClient.post(`${base_url}/estadoCivil`, { estadoCivil: estadoCivil }, this.headers);
+  }
+
+  actualizarEstadoCivil(estadoCivil: EstadoCivilModel) {
     return this.httpClient.put(`${base_url}/estadocivil/${estadoCivil.id}`, estadoCivil, this.headers);
+  }
+
+  elimiminarEstadoCivil(estadoCivil: EstadoCivilModel) {
+    return this.httpClient.delete(`${base_url}/estadocivil/${estadoCivil.id}`, this.headers);
+  }
+
+  activarEstadoCivil(estadoCivil: EstadoCivilModel) {
+    return this.httpClient.put(`${base_url}/estadocivil/activar/${estadoCivil.id}`, estadoCivil, this.headers);
   }
 }
