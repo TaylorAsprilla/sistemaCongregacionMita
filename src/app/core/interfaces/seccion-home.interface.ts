@@ -14,6 +14,7 @@ export const generarSeccionHome: SeccionHome[] = [
     nombreSeccion: 'CMAR Live',
     nombreResponsable: '',
     email: '',
+    ruta: `./../${RUTAS.EVENTOS_EN_VIVO}`,
     logo: 'assets/images/vista-principal/logo-multimedia.png',
     role: [
       ROLES.ADMINISTRADOR,
