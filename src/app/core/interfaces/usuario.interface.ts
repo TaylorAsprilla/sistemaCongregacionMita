@@ -5,7 +5,6 @@ import { MinisterioModel } from '../models/ministerio.model';
 import { NacionalidadModel } from '../models/nacionalidad.model';
 import { PermisoModel } from '../models/permisos.model';
 import { RolCasaModel } from '../models/rol-casa.model';
-import { TipoEmpleoModel } from '../models/tipo-empleo.model';
 import { TipoMiembroModel } from '../models/tipo.miembro.model';
 import { UsuarioModel } from '../models/usuario.model';
 import { CongregacionInterface, UsuarioCongregacionModel } from '../models/usuarioCongregacion.model';
@@ -83,7 +82,6 @@ export interface ActualizarUsuarioInterface {
   rolCasa?: RolCasaModel;
   nacionalidad?: NacionalidadModel;
   gradoAcademico?: GradoAcademicoModel;
-  tipoEmpleo?: TipoEmpleoModel;
   tipoMiembro?: TipoMiembroModel;
   departamentoDireccion?: string;
   codigoPostalDireccion?: string;

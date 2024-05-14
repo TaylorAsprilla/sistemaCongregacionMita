@@ -15,7 +15,7 @@ import { MultimediaModule } from './multimedia/multimedia.module';
 import { InicioModule } from './inicio/inicio.module';
 import { SpinnerModule } from '../components/spinner/spinner.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { SpinnerInterceptor } from '../shared/interceptors/spinner.interceptors';
+import { SpinnerInterceptor } from '../core/interceptors/spinner/spinner.interceptors';
 import { OpcionDeTransporteComponent } from './configuracion/opcion-de-transporte/opcion-de-transporte.component';
 import { GeneroComponent } from './configuracion/genero/genero.component';
 import { TipoDeEstudioComponent } from './configuracion/tipo-de-estudio/tipo-de-estudio.component';
@@ -26,6 +26,8 @@ import { RolEnCasaComponent } from './configuracion/rol-en-casa/rol-en-casa.comp
 import { EstadoCivilComponent } from './configuracion/estado-civil/estado-civil.component';
 import { GradoAlcanzadoComponent } from './configuracion/grado-alcanzado/grado-alcanzado.component';
 import { VoluntarioComponent } from './configuracion/voluntario/voluntario.component';
+import { AyudantesModule } from './ayudantes/ayudantes.module';
+import { AuthInterceptor } from '../core/interceptors/auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,15 @@ import { VoluntarioComponent } from './configuracion/voluntario/voluntario.compo
     InicioModule,
     SpinnerModule,
     ObrerosModule,
+    AyudantesModule,
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true }],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
 })
 export class PagesModule {}

@@ -27,12 +27,10 @@ import { DivisasResolver } from 'src/app/resolvers/divisas/divisas.resolver';
 import { SeccionInformeResolver } from 'src/app/resolvers/seccion-informe/seccion-informe.resolver';
 import { NacionalidadResolver } from 'src/app/resolvers/nacionalidad/nacionalidad.resolver';
 import { CrearSolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
-import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 import { EstadoCivilResolver } from 'src/app/resolvers/estado-civil/estado-civil.resolver';
 import { GeneroResolver } from 'src/app/resolvers/genero/genero.resolver';
 import { RolCasaResolver } from 'src/app/resolvers/rol-casa/rol-casa.resolver';
 import { GradoAcademicoResolver } from 'src/app/resolvers/grado-academico/grado-academico.resolver';
-import { TipoEmpleoResolver } from 'src/app/resolvers/tipo-empleo/tipo-empleo.resolver';
 import { CongregacionResolver } from 'src/app/resolvers/congregacion/congregacion.resolver';
 import { TipoMiembroResolver } from 'src/app/resolvers/tipo-miembro/tipo-miembro.resolver';
 import { MinisterioResolver } from 'src/app/resolvers/ministerio/ministerio.resolver';
@@ -69,6 +67,8 @@ import { EstadoCivilComponent } from 'src/app/pages/configuracion/estado-civil/e
 import { GradoAlcanzadoComponent } from 'src/app/pages/configuracion/grado-alcanzado/grado-alcanzado.component';
 import { RolEnCasaComponent } from 'src/app/pages/configuracion/rol-en-casa/rol-en-casa.component';
 import { VoluntarioComponent } from 'src/app/pages/configuracion/voluntario/voluntario.component';
+import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
+import { CensoAyudanteComponent } from 'src/app/pages/ayudantes/censo-ayudante/censo-ayudante.component';
 
 const childRoutes: Routes = [
   {
@@ -89,8 +89,17 @@ const childRoutes: Routes = [
   {
     path: `${RUTAS.USUARIOS}/:id`,
     component: RegistrarUsuarioComponent,
+    canActivate: [RolesGuard],
     data: {
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+        ROLES.AYUDANTE,
+      ],
     },
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -98,7 +107,6 @@ const childRoutes: Routes = [
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
       gradoAcademico: GradoAcademicoResolver,
-      tipoEmpleo: TipoEmpleoResolver,
       congregacion: CongregacionResolver,
       tipoMiembro: TipoMiembroResolver,
       ministerio: MinisterioResolver,
@@ -109,7 +117,15 @@ const childRoutes: Routes = [
       usuario: UsuarioResolver,
     },
   },
-
+  {
+    path: RUTAS.USUARIOS_AYUDANTE,
+    component: CensoAyudanteComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Censo Ayudante',
+      role: [ROLES.AYUDANTE],
+    },
+  },
   {
     path: RUTAS.CENSO,
     component: CensoObreroComponent,
@@ -131,6 +147,7 @@ const childRoutes: Routes = [
   {
     path: RUTAS.USUARIOS_SUPERVISOR,
     component: CensoSupervisorComponent,
+    canActivate: [RolesGuard],
     data: {
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
     },
@@ -166,23 +183,68 @@ const childRoutes: Routes = [
   {
     path: RUTAS.CONGREGACIONES,
     component: CongregacionesComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Congregaciones',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver, pais: PaisResolver },
-    data: { titulo: 'Congregaciones' },
   },
   {
     path: `${RUTAS.CONGREGACIONES}/:id`,
     component: CrearCongregacionComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Congregaciones',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver, pais: PaisResolver },
   },
   {
     path: RUTAS.CAMPOS,
     component: CamposComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Campos',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
-    data: { titulo: 'Campos' },
   },
   {
     path: `${RUTAS.CAMPOS}/:id`,
     component: CrearCampoComponent,
+    data: {
+      titulo: 'Campos',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
   },
   {
@@ -244,7 +306,6 @@ const childRoutes: Routes = [
       genero: GeneroResolver,
       rolCasa: RolCasaResolver,
       gradoAcademico: GradoAcademicoResolver,
-      tipoEmpleo: TipoEmpleoResolver,
       congregacion: CongregacionResolver,
       tipoMiembro: TipoMiembroResolver,
       ministerio: MinisterioResolver,
@@ -339,6 +400,11 @@ const childRoutes: Routes = [
   {
     path: RUTAS.SERVICIOS_Y_VIGILIAS,
     component: ServiciosYVigiliasComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Servicios y Vigilias',
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    },
   },
   {
     path: `${RUTAS.EVENTOS}/:id`,

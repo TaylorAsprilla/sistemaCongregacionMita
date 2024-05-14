@@ -12,7 +12,6 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
-import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
@@ -26,20 +25,21 @@ import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
   styleUrls: ['./registrar-usuario.component.scss'],
 })
 export class RegistrarUsuarioComponent implements OnInit {
-  public usuario: UsuarioModel;
-  public generos: GeneroModel[] = [];
-  public estadoCivil: EstadoCivilModel[] = [];
-  public rolCasa: RolCasaModel[] = [];
-  public paises: CongregacionPaisModel[] = [];
-  public congregaciones: CongregacionModel[] = [];
-  public campos: CampoModel[] = [];
-  public nacionalidades: NacionalidadModel[] = [];
-  public gradosAcademicos: GradoAcademicoModel[] = [];
-  public tiposEmpleos: TipoEmpleoModel[] = [];
-  public tipoMiembros: TipoMiembroModel[] = [];
-  public ministerios: MinisterioModel[] = [];
-  public voluntariados: VoluntariadoModel[] = [];
-  public tiposDeDocumentos: TipoDocumentoModel[] = [];
+  usuario: UsuarioModel;
+  generos: GeneroModel[] = [];
+  estadoCivil: EstadoCivilModel[] = [];
+  rolCasa: RolCasaModel[] = [];
+  paises: CongregacionPaisModel[] = [];
+  congregaciones: CongregacionModel[] = [];
+  campos: CampoModel[] = [];
+  nacionalidades: NacionalidadModel[] = [];
+  gradosAcademicos: GradoAcademicoModel[] = [];
+
+  tipoMiembros: TipoMiembroModel[] = [];
+  ministerios: MinisterioModel[] = [];
+  voluntariados: VoluntariadoModel[] = [];
+  tiposDeDocumentos: TipoDocumentoModel[] = [];
+  idUsuarioQueRegistra: number;
 
   get OPERACION() {
     return OPERACION;
@@ -55,7 +55,6 @@ export class RegistrarUsuarioComponent implements OnInit {
         rolCasa: RolCasaModel[];
         genero: GeneroModel[];
         gradoAcademico: GradoAcademicoModel[];
-        tipoEmpleo: TipoEmpleoModel[];
         congregacion: CongregacionModel[];
         tipoMiembro: TipoMiembroModel[];
         tipoDocumento: TipoDocumentoModel[];
@@ -71,7 +70,6 @@ export class RegistrarUsuarioComponent implements OnInit {
         this.generos = data.genero.filter((genero) => genero.estado === true);
 
         this.gradosAcademicos = data.gradoAcademico;
-        this.tiposEmpleos = data.tipoEmpleo;
         this.tipoMiembros = data.tipoMiembro;
         this.congregaciones = data.congregacion.filter((congregacion) => congregacion.estado === true);
         this.ministerios = data.ministerio.filter((ministerio) => ministerio.estado === true);
@@ -82,6 +80,7 @@ export class RegistrarUsuarioComponent implements OnInit {
         this.usuario = data?.usuario?.usuario;
       }
     );
+    this.idUsuarioQueRegistra = this.usuarioService.usuarioId;
   }
 
   arrayUsuarioData(dataType: string) {

@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 @NgModule({
   declarations: [InformacionUsuarioComponent],
   imports: [
+    BrowserModule,
     CommonModule,
     AppRoutingModule,
     DirectiveModule,

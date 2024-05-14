@@ -2,7 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
-import { SolicitudMultimediaInterface, SolicitudMultimediaModel } from 'src/app/core/models/solicitud-multimedia.model';
+import {
+  SolicitudMultimediaInterface,
+  SolicitudMultimediaModel,
+  crearSolicitudMultimediaInterface,
+} from 'src/app/core/models/solicitud-multimedia.model';
 
 const base_url = environment.base_url;
 
@@ -48,7 +52,7 @@ export class SolicitudMultimediaService {
       );
   }
 
-  crearSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface) {
+  crearSolicitudMultimedia(solicitudDeacceso: crearSolicitudMultimediaInterface) {
     return this.httpClient.post(`${base_url}/solicitudmultimedia`, solicitudDeacceso, this.headers);
   }
 

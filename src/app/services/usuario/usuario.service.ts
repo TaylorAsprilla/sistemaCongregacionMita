@@ -1,5 +1,6 @@
+import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -13,6 +14,7 @@ import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.int
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
+import { configuracion } from 'src/environments/config/configuration';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -23,7 +25,16 @@ export class UsuarioService {
   public idUsuario: number;
   public multimediaCongregacion: MultimediaCongregacionModel;
 
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  private inactiveTimeout: any;
+  public timeRemaining: EventEmitter<number> = new EventEmitter<number>();
+  private readonly INACTIVE_TIMEOUT_MS: number = configuracion.inactividad.INACTIVE_TIMEOUT_MS;
+  private readonly timerModal: number = configuracion.inactividad.TIMER_MODEL;
+
+  constructor(private httpClient: HttpClient, private router: Router) {
+    this.resetInactiveTimer();
+    window.addEventListener('mousemove', () => this.resetInactiveTimer());
+    window.addEventListener('keypress', () => this.resetInactiveTimer());
+  }
 
   get token(): string {
     return localStorage.getItem('token') || '';
@@ -69,6 +80,67 @@ export class UsuarioService {
         'x-token': this.token,
       },
     };
+  }
+
+  resetInactiveTimer(): void {
+    if (this.inactiveTimeout !== null) {
+      clearTimeout(this.inactiveTimeout);
+    }
+    this.inactiveTimeout = setTimeout(() => {
+      this.showSessionExpirationAlert(); // Llama a la función en lugar de pasarla como referencia
+    }, this.INACTIVE_TIMEOUT_MS);
+
+    this.startCountdown();
+  }
+
+  startCountdown(): void {
+    let remainingTime = this.INACTIVE_TIMEOUT_MS;
+    const countdownInterval = setInterval(() => {
+      remainingTime -= 1000;
+      if (remainingTime <= 0) {
+        clearInterval(countdownInterval);
+      }
+      this.timeRemaining.emit(remainingTime);
+    }, 1000);
+  }
+
+  showSessionExpirationAlert(): void {
+    if (this.token != '') {
+      let timerInterval: any;
+      Swal.fire({
+        title: 'Attention!',
+        html: 'Your session will be automatically logged out due to inactivity in <b></b>',
+        icon: 'warning',
+        timer: this.timerModal,
+        timerProgressBar: true,
+        showCancelButton: true,
+        cancelButtonText: 'Continue session',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+          const popup = Swal.getPopup();
+          const timer = popup ? popup.querySelector('b') : null;
+          if (timer) {
+            timerInterval = setInterval(() => {
+              const timeLeft = Swal.getTimerLeft();
+              if (timeLeft !== null && timeLeft !== undefined) {
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                timer.textContent = `${minutes}m ${seconds}s`;
+              }
+            }, 100);
+          }
+        },
+        willClose: () => {
+          clearInterval(timerInterval);
+        },
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+          this.logout();
+        }
+      });
+    }
   }
 
   logout() {
@@ -152,6 +224,7 @@ export class UsuarioService {
               usuarioCongregacionCongregacion,
               usuarioCongregacionCampo,
               usuarioCongregacionPais,
+              idUsuarioQueRegistra,
             } = respuesta.usuario;
 
             this.usuario = new UsuarioModel(
@@ -204,7 +277,8 @@ export class UsuarioService {
               anoConocimiento,
               usuarioCongregacionCongregacion,
               usuarioCongregacionCampo,
-              usuarioCongregacionPais
+              usuarioCongregacionPais,
+              idUsuarioQueRegistra
             );
 
             localStorage.setItem('token', respuesta.token);
@@ -214,7 +288,6 @@ export class UsuarioService {
         }),
 
         catchError((error) => {
-          console.log(error);
           return of(false);
         })
       );

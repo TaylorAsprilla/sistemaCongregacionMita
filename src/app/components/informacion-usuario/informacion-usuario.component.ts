@@ -1,8 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
-import { Observable, Subscription } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Observable, Subscription, of } from 'rxjs';
+import { catchError, map, startWith } from 'rxjs/operators';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { CampoModel, CONGREGACION_CAMPO } from 'src/app/core/models/campo.model';
 import { CONGREGACION, CongregacionModel } from 'src/app/core/models/congregacion.model';
@@ -15,7 +24,6 @@ import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { CongregacionPaisModel, CONGREGACION_PAIS } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { TipoDocumentoModel, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
-import { TipoEmpleoModel } from 'src/app/core/models/tipo-empleo.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
@@ -23,6 +31,7 @@ import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-corre
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { BuscarCelularService } from 'src/app/services/buscar-celular/buscar-celular.service';
 
 @Component({
   selector: 'app-informacion-usuario',
@@ -30,15 +39,15 @@ import { RUTAS } from 'src/app/routes/menu-items';
   styleUrls: ['./informacion-usuario.component.scss'],
 })
 export class InformacionUsuarioComponent implements OnInit {
-  public registroUnoForm!: FormGroup;
-  public registroDosForm!: FormGroup;
-  public registroTresForm!: FormGroup;
-  public registroCuatroForm!: FormGroup;
+  registroUnoForm!: FormGroup;
+  registroDosForm!: FormGroup;
+  registroTresForm!: FormGroup;
+  registroCuatroForm!: FormGroup;
 
-  public registroUno_step = false;
-  public registroDos_step = false;
-  public registroTres_step = false;
-  public step: number = 1;
+  registroUno_step = false;
+  registroDos_step = false;
+  registroTres_step = false;
+  step: number = 1;
 
   @Input() public usuario: UsuarioModel;
   @Input() public usuarios: UsuarioModel[] = [];
@@ -51,7 +60,6 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() public dosis: DosisModel[] = [];
   @Input() public nacionalidades: NacionalidadModel[] = [];
   @Input() public gradosAcademicos: GradoAcademicoModel[] = [];
-  @Input() public tiposEmpleos: TipoEmpleoModel[] = [];
   @Input() public tipoMiembros: TipoMiembroModel[] = [];
   @Input() public ministerios: MinisterioModel[] = [];
   @Input() public voluntariados: VoluntariadoModel[] = [];
@@ -59,6 +67,7 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() public tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
   @Input() public usuarioMinisterios: number[] = [];
   @Input() public usuarioVoluntariados: number[] = [];
+  @Input() idUsuarioQueRegistra: number;
 
   @Input() usuarioForm: FormGroup;
   @Input() codigoDeMarcadoSeparado = false;
@@ -87,13 +96,14 @@ export class InformacionUsuarioComponent implements OnInit {
 
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
 
-  public usuarioSeleccionado: UsuarioModel;
-  public congregacionesFiltradas: CongregacionModel[] = [];
-  public camposFiltrados: CampoModel[] = [];
+  usuarioSeleccionado: UsuarioModel;
+  congregacionesFiltradas: CongregacionModel[] = [];
+  camposFiltrados: CampoModel[] = [];
 
-  public mensajeBuscarCorreo: string = '';
-  public sinCongregacion: number;
-  public sinCampo: number;
+  mensajeBuscarCorreo: string = '';
+  mensajeBuscarCelular: string = '';
+  sinCongregacion: number;
+  sinCampo: number;
 
   fechaDeNacimiento: Date;
   primerNombre: string;
@@ -138,9 +148,9 @@ export class InformacionUsuarioComponent implements OnInit {
   direccionResidenciaValues: any;
 
   // Subscription
-  public usuarioSubscription: Subscription;
-  public buscarCorreoSubscription: Subscription;
-  public buscarCelularSubscription: Subscription;
+  usuarioSubscription: Subscription;
+  buscarCorreoSubscription: Subscription;
+  buscarCelularSubscription: Subscription;
 
   get CONGREGACION_CAMPO() {
     return CONGREGACION_CAMPO;
@@ -157,6 +167,7 @@ export class InformacionUsuarioComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private buscarCorreoService: BuscarCorreoService,
+    private buscarCelularService: BuscarCelularService,
     private router: Router
   ) {}
 
@@ -178,7 +189,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.estadoCivil_id = this.usuario?.estadoCivil_id ? this.usuario.estadoCivil_id : null;
     this.nacionalidad = this.usuario?.nacionalidad?.nombre ? this.usuario.nacionalidad?.nombre : '';
     this.rolEnCasa = this.usuario?.rolCasa_id ? this.usuario.rolCasa_id : null;
-    this.celular = this.usuario?.numeroCelular ? this.usuario.numeroCelular : '';
+    this.celular = this.usuario?.numeroCelular ? this.usuario.numeroCelular : null;
     this.telefonoCasa = this.usuario?.telefonoCasa ? this.usuario.telefonoCasa : '';
     this.direccion = this.usuario?.direccion;
     this.ciudadDireccion = this.usuario?.ciudadDireccion;
@@ -234,7 +245,10 @@ export class InformacionUsuarioComponent implements OnInit {
     this.registroDosForm = this.formBuilder.group({
       nacionalidad: [this.nacionalidad, [Validators.required, Validators.minLength(3)]],
       rolCasa_id: [this.rolEnCasa, [Validators.required]],
-      numeroCelular: [this.celular, [Validators.required, Validators.minLength(3)]],
+      numeroCelular: [
+        this.celular,
+        { validators: [Validators.minLength(3)], asyncValidators: [this.buscarCelular()], updateOn: 'blur' },
+      ],
       telefonoCasa: [this.telefonoCasa, [Validators.minLength(3)]],
       direccion: [this.direccion, [Validators.required, Validators.minLength(3)]],
       ciudadDireccion: [this.ciudadDireccion, [Validators.required, Validators.minLength(3)]],
@@ -334,8 +348,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   guardarUsuario() {
-    this.registroCuatroForm;
-
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&
@@ -358,8 +370,12 @@ export class InformacionUsuarioComponent implements OnInit {
         apodo: informacionFormulario.apodo ? informacionFormulario.apodo : '',
         nacionalidad_id: this.buscarIDNacionalidad(informacionFormulario.nacionalidad),
         email: informacionFormulario.email ? informacionFormulario.email : null,
-        numeroCelular: informacionFormulario.numeroCelular?.internationalNumber,
-        telefonoCasa: informacionFormulario.telefonoCasa?.internationalNumber,
+        numeroCelular: informacionFormulario.numeroCelular?.internationalNumber
+          ? informacionFormulario.numeroCelular?.internationalNumber
+          : null,
+        telefonoCasa: informacionFormulario.telefonoCasa?.internationalNumber
+          ? informacionFormulario.telefonoCasa?.internationalNumber
+          : null,
         fechaNacimiento: informacionFormulario?.fechaNacimiento,
         genero_id: informacionFormulario?.genero_id,
         estadoCivil_id: informacionFormulario?.estadoCivil_id,
@@ -390,6 +406,7 @@ export class InformacionUsuarioComponent implements OnInit {
         paisPostal: informacionFormulario?.paisPostal,
         departamentoDireccion: informacionFormulario?.departamentoDireccion,
         anoConocimiento: informacionFormulario?.anoConocimiento,
+        idUsuarioQueRegistra: this.idUsuarioQueRegistra,
       };
 
       this.operacion.emit(usuarioNuevo);
@@ -439,7 +456,7 @@ export class InformacionUsuarioComponent implements OnInit {
   limpiarAnoConocimiento() {
     if (!this.registroCuatroForm.get('mismaFechaDeNacimiento').value) {
       this.registroCuatroForm.patchValue({
-        anoConocimiento: '',
+        anoConocimiento: this.anoConocimiento ? this.anoConocimiento : '',
       });
     }
   }
@@ -486,16 +503,62 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   buscarIDNacionalidad(nacionalidad: string): number {
-    return this.nacionalidades.find((nacionalidades: NacionalidadModel) => nacionalidades.nombre == nacionalidad).id;
+    const nacionalidadEncontrada = this.nacionalidades.find(
+      (nacionalidades) => nacionalidades.nombre.toLowerCase() === nacionalidad.toLowerCase()
+    );
+
+    if (nacionalidadEncontrada) {
+      return nacionalidadEncontrada.id;
+    } else {
+      const controlNacionalidad = this.registroDosForm.get('nacionalidad');
+      controlNacionalidad.setErrors({ incorrecto: true });
+
+      return undefined;
+    }
   }
 
-  buscarCorreo(email) {
+  buscarCorreo(email: string) {
     this.mensajeBuscarCorreo = '';
+
+    if (!email) {
+      return;
+    }
     this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreoUsuario(email).subscribe((respuesta: any) => {
       if (!respuesta.ok) {
         this.mensajeBuscarCorreo = respuesta.msg;
       }
     });
+  }
+
+  buscarCelular(): ValidatorFn {
+    this.mensajeBuscarCelular = '';
+
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      const numeroCelular = control.value;
+
+      if (!numeroCelular) {
+        return of(null);
+      }
+
+      const celularNumber = numeroCelular.internationalNumber;
+
+      if (!celularNumber) {
+        return of(null);
+      }
+
+      return this.buscarCelularService.buscarcelular(celularNumber).pipe(
+        map((respuesta: any) => {
+          if (!respuesta.ok) {
+            this.mensajeBuscarCelular = respuesta.msg;
+            const error: ValidationErrors = { celularRegistrado: true, message: respuesta.msg };
+            return error;
+          } else {
+            return null;
+          }
+        }),
+        catchError(() => of(null))
+      );
+    };
   }
 
   tieneTipoDocumento(idPais: string = this.usuario?.paisId) {
@@ -567,6 +630,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   cancelar() {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CENSO}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
   }
 }

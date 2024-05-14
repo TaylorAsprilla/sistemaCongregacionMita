@@ -1,6 +1,8 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { configuracion } from 'src/environments/config/configuration';
+import { UsuarioService } from './../../../../services/usuario/usuario.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -10,12 +12,12 @@ import { OpcionTransporteModel } from 'src/app/core/models/opcion-transporte.mod
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
-import { RAZON_SOLICITUD_ID, SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
+import { RAZON_SOLICITUD_ID, crearSolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
 import { TipoEstudioModel } from 'src/app/core/models/tipo-estudio.model';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { RUTAS } from 'src/app/routes/menu-items';
 
 @Component({
   selector: 'app-crear-solicitud-multimedia',
@@ -23,26 +25,28 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
   styleUrls: ['./crear-solicitud-multimedia.component.scss'],
 })
 export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
-  public solicitudForm: FormGroup;
+  solicitudForm: FormGroup;
 
-  public paises: CongregacionPaisModel[] = [];
-  public nacionalidades: NacionalidadModel[] = [];
-  public congregaciones: CongregacionModel[] = [];
-  public razonSolicitudes: RazonSolicitudModel[] = [];
-  public tipoEstudios: TipoEstudioModel[] = [];
-  public opcionTransporte: OpcionTransporteModel[] = [];
-  public parentescos: ParentescoModel[] = [];
+  paises: CongregacionPaisModel[] = [];
+  nacionalidades: NacionalidadModel[] = [];
+  congregaciones: CongregacionModel[] = [];
+  razonSolicitudes: RazonSolicitudModel[] = [];
+  tipoEstudios: TipoEstudioModel[] = [];
+  opcionTransporte: OpcionTransporteModel[] = [];
+  parentescos: ParentescoModel[] = [];
 
-  public usuario: UsuarioModel;
-  public mensajeBuscarCorreo: string = '';
+  usuario: UsuarioModel;
+  mensajeBuscarCorreo: string = '';
 
-  public idUsuario: number;
-  public nombreUsuario: string;
-  public usuarioQueRegistra: UsuarioModel;
+  idUsuario: number;
+  nombreUsuario: string;
+  usuarioQueRegistra: UsuarioModel;
+
+  tiempoSugerido = configuracion.tiempoSugerido;
 
   // Subscription
-  public buscarCorreoSubscription: Subscription;
-  public usuarioSubscription: Subscription;
+  buscarCorreoSubscription: Subscription;
+  usuarioSubscription: Subscription;
 
   codigoDeMarcadoSeparado = false;
   buscarPaisTelefono = SearchCountryField;
@@ -78,15 +82,9 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private solicitudMultimediaService: SolicitudMultimediaService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private router: Router
   ) {}
-
-  @HostListener('keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
@@ -124,7 +122,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   crearFormularioDeLaSolicitud() {
     this.solicitudForm = this.formBuilder.group({
-      numeroMita: ['', [Validators.required, Validators.minLength(3)]],
       estaCercaACongregacion: [false, [Validators.required]],
       congregacionCercana: ['', [Validators.minLength(3)]],
       razonSolicitud_id: ['', [Validators.required]],
@@ -135,40 +132,13 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  buscarFeligres(id: string) {
-    this.usuarioSubscription = this.usuarioService.getUsuario(Number(id)).subscribe(
-      (respuesta: any) => {
-        if (!!respuesta.usuario) {
-          this.usuario = respuesta.usuario;
+  buscarFeligres(usuario: UsuarioModel) {
+    this.usuario = usuario;
+    this.numeroMita();
+  }
 
-          Swal.fire({
-            position: 'top-end',
-            text: `${this.usuario.primerNombre} ${this.usuario.segundoNombre}
-                ${this.usuario.primerApellido} ${this.usuario.segundoApellido},
-                Número Mita ${this.usuario.id}`,
-            timer: 1500,
-            showConfirmButton: false,
-          });
-        } else {
-          Swal.fire({
-            position: 'top-end',
-            text: `${respuesta.msg}`,
-            icon: 'error',
-            timer: 1500,
-            showConfirmButton: false,
-          });
-        }
-      },
-      (error) => {
-        let errores = error.error.msg;
-
-        Swal.fire({
-          title: 'Error al encontrar el feligrés',
-          icon: 'error',
-          html: errores,
-        });
-      }
-    );
+  numeroMita(): number {
+    return this.usuario?.id;
   }
 
   buscarPais(formControlName: string) {
@@ -323,7 +293,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     if (this.solicitudForm.valid) {
       const formSolicitud = this.solicitudForm.value;
 
-      const solicitudNueva: SolicitudMultimediaInterface = {
+      const solicitudNueva: crearSolicitudMultimediaInterface = {
         usuario_id: this.usuario.id,
         razonSolicitud_id: formSolicitud.razonSolicitud_id,
         estado: true,
@@ -345,12 +315,12 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
         ciudadDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
         terminos: formSolicitud.terminos ? formSolicitud.terminos : false,
-        id: 0,
         emailVerificado: false,
         tiempoAprobacion: null,
         usuario: this.usuario,
         usuarioQueRegistra: this.usuarioQueRegistra,
         tipoMiembro: this.usuario.tipoMiembro,
+        tiempoSugerido: formSolicitud.tiempoSugerido ? formSolicitud.tiempoSugerido : '',
       };
 
       this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(
@@ -381,6 +351,10 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         }
       );
     }
+  }
+
+  actualizarUsuario(usuario: UsuarioModel) {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${usuario.id}`);
   }
 
   resetFormulario() {

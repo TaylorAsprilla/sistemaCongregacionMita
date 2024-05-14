@@ -1,10 +1,11 @@
+import { configuracion } from 'src/environments/config/configuration';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { LoginUsuarioCmarLiveInterface } from 'src/app/core/models/acceso-multimedia.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { SolicitudMultimediaInterface, SolicitudMultimediaModel } from 'src/app/core/models/solicitud-multimedia.model';
+import { SolicitudMultimediaInterface, TIEMPO_SUGERIDO_DIAS } from 'src/app/core/models/solicitud-multimedia.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
@@ -102,6 +103,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           informacionSolicitud?.razonSolicitud_id !== 5
             ? informacionSolicitud?.razonSolicitud?.solicitud
             : informacionSolicitud?.razonSolicitud;
+        const tiempoSugerido = informacionSolicitud?.tiempoSugerido ? informacionSolicitud?.tiempoSugerido : '';
         const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id);
         const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
         const fechaDeSolicitud = informacionSolicitud.createdAt;
@@ -183,6 +185,10 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                       <td class="col-md-5">Razón de la solicitud:</td>
                       <td class="col-md-7">${razonSolicitud}</td>
                     </tr>
+                    <tr>
+                      <td class="col-md-5">Tiempo Sugerido:</td>
+                      <td class="col-md-7">${tiempoSugerido}</td>
+                    </tr>
                      <tr>
                       <td class="col-md-5">Estado</td>
                       <td class="col-md-7">${estado}</td>
@@ -206,11 +212,13 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   }
 
   crearAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
-    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
-    let password = this.generarPassword();
+    const nombreCompleto = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
+    const loginDefault = solicitud.usuario.email;
+    const password = this.generarPassword();
+
     Swal.fire({
       title: 'CMAR LIVE',
-      html: `Desea crear acceso a CMAR LIVE al usuario <b>${nombre}</b>`,
+      html: `Desea crear acceso a CMAR LIVE al usuario <b>${nombreCompleto}</b>`,
       showCancelButton: true,
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
@@ -221,16 +229,26 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const { value: formValues } = await Swal.fire({
-          text: `Credenciales para ${nombre}`,
-          html:
-            `<p>Credenciales para <b>${nombre}</b></p>` +
-            `<label class="input-group obligatorio">Login: </label>
-              <input type="text" id="login" name="login" class="form-control"  value="${solicitud.usuario.email}"  required />` +
-            `<label class="input-group obligatorio">Contraseña: </label>
-              <input type="password" id="password" name="password" class="form-control" value="${password}"/>` +
-            `<label class="input-group obligatorio">Tiempo de aprobación:</label>
-               <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" required/>` +
-            `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
+          title: `Credenciales para ${nombreCompleto}`,
+          html: `
+          <div class="form-group">
+            <label class="input-group obligatorio">Login:</label>
+            <input type="text" id="login" name="login" class="form-control" value="${loginDefault}" required />
+          </div>
+          <div class="form-group">
+            <label class="input-group obligatorio">Contraseña:</label>
+            <input type="password" id="password" name="password" class="form-control" value="${password}" required />
+          </div>
+          <div class="form-group">
+            <label class="input-group obligatorio">Tiempo de aprobación:</label>
+            <select id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" required>
+              <option value="" disabled selected>Seleccionar tiempo de aprobación</option>
+              ${configuracion.tiempoSugerido
+                .map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`)
+                .join('')}
+            </select>
+          </div>
+        `,
           focusConfirm: true,
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -239,47 +257,63 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             return [
               (document.getElementById('login') as HTMLInputElement).value,
               (document.getElementById('password') as HTMLInputElement).value,
-              (document.getElementById('tiempoAprobacion') as HTMLInputElement).value,
+              (document.getElementById('tiempoAprobacion') as HTMLSelectElement).value,
             ];
           },
         });
 
         if (formValues) {
+          const tiempoSeleccionado = formValues[2];
+
+          const tiempoAprobacion = this.calcularFechaDeAprobacion(tiempoSeleccionado);
+
           const dataAcceso: LoginUsuarioCmarLiveInterface = {
-            login: (document.getElementById('login') as HTMLInputElement).value,
-            password: (document.getElementById('password') as HTMLInputElement).value,
+            login: formValues[0],
+            password: formValues[1],
             solicitud_id: solicitud.id,
-            tiempoAprobacion: new Date((document.getElementById('tiempoAprobacion') as HTMLInputElement).value),
+            tiempoAprobacion: new Date(tiempoAprobacion),
             estado: true,
           };
 
+          // Call service to create multimedia access
           this.accesoMultimediaService.crearAccesoMultimedia(dataAcceso).subscribe(
             (accesoCreado: any) => {
               Swal.fire('Acceso creado', 'correctamente', 'success');
               this.cargarSolicitudDeAccesos();
             },
             (error) => {
-              let errores = error.error.errors;
-              let listaErrores = [];
-
-              if (!!errores) {
-                Object.entries(errores).forEach(([key, value]) => {
-                  listaErrores.push('° ' + value['msg'] + '<br>');
-                });
+              let errorMessage = 'Error al crear el acceso';
+              if (error && error.error && error.error.errors) {
+                errorMessage = Object.values(error.error.errors)
+                  .map((error: any) => `° ${error.msg}`)
+                  .join('<br>');
               }
-
               Swal.fire({
-                title: 'El acceso NO ha sido creado',
-                icon: 'error',
-                html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+                title: 'Error',
+                icon: 'info',
+                html: errorMessage,
               });
             }
           );
         }
       } else if (result.isDenied) {
-        Swal.fire('No se pudo crear las credeciales de CMAR LIVE', '', 'info');
+        Swal.fire('No se pudo crear las credenciales de CMAR LIVE', '', 'info');
       }
     });
+  }
+
+  calcularFechaDeAprobacion(opcion: string): Date | null {
+    const cantidad = parseInt(opcion);
+
+    if (isNaN(cantidad) || cantidad <= 0) {
+      console.error('La opción debe ser un número entero positivo.');
+      return null; // Devolver nulo si la conversión no fue exitosa o si es un número inválido
+    }
+
+    const hoy = new Date();
+    const fechaFutura = new Date(hoy.getTime() + cantidad * 24 * 60 * 60 * 1000); // Calcular la fecha futura en milisegundos
+
+    return fechaFutura;
   }
 
   editarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {

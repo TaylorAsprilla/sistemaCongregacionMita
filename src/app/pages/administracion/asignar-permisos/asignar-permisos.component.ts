@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControlOptions, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -17,58 +17,42 @@ import { generate } from 'generate-password-browser';
 })
 export class AsignarPermisosComponent implements OnInit {
   permisosForm: FormGroup;
-  numeroMitaForm: FormGroup;
   passwordUsuarioForm: FormGroup;
 
-  usuarios: UsuarioModel[] = [];
-  usuarioEncontrado: UsuarioModel;
   permisos: PermisoModel[] = [];
-
   permisosUsuario: number[];
+
+  usuarioEncontrado: UsuarioModel;
 
   formSubmitted: boolean = false;
   asignarPermisos: boolean = false;
 
-  usuarioSubscription: Subscription;
   permisoSubscription: Subscription;
 
   @ViewChild('verPermisos') verPermisos: ElementRef;
 
   constructor(
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute,
     private usuarioService: UsuarioService,
     private permisosService: PermisoService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { usuario: UsuarioModel[] }) => {
-      this.usuarios = data.usuario;
-    });
-
     this.permisoSubscription = this.permisosService.getPermisos().subscribe((permiso: PermisoModel[]) => {
       this.permisos = permiso;
     });
 
-    this.crearFormularioNumeroMita();
     this.crearFormularioPermisos();
     this.crearFormularioPassword();
   }
 
   ngOnDestroy(): void {
     this.permisoSubscription?.unsubscribe();
-    this.usuarioSubscription?.unsubscribe();
   }
 
   get permisosArr() {
     return this.permisosForm?.get('permisos') as FormArray;
-  }
-
-  crearFormularioNumeroMita() {
-    this.numeroMitaForm = this.formBuilder.group({
-      numeroMita: ['', [Validators.required, Validators.minLength(3)]],
-    });
   }
 
   crearFormularioPermisos() {
@@ -139,43 +123,14 @@ export class AsignarPermisosComponent implements OnInit {
     );
   }
 
-  buscarFeligres(id: string) {
+  buscarFeligres(usuario: UsuarioModel) {
     this.asignarPermisos = false;
-    this.usuarioSubscription = this.usuarioService.getUsuario(Number(id)).subscribe(
-      (respuesta: any) => {
-        if (!!respuesta.usuario) {
-          this.usuarioEncontrado = respuesta.usuario;
+    this.usuarioEncontrado = usuario;
 
-          Swal.fire({
-            position: 'top-end',
-            text: `${this.usuarioEncontrado.primerNombre} ${this.usuarioEncontrado.segundoNombre}
-                ${this.usuarioEncontrado.primerApellido} ${this.usuarioEncontrado.segundoApellido},
-                Número Mita ${this.usuarioEncontrado.id}`,
-            timer: 1000,
-            showConfirmButton: false,
-          });
-          this.crearFormularioPermisos();
-          this.patchValuePermisos();
-        } else {
-          Swal.fire({
-            position: 'top-end',
-            text: `${respuesta.msg}`,
-            icon: 'error',
-            timer: 1000,
-            showConfirmButton: false,
-          });
-        }
-      },
-      (error) => {
-        let errores = error.error.msg;
-
-        Swal.fire({
-          title: 'Error al encontrar el feligrés',
-          icon: 'error',
-          html: errores,
-        });
-      }
-    );
+    if (this.usuarioEncontrado) {
+      this.crearFormularioPermisos();
+      this.patchValuePermisos();
+    }
   }
 
   arrayUsuarioData() {
@@ -240,12 +195,12 @@ export class AsignarPermisosComponent implements OnInit {
     );
   }
 
-  actualizarUsuario() {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${this.usuarioEncontrado.id}`);
+  actualizarUsuario(usuario: UsuarioModel) {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${usuario.id}`);
   }
 
-  crearAcceso() {
-    const nombre = `${this.usuarioEncontrado.primerNombre} ${this.usuarioEncontrado.segundoNombre} ${this.usuarioEncontrado.primerApellido} ${this.usuarioEncontrado.segundoApellido}`;
+  crearAcceso(usuario: UsuarioModel) {
+    const nombre = `${usuario.primerNombre} ${usuario.segundoNombre} ${usuario.primerApellido} ${usuario.segundoApellido}`;
     let password = this.generarPassword();
     Swal.fire({
       title: 'CMAR LIVE',
@@ -264,7 +219,7 @@ export class AsignarPermisosComponent implements OnInit {
           html:
             `<p>Credenciales para <b>${nombre}</b></p>` +
             `<label class="input-group obligatorio">Login: </label>
-              <input type="text" id="login" name="login" class="form-control"  value="${this.usuarioEncontrado.email}"  required />` +
+              <input type="text" id="login" name="login" class="form-control"  value="${usuario.email}"  required />` +
             `<label class="input-group obligatorio">Contraseña: </label>
               <input type="password" id="password" name="password" class="form-control" value="${password}" required />`,
 
@@ -283,7 +238,7 @@ export class AsignarPermisosComponent implements OnInit {
         if (formValues) {
           const login = (document.getElementById('login') as HTMLInputElement).value;
 
-          this.usuarioService.crearAcceso(this.usuarioEncontrado.id, login, password).subscribe(
+          this.usuarioService.crearAcceso(usuario.id, login, password).subscribe(
             (accesoCreado: any) => {
               this.asignarPermisos = accesoCreado.ok;
               Swal.fire({

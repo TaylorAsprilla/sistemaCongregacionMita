@@ -22,19 +22,47 @@
           <h2 class="mb-3 text-center">Iniciar Sesión</h2>
 
           <div class="form-outline mb-4">
-            <input type="text" formControlName="login" class="form-control form-control-lg" placeholder="Usuario" />
+            <input
+              type="text"
+              formControlName="login"
+              class="form-control form-control-lg"
+              placeholder="Correo electrónico"
+              [ngClass]="{
+                'is-invalid': isLoginFormSubmitted && loginForm.get('login').errors
+              }"
+            />
+
+            <small
+              class="form-text text-danger"
+              *ngIf="isLoginFormSubmitted && loginForm.get('login').errors"
+              class="invalid-feedback"
+            >
+              El correo electrónico es requerido.
+            </small>
           </div>
 
-          <div class="input-group form-outline mb-3">
-            <input
-              type="{{ showPassword ? 'text' : 'password' }}"
-              formControlName="password"
-              class="form-control form-control-lg"
-              placeholder="Contraseña"
-            />
-            <span class="input-group-text" (click)="togglePasswordVisibility()">
-              <i class="feather" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
-            </span>
+          <div>
+            <div class="input-group form-outline mb-3">
+              <input
+                type="{{ showPassword ? 'text' : 'password' }}"
+                formControlName="password"
+                class="form-control form-control-lg"
+                placeholder="Contraseña"
+                [ngClass]="{
+                  'is-invalid': isLoginFormSubmitted && loginForm.get('password').errors
+                }"
+              />
+              <span class="input-group-text" (click)="togglePasswordVisibility()">
+                <i class="feather" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+              </span>
+            </div>
+
+            <small
+              class="form-text text-danger"
+              *ngIf="isLoginFormSubmitted && loginForm.get('password').hasError('required')"
+            >
+              La contraseña es requerida.
+            </small>
           </div>
 
           <div class="d-flex justify-content-between align-items-center">

@@ -22,6 +22,7 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { AsignarPermisosComponent } from './asignar-permisos/asignar-permisos.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { FiltrosModule } from 'src/app/components/filtros/filtros.module';
+import { BuscarUsuarioModule } from 'src/app/components/buscar-usuario/buscar-usuario.module';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { FiltrosModule } from 'src/app/components/filtros/filtros.module';
     UsuarioModule,
     FiltrosModule,
     PipesModule,
+    BuscarUsuarioModule,
   ],
   exports: [
     CamposComponent,

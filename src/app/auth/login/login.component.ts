@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 export class LoginComponent implements OnInit {
   usuariosSubscription: Subscription;
   loginForm: FormGroup;
+  isLoginFormSubmitted: Boolean;
 
   showPassword: boolean = false;
 
@@ -25,11 +26,6 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private formBuilder: FormBuilder, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.usuariosSubscription = this.usuarioService.listarUsuarios().subscribe(
-      (res) => console.log(res),
-      (err) => console.error(err)
-    );
-
     this.crearFormularioLogin();
   }
 
@@ -45,7 +41,16 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  get formLogin() {
+    return this.loginForm.controls;
+  }
+
   login() {
+    this.isLoginFormSubmitted = true;
+
+    if (this.loginForm.invalid) {
+      return;
+    }
     this.usuarioService.login(this.loginForm.value).subscribe(
       (login: any) => {
         const usuario: UsuarioModel = login.usuario;
