@@ -5,7 +5,7 @@ export interface SeccionHome {
   nombreResponsable: string;
   email: string;
   logo: string;
-  ruta: string;
+  ruta?: string;
   role?: ROLES[];
 }
 
@@ -15,7 +15,6 @@ export const generarSeccionHome: SeccionHome[] = [
     nombreResponsable: '',
     email: '',
     logo: 'assets/images/vista-principal/logo-multimedia.png',
-    ruta: `../${RUTAS.SERVICIOS_Y_VIGILIAS}`,
     role: [
       ROLES.ADMINISTRADOR,
       ROLES.SUPERVISOR,
