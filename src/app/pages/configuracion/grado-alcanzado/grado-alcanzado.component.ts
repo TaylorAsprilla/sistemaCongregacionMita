@@ -37,15 +37,20 @@ export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
       });
   }
 
-  async buscarGradoAcademico(id: number) {
-    let gradoAcademicoNombre = '';
-    if (id) {
-      await this.gradoAcademicoService
+  buscarGradoAcademico(id: number): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      if (!id) {
+        reject(new Error('ID no proporcionado'));
+        return;
+      }
+
+      this.gradoAcademicoService
         .getUnGradoAcademico(Number(id))
         .pipe(delay(100))
         .subscribe(
           (gradoAcademicoEncontrado: GradoAcademicoModel) => {
-            gradoAcademicoNombre = gradoAcademicoEncontrado.gradoAcademico;
+            console.log('gradoAcademicoEncontrado', gradoAcademicoEncontrado.gradoAcademico);
+            resolve(gradoAcademicoEncontrado.gradoAcademico);
           },
           (error) => {
             let errores = error.error.errors;
@@ -60,21 +65,23 @@ export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
               icon: 'error',
               html: `${listaErrores.join('')}`,
             });
+
+            reject(new Error('Error al buscar el grado académico'));
           }
         );
-    }
-
-    return gradoAcademicoNombre;
+    });
   }
 
   async actualizarGradoAcademico(id: number) {
-    let opt = await this.buscarGradoAcademico(id);
+    let opcion = await this.buscarGradoAcademico(id);
+
     const { value: gradoAcademicoNombre } = await Swal.fire({
       title: 'Actualizar Grado Académico',
       input: 'text',
       inputLabel: 'Grado Académico',
       showCancelButton: true,
-      inputPlaceholder: opt,
+      inputPlaceholder: opcion,
+      inputValue: opcion,
     });
 
     if (gradoAcademicoNombre) {

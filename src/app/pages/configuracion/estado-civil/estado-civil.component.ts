@@ -37,15 +37,19 @@ export class EstadoCivilComponent implements OnInit {
       });
   }
 
-  async buscarEstadoCivil(id: number) {
-    let estadoCivilNombre = '';
-    if (id) {
-      await this.estadoCivilService
+  buscarEstadoCivil(id: number): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      if (!id) {
+        reject(new Error('ID no proporcionado'));
+        return;
+      }
+
+      this.estadoCivilService
         .getEstadoCivil(Number(id))
         .pipe(delay(100))
         .subscribe(
           (estadoCivilEncontrado: EstadoCivilModel) => {
-            estadoCivilNombre = estadoCivilEncontrado.estadoCivil;
+            resolve(estadoCivilEncontrado.estadoCivil);
           },
           (error) => {
             let errores = error.error.errors;
@@ -54,24 +58,24 @@ export class EstadoCivilComponent implements OnInit {
               listaErrores.push('° ' + value['msg'] + '<br>');
             });
             Swal.fire({
-              title: 'EstadoCivil',
+              title: 'Estado Civil',
               icon: 'error',
               html: `${listaErrores.join('')}`,
             });
+            reject(new Error('Error al buscar el estado civil'));
           }
         );
-    }
-    return estadoCivilNombre;
+    });
   }
 
   async actualizarestadoCivil(id: number) {
-    let opt = await this.buscarEstadoCivil(id);
+    let opcion = await this.buscarEstadoCivil(id);
     const { value: estadoCivilNombre } = await Swal.fire({
       title: 'Actualizar Estado Civil',
       input: 'text',
       inputLabel: 'Estado Civil',
       showCancelButton: true,
-      inputPlaceholder: opt,
+      inputPlaceholder: opcion,
     });
     if (estadoCivilNombre) {
       const data = {
