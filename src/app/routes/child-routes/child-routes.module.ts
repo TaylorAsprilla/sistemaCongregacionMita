@@ -38,7 +38,6 @@ import { VoluntariadoResolver } from 'src/app/resolvers/voluntariado/voluntariad
 import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
-import { ServiciosYVigiliasComponent } from 'src/app/pages/multimedia/eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
 import { ConfirmacionDeRegistroComponent } from 'src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component';
@@ -69,6 +68,7 @@ import { RolEnCasaComponent } from 'src/app/pages/configuracion/rol-en-casa/rol-
 import { VoluntarioComponent } from 'src/app/pages/configuracion/voluntario/voluntario.component';
 import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 import { CensoAyudanteComponent } from 'src/app/pages/ayudantes/censo-ayudante/censo-ayudante.component';
+import { EventosEnVivoComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
 
 const childRoutes: Routes = [
   {
@@ -398,15 +398,6 @@ const childRoutes: Routes = [
     },
   },
   {
-    path: RUTAS.SERVICIOS_Y_VIGILIAS,
-    component: ServiciosYVigiliasComponent,
-    canActivate: [RolesGuard],
-    data: {
-      titulo: 'Servicios y Vigilias',
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
-    },
-  },
-  {
     path: `${RUTAS.EVENTOS}/:id`,
     component: ConfigurarEventosComponent,
   },
@@ -421,6 +412,10 @@ const childRoutes: Routes = [
   {
     path: RUTAS.BIBLIOTECA_VIGILIAS,
     component: VigiliasComponent,
+  },
+  {
+    path: RUTAS.EVENTOS_EN_VIVO,
+    component: EventosEnVivoComponent,
   },
 ];
 

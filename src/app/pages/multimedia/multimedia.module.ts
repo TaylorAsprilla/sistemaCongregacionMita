@@ -12,7 +12,6 @@ import { CargandoInformacionModule } from 'src/app/components/cargando-informaci
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidarEmailComponent } from './solicitudes-multimedia/validar-email/validar-email.component';
-import { ServiciosYVigiliasComponent } from './eventos-multimedia/servicios-y-vigilias/servicios-y-vigilias.component';
 import { ServiciosComponent } from './biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from './biblioteca-multimedia/vigilias/vigilias.component';
 import { BibliotecaMultimediaModule } from 'src/app/components/biblioteca-multimedia/biblioteca-multimedia.module';
@@ -20,6 +19,8 @@ import { ConfigurarEventosComponent } from './eventos-multimedia/configurar-even
 import { EventosComponent } from './eventos-multimedia/eventos/eventos.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { BuscarUsuarioModule } from 'src/app/components/buscar-usuario/buscar-usuario.module';
+import { ServiciosEnVivoModule } from 'src/app/components/servicios-en-vivo/servicios-en-vivo.module';
+import { EventosEnVivoComponent } from './eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
 
 const lang = 'en-US';
 
@@ -28,11 +29,11 @@ const lang = 'en-US';
     SolicitudMultimediaComponent,
     CrearSolicitudMultimediaComponent,
     ValidarEmailComponent,
-    ServiciosYVigiliasComponent,
     ConfigurarEventosComponent,
     ServiciosComponent,
     VigiliasComponent,
     EventosComponent,
+    EventosEnVivoComponent,
   ],
   imports: [
     CommonModule,
@@ -49,13 +50,9 @@ const lang = 'en-US';
     BibliotecaMultimediaModule,
     PipesModule,
     BuscarUsuarioModule,
+    ServiciosEnVivoModule,
   ],
-  exports: [
-    SolicitudMultimediaComponent,
-    CrearSolicitudMultimediaComponent,
-    ValidarEmailComponent,
-    ServiciosYVigiliasComponent,
-  ],
+  exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
   providers: [{ provide: LOCALE_ID, useValue: lang }],
 })
 export class MultimediaModule {}
