@@ -115,7 +115,6 @@ export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
             this.cargarGradosAcademicos();
           },
           (error) => {
-            console.error(error);
             let errores = error.error;
 
             Swal.fire({

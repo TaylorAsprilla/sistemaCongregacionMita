@@ -65,7 +65,6 @@ export class GeneroComponent implements OnInit, OnDestroy {
           this.cargarGeneros();
         },
         (error) => {
-          console.error(error);
           let errores = error.error;
 
           Swal.fire({

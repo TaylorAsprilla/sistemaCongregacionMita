@@ -109,7 +109,6 @@ export class EstadoCivilComponent implements OnInit {
             this.cargarEstadosCiviles();
           },
           (error) => {
-            console.error(error);
             let errores = error.error;
 
             Swal.fire({

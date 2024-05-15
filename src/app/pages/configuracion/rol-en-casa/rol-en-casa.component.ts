@@ -62,7 +62,6 @@ export class RolEnCasaComponent implements OnInit, OnDestroy {
           this.cargarRolCasas();
         },
         (error) => {
-          console.error(error);
           let errores = error.error;
 
           Swal.fire({

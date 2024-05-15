@@ -68,7 +68,6 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
           this.cargarVoluntariados();
         },
         (error) => {
-          console.error(error);
           let errores = error.error;
 
           Swal.fire({
