@@ -1,0 +1,40 @@
+<div class="row">
+  <h2 class="text-center">{{ servicios?.titulo }}</h2>
+  <div *ngIf="servicioPlataforma === PLATAFORMA.VIMEO" class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
+    <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO_ID.SERVICIO">
+      <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+        <div class="ratio ratio-16x9">
+          <iframe
+            [src]="videoUrl"
+            width="400"
+            height="255"
+            frameborder="0"
+            allow="autoplay"
+            fullscreen="allowfullscreen"
+            webkitallowfullscreen
+            mozallowfullscreen
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="servicioPlataforma === PLATAFORMA.YOUTUBE"
+    class="card-body col-sm-12 col-md-12 col-lg-6 text-center"
+    #templateYouTubePlayer
+  >
+    <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO_ID.SERVICIO">
+      <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+        <youtube-player
+          [videoId]="videoUrl | youtube"
+          suggestedQuality="default"
+          [width]="videoWidth"
+          [height]="videoHeight"
+        >
+        </youtube-player>
+      </div>
+    </div>
+  </div>
+</div>

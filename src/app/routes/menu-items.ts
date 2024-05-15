@@ -18,6 +18,8 @@ export enum RUTAS {
   CREAR_ESTATUS = 'crear-estatus',
   CENSO = 'censo',
   EVENTOS = 'eventos',
+  EVENTOS_EN_VIVO = 'eventos-en-vivo',
+  HOME = '/#/sistema/inicio',
   INICIO = 'inicio',
   INFORME = 'informe',
   INFORME_ACTIVIDADES = 'informe-actividades',
@@ -463,22 +465,6 @@ export const ROUTES: RouteInfo[] = [
     ],
     submenu: [
       {
-        path: RUTAS.SERVICIOS_Y_VIGILIAS,
-        title: 'Servicios y Vigilias en Vivo',
-        icon: '',
-        class: '',
-        extralink: false,
-        role: [
-          ROLES.ADMINISTRADOR,
-          ROLES.SUPERVISOR,
-          ROLES.SUPERVISOR_LOCAL,
-          ROLES.OBRERO_CIUDAD,
-          ROLES.ADMINISTRADOR_MULTIMEDIA,
-          ROLES.MULTIMEDIA,
-        ],
-        submenu: [],
-      },
-      {
         path: '',
         title: 'Biblioteca Multimedia',
         icon: '',
@@ -534,6 +520,15 @@ export const ROUTES: RouteInfo[] = [
       {
         path: `${RUTAS.SOLICITUD_MULTIMEDIA}/nuevo`,
         title: 'Nueva Solicitud',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_CIUDAD, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        submenu: [],
+      },
+      {
+        path: RUTAS.EVENTOS_EN_VIVO,
+        title: 'Servicios en Vivo',
         icon: '',
         class: '',
         extralink: false,
