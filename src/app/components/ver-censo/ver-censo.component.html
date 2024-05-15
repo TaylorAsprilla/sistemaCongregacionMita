@@ -1,18 +1,18 @@
 <div class="card">
-  <div class="card-header">
-    <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
-    <div *ngIf="nombreCongregacion; else sinNombre">
-      <span><b> Pais:</b> {{ nombrePais }} - </span>
-      <span><b> Congregacion:</b> {{ nombreCongregacion }} </span>
-      <span *ngIf="!ocultarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div>
+      <h3 class="card-title pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
+      <div *ngIf="titulo; else sinNombre">
+        <div>{{ titulo }}</div>
+      </div>
+      <ng-template #sinNombre>
+        <span><b> País:</b> {{ nombrePais }} - </span>
+        <span><b> Congregación:</b> {{ nombreCongregacion }} </span>
+        <span *ngIf="!ocultarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
+      </ng-template>
     </div>
-
-    <ng-template #sinNombre>
-      <div class="card-body">{{ titulo }}</div>
-    </ng-template>
-
-    <div class="text-right mb-4 float-end">
-      <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+    <div class="text-right mb-4">
+      <a class="btn btn-primary me-2" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
       <app-exportar-excel [usuarios]="usuarios" [nombreArchivo]="nombreArchivo"></app-exportar-excel>
     </div>
   </div>
