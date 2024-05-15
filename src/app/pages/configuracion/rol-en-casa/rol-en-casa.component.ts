@@ -37,41 +37,18 @@ export class RolEnCasaComponent implements OnInit, OnDestroy {
       });
   }
 
-  async buscarRolCasa(id: number) {
-    let rolCasaNombre = '';
-    if (id) {
-      await this.rolCasaService
-        .getUnRolCasa(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (rolCasaEncontrado: RolCasaModel) => {
-            rolCasaNombre = rolCasaEncontrado.rolCasa;
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-            Swal.fire({
-              title: 'Rol en Casa',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-          }
-        );
-    }
-    return rolCasaNombre;
+  buscarRolCasa(id: number) {
+    return this.rolesCasa.find((rolCasa: RolCasaModel) => rolCasa.id === id).rolCasa;
   }
 
   async actualizarRolCasa(id: number) {
-    let opt = await this.buscarRolCasa(id);
+    let rolCasa = this.buscarRolCasa(id);
     const { value: rolCasaNombre } = await Swal.fire({
       title: 'Actualizar Rol en Casa',
       input: 'text',
       inputLabel: 'Rol en Casa',
       showCancelButton: true,
-      inputPlaceholder: opt,
+      inputValue: rolCasa,
     });
     if (rolCasaNombre) {
       const data = {
@@ -79,11 +56,22 @@ export class RolEnCasaComponent implements OnInit, OnDestroy {
         id: id,
         estado: true,
       };
-      this.rolCasaService.actualizarRolCasa(data).subscribe((rolCasaActivo: RolCasaModel) => {
-        Swal.fire('Actualizado!', `El Rol en Casa ${rolCasaNombre.rolCasa} se actualizó correctamente`, 'success');
-        this.cargarRolCasas();
-      });
-      Swal.fire(`${rolCasaNombre} creado!`);
+      this.rolCasaService.actualizarRolCasa(data).subscribe(
+        (rolCasaActivo: RolCasaModel) => {
+          Swal.fire('Actualizado!', `El Rol en Casa ${rolCasaNombre.rolCasa} se actualizó correctamente`, 'success');
+          this.cargarRolCasas();
+        },
+        (error) => {
+          console.error(error);
+          let errores = error.error;
+
+          Swal.fire({
+            title: 'Error al actualizar',
+            icon: 'error',
+            html: `${errores?.msg}`,
+          });
+        }
+      );
     }
   }
 
@@ -144,7 +132,6 @@ export class RolEnCasaComponent implements OnInit, OnDestroy {
 
         this.cargarRolCasas();
       });
-      Swal.fire(`${rolCasa} Creado!`);
     }
   }
 }

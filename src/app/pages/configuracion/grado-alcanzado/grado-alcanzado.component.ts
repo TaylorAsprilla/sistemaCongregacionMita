@@ -37,39 +37,8 @@ export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
       });
   }
 
-  buscarGradoAcademico(id: number): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      if (!id) {
-        reject(new Error('ID no proporcionado'));
-        return;
-      }
-
-      this.gradoAcademicoService
-        .getUnGradoAcademico(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (gradoAcademicoEncontrado: GradoAcademicoModel) => {
-            console.log('gradoAcademicoEncontrado', gradoAcademicoEncontrado.gradoAcademico);
-            resolve(gradoAcademicoEncontrado.gradoAcademico);
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-
-            Swal.fire({
-              title: 'Grado Académico',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-
-            reject(new Error('Error al buscar el grado académico'));
-          }
-        );
-    });
+  buscarGradoAcademico(id: number): string {
+    return this.gradosAcademicos.find((gradoAcademico: GradoAcademicoModel) => gradoAcademico.id === id).gradoAcademico;
   }
 
   async actualizarGradoAcademico(id: number) {
@@ -93,15 +62,10 @@ export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
       this.gradoAcademicoService
         .actualizarGradoAcademico(data)
         .subscribe((gradoAcademicoActivo: GradoAcademicoModel) => {
-          Swal.fire(
-            'Actualizado!',
-            `El Grado Académico ${gradoAcademicoNombre.gradoAcademico} se actualizó correctamente`,
-            'success'
-          );
+          Swal.fire('Actualizado!', `El grado académico ${gradoAcademicoNombre} se actualizó correctamente`, 'success');
 
           this.cargarGradosAcademicos();
         });
-      Swal.fire(`${gradoAcademicoNombre} creado!`);
     }
   }
 
@@ -144,13 +108,23 @@ export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.gradoAcademicoService
-          .activarGradoAcademico(gradoAcademico)
-          .subscribe((gradoAcademicoActivo: GradoAcademicoModel) => {
+        this.gradoAcademicoService.activarGradoAcademico(gradoAcademico).subscribe(
+          (gradoAcademicoActivo: GradoAcademicoModel) => {
             Swal.fire('¡Activado!', `El género ${gradoAcademico.gradoAcademico} fue activado correctamente`, 'success');
 
             this.cargarGradosAcademicos();
-          });
+          },
+          (error) => {
+            console.error(error);
+            let errores = error.error;
+
+            Swal.fire({
+              title: 'Error al actualizar voluntariado',
+              icon: 'error',
+              html: `${errores?.msg}`,
+            });
+          }
+        );
       }
     });
   }
@@ -176,7 +150,6 @@ export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
 
           this.cargarGradosAcademicos();
         });
-      Swal.fire(`${gradoAcademico} Creado!`);
     }
   }
 }

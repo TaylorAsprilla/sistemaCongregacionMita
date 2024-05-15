@@ -37,44 +37,18 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
       });
   }
 
-  async buscarVoluntariado(id: number) {
-    let voluntariadoNombre = '';
-    if (id) {
-      await this.voluntariadoService
-        .getUnVoluntariado(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (voluntariadoEncontrado: VoluntariadoModel) => {
-            voluntariadoNombre = voluntariadoEncontrado.nombreVoluntariado;
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-
-            Swal.fire({
-              title: 'Género',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-          }
-        );
-    }
-
-    return voluntariadoNombre;
+  buscarVoluntariado(id: number): string {
+    return this.voluntariados.find((voluntariado: VoluntariadoModel) => voluntariado.id === id).nombreVoluntariado;
   }
 
   async actualizarVoluntariado(id: number) {
-    let opt = await this.buscarVoluntariado(id);
+    let voluntariado = this.buscarVoluntariado(id);
     const { value: voluntariadoNombre } = await Swal.fire({
       title: 'Actualizar Voluntariado',
       input: 'text',
       inputLabel: 'Voluntariado',
       showCancelButton: true,
-      inputPlaceholder: opt,
+      inputValue: voluntariado,
     });
 
     if (voluntariadoNombre) {
@@ -83,12 +57,27 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
         id: id,
         estado: true,
       };
-      this.voluntariadoService.actualizarTipoMiembro(data).subscribe((voluntariadoActivo: VoluntariadoModel) => {
-        Swal.fire('Actualizado!', `El Género ${voluntariadoNombre.voluntariado} se actualizó correctamente`, 'success');
+      this.voluntariadoService.actualizarTipoMiembro(data).subscribe(
+        (voluntariadoActivo: VoluntariadoModel) => {
+          Swal.fire(
+            'Actualizado!',
+            `El voluntariado <b>${voluntariadoNombre}</b> se actualizó correctamente`,
+            'success'
+          );
 
-        this.cargarVoluntariados();
-      });
-      Swal.fire(`${voluntariadoNombre} creado!`);
+          this.cargarVoluntariados();
+        },
+        (error) => {
+          console.error(error);
+          let errores = error.error;
+
+          Swal.fire({
+            title: 'Error al actualizar voluntariado',
+            icon: 'error',
+            html: `${errores?.msg}`,
+          });
+        }
+      );
     }
   }
 
@@ -155,7 +144,6 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
 
         this.cargarVoluntariados();
       });
-      Swal.fire(`${voluntariado} Creado!`);
     }
   }
 }

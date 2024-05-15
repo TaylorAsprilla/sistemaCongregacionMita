@@ -37,45 +37,18 @@ export class EstadoCivilComponent implements OnInit {
       });
   }
 
-  buscarEstadoCivil(id: number): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      if (!id) {
-        reject(new Error('ID no proporcionado'));
-        return;
-      }
-
-      this.estadoCivilService
-        .getEstadoCivil(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (estadoCivilEncontrado: EstadoCivilModel) => {
-            resolve(estadoCivilEncontrado.estadoCivil);
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-            Swal.fire({
-              title: 'Estado Civil',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-            reject(new Error('Error al buscar el estado civil'));
-          }
-        );
-    });
+  buscarEstadoCivil(id: number): string {
+    return this.estadosCiviles.find((estadoCivil: EstadoCivilModel) => estadoCivil.id === id).estadoCivil;
   }
 
   async actualizarestadoCivil(id: number) {
-    let opcion = await this.buscarEstadoCivil(id);
+    let nombreEstadoCivil = this.buscarEstadoCivil(id);
     const { value: estadoCivilNombre } = await Swal.fire({
       title: 'Actualizar Estado Civil',
       input: 'text',
       inputLabel: 'Estado Civil',
       showCancelButton: true,
-      inputPlaceholder: opcion,
+      inputValue: nombreEstadoCivil,
     });
     if (estadoCivilNombre) {
       const data = {
@@ -84,14 +57,9 @@ export class EstadoCivilComponent implements OnInit {
         estado: true,
       };
       this.estadoCivilService.actualizarEstadoCivil(data).subscribe((estadoCivilActivo: EstadoCivilModel) => {
-        Swal.fire(
-          'Actualizado!',
-          `El Estado Civil ${estadoCivilNombre.estadoCivil} se actualizó correctamente`,
-          'success'
-        );
+        Swal.fire('Actualizado!', `El estado civil <b> ${estadoCivilNombre}</b> se actualizó correctamente`, 'success');
         this.cargarEstadosCiviles();
       });
-      Swal.fire(`${estadoCivilNombre} creado!`);
     }
   }
 
@@ -134,11 +102,23 @@ export class EstadoCivilComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.estadoCivilService.activarEstadoCivil(estadoCivil).subscribe((estadoCivilActivo: EstadoCivilModel) => {
-          Swal.fire('¡Activado!', `El estado civil ${estadoCivil.estadoCivil} fue activado correctamente`, 'success');
+        this.estadoCivilService.activarEstadoCivil(estadoCivil).subscribe(
+          (estadoCivilActivo: EstadoCivilModel) => {
+            Swal.fire('¡Activado!', `El estado civil ${estadoCivil.estadoCivil} fue activado correctamente`, 'success');
 
-          this.cargarEstadosCiviles();
-        });
+            this.cargarEstadosCiviles();
+          },
+          (error) => {
+            console.error(error);
+            let errores = error.error;
+
+            Swal.fire({
+              title: 'Error al actualizar voluntariado',
+              icon: 'error',
+              html: `${errores?.msg}`,
+            });
+          }
+        );
       }
     });
   }
@@ -158,7 +138,6 @@ export class EstadoCivilComponent implements OnInit {
 
         this.cargarEstadosCiviles();
       });
-      Swal.fire(`${estadoCivil} Creado!`);
     }
   }
 }

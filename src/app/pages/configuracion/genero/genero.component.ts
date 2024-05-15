@@ -38,44 +38,18 @@ export class GeneroComponent implements OnInit, OnDestroy {
       });
   }
 
-  async buscarGenero(id: number) {
-    let generoNombre = '';
-    if (id) {
-      await this.generoService
-        .getGenero(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (generoEncontrado: GeneroModel) => {
-            generoNombre = generoEncontrado.genero;
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-
-            Swal.fire({
-              title: 'Género',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-          }
-        );
-    }
-
-    return generoNombre;
+  buscarGenero(id: number) {
+    return this.generos.find((genero: GeneroModel) => genero.id === id).genero;
   }
 
   async actualizarGenero(id: number) {
-    let opt = await this.buscarGenero(id);
+    let nombreGenero = this.buscarGenero(id);
     const { value: generoNombre } = await Swal.fire({
       title: 'Actualizar Género',
       input: 'text',
       inputLabel: 'Género',
       showCancelButton: true,
-      inputPlaceholder: opt,
+      inputValue: nombreGenero,
     });
 
     if (generoNombre) {
@@ -84,12 +58,23 @@ export class GeneroComponent implements OnInit, OnDestroy {
         id: id,
         estado: true,
       };
-      this.generoService.actualizarGenero(data).subscribe((generoActivo: GeneroModel) => {
-        Swal.fire('Actualizado!', `El Género ${generoNombre.genero} se actualizó correctamente`, 'success');
+      this.generoService.actualizarGenero(data).subscribe(
+        (generoActivo: GeneroModel) => {
+          Swal.fire('Actualizado!', `El género <b>${generoNombre}</b> se actualizó correctamente`, 'success');
 
-        this.cargarGeneros();
-      });
-      Swal.fire(`${generoNombre} creado!`);
+          this.cargarGeneros();
+        },
+        (error) => {
+          console.error(error);
+          let errores = error.error;
+
+          Swal.fire({
+            title: 'Error al actualizar voluntariado',
+            icon: 'error',
+            html: `${errores?.msg}`,
+          });
+        }
+      );
     }
   }
 
