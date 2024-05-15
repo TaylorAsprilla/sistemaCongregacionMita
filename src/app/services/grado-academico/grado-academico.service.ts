@@ -35,12 +35,12 @@ export class GradoAcademicoService {
       .pipe(map((respuesta: { ok: boolean; gradoAcademico: GradoAcademicoModel }) => respuesta.gradoAcademico));
   }
 
-  crearGradoAcademico(gradoAcademico: GradoAcademicoModel) {
-    return this.httpClient.post(`${base_url}/gradoacademico`, gradoAcademico, this.headers);
+  crearGradoAcademico(gradoAcademico: string) {
+    return this.httpClient.post(`${base_url}/gradoAcademico`, { gradoAcademico: gradoAcademico }, this.headers);
   }
 
   actualizarGradoAcademico(gradoAcademico: GradoAcademicoModel) {
-    return this.httpClient.put(`${base_url}/gradoacademico/${gradoAcademico.id}`, gradoAcademico, this.headers);
+    return this.httpClient.put(`${base_url}/gradoAcademico/${gradoAcademico.id}`, gradoAcademico, this.headers);
   }
 
   eliminarGradoAcademico(gradoAcademico: GradoAcademicoModel) {

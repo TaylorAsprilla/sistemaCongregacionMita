@@ -36,8 +36,8 @@ export class VoluntariadoService {
       .pipe(map((respuesta: { ok: boolean; voluntariado: VoluntariadoModel }) => respuesta.voluntariado));
   }
 
-  crearVoluntariado(voluntariado: VoluntariadoModel) {
-    return this.httpClient.post(`${base_url}/voluntariado`, voluntariado, this.headers);
+  crearVoluntariado(voluntariado: string) {
+    return this.httpClient.post(`${base_url}/voluntariado`, { voluntariado: voluntariado }, this.headers);
   }
 
   actualizarTipoMiembro(voluntariado: VoluntariadoModel) {

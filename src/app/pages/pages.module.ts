@@ -22,6 +22,10 @@ import { TipoDeEstudioComponent } from './configuracion/tipo-de-estudio/tipo-de-
 import { RazonDeSolicitudComponent } from './configuracion/razon-de-solicitud/razon-de-solicitud.component';
 import { ParentescoComponent } from './configuracion/parentesco/parentesco.component';
 import { ObrerosModule } from './obreros/obreros.module';
+import { RolEnCasaComponent } from './configuracion/rol-en-casa/rol-en-casa.component';
+import { EstadoCivilComponent } from './configuracion/estado-civil/estado-civil.component';
+import { GradoAlcanzadoComponent } from './configuracion/grado-alcanzado/grado-alcanzado.component';
+import { VoluntarioComponent } from './configuracion/voluntario/voluntario.component';
 import { AyudantesModule } from './ayudantes/ayudantes.module';
 import { AuthInterceptor } from '../core/interceptors/auth/auth.interceptor';
 
@@ -33,6 +37,10 @@ import { AuthInterceptor } from '../core/interceptors/auth/auth.interceptor';
     TipoDeEstudioComponent,
     RazonDeSolicitudComponent,
     ParentescoComponent,
+    RolEnCasaComponent,
+    EstadoCivilComponent,
+    GradoAlcanzadoComponent,
+    VoluntarioComponent,
   ],
   exports: [PagesComponent],
   imports: [

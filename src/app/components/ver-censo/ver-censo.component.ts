@@ -8,6 +8,11 @@ import { TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
 import Swal from 'sweetalert2';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
+import { delay } from 'rxjs/operators';
+import { PaisService } from 'src/app/services/pais/pais.service';
+import { CampoService } from 'src/app/services/campo/campo.service';
 
 @Component({
   selector: 'app-ver-censo',
@@ -17,6 +22,7 @@ import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
   @Input() campos: CampoModel[] = [];
+
   @Input() paises: CongregacionPaisModel[] = [];
   @Input() totalUsuarios: number = 0;
 
@@ -31,14 +37,29 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Output() onBorrarUsuario: EventEmitter<UsuariosPorCongregacionInterface> =
     new EventEmitter<UsuariosPorCongregacionInterface>();
 
+  camposFiltrados: CampoModel[] = [];
+
   nombrePais: string = '';
   nombreCampo: string = '';
   usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
   selectedContact: number;
   tableSize: number = 50;
 
+  cargando: boolean = true;
+  paisSubscription: Subscription;
+  campoSubscription: Subscription;
+  congregaciones: CongregacionModel[] = [];
+  congregacionesFiltradas: CongregacionModel[] = [];
+  congregacionesFiltradasId: number[];
+  congregacionSubscription: Subscription;
+
   pagina: number = 1;
   filtrarTexto: string = '';
+  filtrarCongreTexto: string = '';
+  filtrarPaisTexto: string = '';
+  originalPais: string = '';
+  originalCongre: string = '';
+  filtrarCampoTexto: string = '';
 
   usuarioSubscription: Subscription;
 
@@ -48,14 +69,28 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   set filterText(value: string) {
     this.filtrarTexto = value;
-    this.usuariosFiltrados = this.filterUsuarios(value);
+    this.usuariosFiltrados = this.filterUsuarios(
+      this.filterText,
+      this.filtrarPaisTexto,
+      this.filtrarCongreTexto,
+      this.filtrarCampoTexto
+    );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
   }
 
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(
+    private usuarioService: UsuarioService,
+    private paisService: PaisService,
+    private congregacionService: CongregacionService,
+    private campoService: CampoService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cargarCongregaciones();
+    this.cargarPaises();
+    this.cargarCampos();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['usuarios']?.currentValue) {
@@ -68,10 +103,48 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.usuarioSubscription?.unsubscribe();
+    this.congregacionSubscription?.unsubscribe();
+    this.paisSubscription?.unsubscribe();
+    this.campoSubscription?.unsubscribe();
   }
 
   onTableDataChange(event: any) {
     this.pagina = event;
+  }
+
+  cargarCongregaciones() {
+    this.cargando = true;
+    this.congregacionSubscription = this.congregacionService
+      .getCongregaciones()
+      .pipe(delay(100))
+      .subscribe((congregaciones: CongregacionModel[]) => {
+        this.congregaciones = congregaciones;
+        this.congregacionesFiltradas = congregaciones;
+        this.cargando = false;
+      });
+  }
+
+  cargarPaises() {
+    this.cargando = true;
+    this.paisSubscription = this.paisService
+      .getPaises()
+      .pipe(delay(100))
+      .subscribe((paises: CongregacionPaisModel[]) => {
+        this.paises = paises;
+        this.cargando = false;
+      });
+  }
+
+  cargarCampos() {
+    this.cargando = true;
+    this.campoSubscription = this.campoService
+      .getCampos()
+      .pipe(delay(100))
+      .subscribe((campos: CampoModel[]) => {
+        this.campos = campos;
+        this.camposFiltrados = campos;
+        this.cargando = false;
+      });
   }
 
   crearUsuario() {
@@ -94,10 +167,18 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedContact = this.selectedContact === usuario.id ? null : usuario.id;
   }
 
-  filterUsuarios(filterTerm: string): UsuariosPorCongregacionInterface[] {
-    filterTerm = filterTerm.toLocaleLowerCase();
+  filterUsuarios(
+    filterTerm: string,
+    country: string,
+    congre: string,
+    camp: string
+  ): UsuariosPorCongregacionInterface[] {
+    country = country.toLocaleLowerCase();
 
-    if (this.usuarios.length === 0 || this.filterText === '') {
+    congre = congre.toLocaleLowerCase();
+    camp = camp.toLocaleLowerCase();
+    filterTerm = filterTerm.toLocaleLowerCase();
+    if (this.usuarios.length === 0 && (filterTerm === '' || country === '' || congre === '')) {
       return this.usuarios;
     } else {
       return this.usuarios.filter((usuario: UsuariosPorCongregacionInterface) => {
@@ -108,20 +189,112 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         const congregacion = usuario.usuarioCongregacionCongregacion[0].congregacion
           ? usuario.usuarioCongregacionCongregacion[0].congregacion.toLocaleLowerCase()
           : '';
+        const pais = usuario.usuarioCongregacionPais[0].pais
+          ? usuario.usuarioCongregacionPais[0].pais.toLocaleLowerCase()
+          : '';
+        const campo = usuario.usuarioCongregacionCampo[0].campo
+          ? usuario.usuarioCongregacionCampo[0].campo.toLocaleLowerCase()
+          : '';
         const numeroCelular = usuario.numeroCelular ? usuario.numeroCelular : '';
 
         // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
         return (
-          primerNombre.includes(filterTerm) ||
-          primerApellido.includes(filterTerm) ||
-          segundoApellido.includes(filterTerm) ||
-          email.includes(filterTerm) ||
-          congregacion.includes(filterTerm) ||
-          numeroCelular.includes(filterTerm) ||
-          usuario.id.toString().includes(filterTerm)
+          (primerNombre.includes(filterTerm) ||
+            primerApellido.includes(filterTerm) ||
+            segundoApellido.includes(filterTerm) ||
+            email.includes(filterTerm) ||
+            numeroCelular.includes(filterTerm) ||
+            usuario.id.toString().includes(filterTerm)) &&
+          congregacion.includes(congre) &&
+          pais.includes(country) &&
+          campo.includes(camp)
         );
       });
     }
+  }
+
+  filtrarCongregacionesPorPais(pais: string) {
+    this.congregacionesFiltradas = this.congregaciones?.filter(
+      (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
+    );
+  }
+
+  filtrarCamposPorCongregacion(congre: string) {
+    this.camposFiltrados = this.campos?.filter((camposBuscar) => camposBuscar.congregacion_id === parseInt(congre));
+  }
+
+  filtrarCamposPorPais() {
+    this.congregacionesFiltradasId = [];
+    for (let i = 0; i < this.congregacionesFiltradas.length; i++) {
+      this.congregacionesFiltradasId.push(this.congregacionesFiltradas[i].id);
+    }
+    this.camposFiltrados = this.campos?.filter((campoBuscar) =>
+      this.congregacionesFiltradasId.includes(campoBuscar.congregacion_id)
+    );
+  }
+
+  filtrarPais(value: any) {
+    this.filtrarCongreTexto = '';
+    this.filtrarCampoTexto = '';
+    if (value.pais === undefined) {
+      this.filtrarPaisTexto = '';
+      this.congregacionesFiltradas = this.congregaciones;
+      this.camposFiltrados = this.campos;
+    } else {
+      this.originalPais = value.pais;
+      this.filtrarPaisTexto = value.pais;
+      this.filtrarCongregacionesPorPais(value.id);
+      this.filtrarCamposPorPais();
+    }
+    this.usuariosFiltrados = this.filterUsuarios(
+      this.filterText,
+      this.filtrarPaisTexto,
+      this.filtrarCongreTexto,
+      this.filtrarCampoTexto
+    );
+
+    this.totalUsuarios = this.usuariosFiltrados.length;
+    this.pagina = 1;
+  }
+
+  filtrarCongregacion(value: any) {
+    this.filtrarCampoTexto = '';
+    if (value.congregacion === undefined) {
+      this.filtrarCongreTexto = '';
+      this.camposFiltrados = this.campos;
+    } else {
+      this.originalCongre = value.congregacion;
+      this.filtrarCongreTexto = value.congregacion;
+      this.filtrarCamposPorCongregacion(value.id);
+    }
+    this.usuariosFiltrados = this.filterUsuarios(
+      this.filterText,
+      this.filtrarPaisTexto,
+      this.filtrarCongreTexto,
+      this.filtrarCampoTexto
+    );
+    this.totalUsuarios = this.usuariosFiltrados.length;
+    this.pagina = 1;
+  }
+
+  filtrarCampo(value: string) {
+    this.filtrarCampoTexto = value;
+    this.usuariosFiltrados = this.filterUsuarios(
+      this.filterText,
+      this.filtrarPaisTexto,
+      this.filtrarCongreTexto,
+      this.filtrarCampoTexto
+    );
+    this.totalUsuarios = this.usuariosFiltrados.length;
+    this.pagina = 1;
+  }
+
+  resetFiltros() {
+    this.originalPais = '';
+    this.originalCongre = '';
+    this.filtrarCampoTexto = '';
+    this.filterText = '';
+    this.usuariosFiltrados = this.usuarios;
   }
 
   obtenerNombresMinisterios(ministerios: MinisterioModel[]): string {

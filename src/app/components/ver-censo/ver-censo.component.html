@@ -1,210 +1,271 @@
 <div class="card">
-  <div class="card-header">
-    <h3 class="card-title float-left pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
-    <div *ngIf="nombreCongregacion; else sinNombre">
-      <span><b> Pais:</b> {{ nombrePais }} - </span>
-      <span><b> Congregacion:</b> {{ nombreCongregacion }} </span>
-      <span *ngIf="!ocultarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div>
+      <h3 class="card-title pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
+      <div *ngIf="titulo; else sinNombre">
+        <div>{{ titulo }}</div>
+      </div>
+      <ng-template #sinNombre>
+        <span><b> País:</b> {{ nombrePais }} - </span>
+        <span><b> Congregación:</b> {{ nombreCongregacion }} </span>
+        <span *ngIf="!ocultarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
+      </ng-template>
     </div>
-
-    <ng-template #sinNombre>
-      <div class="card-body">{{ titulo }}</div>
-    </ng-template>
-
-    <div class="text-right mb-4 float-end">
-      <a class="btn btn-primary" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
+    <div class="text-right mb-4">
+      <a class="btn btn-primary me-2" (click)="crearUsuario()"> <i class="fas fa-user"></i> Feligrés Nuevo </a>
       <app-exportar-excel [usuarios]="usuarios" [nombreArchivo]="nombreArchivo"></app-exportar-excel>
     </div>
   </div>
 
   <div *ngIf="usuarios.length > 0; else sinFeligreses" class="card-body">
-    <div class="inputBuscqueda">
-      <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
-    </div>
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped" id="excel-table">
-        <thead>
-          <tr>
-            <th scope="col"># Mita</th>
-            <th class="w200 text-center">Nombre</th>
-            <th class="w200 text-center">Correo</th>
-            <th class="col-auto text-center">Edad</th>
-            <th class="col-auto text-center">Celular</th>
-            <th class="col-auto text-center">Congregación</th>
-            <th class="col-auto text-center">Estado</th>
-            <th class="col-auto text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="
-              let usuario of usuariosFiltrados
-                | paginate
-                  : {
-                      itemsPerPage: tableSize,
-                      currentPage: pagina,
-                      totalItems: totalUsuarios
-                    };
-              let i = index
-            "
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="selectPais">País</label>
+          <select
+            id="selectPais"
+            class="form-select form-control"
+            (ngModelChange)="filtrarPais($event)"
+            [(ngModel)]="originalPais"
           >
-            <td class="pointer" (click)="masInformacion(usuario.id)">
-              {{ usuario.id }}
-            </td>
+            <option value="">Seleccione País</option>
+            <option value="">Sin País</option>
+            <option *ngFor="let pais of paises" [ngValue]="pais">{{ pais.pais }}</option>
+          </select>
+        </div>
+      </div>
 
-            <td>
-              {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
-              {{ usuario?.segundoApellido }}
-            </td>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="selectCongregacion">Congregación</label>
+          <select
+            id="selectCongregacion"
+            class="form-select form-control"
+            (ngModelChange)="filtrarCongregacion($event)"
+            [(ngModel)]="originalCongre"
+          >
+            <option value="">Seleccione Congregación</option>
+            <option value="">Sin Congregación</option>
+            <option *ngFor="let congregacion of congregacionesFiltradas" [ngValue]="congregacion">
+              {{ congregacion.congregacion }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="selectCampo">Campo</label>
+          <select
+            id="selectCampo"
+            class="form-select form-control"
+            (ngModelChange)="filtrarCampo($event)"
+            [(ngModel)]="filtrarCampoTexto"
+          >
+            <option value="">Seleccione Campo</option>
+            <option value="">Sin Campo</option>
+            <option *ngFor="let campo of camposFiltrados">{{ campo.campo }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3 d-flex align-items-end">
+        <div class="form-group w-100">
+          <button class="btn btn-primary w-100" (click)="resetFiltros()">Reset Filtros</button>
+        </div>
+      </div>
 
-            <td>
-              <a *ngIf="usuario?.email" class="email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
-              <span *ngIf="!usuario?.email">Sin correo electrónico</span>
-            </td>
+      <div class="row mb-3">
+        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group">
+            <input type="search" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+          </div>
+        </div>
+      </div>
 
-            <td class="text-center">{{ usuario.fechaNacimiento | calcularEdad }}</td>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="excel-table">
+          <thead>
+            <tr>
+              <th scope="col"># Mita</th>
+              <th class="w200 text-center">Nombre</th>
+              <th class="w200 text-center">Correo</th>
+              <th class="col-auto text-center">Edad</th>
+              <th class="col-auto text-center">Celular</th>
+              <th class="col-auto text-center">Congregación</th>
+              <th class="col-auto text-center">Estado</th>
+              <th class="col-auto text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let usuario of usuariosFiltrados
+                  | paginate
+                    : {
+                        itemsPerPage: tableSize,
+                        currentPage: pagina,
+                        totalItems: totalUsuarios
+                      };
+                let i = index
+              "
+            >
+              <td class="pointer" (click)="masInformacion(usuario.id)">
+                {{ usuario.id }}
+              </td>
 
-            <td>
-              <ng-container *ngIf="!!usuario.numeroCelular; else noCelular">
-                <div class="contact-container">
-                  <span>
-                    {{ usuario.numeroCelular }}
-                    <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(usuario)"></i>
-                  </span>
+              <td>
+                {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
+                {{ usuario?.segundoApellido }}
+              </td>
 
-                  <div class="phone-number">
-                    <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
-                      <a
-                        href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
-                        target="_blank"
-                      >
-                        <i class="fab fa-whatsapp mx-2"></i>
-                      </a>
-                      <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
-                        <i class="fab fa-telegram mx-2"></i>
-                      </a>
-                      <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank">
-                        <i class="fa fa-phone mx-2"></i>
-                      </a>
+              <td>
+                <a *ngIf="usuario?.email" class="email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
+                <span *ngIf="!usuario?.email">Sin correo electrónico</span>
+              </td>
+
+              <td class="text-center">{{ usuario.fechaNacimiento | calcularEdad }}</td>
+
+              <td>
+                <ng-container *ngIf="!!usuario.numeroCelular; else noCelular">
+                  <div class="contact-container">
+                    <span>
+                      {{ usuario.numeroCelular }}
+                      <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(usuario)"></i>
+                    </span>
+
+                    <div class="phone-number">
+                      <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
+                        <a
+                          href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
+                          target="_blank"
+                        >
+                          <i class="fab fa-whatsapp mx-2"></i>
+                        </a>
+                        <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
+                          <i class="fab fa-telegram mx-2"></i>
+                        </a>
+                        <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank">
+                          <i class="fa fa-phone mx-2"></i>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ng-container>
+                </ng-container>
 
-              <ng-template #noCelular>
-                <td>Sin número de celular</td>
-              </ng-template>
-            </td>
+                <ng-template #noCelular>
+                  <td>Sin número de celular</td>
+                </ng-template>
+              </td>
 
-            <td>
-              <span *ngIf="!!usuario.usuarioCongregacionPais[0].pais" class="badge badge-primary">
-                {{ this.usuario.usuarioCongregacionPais[0].pais }}
-              </span>
-              <span *ngIf="!!usuario.usuarioCongregacionCongregacion[0].congregacion" class="badge badge-danger">
-                {{ this.usuario.usuarioCongregacionCongregacion[0].congregacion }}</span
-              >
-              <p>
-                <span *ngIf="!!usuario.usuarioCongregacionCampo[0].campo" class="badge badge-success">
-                  {{ this.usuario.usuarioCongregacionCampo[0].campo }}
+              <td>
+                <span *ngIf="!!usuario.usuarioCongregacionPais[0].pais" class="badge badge-primary">
+                  {{ this.usuario.usuarioCongregacionPais[0].pais }}
                 </span>
-              </p>
-            </td>
+                <span *ngIf="!!usuario.usuarioCongregacionCongregacion[0].congregacion" class="badge badge-danger">
+                  {{ this.usuario.usuarioCongregacionCongregacion[0].congregacion }}</span
+                >
+                <p>
+                  <span *ngIf="!!usuario.usuarioCongregacionCampo[0].campo" class="badge badge-success">
+                    {{ this.usuario.usuarioCongregacionCampo[0].campo }}
+                  </span>
+                </p>
+              </td>
 
-            <td>
-              <span *ngIf="usuario.estado" class="badge badge-primary">Activo</span>
-              <span *ngIf="!usuario.estado" class="badge badge-danger">Deshabilitado</span>
-            </td>
-            <td>
-              <a
-                *ngIf="!!usuario.estado"
-                data-toggle="tooltip"
-                data-original-title="Información"
-                title="Más Información"
-                class="btn btn-sm bg-info me-1 mb-1"
-                (click)="masInformacion(usuario.id)"
-              >
-                <i class="fa-solid fa-circle-info ml-1"></i>
-              </a>
-              <a
-                *ngIf="!!usuario.estado"
-                data-toggle="tooltip"
-                data-original-title="Editar"
-                title="Editar Feligrés"
-                class="btn btn-sm bg-primary me-1 mb-1"
-                (click)="actualizarUsuario(usuario.id)"
-              >
-                <i class="fas fa-pencil-alt ml-1"></i>
-              </a>
+              <td>
+                <span *ngIf="usuario.estado" class="badge badge-primary">Activo</span>
+                <span *ngIf="!usuario.estado" class="badge badge-danger">Deshabilitado</span>
+              </td>
+              <td>
+                <a
+                  *ngIf="!!usuario.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Información"
+                  title="Más Información"
+                  class="btn btn-sm bg-info me-1 mb-1"
+                  (click)="masInformacion(usuario.id)"
+                >
+                  <i class="fa-solid fa-circle-info ml-1"></i>
+                </a>
+                <a
+                  *ngIf="!!usuario.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Editar"
+                  title="Editar Feligrés"
+                  class="btn btn-sm bg-primary me-1 mb-1"
+                  (click)="actualizarUsuario(usuario.id)"
+                >
+                  <i class="fas fa-pencil-alt ml-1"></i>
+                </a>
 
-              <a
-                *ngIf="!usuario.estado"
-                data-toggle="tooltip"
-                data-original-title="Activar"
-                title="Activar Feligrés"
-                class="btn btn-sm bg-secondary me-1 mb-1"
-                (click)="activarUsuario(usuario.id)"
-              >
-                <i class="fas fa-check-square"></i>
-              </a>
+                <a
+                  *ngIf="!usuario.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Activar"
+                  title="Activar Feligrés"
+                  class="btn btn-sm bg-secondary me-1 mb-1"
+                  (click)="activarUsuario(usuario.id)"
+                >
+                  <i class="fas fa-check-square"></i>
+                </a>
 
-              <a
-                data-toggle="tooltip"
-                data-original-title="traslado"
-                class="btn btn-sm bg-success me-1 mb-1"
-                title="Transladar Feligrés"
-              >
-                <i class="fa fa-right-left"></i>
-              </a>
+                <a
+                  data-toggle="tooltip"
+                  data-original-title="traslado"
+                  class="btn btn-sm bg-success me-1 mb-1"
+                  title="Transladar Feligrés"
+                >
+                  <i class="fa fa-right-left"></i>
+                </a>
 
-              <a
-                data-toggle="tooltip"
-                data-original-title="trascendió"
-                class="btn btn-sm bg-warning me-1 mb-1"
-                title="Trascendió"
-              >
-                <i class="fa fa-cloud"></i>
-              </a>
+                <a
+                  data-toggle="tooltip"
+                  data-original-title="trascendió"
+                  class="btn btn-sm bg-warning me-1 mb-1"
+                  title="Trascendió"
+                >
+                  <i class="fa fa-cloud"></i>
+                </a>
 
-              <a
-                *ngIf="!!usuario.estado"
-                data-toggle="tooltip"
-                data-original-title="Borrar"
-                title="Eliminar Feligrés"
-                class="btn btn-sm bg-danger me-1 mb-1"
-                (click)="borrarUsuario(usuario)"
-              >
-                <i class="fas fa-trash-alt"></i>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <th scope="col"># Mita</th>
-          <th class="text-center">Nombre</th>
-          <th class="text-center">Correo</th>
-          <th class="text-center">Edad</th>
-          <th class="text-center">Celular</th>
-          <th class="text-center">Congregación</th>
-          <th class="text-center">Estado</th>
-          <th class="text-center">Acciones</th>
-        </tfoot>
-      </table>
+                <a
+                  *ngIf="!!usuario.estado"
+                  data-toggle="tooltip"
+                  data-original-title="Borrar"
+                  title="Eliminar Feligrés"
+                  class="btn btn-sm bg-danger me-1 mb-1"
+                  (click)="borrarUsuario(usuario)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <th scope="col"># Mita</th>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Correo</th>
+            <th class="text-center">Edad</th>
+            <th class="text-center">Celular</th>
+            <th class="text-center">Congregación</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Acciones</th>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center mt-2 mb-2">
+      <pagination-controls
+        (pageChange)="onTableDataChange($event)"
+        previousLabel="Anterior"
+        nextLabel="Próximo"
+        [autoHide]="true"
+        [responsive]="true"
+      >
+      </pagination-controls>
     </div>
   </div>
-  <div class="d-flex justify-content-center mt-2 mb-2">
-    <pagination-controls
-      (pageChange)="onTableDataChange($event)"
-      previousLabel="Anterior"
-      nextLabel="Próximo"
-      [autoHide]="true"
-      [responsive]="true"
-    >
-    </pagination-controls>
-  </div>
-</div>
 
-<ng-template #sinFeligreses>
-  <div class="card">
-    <div class="card-body">No existen feligreses registrados en su congregación a cargo</div>
-  </div>
-</ng-template>
+  <ng-template #sinFeligreses>
+    <div class="card">
+      <div class="card-body">No existen feligreses registrados en su congregación a cargo</div>
+    </div>
+  </ng-template>
+</div>
