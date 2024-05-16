@@ -910,6 +910,7 @@
         <div *ngIf="tipoDeDocumentosFiltrados.length > 0" class="row">
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">Tipo de documento: </label>
+
             <select class="form-select" formControlName="tipoDocumento_id">
               <option value="" disabled>Seleccione el tipo de documento</option>
               <option *ngFor="let tipoDocumento of tipoDeDocumentosFiltrados" [value]="tipoDocumento.id">
