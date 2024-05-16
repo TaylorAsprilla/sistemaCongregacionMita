@@ -49,24 +49,24 @@ export class InformacionUsuarioComponent implements OnInit {
   registroTres_step = false;
   step: number = 1;
 
-  @Input() public usuario: UsuarioModel;
-  @Input() public usuarios: UsuarioModel[] = [];
-  @Input() public generos: GeneroModel[] = [];
-  @Input() public estadoCivil: EstadoCivilModel[] = [];
-  @Input() public rolCasa: RolCasaModel[] = [];
-  @Input() public paises: CongregacionPaisModel[] = [];
-  @Input() public congregaciones: CongregacionModel[] = [];
-  @Input() public campos: CampoModel[] = [];
-  @Input() public dosis: DosisModel[] = [];
-  @Input() public nacionalidades: NacionalidadModel[] = [];
-  @Input() public gradosAcademicos: GradoAcademicoModel[] = [];
-  @Input() public tipoMiembros: TipoMiembroModel[] = [];
-  @Input() public ministerios: MinisterioModel[] = [];
-  @Input() public voluntariados: VoluntariadoModel[] = [];
-  @Input() public tiposDeDocumentos: TipoDocumentoModel[] = [];
-  @Input() public tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
-  @Input() public usuarioMinisterios: number[] = [];
-  @Input() public usuarioVoluntariados: number[] = [];
+  @Input() usuario: UsuarioModel;
+  @Input() usuarios: UsuarioModel[] = [];
+  @Input() generos: GeneroModel[] = [];
+  @Input() estadoCivil: EstadoCivilModel[] = [];
+  @Input() rolCasa: RolCasaModel[] = [];
+  @Input() paises: CongregacionPaisModel[] = [];
+  @Input() congregaciones: CongregacionModel[] = [];
+  @Input() campos: CampoModel[] = [];
+  @Input() dosis: DosisModel[] = [];
+  @Input() nacionalidades: NacionalidadModel[] = [];
+  @Input() gradosAcademicos: GradoAcademicoModel[] = [];
+  @Input() tipoMiembros: TipoMiembroModel[] = [];
+  @Input() ministerios: MinisterioModel[] = [];
+  @Input() voluntariados: VoluntariadoModel[] = [];
+  @Input() tiposDeDocumentos: TipoDocumentoModel[] = [];
+  @Input() tipoDeDocumentosFiltrados: TipoDocumentoModel[] = [];
+  @Input() usuarioMinisterios: number[] = [];
+  @Input() usuarioVoluntariados: number[] = [];
   @Input() idUsuarioQueRegistra: number;
 
   @Input() usuarioForm: FormGroup;
@@ -206,8 +206,8 @@ export class InformacionUsuarioComponent implements OnInit {
     this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
     this.tipoMiembro = this.usuario?.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
     this.esjoven = this.usuario?.esJoven ? 1 : 0;
-    this.ejerMinisterio = this.usuario?.usuarioMinisterio ? true : false;
-    this.voluntario = this.usuario?.usuarioVoluntariado ? true : false;
+    this.ejerMinisterio = !!this.usuario.usuarioMinisterio.length;
+    this.voluntario = !!this.usuario.usuarioVoluntariado.length;
     this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
     this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
     this.congregacionPais = this.usuario?.usuarioCongregacionPais[0]?.pais
@@ -275,8 +275,8 @@ export class InformacionUsuarioComponent implements OnInit {
       congregacion_id: [this.usuario?.usuarioCongregacionCongregacion[0]?.id, [Validators.required]],
       campo_id: [this.usuario?.usuarioCongregacionCampo[0]?.id, [Validators.required]],
       esJoven: [this.esjoven, [Validators.required]],
-      ejerceMinisterio: [this.ejerMinisterio, [Validators.required]],
-      esVoluntario: [this.voluntario, [Validators.required]],
+      ejerceMinisterio: [!!this.usuario.usuarioMinisterio.length, [Validators.required]],
+      esVoluntario: [!!this.usuario.usuarioVoluntariado.length, [Validators.required]],
       ministerio: this.formBuilder.array(controlMinisterios),
       voluntariado: this.formBuilder.array(controlVoluntariados),
       anoConocimiento: [this.anoConocimiento, []],
@@ -361,6 +361,14 @@ export class InformacionUsuarioComponent implements OnInit {
         this.registroTresForm.value,
         this.registroCuatroForm.value
       );
+
+      if (!informacionFormulario.ejerceMinisterio) {
+        this.deseleccionarMinisterios();
+      }
+
+      if (!informacionFormulario.esVoluntario) {
+        this.deseleccionarVoluntariados();
+      }
 
       const usuarioNuevo: RegisterFormInterface = {
         primerNombre: informacionFormulario?.primerNombre,
@@ -462,10 +470,19 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   ministeriosSeleccionados(): number[] {
+    console.log('this.registroCuatroForm', this.registroCuatroForm);
+
     const ministeriosSeleccionados = this.registroCuatroForm.value.ministerio
       .map((checked: any, i: number) => (checked ? this.ministerios[i].id : null))
       .filter((value: any) => value !== null);
     return ministeriosSeleccionados;
+  }
+
+  deseleccionarMinisterios() {
+    const ministeriosArray = this.registroCuatroForm.get('ministerio') as FormArray;
+    ministeriosArray.controls.forEach((control) => {
+      control.setValue(false);
+    });
   }
 
   voluntariadosSelecionados(): number[] {
@@ -473,6 +490,13 @@ export class InformacionUsuarioComponent implements OnInit {
       .map((checked: any, i: number) => (checked ? this.voluntariados[i].id : null))
       .filter((value: any) => value !== null);
     return voluntariadosSelecionados;
+  }
+
+  deseleccionarVoluntariados() {
+    const voluntariadosArray = this.registroCuatroForm.get('voluntariado') as FormArray;
+    voluntariadosArray.controls.forEach((control) => {
+      control.setValue(false);
+    });
   }
 
   filtrarCongregacionesPorPais(pais: string) {
