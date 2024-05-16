@@ -350,7 +350,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         ? usuario.tipoDocumento.documento
         : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
       const numeroDocumento = usuario?.numeroDocumento ? usuario?.numeroDocumento : '';
-      const anoConocimiento = usuario?.anoConocimiento ? new Date(usuario?.anoConocimiento).toLocaleDateString() : '';
+      const anoConocimiento = usuario?.anoConocimiento ? usuario?.anoConocimiento : '';
 
       Swal.fire({
         icon: 'info',
