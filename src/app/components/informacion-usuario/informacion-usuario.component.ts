@@ -174,7 +174,10 @@ export class InformacionUsuarioComponent implements OnInit {
   ngOnInit(): void {
     this.informacionDelUsuario();
     this.crearFormularios();
+
     this.tieneTipoDocumento();
+    this.filtrarCongregacionesPorPais(this.usuario?.usuarioCongregacionPais[0]?.id);
+    this.filtrarCamposPorCongregacion(this.usuario?.usuarioCongregacionCongregacion[0]?.id);
   }
 
   informacionDelUsuario() {
@@ -470,8 +473,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   ministeriosSeleccionados(): number[] {
-    console.log('this.registroCuatroForm', this.registroCuatroForm);
-
     const ministeriosSeleccionados = this.registroCuatroForm.value.ministerio
       .map((checked: any, i: number) => (checked ? this.ministerios[i].id : null))
       .filter((value: any) => value !== null);
@@ -499,15 +500,17 @@ export class InformacionUsuarioComponent implements OnInit {
     });
   }
 
-  filtrarCongregacionesPorPais(pais: string) {
+  filtrarCongregacionesPorPais(idPais: number | string) {
+    this.camposFiltrados = null;
+
     this.congregacionesFiltradas = this.congregaciones?.filter(
-      (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
+      (congregacionBuscar) => congregacionBuscar.pais_id === Number(idPais)
     );
   }
 
-  filtrarCamposPorCongregacion(congregacion: string) {
+  filtrarCamposPorCongregacion(idCongregacion: number | string) {
     this.camposFiltrados = this.campos.filter(
-      (campoABuscar) => campoABuscar.congregacion_id === parseInt(congregacion)
+      (campoABuscar) => campoABuscar.congregacion_id === Number(idCongregacion)
     );
   }
 
@@ -585,20 +588,20 @@ export class InformacionUsuarioComponent implements OnInit {
     };
   }
 
-  tieneTipoDocumento(idPais: string = this.usuario?.paisId) {
+  async tieneTipoDocumento(idPais: string = this.usuario?.usuarioCongregacionPais[0]?.id) {
     this.tipoDeDocumentosFiltrados = [];
     this.tipoDeDocumentosFiltrados = this.tiposDeDocumentos.filter(
       (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais)
     );
 
     if (this.tipoDeDocumentosFiltrados.length > 0) {
-      this.agregarControlTipoDocumento();
+      await this.agregarControlTipoDocumento();
     } else {
       this.eliminarControlTipoDocumento();
     }
   }
 
-  agregarControlTipoDocumento() {
+  async agregarControlTipoDocumento() {
     this.registroCuatroForm = this.formBuilder.group({
       ...this.registroCuatroForm.controls,
       tipoDocumento_id: [this.tipoDeDocumento, Validators.required],
