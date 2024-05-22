@@ -10,6 +10,8 @@ import { CongregacionService } from 'src/app/services/congregacion/congregacion.
 import { PaisService } from 'src/app/services/pais/pais.service';
 import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
+import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
+import { AccesoCongregacionMultimedia } from 'src/app/core/interfaces/acceso-multimedia';
 
 @Component({
   selector: 'app-crear-congregacion',
@@ -35,7 +37,8 @@ export class CrearCongregacionComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private congregacionService: CongregacionService,
-    private paisService: PaisService
+    private paisService: PaisService,
+    private accesoMultimediaService: AccesoMultimediaService
   ) {}
 
   ngOnInit(): void {
@@ -52,7 +55,6 @@ export class CrearCongregacionComponent implements OnInit {
       pais_id: ['', [Validators.required]],
       idObreroEncargado: ['', [Validators.required]],
       email: ['', []],
-      password: [{ value: '' }, [Validators.required]],
     });
 
     this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
@@ -89,13 +91,37 @@ export class CrearCongregacionComponent implements OnInit {
         id: this.congregacionSeleccionada.id,
       };
 
-      this.congregacionService.actualizarCongregacion(data).subscribe((congregacion: any) => {
-        Swal.fire({
-          title: 'Congregación Actualizada',
-          icon: 'success',
-          html: `La congregación ${congregacion.congregacionActualizada.congregacion} se actualizó correctamente`,
-        });
-      });
+      this.congregacionService.actualizarCongregacion(data).subscribe(
+        (congregacion: any) => {
+          Swal.fire({
+            title: 'Congregación Actualizada',
+            icon: 'success',
+            html: `La congregación ${congregacion.congregacionActualizada.congregacion} se actualizó correctamente`,
+          });
+        },
+        (error) => {
+          console.log(error);
+          if (!!error.error.msg) {
+            Swal.fire({
+              icon: 'info',
+              html: error.error.msg,
+            });
+          }
+
+          let errores = error.error.errors;
+          let listaErrores = [];
+
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
+
+          Swal.fire({
+            title: 'Error al crear congregacion',
+            icon: 'error',
+            html: `${listaErrores.join('')}`,
+          });
+        }
+      );
 
       this.resetFormulario();
       this.cargarCongregaciones();
@@ -133,7 +159,7 @@ export class CrearCongregacionComponent implements OnInit {
     if (id !== 'nuevo') {
       this.congregacionService.getCongregacion(Number(id)).subscribe(
         (congregacionEncontrada: CongregacionModel) => {
-          const { congregacion, pais_id, idObreroEncargado, email, password } = congregacionEncontrada;
+          const { congregacion, pais_id, idObreroEncargado, email } = congregacionEncontrada;
           this.congregacionSeleccionada = congregacionEncontrada;
 
           this.congregacionForm.setValue({
@@ -141,7 +167,6 @@ export class CrearCongregacionComponent implements OnInit {
             pais_id,
             idObreroEncargado,
             email,
-            password: password ?? this.generarPassword(),
           });
         },
         (error) => {
@@ -161,6 +186,84 @@ export class CrearCongregacionComponent implements OnInit {
           return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
         }
       );
+    }
+  }
+
+  crearCredenciales(nombreCongregacion: string, email: string) {
+    let congregacion = this.congregaciones.find((congregacion) => congregacion.congregacion === nombreCongregacion);
+
+    if (congregacion) {
+      let password = this.generarPassword();
+      Swal.fire({
+        title: 'CMAR LIVE',
+        html: `Desea crear acceso a CMAR LIVE la congregación <b>${congregacion.congregacion}</b>`,
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'Cancelar',
+        showCloseButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        icon: 'question',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const { value: formValues } = await Swal.fire({
+            text: `Credenciales para ${congregacion.congregacion}`,
+            html:
+              `<p>Credenciales para <b>${congregacion.congregacion}</b></p>` +
+              `<label class="input-group obligatorio">Login: </label>
+              <input type="text" id="email" name="email" class="form-control"  value="${congregacion.email}"  required />` +
+              `<label class="input-group obligatorio">Contraseña: </label>
+              <input type="password" id="password" name="password" class="form-control" value="${password}" required />`,
+
+            focusConfirm: true,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showCloseButton: true,
+            preConfirm: () => {
+              return [
+                (document.getElementById('email') as HTMLInputElement).value,
+                (document.getElementById('password') as HTMLInputElement).value,
+              ];
+            },
+          });
+
+          if (formValues) {
+            const data: AccesoCongregacionMultimedia = {
+              email: email,
+              password: password,
+              idCongregacion: congregacion.id,
+            };
+
+            this.accesoMultimediaService.crearAccesoCongregacionMultimedia(data).subscribe(
+              (accesoCreado: any) => {
+                Swal.fire({
+                  title: 'Acceso creado',
+                  html: `Por favor revise el correo electrónico: <b>${email}</b>`,
+                  icon: 'success',
+                });
+              },
+              (error) => {
+                let errores = error.error.errors;
+                let listaErrores = [];
+
+                if (!!errores) {
+                  Object.entries(errores).forEach(([key, value]) => {
+                    listaErrores.push('° ' + value['msg'] + '<br>');
+                  });
+                }
+
+                Swal.fire({
+                  title: 'El acceso NO ha sido creado',
+                  icon: 'error',
+                  html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+                });
+              }
+            );
+          }
+        } else if (result.isDenied) {
+          Swal.fire('No se pudo crear las credeciales de CMAR LIVE', '', 'info');
+        }
+      });
     }
   }
 

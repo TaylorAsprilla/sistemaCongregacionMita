@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { LoginUsuarioCmarLiveInterface } from 'src/app/core/models/acceso-multimedia.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { SolicitudMultimediaInterface, TIEMPO_SUGERIDO_DIAS } from 'src/app/core/models/solicitud-multimedia.model';
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -12,6 +11,7 @@ import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedi
 import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
+import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
 
 @Component({
   selector: 'app-solicitud-multimedia',
