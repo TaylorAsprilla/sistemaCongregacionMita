@@ -57,7 +57,7 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
         id: id,
         estado: true,
       };
-      this.voluntariadoService.actualizarTipoMiembro(data).subscribe(
+      this.voluntariadoService.actualizarVoluntariado(data).subscribe(
         (voluntariadoActivo: VoluntariadoModel) => {
           Swal.fire(
             'Actualizado!',
@@ -93,7 +93,7 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.voluntariadoService
-          .eliminarYipoMiembro(voluntariado)
+          .eliminarVoluntariado(voluntariado)
           .subscribe((voluntariadoEliminado: VoluntariadoModel) => {
             Swal.fire(
               '¡Deshabilitado!',
@@ -119,11 +119,17 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.voluntariadoService.activarTipoMiembro(voluntariado).subscribe((voluntariadoActivo: VoluntariadoModel) => {
-          Swal.fire('¡Activado!', `El género ${voluntariado.nombreVoluntariado} fue activado correctamente`, 'success');
+        this.voluntariadoService
+          .activarVoluntariado(voluntariado)
+          .subscribe((voluntariadoActivo: VoluntariadoModel) => {
+            Swal.fire(
+              '¡Activado!',
+              `El género ${voluntariado.nombreVoluntariado} fue activado correctamente`,
+              'success'
+            );
 
-          this.cargarVoluntariados();
-        });
+            this.cargarVoluntariados();
+          });
       }
     });
   }
@@ -138,8 +144,8 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
     });
 
     if (voluntariado) {
-      this.voluntariadoService.crearVoluntariado(voluntariado).subscribe((voluntariadoActivo: VoluntariadoModel) => {
-        Swal.fire('Creado!', `El voluntariado ${voluntariado.tipoTransporte} fue creado correctamente`, 'success');
+      this.voluntariadoService.crearVoluntariado(voluntariado).subscribe((nuevoVoluntariado: any) => {
+        Swal.fire('Creado!', ` ${nuevoVoluntariado.msg} `, 'success');
 
         this.cargarVoluntariados();
       });
