@@ -100,7 +100,6 @@ export class CrearCongregacionComponent implements OnInit {
           });
         },
         (error) => {
-          console.log(error);
           if (!!error.error.msg) {
             Swal.fire({
               icon: 'info',
@@ -278,5 +277,9 @@ export class CrearCongregacionComponent implements OnInit {
 
   resetFormulario() {
     this.congregacionForm.reset();
+  }
+
+  cancelar() {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
   }
 }

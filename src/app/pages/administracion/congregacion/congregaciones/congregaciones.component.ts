@@ -8,6 +8,9 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import Swal from 'sweetalert2';
+import { generate } from 'generate-password-browser';
+import { AccesoCongregacionMultimedia } from 'src/app/core/interfaces/acceso-multimedia';
+import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 
 @Component({
   selector: 'app-congregaciones',
@@ -28,6 +31,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private congregacionService: CongregacionService,
+    private accesoMultimediaService: AccesoMultimediaService,
     private activatedRoute: ActivatedRoute
   ) {}
 
@@ -132,5 +136,106 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
 
   obtenerFiltroNombre(nombre: string) {
     this.filtroNombre = nombre;
+  }
+
+  async crearCredenciales(nombreCongregacion: string, email: string) {
+    let congregacion = this.congregaciones.find((congregacion) => congregacion.congregacion === nombreCongregacion);
+
+    if (!email) {
+      Swal.fire({
+        position: 'top-end',
+        html: 'Por favor digite un correo electrónico para la congregación',
+        showConfirmButton: false,
+        timer: 3000,
+      });
+
+      if (congregacion) {
+        this.actualizarCongregacion(congregacion.id);
+      }
+      return;
+    }
+
+    if (!congregacion) return;
+
+    let password = this.generarPassword();
+
+    let result = await Swal.fire({
+      title: 'CMAR LIVE',
+      html: `¿Desea crear acceso a CMAR LIVE para la congregación <b>${congregacion.congregacion}</b>?`,
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+      showCloseButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      icon: 'question',
+    });
+
+    if (result.isConfirmed) {
+      const { value: formValues } = await Swal.fire({
+        text: `Credenciales para ${congregacion.congregacion}`,
+        html:
+          `<p>Credenciales para <b>${congregacion.congregacion}</b></p>` +
+          `<label class="input-group obligatorio">Login: </label>` +
+          `<input type="text" id="email" name="email" class="form-control" value="${congregacion.email}" disabled required />` +
+          `<label class="input-group obligatorio">Contraseña: </label>` +
+          `<input type="password" id="password" name="password" class="form-control" value="${password}" required />`,
+        focusConfirm: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showCloseButton: true,
+        preConfirm: () => {
+          return [
+            (document.getElementById('email') as HTMLInputElement).value,
+            (document.getElementById('password') as HTMLInputElement).value,
+          ];
+        },
+      });
+
+      if (formValues) {
+        const data: AccesoCongregacionMultimedia = {
+          email: email,
+          password: formValues[1],
+          idCongregacion: congregacion.id,
+        };
+
+        this.accesoMultimediaService.crearAccesoCongregacionMultimedia(data).subscribe(
+          () => {
+            Swal.fire({
+              title: 'Acceso creado',
+              html: `Por favor revise el correo electrónico: <b>${email}</b>`,
+              icon: 'success',
+            });
+          },
+          (error) => {
+            const errores = error.error.errors;
+            let listaErrores = [];
+
+            if (errores) {
+              Object.entries(errores).forEach(([key, value]) => {
+                listaErrores.push(`° ${value['msg']}<br>`);
+              });
+            }
+
+            Swal.fire({
+              title: 'El acceso NO ha sido creado',
+              icon: 'error',
+              html: listaErrores.length ? listaErrores.join('') : error.error.msg,
+            });
+          }
+        );
+      }
+    } else if (result.isDenied) {
+      Swal.fire('No se pudo crear las credenciales de CMAR LIVE', '', 'info');
+    }
+  }
+
+  generarPassword() {
+    const password = generate({
+      length: 10,
+      numbers: true,
+    });
+
+    return password;
   }
 }

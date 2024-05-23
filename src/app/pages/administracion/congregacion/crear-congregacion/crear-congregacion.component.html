@@ -66,10 +66,15 @@
               *ngIf="txtEmailCongregacion.value !== ''"
               type="button"
               class="btn btn-secondary"
+              title="Crear Credenciales"
               [disabled]="congregacionForm.invalid"
               (click)="crearCredenciales(txtNombreCongregacion.value, txtEmailCongregacion.value)"
             >
               <i class="fa fa-key"></i> Acceso
+            </button>
+
+            <button type="button" class="btn btn-danger" title="Cancelar" (click)="cancelar()">
+              <i class="fa-solid fa-ban"></i> Cancelar
             </button>
           </div>
         </form>
