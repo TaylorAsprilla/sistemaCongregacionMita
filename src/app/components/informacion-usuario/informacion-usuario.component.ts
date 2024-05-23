@@ -209,8 +209,8 @@ export class InformacionUsuarioComponent implements OnInit {
     this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
     this.tipoMiembro = this.usuario?.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
     this.esjoven = this.usuario?.esJoven ? 1 : 0;
-    this.ejerMinisterio = !!this.usuario?.usuarioMinisterio.length;
-    this.voluntario = !!this.usuario?.usuarioVoluntariado.length;
+    this.ejerMinisterio = !!this.usuario?.usuarioMinisterio?.length;
+    this.voluntario = !!this.usuario?.usuarioVoluntariado?.length;
     this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
     this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
     this.congregacionPais = this.usuario?.usuarioCongregacionPais[0]?.pais
@@ -278,8 +278,8 @@ export class InformacionUsuarioComponent implements OnInit {
       congregacion_id: [this.usuario?.usuarioCongregacionCongregacion[0]?.id, [Validators.required]],
       campo_id: [this.usuario?.usuarioCongregacionCampo[0]?.id, [Validators.required]],
       esJoven: [this.esjoven, [Validators.required]],
-      ejerceMinisterio: [!!this.usuario?.usuarioMinisterio.length, [Validators.required]],
-      esVoluntario: [!!this.usuario?.usuarioVoluntariado.length, [Validators.required]],
+      ejerceMinisterio: [!!this.usuario?.usuarioMinisterio?.length, [Validators.required]],
+      esVoluntario: [!!this.usuario?.usuarioVoluntariado?.length, [Validators.required]],
       ministerio: this.formBuilder.array(controlMinisterios),
       voluntariado: this.formBuilder.array(controlVoluntariados),
       anoConocimiento: [this.anoConocimiento, []],

@@ -27,17 +27,28 @@ export class RecuperarCuentaComponent implements OnInit {
 
   recuperarCuenta() {
     const cuentaUsuario = this.cuentaForm.value;
-    this.usuarioservice.forgotPassword(cuentaUsuario).subscribe((respuesta: any) => {
-      Swal.fire({
-        title: 'CMAR LIVE',
-        icon: 'warning',
-        html: `${respuesta.msg}`,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.router.navigateByUrl(`${RUTAS.LOGIN}`);
-        }
-      });
-    });
+    this.usuarioservice.forgotPassword(cuentaUsuario).subscribe(
+      (respuesta: any) => {
+        Swal.fire({
+          title: 'CMAR LIVE',
+          icon: 'warning',
+          html: `${respuesta.msg}`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigateByUrl(`${RUTAS.LOGIN}`);
+          }
+        });
+      },
+
+      (error) => {
+        let errores = error.error.msg;
+
+        Swal.fire({
+          icon: 'info',
+          html: `${errores}`,
+        });
+      }
+    );
   }
 
   obtenerAnioActual = (): number => {

@@ -3,7 +3,7 @@ import { TIEMPO_SUGERIDO_DIAS, TIEMPO_SUGERIDO_TEXT } from '../../app/core/model
 export const configuracion = {
   inactividad: {
     // HH: MM: SS: MS
-    INACTIVE_TIMEOUT_MS: 5 * 10 * 60 * 1000, // 5 horas en milisegundos
+    INACTIVE_TIMEOUT_MS: 10 * 10 * 60 * 1000, // 10 horas en milisegundos
     TIMER_MODEL: 5 * 60 * 1000, // 5 minutos en milisegundos,
   },
 

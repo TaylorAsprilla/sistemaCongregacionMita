@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'environment';
 import { tap } from 'rxjs/operators';
-import { AccesoMultimediaModel, LoginUsuarioCmarLiveInterface } from 'src/app/core/models/acceso-multimedia.model';
+import { AccesoCongregacionMultimedia, LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
+import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';
 
 const base_url = environment.base_url;
 
@@ -31,6 +32,16 @@ export class AccesoMultimediaService {
         resp;
       })
     );
+  }
+
+  crearAccesoCongregacionMultimedia(accesoCongregacionMultimedia: AccesoCongregacionMultimedia) {
+    return this.httpClient
+      .post(`${base_url}/accesomultimedia/congregacion`, accesoCongregacionMultimedia, this.headers)
+      .pipe(
+        tap((resp: any) => {
+          resp;
+        })
+      );
   }
 
   eliminarAccesoMultimedia(idAccesoMultimedia: number) {

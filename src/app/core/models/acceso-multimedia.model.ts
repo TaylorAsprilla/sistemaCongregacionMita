@@ -9,14 +9,6 @@ export class AccesoMultimediaModel {
   ) {}
 }
 
-export interface LoginUsuarioCmarLiveInterface {
-  login: string;
-  password: string;
-  solicitud_id: number;
-  tiempoAprobacion: Date;
-  estado: boolean;
-}
-
 export class MultimediaCmarLiveModel {
   constructor(
     public id: number,
