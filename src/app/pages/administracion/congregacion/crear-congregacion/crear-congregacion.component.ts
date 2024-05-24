@@ -278,4 +278,8 @@ export class CrearCongregacionComponent implements OnInit {
   resetFormulario() {
     this.congregacionForm.reset();
   }
+
+  cancelar() {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
+  }
 }

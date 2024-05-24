@@ -37,18 +37,18 @@ export class VoluntariadoService {
   }
 
   crearVoluntariado(voluntariado: string) {
-    return this.httpClient.post(`${base_url}/voluntariado`, { voluntariado: voluntariado }, this.headers);
+    return this.httpClient.post(`${base_url}/voluntariado`, { nombreVoluntariado: voluntariado }, this.headers);
   }
 
-  actualizarTipoMiembro(voluntariado: VoluntariadoModel) {
+  actualizarVoluntariado(voluntariado: VoluntariadoModel) {
     return this.httpClient.put(`${base_url}/voluntariado/${voluntariado.id}`, voluntariado, this.headers);
   }
 
-  eliminarYipoMiembro(voluntariado: VoluntariadoModel) {
+  eliminarVoluntariado(voluntariado: VoluntariadoModel) {
     return this.httpClient.delete(`${base_url}/voluntariado/${voluntariado.id}`, this.headers);
   }
 
-  activarTipoMiembro(voluntariado: VoluntariadoModel) {
+  activarVoluntariado(voluntariado: VoluntariadoModel) {
     return this.httpClient.put(`${base_url}/voluntariado/activar/${voluntariado.id}`, voluntariado, this.headers);
   }
 }
