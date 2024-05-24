@@ -96,7 +96,6 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.cargarCongregaciones();
     this.cargarPaises();
     this.cargarCampos();
-    console.log('isMobile = ' + this.isMobile);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -306,7 +305,6 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   esconderFiltros() {
     this.isFiltrosVisibles = !this.isFiltrosVisibles;
-    console.log(this.isFiltrosVisibles);
   }
 
   obtenerNombresMinisterios(ministerios: MinisterioModel[]): string {

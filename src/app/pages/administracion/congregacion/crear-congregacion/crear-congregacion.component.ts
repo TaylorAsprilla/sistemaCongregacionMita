@@ -100,7 +100,6 @@ export class CrearCongregacionComponent implements OnInit {
           });
         },
         (error) => {
-          console.log(error);
           if (!!error.error.msg) {
             Swal.fire({
               icon: 'info',
