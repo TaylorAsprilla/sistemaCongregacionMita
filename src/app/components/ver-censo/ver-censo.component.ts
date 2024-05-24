@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { UsuarioInterface, UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
@@ -13,6 +13,7 @@ import { CongregacionService } from 'src/app/services/congregacion/congregacion.
 import { delay } from 'rxjs/operators';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { CampoService } from 'src/app/services/campo/campo.service';
+import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-ver-censo',
@@ -63,6 +64,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   usuarioSubscription: Subscription;
 
+  isMobile: Observable<BreakpointState>;
+  isFiltrosVisibles: boolean = false;
+
   get filterText() {
     return this.filtrarTexto;
   }
@@ -83,10 +87,12 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     private usuarioService: UsuarioService,
     private paisService: PaisService,
     private congregacionService: CongregacionService,
-    private campoService: CampoService
+    private campoService: CampoService,
+    private breakpointService: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
+    this.isMobile = this.breakpointService.observe(Breakpoints.Handset);
     this.cargarCongregaciones();
     this.cargarPaises();
     this.cargarCampos();
@@ -295,6 +301,10 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.filtrarCampoTexto = '';
     this.filterText = '';
     this.usuariosFiltrados = this.usuarios;
+  }
+
+  esconderFiltros() {
+    this.isFiltrosVisibles = !this.isFiltrosVisibles;
   }
 
   obtenerNombresMinisterios(ministerios: MinisterioModel[]): string {
