@@ -7,7 +7,7 @@ export class CongregacionPaisModel {
     public id: number,
     public pais: string,
     public estado: boolean,
-    public idDivisa: number,
-    public idObreroEncargado: number
+    public idDivisa?: number,
+    public idObreroEncargado?: number
   ) {}
 }
