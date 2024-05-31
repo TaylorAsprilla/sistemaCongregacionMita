@@ -76,7 +76,8 @@ export class UsuarioModel {
     public usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface,
     public usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface,
     public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface,
-    public idUsuarioQueRegistra?: number
+    public idUsuarioQueRegistra?: number,
+    public congregacion?: string
   ) {}
 
   get fotoUrl() {
@@ -91,10 +92,6 @@ export class UsuarioModel {
 
   get paisId() {
     return this.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id;
-  }
-
-  get congregacion() {
-    return this.usuarioCongregacion[0]?.congregacion;
   }
 
   get congregacionId() {
