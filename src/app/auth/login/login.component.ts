@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CONFIGURACION } from 'src/app/core/enums/config.enum';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -53,48 +54,41 @@ export class LoginComponent implements OnInit {
     }
     this.usuarioService.login(this.loginForm.value).subscribe(
       (login: any) => {
-        const usuario: UsuarioModel = login.usuario;
+        const usuario = login.usuario;
+        let mensajeBienvenida = '';
 
-        if (!!usuario) {
+        if (login.entidadTipo === CONFIGURACION.USUARIO) {
+          const usuario: UsuarioModel = login.usuario;
+
           const primerNombre: string = usuario.primerNombre ? usuario.primerNombre : login.usuario.nombre;
           const segundoNombre: string = usuario.segundoNombre ? usuario.segundoNombre : '';
           const primerApellido: string = usuario.primerApellido ? usuario.primerApellido : '';
           const segundoApellido: string = usuario.segundoApellido ? usuario.segundoApellido : '';
+          mensajeBienvenida = `Bienvenido ${primerNombre} ${segundoNombre} ${primerApellido} ${segundoApellido}`;
+        } else if (login.entidadTipo === CONFIGURACION.CONGREGACION) {
+          mensajeBienvenida = `Bienvenido ${usuario.congregacion}`;
+        }
 
+        if (mensajeBienvenida) {
           if (this.loginForm.get('remember').value) {
             localStorage.setItem('login', this.loginForm.get('login').value);
             localStorage.setItem('remember', this.loginForm.get('remember').value);
           } else {
             localStorage.removeItem('login');
           }
+
           Swal.fire({
             position: 'bottom-end',
-            html: `Bienvenido ${primerNombre} ${segundoNombre} ${primerApellido} ${segundoApellido}`,
+            html: mensajeBienvenida,
             showConfirmButton: false,
             timer: 1500,
           });
 
-          // Navegar al Dashboard
-          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
-        } else if (login.congregacion) {
-          const congregacion = login.congregacion;
-          const nombreCongregacion: string = congregacion.congregacion;
-
-          if (this.loginForm.get('remember').value) {
-            localStorage.setItem('login', this.loginForm.get('login').value);
-            localStorage.setItem('remember', this.loginForm.get('remember').value);
-          } else {
-            localStorage.removeItem('login');
-          }
-          Swal.fire({
-            position: 'bottom-end',
-            html: `Bienvenido ${nombreCongregacion} `,
-            showConfirmButton: false,
-            timer: 1500,
-          });
           // Navegar al Dashboard
           this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
         }
+        // Navegar al Dashboard
+        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
       },
       (err) => {
         Swal.fire({ icon: 'error', html: `${err.error.msg}` });
