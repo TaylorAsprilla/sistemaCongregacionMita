@@ -78,19 +78,23 @@
                     <a class="informacion" href="mailto:{{ email }}">
                       <p class="text-muted">{{ email }}</p></a
                     >
-                    <a class="informacion" href="tel:{{ numeroCelular }}">
-                      <p class="text-muted">{{ numeroCelular }}</p></a
-                    >
-                    <a *ngIf="usuario" class="informacion">
-                      <p class="text-muted"><b>Número Mita: </b>{{ usuario?.id }}</p></a
-                    >
+                    <div *ngIf="usuario">
+                      <a class="informacion" href="tel:{{ numeroCelular }}">
+                        <p class="text-muted">{{ numeroCelular }}</p></a
+                      >
+                      <a class="informacion">
+                        <p class="text-muted"><b>Número Mita: </b>{{ usuario?.id }}</p></a
+                      >
+                    </div>
                   </div>
                 </div>
               </li>
-              <li role="separator" class="divider"></li>
-              <li *ngIf="usuario">
-                <a [routerLink]="[Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
-              </li>
+              <div *ngIf="usuario">
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a [routerLink]="[Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
+                </li>
+              </div>
               <li role="separator" class="divider"></li>
               <li>
                 <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>

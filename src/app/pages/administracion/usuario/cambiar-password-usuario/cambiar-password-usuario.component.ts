@@ -68,28 +68,26 @@ export class CambiarPasswordUsuarioComponent implements OnInit {
     const passwordNuevoUno = this.passwordUsuarioForm.controls['passwordNuevoUno']?.value;
 
     if (this.passwordUsuarioForm.valid) {
-      this.usuarioservice
-        .cambiarPasswordUsuario(this.idusuario, this.loginUsuario, passwordAntiguo, passwordNuevoUno)
-        .subscribe(
-          (respuesta: any) => {
-            Swal.fire({
-              title: 'CMAR LIVE',
-              icon: 'warning',
-              html: `${respuesta.msg}`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.router.navigateByUrl(`${RUTAS.LOGIN}`);
-              }
-            });
-          },
-          (err) => {
-            Swal.fire({
-              title: 'CMAR LIVE',
-              icon: 'warning',
-              html: `${err.error.msg}`,
-            });
-          }
-        );
+      this.usuarioservice.cambiarPasswordUsuario(this.loginUsuario, passwordAntiguo, passwordNuevoUno).subscribe(
+        (respuesta: any) => {
+          Swal.fire({
+            title: 'CMAR LIVE',
+            icon: 'warning',
+            html: `${respuesta.msg}`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigateByUrl(`${RUTAS.LOGIN}`);
+            }
+          });
+        },
+        (err) => {
+          Swal.fire({
+            title: 'CMAR LIVE',
+            icon: 'warning',
+            html: `${err.error.msg}`,
+          });
+        }
+      );
     }
   }
 

@@ -337,10 +337,10 @@ export class UsuarioService {
     );
   }
 
-  cambiarPasswordUsuario(idUsuario: number, login: string, passwordAntiguo: string, passwordNuevo: string) {
+  cambiarPasswordUsuario(login: string, passwordAntiguo: string, passwordNuevo: string) {
     return this.httpClient.put(
       `${base_url}/login/cambiarpasswordusuario`,
-      { idUsuario, passwordAntiguo, passwordNuevo, login },
+      { passwordAntiguo, passwordNuevo, login },
       this.headers
     );
   }
