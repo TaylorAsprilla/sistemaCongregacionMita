@@ -351,6 +351,17 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   guardarUsuario() {
+    console.log(
+      'Formulario uno',
+      this.registroUnoForm,
+      'Formulario Dos',
+      this.registroDosForm,
+      'Formulario Tres',
+      this.registroTresForm,
+      'Formulario Cuatro',
+      this.registroCuatroForm
+    );
+
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&
