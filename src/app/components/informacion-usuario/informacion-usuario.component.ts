@@ -551,7 +551,7 @@ export class InformacionUsuarioComponent implements OnInit {
       return;
     }
     this.buscarCorreoSubscription = this.buscarCorreoService
-      .buscarCorreoUsuario(email, this.usuario.id)
+      .buscarCorreoUsuario(email, this.usuario?.id)
       .subscribe((respuesta: any) => {
         if (!respuesta.ok) {
           this.mensajeBuscarCorreo = respuesta.msg;
@@ -575,7 +575,7 @@ export class InformacionUsuarioComponent implements OnInit {
         return of(null);
       }
 
-      return this.buscarCelularService.buscarcelular(celularNumber, this.usuario.id).pipe(
+      return this.buscarCelularService.buscarcelular(celularNumber, this.usuario?.id).pipe(
         map((respuesta: any) => {
           if (!respuesta.ok) {
             this.mensajeBuscarCelular = respuesta.msg;

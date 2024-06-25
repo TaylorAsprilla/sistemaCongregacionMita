@@ -22,15 +22,15 @@ export class BuscarCelularService {
     };
   }
 
-  // buscarcelular(numeroCelular: string, idUsuario: number) {
-  //   console.log(idUsuario);
-  //   return this.httpClient.get(
-  //     `${base_url}/buscarcelular?numeroCelular=${numeroCelular}&idUsuario=${idUsuario}`,
-  //     this.headers
-  //   );
-  // }
-
-  buscarcelular(numeroCelular: string) {
-    return this.httpClient.get(`${base_url}/buscarcelular?numeroCelular=${numeroCelular}`, this.headers);
+  buscarcelular(numeroCelular: string, idUsuario: number = null) {
+    console.log(idUsuario);
+    return this.httpClient.get(
+      `${base_url}/buscarcelular?numeroCelular=${numeroCelular}&idUsuario=${idUsuario}`,
+      this.headers
+    );
   }
+
+  // buscarcelular(numeroCelular: string) {
+  //   return this.httpClient.get(`${base_url}/buscarcelular?numeroCelular=${numeroCelular}`, this.headers);
+  // }
 }
