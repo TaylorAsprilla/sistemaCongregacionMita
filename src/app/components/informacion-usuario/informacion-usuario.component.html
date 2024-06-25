@@ -204,22 +204,12 @@
         <div class="row">
           <div class="form-group col-md-6 col-sm-12">
             <label class="input-group obligatorio">País de Nacimiento: </label>
-            <input
-              type="text"
-              placeholder="Buscar el país"
-              formControlName="nacionalidad"
-              [matAutocomplete]="nacionalidad"
-              (keypress)="buscarNacionalidad('nacionalidad')"
-              (blur)="buscarIDNacionalidad(txtNacionalidad.value)"
-              matInput
-              class="form-control form-select"
-              #txtNacionalidad
-            />
-            <mat-autocomplete #nacionalidad="matAutocomplete">
-              <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
+
+            <select formControlName="nacionalidad" class="form-select">
+              <option *ngFor="let item of nacionalidades" [value]="item.nombre">
                 {{ item.nombre }}
-              </mat-option>
-            </mat-autocomplete>
+              </option>
+            </select>
 
             <small
               class="form-text text-danger"
@@ -456,19 +446,12 @@
           </small>
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group obligatorio">País: </label>
-            <input
-              type="text"
-              placeholder="País de Residencia"
-              formControlName="paisDireccion"
-              class="form-control"
-              [matAutocomplete]="auto"
-              (keypress)="buscarNacionalidad('paisDireccion')"
-            />
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let pais of letrasFiltrarNacionalidad | async" [value]="pais.nombre">
-                {{ pais.nombre }}
-              </mat-option>
-            </mat-autocomplete>
+
+            <select formControlName="paisDireccion" class="form-select">
+              <option *ngFor="let item of nacionalidades" [value]="item.nombre">
+                {{ item.nombre }}
+              </option>
+            </select>
             <small
               class="form-text text-danger"
               *ngIf="
@@ -570,19 +553,12 @@
 
           <div class="form-group col-sm-12 col-md-6 col-lg-4">
             <label class="input-group">Pais: </label>
-            <input
-              type="text"
-              placeholder="País de la dirección postal"
-              formControlName="paisPostal"
-              [matAutocomplete]="auto"
-              class="form-control"
-              (keypress)="buscarNacionalidad('paisPostal')"
-            />
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let item of letrasFiltrarNacionalidad | async" [value]="item.nombre">
+
+            <select formControlName="paisPostal" class="form-select">
+              <option *ngFor="let item of nacionalidades" [value]="item.nombre">
                 {{ item.nombre }}
-              </mat-option>
-            </mat-autocomplete>
+              </option>
+            </select>
 
             <small
               class="form-text text-danger"

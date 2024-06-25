@@ -550,11 +550,13 @@ export class InformacionUsuarioComponent implements OnInit {
     if (!email) {
       return;
     }
-    this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreoUsuario(email).subscribe((respuesta: any) => {
-      if (!respuesta.ok) {
-        this.mensajeBuscarCorreo = respuesta.msg;
-      }
-    });
+    this.buscarCorreoSubscription = this.buscarCorreoService
+      .buscarCorreoUsuario(email, this.usuario.id)
+      .subscribe((respuesta: any) => {
+        if (!respuesta.ok) {
+          this.mensajeBuscarCorreo = respuesta.msg;
+        }
+      });
   }
 
   buscarCelular(): ValidatorFn {
@@ -573,7 +575,7 @@ export class InformacionUsuarioComponent implements OnInit {
         return of(null);
       }
 
-      return this.buscarCelularService.buscarcelular(celularNumber).pipe(
+      return this.buscarCelularService.buscarcelular(celularNumber, this.usuario.id).pipe(
         map((respuesta: any) => {
           if (!respuesta.ok) {
             this.mensajeBuscarCelular = respuesta.msg;
