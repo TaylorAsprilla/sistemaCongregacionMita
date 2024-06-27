@@ -147,6 +147,8 @@ export class InformacionUsuarioComponent implements OnInit {
 
   direccionResidenciaValues: any;
 
+  mostrarPoliticaDatos: boolean = false;
+
   // Subscription
   usuarioSubscription: Subscription;
   buscarCorreoSubscription: Subscription;
@@ -284,6 +286,7 @@ export class InformacionUsuarioComponent implements OnInit {
       voluntariado: this.formBuilder.array(controlVoluntariados),
       anoConocimiento: [this.anoConocimiento, []],
       mismaFechaDeNacimiento: [],
+      aceptaPolitica: [false, Validators.requiredTrue],
     });
 
     this.patchValueMinisterios();
@@ -351,6 +354,17 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   guardarUsuario() {
+    console.log(
+      'Formulario uno',
+      this.registroUnoForm,
+      'Formulario Dos',
+      this.registroDosForm,
+      'Formulario Tres',
+      this.registroTresForm,
+      'Formulario Cuatro',
+      this.registroCuatroForm
+    );
+
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&
@@ -550,11 +564,13 @@ export class InformacionUsuarioComponent implements OnInit {
     if (!email) {
       return;
     }
-    this.buscarCorreoSubscription = this.buscarCorreoService.buscarCorreoUsuario(email).subscribe((respuesta: any) => {
-      if (!respuesta.ok) {
-        this.mensajeBuscarCorreo = respuesta.msg;
-      }
-    });
+    this.buscarCorreoSubscription = this.buscarCorreoService
+      .buscarCorreoUsuario(email, this.usuario?.id)
+      .subscribe((respuesta: any) => {
+        if (!respuesta.ok) {
+          this.mensajeBuscarCorreo = respuesta.msg;
+        }
+      });
   }
 
   buscarCelular(): ValidatorFn {
@@ -573,7 +589,7 @@ export class InformacionUsuarioComponent implements OnInit {
         return of(null);
       }
 
-      return this.buscarCelularService.buscarcelular(celularNumber).pipe(
+      return this.buscarCelularService.buscarcelular(celularNumber, this.usuario?.id).pipe(
         map((respuesta: any) => {
           if (!respuesta.ok) {
             this.mensajeBuscarCelular = respuesta.msg;
@@ -617,7 +633,32 @@ export class InformacionUsuarioComponent implements OnInit {
     return true;
   }
 
+  onPaisChange(event: any) {
+    console.log(event);
+    const paisSeleccionado = event.target.value;
+    const idColombia = 2;
+
+    this.mostrarPoliticaDatos = paisSeleccionado == idColombia;
+
+    // Si el país no es Colombia, desmarcar el checkbox y actualizar la validación
+    if (!this.mostrarPoliticaDatos) {
+      this.registroCuatroForm.get('aceptaPolitica').setValue(false);
+      this.registroCuatroForm.get('aceptaPolitica').clearValidators();
+      this.registroCuatroForm.get('aceptaPolitica').updateValueAndValidity();
+    } else {
+      this.registroCuatroForm.get('aceptaPolitica').setValidators(Validators.requiredTrue);
+      this.registroCuatroForm.get('aceptaPolitica').updateValueAndValidity();
+    }
+  }
+
   next() {
+    console.log(
+      'Información del Censo',
+      this.registroUnoForm,
+      this.registroDosForm,
+      this.registroTresForm,
+      this.registroCuatroForm
+    );
     if (this.step == 1) {
       this.registroUno_step = true;
       if (this.registroUnoForm.invalid) {

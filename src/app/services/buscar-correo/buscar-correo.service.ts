@@ -22,9 +22,13 @@ export class BuscarCorreoService {
     };
   }
 
-  buscarCorreoUsuario(email: string) {
-    return this.httpClient.get(`${base_url}/usuarios/buscarcorreo/${email}`, this.headers);
+  buscarCorreoUsuario(email: string, idUsuario: number = null) {
+    return this.httpClient.get(`${base_url}/buscarcorreo?email=${email}&idUsuario=${idUsuario}`, this.headers);
   }
+
+  // buscarCorreoUsuario(email: string) {
+  // return this.httpClient.get(`${base_url}/usuarios/buscarcorreo/${email}`, this.headers);
+  // }
 
   buscarCorreoSolicitud(email: string) {
     return this.httpClient.get(`${base_url}/solicitudmultimedia/buscarcorreo/${email}`, this.headers);

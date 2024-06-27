@@ -60,7 +60,6 @@
               [(ngModel)]="originalPais"
             >
               <option value="">Seleccione País</option>
-              <option value="">Sin País</option>
               <option *ngFor="let pais of paises" [ngValue]="pais">{{ pais.pais }}</option>
             </select>
           </div>
