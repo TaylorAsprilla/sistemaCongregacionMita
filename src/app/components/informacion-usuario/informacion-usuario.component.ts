@@ -21,7 +21,7 @@ import { GeneroModel } from 'src/app/core/models/genero.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { CongregacionPaisModel, CONGREGACION_PAIS } from 'src/app/core/models/congregacion-pais.model';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { TipoDocumentoModel, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-documento.model';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
@@ -32,6 +32,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { BuscarCelularService } from 'src/app/services/buscar-celular/buscar-celular.service';
+import { CONGREGACION_PAIS, ID_PAIS } from 'src/app/core/enums/congregacionPais.enum';
 
 @Component({
   selector: 'app-informacion-usuario',
@@ -180,6 +181,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.tieneTipoDocumento();
     this.filtrarCongregacionesPorPais(this.usuario?.usuarioCongregacionPais[0]?.id);
     this.filtrarCamposPorCongregacion(this.usuario?.usuarioCongregacionCongregacion[0]?.id);
+    this.onPaisChange();
   }
 
   informacionDelUsuario() {
@@ -633,10 +635,11 @@ export class InformacionUsuarioComponent implements OnInit {
     return true;
   }
 
-  onPaisChange(event: any) {
-    console.log(event);
-    const paisSeleccionado = event.target.value;
-    const idColombia = 2;
+  onPaisChange(event: any = null) {
+    // Obtener el valor del país seleccionado
+    const paisSeleccionado = event ? event.target.value : this.usuario?.usuarioCongregacionPais[0]?.id;
+
+    const idColombia = ID_PAIS.COLOMBIA;
 
     this.mostrarPoliticaDatos = paisSeleccionado == idColombia;
 

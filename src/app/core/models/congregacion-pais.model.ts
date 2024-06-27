@@ -1,7 +1,3 @@
-export enum CONGREGACION_PAIS {
-  SIN_CONGREGACION_PAIS = '42',
-}
-
 export class CongregacionPaisModel {
   constructor(
     public id: number,
