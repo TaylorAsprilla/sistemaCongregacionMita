@@ -25,10 +25,10 @@ export class UsuariosPorCongregacionService {
     };
   }
 
-  listarUsuariosPorPais(desde: number = 0, idPais: number) {
+  listarUsuariosPorPais(idUsuario: number) {
     return this.httpClient
       .get<UsuariosPorCongregacionRespuesta>(
-        `${base_url}/usuariocongregacion/pais/?desde=${desde}&idPais=${idPais}`,
+        `${base_url}/usuariocongregacion/pais?idUsuario=${idUsuario}`,
         this.headers
       )
       .pipe(

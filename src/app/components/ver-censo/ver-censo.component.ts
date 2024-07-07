@@ -27,9 +27,11 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() paises: CongregacionPaisModel[] = [];
   @Input() totalUsuarios: number = 0;
 
+  @Input() nombrePais: string = '';
   @Input() nombreCongregacion: string = '';
   @Input() nombreArchivo: string = '';
-  @Input() ocultarNombreCampo: boolean = false;
+  @Input() mostrarNombreCongregacion: boolean = false;
+  @Input() mostrarNombreCampo: boolean = false;
   @Input() titulo: string = '';
 
   @Output() onCrearUsuario = new EventEmitter<void>();
@@ -40,7 +42,6 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   camposFiltrados: CampoModel[] = [];
 
-  nombrePais: string = '';
   nombreCampo: string = '';
   usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
   selectedContact: number;
