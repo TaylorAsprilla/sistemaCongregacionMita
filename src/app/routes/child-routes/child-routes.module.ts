@@ -415,6 +415,7 @@ const childRoutes: Routes = [
   },
   {
     path: RUTAS.EVENTOS_EN_VIVO,
+    canActivate: [RolesGuard],
     component: EventosEnVivoComponent,
   },
 ];
