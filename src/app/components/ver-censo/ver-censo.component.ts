@@ -429,7 +429,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
                       <td class="col-md-7">${gradoAcademico}</td>
                     </tr>
                      <tr>
-                      <td class="col-md-5">Ocupación:</td>
+                      <td class="col-md-5">Profesión y/o Ocupación:</td>
                       <td class="col-md-7">${ocupacion}</td>
                     </tr>
                       <tr>
