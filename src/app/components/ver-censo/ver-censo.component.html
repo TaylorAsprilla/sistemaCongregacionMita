@@ -6,9 +6,9 @@
         <div>{{ titulo }}</div>
       </div>
       <ng-template #sinNombre>
-        <span><b> País:</b> {{ nombrePais }} - </span>
-        <span><b> Congregación:</b> {{ nombreCongregacion }} </span>
-        <span *ngIf="!ocultarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
+        <span><b> País:</b> {{ nombrePais }} </span>
+        <span *ngIf="!!mostrarNombreCongregacion"><b> - Congregación:</b> {{ nombreCongregacion }}</span>
+        <span *ngIf="!!mostrarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
       </ng-template>
     </div>
 

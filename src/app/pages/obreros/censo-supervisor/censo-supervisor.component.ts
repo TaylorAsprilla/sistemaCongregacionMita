@@ -17,11 +17,9 @@ export class CensoSupervisorComponent implements OnInit {
   nombreArchivo: string;
   nombreCongregacionPais: string;
   cargando: boolean = true;
-  idPaisObrero: number;
-  paginaDesde: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
-  usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
   totalUsuarios: number = 0;
+  idUsuario: number;
 
   // Subscription
   usuarioSubscription: Subscription;
@@ -33,7 +31,7 @@ export class CensoSupervisorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.idPaisObrero = this.usuarioService.usuarioIdCongregacionPais;
+    this.idUsuario = this.usuarioService.usuarioId;
     this.nombreCongregacionPais = this.usuarioService.nombreCongregacionPais;
     this.nombreArchivo = `Censo - ${this.nombreCongregacionPais}`;
     this.cargarUsuarios();
@@ -46,7 +44,7 @@ export class CensoSupervisorComponent implements OnInit {
   cargarUsuarios() {
     this.cargando = true;
     this.usuarioSubscription = this.usuariosPorCongregacionService
-      .listarUsuariosPorPais(this.paginaDesde, this.idPaisObrero)
+      .listarUsuariosPorPais(this.idUsuario)
       .subscribe(({ totalUsuarios, usuarios }) => {
         this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;
