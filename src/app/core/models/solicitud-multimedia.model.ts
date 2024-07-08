@@ -104,6 +104,7 @@ export interface SolicitudMultimediaInterface {
   observaciones: string;
   opcionTransporte_id: number;
   tipoDeEstudio_id: number;
+  otraRazon?: string;
   razonSolicitud?: RazonSolicitudModel;
   parentesco_id: number;
   tiempoAprobacion: Date;
@@ -135,6 +136,7 @@ export interface crearSolicitudMultimediaInterface {
   observaciones: string;
   opcionTransporte_id: number;
   tipoDeEstudio_id: number;
+  otraRazon?: string;
   razonSolicitud?: RazonSolicitudModel;
   parentesco_id: number;
   tiempoAprobacion: Date;
