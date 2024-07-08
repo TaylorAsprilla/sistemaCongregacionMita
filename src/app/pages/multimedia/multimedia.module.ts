@@ -21,6 +21,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { BuscarUsuarioModule } from 'src/app/components/buscar-usuario/buscar-usuario.module';
 import { ServiciosEnVivoModule } from 'src/app/components/servicios-en-vivo/servicios-en-vivo.module';
 import { EventosEnVivoComponent } from './eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 const lang = 'en-US';
 
@@ -51,6 +52,7 @@ const lang = 'en-US';
     PipesModule,
     BuscarUsuarioModule,
     ServiciosEnVivoModule,
+    NgxPaginationModule,
   ],
   exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
   providers: [{ provide: LOCALE_ID, useValue: lang }],

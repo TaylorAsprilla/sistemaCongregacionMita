@@ -24,6 +24,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   tipoMiembro: TipoMiembroModel[];
   cargando: boolean = false;
   fieldTextType: boolean;
+  pagina: number = 1;
 
   // Subscription
   public solicitudAccesoSubscription: Subscription;
@@ -99,10 +100,10 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
         const celular = informacionSolicitud?.usuario.numeroCelular ? informacionSolicitud?.usuario.numeroCelular : '';
 
         const tipoMiembro = this.buscarTipoMiembro(informacionSolicitud?.usuario.tipoMiembro_id);
-        const razonSolicitud =
+        const otraRazon =
           informacionSolicitud?.razonSolicitud_id !== 5
             ? informacionSolicitud?.razonSolicitud?.solicitud
-            : informacionSolicitud?.razonSolicitud;
+            : informacionSolicitud?.otraRazon;
         const tiempoSugerido = informacionSolicitud?.tiempoSugerido ? informacionSolicitud?.tiempoSugerido : '';
         const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id);
         const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
@@ -183,7 +184,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                     </tr>
                     <tr>
                       <td class="col-md-5">Razón de la solicitud:</td>
-                      <td class="col-md-7">${razonSolicitud}</td>
+                      <td class="col-md-7">${otraRazon}</td>
                     </tr>
                     <tr>
                       <td class="col-md-5">Tiempo Sugerido:</td>
@@ -491,5 +492,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
 
     return password;
+  }
+
+  onTableDataChange(event: any) {
+    this.pagina = event;
   }
 }

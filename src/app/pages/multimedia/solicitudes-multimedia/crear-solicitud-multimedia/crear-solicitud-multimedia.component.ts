@@ -125,7 +125,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       estaCercaACongregacion: [false, [Validators.required]],
       congregacionCercana: ['', [Validators.minLength(3)]],
       razonSolicitud_id: ['', [Validators.required]],
-      otraRazonSolicitud: ['', []],
+      otraRazon: ['', []],
       observaciones: ['', [Validators.minLength(3)]],
       tiempoSugerido: ['', []],
       terminos: ['', [Validators.required, Validators.requiredTrue]],
@@ -296,6 +296,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       const solicitudNueva: crearSolicitudMultimediaInterface = {
         usuario_id: this.usuario.id,
         razonSolicitud_id: formSolicitud.razonSolicitud_id,
+        otraRazon: formSolicitud.otraRazon,
         estado: true,
         usuarioQueRegistra_id: this.idUsuario,
         duracionDelPeriodoDeEstudio: formSolicitud.duracionDelPeriodoDeEstudio

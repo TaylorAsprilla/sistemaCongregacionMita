@@ -103,9 +103,14 @@
       </table>
     </div>
   </div>
-  <div class="col-md-4 mb-4 ml-2">
-    <button class="btn btn-secondary">Anterior</button>
-    &nbsp;
-    <button class="btn btn-secondary">Siguiente</button>
+  <div class="d-flex justify-content-center mt-2 mb-2">
+    <pagination-controls
+      (pageChange)="onTableDataChange($event)"
+      previousLabel="Anterior"
+      nextLabel="Próximo"
+      [autoHide]="true"
+      [responsive]="true"
+    >
+    </pagination-controls>
   </div>
 </div>
