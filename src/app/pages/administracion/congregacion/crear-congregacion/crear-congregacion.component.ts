@@ -54,6 +54,7 @@ export class CrearCongregacionComponent implements OnInit {
       congregacion: ['', [Validators.required, Validators.minLength(3)]],
       pais_id: ['', [Validators.required]],
       idObreroEncargado: ['', [Validators.required]],
+      idObreroEncargadoDos: ['', []],
       email: ['', []],
     });
 
@@ -158,13 +159,14 @@ export class CrearCongregacionComponent implements OnInit {
     if (id !== 'nuevo') {
       this.congregacionService.getCongregacion(Number(id)).subscribe(
         (congregacionEncontrada: CongregacionModel) => {
-          const { congregacion, pais_id, idObreroEncargado, email } = congregacionEncontrada;
+          const { congregacion, pais_id, idObreroEncargado, idObreroEncargadoDos, email } = congregacionEncontrada;
           this.congregacionSeleccionada = congregacionEncontrada;
 
           this.congregacionForm.setValue({
             congregacion,
             pais_id,
             idObreroEncargado,
+            idObreroEncargadoDos,
             email,
           });
         },

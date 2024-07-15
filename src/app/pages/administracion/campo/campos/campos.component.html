@@ -27,6 +27,7 @@
               <th scope="col">Item</th>
               <th class="col-auto text-center">Nombre</th>
               <th class="col-auto text-center">Obrero Encargado</th>
+              <th class="col-auto text-center">Obrero Auxiliar</th>
               <th class="col-auto text-center">Congregación</th>
               <th class="col-auto text-center">País</th>
               <th class="col-auto text-center">Estado</th>
@@ -38,6 +39,7 @@
               <td>{{ i + 1 }}</td>
               <td>{{ campo.campo }}</td>
               <td>{{ buscarObrero(campo.idObreroEncargado) }}</td>
+              <td>{{ buscarObrero(campo?.idObreroEncargadoDos) }}</td>
               <td>
                 {{ buscarCongregacion(campo.congregacion_id)['congregacion'] }}
               </td>
@@ -83,6 +85,7 @@
               <th>Item</th>
               <th>Nombre</th>
               <th>Obrero Encargado</th>
+              <th>Obrero Auxiliar</th>
               <th>País</th>
               <th>Congregación</th>
               <th>Estado</th>

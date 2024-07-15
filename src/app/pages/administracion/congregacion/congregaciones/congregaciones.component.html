@@ -29,6 +29,7 @@
               <th>Item</th>
               <th class="w300">Nombre</th>
               <th>Obrero Encargado</th>
+              <th>Obrero Auxiliar</th>
               <th>País</th>
               <th>Email</th>
               <th>Estado</th>
@@ -46,6 +47,8 @@
               <td>{{ congregacion.congregacion }}</td>
 
               <td>{{ buscarObrero(congregacion.idObreroEncargado) }}</td>
+
+              <td>{{ buscarObrero(congregacion?.idObreroEncargadoDos) }}</td>
 
               <td>{{ buscarPais(congregacion.pais_id) }}</td>
 
@@ -100,6 +103,7 @@
               <th>Item</th>
               <th>Nombre</th>
               <th>Obrero Encargado</th>
+              <th>Obrero Auxiliar</th>
               <th>País</th>
               <th>Email</th>
               <th>Estado</th>

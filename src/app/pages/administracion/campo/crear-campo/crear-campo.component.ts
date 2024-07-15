@@ -49,6 +49,7 @@ export class CrearCampoComponent implements OnInit {
       campo: ['', [Validators.required, Validators.minLength(3)]],
       congregacion_id: ['', [Validators.required]],
       idObreroEncargado: ['', [Validators.required]],
+      idObreroEncargadoDos: ['', []],
     });
 
     this.cargarCampos();
@@ -116,10 +117,10 @@ export class CrearCampoComponent implements OnInit {
     if (id !== 'nuevo') {
       this.campoService.getCampo(Number(id)).subscribe(
         (campoActualizado: CampoModel) => {
-          const { campo, congregacion_id, idObreroEncargado } = campoActualizado;
+          const { campo, congregacion_id, idObreroEncargado, idObreroEncargadoDos } = campoActualizado;
           this.campoSeleccionado = campoActualizado;
 
-          this.campoForm.setValue({ campo, congregacion_id, idObreroEncargado });
+          this.campoForm.setValue({ campo, congregacion_id, idObreroEncargado, idObreroEncargadoDos });
         },
         (error) => {
           let errores = error.error.errors;

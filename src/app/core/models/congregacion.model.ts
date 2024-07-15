@@ -9,6 +9,7 @@ export class CongregacionModel {
     public estado: boolean,
     public pais_id: number,
     public idObreroEncargado: number,
+    public idObreroEncargadoDos?: number,
     public email?: string,
     public password?: string
   ) {}

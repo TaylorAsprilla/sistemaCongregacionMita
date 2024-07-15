@@ -33,6 +33,18 @@
             </select>
           </div>
 
+          <div class="form-group">
+            <label class="col-form-label">Obrero Auxiliar</label>
+            <select class="form-control" formControlName="idObreroEncargadoDos">
+              <option [value]="null" disabled>Seleccione el obrero auxiliar</option>
+              <option [value]="null">Sin obrero auxiliar</option>
+              <option *ngFor="let obrero of obreros" [value]="obrero.id">
+                {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
+                {{ obrero.segundoApellido }}
+              </option>
+            </select>
+          </div>
+
           <div class="card">
             <button type="submit" class="submit btn btn-primary" [disabled]="campoForm.invalid">
               <i class="fa fa-save"></i> Guardar
