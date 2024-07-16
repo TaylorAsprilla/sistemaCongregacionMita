@@ -311,8 +311,8 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         horaTemploMasCercano: formSolicitud.horaTemploMasCercano ? formSolicitud.horaTemploMasCercano : '',
         personaEncamada: formSolicitud.personaEncamada ? formSolicitud.personaEncamada : 0,
         personaEncargada: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
-        enfermedadCronica: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
-        enfermedadQuePadece: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
+        enfermedadCronica: formSolicitud.enfermedadCronica ? formSolicitud.enfermedadCronica : '',
+        enfermedadQuePadece: formSolicitud.enfermedadQuePadece ? formSolicitud.enfermedadQuePadece : '',
         paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
         ciudadDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
         terminos: formSolicitud.terminos ? formSolicitud.terminos : false,
@@ -322,6 +322,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         usuarioQueRegistra: this.usuarioQueRegistra,
         tipoMiembro: this.usuario.tipoMiembro,
         tiempoSugerido: formSolicitud.tiempoSugerido ? formSolicitud.tiempoSugerido : '',
+        congregacionCercana: formSolicitud.congregacionCercana,
       };
 
       this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(
