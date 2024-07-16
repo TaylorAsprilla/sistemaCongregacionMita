@@ -104,8 +104,17 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           informacionSolicitud?.razonSolicitud_id !== 5
             ? informacionSolicitud?.razonSolicitud?.solicitud
             : informacionSolicitud?.otraRazon;
+        const congregacionCercana = informacionSolicitud?.congregacionCercana
+          ? informacionSolicitud?.congregacionCercana
+          : '';
         const tiempoSugerido = informacionSolicitud?.tiempoSugerido ? informacionSolicitud?.tiempoSugerido : '';
         const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id);
+        const personaEncamada = informacionSolicitud.personaEncamada ? informacionSolicitud.personaEncamada : 'No';
+        const personaEncargada = informacionSolicitud.personaEncargada ? informacionSolicitud.personaEncargada : '';
+        const enfermedadCronica = informacionSolicitud.enfermedadCronica ? informacionSolicitud.enfermedadCronica : '';
+        const enfermedadQuePadece = informacionSolicitud.enfermedadQuePadece
+          ? informacionSolicitud.enfermedadQuePadece
+          : '';
         const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
         const fechaDeSolicitud = informacionSolicitud.createdAt;
         const estado = !!informacionSolicitud?.estado
@@ -120,7 +129,6 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                     <tr>
                       <th scope="col">Item</th>
                       <th scope="col">Valor</th>
-
                     </tr>
                   </thead>
                   <tbody>
@@ -146,34 +154,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                       <td class="col-md-5">Fecha de Nacimiento:</td>
                       <td class="col-md-7">${fecha}</td>
                     </tr>
-                    <tr>
-                      <td class="col-md-5">Nacionalidad:</td>
-                      <td class="col-md-7">${nacionalidad}</td>
-                    </tr>
-                    <tr>
-                      <td class="col-md-5">Dirección:</td>
-                      <td class="col-md-7">${direccion}</td>
-                    </tr>
-                    <tr>
-                      <td class="col-md-5">Ciudad:</td>
-                      <td class="col-md-7">${ciudad}</td>
-                    </tr>
-                     <tr>
-                      <td class="col-md-5">Departamento:</td>
-                      <td class="col-md-7">${departamento}</td>
-                    </tr>
-                     <tr>
-                      <td class="col-md-5">Código Postal:</td>
-                      <td class="col-md-7">${codigoPostal}</td>
-                    </tr>
-                     <tr>
-                      <td class="col-md-5">País:</td>
-                      <td class="col-md-7">${pais}</td>
-                    </tr>
-                     <tr>
-                      <td class="col-md-5">Teléfono:</td>
-                      <td class="col-md-7">${telefono}</td>
-                    </tr>
+
                      <tr>
                       <td class="col-md-5">Celular:</td>
                       <td class="col-md-7">${celular}</td>
@@ -185,6 +166,30 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                     <tr>
                       <td class="col-md-5">Razón de la solicitud:</td>
                       <td class="col-md-7">${otraRazon}</td>
+                    </tr>
+                    <tr>
+                      <td class="col-md-5">Congregación Cerca:</td>
+                      <td class="col-md-7">${congregacionCercana}</td>
+                    </tr>
+                    <tr>
+                    <tr>
+                      <td class="col-md-5">Persona Encamada:</td>
+                      <td class="col-md-7">${personaEncamada}</td>
+                    </tr>
+                    <tr>
+                      <tr>
+                      <td class="col-md-5">Persona Encargada:</td>
+                      <td class="col-md-7">${personaEncargada}</td>
+                    </tr>
+                    <tr>
+                      <tr>
+                      <td class="col-md-5">Enfermedad Crónica:</td>
+                      <td class="col-md-7">${enfermedadCronica}</td>
+                    </tr>
+                    <tr>
+                      <tr>
+                      <td class="col-md-5">Enfermedad Que Padece:</td>
+                      <td class="col-md-7">${enfermedadQuePadece}</td>
                     </tr>
                     <tr>
                       <td class="col-md-5">Tiempo Sugerido:</td>

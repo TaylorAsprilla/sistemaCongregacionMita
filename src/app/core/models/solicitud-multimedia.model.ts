@@ -48,7 +48,6 @@ export class SolicitudMultimediaModel {
     public pais: string,
     public email: string,
     public miembroCongregacion: boolean,
-    public congregacionCercana: string,
     public estado: boolean,
     public emailVerificado: boolean,
     public razonSolicitud_id: number,
@@ -58,6 +57,7 @@ export class SolicitudMultimediaModel {
     public terminos: boolean,
     public createdAt: Date,
     public updatedAt: Date,
+    public congregacionCercana?: string,
     public departamento?: string,
     public codigoPostal?: string,
     public telefono?: string,
@@ -113,6 +113,7 @@ export interface SolicitudMultimediaInterface {
   usuario: UsuarioModel;
   usuarioQueRegistra: UsuarioModel;
   tiempoSugerido: string;
+  congregacionCercana: string;
   terminos: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -141,6 +142,7 @@ export interface crearSolicitudMultimediaInterface {
   parentesco_id: number;
   tiempoAprobacion: Date;
   tipoMiembro: TipoMiembroModel;
+  congregacionCercana: string;
   usuario_id: number;
   usuario: UsuarioModel;
   usuarioQueRegistra: UsuarioModel;

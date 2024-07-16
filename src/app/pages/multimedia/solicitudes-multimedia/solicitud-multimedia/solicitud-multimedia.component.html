@@ -16,21 +16,18 @@
       <table class="table table-bordered table-striped mx-auto">
         <thead>
           <tr>
-            <th>Item</th>
+            <th># Mita</th>
             <th>Nombre</th>
             <th>Celular</th>
             <th>Email</th>
-            <th>Login</th>
+            <th>Tipo Solicitud</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let solicitud of solicitudesDeAccesos">
-            <td>
-              {{ solicitud.id }}
-              <p><td class="link-primary pointer" (click)="masInformacion(solicitud.id)">Ver Más</td></p>
-            </td>
+            <td class="pointer" (click)="masInformacion(solicitud.id)">{{ solicitud.usuario.id }}</td>
 
             <td>
               {{ solicitud.usuario.primerNombre }} {{ solicitud.usuario.segundoNombre }} <br />
@@ -41,7 +38,7 @@
 
             <td>{{ solicitud?.usuario.email }}</td>
 
-            <td>{{ solicitud?.usuario?.login }}</td>
+            <td>{{ solicitud?.razonSolicitud.solicitud }}</td>
 
             <td>
               <span class="badge badge-primary" *ngIf="!!solicitud?.estado">Activo</span>
@@ -50,10 +47,17 @@
 
             <td>
               <a
+                data-toggle="tooltip"
+                data-original-title="Crear Acceso"
+                class="btn bg-primary ms-1"
+                (click)="masInformacion(solicitud.id)"
+                ><i class="fa-solid fa fa-info"></i
+              ></a>
+              <a
                 *ngIf="!solicitud?.usuario?.password"
                 data-toggle="tooltip"
                 data-original-title="Crear Acceso"
-                class="btn bg-info"
+                class="btn bg-info ms-1"
                 (click)="crearAccesoMultimedia(solicitud)"
                 ><i class="fa-solid fa fa-key"></i
               ></a>
@@ -92,7 +96,7 @@
           </tr>
         </tbody>
         <tfoot>
-          <th>Item</th>
+          <th># Mita</th>
           <th>Nombre</th>
           <th>Celular</th>
           <th>Email</th>
