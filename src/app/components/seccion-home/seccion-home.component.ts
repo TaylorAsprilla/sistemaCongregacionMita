@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ROLES } from 'src/app/routes/menu-items';
 
 @Component({
   selector: 'app-seccion-home',
