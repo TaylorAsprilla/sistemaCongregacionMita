@@ -356,17 +356,6 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   guardarUsuario() {
-    console.log(
-      'Formulario uno',
-      this.registroUnoForm,
-      'Formulario Dos',
-      this.registroDosForm,
-      'Formulario Tres',
-      this.registroTresForm,
-      'Formulario Cuatro',
-      this.registroCuatroForm
-    );
-
     if (
       this.step == 4 &&
       this.registroUnoForm.valid &&
@@ -399,10 +388,10 @@ export class InformacionUsuarioComponent implements OnInit {
         email: informacionFormulario.email ? informacionFormulario.email : null,
         numeroCelular: informacionFormulario.numeroCelular?.internationalNumber
           ? informacionFormulario.numeroCelular?.internationalNumber
-          : null,
+          : informacionFormulario.numeroCelular,
         telefonoCasa: informacionFormulario.telefonoCasa?.internationalNumber
           ? informacionFormulario.telefonoCasa?.internationalNumber
-          : null,
+          : informacionFormulario.telefonoCasa,
         fechaNacimiento: informacionFormulario?.fechaNacimiento,
         genero_id: informacionFormulario?.genero_id,
         estadoCivil_id: informacionFormulario?.estadoCivil_id,
