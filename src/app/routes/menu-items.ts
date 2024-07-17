@@ -407,15 +407,6 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: `${RUTAS.SOLICITUD_MULTIMEDIA}/nuevo`,
-    title: 'Solicitud Multimedia',
-    icon: 'fa-solid fa-tv',
-    class: '',
-    extralink: false,
-    role: [ROLES.AYUDANTE],
-    submenu: [],
-  },
-  {
     path: '',
     title: 'Supervisor',
     icon: '',

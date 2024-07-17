@@ -40,8 +40,15 @@ export const generarSeccionHome: SeccionHome[] = [
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
       ROLES.ASISTENTE_OOTS,
-      ROLES.AYUDANTE,
     ],
+  },
+  {
+    nombreSeccion: 'Censo Ayudante',
+    nombreResponsable: '',
+    email: '',
+    logo: 'assets/images/vista-principal/censo.png',
+    ruta: `../${RUTAS.USUARIOS_AYUDANTE}`,
+    role: [ROLES.AYUDANTE],
   },
   {
     nombreSeccion: 'Informes',
@@ -64,7 +71,6 @@ export const generarSeccionHome: SeccionHome[] = [
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
       ROLES.ASISTENTE_OOTS,
-      ROLES.AYUDANTE,
     ],
   },
 ];
