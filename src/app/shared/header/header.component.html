@@ -100,15 +100,17 @@
                 <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
               </li>
               <li role="separator" class="divider"></li>
-              <li>
-                <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
-              </li>
+              <div *ngIf="usuario">
+                <li>
+                  <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
+                </li>
 
-              <li role="separator" class="divider"></li>
-              <li>
-                <a href="#"> <i class="ti-settings"></i> Configuración</a>
-              </li>
-              <li role="separator" class="divider"></li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a href="#"> <i class="ti-settings"></i> Configuración</a>
+                </li>
+                <li role="separator" class="divider"></li>
+              </div>
               <li>
                 <a (click)="logout()" class="pointer"> <i class="fa fa-power-off"></i> Cerrar Sesión</a>
               </li>
