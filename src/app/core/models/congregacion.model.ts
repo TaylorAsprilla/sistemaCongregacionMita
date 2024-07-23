@@ -4,11 +4,11 @@ export enum CONGREGACION {
 
 export class CongregacionModel {
   constructor(
-    public id: number,
+    public readonly id: number,
     public congregacion: string,
     public estado: boolean,
     public pais_id: number,
-    public idObreroEncargado: number,
+    public idObreroEncargado?: number,
     public idObreroEncargadoDos?: number,
     public email?: string,
     public password?: string

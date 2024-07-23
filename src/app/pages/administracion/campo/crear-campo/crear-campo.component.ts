@@ -48,8 +48,8 @@ export class CrearCampoComponent implements OnInit {
     this.campoForm = this.formBuilder.group({
       campo: ['', [Validators.required, Validators.minLength(3)]],
       congregacion_id: ['', [Validators.required]],
-      idObreroEncargado: ['', [Validators.required]],
-      idObreroEncargadoDos: ['', []],
+      idObreroEncargado: [null, [Validators.required]],
+      idObreroEncargadoDos: [null, []],
     });
 
     this.cargarCampos();
@@ -66,46 +66,63 @@ export class CrearCampoComponent implements OnInit {
   }
 
   crearCampo() {
-    const campoNuevo = this.campoForm.value;
+    const campoNuevo = { ...this.campoForm.value };
 
-    if (campoNuevo.idObreroEncargado === 'null') {
-      delete campoNuevo.idObreroEncargado;
-    }
+    // Eliminar los campos que no son números válidos
+    ['idObreroEncargado', 'idObreroEncargadoDos'].forEach((campo) => {
+      if (campoNuevo[campo] === 'null') {
+        delete campoNuevo[campo];
+      }
+    });
 
     if (this.campoSeleccionado) {
       const data = {
-        ...this.campoForm.value,
+        ...campoNuevo,
         id: this.campoSeleccionado.id,
       };
 
-      this.campoService.actualizarCampo(data).subscribe((campo: any) => {
-        Swal.fire({
-          title: 'Campo Actualizado',
-          icon: 'success',
-          html: `El campo ${campo.campoActualizado.campo} se actualizó correctamente`,
-        });
-      });
-      this.resetFormulario();
-      this.cargarCampos();
-    } else {
-      this.campoService.crearCampo(campoNuevo).subscribe(
-        (campoCreado: any) => {
-          Swal.fire('Campo creado', `${campoCreado.campo.campo}`, 'success');
+      this.campoService.actualizarCampo(data).subscribe(
+        (campo: any) => {
+          Swal.fire({
+            title: 'Campo Actualizado',
+            icon: 'success',
+            html: `El campo ${campo.campoActualizado.campo} se actualizó correctamente`,
+          });
           this.resetFormulario();
           this.cargarCampos();
         },
         (error) => {
-          let errores = error.error.errors;
-          let listaErrores = [];
-
-          Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
+          const errores = error.error.errors;
+          const listaErrores = Object.values(errores)
+            .map((err: any) => `° ${err.msg}<br>`)
+            .join('');
+          Swal.fire({
+            title: 'Error al actualizar campo',
+            icon: 'error',
+            html: `${listaErrores}`,
           });
-
+        }
+      );
+    } else {
+      this.campoService.crearCampo(campoNuevo).subscribe(
+        (campoCreado: any) => {
+          Swal.fire({
+            title: 'Campo Creado',
+            icon: 'success',
+            html: `El campo ${campoCreado.campo.campo} se creó correctamente`,
+          });
+          this.resetFormulario();
+          this.cargarCampos();
+        },
+        (error) => {
+          const errores = error.error.errors;
+          const listaErrores = Object.values(errores)
+            .map((err: any) => `° ${err.msg}<br>`)
+            .join('');
           Swal.fire({
             title: 'Error al crear campo',
             icon: 'error',
-            html: `${listaErrores.join('')}`,
+            html: `${listaErrores}`,
           });
           this.router.navigateByUrl(RUTAS.INICIO);
         }

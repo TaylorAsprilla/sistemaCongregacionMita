@@ -53,9 +53,9 @@ export class CrearCongregacionComponent implements OnInit {
     this.congregacionForm = this.formBuilder.group({
       congregacion: ['', [Validators.required, Validators.minLength(3)]],
       pais_id: ['', [Validators.required]],
-      idObreroEncargado: ['', [Validators.required]],
-      idObreroEncargadoDos: ['', []],
-      email: ['', []],
+      idObreroEncargado: [null, [Validators.required]],
+      idObreroEncargadoDos: [null, []],
+      email: [null, []],
     });
 
     this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
@@ -79,11 +79,13 @@ export class CrearCongregacionComponent implements OnInit {
   }
 
   crearCongregacion() {
-    const congregacionNueva = this.congregacionForm.value;
+    const congregacionNueva = { ...this.congregacionForm.value };
 
-    if (congregacionNueva.idObreroEncargado === 'null') {
-      delete congregacionNueva.idObreroEncargado;
-    }
+    ['idObreroEncargado', 'idObreroEncargadoDos'].forEach((campo) => {
+      if (congregacionNueva[campo] === 'null') {
+        delete congregacionNueva[campo];
+      }
+    });
 
     if (this.congregacionSeleccionada) {
       const data: CongregacionModel = {
