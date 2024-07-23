@@ -2,11 +2,11 @@
 <div class="user-profile mt-4">
   <!-- User profile image -->
   <div class="profile-img">
-    <a [routerLink]="[Rutas.PERFIL, usuario?.id]"><img src="assets/images/users/perfil.png" alt="user" /></a>
+    <a [routerLink]="[Rutas.PERFIL, usuario?.id]"> <img [src]="fotoPerfil" [alt]="nombre" class="profile-pic" /></a>
   </div>
   <!-- User profile text-->
   <div class="profile-text">
-    <h5>{{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundoApellido }}</h5>
+    <h5>{{ nombre }}</h5>
     <div *ngIf="usuario">
       <h5>Número Mita {{ usuario?.id }}</h5>
       <a [routerLink]="[Rutas.PERFIL, usuario.id]" data-toggle="tooltip" title="Perfil">

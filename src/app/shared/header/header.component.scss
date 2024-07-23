@@ -12,3 +12,16 @@ a.informacion {
   color: white;
   font-weight: 500;
 }
+
+/* styles.css */
+.custom-avatar {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  background-color: #ffffff;
+  color: rgb(242, 18, 18);
+  font-size: 24px;
+  text-align: center;
+  line-height: 48px;
+  border-radius: 50%;
+}

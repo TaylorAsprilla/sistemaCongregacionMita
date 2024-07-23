@@ -62,19 +62,20 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <img src="assets/images/users/perfil.png" alt="user" class="profile-pic" />
+            <img [src]="fotoPerfil" [alt]="nombre" class="profile-pic" />
           </a>
+
           <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
             <ul class="dropdown-user">
               <li>
                 <div class="dw-user-box">
                   <div class="text-center">
                     <div class="u-img">
-                      <img src="assets/images/users/perfil.png" alt="user" />
+                      <img [src]="fotoPerfil" [alt]="nombre" />
                     </div>
                   </div>
                   <div class="u-text mt-2">
-                    <h4>{{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundoApellido }}</h4>
+                    <h4>{{ nombre }}</h4>
                     <a class="informacion" href="mailto:{{ email }}">
                       <p class="text-muted">{{ email }}</p></a
                     >

@@ -4,6 +4,7 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROUTES, RUTAS } from 'src/app/routes/menu-items';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
+import { GENERO } from 'src/app/core/enums/genero.enum';
 declare var $: any;
 
 @Component({
@@ -22,6 +23,9 @@ export class SidebarComponent implements OnInit {
   segundoApellido: string = '';
   email: string = '';
   numeroCelular: string = '';
+  nombre: string = '';
+
+  fotoPerfil: string = '';
 
   showMenu = '';
   showSubMenu = '';
@@ -62,15 +66,27 @@ export class SidebarComponent implements OnInit {
     this.multimediaCongregacion = this.usuarioService.multimediaCongregacion;
 
     if (this.usuario) {
-      this.primerNombre = this.usuario?.primerNombre;
-      this.segundoNombre = this.usuario?.segundoNombre;
-      this.primerApellido = this.usuario?.primerApellido;
-      this.segundoApellido = this.usuario?.segundoApellido;
-      this.email = this.usuario?.email;
-      this.numeroCelular = this.usuario?.numeroCelular;
+      const { primerNombre, segundoNombre, primerApellido, segundoApellido, email, numeroCelular, genero } =
+        this.usuario;
+
+      this.primerNombre = primerNombre;
+      this.segundoNombre = segundoNombre;
+      this.primerApellido = primerApellido;
+      this.segundoApellido = segundoApellido;
+
+      this.nombre = primerNombre + primerNombre + primerApellido + segundoApellido;
+      this.email = email;
+      this.numeroCelular = numeroCelular;
+
+      this.fotoPerfil =
+        genero?.genero === GENERO.MASCULINO ? 'assets/images/users/perfil.png' : 'assets/images/users/perfil-mujer.png';
     } else if (this.multimediaCongregacion) {
-      this.primerNombre = this.multimediaCongregacion.congregacion;
-      this.email = this.multimediaCongregacion?.email;
+      const { congregacion, email } = this.multimediaCongregacion;
+
+      this.fotoPerfil = 'assets/images/users/multimedia.jpg';
+
+      this.nombre = congregacion;
+      this.email = email;
     }
   }
 

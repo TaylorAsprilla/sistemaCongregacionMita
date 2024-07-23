@@ -5,6 +5,7 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
+import { GENERO } from 'src/app/core/enums/genero.enum';
 declare var $: any;
 
 @Component({
@@ -15,15 +16,18 @@ declare var $: any;
 export class HeaderComponent implements OnInit {
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  public usuario: UsuarioModel;
+  usuario: UsuarioModel;
   multimediaCongregacion: MultimediaCongregacionModel;
 
-  public primerNombre: string = '';
-  public segundoNombre: string = '';
-  public primerApellido: string = '';
-  public segundoApellido: string = '';
-  public email: string = '';
-  public numeroCelular: string = '';
+  primerNombre: string = '';
+  segundoNombre: string = '';
+  primerApellido: string = '';
+  segundoApellido: string = '';
+  nombre: string = '';
+  email: string = '';
+  numeroCelular: string = '';
+
+  fotoPerfil: string = '';
 
   get Rutas() {
     return RUTAS;
@@ -36,15 +40,26 @@ export class HeaderComponent implements OnInit {
     this.multimediaCongregacion = this.usuarioService.multimediaCongregacion;
 
     if (this.usuario) {
-      this.primerNombre = this.usuario?.primerNombre;
-      this.segundoNombre = this.usuario?.segundoNombre;
-      this.primerApellido = this.usuario?.primerApellido;
-      this.segundoApellido = this.usuario?.segundoApellido;
-      this.email = this.usuario?.email;
-      this.numeroCelular = this.usuario?.numeroCelular;
+      const { primerNombre, segundoNombre, primerApellido, segundoApellido, email, numeroCelular, genero } =
+        this.usuario;
+
+      this.primerNombre = primerNombre;
+      this.segundoNombre = segundoNombre;
+      this.primerApellido = primerApellido;
+      this.segundoApellido = segundoApellido;
+
+      this.nombre = primerNombre + primerNombre + primerApellido + segundoApellido;
+      this.email = email;
+      this.numeroCelular = numeroCelular;
+
+      this.fotoPerfil =
+        genero?.genero === GENERO.MASCULINO ? 'assets/images/users/perfil.png' : 'assets/images/users/perfil-mujer.png';
     } else if (this.multimediaCongregacion) {
-      this.primerNombre = this.multimediaCongregacion.congregacion;
-      this.email = this.multimediaCongregacion?.email;
+      const { congregacion, email } = this.multimediaCongregacion;
+
+      this.fotoPerfil = 'assets/images/users/multimedia.jpg';
+      this.nombre = congregacion;
+      this.email = email;
     }
   }
 
