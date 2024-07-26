@@ -5,6 +5,7 @@ import { ROUTES, RUTAS } from 'src/app/routes/menu-items';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { GENERO } from 'src/app/core/enums/genero.enum';
+import { configuracion } from 'src/environments/config/configuration';
 declare var $: any;
 
 @Component({
@@ -74,16 +75,16 @@ export class SidebarComponent implements OnInit {
       this.primerApellido = primerApellido;
       this.segundoApellido = segundoApellido;
 
-      this.nombre = primerNombre + primerNombre + primerApellido + segundoApellido;
+      this.nombre = `${primerNombre} ${segundoNombre} ${primerApellido} ${segundoApellido}`;
       this.email = email;
       this.numeroCelular = numeroCelular;
 
       this.fotoPerfil =
-        genero?.genero === GENERO.MASCULINO ? 'assets/images/users/perfil.png' : 'assets/images/users/perfil-mujer.png';
+        genero?.genero === GENERO.MASCULINO ? configuracion.avatarMasculino : configuracion.avatarFemenino;
     } else if (this.multimediaCongregacion) {
       const { congregacion, email } = this.multimediaCongregacion;
 
-      this.fotoPerfil = 'assets/images/users/multimedia.jpg';
+      this.fotoPerfil = configuracion.logoMultimedia;
 
       this.nombre = congregacion;
       this.email = email;

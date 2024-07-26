@@ -14,4 +14,8 @@ export const configuracion = {
     { value: TIEMPO_SUGERIDO_DIAS.UN_ANO, label: TIEMPO_SUGERIDO_TEXT.UN_ANO },
     { value: TIEMPO_SUGERIDO_DIAS.DOS_ANOS, label: TIEMPO_SUGERIDO_TEXT.DOS_ANOS },
   ],
+
+  avatarMasculino: 'assets/images/users/perfil.png',
+  avatarFemenino: 'assets/images/users/perfil-mujer.png',
+  logoMultimedia: 'assets/images/users/multimedia.jpg',
 };
