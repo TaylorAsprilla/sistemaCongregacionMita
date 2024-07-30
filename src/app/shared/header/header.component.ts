@@ -43,12 +43,7 @@ export class HeaderComponent implements OnInit {
       const { primerNombre, segundoNombre, primerApellido, segundoApellido, email, numeroCelular, genero } =
         this.usuario;
 
-      this.primerNombre = primerNombre;
-      this.segundoNombre = segundoNombre;
-      this.primerApellido = primerApellido;
-      this.segundoApellido = segundoApellido;
-
-      this.nombre = primerNombre + primerNombre + primerApellido + segundoApellido;
+      this.nombre = `${primerNombre} ${segundoNombre} ${primerApellido} ${segundoApellido}`;
       this.email = email;
       this.numeroCelular = numeroCelular;
 
