@@ -39,6 +39,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Output() onActivarUsuario: EventEmitter<number> = new EventEmitter<number>();
   @Output() onBorrarUsuario: EventEmitter<UsuariosPorCongregacionInterface> =
     new EventEmitter<UsuariosPorCongregacionInterface>();
+  @Output() onEnviarEmail: EventEmitter<number> = new EventEmitter<number>();
 
   camposFiltrados: CampoModel[] = [];
 
@@ -164,6 +165,10 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   activarUsuario(usuarioId: number) {
     this.onActivarUsuario.emit(usuarioId);
+  }
+
+  enviarEmail(usuarioId: number) {
+    this.onEnviarEmail.emit(usuarioId);
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
