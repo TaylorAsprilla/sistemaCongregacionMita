@@ -7,6 +7,7 @@ import { AyudanteService } from 'src/app/services/ayudante/ayudante.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
 
 @Component({
   selector: 'app-censo-ayudante',
@@ -33,7 +34,8 @@ export class CensoAyudanteComponent implements OnInit {
   constructor(
     private router: Router,
     private usuarioService: UsuarioService,
-    private ayudanteServices: AyudanteService
+    private ayudanteServices: AyudanteService,
+    private enviarCorreoService: EnviarCorreoService
   ) {}
 
   ngOnInit(): void {
@@ -129,5 +131,24 @@ export class CensoAyudanteComponent implements OnInit {
       console.error('Error al buscar usuario:', error);
       throw error;
     }
+  }
+
+  async enviarEmail(id: number) {
+    await Swal.fire({
+      title: 'Correo Electrónico',
+      text: `Desea enviarle el correo electrónico de bienvenida`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, activar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.enviarCorreoService.correoDeBienvenida(id).subscribe((resp: any) => {
+          Swal.fire('¡Enviado!', `${resp.msg}`, 'success');
+        });
+      }
+    });
   }
 }

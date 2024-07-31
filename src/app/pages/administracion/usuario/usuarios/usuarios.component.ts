@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -24,7 +25,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   // Subscription
   usuarioSubscription: Subscription;
 
-  constructor(private router: Router, private usuarioService: UsuarioService, private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private usuarioService: UsuarioService,
+    private activatedRoute: ActivatedRoute,
+    private enviarCorreoService: EnviarCorreoService
+  ) {}
 
   ngOnInit(): void {
     this.nombreArchivo = 'Censo General';
@@ -119,5 +125,24 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       console.error('Error al buscar usuario:', error);
       throw error; // o manejar el error según tus necesidades
     }
+  }
+
+  async enviarEmail(id: number) {
+    await Swal.fire({
+      title: 'Correo Electrónico',
+      text: `Desea enviarle el correo electrónico de bienvenida`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, activar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.enviarCorreoService.correoDeBienvenida(id).subscribe((resp: any) => {
+          Swal.fire('¡Enviado!', `${resp.msg}`, 'success');
+        });
+      }
+    });
   }
 }
