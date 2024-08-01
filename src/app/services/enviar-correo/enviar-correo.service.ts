@@ -21,8 +21,4 @@ export class EnviarCorreoService {
       },
     };
   }
-
-  correoDeBienvenida(idUsuario: number) {
-    return this.httpClient.get(`${base_url}/email/${idUsuario}`, this.headers);
-  }
 }

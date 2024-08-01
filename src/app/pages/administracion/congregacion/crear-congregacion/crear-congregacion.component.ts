@@ -31,6 +31,8 @@ export class CrearCongregacionComponent implements OnInit {
   // Subscription
   public congregacionSubscription: Subscription;
   public paisSubscription: Subscription;
+  activatedRouteParamsSubscription: Subscription;
+  activatedRouteDataSubscription: Subscription;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -42,11 +44,11 @@ export class CrearCongregacionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(({ id }) => {
+    this.activatedRouteParamsSubscription = this.activatedRoute.params.subscribe(({ id }) => {
       this.buscarCongregacion(id);
     });
 
-    this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[] }) => {
+    this.activatedRouteDataSubscription = this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[] }) => {
       this.obreros = data.obrero;
     });
 
@@ -68,6 +70,8 @@ export class CrearCongregacionComponent implements OnInit {
   ngOnDestroy(): void {
     this.paisSubscription?.unsubscribe();
     this.congregacionSubscription?.unsubscribe();
+    this.activatedRouteParamsSubscription?.unsubscribe();
+    this.activatedRouteDataSubscription?.unsubscribe();
   }
 
   cargarCongregaciones() {
@@ -78,83 +82,63 @@ export class CrearCongregacionComponent implements OnInit {
       });
   }
 
-  crearCongregacion() {
-    const congregacionNueva = { ...this.congregacionForm.value };
-
-    ['idObreroEncargado', 'idObreroEncargadoDos'].forEach((campo) => {
-      if (congregacionNueva[campo] === 'null') {
-        delete congregacionNueva[campo];
-      }
-    });
+  async crearCongregacion() {
+    const congregacionNueva = await this.prepararDatosCongregacion(this.congregacionForm.value);
 
     if (this.congregacionSeleccionada) {
-      const data: CongregacionModel = {
-        ...this.congregacionForm.value,
-
-        id: this.congregacionSeleccionada.id,
-      };
-
-      this.congregacionService.actualizarCongregacion(data).subscribe(
-        (congregacion: any) => {
-          Swal.fire({
-            title: 'Congregación Actualizada',
-            icon: 'success',
-            html: `La congregación ${congregacion.congregacionActualizada.congregacion} se actualizó correctamente`,
-          });
-        },
-        (error) => {
-          if (!!error.error.msg) {
-            Swal.fire({
-              icon: 'info',
-              html: error.error.msg,
-            });
-          }
-
-          let errores = error.error.errors;
-          let listaErrores = [];
-
-          Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
-          });
-
-          Swal.fire({
-            title: 'Error al crear congregacion',
-            icon: 'error',
-            html: `${listaErrores.join('')}`,
-          });
-        }
-      );
-
-      this.resetFormulario();
-      this.cargarCongregaciones();
+      this.procesarActualizacionCongregacion(congregacionNueva);
     } else {
-      this.congregacionService.crearCongregacion(congregacionNueva).subscribe(
-        (congregacionCreado: any) => {
-          Swal.fire({
-            title: 'Congregación creada',
-            html: `La congregación ${congregacionCreado.congregacion.congregacion} se creó correctamente`,
-            icon: 'success',
-          });
-
-          this.resetFormulario();
-          this.cargarCongregaciones();
-        },
-        (error) => {
-          let errores = error.error.errors;
-          let listaErrores = [];
-
-          Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
-          });
-
-          Swal.fire({
-            title: 'Error al crear congregacion',
-            icon: 'error',
-            html: `${listaErrores.join('')}`,
-          });
-        }
-      );
+      this.procesarCreacionCongregacion(congregacionNueva);
     }
+  }
+
+  prepararDatosCongregacion(congregacionFormValue: any): any {
+    const congregacion = { ...congregacionFormValue };
+    ['idObreroEncargado', 'idObreroEncargadoDos'].forEach((campo) => {
+      if (congregacion[campo] === 'null') {
+        delete congregacion[campo];
+      }
+    });
+    return congregacion;
+  }
+
+  procesarActualizacionCongregacion(congregacionNueva: any) {
+    const data: CongregacionModel = {
+      ...congregacionNueva,
+      id: this.congregacionSeleccionada.id,
+    };
+
+    this.congregacionService.actualizarCongregacion(data).subscribe(
+      (congregacion: any) => {
+        Swal.fire({
+          title: 'Congregación Actualizada',
+          icon: 'success',
+          html: `La congregación ${congregacion.congregacionActualizada.congregacion} se actualizó correctamente`,
+        });
+
+        this.resetFormulario();
+        this.cargarCongregaciones();
+      },
+      (error) => this.manejarError(error, 'actualizar')
+    );
+  }
+
+  procesarCreacionCongregacion(congregacionNueva: any) {
+    this.congregacionService.crearCongregacion(congregacionNueva).subscribe(
+      (congregacionCreado: any) => {
+        Swal.fire({
+          title: 'Congregación creada',
+          html: `La congregación ${congregacionCreado.congregacion.congregacion} se creó correctamente`,
+          icon: 'success',
+        });
+
+        this.resetFormulario();
+        this.cargarCongregaciones();
+      },
+      (error) => {
+        this.manejarError(error, 'crear');
+      }
+    );
   }
 
   buscarCongregacion(id: string) {
@@ -285,5 +269,29 @@ export class CrearCongregacionComponent implements OnInit {
 
   cancelar() {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
+  }
+
+  manejarError(error: any, tipo: string) {
+    let title = tipo === 'crear' ? 'Error al crear congregación' : 'Error al actualizar congregación';
+
+    if (error.error.msg) {
+      Swal.fire({
+        icon: 'info',
+        html: error.error.msg,
+      });
+    }
+
+    let errores = error.error.errors;
+    let listaErrores = [];
+
+    Object.entries(errores).forEach(([key, value]) => {
+      listaErrores.push('° ' + value['msg'] + '<br>');
+    });
+
+    Swal.fire({
+      title: title,
+      icon: 'error',
+      html: `${listaErrores.join('')}`,
+    });
   }
 }
