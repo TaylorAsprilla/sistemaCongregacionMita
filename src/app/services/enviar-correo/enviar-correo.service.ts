@@ -21,4 +21,8 @@ export class EnviarCorreoService {
       },
     };
   }
+
+  correoDeBienvenida(idUsuario: number) {
+    return this.httpClient.post(`${base_url}/email/${idUsuario}`, this.headers);
+  }
 }
