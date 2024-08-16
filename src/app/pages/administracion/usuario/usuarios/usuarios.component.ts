@@ -130,12 +130,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   async enviarEmail(id: number) {
     await Swal.fire({
       title: 'Correo Electrónico',
-      text: `Desea enviarle el correo electrónico de bienvenida`,
+      text: `Desea enviar el correo electrónico de bienvenida`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, activar',
+      confirmButtonText: 'Enviar',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
