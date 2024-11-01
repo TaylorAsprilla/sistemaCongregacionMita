@@ -1,17 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
-import { Observable, Subscription, of } from 'rxjs';
-import { catchError, map, startWith } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { CampoModel, CONGREGACION_CAMPO } from 'src/app/core/models/campo.model';
 import { CONGREGACION, CongregacionModel } from 'src/app/core/models/congregacion.model';
@@ -31,7 +22,6 @@ import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-corre
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
-import { BuscarCelularService } from 'src/app/services/buscar-celular/buscar-celular.service';
 import { CONGREGACION_PAIS, ID_PAIS } from 'src/app/core/enums/congregacionPais.enum';
 
 @Component({
@@ -102,7 +92,6 @@ export class InformacionUsuarioComponent implements OnInit {
   camposFiltrados: CampoModel[] = [];
 
   mensajeBuscarCorreo: string = '';
-  mensajeBuscarCelular: string = '';
   sinCongregacion: number;
   sinCampo: number;
 
@@ -153,7 +142,6 @@ export class InformacionUsuarioComponent implements OnInit {
   // Subscription
   usuarioSubscription: Subscription;
   buscarCorreoSubscription: Subscription;
-  buscarCelularSubscription: Subscription;
 
   get CONGREGACION_CAMPO() {
     return CONGREGACION_CAMPO;
@@ -170,7 +158,6 @@ export class InformacionUsuarioComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private buscarCorreoService: BuscarCorreoService,
-    private buscarCelularService: BuscarCelularService,
     private router: Router
   ) {}
 
@@ -252,10 +239,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.registroDosForm = this.formBuilder.group({
       nacionalidad: [this.nacionalidad, [Validators.required, Validators.minLength(3)]],
       rolCasa_id: [this.rolEnCasa, [Validators.required]],
-      numeroCelular: [
-        this.celular,
-        { validators: [Validators.minLength(3)], asyncValidators: [this.buscarCelular()], updateOn: 'blur' },
-      ],
+      numeroCelular: [this.celular, [Validators.minLength(3)]],
       telefonoCasa: [this.telefonoCasa, [Validators.minLength(3)]],
       direccion: [this.direccion, [Validators.required, Validators.minLength(3)]],
       ciudadDireccion: [this.ciudadDireccion, [Validators.required, Validators.minLength(3)]],
@@ -562,37 +546,6 @@ export class InformacionUsuarioComponent implements OnInit {
           this.mensajeBuscarCorreo = respuesta.msg;
         }
       });
-  }
-
-  buscarCelular(): ValidatorFn {
-    this.mensajeBuscarCelular = '';
-
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      const numeroCelular = control.value;
-
-      if (!numeroCelular) {
-        return of(null);
-      }
-
-      const celularNumber = numeroCelular.internationalNumber;
-
-      if (!celularNumber) {
-        return of(null);
-      }
-
-      return this.buscarCelularService.buscarcelular(celularNumber, this.usuario?.id).pipe(
-        map((respuesta: any) => {
-          if (!respuesta.ok) {
-            this.mensajeBuscarCelular = respuesta.msg;
-            const error: ValidationErrors = { celularRegistrado: true, message: respuesta.msg };
-            return error;
-          } else {
-            return null;
-          }
-        }),
-        catchError(() => of(null))
-      );
-    };
   }
 
   async tieneTipoDocumento(idPais: string = this.usuario?.usuarioCongregacionPais[0]?.id) {
