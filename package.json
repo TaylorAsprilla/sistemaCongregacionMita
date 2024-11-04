@@ -36,7 +36,7 @@
     "@iplab/ngx-file-upload": "^4.0.0",
     "@mattlewis92/dom-autoscroller": "^2.4.2",
     "@ng-bootstrap/ng-bootstrap": "^13.1.0",
-    "@ngrx/store": "^14.3.2",
+    "@ngrx/store": "^14.3.3",
     "@popperjs/core": "^2.11.6",
     "@swimlane/ngx-charts": "^20.1.0",
     "@swimlane/ngx-datatable": "^20.1.0",
