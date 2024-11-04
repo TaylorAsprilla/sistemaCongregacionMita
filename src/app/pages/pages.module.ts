@@ -5,7 +5,6 @@ import { AdministracionModule } from './administracion/administracion.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PagesComponent } from './pages.component';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfilModule } from './perfil/perfil.module';
 import { InformeModule } from './informes/informe.module';
 import { PipesModule } from '../pipes/pipes.module';
@@ -50,7 +49,6 @@ import { AuthInterceptor } from '../core/interceptors/auth/auth.interceptor';
     AdministracionModule,
     FormsModule,
     ReactiveFormsModule,
-    PerfectScrollbarModule,
     PerfilModule,
     InformeModule,
     PipesModule,

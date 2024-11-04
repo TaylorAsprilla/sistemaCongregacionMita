@@ -78,7 +78,6 @@
     "ngx-intl-tel-input": "^3.2.0",
     "ngx-mat-timepicker": "^15.1.2",
     "ngx-pagination": "^6.0.3",
-    "ngx-perfect-scrollbar": "^10.1.1",
     "ngx-toastr": "^15.2.1",
     "pace-js": "^1.2.4",
     "popper.js": "^1.16.1",
