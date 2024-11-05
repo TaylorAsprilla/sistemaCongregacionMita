@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
   primerApellido: string = '';
   segundoApellido: string = '';
   nombre: string = '';
-  email: string = '';
+  email: string | undefined = '';
   numeroCelular: string = '';
 
   fotoPerfil: string = '';

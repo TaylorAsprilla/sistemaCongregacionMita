@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'environment';
+import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { InformeModel } from 'src/app/core/models/informe.model';
 

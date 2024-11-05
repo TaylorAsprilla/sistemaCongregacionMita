@@ -10,9 +10,6 @@ import { CrearPaisComponent } from './pais/crear-pais/crear-pais.component';
 import { PaisesComponent } from './pais/paises/paises.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { CrearMinisterioComponent } from './ministerios/crear-ministerio/crear-ministerio.component';
 import { CargandoInformacionModule } from 'src/app/components/cargando-informacion/cargando-informacion.module';
 import { CrearTipoDocumentoComponent } from './tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
@@ -23,6 +20,8 @@ import { AsignarPermisosComponent } from './asignar-permisos/asignar-permisos.co
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { FiltrosModule } from 'src/app/components/filtros/filtros.module';
 import { BuscarUsuarioModule } from 'src/app/components/buscar-usuario/buscar-usuario.module';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -47,7 +46,6 @@ import { BuscarUsuarioModule } from 'src/app/components/buscar-usuario/buscar-us
     NgxIntlTelInputModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatInputModule,
     InformacionUsuarioModule,
     UsuarioModule,
     FiltrosModule,

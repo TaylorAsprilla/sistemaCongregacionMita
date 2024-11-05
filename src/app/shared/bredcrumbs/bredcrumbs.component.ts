@@ -1,16 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap } from 'rxjs/operators';
-
-import 'rxjs/add/operator/mergeMap';
 
 @Component({
   selector: 'app-bredcrumbs',
   templateUrl: './bredcrumbs.component.html',
   styleUrls: ['./bredcrumbs.component.css'],
 })
-export class BredcrumbsComponent implements OnInit {
+export class BredcrumbsComponent {
   @Input() layout: string = '';
   public pageInfo: any;
 
@@ -33,5 +31,4 @@ export class BredcrumbsComponent implements OnInit {
         this.pageInfo = event;
       });
   }
-  ngOnInit() {}
 }

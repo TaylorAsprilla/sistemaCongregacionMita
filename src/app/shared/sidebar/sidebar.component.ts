@@ -18,11 +18,11 @@ export class SidebarComponent implements OnInit {
   usuario: UsuarioModel;
   multimediaCongregacion: MultimediaCongregacionModel;
 
-  primerNombre: string = '';
-  segundoNombre: string = '';
-  primerApellido: string = '';
-  segundoApellido: string = '';
-  email: string = '';
+  primerNombre: string | undefined = '';
+  segundoNombre: string | undefined = '';
+  primerApellido: string | undefined = '';
+  segundoApellido: string | undefined = '';
+  email: string | undefined = '';
   numeroCelular: string = '';
   nombre: string = '';
 

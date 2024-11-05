@@ -49,6 +49,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.css",
+              "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/scss/style.scss",
@@ -112,13 +113,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "sistemacmi:build:production"
+              "buildTarget": "sistemacmi:build:production"
             },
             "development": {
-              "browserTarget": "sistemacmi:build:development"
+              "buildTarget": "sistemacmi:build:development"
             },
             "qa": {
-              "browserTarget": "sistemacmi:build:qa"
+              "buildTarget": "sistemacmi:build:qa"
             }
           },
           "defaultConfiguration": "development"
@@ -126,7 +127,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sistemacmi:build"
+            "buildTarget": "sistemacmi:build"
           }
         },
         "test": {

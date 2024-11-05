@@ -1,6 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { RUTAS } from '../routes/menu-items';
 import { MultimediaCongregacionModel } from '../core/models/acceso-multimedia.model';
 import { UsuarioService } from '../services/usuario/usuario.service';
@@ -21,7 +20,6 @@ export class PagesComponent implements OnInit {
 
   public innerWidth: any;
 
-  public config: PerfectScrollbarConfigInterface = {};
   constructor(private router: Router, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {

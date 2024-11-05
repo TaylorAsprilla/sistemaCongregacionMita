@@ -2,9 +2,6 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SolicitudMultimediaComponent } from './solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 import { CrearSolicitudMultimediaComponent } from './solicitudes-multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
@@ -22,6 +19,7 @@ import { BuscarUsuarioModule } from 'src/app/components/buscar-usuario/buscar-us
 import { ServiciosEnVivoModule } from 'src/app/components/servicios-en-vivo/servicios-en-vivo.module';
 import { EventosEnVivoComponent } from './eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const lang = 'en-US';
 
@@ -41,9 +39,6 @@ const lang = 'en-US';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule,
     BrowserModule,
     BrowserAnimationsModule,
     NgxIntlTelInputModule,
@@ -53,6 +48,7 @@ const lang = 'en-US';
     BuscarUsuarioModule,
     ServiciosEnVivoModule,
     NgxPaginationModule,
+    MatAutocompleteModule,
   ],
   exports: [SolicitudMultimediaComponent, CrearSolicitudMultimediaComponent, ValidarEmailComponent],
   providers: [{ provide: LOCALE_ID, useValue: lang }],

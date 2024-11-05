@@ -38,12 +38,10 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(
-      (data: { tipoMiembro: TipoMiembroModel[]; nacionalidad: NacionalidadModel[] }) => {
-        this.tipoMiembro = data.tipoMiembro;
-        this.nacionalidades = data.nacionalidad;
-      }
-    );
+    this.activatedRoute.data.subscribe((data: any) => {
+      this.tipoMiembro = data.tipoMiembro;
+      this.nacionalidades = data.nacionalidad;
+    });
 
     this.cargarSolicitudDeAccesos();
   }
@@ -108,7 +106,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           ? informacionSolicitud?.congregacionCercana
           : '';
         const tiempoSugerido = informacionSolicitud?.tiempoSugerido ? informacionSolicitud?.tiempoSugerido : '';
-        const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id);
+        const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id ?? 0);
         const personaEncamada = informacionSolicitud.personaEncamada ? informacionSolicitud.personaEncamada : 'No';
         const personaEncargada = informacionSolicitud.personaEncargada ? informacionSolicitud.personaEncargada : '';
         const enfermedadCronica = informacionSolicitud.enfermedadCronica ? informacionSolicitud.enfermedadCronica : '';
@@ -117,6 +115,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           : '';
         const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
         const fechaDeSolicitud = informacionSolicitud.createdAt;
+
         const estado = !!informacionSolicitud?.estado
           ? '<span class="badge badge-primary">Activo</span>'
           : '<span class="badge badge-danger">Deshabilitado</span>';
@@ -205,7 +204,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                     </tr>
                      <tr>
                       <td class="col-md-5">Fecha de solicitud</td>
-                      <td class="col-md-7">${new Date(fechaDeSolicitud)}</td>
+                     <td class="col-md-7">${fechaDeSolicitud ? new Date(fechaDeSolicitud) : 'Sin fecha'}</td>
                     </tr>
                   </tbody>
                 </table>`,
@@ -278,6 +277,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             password: formValues[1],
             solicitud_id: solicitud.id,
             tiempoAprobacion: new Date(tiempoAprobacion),
+
             estado: true,
           };
 

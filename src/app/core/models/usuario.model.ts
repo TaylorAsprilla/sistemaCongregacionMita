@@ -1,4 +1,4 @@
-import { environment } from 'environment';
+import { environment } from 'src/environments/environment';
 import { EstadoCivilModel } from './estado-civil.model';
 import { GeneroModel } from './genero.model';
 import { GradoAcademicoModel } from './grado-academico.model';

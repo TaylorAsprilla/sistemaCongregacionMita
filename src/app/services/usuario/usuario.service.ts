@@ -12,7 +12,7 @@ import {
 import { LoginForm } from 'src/app/core/interfaces/login-form.interface';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { environment } from 'environment';
+import { environment } from 'src/environments/environment';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { configuracion } from 'src/environments/config/configuration';
 

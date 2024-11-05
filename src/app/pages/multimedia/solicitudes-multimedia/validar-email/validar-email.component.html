@@ -11,7 +11,8 @@
       <p>No pudo ser verificada la cuenta de correo electrónico</p>
       <p>
         Para mayor información contactarse a
-        <a href="mailto:multimedia@congregacionmita.com"> multimedia@congregacionmita.com</a>
+
+        <a [href]="'mailto:' + email">{{ email }}</a>
       </p>
     </h4>
   </ng-template>

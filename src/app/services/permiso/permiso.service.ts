@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'environment';
+
 import { map } from 'rxjs/operators';
 
 import { PermisoUsuarioModel } from 'src/app/core/models/permiso-usuario.model';
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { ROLES } from 'src/app/routes/menu-items';
+import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
 

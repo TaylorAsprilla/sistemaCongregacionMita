@@ -8,7 +8,9 @@ import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedi
   styleUrls: ['./validar-email.component.scss'],
 })
 export class ValidarEmailComponent implements OnInit {
-  public solicitudValida: boolean = false;
+  solicitudValida: boolean = false;
+  email: string = 'multimedia@congregacionmita.com';
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,

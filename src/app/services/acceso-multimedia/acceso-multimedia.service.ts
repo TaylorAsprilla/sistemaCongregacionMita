@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'environment';
+import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
 import { AccesoCongregacionMultimedia, LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
 import { AccesoMultimediaModel } from 'src/app/core/models/acceso-multimedia.model';

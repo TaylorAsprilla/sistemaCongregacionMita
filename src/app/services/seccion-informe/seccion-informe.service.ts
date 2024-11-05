@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'environment';
+
 import { map } from 'rxjs/operators';
 import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
+import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
 
