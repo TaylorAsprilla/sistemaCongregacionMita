@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { PaisService } from 'src/app/services/pais/pais.service';
@@ -7,7 +7,7 @@ import { PaisService } from 'src/app/services/pais/pais.service';
 @Injectable({
   providedIn: 'root',
 })
-export class PaisResolver implements Resolve<boolean> {
+export class PaisResolver  {
   constructor(private paisService: PaisService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {

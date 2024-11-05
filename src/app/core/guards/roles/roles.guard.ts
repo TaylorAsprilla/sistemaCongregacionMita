@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -7,7 +7,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 @Injectable({
   providedIn: 'root',
 })
-export class RolesGuard implements CanActivate {
+export class RolesGuard  {
   constructor(private usuarioService: UsuarioService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

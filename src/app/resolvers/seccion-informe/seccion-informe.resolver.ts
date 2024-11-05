@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SeccionInformeService } from 'src/app/services/seccion-informe/seccion-informe.service';
@@ -7,7 +7,7 @@ import { SeccionInformeService } from 'src/app/services/seccion-informe/seccion-
 @Injectable({
   providedIn: 'root',
 })
-export class SeccionInformeResolver implements Resolve<boolean> {
+export class SeccionInformeResolver  {
   constructor(private seccionInformeService: SeccionInformeService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {

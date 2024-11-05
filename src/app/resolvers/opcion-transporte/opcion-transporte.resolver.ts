@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { OpcionTransporteService } from 'src/app/services/opcion-transporte/opcion-transporte.service';
@@ -7,7 +7,7 @@ import { OpcionTransporteService } from 'src/app/services/opcion-transporte/opci
 @Injectable({
   providedIn: 'root',
 })
-export class OpcionTransporteResolver implements Resolve<boolean> {
+export class OpcionTransporteResolver  {
   constructor(private opcionTransporteService: OpcionTransporteService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { VoluntariadoService } from 'src/app/services/voluntariado/voluntariado.service';
@@ -7,7 +7,7 @@ import { VoluntariadoService } from 'src/app/services/voluntariado/voluntariado.
 @Injectable({
   providedIn: 'root',
 })
-export class VoluntariadoResolver implements Resolve<boolean> {
+export class VoluntariadoResolver  {
   constructor(private voluntariadoService: VoluntariadoService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
