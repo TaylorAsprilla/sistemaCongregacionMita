@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { map } from 'rxjs/operators';
 import { VisitaModel } from 'src/app/core/models/visita.model';
@@ -25,10 +26,10 @@ export class VisitaService {
     };
   }
 
-  getVisita() {
+  getVisita(): Observable<VisitaModel[]> {
     return this.httpClient
-      .get(`${base_url}/visita/`, this.headers)
-      .pipe(map((visita: { ok: boolean; visitas: VisitaModel[] }) => visita.visitas));
+      .get<{ ok: boolean; visitas: VisitaModel[] }>(`${base_url}/visita/`, this.headers)
+      .pipe(map((respuesta) => respuesta.visitas));
   }
 
   crearVisita(visita: VisitaModel) {

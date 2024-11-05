@@ -13,7 +13,7 @@ const excluded = [
 
 @Pipe({ name: 'keys' })
 export class KeysPipe implements PipeTransform {
-  transform(value): any {
+  transform(value: any): any {
     let keys = [];
     for (let key in value) {
       if (!excluded.includes(key)) {

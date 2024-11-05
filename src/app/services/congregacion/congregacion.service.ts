@@ -1,21 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 
 const base_url = environment.base_url;
+
 @Injectable({
   providedIn: 'root',
 })
 export class CongregacionService {
   constructor(private httpClient: HttpClient) {}
 
-  get token(): string {
+  private get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  get headers() {
+  private get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -23,33 +25,69 @@ export class CongregacionService {
     };
   }
 
-  getCongregaciones() {
+  // Obtener todas las congregaciones
+  getCongregaciones(): Observable<CongregacionModel[]> {
     return this.httpClient
-      .get(`${base_url}/congregacion`, this.headers)
-      .pipe(map((congregacion: { ok: boolean; congregacion: CongregacionModel[] }) => congregacion.congregacion));
-  }
-
-  getCongregacion(id: number) {
-    return this.httpClient
-      .get(`${base_url}/congregacion/${id}`, this.headers)
+      .get<{ ok: boolean; congregacion: CongregacionModel[] }>(`${base_url}/congregacion`, this.headers)
       .pipe(
-        map((congregacion: { ok: boolean; congregacion: CongregacionModel; id: number }) => congregacion.congregacion)
+        map((response) => {
+          if (response.ok) {
+            return response.congregacion;
+          } else {
+            throw new Error('No se pudieron obtener las congregaciones');
+          }
+        }),
+        catchError(this.handleError)
       );
   }
 
-  crearCongregacion(congregacion: CongregacionModel) {
-    return this.httpClient.post(`${base_url}/congregacion`, congregacion, this.headers);
+  // Obtener una congregación específica
+  getCongregacion(id: number): Observable<CongregacionModel> {
+    return this.httpClient
+      .get<{ ok: boolean; congregacion: CongregacionModel }>(`${base_url}/congregacion/${id}`, this.headers)
+      .pipe(
+        map((response) => {
+          if (response.ok) {
+            return response.congregacion;
+          } else {
+            throw new Error('No se pudo obtener la congregación');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
-  actualizarCongregacion(congregacion: CongregacionModel) {
-    return this.httpClient.put(`${base_url}/congregacion/${congregacion.id}`, congregacion, this.headers);
+  // Crear una nueva congregación
+  crearCongregacion(congregacion: CongregacionModel): Observable<CongregacionModel> {
+    return this.httpClient
+      .post<CongregacionModel>(`${base_url}/congregacion`, congregacion, this.headers)
+      .pipe(catchError(this.handleError));
   }
 
-  eliminarCongregacion(congregacion: CongregacionModel) {
-    return this.httpClient.delete(`${base_url}/congregacion/${congregacion.id}`, this.headers);
+  // Actualizar una congregación existente
+  actualizarCongregacion(congregacion: CongregacionModel): Observable<CongregacionModel> {
+    return this.httpClient
+      .put<CongregacionModel>(`${base_url}/congregacion/${congregacion.id}`, congregacion, this.headers)
+      .pipe(catchError(this.handleError));
   }
 
-  activarCongregacion(congregacion: CongregacionModel) {
-    return this.httpClient.put(`${base_url}/congregacion/activar/${congregacion.id}`, congregacion, this.headers);
+  // Eliminar una congregación
+  eliminarCongregacion(congregacion: CongregacionModel): Observable<void> {
+    return this.httpClient
+      .delete<void>(`${base_url}/congregacion/${congregacion.id}`, this.headers)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Activar una congregación
+  activarCongregacion(congregacion: CongregacionModel): Observable<CongregacionModel> {
+    return this.httpClient
+      .put<CongregacionModel>(`${base_url}/congregacion/activar/${congregacion.id}`, congregacion, this.headers)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Manejo de errores
+  private handleError(error: any): Observable<never> {
+    console.error('Error en la solicitud HTTP:', error);
+    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
   }
 }

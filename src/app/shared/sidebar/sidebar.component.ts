@@ -15,8 +15,8 @@ declare var $: any;
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[] = [];
-  usuario: UsuarioModel;
-  multimediaCongregacion: MultimediaCongregacionModel;
+  usuario: UsuarioModel | undefined;
+  multimediaCongregacion: MultimediaCongregacionModel | undefined;
 
   primerNombre: string | undefined = '';
   segundoNombre: string | undefined = '';

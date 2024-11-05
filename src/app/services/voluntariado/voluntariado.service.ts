@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
+import { Observable } from 'rxjs';
 
 const base_url = environment.base_url;
 
@@ -24,16 +25,16 @@ export class VoluntariadoService {
     };
   }
 
-  getVoluntariados() {
+  getVoluntariados(): Observable<VoluntariadoModel[]> {
     return this.httpClient
-      .get(`${base_url}/voluntariado`, this.headers)
-      .pipe(map((respuesta: { ok: boolean; voluntariados: VoluntariadoModel[] }) => respuesta.voluntariados));
+      .get<{ ok: boolean; voluntariados: VoluntariadoModel[] }>(`${base_url}/voluntariado`, this.headers)
+      .pipe(map((respuesta) => respuesta.voluntariados));
   }
 
-  getUnVoluntariado(id: number) {
+  getUnVoluntariado(id: number): Observable<VoluntariadoModel> {
     return this.httpClient
-      .get(`${base_url}/voluntariado/${id}`, this.headers)
-      .pipe(map((respuesta: { ok: boolean; voluntariado: VoluntariadoModel }) => respuesta.voluntariado));
+      .get<{ ok: boolean; voluntariado: VoluntariadoModel }>(`${base_url}/voluntariado/${id}`, this.headers)
+      .pipe(map((respuesta) => respuesta.voluntariado));
   }
 
   crearVoluntariado(voluntariado: string) {

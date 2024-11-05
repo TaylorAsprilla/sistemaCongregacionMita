@@ -16,8 +16,8 @@ declare var $: any;
 export class HeaderComponent implements OnInit {
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  usuario: UsuarioModel;
-  multimediaCongregacion: MultimediaCongregacionModel;
+  usuario: UsuarioModel | undefined;
+  multimediaCongregacion: MultimediaCongregacionModel | undefined;
 
   primerNombre: string = '';
   segundoNombre: string = '';

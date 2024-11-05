@@ -1,21 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
 
 const base_url = environment.base_url;
+
 @Injectable({
   providedIn: 'root',
 })
 export class DivisaService {
   constructor(private httpClient: HttpClient) {}
 
-  get token(): string {
+  private get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  get headers() {
+  private get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -23,17 +25,37 @@ export class DivisaService {
     };
   }
 
-  listarDivisa() {
+  // Listar todas las divisas
+  listarDivisa(): Observable<DivisaModel[]> {
+    return this.httpClient.get<{ ok: boolean; divisa: DivisaModel[] }>(`${base_url}/divisa`, this.headers).pipe(
+      map((response) => {
+        if (response.ok) {
+          return response.divisa;
+        } else {
+          throw new Error('No se pudieron obtener las divisas');
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  // Crear una nueva divisa
+  crearDivisa(divisa: DivisaModel): Observable<DivisaModel> {
     return this.httpClient
-      .get(`${base_url}/divisa`, this.headers)
-      .pipe(map((divisa: { ok: boolean; divisa: DivisaModel[] }) => divisa.divisa));
+      .post<DivisaModel>(`${base_url}/divisa`, divisa, this.headers)
+      .pipe(catchError(this.handleError));
   }
 
-  crearPais(divisa: DivisaModel) {
-    return this.httpClient.post(`${base_url}/divisa`, divisa, this.headers);
+  // Actualizar una divisa existente
+  actualizarDivisa(divisa: DivisaModel): Observable<DivisaModel> {
+    return this.httpClient
+      .put<DivisaModel>(`${base_url}/divisa/${divisa.id}`, divisa, this.headers)
+      .pipe(catchError(this.handleError));
   }
 
-  actualizarPais(divisa: DivisaModel) {
-    return this.httpClient.put(`${base_url}/divisa/${divisa.id}`, divisa, this.headers);
+  // Manejo de errores
+  private handleError(error: any): Observable<never> {
+    console.error('Error en la solicitud HTTP:', error);
+    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
   }
 }

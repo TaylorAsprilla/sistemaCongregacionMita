@@ -79,8 +79,8 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
             this.metaForm.setValue({ meta, fecha, accion, tipoStatus_id, comentarios, informe_id });
           },
           (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
+            const errores = error.error.errors as { [key: string]: { msg: string } };
+            const listaErrores: string[] = [];
 
             Object.entries(errores).forEach(([key, value]) => {
               listaErrores.push('° ' + value['msg'] + '<br>');
@@ -107,8 +107,8 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
         this.navegarAlInforme();
       },
       (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
+        const errores = error.error.errors as { [key: string]: { msg: string } };
+        const listaErrores: string[] = [];
 
         Object.entries(errores).forEach(([key, value]) => {
           listaErrores.push('° ' + value['msg'] + '<br>');

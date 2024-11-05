@@ -37,8 +37,8 @@ export class VoluntarioComponent implements OnInit, OnDestroy {
       });
   }
 
-  buscarVoluntariado(id: number): string {
-    return this.voluntariados.find((voluntariado: VoluntariadoModel) => voluntariado.id === id).nombreVoluntariado;
+  buscarVoluntariado(id: number): string | undefined {
+    return this.voluntariados.find((voluntariado: VoluntariadoModel) => voluntariado.id === id)?.nombreVoluntariado;
   }
 
   async actualizarVoluntariado(id: number) {

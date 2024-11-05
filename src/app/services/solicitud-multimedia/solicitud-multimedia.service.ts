@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import {
   SolicitudMultimediaInterface,
   SolicitudMultimediaModel,
@@ -18,11 +19,11 @@ export class SolicitudMultimediaService {
 
   constructor(private httpClient: HttpClient) {}
 
-  get token(): string {
+  private get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  get headers() {
+  private get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -30,49 +31,65 @@ export class SolicitudMultimediaService {
     };
   }
 
-  getSolicitudes() {
+  getSolicitudes(): Observable<SolicitudMultimediaInterface[]> {
     return this.httpClient
-      .get(`${base_url}/solicitudmultimedia`, this.headers)
+      .get<{ ok: boolean; solicitudDeAccesos: SolicitudMultimediaInterface[] }>(
+        `${base_url}/solicitudmultimedia`,
+        this.headers
+      )
       .pipe(
-        map(
-          (respuesta: { ok: boolean; solicitudDeAccesos: SolicitudMultimediaInterface[] }) =>
-            respuesta.solicitudDeAccesos
-        )
+        map((respuesta) => (respuesta.ok ? respuesta.solicitudDeAccesos : [])),
+        catchError(this.handleError<SolicitudMultimediaInterface[]>('getSolicitudes', []))
       );
   }
 
-  getSolicitud(id: number) {
+  getSolicitud(id: number): Observable<SolicitudMultimediaInterface | null> {
     return this.httpClient
-      .get(`${base_url}/solicitudmultimedia/${id}`, this.headers)
+      .get<{ ok: boolean; solicitudDeAcceso: SolicitudMultimediaInterface }>(
+        `${base_url}/solicitudmultimedia/${id}`,
+        this.headers
+      )
       .pipe(
-        map(
-          (respuesta: { ok: boolean; solicitudDeAcceso: SolicitudMultimediaInterface; id: number }) =>
-            respuesta.solicitudDeAcceso
-        )
+        map((respuesta) => (respuesta.ok ? respuesta.solicitudDeAcceso : null)),
+        catchError(this.handleError<SolicitudMultimediaInterface | null>('getSolicitud', null)) // Permitir que el valor predeterminado sea null
       );
   }
 
-  crearSolicitudMultimedia(solicitudDeacceso: crearSolicitudMultimediaInterface) {
-    return this.httpClient.post(`${base_url}/solicitudmultimedia`, solicitudDeacceso, this.headers);
+  crearSolicitudMultimedia(solicitudDeacceso: crearSolicitudMultimediaInterface): Observable<any> {
+    return this.httpClient
+      .post(`${base_url}/solicitudmultimedia`, solicitudDeacceso, this.headers)
+      .pipe(catchError(this.handleError('crearSolicitudMultimedia')));
   }
 
-  validarEmail(id: number) {
-    return this.httpClient.put(`${base_url}/solicitudmultimedia/validaremail/${id}`, null);
+  validarEmail(id: number): Observable<any> {
+    return this.httpClient
+      .put(`${base_url}/solicitudmultimedia/validaremail/${id}`, null, this.headers)
+      .pipe(catchError(this.handleError('validarEmail')));
   }
 
-  eliminarSolicitudMultimedia(idsolicitudDeacceso: number) {
-    return this.httpClient.delete(`${base_url}/solicitudmultimedia/${idsolicitudDeacceso}`, this.headers);
+  eliminarSolicitudMultimedia(idsolicitudDeacceso: number): Observable<any> {
+    return this.httpClient
+      .delete(`${base_url}/solicitudmultimedia/${idsolicitudDeacceso}`, this.headers)
+      .pipe(catchError(this.handleError('eliminarSolicitudMultimedia')));
   }
 
-  actualizarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface, id: number) {
-    return this.httpClient.put(`${base_url}/solicitudmultimedia/${id}`, solicitudDeacceso, this.headers);
+  actualizarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface, id: number): Observable<any> {
+    return this.httpClient
+      .put(`${base_url}/solicitudmultimedia/${id}`, solicitudDeacceso, this.headers)
+      .pipe(catchError(this.handleError('actualizarSolicitudMultimedia')));
   }
 
-  activarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaModel) {
-    return this.httpClient.put(
-      `${base_url}/solicitudmultimedia/activar/${solicitudDeacceso.id}`,
-      solicitudDeacceso,
-      this.headers
-    );
+  activarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaModel): Observable<any> {
+    return this.httpClient
+      .put(`${base_url}/solicitudmultimedia/activar/${solicitudDeacceso.id}`, solicitudDeacceso, this.headers)
+      .pipe(catchError(this.handleError('activarSolicitudMultimedia')));
+  }
+
+  private handleError<T>(operation = 'operación', result?: T | null) {
+    // Cambiar la firma para aceptar null
+    return (error: any): Observable<T> => {
+      console.error(`${operation} falló:`, error); // Log de error
+      return of(result as T); // Retorna un valor por defecto si ocurre un error
+    };
   }
 }

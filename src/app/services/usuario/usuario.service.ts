@@ -21,9 +21,9 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class UsuarioService {
-  public usuario: UsuarioModel;
-  public idUsuario: number;
-  public multimediaCongregacion: MultimediaCongregacionModel;
+  public usuario: UsuarioModel | undefined;
+  public idUsuario: number | undefined;
+  public multimediaCongregacion: MultimediaCongregacionModel | undefined;
 
   private inactiveTimeout: any;
   public timeRemaining: EventEmitter<number> = new EventEmitter<number>();
@@ -40,38 +40,45 @@ export class UsuarioService {
     return localStorage.getItem('token') || '';
   }
 
-  get usuarioId(): number {
-    return this.usuario?.id || this.multimediaCongregacion?.id;
+  get usuarioId(): number | undefined {
+    return this.usuario?.id ?? this.multimediaCongregacion?.id;
   }
 
-  get usuarioLogin() {
-    return this.usuario?.login || this.multimediaCongregacion?.email;
+  get usuarioLogin(): string | undefined {
+    return this.usuario?.login ?? this.multimediaCongregacion?.email;
   }
 
   get usuarioNombre(): string {
-    return `${this.usuario.primerNombre} ${this.usuario.segundoNombre} ${this.usuario.primerApellido} ${this.usuario.segundoApellido}`;
+    return `${this.usuario?.primerNombre || ''} ${this.usuario?.segundoNombre || ''} ${
+      this.usuario?.primerApellido || ''
+    } ${this.usuario?.segundoApellido || ''}`.trim();
   }
 
-  get usuarioIdCongregacionPais(): number {
-    return this.usuario.usuarioCongregacion.pais_id;
+  get usuarioIdCongregacionPais(): number | undefined {
+    return this.usuario?.usuarioCongregacion?.pais_id;
   }
 
-  get usuarioIdCongregacion(): number {
-    return this.usuario.usuarioCongregacion.congregacion_id;
+  get usuarioIdCongregacion(): number | undefined {
+    return this.usuario?.usuarioCongregacion?.congregacion_id;
   }
 
-  get nombreCongregacionPais(): string {
-    return this.usuario?.usuarioCongregacionPais[0].pais;
+  get nombreCongregacionPais(): string | undefined {
+    const paisData = this.usuario?.usuarioCongregacionPais;
+    return Array.isArray(paisData) ? paisData[0]?.pais : undefined;
   }
 
-  get nombreCongregacion(): string {
-    return `${this.usuario?.usuarioCongregacionCongregacion[0].congregacion}, ${this.usuario?.usuarioCongregacionPais[0].pais} `;
+  get nombreCongregacion(): string | undefined {
+    const congregacionData = this.usuario?.usuarioCongregacionCongregacion;
+    const paisData = this.usuario?.usuarioCongregacionPais;
+
+    const congregacion = Array.isArray(congregacionData) ? congregacionData[0]?.congregacion || '' : '';
+    const pais = Array.isArray(paisData) ? paisData[0]?.pais || '' : '';
+
+    return `${congregacion}, ${pais}`.trim();
   }
 
-  get role() {
-    return this.usuario.usuarioPermiso.map((permiso) => {
-      return permiso.permiso;
-    });
+  get role(): string[] {
+    return this.usuario?.usuarioPermiso?.map((permiso) => permiso.permiso) || [];
   }
 
   get headers() {
@@ -160,7 +167,7 @@ export class UsuarioService {
         map((respuesta: any) => {
           if (!!respuesta.congregacion) {
             const { id, congregacion, email, pais_id, idObreroEncargado } = respuesta.congregacion;
-            this.usuario = null;
+            this.usuario = undefined;
 
             this.multimediaCongregacion = new MultimediaCongregacionModel(
               id,

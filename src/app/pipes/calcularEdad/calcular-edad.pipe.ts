@@ -4,14 +4,28 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'calcularEdad',
 })
 export class CalcularEdadPipe implements PipeTransform {
-  transform(fechaNacimiento: Date): number {
+  transform(fechaNacimiento: Date | string): number {
     if (!fechaNacimiento) {
-      return null;
+      return 0; // Retorna 0 en lugar de null
     }
 
-    const fechaNacimientoDate = new Date(fechaNacimiento);
-    const diferencia = Date.now() - fechaNacimientoDate.getTime();
-    const edadEnAnios = Math.floor(diferencia / (365.25 * 24 * 60 * 60 * 1000));
+    // Convertir a objeto Date si es necesario
+    const fechaNacimientoDate = typeof fechaNacimiento === 'string' ? new Date(fechaNacimiento) : fechaNacimiento;
+
+    // Validar la fecha
+    if (isNaN(fechaNacimientoDate.getTime())) {
+      return 0; // Retorna 0 si la fecha es inválida
+    }
+
+    const ahora = new Date();
+    const edadEnAnios = ahora.getFullYear() - fechaNacimientoDate.getFullYear();
+    const mesDiff = ahora.getMonth() - fechaNacimientoDate.getMonth();
+
+    // Ajusta si el cumpleaños no ha ocurrido todavía este año
+    if (mesDiff < 0 || (mesDiff === 0 && ahora.getDate() < fechaNacimientoDate.getDate())) {
+      return edadEnAnios - 1;
+    }
+
     return edadEnAnios;
   }
 }

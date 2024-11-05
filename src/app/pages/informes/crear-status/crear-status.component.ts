@@ -49,8 +49,8 @@ export class CrearStatusComponent implements OnInit {
         this.cargarListaEstatus();
       },
       (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
+        const errores = error.error.errors as { [key: string]: { msg: string } };
+        const listaErrores: string[] = [];
 
         Object.entries(errores).forEach(([key, value]) => {
           listaErrores.push('° ' + value['msg'] + '<br>');

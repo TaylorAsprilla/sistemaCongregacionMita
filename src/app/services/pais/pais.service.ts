@@ -1,21 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
+import { Observable, throwError } from 'rxjs';
 
 const base_url = environment.base_url;
+
 @Injectable({
   providedIn: 'root',
 })
 export class PaisService {
   constructor(private httpClient: HttpClient) {}
 
-  get token(): string {
+  private get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  get headers() {
+  private get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -23,31 +25,53 @@ export class PaisService {
     };
   }
 
-  getPaises() {
+  // Obtener todos los países
+  getPaises(): Observable<CongregacionPaisModel[]> {
+    return this.httpClient.get<{ ok: boolean; pais: CongregacionPaisModel[] }>(`${base_url}/pais`, this.headers).pipe(
+      map((response) => (response.ok ? response.pais : [])),
+      catchError(this.handleError)
+    );
+  }
+
+  // Obtener un país por su ID
+  getPais(id: number): Observable<CongregacionPaisModel | null> {
     return this.httpClient
-      .get(`${base_url}/pais`, this.headers)
-      .pipe(map((pais: { ok: boolean; pais: CongregacionPaisModel[] }) => pais.pais));
+      .get<{ ok: boolean; pais: CongregacionPaisModel }>(`${base_url}/pais/${id}`, this.headers)
+      .pipe(
+        map((response) => (response.ok ? response.pais : null)),
+        catchError(this.handleError)
+      );
   }
 
-  getPais(id: number) {
+  // Crear un nuevo país
+  crearPais(pais: CongregacionPaisModel): Observable<CongregacionPaisModel> {
     return this.httpClient
-      .get(`${base_url}/pais/${id}`, this.headers)
-      .pipe(map((pais: { ok: boolean; pais: CongregacionPaisModel; id: number }) => pais.pais));
+      .post<CongregacionPaisModel>(`${base_url}/pais`, pais, this.headers)
+      .pipe(catchError(this.handleError));
   }
 
-  crearPais(pais: CongregacionPaisModel) {
-    return this.httpClient.post(`${base_url}/pais`, pais, this.headers);
+  // Actualizar un país
+  actualizarPais(pais: CongregacionPaisModel): Observable<CongregacionPaisModel> {
+    return this.httpClient
+      .put<CongregacionPaisModel>(`${base_url}/pais/${pais.id}`, pais, this.headers)
+      .pipe(catchError(this.handleError));
   }
 
-  actualizarPais(pais: CongregacionPaisModel) {
-    return this.httpClient.put(`${base_url}/pais/${pais.id}`, pais, this.headers);
+  // Eliminar un país
+  eliminarPais(pais: CongregacionPaisModel): Observable<void> {
+    return this.httpClient.delete<void>(`${base_url}/pais/${pais.id}`, this.headers).pipe(catchError(this.handleError));
   }
 
-  eliminarPais(pais: CongregacionPaisModel) {
-    return this.httpClient.delete(`${base_url}/pais/${pais.id}`, this.headers);
+  // Activar un país
+  activarPais(pais: CongregacionPaisModel): Observable<CongregacionPaisModel> {
+    return this.httpClient
+      .put<CongregacionPaisModel>(`${base_url}/pais/activar/${pais.id}`, pais, this.headers)
+      .pipe(catchError(this.handleError));
   }
 
-  activarPais(pais: CongregacionPaisModel) {
-    return this.httpClient.put(`${base_url}/pais/activar/${pais.id}`, pais, this.headers);
+  // Manejo de errores
+  private handleError(error: any): Observable<never> {
+    console.error('Ocurrió un error en la solicitud HTTP:', error);
+    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
   }
 }

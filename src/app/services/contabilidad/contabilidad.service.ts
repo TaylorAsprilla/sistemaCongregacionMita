@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
 
 const base_url = environment.base_url;
@@ -12,11 +13,11 @@ const base_url = environment.base_url;
 export class ContabilidadService {
   constructor(private httpClient: HttpClient) {}
 
-  get token(): string {
+  private get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  get headers() {
+  private get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -24,23 +25,55 @@ export class ContabilidadService {
     };
   }
 
-  getContabilidad() {
+  // Obtener todas las contabilidades
+  getContabilidad(): Observable<ContabilidadModel[]> {
     return this.httpClient
-      .get(`${base_url}/contabilidad/`, this.headers)
-      .pipe(map((contabilidad: { ok: boolean; contabilidad: ContabilidadModel[] }) => contabilidad.contabilidad));
+      .get<{ ok: boolean; contabilidad: ContabilidadModel[] }>(`${base_url}/contabilidad/`, this.headers)
+      .pipe(
+        map((response) => {
+          if (response.ok) {
+            return response.contabilidad;
+          } else {
+            throw new Error('No se pudieron obtener las contabilidades');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
-  getUnaContabilidad(contabilidad: ContabilidadModel) {
+  // Obtener una contabilidad específica
+  getUnaContabilidad(id: number): Observable<ContabilidadModel> {
     return this.httpClient
-      .get(`${base_url}/contabilidad/${contabilidad.id}`, this.headers)
-      .pipe(map((contabilidad: { ok: boolean; contabilidad: ContabilidadModel[] }) => contabilidad.contabilidad));
+      .get<{ ok: boolean; contabilidad: ContabilidadModel }>(`${base_url}/contabilidad/${id}`, this.headers)
+      .pipe(
+        map((response) => {
+          if (response.ok) {
+            return response.contabilidad;
+          } else {
+            throw new Error('No se pudo obtener la contabilidad');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
-  crearContabilidad(contabilidad: ContabilidadModel) {
-    return this.httpClient.post(`${base_url}/contabilidad`, contabilidad, this.headers);
+  // Crear una nueva contabilidad
+  crearContabilidad(contabilidad: ContabilidadModel): Observable<ContabilidadModel> {
+    return this.httpClient
+      .post<ContabilidadModel>(`${base_url}/contabilidad`, contabilidad, this.headers)
+      .pipe(catchError(this.handleError));
   }
 
-  actualizarContabilidad(contabilidad: ContabilidadModel) {
-    return this.httpClient.put(`${base_url}/contabilidad/${contabilidad.id}`, this.headers);
+  // Actualizar una contabilidad existente
+  actualizarContabilidad(contabilidad: ContabilidadModel): Observable<ContabilidadModel> {
+    return this.httpClient
+      .put<ContabilidadModel>(`${base_url}/contabilidad/${contabilidad.id}`, contabilidad, this.headers)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Manejo de errores
+  private handleError(error: any): Observable<never> {
+    console.error('Error en la solicitud HTTP:', error);
+    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
   }
 }

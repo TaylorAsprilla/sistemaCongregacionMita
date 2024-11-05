@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 
 const base_url = environment.base_url;
@@ -12,11 +13,11 @@ const base_url = environment.base_url;
 export class NacionalidadService {
   constructor(private httpClient: HttpClient) {}
 
-  get token(): string {
+  private get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  get headers() {
+  private get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -24,15 +25,41 @@ export class NacionalidadService {
     };
   }
 
-  getNacionalidades() {
+  // Obtener todas las nacionalidades
+  getNacionalidades(): Observable<NacionalidadModel[]> {
     return this.httpClient
-      .get(`${base_url}/nacionalidad`)
-      .pipe(map((nacionalidad: { ok: boolean; nacionalidades: NacionalidadModel[] }) => nacionalidad.nacionalidades));
+      .get<{ ok: boolean; nacionalidades: NacionalidadModel[] }>(`${base_url}/nacionalidad`, this.headers)
+      .pipe(
+        map((response) => {
+          if (response.ok) {
+            return response.nacionalidades;
+          } else {
+            throw new Error('No se pudieron obtener las nacionalidades');
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
-  getNacionalidad(id: string) {
+  // Obtener una nacionalidad específica por ID
+  getNacionalidad(id: string): Observable<NacionalidadModel> {
     return this.httpClient
-      .get(`${base_url}/nacionalidad/${id}`, this.headers)
-      .pipe(map((nacionalidad: { ok: boolean; nacionalidad: NacionalidadModel }) => nacionalidad.nacionalidad));
+      .get<{ ok: boolean; nacionalidad: NacionalidadModel }>(`${base_url}/nacionalidad/${id}`, this.headers)
+      .pipe(
+        map((response) => {
+          if (response.ok) {
+            return response.nacionalidad;
+          } else {
+            throw new Error('No se pudo obtener la nacionalidad');
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  // Manejo de errores
+  private handleError(error: any): Observable<never> {
+    console.error('Error en la solicitud HTTP:', error);
+    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
   }
 }
