@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ObjectUnsubscribedError, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -9,11 +9,18 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import { MetaService } from 'src/app/services/meta/meta.service';
 import Swal from 'sweetalert2';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-informe-metas',
-  templateUrl: './informe-metas.component.html',
-  styleUrls: ['./informe-metas.component.scss'],
+    selector: 'app-informe-metas',
+    templateUrl: './informe-metas.component.html',
+    styleUrls: ['./informe-metas.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgFor,
+    ],
 })
 export class InformeMetasComponent implements OnInit, OnDestroy {
   public metaForm: UntypedFormGroup;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CampoModel } from 'src/app/core/models/campo.model';
@@ -8,11 +8,18 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import Swal from 'sweetalert2';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-crear-campo',
-  templateUrl: './crear-campo.component.html',
-  styleUrls: ['./crear-campo.component.scss'],
+    selector: 'app-crear-campo',
+    templateUrl: './crear-campo.component.html',
+    styleUrls: ['./crear-campo.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgFor,
+    ],
 })
 export class CrearCampoComponent implements OnInit {
   public campoForm: UntypedFormGroup;

@@ -3,11 +3,15 @@ import { ActivatedRoute } from '@angular/router';
 import { generarSeccioninforme, Seccion } from 'src/app/core/interfaces/seccion-informe.interface';
 import { InformeModel } from 'src/app/core/models/informe.model';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { NgFor } from '@angular/common';
+import { SeccionInformeComponent } from '../../../components/seccion-informe/seccion-informe.component';
 
 @Component({
-  selector: 'app-informe',
-  templateUrl: './informe.component.html',
-  styleUrls: ['./informe.component.scss'],
+    selector: 'app-informe',
+    templateUrl: './informe.component.html',
+    styleUrls: ['./informe.component.scss'],
+    standalone: true,
+    imports: [NgFor, SeccionInformeComponent],
 })
 export class InformeComponent implements OnInit {
   get Rutas() {

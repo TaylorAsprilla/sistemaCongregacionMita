@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({
-  name: 'youtube',
+    name: 'youtube',
+    standalone: true,
 })
 export class YoutubePipe implements PipeTransform {
   currentVideoId: string = '';

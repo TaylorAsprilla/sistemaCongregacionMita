@@ -5,8 +5,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
-  declarations: [ServiciosEnVivoComponent],
-  imports: [CommonModule, YouTubePlayerModule, PipesModule],
-  exports: [ServiciosEnVivoComponent],
+    imports: [CommonModule, YouTubePlayerModule, PipesModule, ServiciosEnVivoComponent],
+    exports: [ServiciosEnVivoComponent],
 })
 export class ServiciosEnVivoModule {}

@@ -14,11 +14,31 @@ import { delay } from 'rxjs/operators';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
+import { NgIf, NgFor, NgClass, AsyncPipe } from '@angular/common';
+import { ExportarExcelComponent } from '../exportar-excel/exportar-excel.component';
+import { FormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
+import { WhatsappPipe } from '../../pipes/whatsapp/whatsapp.pipe';
+import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
 
 @Component({
-  selector: 'app-ver-censo',
-  templateUrl: './ver-censo.component.html',
-  styleUrls: ['./ver-censo.component.scss'],
+    selector: 'app-ver-censo',
+    templateUrl: './ver-censo.component.html',
+    styleUrls: ['./ver-censo.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        ExportarExcelComponent,
+        FormsModule,
+        NgFor,
+        NgClass,
+        NgxPaginationModule,
+        AsyncPipe,
+        TelegramPipe,
+        WhatsappPipe,
+        CalcularEdadPipe,
+    ],
 })
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];

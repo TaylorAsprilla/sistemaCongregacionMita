@@ -8,8 +8,8 @@ describe('CrearCongregacionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CrearCongregacionComponent ]
-    })
+    imports: [CrearCongregacionComponent]
+})
     .compileComponents();
   });
 

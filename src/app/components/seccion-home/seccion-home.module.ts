@@ -5,8 +5,7 @@ import { SeccionHomeComponent } from './seccion-home.component';
 import { DirectiveModule } from 'src/app/directive/directive.module';
 
 @NgModule({
-  declarations: [SeccionHomeComponent],
-  imports: [CommonModule, AppRoutingModule, DirectiveModule],
-  exports: [SeccionHomeComponent],
+    imports: [CommonModule, AppRoutingModule, DirectiveModule, SeccionHomeComponent],
+    exports: [SeccionHomeComponent],
 })
 export class SeccionHomeModule {}

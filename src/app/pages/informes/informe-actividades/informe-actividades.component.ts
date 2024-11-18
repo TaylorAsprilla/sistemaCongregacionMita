@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
@@ -7,11 +7,18 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import Swal from 'sweetalert2';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-informes-actividades',
-  templateUrl: './informe-actividades.component.html',
-  styleUrls: ['./informe-actividades.component.scss'],
+    selector: 'app-informes-actividades',
+    templateUrl: './informe-actividades.component.html',
+    styleUrls: ['./informe-actividades.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgFor,
+    ],
 })
 export class InformeActividadesComponent implements OnInit, OnDestroy {
   public actividadForm: UntypedFormGroup;

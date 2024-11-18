@@ -4,8 +4,7 @@ import { FiltrosComponent } from './filtros.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [FiltrosComponent],
-  imports: [CommonModule, FormsModule],
-  exports: [FiltrosComponent],
+    imports: [CommonModule, FormsModule, FiltrosComponent],
+    exports: [FiltrosComponent],
 })
 export class FiltrosModule {}

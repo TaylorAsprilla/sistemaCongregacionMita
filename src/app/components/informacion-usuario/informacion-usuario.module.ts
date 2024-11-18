@@ -9,18 +9,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @NgModule({
-  declarations: [InformacionUsuarioComponent],
-  imports: [
-    BrowserModule,
-    CommonModule,
-    AppRoutingModule,
-    DirectiveModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    NgxIntlTelInputModule,
-  ],
-  exports: [InformacionUsuarioComponent],
+    imports: [
+        BrowserModule,
+        CommonModule,
+        AppRoutingModule,
+        DirectiveModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        NgxIntlTelInputModule,
+        InformacionUsuarioComponent,
+    ],
+    exports: [InformacionUsuarioComponent],
 })
 export class InformacionUsuarioModule {}

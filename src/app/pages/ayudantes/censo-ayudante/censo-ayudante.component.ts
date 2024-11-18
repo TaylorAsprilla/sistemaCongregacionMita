@@ -8,11 +8,20 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
+import { NgIf } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
+import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.component';
 
 @Component({
-  selector: 'app-censo-ayudante',
-  templateUrl: './censo-ayudante.component.html',
-  styleUrls: ['./censo-ayudante.component.scss'],
+    selector: 'app-censo-ayudante',
+    templateUrl: './censo-ayudante.component.html',
+    styleUrls: ['./censo-ayudante.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        VerCensoComponent,
+    ],
 })
 export class CensoAyudanteComponent implements OnInit {
   totalUsuarios: number = 0;

@@ -7,8 +7,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { NopagefoundComponent } from './nopagefound.component';
 
 @NgModule({
-  declarations: [NopagefoundComponent],
-  imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, RouterModule, PipesModule],
-  exports: [NopagefoundComponent],
+    imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, RouterModule, PipesModule, NopagefoundComponent],
+    exports: [NopagefoundComponent],
 })
 export class NopagefoundModule {}

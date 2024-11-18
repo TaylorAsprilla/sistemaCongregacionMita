@@ -1,15 +1,24 @@
 import Swal from 'sweetalert2';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-crear-ministerio',
-  templateUrl: './crear-ministerio.component.html',
-  styleUrls: ['./crear-ministerio.component.scss'],
+    selector: 'app-crear-ministerio',
+    templateUrl: './crear-ministerio.component.html',
+    styleUrls: ['./crear-ministerio.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgxIntlTelInputModule,
+        NgFor,
+    ],
 })
 export class CrearMinisterioComponent implements OnInit {
   ministerioForm: UntypedFormGroup;

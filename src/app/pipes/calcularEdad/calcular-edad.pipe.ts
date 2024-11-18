@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'calcularEdad',
+    name: 'calcularEdad',
+    standalone: true,
 })
 export class CalcularEdadPipe implements PipeTransform {
   transform(fechaNacimiento: Date | string): number {

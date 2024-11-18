@@ -8,8 +8,8 @@ describe('SolicitudMultimediaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SolicitudMultimediaComponent],
-    }).compileComponents();
+    imports: [SolicitudMultimediaComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

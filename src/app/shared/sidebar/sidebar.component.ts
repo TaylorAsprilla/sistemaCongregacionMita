@@ -6,12 +6,24 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { GENERO } from 'src/app/core/enums/genero.enum';
 import { configuracion } from 'src/environments/config/configuration';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { PermisosDirective } from '../../directive/permisos/permisos.directive';
 declare var $: any;
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss'],
+    standalone: true,
+    imports: [
+        RouterLink,
+        NgIf,
+        NgFor,
+        PermisosDirective,
+        NgClass,
+        RouterLinkActive,
+    ],
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[] = [];

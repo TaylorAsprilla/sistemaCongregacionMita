@@ -8,8 +8,8 @@ describe('TiposDeDocumentosComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TiposDeDocumentosComponent ]
-    })
+    imports: [TiposDeDocumentosComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(TiposDeDocumentosComponent);

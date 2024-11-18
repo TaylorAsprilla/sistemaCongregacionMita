@@ -1,13 +1,29 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { RUTAS } from '../routes/menu-items';
 import { MultimediaCongregacionModel } from '../core/models/acceso-multimedia.model';
 import { UsuarioService } from '../services/usuario/usuario.service';
+import { SpinnerComponent } from '../components/spinner/spinner.component';
+import { NgClass } from '@angular/common';
+import { HeaderComponent } from '../shared/header/header.component';
+import { SidebarComponent } from '../shared/sidebar/sidebar.component';
+import { BredcrumbsComponent } from '../shared/bredcrumbs/bredcrumbs.component';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @Component({
-  selector: 'app-pages',
-  templateUrl: './pages.component.html',
-  styleUrls: ['./pages.component.scss'],
+    selector: 'app-pages',
+    templateUrl: './pages.component.html',
+    styleUrls: ['./pages.component.scss'],
+    standalone: true,
+    imports: [
+        SpinnerComponent,
+        NgClass,
+        HeaderComponent,
+        SidebarComponent,
+        BredcrumbsComponent,
+        RouterOutlet,
+        FooterComponent,
+    ],
 })
 export class PagesComponent implements OnInit {
   color = 'blue';

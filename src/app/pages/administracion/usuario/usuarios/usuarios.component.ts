@@ -7,11 +7,20 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { NgIf } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
+import { VerCensoComponent } from '../../../../components/ver-censo/ver-censo.component';
 
 @Component({
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css'],
+    selector: 'app-usuarios',
+    templateUrl: './usuarios.component.html',
+    styleUrls: ['./usuarios.component.css'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        VerCensoComponent,
+    ],
 })
 export class UsuariosComponent implements OnInit, OnDestroy {
   totalUsuarios: number = 0;

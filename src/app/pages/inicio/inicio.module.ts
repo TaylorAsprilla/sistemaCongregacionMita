@@ -9,8 +9,7 @@ import { BibliotecaMultimediaModule } from 'src/app/components/biblioteca-multim
 import { ServiciosEnVivoModule } from 'src/app/components/servicios-en-vivo/servicios-en-vivo.module';
 
 @NgModule({
-  declarations: [InicioComponent],
-  imports: [CommonModule, RouterModule, AppRoutingModule, DirectiveModule, SeccionHomeModule, ServiciosEnVivoModule],
-  exports: [InicioComponent],
+    imports: [CommonModule, RouterModule, AppRoutingModule, DirectiveModule, SeccionHomeModule, ServiciosEnVivoModule, InicioComponent],
+    exports: [InicioComponent],
 })
 export class InicioModule {}

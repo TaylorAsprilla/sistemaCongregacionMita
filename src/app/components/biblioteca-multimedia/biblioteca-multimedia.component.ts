@@ -10,11 +10,21 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
+import { NgFor, NgIf } from '@angular/common';
+import { YouTubePlayer } from '@angular/youtube-player';
+import { YoutubePipe } from '../../pipes/youtube/youtube.pipe';
 
 @Component({
-  selector: 'app-biblioteca-multimedia',
-  templateUrl: './biblioteca-multimedia.component.html',
-  styleUrls: ['./biblioteca-multimedia.component.scss'],
+    selector: 'app-biblioteca-multimedia',
+    templateUrl: './biblioteca-multimedia.component.html',
+    styleUrls: ['./biblioteca-multimedia.component.scss'],
+    standalone: true,
+    imports: [
+        NgFor,
+        NgIf,
+        YouTubePlayer,
+        YoutubePipe,
+    ],
 })
 export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() serviciosYvigilias: LinkEventoModel[] = [];

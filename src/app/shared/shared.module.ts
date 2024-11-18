@@ -10,8 +10,7 @@ import { DirectiveModule } from '../directive/directive.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  declarations: [BredcrumbsComponent, FooterComponent, HeaderComponent, SidebarComponent],
-  exports: [BredcrumbsComponent, FooterComponent, HeaderComponent, SidebarComponent],
-  imports: [CommonModule, RouterModule, FormsModule, DirectiveModule, NgbModule],
+    exports: [BredcrumbsComponent, FooterComponent, HeaderComponent, SidebarComponent],
+    imports: [CommonModule, RouterModule, FormsModule, DirectiveModule, NgbModule, BredcrumbsComponent, FooterComponent, HeaderComponent, SidebarComponent],
 })
 export class SharedModule {}

@@ -8,7 +8,6 @@ import { RecuperarCuentaComponent } from './recuperar-cuenta/recuperar-cuenta.co
 import { CambiarPasswordComponent } from './cambiar-password/cambiar-password.component';
 
 @NgModule({
-  declarations: [LoginComponent, RecuperarCuentaComponent, CambiarPasswordComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule, LoginComponent, RecuperarCuentaComponent, CambiarPasswordComponent],
 })
 export class AuthModule {}

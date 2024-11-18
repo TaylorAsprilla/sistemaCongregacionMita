@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
@@ -12,11 +12,21 @@ import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { AccesoCongregacionMultimedia } from 'src/app/core/interfaces/acceso-multimedia';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-crear-congregacion',
-  templateUrl: './crear-congregacion.component.html',
-  styleUrls: ['./crear-congregacion.component.scss'],
+    selector: 'app-crear-congregacion',
+    templateUrl: './crear-congregacion.component.html',
+    styleUrls: ['./crear-congregacion.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgxIntlTelInputModule,
+        NgFor,
+        NgIf,
+    ],
 })
 export class CrearCongregacionComponent implements OnInit {
   public congregacionForm: UntypedFormGroup;

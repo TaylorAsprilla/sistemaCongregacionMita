@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SpinnerComponent } from './spinner.component';
 
 @NgModule({
-  declarations: [SpinnerComponent],
-  imports: [CommonModule],
-  exports: [SpinnerComponent],
+    imports: [CommonModule, SpinnerComponent],
+    exports: [SpinnerComponent],
 })
 export class SpinnerModule {}

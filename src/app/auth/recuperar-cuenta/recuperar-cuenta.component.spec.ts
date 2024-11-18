@@ -8,8 +8,8 @@ describe('RecuperarCuentaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecuperarCuentaComponent ]
-    })
+    imports: [RecuperarCuentaComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(RecuperarCuentaComponent);

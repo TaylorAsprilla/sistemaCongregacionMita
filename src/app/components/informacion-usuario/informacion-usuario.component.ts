@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CountryISO, PhoneNumberFormat, SearchCountryField, NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
@@ -23,11 +23,21 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CONGREGACION_PAIS, ID_PAIS } from 'src/app/core/enums/congregacionPais.enum';
+import { NgClass, NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-informacion-usuario',
-  templateUrl: './informacion-usuario.component.html',
-  styleUrls: ['./informacion-usuario.component.scss'],
+    selector: 'app-informacion-usuario',
+    templateUrl: './informacion-usuario.component.html',
+    styleUrls: ['./informacion-usuario.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgClass,
+        NgIf,
+        NgxIntlTelInputModule,
+        NgFor,
+    ],
 })
 export class InformacionUsuarioComponent implements OnInit {
   registroUnoForm!: FormGroup;

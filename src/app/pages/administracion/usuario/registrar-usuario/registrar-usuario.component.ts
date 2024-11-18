@@ -18,11 +18,14 @@ import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { InformacionUsuarioComponent } from '../../../../components/informacion-usuario/informacion-usuario.component';
 
 @Component({
-  selector: 'app-registrar-usuario',
-  templateUrl: './registrar-usuario.component.html',
-  styleUrls: ['./registrar-usuario.component.scss'],
+    selector: 'app-registrar-usuario',
+    templateUrl: './registrar-usuario.component.html',
+    styleUrls: ['./registrar-usuario.component.scss'],
+    standalone: true,
+    imports: [InformacionUsuarioComponent],
 })
 export class RegistrarUsuarioComponent implements OnInit {
   usuario: UsuarioModel;

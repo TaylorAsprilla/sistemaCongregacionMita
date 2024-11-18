@@ -1,9 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-seccion-informe',
-  templateUrl: './seccion-informe.component.html',
-  styleUrls: ['./seccion-informe.component.css'],
+    selector: 'app-seccion-informe',
+    templateUrl: './seccion-informe.component.html',
+    styleUrls: ['./seccion-informe.component.css'],
+    standalone: true,
+    imports: [RouterLink],
 })
 export class SeccionInformeComponent implements OnInit {
   @Input() nombre: string = '';

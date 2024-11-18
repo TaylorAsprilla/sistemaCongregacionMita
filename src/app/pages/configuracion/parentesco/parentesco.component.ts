@@ -4,11 +4,19 @@ import { delay } from 'rxjs/operators';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
 import { ParentescoService } from 'src/app/services/parentesco/parentesco.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-parentesco',
-  templateUrl: './parentesco.component.html',
-  styleUrls: ['./parentesco.component.scss'],
+    selector: 'app-parentesco',
+    templateUrl: './parentesco.component.html',
+    styleUrls: ['./parentesco.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class ParentescoComponent implements OnInit {
   public cargando: boolean = true;

@@ -8,8 +8,8 @@ describe('GeneroComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GeneroComponent ]
-    })
+    imports: [GeneroComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(GeneroComponent);

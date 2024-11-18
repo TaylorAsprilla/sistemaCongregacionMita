@@ -8,11 +8,20 @@ import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-co
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
+import { NgIf } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
+import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.component';
 
 @Component({
-  selector: 'app-censo-supervisor',
-  templateUrl: './censo-supervisor.component.html',
-  styleUrls: ['./censo-supervisor.component.scss'],
+    selector: 'app-censo-supervisor',
+    templateUrl: './censo-supervisor.component.html',
+    styleUrls: ['./censo-supervisor.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        VerCensoComponent,
+    ],
 })
 export class CensoSupervisorComponent implements OnInit {
   nombreArchivo: string;

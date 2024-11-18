@@ -5,11 +5,19 @@ import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-ministerios',
-  templateUrl: './ministerios.component.html',
-  styleUrls: ['./ministerios.component.css'],
+    selector: 'app-ministerios',
+    templateUrl: './ministerios.component.html',
+    styleUrls: ['./ministerios.component.css'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class MinisteriosComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

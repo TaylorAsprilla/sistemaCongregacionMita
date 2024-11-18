@@ -11,7 +11,10 @@ const excluded = [
   'idSeccion',
 ];
 
-@Pipe({ name: 'keys' })
+@Pipe({
+    name: 'keys',
+    standalone: true
+})
 export class KeysPipe implements PipeTransform {
   transform(value: any): any {
     let keys = [];

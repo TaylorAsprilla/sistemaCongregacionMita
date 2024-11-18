@@ -4,7 +4,8 @@ import { environment } from 'src/environments/environment';
 const base_url = environment.base_url;
 
 @Pipe({
-  name: 'imagen',
+    name: 'imagen',
+    standalone: true,
 })
 export class ImagenPipe implements PipeTransform {
   transform(imagen: string, tipo: 'usuarios' | 'ministerios'): string {

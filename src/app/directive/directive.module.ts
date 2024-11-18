@@ -5,8 +5,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
-  declarations: [PermisosDirective],
-  imports: [CommonModule, BrowserModule, AppRoutingModule],
-  exports: [PermisosDirective],
+    imports: [CommonModule, BrowserModule, AppRoutingModule, PermisosDirective],
+    exports: [PermisosDirective],
 })
 export class DirectiveModule {}

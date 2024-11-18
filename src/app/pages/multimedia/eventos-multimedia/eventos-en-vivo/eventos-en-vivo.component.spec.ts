@@ -8,8 +8,8 @@ describe('EventosEnVivoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventosEnVivoComponent ]
-    })
+    imports: [EventosEnVivoComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(EventosEnVivoComponent);

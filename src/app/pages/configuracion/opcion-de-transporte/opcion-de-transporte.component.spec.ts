@@ -8,8 +8,8 @@ describe('OpcionDeTransporteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OpcionDeTransporteComponent ]
-    })
+    imports: [OpcionDeTransporteComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(OpcionDeTransporteComponent);

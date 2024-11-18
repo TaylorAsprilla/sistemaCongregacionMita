@@ -11,16 +11,16 @@ import { CensoSupervisorComponent } from './censo-supervisor/censo-supervisor.co
 import { VerCensoModule } from 'src/app/components/ver-censo/ver-censo.module';
 
 @NgModule({
-  declarations: [CensoObreroComponent, CensoSupervisorComponent],
-  imports: [
-    CommonModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    PipesModule,
-    CargandoInformacionModule,
-    VerCensoModule,
-  ],
+    imports: [
+        CommonModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        PipesModule,
+        CargandoInformacionModule,
+        VerCensoModule,
+        CensoObreroComponent, CensoSupervisorComponent,
+    ],
 })
 export class ObrerosModule {}

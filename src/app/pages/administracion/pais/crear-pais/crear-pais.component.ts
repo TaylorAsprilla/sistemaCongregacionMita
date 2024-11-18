@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -13,11 +13,20 @@ import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { ObreroInterface, ObreroModel } from 'src/app/core/models/obrero.model';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-crear-pais',
-  templateUrl: './crear-pais.component.html',
-  styleUrls: ['./crear-pais.component.scss'],
+    selector: 'app-crear-pais',
+    templateUrl: './crear-pais.component.html',
+    styleUrls: ['./crear-pais.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgxIntlTelInputModule,
+        NgFor,
+    ],
 })
 export class CrearPaisComponent implements OnInit, OnDestroy {
   public paisForm: FormGroup;

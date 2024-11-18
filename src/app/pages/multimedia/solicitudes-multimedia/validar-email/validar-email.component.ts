@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-validar-email',
-  templateUrl: './validar-email.component.html',
-  styleUrls: ['./validar-email.component.scss'],
+    selector: 'app-validar-email',
+    templateUrl: './validar-email.component.html',
+    styleUrls: ['./validar-email.component.scss'],
+    standalone: true,
+    imports: [NgIf],
 })
 export class ValidarEmailComponent implements OnInit {
   solicitudValida: boolean = false;

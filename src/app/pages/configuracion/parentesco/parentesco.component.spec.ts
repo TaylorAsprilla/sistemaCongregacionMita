@@ -8,8 +8,8 @@ describe('ParentescoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ParentescoComponent ]
-    })
+    imports: [ParentescoComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ParentescoComponent);

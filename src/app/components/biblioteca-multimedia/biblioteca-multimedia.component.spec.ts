@@ -8,8 +8,8 @@ describe('BibliotecaMultimediaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BibliotecaMultimediaComponent ]
-    })
+    imports: [BibliotecaMultimediaComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(BibliotecaMultimediaComponent);

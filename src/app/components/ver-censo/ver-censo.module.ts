@@ -7,8 +7,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ExportarExcelModule } from '../exportar-excel/exportar-excel.module';
 
 @NgModule({
-  declarations: [VerCensoComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxPaginationModule, PipesModule, ExportarExcelModule],
-  exports: [VerCensoComponent],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxPaginationModule, PipesModule, ExportarExcelModule, VerCensoComponent],
+    exports: [VerCensoComponent],
 })
 export class VerCensoModule {}

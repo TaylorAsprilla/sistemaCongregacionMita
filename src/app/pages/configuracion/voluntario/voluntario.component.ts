@@ -4,11 +4,19 @@ import { delay } from 'rxjs/operators';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { VoluntariadoService } from 'src/app/services/voluntariado/voluntariado.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-voluntario',
-  templateUrl: './voluntario.component.html',
-  styleUrls: ['./voluntario.component.scss'],
+    selector: 'app-voluntario',
+    templateUrl: './voluntario.component.html',
+    styleUrls: ['./voluntario.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class VoluntarioComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

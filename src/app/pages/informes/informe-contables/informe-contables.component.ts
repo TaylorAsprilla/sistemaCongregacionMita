@@ -1,14 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { ContabilidadService } from 'src/app/services/contabilidad/contabilidad.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-informe-contables',
-  templateUrl: './informe-contables.component.html',
-  styleUrls: ['./informe-contables.component.scss'],
+    selector: 'app-informe-contables',
+    templateUrl: './informe-contables.component.html',
+    styleUrls: ['./informe-contables.component.scss'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule],
 })
 export class InformeContablesComponent implements OnInit, OnDestroy {
   public contabilidadForm: UntypedFormGroup;

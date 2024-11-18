@@ -1,16 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LogroModel } from 'src/app/core/models/logro.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import Swal from 'sweetalert2';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-informe-logros',
-  templateUrl: './informe-logros.component.html',
-  styleUrls: ['./informe-logros.component.scss'],
+    selector: 'app-informe-logros',
+    templateUrl: './informe-logros.component.html',
+    styleUrls: ['./informe-logros.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgFor,
+    ],
 })
 export class InformeLogrosComponent implements OnInit, OnDestroy {
   public logroForm: UntypedFormGroup;

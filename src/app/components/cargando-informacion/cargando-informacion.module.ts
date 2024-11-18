@@ -4,8 +4,7 @@ import { CargandoInformacionComponent } from './cargando-informacion.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 
 @NgModule({
-  declarations: [CargandoInformacionComponent],
-  imports: [CommonModule, AppRoutingModule],
-  exports: [CargandoInformacionComponent],
+    imports: [CommonModule, AppRoutingModule, CargandoInformacionComponent],
+    exports: [CargandoInformacionComponent],
 })
 export class CargandoInformacionModule {}

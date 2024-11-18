@@ -26,9 +26,10 @@ import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 
 @Component({
-  selector: 'app-ver-informe',
-  templateUrl: './ver-informe.component.html',
-  styleUrls: ['./ver-informe.component.css'],
+    selector: 'app-ver-informe',
+    templateUrl: './ver-informe.component.html',
+    styleUrls: ['./ver-informe.component.css'],
+    standalone: true,
 })
 export class VerInformeComponent implements OnInit, OnDestroy {
   @ViewChild('content', { static: false }) el!: ElementRef;

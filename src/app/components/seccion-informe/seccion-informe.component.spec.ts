@@ -8,8 +8,8 @@ describe('SeccionInformeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SeccionInformeComponent],
-    }).compileComponents();
+    imports: [SeccionInformeComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

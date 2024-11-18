@@ -7,8 +7,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { InformacionUsuarioModule } from 'src/app/components/informacion-usuario/informacion-usuario.module';
 
 @NgModule({
-  declarations: [PerfilComponent],
-  imports: [CommonModule, AppRoutingModule, RouterModule, PipesModule, InformacionUsuarioModule],
-  exports: [PerfilComponent],
+    imports: [CommonModule, AppRoutingModule, RouterModule, PipesModule, InformacionUsuarioModule, PerfilComponent],
+    exports: [PerfilComponent],
 })
 export class PerfilModule {}

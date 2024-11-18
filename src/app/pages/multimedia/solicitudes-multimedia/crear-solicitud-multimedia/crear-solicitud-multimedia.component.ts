@@ -1,9 +1,9 @@
 import { configuracion } from 'src/environments/config/configuration';
 import { UsuarioService } from './../../../../services/usuario/usuario.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
+import { CountryISO, PhoneNumberFormat, SearchCountryField, NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
@@ -18,11 +18,28 @@ import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedi
 import Swal from 'sweetalert2';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { BuscarUsuarioComponent } from '../../../../components/buscar-usuario/buscar-usuario.component';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatOption } from '@angular/material/core';
 
 @Component({
-  selector: 'app-crear-solicitud-multimedia',
-  templateUrl: './crear-solicitud-multimedia.component.html',
-  styleUrls: ['./crear-solicitud-multimedia.component.scss'],
+    selector: 'app-crear-solicitud-multimedia',
+    templateUrl: './crear-solicitud-multimedia.component.html',
+    styleUrls: ['./crear-solicitud-multimedia.component.scss'],
+    standalone: true,
+    imports: [
+        BuscarUsuarioComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxIntlTelInputModule,
+        NgIf,
+        MatAutocompleteTrigger,
+        MatAutocomplete,
+        NgFor,
+        MatOption,
+        AsyncPipe,
+    ],
 })
 export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   solicitudForm: FormGroup;

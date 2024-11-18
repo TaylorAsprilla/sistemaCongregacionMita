@@ -15,30 +15,28 @@ import { VerCensoModule } from 'src/app/components/ver-censo/ver-censo.module';
 import { ExportarExcelModule } from 'src/app/components/exportar-excel/exportar-excel.module';
 
 @NgModule({
-  declarations: [
-    ConfirmacionDeRegistroComponent,
-    RegistrarUsuarioComponent,
-    UsuariosComponent,
-    CambiarPasswordUsuarioComponent,
-  ],
-  imports: [
-    CommonModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    InformacionUsuarioModule,
-    CargandoInformacionModule,
-    PipesModule,
-    NgxPaginationModule,
-    VerCensoModule,
-    ExportarExcelModule,
-  ],
-  exports: [
-    ConfirmacionDeRegistroComponent,
-    RegistrarUsuarioComponent,
-    UsuariosComponent,
-    CambiarPasswordUsuarioComponent,
-  ],
+    imports: [
+        CommonModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        InformacionUsuarioModule,
+        CargandoInformacionModule,
+        PipesModule,
+        NgxPaginationModule,
+        VerCensoModule,
+        ExportarExcelModule,
+        ConfirmacionDeRegistroComponent,
+        RegistrarUsuarioComponent,
+        UsuariosComponent,
+        CambiarPasswordUsuarioComponent,
+    ],
+    exports: [
+        ConfirmacionDeRegistroComponent,
+        RegistrarUsuarioComponent,
+        UsuariosComponent,
+        CambiarPasswordUsuarioComponent,
+    ],
 })
 export class UsuarioModule {}

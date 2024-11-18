@@ -4,11 +4,19 @@ import { delay } from 'rxjs/operators';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { RolCasaService } from 'src/app/services/rol-casa/rol-casa.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-rol-en-casa',
-  templateUrl: './rol-en-casa.component.html',
-  styleUrls: ['./rol-en-casa.component.scss'],
+    selector: 'app-rol-en-casa',
+    templateUrl: './rol-en-casa.component.html',
+    styleUrls: ['./rol-en-casa.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class RolEnCasaComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

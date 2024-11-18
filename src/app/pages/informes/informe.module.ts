@@ -17,31 +17,27 @@ import { SeccionInformeModule } from 'src/app/components/seccion-informe/seccion
 import { InformeSituacionVisitaComponent } from './informe-situacion-visita/informe-situacion-visita.component';
 
 @NgModule({
-  declarations: [
-    CrearActividadComponent,
-    CrearStatusComponent,
-    InformeActividadesComponent,
-    InformeContablesComponent,
-    InformeLogrosComponent,
-    InformeMetasComponent,
-    InformeVisitasComponent,
-    InformeSituacionVisitaComponent,
-    InformeComponent,
-    CrearCampoComponent,
-    VerInformeComponent,
-    KeysPipe,
-  ],
-  imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, SeccionInformeModule],
-  exports: [
-    CrearActividadComponent,
-    CrearStatusComponent,
-    InformeActividadesComponent,
-    InformeContablesComponent,
-    InformeLogrosComponent,
-    InformeMetasComponent,
-    InformeVisitasComponent,
-
-    KeysPipe,
-  ],
+    imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, SeccionInformeModule, CrearActividadComponent,
+        CrearStatusComponent,
+        InformeActividadesComponent,
+        InformeContablesComponent,
+        InformeLogrosComponent,
+        InformeMetasComponent,
+        InformeVisitasComponent,
+        InformeSituacionVisitaComponent,
+        InformeComponent,
+        CrearCampoComponent,
+        VerInformeComponent,
+        KeysPipe],
+    exports: [
+        CrearActividadComponent,
+        CrearStatusComponent,
+        InformeActividadesComponent,
+        InformeContablesComponent,
+        InformeLogrosComponent,
+        InformeMetasComponent,
+        InformeVisitasComponent,
+        KeysPipe,
+    ],
 })
 export class InformeModule {}

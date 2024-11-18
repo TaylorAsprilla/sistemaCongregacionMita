@@ -5,8 +5,7 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
-  declarations: [BibliotecaMultimediaComponent],
-  imports: [CommonModule, PipesModule, YouTubePlayerModule],
-  exports: [BibliotecaMultimediaComponent],
+    imports: [CommonModule, PipesModule, YouTubePlayerModule, BibliotecaMultimediaComponent],
+    exports: [BibliotecaMultimediaComponent],
 })
 export class BibliotecaMultimediaModule {}

@@ -9,16 +9,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
-  declarations: [CensoAyudanteComponent],
-  imports: [
-    CommonModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    PipesModule,
-    VerCensoModule,
-    CargandoInformacionModule,
-  ],
+    imports: [
+        CommonModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserModule,
+        PipesModule,
+        VerCensoModule,
+        CargandoInformacionModule,
+        CensoAyudanteComponent,
+    ],
 })
 export class AyudantesModule {}

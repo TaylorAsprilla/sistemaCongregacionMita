@@ -8,8 +8,8 @@ describe('ExportarExcelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExportarExcelComponent ]
-    })
+    imports: [ExportarExcelComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ExportarExcelComponent);

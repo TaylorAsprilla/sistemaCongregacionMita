@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -8,11 +8,20 @@ import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
 import Swal from 'sweetalert2';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-crear-tipo-documento',
-  templateUrl: './crear-tipo-documento.component.html',
-  styleUrls: ['./crear-tipo-documento.component.scss'],
+    selector: 'app-crear-tipo-documento',
+    templateUrl: './crear-tipo-documento.component.html',
+    styleUrls: ['./crear-tipo-documento.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgxIntlTelInputModule,
+        NgFor,
+    ],
 })
 export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
   public tipoDocumentoForm: FormGroup;

@@ -4,11 +4,19 @@ import { delay } from 'rxjs/operators';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
 import { RazonSolicitudService } from 'src/app/services/razon-solicitud/razon-solicitud.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-razon-de-solicitud',
-  templateUrl: './razon-de-solicitud.component.html',
-  styleUrls: ['./razon-de-solicitud.component.scss'],
+    selector: 'app-razon-de-solicitud',
+    templateUrl: './razon-de-solicitud.component.html',
+    styleUrls: ['./razon-de-solicitud.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

@@ -19,11 +19,14 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { InformacionUsuarioComponent } from '../../components/informacion-usuario/informacion-usuario.component';
 
 @Component({
-  selector: 'app-perfil',
-  templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.css'],
+    selector: 'app-perfil',
+    templateUrl: './perfil.component.html',
+    styleUrls: ['./perfil.component.css'],
+    standalone: true,
+    imports: [InformacionUsuarioComponent],
 })
 export class PerfilComponent implements OnInit, OnDestroy {
   public usuario: UsuarioModel;
