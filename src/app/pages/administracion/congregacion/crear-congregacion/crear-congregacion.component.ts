@@ -176,11 +176,15 @@ export class CrearCongregacionComponent implements OnInit {
     }
   }
 
-  crearCredenciales(nombreCongregacion: string, email: string) {
+  crearCredenciales(nombreCongregacion: string, email: string): void {
+    // Buscar la congregación por nombre
     let congregacion = this.congregaciones.find((congregacion) => congregacion.congregacion === nombreCongregacion);
 
     if (congregacion) {
+      // Generar una nueva contraseña
       let password = this.generarPassword();
+
+      // Mostrar un Swal para confirmar la acción
       Swal.fire({
         title: 'CMAR LIVE',
         html: `Desea crear acceso a CMAR LIVE la congregación <b>${congregacion.congregacion}</b>`,
@@ -193,15 +197,16 @@ export class CrearCongregacionComponent implements OnInit {
         icon: 'question',
       }).then(async (result) => {
         if (result.isConfirmed) {
+          // Mostrar un formulario para ingresar credenciales
           const { value: formValues } = await Swal.fire({
             text: `Credenciales para ${congregacion.congregacion}`,
-            html:
-              `<p>Credenciales para <b>${congregacion.congregacion}</b></p>` +
-              `<label class="input-group obligatorio">Login: </label>
-              <input type="text" id="email" name="email" class="form-control"  value="${congregacion.email}"  required />` +
-              `<label class="input-group obligatorio">Contraseña: </label>
-              <input type="password" id="password" name="password" class="form-control" value="${password}" required />`,
-
+            html: `
+              <p>Credenciales para <b>${congregacion.congregacion}</b></p>
+              <label class="input-group obligatorio">Login: </label>
+              <input type="text" id="email" name="email" class="form-control" value="${congregacion.email}" required />
+              <label class="input-group obligatorio">Contraseña: </label>
+              <input type="password" id="password" name="password" class="form-control" value="${password}" required />
+            `,
             focusConfirm: true,
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -215,40 +220,48 @@ export class CrearCongregacionComponent implements OnInit {
           });
 
           if (formValues) {
+            // Crear el objeto de datos que se enviará al servicio
             const data: AccesoCongregacionMultimedia = {
-              email: email,
-              password: password,
+              email: formValues[0], // Utilizamos el email ingresado en el formulario
+              password: formValues[1], // Utilizamos la contraseña ingresada
               idCongregacion: congregacion.id,
             };
 
-            this.accesoMultimediaService.crearAccesoCongregacionMultimedia(data).subscribe(
-              (accesoCreado: any) => {
+            // Llamamos al servicio para crear el acceso
+            this.accesoMultimediaService.crearAccesoCongregacionMultimedia(data).subscribe({
+              next: (accesoCreado: any) => {
+                // Notificación si el acceso se creó correctamente
                 Swal.fire({
                   title: 'Acceso creado',
                   html: `Por favor revise el correo electrónico: <b>${email}</b>`,
                   icon: 'success',
                 });
               },
-              (error) => {
+              error: (error) => {
+                // Manejo de errores
                 let errores = error.error.errors;
-                let listaErrores = [];
+                let listaErrores: string[] = [];
 
-                if (!!errores) {
+                if (errores) {
+                  // Iterar sobre los errores y formatearlos para mostrarlos
                   Object.entries(errores).forEach(([key, value]) => {
-                    listaErrores.push('° ' + value['msg'] + '<br>');
+                    if (typeof value === 'object' && value !== null && 'msg' in value) {
+                      listaErrores.push(`° ${value['msg']}<br>`);
+                    }
                   });
                 }
 
+                // Mostrar mensaje de error si hubo problemas
                 Swal.fire({
                   title: 'El acceso NO ha sido creado',
                   icon: 'error',
                   html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
                 });
-              }
-            );
+              },
+            });
           }
         } else if (result.isDenied) {
-          Swal.fire('No se pudo crear las credeciales de CMAR LIVE', '', 'info');
+          Swal.fire('No se pudo crear las credenciales de CMAR LIVE', '', 'info');
         }
       });
     }
@@ -271,27 +284,39 @@ export class CrearCongregacionComponent implements OnInit {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
   }
 
-  manejarError(error: any, tipo: string) {
-    let title = tipo === 'crear' ? 'Error al crear congregación' : 'Error al actualizar congregación';
+  manejarError(error: any, tipo: string): void {
+    const title = tipo === 'crear' ? 'Error al crear congregación' : 'Error al actualizar congregación';
 
-    if (error.error.msg) {
+    if (error?.error?.msg) {
       Swal.fire({
         icon: 'info',
         html: error.error.msg,
       });
     }
 
-    let errores = error.error.errors;
-    let listaErrores = [];
+    if (error?.error?.errors) {
+      const errores = error.error.errors;
+      const listaErrores: string[] = [];
 
-    Object.entries(errores).forEach(([key, value]) => {
-      listaErrores.push('° ' + value['msg'] + '<br>');
-    });
+      // Iteramos sobre los errores y los formateamos para mostrar
+      Object.entries(errores).forEach(([key, value]) => {
+        if (typeof value === 'object' && value !== null && 'msg' in value) {
+          listaErrores.push(`° ${value['msg']}<br>`);
+        }
+      });
 
-    Swal.fire({
-      title: title,
-      icon: 'error',
-      html: `${listaErrores.join('')}`,
-    });
+      Swal.fire({
+        title: title,
+        icon: 'error',
+        html: listaErrores.join(''), // Unimos todos los errores en un string HTML
+      });
+    } else {
+      // Si no se reciben errores específicos, mostramos un mensaje genérico
+      Swal.fire({
+        title: title,
+        icon: 'error',
+        html: 'Hubo un error inesperado. Por favor, intenta nuevamente más tarde.',
+      });
+    }
   }
 }

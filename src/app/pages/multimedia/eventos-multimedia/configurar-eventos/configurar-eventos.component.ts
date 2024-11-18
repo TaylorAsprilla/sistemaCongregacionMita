@@ -137,7 +137,7 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
           },
           (error) => {
             let errores = error.error.errors;
-            let listaErrores = [];
+            let listaErrores: string[] = [];
 
             Object.entries(errores).forEach(([key, value]) => {
               listaErrores.push('° ' + value['msg'] + '<br>');

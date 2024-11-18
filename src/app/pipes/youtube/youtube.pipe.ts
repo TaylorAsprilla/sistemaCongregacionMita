@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   name: 'youtube',
 })
 export class YoutubePipe implements PipeTransform {
-  currentVideoId: string;
+  currentVideoId: string = '';
   constructor(protected domSanitizer: DomSanitizer) {}
 
   transform(video: any, args?: any[]): any {

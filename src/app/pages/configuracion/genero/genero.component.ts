@@ -89,7 +89,7 @@ export class GeneroComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.generoService.elimiminarGenero(genero).subscribe((generoEliminado: GeneroModel) => {
+        this.generoService.eliminarGenero(genero).subscribe(() => {
           Swal.fire('¡Deshabilitado!', `El género ${genero.genero} fue deshabilitado correctamente`, 'success');
 
           this.cargarGeneros();

@@ -76,7 +76,7 @@ export class TiposDeDocumentosComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.tipoDocumentoService
-          .elimiminarTipoDocumento(tipoDeDocumento)
+          .eliminarTipoDocumento(tipoDeDocumento)
           .subscribe((tipoDeDocumentoEliminado: TipoDocumentoModel) => {
             Swal.fire(
               '¡Deshabilitado!',

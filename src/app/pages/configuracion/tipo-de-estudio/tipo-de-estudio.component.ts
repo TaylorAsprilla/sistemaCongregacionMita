@@ -78,7 +78,7 @@ export class TipoDeEstudioComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.tipoEstudioService.eliminarTipoEmpleo(tipoEstudio).subscribe((tipoEstudioEliminado: TipoEstudioModel) => {
+        this.tipoEstudioService.eliminarTipoEstudio(tipoEstudio).subscribe((tipoEstudioEliminado: TipoEstudioModel) => {
           Swal.fire(
             '¡Deshabilitado!',
             `El tipo estudio ${tipoEstudio.estudio} fue deshabilitado correctamente`,
@@ -103,7 +103,7 @@ export class TipoDeEstudioComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.tipoEstudioService.activarTipoEmpleo(tipoEstudio).subscribe((tipoEstudioActiva: TipoEstudioModel) => {
+        this.tipoEstudioService.activarTipoEstudio(tipoEstudio).subscribe((tipoEstudioActiva: TipoEstudioModel) => {
           Swal.fire('¡Activado!', `El tipo de estudio ${tipoEstudio.estudio} fue activada correctamente`, 'success');
 
           this.cargartipoEstudios();

@@ -63,7 +63,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.paisService.eliminarPais(pais).subscribe((paisEliminado: CongregacionPaisModel) => {
+        this.paisService.eliminarPais(pais).subscribe(() => {
           Swal.fire('¡Deshabilitado!', `El país ${pais.pais} fue deshabilitado correctamente`, 'success');
 
           this.cargarPaises();

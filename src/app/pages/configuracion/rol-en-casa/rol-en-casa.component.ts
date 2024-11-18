@@ -38,7 +38,7 @@ export class RolEnCasaComponent implements OnInit, OnDestroy {
   }
 
   buscarRolCasa(id: number) {
-    return this.rolesCasa.find((rolCasa: RolCasaModel) => rolCasa.id === id).rolCasa;
+    return this.rolesCasa.find((rolCasa: RolCasaModel) => rolCasa.id === id)?.rolCasa;
   }
 
   async actualizarRolCasa(id: number) {
@@ -86,7 +86,7 @@ export class RolEnCasaComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.rolCasaService.elimiminarRolCasa(rolCasa).subscribe((rolCasaEliminado: RolCasaModel) => {
+        this.rolCasaService.eliminarRolCasa(rolCasa).subscribe((rolCasaEliminado: RolCasaModel) => {
           Swal.fire('¡Deshabilitado!', `El género ${rolCasa.rolCasa} fue deshabilitado correctamente`, 'success');
 
           this.cargarRolCasas();

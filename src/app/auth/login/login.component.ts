@@ -70,9 +70,9 @@ export class LoginComponent implements OnInit {
         }
 
         if (mensajeBienvenida) {
-          if (this.loginForm.get('remember').value) {
-            localStorage.setItem('login', this.loginForm.get('login').value);
-            localStorage.setItem('remember', this.loginForm.get('remember').value);
+          if (this.loginForm.get('remember')?.value) {
+            localStorage.setItem('login', this.loginForm.get('login')?.value);
+            localStorage.setItem('remember', this.loginForm.get('remember')?.value);
           } else {
             localStorage.removeItem('login');
           }

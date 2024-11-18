@@ -75,7 +75,7 @@ export class MinisteriosComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.ministerioService.activarministerio(ministerio).subscribe((ministerioActivo) => {
+        this.ministerioService.activarMinisterio(ministerio).subscribe((ministerioActivo) => {
           Swal.fire('¡Activado!', `El ministerio ${ministerio.ministerio} fue activado correctamente`, 'success');
 
           this.cargarMinisterios();

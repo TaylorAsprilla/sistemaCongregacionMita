@@ -13,7 +13,6 @@ import { RUTAS } from 'src/app/routes/menu-items';
 })
 export class CrearMinisterioComponent implements OnInit {
   ministerioForm: UntypedFormGroup;
-
   ministerios: MinisterioModel[] = [];
 
   ministerioSeleccionado: MinisterioModel;
@@ -38,58 +37,56 @@ export class CrearMinisterioComponent implements OnInit {
     });
   }
 
-  crearFormulario() {
+  crearFormulario(): void {
     this.ministerioForm = this.formBuilder.group({
       ministerio: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
-  buscarMinisterio(id: string) {
+  buscarMinisterio(id: string): void {
     if (id !== 'nuevo') {
-      this.ministerioSeleccionado = this.ministerios.find((ministerio) => ministerio.id === Number(id));
+      this.ministerioSeleccionado = this.ministerios.find((ministerio) => ministerio.id === Number(id)) || null;
       if (this.ministerioSeleccionado) {
         this.ministerioForm.patchValue({ ministerio: this.ministerioSeleccionado.ministerio });
       }
     }
   }
 
-  crearMinisterio() {
-    const ministerioNuevo = this.ministerioForm.value;
+  crearMinisterio(): void {
+    const ministerioNuevo: MinisterioModel = this.ministerioForm.value;
 
     if (this.ministerioSeleccionado) {
       this.actualizarMinisterio();
     } else {
-      this.ministerioService.crearMinisterio(ministerioNuevo).subscribe(
-        (ministerioCreado: any) => {
-          this.mostrarMensaje(
-            'Ministerio nuevo',
-            `El ministerio ${ministerioCreado.ministerioCreado.ministerio} se creó correctamente`
-          );
+      this.ministerioService.crearMinisterio(ministerioNuevo).subscribe({
+        next: (ministerioCreado: MinisterioModel) => {
+          this.mostrarMensaje('Ministerio nuevo', `El ministerio ${ministerioCreado.ministerio} se creó correctamente`);
           this.redirigir();
         },
-        (error) => {
-          this.manejarErrores(error);
-        }
-      );
+        error: (error) => this.manejarErrores(error),
+      });
     }
   }
 
-  actualizarMinisterio() {
-    const data = {
+  actualizarMinisterio(): void {
+    const data: MinisterioModel = {
       ...this.ministerioForm.value,
-      id: this.ministerioSeleccionado.id,
+      id: this.ministerioSeleccionado!.id,
     };
 
-    this.ministerioService.actualizarMinisterio(data).subscribe((ministerio: any) => {
-      this.mostrarMensaje(
-        'Ministerio Actualizado',
-        `El ministerio ${ministerio.ministerioActualizado.ministerio} se actualizó correctamente`
-      );
-      this.redirigir();
+    this.ministerioService.actualizarMinisterio(data).subscribe({
+      next: (ministerioActualizado: MinisterioModel) => {
+        this.mostrarMensaje(
+          'Ministerio Actualizado',
+          `El ministerio ${ministerioActualizado.ministerio} se actualizó correctamente`
+        );
+        this.redirigir();
+      },
+      error: (error) => this.manejarErrores(error),
     });
   }
 
-  mostrarMensaje(titulo: string, mensaje: string) {
+  mostrarMensaje(titulo: string, mensaje: string): void {
     Swal.fire({
       title: titulo,
       icon: 'success',
@@ -97,19 +94,20 @@ export class CrearMinisterioComponent implements OnInit {
     });
   }
 
-  manejarErrores(error) {
-    const errores = error.error.errors;
-    const msg = error.error.msg || '';
-    const listaErrores = errores ? Object.entries(errores).map(([key, value]) => '° ' + value['msg'] + '<br>') : [];
+  manejarErrores(error: any): void {
+    const errores = error?.error?.errors as { [key: string]: { msg: string } } | undefined;
+    const msg = error?.error?.msg || '';
+
+    const listaErrores = errores ? Object.values(errores).map((error) => '° ' + error.msg + '<br>') : [];
     const errorHtml = msg ? `${msg} ${listaErrores.join('')}` : listaErrores.join('');
     this.mostrarMensaje('Error al crear el ministerio', errorHtml);
   }
 
-  redirigir() {
+  redirigir(): void {
     this.router.navigate([RUTAS.SISTEMA, RUTAS.MINISTERIOS]);
   }
 
-  resetFormulario() {
+  resetFormulario(): void {
     this.ministerioForm.reset();
   }
 }

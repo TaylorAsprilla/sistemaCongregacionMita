@@ -39,7 +39,7 @@ export class InformeComponent implements OnInit {
 
   trimestres = [this.finPrimerTrimestre, this.finSegundoTrimestre, this.finTercerTrimestre, this.finCuartoTrimestre];
 
-  escogerTrimestre(finalTrimestreActual) {
+  escogerTrimestre(finalTrimestreActual: number) {
     var ahora = new Date().getTime();
 
     for (var i = 0; i < this.trimestres.length; i++) {

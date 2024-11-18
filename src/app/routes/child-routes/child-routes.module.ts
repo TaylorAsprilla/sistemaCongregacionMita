@@ -177,7 +177,7 @@ const childRoutes: Routes = [
   {
     path: `${RUTAS.PAISES}/:id`,
     component: CrearPaisComponent,
-    resolve: { divisas: DivisasResolver, obrero: ObreroResolver },
+    resolve: { divisas: DivisasResolver, obreros: ObreroResolver },
     data: { titulo: 'Crear Pais' },
   },
   {

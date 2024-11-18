@@ -12,6 +12,7 @@ import { DivisaService } from 'src/app/services/divisa/divisa.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { ObreroInterface, ObreroModel } from 'src/app/core/models/obrero.model';
 
 @Component({
   selector: 'app-crear-pais',
@@ -24,7 +25,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   public paises: CongregacionPaisModel[] = [];
   public divisas: DivisaModel[] = [];
   public usuarios: UsuarioModel[] = [];
-  public obreros: UsuarioModel[] = [];
+  public obreros: ObreroInterface[] = [];
 
   public paisSeleccionado: CongregacionPaisModel;
 
@@ -47,7 +48,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
       this.buscarPais(id);
     });
 
-    this.activatedRoute.data.subscribe((data: { obrero: UsuarioModel[] }) => {
+    this.activatedRoute.data.subscribe((data: any) => {
       this.obreros = data.obrero;
     });
 
@@ -130,36 +131,34 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
     }
   }
 
-  buscarPais(id: string) {
-    if (id !== 'nuevo') {
-      this.paisService
-        .getPais(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (paisEncontrado: CongregacionPaisModel) => {
-            const { pais, idObreroEncargado, idDivisa } = paisEncontrado;
-            this.paisSeleccionado = paisEncontrado;
+  buscarPais(id: string): void {
+    // Si el id es "nuevo", simplemente salir de la función
+    if (id === 'nuevo') return;
 
-            this.paisForm.setValue({ pais, idDivisa, idObreroEncargado });
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
+    // Obtener el país solo si el id no es "nuevo"
+    this.paisService
+      .getPais(Number(id))
+      .pipe(delay(100))
+      .subscribe(
+        (paisEncontrado: CongregacionPaisModel) => {
+          const { pais, idObreroEncargado, idDivisa } = paisEncontrado;
+          this.paisSeleccionado = paisEncontrado;
 
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
+          this.paisForm.setValue({ pais, idDivisa, idObreroEncargado });
+        },
+        (error) => {
+          const errores = error.error.errors || [];
+          const listaErrores = Object.entries(errores).map(([, value]) => '° ' + value['msg'] + '<br>');
 
-            Swal.fire({
-              title: 'Congregacion',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
-          }
-        );
-    }
+          Swal.fire({
+            title: 'Error en Congregación',
+            icon: 'error',
+            html: listaErrores.length ? listaErrores.join('') : 'Ocurrió un error al obtener el país.',
+          }).then(() => {
+            this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
+          });
+        }
+      );
   }
 
   resetFormulario() {

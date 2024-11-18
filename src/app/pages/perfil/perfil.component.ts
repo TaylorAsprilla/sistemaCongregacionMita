@@ -1,12 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
-import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
-import { DosisModel } from 'src/app/core/models/dosis.model';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
 import { GeneroModel } from 'src/app/core/models/genero.model';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
@@ -21,6 +18,7 @@ import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 
 @Component({
   selector: 'app-perfil',
@@ -74,12 +72,16 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.generos = data.genero;
         this.gradosAcademicos = data.gradoAcademico;
         this.tipoMiembros = data.tipoMiembro;
-        this.congregaciones = data.congregacion.filter((congregacion) => congregacion.estado === true);
-        this.ministerios = data.ministerio.filter((ministerio) => ministerio.estado === true);
+        this.congregaciones = data.congregacion.filter(
+          (congregacion: CongregacionModel) => congregacion.estado === true
+        );
+        this.ministerios = data.ministerio.filter((ministerio: MinisterioModel) => ministerio.estado === true);
         this.voluntariados = data.voluntariado;
-        this.paises = data.pais.filter((pais) => pais.estado === true);
-        this.campos = data.campo.filter((campo) => campo.estado === true);
-        this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
+        this.paises = data.pais.filter((pais: CongregacionPaisModel) => pais.estado === true);
+        this.campos = data.campo.filter((campo: CampoModel) => campo.estado === true);
+        this.tiposDeDocumentos = data.tipoDocumento.filter(
+          (tipoDocumento: TipoDocumentoModel) => tipoDocumento.estado === true
+        );
         this.usuario = data.usuario.usuario;
       }
     );
@@ -113,10 +115,12 @@ export class PerfilComponent implements OnInit, OnDestroy {
           },
           (error) => {
             let errores = error.error.errors;
-            let listaErrores = [];
+            let listaErrores: string[] = [];
 
             Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
+              if (value && typeof value === 'object' && 'msg' in value) {
+                listaErrores.push(`° ${value['msg']}<br>`);
+              }
             });
 
             Swal.fire({
@@ -130,8 +134,16 @@ export class PerfilComponent implements OnInit, OnDestroy {
     });
   }
 
-  arrayUsuarioData(dataType: string) {
-    const data = this.usuario?.[dataType];
-    return Array.isArray(data) ? data.map((item: any) => item?.id).filter(Boolean) : [];
+  arrayUsuarioData(dataType: keyof UsuarioModel): number[] {
+    // Verificamos si 'dataType' existe en 'usuario' y es un arreglo
+    const data = this.usuario[dataType];
+
+    // Si 'data' es un arreglo, mapeamos los ids y filtramos los valores no válidos
+    if (Array.isArray(data)) {
+      return data.map((item: any) => item?.id).filter(Boolean);
+    }
+
+    // Si no es un arreglo o no existe, devolvemos un arreglo vacío
+    return [];
   }
 }

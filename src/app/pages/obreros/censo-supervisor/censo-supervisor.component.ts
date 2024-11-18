@@ -16,11 +16,11 @@ import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-corre
 })
 export class CensoSupervisorComponent implements OnInit {
   nombreArchivo: string;
-  nombreCongregacionPais: string;
+  nombreCongregacionPais: string | undefined;
   cargando: boolean = true;
   usuarios: UsuariosPorCongregacionInterface[] = [];
   totalUsuarios: number = 0;
-  idUsuario: number;
+  idUsuario: number | undefined;
 
   // Subscription
   usuarioSubscription: Subscription;
@@ -45,13 +45,15 @@ export class CensoSupervisorComponent implements OnInit {
 
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioSubscription = this.usuariosPorCongregacionService
-      .listarUsuariosPorPais(this.idUsuario)
-      .subscribe(({ totalUsuarios, usuarios }) => {
-        this.totalUsuarios = totalUsuarios;
-        this.usuarios = usuarios;
-        this.cargando = false;
-      });
+    if (this.idUsuario) {
+      this.usuarioSubscription = this.usuariosPorCongregacionService
+        .listarUsuariosPorPais(this.idUsuario)
+        .subscribe(({ totalUsuarios, usuarios }) => {
+          this.totalUsuarios = totalUsuarios;
+          this.usuarios = usuarios;
+          this.cargando = false;
+        });
+    }
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {

@@ -84,7 +84,7 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
           const listaErrores: string[] = [];
 
           Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
+            listaErrores.push('° ' + (value as { msg: string })['msg'] + '<br>');
           });
 
           Swal.fire({
@@ -103,19 +103,21 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
       this.tipoDocumentoService
         .getTipoDocumento(id)
         .pipe(delay(100))
-        .subscribe(
-          (tipoDeDocumentoEncontrado: TipoDocumentoModel) => {
-            const { documento, pais_id } = tipoDeDocumentoEncontrado;
-            this.tipoDeDocumentoSeleccionado = tipoDeDocumentoEncontrado;
+        .subscribe({
+          next: (tipoDeDocumentoEncontrado: TipoDocumentoModel | null) => {
+            if (tipoDeDocumentoEncontrado) {
+              const { documento, pais_id } = tipoDeDocumentoEncontrado;
+              this.tipoDeDocumentoSeleccionado = tipoDeDocumentoEncontrado;
 
-            this.tipoDocumentoForm.setValue({ documento, pais_id });
+              this.tipoDocumentoForm.setValue({ documento, pais_id });
+            }
           },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
+          error: (error) => {
+            const errores = error.error.errors as { [key: string]: { msg: string } };
+            const listaErrores: string[] = [];
 
             Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
+              listaErrores.push('° ' + value.msg + '<br>');
             });
 
             Swal.fire({
@@ -124,9 +126,9 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_DOCUMENTO}`);
-          }
-        );
+            this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_DOCUMENTO}`);
+          },
+        });
     }
   }
 

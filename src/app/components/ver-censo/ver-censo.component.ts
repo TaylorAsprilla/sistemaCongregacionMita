@@ -45,16 +45,13 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   nombreCampo: string = '';
   usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
-  selectedContact: number;
+  selectedContact: number | null;
   tableSize: number = 50;
 
   cargando: boolean = true;
-  paisSubscription: Subscription;
-  campoSubscription: Subscription;
   congregaciones: CongregacionModel[] = [];
   congregacionesFiltradas: CongregacionModel[] = [];
   congregacionesFiltradasId: number[];
-  congregacionSubscription: Subscription;
 
   pagina: number = 1;
   filtrarTexto: string = '';
@@ -64,7 +61,10 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   originalCongre: string = '';
   filtrarCampoTexto: string = '';
 
+  paisSubscription: Subscription;
+  campoSubscription: Subscription;
   usuarioSubscription: Subscription;
+  congregacionSubscription: Subscription;
 
   isMobile: Observable<BreakpointState>;
   isFiltrosVisibles: boolean = false;
@@ -103,9 +103,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['usuarios']?.currentValue) {
       this.usuariosFiltrados = this.usuarios;
-      this.nombrePais = this.usuarios[0]?.usuarioCongregacionPais[0]?.pais;
-      this.nombreCongregacion = this.usuarios[0]?.usuarioCongregacionCongregacion[0]?.congregacion;
-      this.nombreCampo = this.usuarios[0]?.usuarioCongregacionCampo[0]?.campo;
+      this.nombrePais = this.usuarios[0]?.usuarioCongregacionPais?.[0]?.pais ?? '';
+      this.nombreCongregacion = this.usuarios[0]?.usuarioCongregacionCongregacion?.[0]?.congregacion ?? '';
+      this.nombreCampo = this.usuarios[0]?.usuarioCongregacionCampo?.[0]?.campo ?? '';
     }
   }
 
@@ -185,41 +185,47 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     congre: string,
     camp: string
   ): UsuariosPorCongregacionInterface[] {
-    country = country.toLocaleLowerCase();
+    const lowerFilterTerm = filterTerm.toLocaleLowerCase();
+    const lowerCountry = country.toLocaleLowerCase();
+    const lowerCongre = congre.toLocaleLowerCase();
+    const lowerCamp = camp.toLocaleLowerCase();
 
-    congre = congre.toLocaleLowerCase();
-    camp = camp.toLocaleLowerCase();
-    filterTerm = filterTerm.toLocaleLowerCase();
-    if (this.usuarios.length === 0 && (filterTerm === '' || country === '' || congre === '')) {
+    // Si no hay usuarios y los filtros están vacíos, devolvemos todos los usuarios
+    if (this.usuarios.length === 0 && (lowerFilterTerm === '' || lowerCountry === '' || lowerCongre === '')) {
       return this.usuarios;
     } else {
       return this.usuarios.filter((usuario: UsuariosPorCongregacionInterface) => {
-        const primerNombre = usuario.primerNombre ? usuario.primerNombre.toLocaleLowerCase() : '';
-        const primerApellido = usuario.primerApellido ? usuario.primerApellido.toLocaleLowerCase() : '';
-        const segundoApellido = usuario.segundoApellido ? usuario.segundoApellido.toLocaleLowerCase() : '';
-        const email = usuario.email ? usuario.email.toLocaleLowerCase() : '';
-        const congregacion = usuario.usuarioCongregacionCongregacion[0].congregacion
+        // Utilizamos una función de utilidad para convertir a minúsculas de forma segura
+        const getSafeString = (value: string | undefined): string => (value ? value.toLocaleLowerCase() : '');
+
+        const primerNombre = getSafeString(usuario.primerNombre);
+        const primerApellido = getSafeString(usuario.primerApellido);
+        const segundoApellido = getSafeString(usuario.segundoApellido);
+        const email = getSafeString(usuario.email);
+        const numeroCelular = usuario.numeroCelular || '';
+
+        // Obtener los valores relacionados con la congregación, país y campo de forma segura
+        const congregacion = usuario.usuarioCongregacionCongregacion?.[0]?.congregacion
           ? usuario.usuarioCongregacionCongregacion[0].congregacion.toLocaleLowerCase()
           : '';
-        const pais = usuario.usuarioCongregacionPais[0].pais
+        const pais = usuario.usuarioCongregacionPais?.[0]?.pais
           ? usuario.usuarioCongregacionPais[0].pais.toLocaleLowerCase()
           : '';
-        const campo = usuario.usuarioCongregacionCampo[0].campo
+        const campo = usuario.usuarioCongregacionCampo?.[0]?.campo
           ? usuario.usuarioCongregacionCampo[0].campo.toLocaleLowerCase()
           : '';
-        const numeroCelular = usuario.numeroCelular ? usuario.numeroCelular : '';
 
         // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
         return (
-          (primerNombre.includes(filterTerm) ||
-            primerApellido.includes(filterTerm) ||
-            segundoApellido.includes(filterTerm) ||
-            email.includes(filterTerm) ||
-            numeroCelular.includes(filterTerm) ||
-            usuario.id.toString().includes(filterTerm)) &&
-          congregacion.includes(congre) &&
-          pais.includes(country) &&
-          campo.includes(camp)
+          (primerNombre.includes(lowerFilterTerm) ||
+            primerApellido.includes(lowerFilterTerm) ||
+            segundoApellido.includes(lowerFilterTerm) ||
+            email.includes(lowerFilterTerm) ||
+            numeroCelular.includes(lowerFilterTerm) ||
+            usuario.id.toString().includes(lowerFilterTerm)) &&
+          congregacion.includes(lowerCongre) &&
+          pais.includes(lowerCountry) &&
+          campo.includes(lowerCamp)
         );
       });
     }
@@ -330,39 +336,43 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       const usuario = respuesta.usuario;
 
       const numeroMita = usuario.id;
-      const fechaDeNacimiento = usuario.fechaNacimiento ? usuario.fechaNacimiento : null;
+      const fechaDeNacimiento = usuario.fechaNacimiento;
       const nombre = `${usuario?.primerNombre} ${usuario?.segundoNombre} ${usuario?.primerApellido} ${usuario?.segundoApellido}`;
       const apodo = usuario.apodo ? usuario.apodo : '';
       const email = usuario.email ? usuario.email : '';
-      const genero = usuario.genero.estado ? usuario.genero.genero : '';
-      const estadoCivil = usuario.estadoCivil.estadoCivil ? usuario.estadoCivil.estadoCivil : '';
+      const genero = usuario.genero?.genero ? usuario.genero.genero : '';
+      const estadoCivil = usuario.estadoCivil?.estadoCivil ? usuario.estadoCivil.estadoCivil : '';
       const nacionalidad = usuario.nacionalidad?.nombre ? usuario.nacionalidad?.nombre : '';
-      const rolEnCasa = usuario.rolCasa.rolCasa ? usuario.rolCasa.rolCasa : '';
+      const rolEnCasa = usuario.rolCasa?.rolCasa ? usuario.rolCasa.rolCasa : '';
       const celular = usuario.numeroCelular ? usuario.numeroCelular : '';
       const telefonoCasa = usuario.telefonoCasa ? usuario.telefonoCasa : '';
       const direccion = `${usuario?.direccion}, ${usuario?.ciudadDireccion},  ${usuario?.departamentoDireccion}, ${usuario?.paisDireccion}, ${usuario?.codigoPostalDireccion}`;
       const direccionPostal = usuario?.direccionPostal
         ? `${usuario?.direccionPostal}, ${usuario?.ciudadPostal}, ${usuario?.departamentoPostal}, ${usuario?.paisPostal}, ${usuario?.codigoPostal}`
         : '';
-      const gradoAcademico = usuario.gradoAcademico.gradoAcademico ? usuario.gradoAcademico.gradoAcademico : '';
+      const gradoAcademico = usuario.gradoAcademico?.gradoAcademico ? usuario.gradoAcademico.gradoAcademico : '';
       const ocupacion = usuario.ocupacion || '';
       const especializacionEmpleo = usuario.especializacionEmpleo ? usuario.especializacionEmpleo : '';
-      const tipoMiembro = usuario?.tipoMiembro.miembro ? usuario.tipoMiembro.miembro : '';
+      const tipoMiembro = usuario.tipoMiembro?.miembro ? usuario.tipoMiembro.miembro : '';
       const esjoven = usuario.esJoven ? 'Sí' : 'No';
       const ministerio = usuario.usuarioMinisterio ? this.obtenerNombresMinisterios(usuario.usuarioMinisterio) : false;
       const voluntario = usuario.usuarioVoluntariado
         ? this.obtenerNombresVoluntariados(usuario.usuarioVoluntariado)
         : '';
-      const congregacionPais = usuario?.usuarioCongregacionPais[0]?.pais
-        ? usuario?.usuarioCongregacionPais[0]?.pais
+
+      const congregacionPais = usuario.usuarioCongregacionPais?.[0]?.pais
+        ? usuario.usuarioCongregacionPais[0].pais
         : '';
-      const congreacionCiudad = usuario?.usuarioCongregacionCongregacion[0]?.congregacion
-        ? usuario?.usuarioCongregacionCongregacion[0]?.congregacion
+
+      const congreacionCiudad = usuario.usuarioCongregacionCongregacion?.[0]?.congregacion
+        ? usuario.usuarioCongregacionCongregacion[0].congregacion
         : '';
-      const congregacionCampo = usuario?.usuarioCongregacionCampo[0]?.campo
-        ? usuario?.usuarioCongregacionCampo[0]?.campo
+
+      const congregacionCampo = usuario.usuarioCongregacionCampo?.[0]?.campo
+        ? usuario.usuarioCongregacionCampo[0].campo
         : '';
-      const tipoDeDocumento = usuario?.tipoDocumento.documento
+
+      const tipoDeDocumento = usuario?.tipoDocumento?.documento
         ? usuario.tipoDocumento.documento
         : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
       const numeroDocumento = usuario?.numeroDocumento ? usuario?.numeroDocumento : '';
@@ -484,7 +494,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
                     </tr>
                      <tr>
                       <td class="col-md-5">Fecha de Nacimiento:</td>
-                      <td class="col-md-7">${new Date(fechaDeNacimiento).toLocaleDateString()}</td>
+                      <td class="col-md-7">${fechaDeNacimiento}</td>
                     </tr>
                   </tbody>
                 </table>`,

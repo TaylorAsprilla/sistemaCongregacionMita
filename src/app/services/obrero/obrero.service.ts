@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { map, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
-import { ObreroModel } from 'src/app/core/models/obrero.model';
+import { ObreroInterface, ObreroModel } from 'src/app/core/models/obrero.model';
+import { UsuarioModel } from 'src/app/core/models/usuario.model';
 
 const base_url = environment.base_url;
 
@@ -27,8 +28,8 @@ export class ObreroService {
   }
 
   // Obtener todos los obreros
-  getObreros(): Observable<ObreroModel[]> {
-    return this.httpClient.get<{ ok: boolean; obreros: ObreroModel[] }>(`${base_url}/obrero`, this.headers).pipe(
+  getObreros(): Observable<ObreroInterface[]> {
+    return this.httpClient.get<{ ok: boolean; obreros: ObreroInterface[] }>(`${base_url}/obrero`, this.headers).pipe(
       map((response) => (response.ok ? response.obreros : [])),
       catchError(this.handleError)
     );

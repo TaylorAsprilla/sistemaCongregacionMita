@@ -18,10 +18,10 @@ export class CensoObreroComponent implements OnInit, OnDestroy {
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
 
-  idUsuario: number;
+  idUsuario: number | undefined;
 
   paginaDesde: number = 0;
-  congregacion: string;
+  congregacion: string | undefined;
   nombreArchivo: string;
 
   cargando: boolean = true;

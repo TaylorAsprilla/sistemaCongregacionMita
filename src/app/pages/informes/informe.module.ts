@@ -8,13 +8,13 @@ import { InformeContablesComponent } from './informe-contables/informe-contables
 import { InformeLogrosComponent } from './informe-logros/informe-logros.component';
 import { InformeMetasComponent } from './informe-metas/informe-metas.component';
 import { InformeVisitasComponent } from './informe-visitas/informe-visitas.component';
-import { InformeSituacionVisitaComponent } from './informe-situacion-visita/informe-situacion-visita.component';
 import { InformeComponent } from './informe/informe.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CrearCampoComponent } from '../administracion/campo/crear-campo/crear-campo.component';
 import { VerInformeComponent } from './ver-informe/ver-informe.component';
 import { KeysPipe } from './ver-informe/keys.pipe';
 import { SeccionInformeModule } from 'src/app/components/seccion-informe/seccion-informe.module';
+import { InformeSituacionVisitaComponent } from './informe-situacion-visita/informe-situacion-visita.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,7 @@ import { SeccionInformeModule } from 'src/app/components/seccion-informe/seccion
     InformeLogrosComponent,
     InformeMetasComponent,
     InformeVisitasComponent,
-    InformeSituacionVisitaComponent,
+
     KeysPipe,
   ],
 })

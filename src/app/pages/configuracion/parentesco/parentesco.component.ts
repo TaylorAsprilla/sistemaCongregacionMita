@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
@@ -38,31 +37,40 @@ export class ParentescoComponent implements OnInit {
       });
   }
 
-  async buscarParentesco(id: number) {
+  async buscarParentesco(id: number): Promise<string> {
     let tipoDeParentesco = '';
     if (id) {
-      this.parentescoService
-        .getUnParentesco(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (parentescoEncontrada: ParentescoModel) => {
-            tipoDeParentesco = parentescoEncontrada.nombre;
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
-
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-
+      this.parentescoService.getUnParentesco(id).subscribe({
+        next: (parentescoEncontrado: ParentescoModel | null) => {
+          if (parentescoEncontrado) {
+            // Manejar el caso en que el parentesco es encontrado
+            tipoDeParentesco = parentescoEncontrado.nombre;
+            console.log('Parentesco encontrado:', tipoDeParentesco);
+          } else {
+            // Manejar el caso en que el parentesco no es encontrado
             Swal.fire({
               title: 'Parentesco',
               icon: 'error',
-              html: `${listaErrores.join('')}`,
+              html: 'Parentesco no encontrado',
             });
           }
-        );
+        },
+        error: (error) => {
+          // Manejar errores de la llamada HTTP
+          const errores = error.error.errors as { [key: string]: { msg: string } };
+          const listaErrores: string[] = [];
+
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
+
+          Swal.fire({
+            title: 'Error al obtener el parentesco',
+            icon: 'error',
+            html: `${listaErrores.join('')}`,
+          });
+        },
+      });
     }
 
     return tipoDeParentesco;
@@ -106,7 +114,7 @@ export class ParentescoComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.parentescoService.eliminarParentesco(parentesco).subscribe((parentescoEliminado: ParentescoModel) => {
+        this.parentescoService.eliminarParentesco(parentesco).subscribe(() => {
           Swal.fire('¡Deshabilitado!', `El parentesco ${parentesco.nombre} fue deshabilitado correctamente`, 'success');
 
           this.cargarParentescos();

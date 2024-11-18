@@ -114,16 +114,19 @@ export class CamposComponent implements OnInit {
     return nombreObrero;
   }
 
-  buscarPais(idPais: number): string {
+  buscarPais(idPais: number): string | undefined {
     return this.paises.find((pais) => pais.id === idPais)?.pais;
   }
 
-  buscarCongregacion(idCongregacion: number): object {
+  buscarCongregacion(idCongregacion: number): { congregacion?: string; pais?: string } {
     const congregacion = this.congregaciones.find((congregacion) => congregacion.id === idCongregacion);
 
-    this.buscarPais(congregacion?.pais_id);
+    if (congregacion) {
+      const pais = this.buscarPais(congregacion.pais_id);
+      return { congregacion: congregacion.congregacion, pais };
+    }
 
-    return { congregacion: congregacion?.congregacion, pais: this.buscarPais(congregacion?.pais_id) };
+    return {}; // Retorna un objeto vacío si no se encuentra la congregación
   }
 
   obtenerFiltroNombre(nombre: string) {

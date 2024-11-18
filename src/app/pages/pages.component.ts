@@ -16,7 +16,7 @@ export class PagesComponent implements OnInit {
   showDarktheme = false;
   showRtl = false;
 
-  multimediaCongregacion: MultimediaCongregacionModel;
+  multimediaCongregacion: MultimediaCongregacionModel | undefined = undefined;
 
   public innerWidth: any;
 

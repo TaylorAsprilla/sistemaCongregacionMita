@@ -188,15 +188,15 @@
           </td>
 
           <td>
-            <span *ngIf="!!usuario.usuarioCongregacionPais[0].pais" class="badge badge-primary">
-              {{ this.usuario.usuarioCongregacionPais[0].pais }}
+            <span *ngIf="!!usuario.usuarioCongregacionPais?.[0]?.pais" class="badge badge-primary">
+              {{ usuario.usuarioCongregacionPais?.[0]?.pais }}
             </span>
-            <span *ngIf="!!usuario.usuarioCongregacionCongregacion[0].congregacion" class="badge badge-danger">
-              {{ this.usuario.usuarioCongregacionCongregacion[0].congregacion }}</span
+            <span *ngIf="!!usuario.usuarioCongregacionCongregacion?.[0]?.congregacion" class="badge badge-danger">
+              {{ usuario.usuarioCongregacionCongregacion?.[0]?.congregacion }}</span
             >
             <p>
-              <span *ngIf="!!usuario.usuarioCongregacionCampo[0].campo" class="badge badge-success">
-                {{ this.usuario.usuarioCongregacionCampo[0].campo }}
+              <span *ngIf="!!usuario.usuarioCongregacionCampo?.[0]?.campo" class="badge badge-success">
+                {{ usuario.usuarioCongregacionCampo?.[0]?.campo}}
               </span>
             </p>
           </td>

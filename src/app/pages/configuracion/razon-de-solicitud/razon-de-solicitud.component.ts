@@ -37,44 +37,50 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
       });
   }
 
-  buscarRazonSolicitud(id: number) {
+  async buscarRazonSolicitud(id: number) {
     let razonSolicitud = '';
     if (id) {
-      this.razonSolicitudService
-        .getUnaRazonsolicitud(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (razonEncontrada: RazonSolicitudModel) => {
-            razonSolicitud = razonEncontrada.solicitud;
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
+      try {
+        const razonEncontrada = await this.razonSolicitudService.getUnaRazonsolicitud(id).pipe(delay(100)).toPromise();
+        if (razonEncontrada) {
+          // Manejar el caso en que la razón de solicitud es encontrada
+          razonSolicitud = razonEncontrada.solicitud;
+          console.log('Razón de solicitud encontrada:', razonSolicitud);
+        } else {
+          // Manejar el caso en que la razón de solicitud no es encontrada
+          Swal.fire({
+            title: 'Razón de Solicitud',
+            icon: 'error',
+            html: 'Razón de solicitud no encontrada',
+          });
+        }
+      } catch (error) {
+        // Manejar errores de la llamada HTTP
+        const errores = (error as any).error.errors as { [key: string]: { msg: string } };
+        const listaErrores: string[] = [];
 
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
+        Object.entries(errores).forEach(([key, value]) => {
+          listaErrores.push('° ' + value['msg'] + '<br>');
+        });
 
-            Swal.fire({
-              title: 'Razon Solicitud',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-          }
-        );
+        Swal.fire({
+          title: 'Error al obtener la razón de solicitud',
+          icon: 'error',
+          html: `${listaErrores.join('')}`,
+        });
+      }
     }
 
     return razonSolicitud;
   }
 
   async actualizarRazonSolicitud(id: number) {
-    let opt = this.buscarRazonSolicitud(id);
+    const opt = await this.buscarRazonSolicitud(id);
 
     const { value: opcion } = await Swal.fire({
       title: 'Actualizar',
       input: 'text',
       inputLabel: 'Razón de Solicitud',
-
       showCancelButton: true,
       inputPlaceholder: opt,
     });
@@ -85,19 +91,33 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
         id: id,
         estado: true,
       };
-      this.razonSolicitudService.actualizarRazonSolicitud(data).subscribe((razonActiva: RazonDeSolicitudComponent) => {
-        Swal.fire('Creada!', `La razón de la solicitud ${opcion.solicitud} fue creada correctamente`, 'success');
+      this.razonSolicitudService.actualizarRazonSolicitud(data).subscribe({
+        next: (razonActiva: RazonSolicitudModel) => {
+          Swal.fire('Actualizada!', `La razón de la solicitud fue actualizada correctamente`, 'success');
+          this.cargarRazonSolicitud();
+        },
+        error: (error) => {
+          const errores = error.error.errors as { [key: string]: { msg: string } };
+          const listaErrores: string[] = [];
 
-        this.cargarRazonSolicitud();
+          Object.entries(errores).forEach(([key, value]) => {
+            listaErrores.push('° ' + value['msg'] + '<br>');
+          });
+
+          Swal.fire({
+            title: 'Error al actualizar la razón de solicitud',
+            icon: 'error',
+            html: `${listaErrores.join('')}`,
+          });
+        },
       });
-      Swal.fire(`${opcion} creada!`);
     }
   }
 
   borrarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
     Swal.fire({
       title: '¿Borrar?',
-      text: `Esta seguro de borrar ${razonSolicitud.solicitud}`,
+      text: `¿Está seguro de borrar ${razonSolicitud.solicitud}?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -106,17 +126,30 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.razonSolicitudService
-          .elimiminarRazonsolicitud(razonSolicitud)
-          .subscribe((razonSolicitudEliminado: RazonSolicitudModel) => {
+        this.razonSolicitudService.eliminarRazonsolicitud(razonSolicitud).subscribe({
+          next: (razonSolicitudEliminado: RazonSolicitudModel) => {
             Swal.fire(
               '¡Deshabilitado!',
               `La razón de solicitud ${razonSolicitud.solicitud} fue deshabilitada correctamente`,
               'success'
             );
-
             this.cargarRazonSolicitud();
-          });
+          },
+          error: (error: any) => {
+            const errores = error.error.errors as { [key: string]: { msg: string } };
+            const listaErrores: string[] = [];
+
+            Object.entries(errores).forEach(([key, value]) => {
+              listaErrores.push('° ' + value['msg'] + '<br>');
+            });
+
+            Swal.fire({
+              title: 'Error al deshabilitar la razón de solicitud',
+              icon: 'error',
+              html: `${listaErrores.join('')}`,
+            });
+          },
+        });
       }
     });
   }

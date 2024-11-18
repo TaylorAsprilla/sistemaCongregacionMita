@@ -85,11 +85,11 @@ export class InformacionUsuarioComponent implements OnInit {
 
   @Output() operacion = new EventEmitter<RegisterFormInterface>();
 
-  letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
+  letrasFiltrarNacionalidad: Observable<NacionalidadModel[]> | undefined;
 
   usuarioSeleccionado: UsuarioModel;
   congregacionesFiltradas: CongregacionModel[] = [];
-  camposFiltrados: CampoModel[] = [];
+  camposFiltrados: CampoModel[] | null = [];
 
   mensajeBuscarCorreo: string = '';
   sinCongregacion: number;
@@ -101,35 +101,35 @@ export class InformacionUsuarioComponent implements OnInit {
   primerApellido: string;
   segundoApellio: string;
   apodo: string;
-  email: string;
-  genero_id: number;
-  estadoCivil_id: number;
+  email: string | null;
+  genero_id: number | null;
+  estadoCivil_id: number | null;
   nacionalidad: string;
-  rolEnCasa: number;
-  celular: string;
+  rolEnCasa: number | null;
+  celular: string | null;
   telefonoCasa: string;
   direccion: string;
   ciudadDireccion: string;
-  departamentoDireccion: string;
-  codigoPostalDireccion: string;
+  departamentoDireccion: string | undefined;
+  codigoPostalDireccion: string | undefined;
   paisDireccion: string;
-  direccionPostal: string;
-  ciudadPostal: string;
-  departamentoPostal: string;
-  codigoPostal: string;
-  paisPostal: string;
-  gradoAcademico: number;
+  direccionPostal: string | undefined;
+  ciudadPostal: string | undefined;
+  departamentoPostal: string | undefined;
+  codigoPostal: string | undefined;
+  paisPostal: string | undefined;
+  gradoAcademico: number | null;
   ocupacion: string;
   especializacionEmpleo: string;
-  tipoMiembro: number;
+  tipoMiembro: number | null;
   esjoven: number;
   ejerMinisterio: boolean;
   voluntario: boolean;
-  ministerioUsuario: number[];
-  voluntarioUsuario: number[];
-  congregacionPais: number;
-  congreacionCiudad: number;
-  congregacionCampo: number;
+  ministerioUsuario: number[] | null;
+  voluntarioUsuario: number[] | null;
+  congregacionPais: string | null;
+  congreacionCiudad: string | null;
+  congregacionCampo: string | null;
   dosisUsuario: number;
   tipoDeDocumento: string;
   numeroDocumento: string;
@@ -166,58 +166,51 @@ export class InformacionUsuarioComponent implements OnInit {
     this.crearFormularios();
 
     this.tieneTipoDocumento();
-    this.filtrarCongregacionesPorPais(this.usuario?.usuarioCongregacionPais[0]?.id);
-    this.filtrarCamposPorCongregacion(this.usuario?.usuarioCongregacionCongregacion[0]?.id);
+    this.filtrarCongregacionesPorPais(this.usuario?.usuarioCongregacionPais?.[0]?.id);
+    this.filtrarCamposPorCongregacion(this.usuario?.usuarioCongregacionCongregacion?.[0]?.id);
     this.onPaisChange();
   }
 
   informacionDelUsuario() {
-    this.fechaDeNacimiento = this.usuario?.fechaNacimiento ? this.usuario.fechaNacimiento : null;
-    this.primerNombre = this.usuario?.primerNombre ? this.usuario.primerNombre : '';
-    this.segundoNombre = this.usuario?.segundoNombre ? this.usuario.segundoNombre : '';
-    this.primerApellido = this.usuario?.primerApellido ? this.usuario.primerApellido : '';
-    this.segundoApellio = this.usuario?.segundoApellido ? this.usuario.segundoApellido : '';
-    this.apodo = this.usuario?.apodo ? this.usuario.apodo : '';
-    this.email = this.usuario?.email ? this.usuario.email : null;
-    this.genero_id = this.usuario?.genero_id ? this.usuario.genero_id : null;
-    this.estadoCivil_id = this.usuario?.estadoCivil_id ? this.usuario.estadoCivil_id : null;
-    this.nacionalidad = this.usuario?.nacionalidad?.nombre ? this.usuario.nacionalidad?.nombre : '';
-    this.rolEnCasa = this.usuario?.rolCasa_id ? this.usuario.rolCasa_id : null;
-    this.celular = this.usuario?.numeroCelular ? this.usuario.numeroCelular : null;
-    this.telefonoCasa = this.usuario?.telefonoCasa ? this.usuario.telefonoCasa : '';
-    this.direccion = this.usuario?.direccion;
-    this.ciudadDireccion = this.usuario?.ciudadDireccion;
-    this.departamentoDireccion = this.usuario?.departamentoDireccion;
-    this.codigoPostalDireccion = this.usuario?.codigoPostalDireccion;
-    this.paisDireccion = this.usuario?.paisDireccion;
-    this.direccionPostal = this.usuario?.direccionPostal;
-    this.ciudadPostal = this.usuario?.ciudadPostal;
-    this.departamentoPostal = this.usuario?.departamentoPostal;
-    this.codigoPostal = this.usuario?.codigoPostal;
-    this.paisPostal = this.usuario?.paisPostal;
-    this.gradoAcademico = this.usuario?.gradoAcademico_id ? this.usuario.gradoAcademico_id : null;
-    this.ocupacion = this.usuario?.ocupacion ? this.usuario?.ocupacion : '';
-    this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
-    this.tipoMiembro = this.usuario?.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
-    this.esjoven = this.usuario?.esJoven ? 1 : 0;
-    this.ejerMinisterio = !!this.usuario?.usuarioMinisterio?.length;
-    this.voluntario = !!this.usuario?.usuarioVoluntariado?.length;
-    this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
-    this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
-    this.congregacionPais = this.usuario?.usuarioCongregacionPais[0]?.pais
-      ? this.usuario?.usuarioCongregacionPais[0]?.pais
-      : null;
-    this.congreacionCiudad = this.usuario?.usuarioCongregacionCongregacion[0]?.congregacion
-      ? this.usuario?.usuarioCongregacionCongregacion[0]?.congregacion
-      : null;
-    this.congregacionCampo = this.usuario?.usuarioCongregacionCampo[0]?.campo
-      ? this.usuario?.usuarioCongregacionCampo[0]?.campo
-      : null;
-    this.tipoDeDocumento = this.usuario?.tipoDocumento_id
-      ? this.usuario.tipoDocumento_id.toString()
-      : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
-    this.numeroDocumento = this.usuario?.numeroDocumento ? this.usuario?.numeroDocumento : '';
-    this.anoConocimiento = this.usuario?.anoConocimiento ? this.usuario?.anoConocimiento : '';
+    const usuario = this.usuario;
+    this.fechaDeNacimiento = usuario.fechaNacimiento || null;
+    this.primerNombre = usuario.primerNombre || '';
+    this.segundoNombre = usuario.segundoNombre || '';
+    this.primerApellido = usuario.primerApellido || '';
+    this.segundoApellio = usuario.segundoApellido || '';
+    this.apodo = usuario.apodo || '';
+    this.email = usuario.email || null;
+    this.genero_id = usuario.genero_id || null;
+    this.estadoCivil_id = usuario.estadoCivil_id || null;
+    this.nacionalidad = usuario.nacionalidad?.nombre || '';
+    this.rolEnCasa = usuario.rolCasa_id || null;
+    this.celular = usuario.numeroCelular || null;
+    this.telefonoCasa = usuario.telefonoCasa || '';
+    this.direccion = usuario.direccion || '';
+    this.ciudadDireccion = usuario.ciudadDireccion || '';
+    this.departamentoDireccion = usuario.departamentoDireccion || '';
+    this.codigoPostalDireccion = usuario.codigoPostalDireccion || '';
+    this.paisDireccion = usuario.paisDireccion || '';
+    this.direccionPostal = usuario.direccionPostal || '';
+    this.ciudadPostal = usuario.ciudadPostal || '';
+    this.departamentoPostal = usuario.departamentoPostal || '';
+    this.codigoPostal = usuario.codigoPostal || '';
+    this.paisPostal = usuario.paisPostal || '';
+    this.gradoAcademico = usuario.gradoAcademico_id || null;
+    this.ocupacion = usuario.ocupacion || '';
+    this.especializacionEmpleo = usuario.especializacionEmpleo || '';
+    this.tipoMiembro = usuario.tipoMiembro_id || null;
+    this.esjoven = usuario.esJoven ? 1 : 0;
+    this.ejerMinisterio = !!usuario.usuarioMinisterio?.length;
+    this.voluntario = !!usuario.usuarioVoluntariado?.length;
+    this.ministerioUsuario = this.usuarioMinisterios || null;
+    this.voluntarioUsuario = this.usuarioVoluntariados || null;
+    this.congregacionPais = usuario.usuarioCongregacionPais?.[0]?.pais || null;
+    this.congreacionCiudad = usuario.usuarioCongregacionCongregacion?.[0]?.congregacion || null;
+    this.congregacionCampo = usuario.usuarioCongregacionCampo?.[0]?.campo || null;
+    this.tipoDeDocumento = usuario.tipoDocumento_id?.toString() || TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
+    this.numeroDocumento = usuario.numeroDocumento || '';
+    this.anoConocimiento = usuario.anoConocimiento || '';
   }
 
   crearFormularios() {
@@ -262,9 +255,9 @@ export class InformacionUsuarioComponent implements OnInit {
 
     this.registroCuatroForm = this.formBuilder.group({
       tipoMiembro_id: [this.tipoMiembro, [Validators.required]],
-      congregacionPais_id: [this.usuario?.usuarioCongregacionPais[0]?.id, [Validators.required]],
-      congregacion_id: [this.usuario?.usuarioCongregacionCongregacion[0]?.id, [Validators.required]],
-      campo_id: [this.usuario?.usuarioCongregacionCampo[0]?.id, [Validators.required]],
+      congregacionPais_id: [this.usuario?.usuarioCongregacionPais?.[0]?.id, [Validators.required]],
+      congregacion_id: [this.usuario?.usuarioCongregacionCongregacion?.[0]?.id, [Validators.required]],
+      campo_id: [this.usuario?.usuarioCongregacionCampo?.[0]?.id, [Validators.required]],
       esJoven: [this.esjoven, [Validators.required]],
       ejerceMinisterio: [!!this.usuario?.usuarioMinisterio?.length, [Validators.required]],
       esVoluntario: [!!this.usuario?.usuarioVoluntariado?.length, [Validators.required]],
@@ -420,20 +413,20 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   copiarDireccionResidencia() {
-    if (this.registroDosForm.get('mismaDireccionPostal').value) {
-      const direccionResidencia = this.registroDosForm.get('direccion').value;
+    if (this.registroDosForm.get('mismaDireccionPostal')?.value) {
+      const direccionResidencia = this.registroDosForm.get('direccion')?.value;
       this.registroDosForm.patchValue({
         direccionPostal: direccionResidencia,
-        ciudadPostal: this.registroDosForm.get('ciudadDireccion').value,
-        departamentoPostal: this.registroDosForm.get('departamentoDireccion').value,
-        codigoPostal: this.registroDosForm.get('codigoPostalDireccion').value,
-        paisPostal: this.registroDosForm.get('paisDireccion').value,
+        ciudadPostal: this.registroDosForm.get('ciudadDireccion')?.value,
+        departamentoPostal: this.registroDosForm.get('departamentoDireccion')?.value,
+        codigoPostal: this.registroDosForm.get('codigoPostalDireccion')?.value,
+        paisPostal: this.registroDosForm.get('paisDireccion')?.value,
       });
     }
   }
 
   limpiarDireccionPostal() {
-    if (!this.registroDosForm.get('mismaDireccionPostal').value) {
+    if (!this.registroDosForm.get('mismaDireccionPostal')?.value) {
       this.registroDosForm.patchValue({
         direccionPostal: '',
         ciudadPostal: '',
@@ -445,8 +438,8 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   copiarFechaDeNacimiento() {
-    if (this.registroCuatroForm.get('mismaFechaDeNacimiento').value) {
-      let fecha = this.registroUnoForm.get('fechaNacimiento').value.substring(0, 4);
+    if (this.registroCuatroForm.get('mismaFechaDeNacimiento')?.value) {
+      const fecha = this.registroUnoForm.get('fechaNacimiento')?.value.substring(0, 4);
       this.registroCuatroForm.patchValue({
         anoConocimiento: fecha,
       });
@@ -454,18 +447,17 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   limpiarAnoConocimiento() {
-    if (!this.registroCuatroForm.get('mismaFechaDeNacimiento').value) {
+    if (!this.registroCuatroForm.get('mismaFechaDeNacimiento')?.value) {
       this.registroCuatroForm.patchValue({
-        anoConocimiento: this.anoConocimiento ? this.anoConocimiento : '',
+        anoConocimiento: this.anoConocimiento || '',
       });
     }
   }
 
   ministeriosSeleccionados(): number[] {
-    const ministeriosSeleccionados = this.registroCuatroForm.value.ministerio
+    return this.registroCuatroForm.value.ministerio
       .map((checked: any, i: number) => (checked ? this.ministerios[i].id : null))
       .filter((value: any) => value !== null);
-    return ministeriosSeleccionados;
   }
 
   deseleccionarMinisterios() {
@@ -476,10 +468,9 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   voluntariadosSelecionados(): number[] {
-    const voluntariadosSelecionados = this.registroCuatroForm.value.voluntariado
+    return this.registroCuatroForm.value.voluntariado
       .map((checked: any, i: number) => (checked ? this.voluntariados[i].id : null))
       .filter((value: any) => value !== null);
-    return voluntariadosSelecionados;
   }
 
   deseleccionarVoluntariados() {
@@ -489,7 +480,7 @@ export class InformacionUsuarioComponent implements OnInit {
     });
   }
 
-  filtrarCongregacionesPorPais(idPais: number | string) {
+  filtrarCongregacionesPorPais(idPais: number | string | undefined) {
     this.camposFiltrados = null;
 
     this.congregacionesFiltradas = this.congregaciones?.filter(
@@ -497,14 +488,14 @@ export class InformacionUsuarioComponent implements OnInit {
     );
   }
 
-  filtrarCamposPorCongregacion(idCongregacion: number | string) {
+  filtrarCamposPorCongregacion(idCongregacion: number | string | undefined) {
     this.camposFiltrados = this.campos.filter(
       (campoABuscar) => campoABuscar.congregacion_id === Number(idCongregacion)
     );
   }
 
   buscarNacionalidad(formControlName: string) {
-    this.letrasFiltrarNacionalidad = this.registroDosForm.get(formControlName.toString()).valueChanges.pipe(
+    this.letrasFiltrarNacionalidad = this.registroDosForm.get(formControlName.toString())?.valueChanges.pipe(
       startWith(''),
       map((valor) => this.filtrar(valor || ''))
     );
@@ -518,7 +509,7 @@ export class InformacionUsuarioComponent implements OnInit {
     );
   }
 
-  buscarIDNacionalidad(nacionalidad: string): number {
+  buscarIDNacionalidad(nacionalidad: string): number | undefined {
     const nacionalidadEncontrada = this.nacionalidades.find(
       (nacionalidades) => nacionalidades.nombre.toLowerCase() === nacionalidad.toLowerCase()
     );
@@ -527,7 +518,9 @@ export class InformacionUsuarioComponent implements OnInit {
       return nacionalidadEncontrada.id;
     } else {
       const controlNacionalidad = this.registroDosForm.get('nacionalidad');
-      controlNacionalidad.setErrors({ incorrecto: true });
+      if (controlNacionalidad) {
+        controlNacionalidad.setErrors({ incorrecto: true });
+      }
 
       return undefined;
     }
@@ -548,8 +541,7 @@ export class InformacionUsuarioComponent implements OnInit {
       });
   }
 
-  async tieneTipoDocumento(idPais: string = this.usuario?.usuarioCongregacionPais[0]?.id) {
-    this.tipoDeDocumentosFiltrados = [];
+  async tieneTipoDocumento(idPais: number | undefined = this.usuario?.usuarioCongregacionPais?.[0]?.id) {
     this.tipoDeDocumentosFiltrados = this.tiposDeDocumentos.filter(
       (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais)
     );
@@ -579,7 +571,7 @@ export class InformacionUsuarioComponent implements OnInit {
 
   onPaisChange(event: any = null) {
     // Obtener el valor del país seleccionado
-    const paisSeleccionado = event ? event.target.value : this.usuario?.usuarioCongregacionPais[0]?.id;
+    const paisSeleccionado = event ? event.target.value : this.usuario?.usuarioCongregacionPais?.[0]?.id;
 
     const idColombia = ID_PAIS.COLOMBIA;
 
@@ -587,12 +579,12 @@ export class InformacionUsuarioComponent implements OnInit {
 
     // Si el país no es Colombia, desmarcar el checkbox y actualizar la validación
     if (!this.mostrarPoliticaDatos) {
-      this.registroCuatroForm.get('aceptaPolitica').setValue(false);
-      this.registroCuatroForm.get('aceptaPolitica').clearValidators();
-      this.registroCuatroForm.get('aceptaPolitica').updateValueAndValidity();
+      this.registroCuatroForm.get('aceptaPolitica')?.setValue(false);
+      this.registroCuatroForm.get('aceptaPolitica')?.clearValidators();
+      this.registroCuatroForm.get('aceptaPolitica')?.updateValueAndValidity();
     } else {
-      this.registroCuatroForm.get('aceptaPolitica').setValidators(Validators.requiredTrue);
-      this.registroCuatroForm.get('aceptaPolitica').updateValueAndValidity();
+      this.registroCuatroForm.get('aceptaPolitica')?.setValidators(Validators.requiredTrue);
+      this.registroCuatroForm.get('aceptaPolitica')?.updateValueAndValidity();
     }
   }
 

@@ -81,17 +81,15 @@ export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.gradoAcademicoService
-          .eliminarGradoAcademico(gradoAcademico)
-          .subscribe((gradoAcademicoEliminado: GradoAcademicoModel) => {
-            Swal.fire(
-              '¡Deshabilitado!',
-              `El género ${gradoAcademico.gradoAcademico} fue deshabilitado correctamente`,
-              'success'
-            );
+        this.gradoAcademicoService.eliminarGradoAcademico(gradoAcademico).subscribe(() => {
+          Swal.fire(
+            '¡Deshabilitado!',
+            `El género ${gradoAcademico.gradoAcademico} fue deshabilitado correctamente`,
+            'success'
+          );
 
-            this.cargarGradosAcademicos();
-          });
+          this.cargarGradosAcademicos();
+        });
       }
     });
   }

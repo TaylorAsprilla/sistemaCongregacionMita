@@ -98,29 +98,50 @@ export class AsignarPermisosComponent implements OnInit {
     }
   }
 
-  resetPassword() {
+  resetPassword(): void {
     this.formSubmitted = true;
     const { passwordNuevoUno, passwordNuevoDos } = this.passwordUsuarioForm.value;
 
-    this.usuarioService.resetPassword(this.usuarioEncontrado.login, passwordNuevoUno).subscribe(
-      (usuarioActualizado) => {
-        Swal.fire('Actualizado', 'Se creo una nueva contraseña', 'success');
-      },
-      (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
+    if (passwordNuevoUno !== passwordNuevoDos) {
+      Swal.fire({
+        title: 'Error',
+        icon: 'error',
+        html: 'Las contraseñas no coinciden. Por favor, verifique e intente nuevamente.',
+      });
+      return;
+    }
 
-        Object.entries(errores).forEach(([key, value]) => {
-          listaErrores.push('° ' + value['msg'] + '<br>');
-        });
+    if (this.usuarioEncontrado.login) {
+      // Enviar solicitud para restablecer la contraseña
+      this.usuarioService.resetPassword(this.usuarioEncontrado.login, passwordNuevoUno).subscribe(
+        () => {
+          Swal.fire('Actualizado', 'Se creó una nueva contraseña', 'success');
 
-        Swal.fire({
-          title: 'Error',
-          icon: 'error',
-          html: `Error al crear una nueva contraseña <p> ${listaErrores.join('')}`,
-        });
-      }
-    );
+          // Reiniciar el formulario y el estado después de un cambio exitoso
+          this.passwordUsuarioForm.reset();
+          this.formSubmitted = false;
+        },
+        (error) => {
+          const listaErrores: string[] = [];
+          const errores = error?.error?.errors as { [key: string]: { msg: string } } | undefined;
+
+          // Manejar y mostrar errores específicos si existen
+          if (errores) {
+            Object.entries(errores).forEach(([_, value]) => {
+              listaErrores.push('° ' + value.msg + '<br>');
+            });
+          }
+
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            html: listaErrores.length
+              ? `Error al crear una nueva contraseña:<br> ${listaErrores.join('')}`
+              : 'Ocurrió un error al intentar crear la nueva contraseña.',
+          });
+        }
+      );
+    }
   }
 
   buscarFeligres(usuario: UsuarioModel) {
@@ -180,10 +201,12 @@ export class AsignarPermisosComponent implements OnInit {
       },
       (error) => {
         let errores = error.error.errors;
-        let listaErrores = [];
+        let listaErrores: string[] = [];
 
         Object.entries(errores).forEach(([key, value]) => {
-          listaErrores.push('° ' + value['msg'] + '<br>');
+          if (value && typeof value === 'object' && 'msg' in value) {
+            listaErrores.push(`° ${value['msg']}<br>`);
+          }
         });
 
         Swal.fire({
@@ -253,11 +276,13 @@ export class AsignarPermisosComponent implements OnInit {
             },
             (error) => {
               let errores = error.error.errors;
-              let listaErrores = [];
+              let listaErrores: string[] = [];
 
               if (!!errores) {
                 Object.entries(errores).forEach(([key, value]) => {
-                  listaErrores.push('° ' + value['msg'] + '<br>');
+                  if (value && typeof value === 'object' && 'msg' in value) {
+                    listaErrores.push(`° ${value['msg']}<br>`);
+                  }
                 });
               }
 

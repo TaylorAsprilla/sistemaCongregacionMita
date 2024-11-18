@@ -75,17 +75,15 @@ export class EstadoCivilComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.estadoCivilService
-          .elimiminarEstadoCivil(estadoCivil)
-          .subscribe((estadoCivilEliminado: EstadoCivilModel) => {
-            Swal.fire(
-              '¡Deshabilitado!',
-              `El estado civil ${estadoCivil.estadoCivil} fue deshabilitado correctamente`,
-              'success'
-            );
+        this.estadoCivilService.eliminarEstadoCivil(estadoCivil).subscribe(() => {
+          Swal.fire(
+            '¡Deshabilitado!',
+            `El estado civil ${estadoCivil.estadoCivil} fue deshabilitado correctamente`,
+            'success'
+          );
 
-            this.cargarEstadosCiviles();
-          });
+          this.cargarEstadosCiviles();
+        });
       }
     });
   }
