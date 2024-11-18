@@ -49,7 +49,6 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.css",
-              "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/scss/style.scss",
