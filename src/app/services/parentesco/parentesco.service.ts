@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { map, catchError } from 'rxjs/operators';
+import { environment } from 'environment';
+import { map } from 'rxjs/operators';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
-import { Observable, throwError } from 'rxjs';
 
 const base_url = environment.base_url;
 
@@ -13,11 +12,11 @@ const base_url = environment.base_url;
 export class ParentescoService {
   constructor(private httpClient: HttpClient) {}
 
-  private get token(): string {
+  get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  private get headers() {
+  get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -25,57 +24,35 @@ export class ParentescoService {
     };
   }
 
-  // Obtener todos los parentescos
-  getParentesco(): Observable<ParentescoModel[]> {
+  getParentesco() {
     return this.httpClient
-      .get<{ ok: boolean; parentesco: ParentescoModel[] }>(`${base_url}/parentesco`, this.headers)
-      .pipe(
-        map((respuesta) => (respuesta.ok ? respuesta.parentesco : [])),
-        catchError(this.handleError)
-      );
+      .get(`${base_url}/parentesco`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; parentesco: ParentescoModel[] }) => respuesta.parentesco));
   }
 
-  // Obtener un parentesco por ID
-  getUnParentesco(id: number): Observable<ParentescoModel | null> {
+  getUnParentesco(id: number) {
     return this.httpClient
-      .get<{ ok: boolean; parentesco: ParentescoModel }>(`${base_url}/parentesco/${id}`, this.headers)
-      .pipe(
-        map((respuesta) => (respuesta.ok ? respuesta.parentesco : null)),
-        catchError(this.handleError)
-      );
+      .get(`${base_url}/parentesco/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; parentesco: ParentescoModel }) => respuesta.parentesco));
   }
 
-  // Crear un nuevo parentesco
-  crearParentesco(parentesco: ParentescoModel): Observable<ParentescoModel> {
-    return this.httpClient
-      .post<ParentescoModel>(`${base_url}/parentesco`, parentesco, this.headers)
-      .pipe(catchError(this.handleError));
+  // crearParentesco(parentesco: ParentescoModel) {
+  //   return this.httpClient.post(`${base_url}/parentesco`, parentesco, this.headers);
+  // }
+
+  crearParentesco(parentesco: ParentescoModel) {
+    return this.httpClient.post(`${base_url}/parentesco`, { nombre: parentesco }, this.headers);
   }
 
-  // Actualizar un parentesco
-  actualizarParentesco(parentesco: ParentescoModel): Observable<ParentescoModel> {
-    return this.httpClient
-      .put<ParentescoModel>(`${base_url}/parentesco/${parentesco.id}`, parentesco, this.headers)
-      .pipe(catchError(this.handleError));
+  actualizarParentesco(parentesco: ParentescoModel) {
+    return this.httpClient.put(`${base_url}/parentesco/${parentesco.id}`, parentesco, this.headers);
   }
 
-  // Eliminar un parentesco
-  eliminarParentesco(parentesco: ParentescoModel): Observable<void> {
-    return this.httpClient
-      .delete<void>(`${base_url}/parentesco/${parentesco.id}`, this.headers)
-      .pipe(catchError(this.handleError));
+  eliminarParentesco(parentesco: ParentescoModel) {
+    return this.httpClient.delete(`${base_url}/parentesco/${parentesco.id}`, this.headers);
   }
 
-  // Activar un parentesco
-  activarParentesco(parentesco: ParentescoModel): Observable<ParentescoModel> {
-    return this.httpClient
-      .put<ParentescoModel>(`${base_url}/parentesco/activar/${parentesco.id}`, parentesco, this.headers)
-      .pipe(catchError(this.handleError));
-  }
-
-  // Manejo de errores
-  private handleError(error: any): Observable<never> {
-    console.error('Error en la solicitud HTTP:', error);
-    return throwError(() => new Error('Error en la solicitud. Inténtelo más tarde.'));
+  activarParentesco(parentesco: ParentescoModel) {
+    return this.httpClient.put(`${base_url}/parentesco/activar/${parentesco.id}`, parentesco, this.headers);
   }
 }

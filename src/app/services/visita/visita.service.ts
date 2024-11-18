@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
+import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { VisitaModel } from 'src/app/core/models/visita.model';
-import { environment } from 'src/environments/environment';
 
 const base_url = environment.base_url;
 
@@ -26,10 +24,10 @@ export class VisitaService {
     };
   }
 
-  getVisita(): Observable<VisitaModel[]> {
+  getVisita() {
     return this.httpClient
-      .get<{ ok: boolean; visitas: VisitaModel[] }>(`${base_url}/visita/`, this.headers)
-      .pipe(map((respuesta) => respuesta.visitas));
+      .get(`${base_url}/visita/`, this.headers)
+      .pipe(map((visita: { ok: boolean; visitas: VisitaModel[] }) => visita.visitas));
   }
 
   crearVisita(visita: VisitaModel) {

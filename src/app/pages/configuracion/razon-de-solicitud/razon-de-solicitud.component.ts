@@ -126,7 +126,7 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.razonSolicitudService.eliminarRazonsolicitud(razonSolicitud).subscribe({
+        this.razonSolicitudService.eliminarRazonSolicitud(razonSolicitud).subscribe({
           next: (razonSolicitudEliminado: RazonSolicitudModel) => {
             Swal.fire(
               '¡Deshabilitado!',

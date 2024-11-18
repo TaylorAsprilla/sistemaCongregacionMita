@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
+import { environment } from 'environment';
+import { map } from 'rxjs/operators';
 import { LogroModel } from 'src/app/core/models/logro.model';
 
 const base_url = environment.base_url;
@@ -13,11 +12,11 @@ const base_url = environment.base_url;
 export class LogroService {
   constructor(private httpClient: HttpClient) {}
 
-  private get token(): string {
+  get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  private get headers() {
+  get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -25,37 +24,17 @@ export class LogroService {
     };
   }
 
-  // Obtener todos los logros
-  getLogros(): Observable<LogroModel[]> {
-    return this.httpClient.get<{ ok: boolean; logros: LogroModel[] }>(`${base_url}/logro`, this.headers).pipe(
-      map((response) => {
-        if (response.ok) {
-          return response.logros;
-        } else {
-          throw new Error('No se pudieron obtener los logros');
-        }
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  // Crear un nuevo logro
-  crearLogro(logro: LogroModel): Observable<LogroModel> {
+  getLogros() {
     return this.httpClient
-      .post<LogroModel>(`${base_url}/logro`, logro, this.headers)
-      .pipe(catchError(this.handleError));
+      .get(`${base_url}/logro`, this.headers)
+      .pipe(map((logros: { ok: boolean; logros: LogroModel[] }) => logros.logros));
   }
 
-  // Actualizar un logro existente
-  actualizarLogro(logro: LogroModel): Observable<LogroModel> {
-    return this.httpClient
-      .put<LogroModel>(`${base_url}/logro/${logro.id}`, logro, this.headers)
-      .pipe(catchError(this.handleError));
+  crearLogro(logro: LogroModel) {
+    return this.httpClient.post(`${base_url}/logro`, logro, this.headers);
   }
 
-  // Manejo de errores
-  private handleError(error: any): Observable<never> {
-    console.error('Error en la solicitud HTTP:', error);
-    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
+  actualizarLogro(logro: LogroModel) {
+    return this.httpClient.put(`${base_url}/logro/${logro.id}`, logro, this.headers);
   }
 }

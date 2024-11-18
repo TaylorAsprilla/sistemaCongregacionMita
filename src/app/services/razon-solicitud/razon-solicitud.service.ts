@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { environment } from 'environment';
+import { map } from 'rxjs/operators';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
 
 const base_url = environment.base_url;
@@ -13,11 +12,11 @@ const base_url = environment.base_url;
 export class RazonSolicitudService {
   constructor(private httpClient: HttpClient) {}
 
-  private get token(): string {
+  get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  private get headers() {
+  get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -25,56 +24,41 @@ export class RazonSolicitudService {
     };
   }
 
-  getRazonsolicitud(): Observable<RazonSolicitudModel[]> {
+  getRazonsolicitud() {
     return this.httpClient
-      .get<{ ok: boolean; razonSolicitud: RazonSolicitudModel[] }>(`${base_url}/razonsolicitud`, this.headers)
-      .pipe(
-        map((response) => (response.ok ? response.razonSolicitud : [])), // Manejo de la respuesta
-        catchError(this.handleError<RazonSolicitudModel[]>('getRazonsolicitud', [])) // Manejo de errores
-      );
+      .get(`${base_url}/razonsolicitud`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; razonSolicitud: RazonSolicitudModel[] }) => respuesta.razonSolicitud));
   }
 
-  getUnaRazonsolicitud(id: number): Observable<RazonSolicitudModel | null> {
+  //pregunta
+  getUnaRazonsolicitud(id: number) {
     return this.httpClient
-      .get<{ ok: boolean; razonSolicitud: RazonSolicitudModel }>(`${base_url}/razonsolicitud/${id}`, this.headers)
-      .pipe(
-        map((response) => (response.ok ? response.razonSolicitud : null)), // Manejo de la respuesta
-        catchError(this.handleError<RazonSolicitudModel | null>('getUnaRazonsolicitud', null)) // Manejo de errores
-      );
+      .get(`${base_url}/razonsolicitud/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; razonSolicitud: RazonSolicitudModel }) => respuesta.razonSolicitud));
   }
 
-  crearRazonSolicitud(razonSolicitud: string): Observable<RazonSolicitudModel> {
-    return this.httpClient
-      .post<RazonSolicitudModel>(
-        `${base_url}/razonsolicitud`,
-        { solicitud: razonSolicitud, estado: true },
-        this.headers
-      )
-      .pipe(catchError(this.handleError<RazonSolicitudModel>('crearRazonSolicitud')));
+  // crearRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
+  //   return this.httpClient.post(`${base_url}/razonsolicitud`, razonSolicitud, this.headers);
+  // }
+
+  //pregunta
+  crearRazonSolicitud(razonSolicitud: string) {
+    return this.httpClient.post(
+      `${base_url}/razonsolicitud`,
+      { solicitud: razonSolicitud, estado: true },
+      this.headers
+    );
   }
 
-  actualizarRazonSolicitud(razonSolicitud: RazonSolicitudModel): Observable<RazonSolicitudModel> {
-    return this.httpClient
-      .put<RazonSolicitudModel>(`${base_url}/razonsolicitud/${razonSolicitud.id}`, razonSolicitud, this.headers)
-      .pipe(catchError(this.handleError<RazonSolicitudModel>('actualizarRazonSolicitud')));
+  actualizarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
+    return this.httpClient.put(`${base_url}/razonsolicitud/${razonSolicitud.id}`, razonSolicitud, this.headers);
   }
 
-  eliminarRazonsolicitud(razonSolicitud: RazonSolicitudModel): Observable<any> {
-    return this.httpClient
-      .delete(`${base_url}/razonsolicitud/${razonSolicitud.id}`, this.headers)
-      .pipe(catchError(this.handleError<any>('eliminarRazonsolicitud')));
+  eliminarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
+    return this.httpClient.delete(`${base_url}/razonsolicitud/${razonSolicitud.id}`, this.headers);
   }
 
-  activarRazonSolicitud(razonSolicitud: RazonSolicitudModel): Observable<RazonSolicitudModel> {
-    return this.httpClient
-      .put<RazonSolicitudModel>(`${base_url}/razonsolicitud/activar/${razonSolicitud.id}`, razonSolicitud, this.headers)
-      .pipe(catchError(this.handleError<RazonSolicitudModel>('activarRazonSolicitud')));
-  }
-
-  private handleError<T>(operation = 'operación', result?: T): (error: any) => Observable<T> {
-    return (error: any): Observable<T> => {
-      console.error(`${operation} falló:`, error); // Log del error
-      return of(result as T); // Retorna un valor por defecto en caso de error
-    };
+  activarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
+    return this.httpClient.put(`${base_url}/razonsolicitud/activar/${razonSolicitud.id}`, razonSolicitud, this.headers);
   }
 }

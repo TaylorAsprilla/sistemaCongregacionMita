@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { UsuariosPorCongregacionRespuesta } from 'src/app/core/interfaces/usuario.interface';
 

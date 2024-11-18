@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
+import { environment } from 'environment';
+import { map } from 'rxjs/operators';
 import { LinkEventoModel } from 'src/app/core/models/link-evento.model';
 
 const base_url = environment.base_url;
@@ -13,11 +12,11 @@ const base_url = environment.base_url;
 export class LinkEventosService {
   constructor(private httpClient: HttpClient) {}
 
-  private get token(): string {
+  get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  private get headers() {
+  get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -25,87 +24,45 @@ export class LinkEventosService {
     };
   }
 
-  getEventos(): Observable<LinkEventoModel[]> {
-    return this.httpClient.get<{ ok: boolean; linkEvento: LinkEventoModel[] }>(`${base_url}/evento`, this.headers).pipe(
-      map((response) => {
-        if (response.ok) {
-          return response.linkEvento;
-        } else {
-          throw new Error('No se pudieron obtener los eventos');
-        }
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  getUnLinkEvento(id: number): Observable<LinkEventoModel> {
+  getEventos() {
     return this.httpClient
-      .get<{ ok: boolean; linkEvento: LinkEventoModel }>(`${base_url}/evento/${id}`, this.headers)
-      .pipe(
-        map((response) => {
-          if (response.ok) {
-            return response.linkEvento;
-          } else {
-            throw new Error('No se pudo obtener el evento');
-          }
-        }),
-        catchError(this.handleError)
-      );
+      .get(`${base_url}/evento`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; linkEvento: LinkEventoModel[] }) => respuesta.linkEvento));
   }
 
-  getLinkServicio(): Observable<LinkEventoModel> {
+  getUnLinkEvento(id: number) {
     return this.httpClient
-      .get<{ ok: boolean; linkEvento: LinkEventoModel }>(`${base_url}/evento/link/servicio`, this.headers)
-      .pipe(
-        map((response) => {
-          if (response.ok) {
-            return response.linkEvento;
-          } else {
-            throw new Error('No se pudo obtener el link del servicio');
-          }
-        }),
-        catchError(this.handleError)
-      );
+      .get(`${base_url}/evento/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; linkEvento: LinkEventoModel }) => respuesta.linkEvento));
   }
 
-  crearEvento(evento: LinkEventoModel): Observable<LinkEventoModel> {
+  getLinkServicio() {
     return this.httpClient
-      .post<LinkEventoModel>(`${base_url}/evento`, evento, this.headers)
-      .pipe(catchError(this.handleError));
+      .get(`${base_url}/evento/link/servicio`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; linkEvento: LinkEventoModel }) => respuesta.linkEvento));
   }
 
-  actualizarEvento(evento: LinkEventoModel): Observable<LinkEventoModel> {
-    return this.httpClient
-      .put<LinkEventoModel>(`${base_url}/evento/${evento.id}`, evento, this.headers)
-      .pipe(catchError(this.handleError));
+  crearEvento(evento: LinkEventoModel) {
+    return this.httpClient.post(`${base_url}/evento`, evento, this.headers);
   }
 
-  eliminarEvento(evento: LinkEventoModel): Observable<void> {
-    return this.httpClient
-      .delete<void>(`${base_url}/evento/${evento.id}`, this.headers)
-      .pipe(catchError(this.handleError));
+  actualizarEvento(evento: LinkEventoModel) {
+    return this.httpClient.put(`${base_url}/evento/${evento.id}`, evento, this.headers);
   }
 
-  activarEvento(evento: LinkEventoModel): Observable<LinkEventoModel> {
-    return this.httpClient
-      .put<LinkEventoModel>(`${base_url}/evento/activar/${evento.id}`, evento, this.headers)
-      .pipe(catchError(this.handleError));
+  eliminarEvento(evento: LinkEventoModel) {
+    return this.httpClient.delete(`${base_url}/evento/${evento.id}`, this.headers);
   }
 
-  agregarABiblioteca(evento: LinkEventoModel): Observable<LinkEventoModel> {
-    return this.httpClient
-      .put<LinkEventoModel>(`${base_url}/evento/agregarbiblioteca/${evento.id}`, evento, this.headers)
-      .pipe(catchError(this.handleError));
+  activarEvento(evento: LinkEventoModel) {
+    return this.httpClient.put(`${base_url}/evento/activar/${evento.id}`, evento, this.headers);
   }
 
-  eliminarDeLaBiblioteca(evento: LinkEventoModel): Observable<LinkEventoModel> {
-    return this.httpClient
-      .put<LinkEventoModel>(`${base_url}/evento/eliminardebiblioteca/${evento.id}`, evento, this.headers)
-      .pipe(catchError(this.handleError));
+  agregarABiblioteca(evento: LinkEventoModel) {
+    return this.httpClient.put(`${base_url}/evento/agregarbiblioteca/${evento.id}`, evento, this.headers);
   }
 
-  private handleError(error: any): Observable<never> {
-    console.error('Error en la solicitud HTTP:', error);
-    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
+  eliminarDeLaBiblioteca(evento: LinkEventoModel) {
+    return this.httpClient.put(`${base_url}/evento/eliminardebiblioteca/${evento.id}`, evento, this.headers);
   }
 }

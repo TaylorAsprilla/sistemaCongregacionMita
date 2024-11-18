@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
-import { Observable } from 'rxjs';
 
 const base_url = environment.base_url;
 
@@ -25,16 +24,16 @@ export class VoluntariadoService {
     };
   }
 
-  getVoluntariados(): Observable<VoluntariadoModel[]> {
+  getVoluntariados() {
     return this.httpClient
-      .get<{ ok: boolean; voluntariados: VoluntariadoModel[] }>(`${base_url}/voluntariado`, this.headers)
-      .pipe(map((respuesta) => respuesta.voluntariados));
+      .get(`${base_url}/voluntariado`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; voluntariados: VoluntariadoModel[] }) => respuesta.voluntariados));
   }
 
-  getUnVoluntariado(id: number): Observable<VoluntariadoModel> {
+  getUnVoluntariado(id: number) {
     return this.httpClient
-      .get<{ ok: boolean; voluntariado: VoluntariadoModel }>(`${base_url}/voluntariado/${id}`, this.headers)
-      .pipe(map((respuesta) => respuesta.voluntariado));
+      .get(`${base_url}/voluntariado/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; voluntariado: VoluntariadoModel }) => respuesta.voluntariado));
   }
 
   crearVoluntariado(voluntariado: string) {

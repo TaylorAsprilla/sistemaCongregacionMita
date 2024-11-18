@@ -1,23 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
+import { environment } from 'environment';
+import { map } from 'rxjs/operators';
 import { GeneroModel } from 'src/app/core/models/genero.model';
 
 const base_url = environment.base_url;
-
 @Injectable({
   providedIn: 'root',
 })
 export class GeneroService {
   constructor(private httpClient: HttpClient) {}
 
-  private get token(): string {
+  get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  private get headers() {
+  get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -25,59 +23,32 @@ export class GeneroService {
     };
   }
 
-  getGeneros(): Observable<GeneroModel[]> {
-    return this.httpClient.get<{ ok: boolean; genero: GeneroModel[] }>(`${base_url}/genero`, this.headers).pipe(
-      map((response) => {
-        if (response.ok) {
-          return response.genero;
-        } else {
-          throw new Error('No se pudieron obtener los géneros');
-        }
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  getGenero(id: number): Observable<GeneroModel> {
-    return this.httpClient.get<{ ok: boolean; genero: GeneroModel }>(`${base_url}/genero/${id}`, this.headers).pipe(
-      map((response) => {
-        if (response.ok) {
-          return response.genero;
-        } else {
-          throw new Error('No se pudo obtener el género');
-        }
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  crearGenero(genero: string): Observable<GeneroModel> {
+  getGeneros() {
     return this.httpClient
-      .post<GeneroModel>(`${base_url}/genero`, { genero }, this.headers)
-      .pipe(catchError(this.handleError));
+      .get(`${base_url}/genero`, this.headers)
+      .pipe(map((genero: { ok: boolean; genero: GeneroModel[] }) => genero.genero));
   }
 
-  actualizarGenero(genero: GeneroModel): Observable<GeneroModel> {
+  getGenero(id: number) {
     return this.httpClient
-      .put<GeneroModel>(`${base_url}/genero/${genero.id}`, genero, this.headers)
-      .pipe(catchError(this.handleError));
+      .get(`${base_url}/genero/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; genero: GeneroModel }) => respuesta.genero));
   }
 
-  eliminarGenero(genero: GeneroModel): Observable<void> {
-    return this.httpClient
-      .delete<void>(`${base_url}/genero/${genero.id}`, this.headers)
-      .pipe(catchError(this.handleError));
+  crearGenero(genero: string) {
+    return this.httpClient.post(`${base_url}/genero`, { genero: genero }, this.headers);
   }
 
-  activarGenero(genero: GeneroModel): Observable<GeneroModel> {
-    return this.httpClient
-      .put<GeneroModel>(`${base_url}/genero/activar/${genero.id}`, genero, this.headers)
-      .pipe(catchError(this.handleError));
+  actualizarGenero(genero: GeneroModel) {
+    return this.httpClient.put(`${base_url}/genero/${genero.id}`, genero, this.headers);
   }
 
-  // Manejo de errores
-  private handleError(error: any): Observable<never> {
-    console.error('Error en la solicitud HTTP:', error);
-    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
+  eliminarGenero(genero: GeneroModel) {
+    return this.httpClient.delete(`${base_url}/genero/${genero.id}`, this.headers);
+  }
+
+  // preguntar creo q no existe en back
+  activarGenero(genero: GeneroModel) {
+    return this.httpClient.put(`${base_url}/genero/activar/${genero.id}`, genero, this.headers);
   }
 }

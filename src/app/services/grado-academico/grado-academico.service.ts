@@ -1,23 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
+import { environment } from 'environment';
+import { map } from 'rxjs/operators';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 
 const base_url = environment.base_url;
-
 @Injectable({
   providedIn: 'root',
 })
 export class GradoAcademicoService {
   constructor(private httpClient: HttpClient) {}
 
-  private get token(): string {
+  get token(): string {
     return localStorage.getItem('token') || '';
   }
 
-  private get headers() {
+  get headers() {
     return {
       headers: {
         'x-token': this.token,
@@ -25,62 +23,31 @@ export class GradoAcademicoService {
     };
   }
 
-  getGradosAcademicos(): Observable<GradoAcademicoModel[]> {
+  getGradosAcademicos() {
     return this.httpClient
-      .get<{ ok: boolean; gradoAcademico: GradoAcademicoModel[] }>(`${base_url}/gradoacademico`, this.headers)
-      .pipe(
-        map((response) => {
-          if (response.ok) {
-            return response.gradoAcademico;
-          } else {
-            throw new Error('No se pudieron obtener los grados académicos');
-          }
-        }),
-        catchError(this.handleError)
-      );
+      .get(`${base_url}/gradoacademico`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; gradoAcademico: GradoAcademicoModel[] }) => respuesta.gradoAcademico));
   }
 
-  getUnGradoAcademico(id: number): Observable<GradoAcademicoModel> {
+  getUnGradoAcademico(id: number) {
     return this.httpClient
-      .get<{ ok: boolean; gradoAcademico: GradoAcademicoModel }>(`${base_url}/gradoacademico/${id}`, this.headers)
-      .pipe(
-        map((response) => {
-          if (response.ok) {
-            return response.gradoAcademico;
-          } else {
-            throw new Error('No se pudo obtener el grado académico');
-          }
-        }),
-        catchError(this.handleError)
-      );
+      .get(`${base_url}/gradoacademico/${id}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; gradoAcademico: GradoAcademicoModel }) => respuesta.gradoAcademico));
   }
 
-  crearGradoAcademico(gradoAcademico: string): Observable<GradoAcademicoModel> {
-    return this.httpClient
-      .post<GradoAcademicoModel>(`${base_url}/gradoAcademico`, { gradoAcademico }, this.headers)
-      .pipe(catchError(this.handleError));
+  crearGradoAcademico(gradoAcademico: string) {
+    return this.httpClient.post(`${base_url}/gradoAcademico`, { gradoAcademico: gradoAcademico }, this.headers);
   }
 
-  actualizarGradoAcademico(gradoAcademico: GradoAcademicoModel): Observable<GradoAcademicoModel> {
-    return this.httpClient
-      .put<GradoAcademicoModel>(`${base_url}/gradoAcademico/${gradoAcademico.id}`, gradoAcademico, this.headers)
-      .pipe(catchError(this.handleError));
+  actualizarGradoAcademico(gradoAcademico: GradoAcademicoModel) {
+    return this.httpClient.put(`${base_url}/gradoAcademico/${gradoAcademico.id}`, gradoAcademico, this.headers);
   }
 
-  eliminarGradoAcademico(gradoAcademico: GradoAcademicoModel): Observable<void> {
-    return this.httpClient
-      .delete<void>(`${base_url}/gradoacademico/${gradoAcademico.id}`, this.headers)
-      .pipe(catchError(this.handleError));
+  eliminarGradoAcademico(gradoAcademico: GradoAcademicoModel) {
+    return this.httpClient.delete(`${base_url}/gradoacademico/${gradoAcademico.id}`, this.headers);
   }
 
-  activarGradoAcademico(gradoAcademico: GradoAcademicoModel): Observable<GradoAcademicoModel> {
-    return this.httpClient
-      .put<GradoAcademicoModel>(`${base_url}/gradoAcademico/activar/${gradoAcademico.id}`, gradoAcademico, this.headers)
-      .pipe(catchError(this.handleError));
-  }
-
-  private handleError(error: any): Observable<never> {
-    console.error('Error en la solicitud HTTP:', error);
-    return throwError(() => new Error('Hubo un problema con la solicitud. Inténtelo más tarde.'));
+  activarGradoAcademico(gradoAcademico: GradoAcademicoModel) {
+    return this.httpClient.put(`${base_url}/gradoAcademico/activar/${gradoAcademico.id}`, gradoAcademico, this.headers);
   }
 }
