@@ -39,7 +39,9 @@
               "dom-autoscroller",
               "@agm/core",
               "@swimlane/ngx-charts",
-              "@mattlewis92/dom-autoscroller"
+              "@mattlewis92/dom-autoscroller",
+              "google-libphonenumber",
+              "sweetalert2"
             ],
             "outputPath": "dist/sistemacmi",
             "index": "src/index.html",
@@ -48,14 +50,14 @@
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.css",
               "node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/assets/scss/style.scss",
               "node_modules/@swimlane/ngx-datatable/index.css",
               "node_modules/@swimlane/ngx-datatable/themes/material.css",
               "node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "node_modules/animate.css/animate.css"
+              "node_modules/animate.css/animate.css",
+              "src/styles.css"
             ],
             "scripts": []
           },

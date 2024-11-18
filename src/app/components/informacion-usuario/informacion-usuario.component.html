@@ -20,8 +20,8 @@
           <small
             class="form-text text-danger"
             *ngIf="
-              registroUnoForm.get('fechaNacimiento')?.hasError('required') &&
-              registroUnoForm.get('fechaNacimiento')?.touched
+              registroUnoForm.get('fechaNacimiento').hasError('required') &&
+              registroUnoForm.get('fechaNacimiento').touched
             "
           >
             La fecha de nacimiento del feligrés es requerida.
@@ -35,8 +35,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroUnoForm.get('primerNombre')?.hasError('required') &&
-                registroUnoForm.get('primerNombre')?.touched
+                registroUnoForm.get('primerNombre').hasError('required') && registroUnoForm.get('primerNombre').touched
               "
             >
               La primer nombre del feligrés es requerido.
@@ -44,8 +43,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroUnoForm.get('primerNombre')?.hasError('minlength') &&
-                registroUnoForm.get('primerNombre')?.touched
+                registroUnoForm.get('primerNombre').hasError('minlength') && registroUnoForm.get('primerNombre').touched
               "
             >
               El primer nombre del feligrés no tiene la longitud mínima permitida.
@@ -58,8 +56,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroUnoForm.get('segundoNombre')?.hasError('minlength') &&
-                registroUnoForm.get('segundoNombre')?.touched
+                registroUnoForm.get('segundoNombre').hasError('minlength') &&
+                registroUnoForm.get('segundoNombre').touched
               "
             >
               El segundo nombre del feligrés no tiene la longitud mínima permitida.
@@ -74,8 +72,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroUnoForm.get('primerApellido')?.hasError('required') &&
-                registroUnoForm.get('primerApellido')?.touched
+                registroUnoForm.get('primerApellido').hasError('required') &&
+                registroUnoForm.get('primerApellido').touched
               "
             >
               La primer apellido del feligrés es requerido.
@@ -83,8 +81,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroUnoForm.get('primerApellido')?.hasError('minlength') &&
-                registroUnoForm.get('primerApellido')?.touched
+                registroUnoForm.get('primerApellido').hasError('minlength') &&
+                registroUnoForm.get('primerApellido').touched
               "
             >
               El primer apellido del feligrés no tiene la longitud mínima permitida.
@@ -97,8 +95,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroUnoForm.get('segundoApellido')?.hasError('minlength') &&
-                registroUnoForm.get('segundoApellido')?.touched
+                registroUnoForm.get('segundoApellido').hasError('minlength') &&
+                registroUnoForm.get('segundoApellido').touched
               "
             >
               El segundo apellido del feligrés no tiene la longitud mínima permitida.
@@ -112,7 +110,7 @@
             <input type="text" formControlName="apodo" class="form-control" placeholder="Apodo" />
             <small
               class="form-text text-danger"
-              *ngIf="registroUnoForm.get('apodo')?.hasError('minlength') && registroUnoForm.get('apodo')?.touched"
+              *ngIf="registroUnoForm.get('apodo').hasError('minlength') && registroUnoForm.get('apodo').touched"
             >
               El apodo del feligrés no tiene la longitud mínima permitida.
             </small>
@@ -131,7 +129,7 @@
             />
             <small
               class="form-text text-danger"
-              *ngIf="registroUnoForm.get('email')?.hasError('email') && registroUnoForm.get('email')?.touched"
+              *ngIf="registroUnoForm.get('email').hasError('email') && registroUnoForm.get('email').touched"
             >
               El valor ingresado no corresponde a un correo electrónico.
             </small>
@@ -152,9 +150,7 @@
             </select>
             <small
               class="form-text text-danger"
-              *ngIf="
-                registroUnoForm.get('genero_id')?.hasError('required') && registroUnoForm.get('genero_id')?.touched
-              "
+              *ngIf="registroUnoForm.get('genero_id').hasError('required') && registroUnoForm.get('genero_id').touched"
             >
               El género del feligrés es requerido.
             </small>
@@ -171,8 +167,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroUnoForm.get('estadoCivil_id')?.hasError('required') &&
-                registroUnoForm.get('estadoCivil_id')?.touched
+                registroUnoForm.get('estadoCivil_id').hasError('required') &&
+                registroUnoForm.get('estadoCivil_id').touched
               "
             >
               El estado civil del feligrés es requerido.
@@ -218,8 +214,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('nacionalidad')?.hasError('required') &&
-                registroDosForm.get('nacionalidad')?.touched
+                registroDosForm.get('nacionalidad').hasError('required') && registroDosForm.get('nacionalidad').touched
               "
             >
               El país de nacimiento del feligrés es requerida.
@@ -227,8 +222,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('nacionalidad')?.hasError('minlength') &&
-                registroDosForm.get('nacionalidad')?.touched
+                registroDosForm.get('nacionalidad').hasError('minlength') && registroDosForm.get('nacionalidad').touched
               "
             >
               El país de nacimiento del feligrés no tiene la longitud mínima permitida.
@@ -236,8 +230,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('nacionalidad')?.hasError('incorrecto') &&
-                registroDosForm.get('nacionalidad')?.touched
+                registroDosForm.get('nacionalidad').hasError('incorrecto') &&
+                registroDosForm.get('nacionalidad').touched
               "
             >
               El país de nacimiento no se encuentra. Por favor, seleccione un país adecuado.
@@ -255,7 +249,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('rolCasa_id')?.hasError('required') && registroDosForm.get('rolCasa_id')?.touched
+                registroDosForm.get('rolCasa_id').hasError('required') && registroDosForm.get('rolCasa_id').touched
               "
             >
               El rol de la casa del feligrés es requerido.
@@ -287,15 +281,15 @@
 
             <small
               class="form-text text-primary"
-              *ngIf="!registroDosForm.get('numeroCelular')?.errors && txtNumeroCelular.value"
+              *ngIf="!registroDosForm.get('numeroCelular').errors && txtNumeroCelular.value"
             >
               El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
             </small>
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('numeroCelular')?.hasError('minlength') &&
-                registroDosForm.get('numeroCelular')?.touched
+                registroDosForm.get('numeroCelular').hasError('minlength') &&
+                registroDosForm.get('numeroCelular').touched
               "
             >
               El número de celular del feligrés no tiene la longitud mínima permitida.
@@ -304,7 +298,7 @@
             <div>
               <small
                 class="form-text text-danger"
-                *ngIf="registroDosForm.get('numeroCelular')?.invalid && registroDosForm.get('numeroCelular')?.touched"
+                *ngIf="registroDosForm.get('numeroCelular').invalid && registroDosForm.get('numeroCelular').touched"
               >
                 El número de celular no es válido
               </small>
@@ -331,18 +325,18 @@
               formControlName="telefonoCasa"
             >
             </ngx-intl-tel-input>
-            <div class="form-text text-info" *ngIf="registroDosForm.get('telefonoCasa')?.invalid">
+            <div class="form-text text-info" *ngIf="registroDosForm.get('telefonoCasa').invalid">
               Digitar el número de teléfono con el indicativo de la región local
             </div>
             <small
               class="form-text text-danger"
-              *ngIf="registroDosForm.get('telefonoCasa')?.invalid && registroDosForm.get('telefonoCasa')?.touched"
+              *ngIf="registroDosForm.get('telefonoCasa').invalid && registroDosForm.get('telefonoCasa').touched"
             >
               El número de teléfono de la casa no es válido
             </small>
             <small
               class="form-text text-primary"
-              *ngIf="!registroDosForm.get('telefonoCasa')?.invalid && registroDosForm.get('telefonoCasa')?.value"
+              *ngIf="!registroDosForm.get('telefonoCasa').invalid && registroDosForm.get('telefonoCasa').value"
             >
               El número de teléfono de la casa es válido <i class="fa-solid fa-thumbs-up"></i>
             </small>
@@ -350,8 +344,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('telefonoCasa')?.hasError('minlength') &&
-                registroDosForm.get('telefonoCasa')?.touched
+                registroDosForm.get('telefonoCasa').hasError('minlength') && registroDosForm.get('telefonoCasa').touched
               "
             >
               El número de la casa del feligrés no tiene la longitud mínima permitida.
@@ -371,17 +364,13 @@
             />
             <small
               class="form-text text-danger"
-              *ngIf="
-                registroDosForm.get('direccion')?.hasError('required') && registroDosForm.get('direccion')?.touched
-              "
+              *ngIf="registroDosForm.get('direccion').hasError('required') && registroDosForm.get('direccion').touched"
             >
               La dirección del feligrés es requerido.
             </small>
             <small
               class="form-text text-danger"
-              *ngIf="
-                registroDosForm.get('direccion')?.hasError('minlength') && registroDosForm.get('direccion')?.touched
-              "
+              *ngIf="registroDosForm.get('direccion').hasError('minlength') && registroDosForm.get('direccion').touched"
             >
               La dirección del feligrés no tiene la longitud mínima permitida.
             </small>
@@ -393,8 +382,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('ciudadDireccion')?.hasError('required') &&
-                registroDosForm.get('ciudadDireccion')?.touched
+                registroDosForm.get('ciudadDireccion').hasError('required') &&
+                registroDosForm.get('ciudadDireccion').touched
               "
             >
               El campo ciudad / localidad es requerido.
@@ -402,8 +391,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('ciudadDireccion')?.hasError('minlength') &&
-                registroDosForm.get('ciudadDireccion')?.touched
+                registroDosForm.get('ciudadDireccion').hasError('minlength') &&
+                registroDosForm.get('ciudadDireccion').touched
               "
             >
               El campo ciudad / localidad no tiene la longitud mínima permitida.
@@ -422,8 +411,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('departamentoDireccion')?.hasError('minlength') &&
-                registroDosForm.get('departamentoDireccion')?.touched
+                registroDosForm.get('departamentoDireccion').hasError('minlength') &&
+                registroDosForm.get('departamentoDireccion').touched
               "
             >
               El campo estado / provincia / departamento no tiene la longitud mínima permitida.
@@ -442,8 +431,8 @@
           <small
             class="form-text text-danger"
             *ngIf="
-              registroDosForm.get('codigoPostalDireccion')?.hasError('minlength') &&
-              registroDosForm.get('codigoPostalDireccion')?.touched
+              registroDosForm.get('codigoPostalDireccion').hasError('minlength') &&
+              registroDosForm.get('codigoPostalDireccion').touched
             "
           >
             El código postal no tiene la longitud mínima permitida.
@@ -459,8 +448,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('paisDireccion')?.hasError('required') &&
-                registroDosForm.get('paisDireccion')?.touched
+                registroDosForm.get('paisDireccion').hasError('required') &&
+                registroDosForm.get('paisDireccion').touched
               "
             >
               El país de la dirección de residencia es requerida.
@@ -468,8 +457,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('paisDireccion')?.hasError('minlength') &&
-                registroDosForm.get('paisDireccion')?.touched
+                registroDosForm.get('paisDireccion').hasError('minlength') &&
+                registroDosForm.get('paisDireccion').touched
               "
             >
               El país de la dirección de residencia no tiene la longitud mínima permitida.
@@ -497,8 +486,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('direccionPostal')?.hasError('required') &&
-                registroDosForm.get('direccionPostal')?.touched
+                registroDosForm.get('direccionPostal').hasError('required') &&
+                registroDosForm.get('direccionPostal').touched
               "
             >
               La dirección postal es requerida.
@@ -506,8 +495,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('direccionPostal')?.hasError('minlength') &&
-                registroDosForm.get('direccionPostal')?.touched
+                registroDosForm.get('direccionPostal').hasError('minlength') &&
+                registroDosForm.get('direccionPostal').touched
               "
             >
               La dirección postal no tiene la longitud mínima permitida.
@@ -520,8 +509,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('ciudadPostal')?.hasError('required') &&
-                registroDosForm.get('ciudadPostal')?.touched
+                registroDosForm.get('ciudadPostal').hasError('required') && registroDosForm.get('ciudadPostal').touched
               "
             >
               El campo ciudad / localidad de la dirección postal es requerida.
@@ -529,8 +517,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('ciudadPostal')?.hasError('minlength') &&
-                registroDosForm.get('ciudadPostal')?.touched
+                registroDosForm.get('ciudadPostal').hasError('minlength') && registroDosForm.get('ciudadPostal').touched
               "
             >
               El campo ciudad / localidad de la dirección postal no tiene la longitud mínima permitida.
@@ -544,8 +531,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('departamentoPostal')?.hasError('minlength') &&
-                registroDosForm.get('departamentoPostal')?.touched
+                registroDosForm.get('departamentoPostal').hasError('minlength') &&
+                registroDosForm.get('departamentoPostal').touched
               "
             >
               El campo estado / provincia / departamento de la dirección postal no tiene la longitud mínima permitida.
@@ -569,7 +556,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroDosForm.get('paisPostal')?.hasError('required') && registroDosForm.get('paisPostal')?.touched
+                registroDosForm.get('paisPostal').hasError('required') && registroDosForm.get('paisPostal').touched
               "
             >
               El país de la dirección postal es requerido.
@@ -613,8 +600,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroTresForm.get('gradoAcademico_id')?.hasError('required') &&
-                registroTresForm.get('gradoAcademico_id')?.touched
+                registroTresForm.get('gradoAcademico_id').hasError('required') &&
+                registroTresForm.get('gradoAcademico_id').touched
               "
             >
               Seleccione un grado académico.
@@ -633,7 +620,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroTresForm.get('ocupacion')?.hasError('required') && registroTresForm.get('ocupacion')?.touched
+                registroTresForm.get('ocupacion').hasError('required') && registroTresForm.get('ocupacion').touched
               "
             >
               La ocupación es obligatoria
@@ -641,7 +628,7 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroTresForm.get('ocupacion')?.hasError('minlength') && registroTresForm.get('ocupacion')?.touched
+                registroTresForm.get('ocupacion').hasError('minlength') && registroTresForm.get('ocupacion').touched
               "
             >
               El campo ocupación no tiene la longitud mínima permitida.
@@ -660,8 +647,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroTresForm.get('especializacionEmpleo')?.hasError('minlength') &&
-                registroTresForm.get('especializacionEmpleo')?.touched
+                registroTresForm.get('especializacionEmpleo').hasError('minlength') &&
+                registroTresForm.get('especializacionEmpleo').touched
               "
             >
               El campo especialización de empleo no tiene la longitud mínima permitida.
@@ -713,8 +700,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('tipoMiembro_id')?.hasError('tipoMiembro_id') &&
-                registroCuatroForm.get('tipoMiembro_id')?.touched
+                registroCuatroForm.get('tipoMiembro_id').hasError('tipoMiembro_id') &&
+                registroCuatroForm.get('tipoMiembro_id').touched
               "
             >
               Selecciones que tipo de miembro es
@@ -736,9 +723,7 @@
 
             <small
               class="form-text text-danger"
-              *ngIf="
-                registroCuatroForm.get('esJoven')?.hasError('esJoven') && registroCuatroForm.get('esJoven')?.touched
-              "
+              *ngIf="registroCuatroForm.get('esJoven').hasError('esJoven') && registroCuatroForm.get('esJoven').touched"
             >
               Selecciones si es o no Joven
             </small>
@@ -767,8 +752,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('ejerceMinisterio')?.hasError('ejerceMinisterio') &&
-                registroCuatroForm.get('ejerceMinisterio')?.touched
+                registroCuatroForm.get('ejerceMinisterio').hasError('ejerceMinisterio') &&
+                registroCuatroForm.get('ejerceMinisterio').touched
               "
             >
               ¿Ejerce algún ministerio?
@@ -788,8 +773,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('esVoluntario')?.hasError('esVoluntario') &&
-                registroCuatroForm.get('esVoluntario')?.touched
+                registroCuatroForm.get('esVoluntario').hasError('esVoluntario') &&
+                registroCuatroForm.get('esVoluntario').touched
               "
             >
               ¿Realiza labor voluntaria/ministerial?
@@ -848,8 +833,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('congregacionPais_id')?.hasError('required') &&
-                registroCuatroForm.get('congregacionPais_id')?.touched
+                registroCuatroForm.get('congregacionPais_id').hasError('required') &&
+                registroCuatroForm.get('congregacionPais_id').touched
               "
             >
               La congregación del feligrés es requerida.
@@ -872,8 +857,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('congregacion_id')?.hasError('required') &&
-                registroCuatroForm.get('congregacion_id')?.touched
+                registroCuatroForm.get('congregacion_id').hasError('required') &&
+                registroCuatroForm.get('congregacion_id').touched
               "
             >
               La congregación del feligrés es requerida.
@@ -905,8 +890,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('tipoDocumento_id')?.hasError('required') &&
-                registroCuatroForm.get('tipoDocumento_id')?.touched
+                registroCuatroForm.get('tipoDocumento_id').hasError('required') &&
+                registroCuatroForm.get('tipoDocumento_id').touched
               "
             >
               El tipo de documento del feligrés es requerido.
@@ -924,8 +909,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('numeroDocumento')?.hasError('required') &&
-                registroCuatroForm.get('numeroDocumento')?.touched
+                registroCuatroForm.get('numeroDocumento').hasError('required') &&
+                registroCuatroForm.get('numeroDocumento').touched
               "
             >
               El número de documento es requerido
@@ -933,8 +918,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('numeroDocumento')?.hasError('minlength') &&
-                registroCuatroForm.get('numeroDocumento')?.touched
+                registroCuatroForm.get('numeroDocumento').hasError('minlength') &&
+                registroCuatroForm.get('numeroDocumento').touched
               "
             >
               El número de documento no tiene la longitud mínima permitida.
@@ -982,8 +967,8 @@
             <small
               class="form-text text-danger"
               *ngIf="
-                registroCuatroForm.get('aceptaPolitica')?.hasError('required') &&
-                registroCuatroForm.get('aceptaPolitica')?.touched
+                registroCuatroForm.get('aceptaPolitica').hasError('required') &&
+                registroCuatroForm.get('aceptaPolitica').touched
               "
             >
               Debes aceptar la política de tratamiento de datos para continuar.
