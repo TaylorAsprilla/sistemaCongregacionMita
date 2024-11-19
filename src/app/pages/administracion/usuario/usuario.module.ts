@@ -12,26 +12,25 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { NgxPaginationModule } from 'ngx-pagination'; //Imports NgxPaginationModule
 import { VerCensoModule } from 'src/app/components/ver-censo/ver-censo.module';
-import { ExportarExcelModule } from 'src/app/components/exportar-excel/exportar-excel.module';
+
 
 @NgModule({
     imports: [
-        CommonModule,
-        AppRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        BrowserModule,
-        InformacionUsuarioModule,
-        CargandoInformacionModule,
-        PipesModule,
-        NgxPaginationModule,
-        VerCensoModule,
-        ExportarExcelModule,
-        ConfirmacionDeRegistroComponent,
-        RegistrarUsuarioComponent,
-        UsuariosComponent,
-        CambiarPasswordUsuarioComponent,
-    ],
+    CommonModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserModule,
+    InformacionUsuarioModule,
+    CargandoInformacionModule,
+    PipesModule,
+    NgxPaginationModule,
+    VerCensoModule,
+    ConfirmacionDeRegistroComponent,
+    RegistrarUsuarioComponent,
+    UsuariosComponent,
+    CambiarPasswordUsuarioComponent,
+],
     exports: [
         ConfirmacionDeRegistroComponent,
         RegistrarUsuarioComponent,

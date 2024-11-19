@@ -1,1 +1,32 @@
-<router-outlet> </router-outlet>
+<app-spinner></app-spinner>
+<div
+  id="main-wrapper"
+  [ngClass]="{
+    blue: color == 'blue',
+
+    'mini-sidebar': showMinisidebar,
+    'dark-theme': showDarktheme,
+    'rtl-theme': showRtl
+  }"
+>
+  <app-header class="w-100" (toggleSidebar)="toggleSidebar()"></app-header>
+
+  <aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+      <app-sidebar></app-sidebar>
+    </div>
+    <!-- End Sidebar scroll-->
+  </aside>
+
+  <div class="page-wrapper">
+    <app-bredcrumbs></app-bredcrumbs>
+
+    <div class="container-fluid">
+      <!-- Sistema de rutas -->
+
+      <router-outlet> </router-outlet>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

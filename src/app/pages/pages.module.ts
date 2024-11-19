@@ -12,7 +12,7 @@ import { NopagefoundModule } from './nopagefound/nopagefound.module';
 import { CargandoInformacionModule } from '../components/cargando-informacion/cargando-informacion.module';
 import { MultimediaModule } from './multimedia/multimedia.module';
 import { InicioModule } from './inicio/inicio.module';
-import { SpinnerModule } from '../components/spinner/spinner.module';
+
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SpinnerInterceptor } from '../core/interceptors/spinner/spinner.interceptors';
 import { OpcionDeTransporteComponent } from './configuracion/opcion-de-transporte/opcion-de-transporte.component';
@@ -31,33 +31,32 @@ import { AuthInterceptor } from '../core/interceptors/auth/auth.interceptor';
 @NgModule({
     exports: [PagesComponent],
     imports: [
-        CommonModule,
-        RouterModule,
-        SharedModule,
-        AdministracionModule,
-        FormsModule,
-        ReactiveFormsModule,
-        PerfilModule,
-        InformeModule,
-        PipesModule,
-        NopagefoundModule,
-        CargandoInformacionModule,
-        MultimediaModule,
-        InicioModule,
-        SpinnerModule,
-        ObrerosModule,
-        AyudantesModule,
-        PagesComponent,
-        OpcionDeTransporteComponent,
-        GeneroComponent,
-        TipoDeEstudioComponent,
-        RazonDeSolicitudComponent,
-        ParentescoComponent,
-        RolEnCasaComponent,
-        EstadoCivilComponent,
-        GradoAlcanzadoComponent,
-        VoluntarioComponent,
-    ],
+    CommonModule,
+    RouterModule,
+    SharedModule,
+    AdministracionModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PerfilModule,
+    InformeModule,
+    PipesModule,
+    NopagefoundModule,
+    CargandoInformacionModule,
+    MultimediaModule,
+    InicioModule,
+    ObrerosModule,
+    AyudantesModule,
+    PagesComponent,
+    OpcionDeTransporteComponent,
+    GeneroComponent,
+    TipoDeEstudioComponent,
+    RazonDeSolicitudComponent,
+    ParentescoComponent,
+    RolEnCasaComponent,
+    EstadoCivilComponent,
+    GradoAlcanzadoComponent,
+    VoluntarioComponent,
+],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true },
         {
