@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppRoutingModule } from 'src/app/app-routing.module';
+import { AppRoutingModule } from 'src/app/app.routes';
 import { CrearActividadComponent } from './crear-actividad/crear-actividad.component';
 import { CrearStatusComponent } from './crear-status/crear-status.component';
 import { InformeActividadesComponent } from './informe-actividades/informe-actividades.component';
@@ -17,27 +17,34 @@ import { SeccionInformeModule } from 'src/app/components/seccion-informe/seccion
 import { InformeSituacionVisitaComponent } from './informe-situacion-visita/informe-situacion-visita.component';
 
 @NgModule({
-    imports: [CommonModule, AppRoutingModule, FormsModule, ReactiveFormsModule, SeccionInformeModule, CrearActividadComponent,
-        CrearStatusComponent,
-        InformeActividadesComponent,
-        InformeContablesComponent,
-        InformeLogrosComponent,
-        InformeMetasComponent,
-        InformeVisitasComponent,
-        InformeSituacionVisitaComponent,
-        InformeComponent,
-        CrearCampoComponent,
-        VerInformeComponent,
-        KeysPipe],
-    exports: [
-        CrearActividadComponent,
-        CrearStatusComponent,
-        InformeActividadesComponent,
-        InformeContablesComponent,
-        InformeLogrosComponent,
-        InformeMetasComponent,
-        InformeVisitasComponent,
-        KeysPipe,
-    ],
+  imports: [
+    CommonModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SeccionInformeModule,
+    CrearActividadComponent,
+    CrearStatusComponent,
+    InformeActividadesComponent,
+    InformeContablesComponent,
+    InformeLogrosComponent,
+    InformeMetasComponent,
+    InformeVisitasComponent,
+    InformeSituacionVisitaComponent,
+    InformeComponent,
+    CrearCampoComponent,
+    VerInformeComponent,
+    KeysPipe,
+  ],
+  exports: [
+    CrearActividadComponent,
+    CrearStatusComponent,
+    InformeActividadesComponent,
+    InformeContablesComponent,
+    InformeLogrosComponent,
+    InformeMetasComponent,
+    InformeVisitasComponent,
+    KeysPipe,
+  ],
 })
 export class InformeModule {}

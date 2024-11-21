@@ -13,17 +13,13 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
 import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.component';
 
 @Component({
-    selector: 'app-censo-supervisor',
-    templateUrl: './censo-supervisor.component.html',
-    styleUrls: ['./censo-supervisor.component.scss'],
-    standalone: true,
-    imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        VerCensoComponent,
-    ],
+  selector: 'app-censo-supervisor',
+  templateUrl: './censo-supervisor.component.html',
+  styleUrls: ['./censo-supervisor.component.scss'],
+  standalone: true,
+  imports: [NgIf, CargandoInformacionComponent, VerCensoComponent],
 })
-export class CensoSupervisorComponent implements OnInit {
+export default class CensoSupervisorComponent implements OnInit {
   nombreArchivo: string;
   nombreCongregacionPais: string | undefined;
   cargando: boolean = true;

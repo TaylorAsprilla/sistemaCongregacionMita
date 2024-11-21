@@ -21,13 +21,13 @@ import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { InformacionUsuarioComponent } from '../../../../components/informacion-usuario/informacion-usuario.component';
 
 @Component({
-    selector: 'app-registrar-usuario',
-    templateUrl: './registrar-usuario.component.html',
-    styleUrls: ['./registrar-usuario.component.scss'],
-    standalone: true,
-    imports: [InformacionUsuarioComponent],
+  selector: 'app-registrar-usuario',
+  templateUrl: './registrar-usuario.component.html',
+  styleUrls: ['./registrar-usuario.component.scss'],
+  standalone: true,
+  imports: [InformacionUsuarioComponent],
 })
-export class RegistrarUsuarioComponent implements OnInit {
+export default class RegistrarUsuarioComponent implements OnInit {
   usuario: UsuarioModel;
   generos: GeneroModel[] = [];
   estadoCivil: EstadoCivilModel[] = [];

@@ -6,12 +6,12 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Component({
-    selector: 'app-confirmacion-de-registro',
-    templateUrl: './confirmacion-de-registro.component.html',
-    styleUrls: ['./confirmacion-de-registro.component.scss'],
-    standalone: true,
+  selector: 'app-confirmacion-de-registro',
+  templateUrl: './confirmacion-de-registro.component.html',
+  styleUrls: ['./confirmacion-de-registro.component.scss'],
+  standalone: true,
 })
-export class ConfirmacionDeRegistroComponent implements OnInit {
+export default class ConfirmacionDeRegistroComponent implements OnInit {
   usuario: UsuarioModel;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}

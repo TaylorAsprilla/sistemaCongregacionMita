@@ -11,19 +11,19 @@ import { BredcrumbsComponent } from '../shared/bredcrumbs/bredcrumbs.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 
 @Component({
-    selector: 'app-pages',
-    templateUrl: './pages.component.html',
-    styleUrls: ['./pages.component.scss'],
-    standalone: true,
-    imports: [
-        SpinnerComponent,
-        NgClass,
-        HeaderComponent,
-        SidebarComponent,
-        BredcrumbsComponent,
-        RouterOutlet,
-        FooterComponent,
-    ],
+  selector: 'app-pages',
+  templateUrl: './pages.component.html',
+  styleUrls: ['./pages.component.scss'],
+  standalone: true,
+  imports: [
+    SpinnerComponent,
+    NgClass,
+    HeaderComponent,
+    SidebarComponent,
+    BredcrumbsComponent,
+    RouterOutlet,
+    FooterComponent,
+  ],
 })
 export class PagesComponent implements OnInit {
   color = 'blue';

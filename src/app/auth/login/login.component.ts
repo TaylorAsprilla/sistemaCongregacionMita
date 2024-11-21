@@ -10,19 +10,13 @@ import Swal from 'sweetalert2';
 import { NgClass, NgIf } from '@angular/common';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: true,
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgClass,
-        NgIf,
-        RouterLink,
-    ],
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, RouterLink],
 })
-export class LoginComponent implements OnInit {
+export default class LoginComponent implements OnInit {
   usuariosSubscription: Subscription;
   loginForm: FormGroup;
   isLoginFormSubmitted: Boolean;

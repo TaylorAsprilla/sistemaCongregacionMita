@@ -1,6 +1,14 @@
 import Swal from 'sweetalert2';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AbstractControlOptions, FormArray, FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  AbstractControlOptions,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -14,20 +22,13 @@ import { NgIf, NgFor } from '@angular/common';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @Component({
-    selector: 'app-asignar-permisos',
-    templateUrl: './asignar-permisos.component.html',
-    styleUrls: ['./asignar-permisos.component.scss'],
-    standalone: true,
-    imports: [
-        BuscarUsuarioComponent,
-        NgIf,
-        FormsModule,
-        ReactiveFormsModule,
-        NgFor,
-        NgxIntlTelInputModule,
-    ],
+  selector: 'app-asignar-permisos',
+  templateUrl: './asignar-permisos.component.html',
+  styleUrls: ['./asignar-permisos.component.scss'],
+  standalone: true,
+  imports: [BuscarUsuarioComponent, NgIf, FormsModule, ReactiveFormsModule, NgFor, NgxIntlTelInputModule],
 })
-export class AsignarPermisosComponent implements OnInit {
+export default class AsignarPermisosComponent implements OnInit {
   permisosForm: FormGroup;
   passwordUsuarioForm: FormGroup;
 

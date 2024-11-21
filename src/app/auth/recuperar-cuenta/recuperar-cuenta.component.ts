@@ -6,17 +6,13 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
-    selector: 'app-recuperar-cuenta',
-    templateUrl: './recuperar-cuenta.component.html',
-    styleUrls: ['./recuperar-cuenta.component.scss'],
-    standalone: true,
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        RouterLink,
-    ],
+  selector: 'app-recuperar-cuenta',
+  templateUrl: './recuperar-cuenta.component.html',
+  styleUrls: ['./recuperar-cuenta.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
-export class RecuperarCuentaComponent implements OnInit {
+export default class RecuperarCuentaComponent implements OnInit {
   cuentaForm: FormGroup;
 
   get Rutas() {

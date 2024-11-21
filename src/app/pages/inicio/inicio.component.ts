@@ -15,18 +15,13 @@ import { SeccionHomeComponent } from '../../components/seccion-home/seccion-home
 import { ServiciosEnVivoComponent } from '../../components/servicios-en-vivo/servicios-en-vivo.component';
 
 @Component({
-    selector: 'app-inicio',
-    templateUrl: './inicio.component.html',
-    styleUrls: ['./inicio.component.css'],
-    standalone: true,
-    imports: [
-        NgFor,
-        PermisosDirective,
-        SeccionHomeComponent,
-        ServiciosEnVivoComponent,
-    ],
+  selector: 'app-inicio',
+  templateUrl: './inicio.component.html',
+  styleUrls: ['./inicio.component.css'],
+  standalone: true,
+  imports: [NgFor, PermisosDirective, SeccionHomeComponent, ServiciosEnVivoComponent],
 })
-export class InicioComponent implements OnInit {
+export default class InicioComponent implements OnInit {
   usuarios: UsuarioModel[] = [];
   totalUsuarios: number;
 

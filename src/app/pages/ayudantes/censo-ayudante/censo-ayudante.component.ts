@@ -13,17 +13,13 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
 import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.component';
 
 @Component({
-    selector: 'app-censo-ayudante',
-    templateUrl: './censo-ayudante.component.html',
-    styleUrls: ['./censo-ayudante.component.scss'],
-    standalone: true,
-    imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        VerCensoComponent,
-    ],
+  selector: 'app-censo-ayudante',
+  templateUrl: './censo-ayudante.component.html',
+  styleUrls: ['./censo-ayudante.component.scss'],
+  standalone: true,
+  imports: [NgIf, CargandoInformacionComponent, VerCensoComponent],
 })
-export class CensoAyudanteComponent implements OnInit {
+export default class CensoAyudanteComponent implements OnInit {
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
   nombreUsuario: string;

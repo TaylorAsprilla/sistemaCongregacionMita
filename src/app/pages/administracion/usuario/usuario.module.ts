@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from 'src/app/app-routing.module';
 import { CargandoInformacionModule } from 'src/app/components/cargando-informacion/cargando-informacion.module';
 import { InformacionUsuarioModule } from 'src/app/components/informacion-usuario/informacion-usuario.module';
 import { CambiarPasswordUsuarioComponent } from './cambiar-password-usuario/cambiar-password-usuario.component';
@@ -13,11 +12,9 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { NgxPaginationModule } from 'ngx-pagination'; //Imports NgxPaginationModule
 import { VerCensoModule } from 'src/app/components/ver-censo/ver-censo.module';
 
-
 @NgModule({
-    imports: [
+  imports: [
     CommonModule,
-    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
@@ -30,12 +27,12 @@ import { VerCensoModule } from 'src/app/components/ver-censo/ver-censo.module';
     RegistrarUsuarioComponent,
     UsuariosComponent,
     CambiarPasswordUsuarioComponent,
-],
-    exports: [
-        ConfirmacionDeRegistroComponent,
-        RegistrarUsuarioComponent,
-        UsuariosComponent,
-        CambiarPasswordUsuarioComponent,
-    ],
+  ],
+  exports: [
+    ConfirmacionDeRegistroComponent,
+    RegistrarUsuarioComponent,
+    UsuariosComponent,
+    CambiarPasswordUsuarioComponent,
+  ],
 })
 export class UsuarioModule {}
