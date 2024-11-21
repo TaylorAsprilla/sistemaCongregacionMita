@@ -11,6 +11,7 @@ export const appConfig: ApplicationConfig = {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
+
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideAnimations(),
     provideRouter(routes),

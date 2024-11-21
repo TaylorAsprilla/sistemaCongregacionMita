@@ -9,21 +9,15 @@ import { configuracion } from 'src/environments/config/configuration';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIf, NgFor, NgClass } from '@angular/common';
 import { PermisosDirective } from '../../directive/permisos/permisos.directive';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 declare var $: any;
 
 @Component({
-    selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.scss'],
-    standalone: true,
-    imports: [
-        RouterLink,
-        NgIf,
-        NgFor,
-        PermisosDirective,
-        NgClass,
-        RouterLinkActive,
-    ],
+  selector: 'app-sidebar',
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss'],
+  standalone: true,
+  imports: [RouterLink, NgIf, NgFor, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule],
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[] = [];
