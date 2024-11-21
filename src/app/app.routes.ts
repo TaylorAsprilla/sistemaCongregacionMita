@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadChildren: () => import('./auth/auth.routes'),
   },
   {
+    path: '',
+    loadChildren: () => import('./pages/multimedia/multimedia.routes'),
+  },
+  {
     path: '**',
     component: NopagefoundComponent,
   },
