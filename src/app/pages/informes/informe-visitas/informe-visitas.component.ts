@@ -1,16 +1,23 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VisitaModel } from 'src/app/core/models/visita.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { VisitaService } from 'src/app/services/visita/visita.service';
 import Swal from 'sweetalert2';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-informe-visitas',
-  templateUrl: './informe-visitas.component.html',
-  styleUrls: ['./informe-visitas.component.scss'],
+    selector: 'app-informe-visitas',
+    templateUrl: './informe-visitas.component.html',
+    styleUrls: ['./informe-visitas.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgFor,
+    ],
 })
 export class InformeVisitasComponent implements OnInit, OnDestroy {
   public visitaForm: UntypedFormGroup;
@@ -53,7 +60,7 @@ export class InformeVisitasComponent implements OnInit, OnDestroy {
       },
       (error) => {
         let errores = error.error.errors;
-        let listaErrores = [];
+        let listaErrores: string[] = [];
 
         Object.entries(errores).forEach(([key, value]) => {
           listaErrores.push('° ' + value['msg'] + '<br>');

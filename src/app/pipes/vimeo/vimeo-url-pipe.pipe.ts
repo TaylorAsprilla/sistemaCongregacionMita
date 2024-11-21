@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({
-  name: 'vimeoUrlPipe',
+    name: 'vimeoUrlPipe',
+    standalone: true,
 })
 export class VimeoUrlPipePipe implements PipeTransform {
   constructor(protected domSanitizer: DomSanitizer) {}

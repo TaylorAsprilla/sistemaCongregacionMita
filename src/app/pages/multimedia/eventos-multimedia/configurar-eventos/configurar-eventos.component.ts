@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -7,11 +7,22 @@ import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/
 import { RUTAS } from 'src/app/routes/menu-items';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
 import Swal from 'sweetalert2';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { NgFor } from '@angular/common';
+import { BibliotecaMultimediaComponent } from '../../../../components/biblioteca-multimedia/biblioteca-multimedia.component';
 
 @Component({
-  selector: 'app-configurar-eventos',
-  templateUrl: './configurar-eventos.component.html',
-  styleUrls: ['./configurar-eventos.component.scss'],
+    selector: 'app-configurar-eventos',
+    templateUrl: './configurar-eventos.component.html',
+    styleUrls: ['./configurar-eventos.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgxIntlTelInputModule,
+        NgFor,
+        BibliotecaMultimediaComponent,
+    ],
 })
 export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   eventosForm: FormGroup;
@@ -78,8 +89,8 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
           this.cargarEventos();
         },
         (error) => {
-          let errores = error.error.errors;
-          let listaErrores = [];
+          const errores = error.error.errors as { [key: string]: { msg: string } };
+          const listaErrores: string[] = [];
 
           Object.entries(errores).forEach(([key, value]) => {
             listaErrores.push('° ' + value['msg'] + '<br>');
@@ -137,7 +148,7 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
           },
           (error) => {
             let errores = error.error.errors;
-            let listaErrores = [];
+            let listaErrores: string[] = [];
 
             Object.entries(errores).forEach(([key, value]) => {
               listaErrores.push('° ' + value['msg'] + '<br>');

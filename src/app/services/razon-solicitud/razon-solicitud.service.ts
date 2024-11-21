@@ -54,7 +54,7 @@ export class RazonSolicitudService {
     return this.httpClient.put(`${base_url}/razonsolicitud/${razonSolicitud.id}`, razonSolicitud, this.headers);
   }
 
-  elimiminarRazonsolicitud(razonSolicitud: RazonSolicitudModel) {
+  eliminarRazonSolicitud(razonSolicitud: RazonSolicitudModel) {
     return this.httpClient.delete(`${base_url}/razonsolicitud/${razonSolicitud.id}`, this.headers);
   }
 

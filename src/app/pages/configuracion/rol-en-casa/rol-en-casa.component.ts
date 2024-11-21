@@ -4,11 +4,19 @@ import { delay } from 'rxjs/operators';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
 import { RolCasaService } from 'src/app/services/rol-casa/rol-casa.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-rol-en-casa',
-  templateUrl: './rol-en-casa.component.html',
-  styleUrls: ['./rol-en-casa.component.scss'],
+    selector: 'app-rol-en-casa',
+    templateUrl: './rol-en-casa.component.html',
+    styleUrls: ['./rol-en-casa.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class RolEnCasaComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
@@ -38,7 +46,7 @@ export class RolEnCasaComponent implements OnInit, OnDestroy {
   }
 
   buscarRolCasa(id: number) {
-    return this.rolesCasa.find((rolCasa: RolCasaModel) => rolCasa.id === id).rolCasa;
+    return this.rolesCasa.find((rolCasa: RolCasaModel) => rolCasa.id === id)?.rolCasa;
   }
 
   async actualizarRolCasa(id: number) {
@@ -86,7 +94,7 @@ export class RolEnCasaComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.rolCasaService.elimiminarRolCasa(rolCasa).subscribe((rolCasaEliminado: RolCasaModel) => {
+        this.rolCasaService.eliminarRolCasa(rolCasa).subscribe((rolCasaEliminado: RolCasaModel) => {
           Swal.fire('¡Deshabilitado!', `El género ${rolCasa.rolCasa} fue deshabilitado correctamente`, 'success');
 
           this.cargarRolCasas();

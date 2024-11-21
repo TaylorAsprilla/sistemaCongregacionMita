@@ -9,25 +9,22 @@ import { WhatsappPipe } from './whatsapp/whatsapp.pipe';
 import { CalcularEdadPipe } from './calcularEdad/calcular-edad.pipe';
 
 @NgModule({
-  declarations: [
-    ImagenPipe,
-    VimeoUrlPipePipe,
-    YoutubePipe,
-    FilterByNombrePipePipe,
-    TelegramPipe,
-    WhatsappPipe,
-    CalcularEdadPipe,
-  ],
-  imports: [CommonModule],
-  exports: [
-    ImagenPipe,
-    VimeoUrlPipePipe,
-    YoutubePipe,
-    FilterByNombrePipePipe,
-    TelegramPipe,
-    WhatsappPipe,
-    CalcularEdadPipe,
-  ],
-  providers: [FilterByNombrePipePipe],
+    imports: [CommonModule, ImagenPipe,
+        VimeoUrlPipePipe,
+        YoutubePipe,
+        FilterByNombrePipePipe,
+        TelegramPipe,
+        WhatsappPipe,
+        CalcularEdadPipe],
+    exports: [
+        ImagenPipe,
+        VimeoUrlPipePipe,
+        YoutubePipe,
+        FilterByNombrePipePipe,
+        TelegramPipe,
+        WhatsappPipe,
+        CalcularEdadPipe,
+    ],
+    providers: [FilterByNombrePipePipe],
 })
 export class PipesModule {}

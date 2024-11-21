@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -8,11 +8,20 @@ import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
 import Swal from 'sweetalert2';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-crear-tipo-documento',
-  templateUrl: './crear-tipo-documento.component.html',
-  styleUrls: ['./crear-tipo-documento.component.scss'],
+    selector: 'app-crear-tipo-documento',
+    templateUrl: './crear-tipo-documento.component.html',
+    styleUrls: ['./crear-tipo-documento.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgxIntlTelInputModule,
+        NgFor,
+    ],
 })
 export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
   public tipoDocumentoForm: FormGroup;
@@ -80,11 +89,11 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
           this.cargarTiposDeDocumentos();
         },
         (error) => {
-          let errores = error.error.errors;
-          let listaErrores = [];
+          const errores = error.error.errors as { [key: string]: { msg: string } };
+          const listaErrores: string[] = [];
 
           Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
+            listaErrores.push('° ' + (value as { msg: string })['msg'] + '<br>');
           });
 
           Swal.fire({
@@ -103,19 +112,21 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
       this.tipoDocumentoService
         .getTipoDocumento(id)
         .pipe(delay(100))
-        .subscribe(
-          (tipoDeDocumentoEncontrado: TipoDocumentoModel) => {
-            const { documento, pais_id } = tipoDeDocumentoEncontrado;
-            this.tipoDeDocumentoSeleccionado = tipoDeDocumentoEncontrado;
+        .subscribe({
+          next: (tipoDeDocumentoEncontrado: TipoDocumentoModel | null) => {
+            if (tipoDeDocumentoEncontrado) {
+              const { documento, pais_id } = tipoDeDocumentoEncontrado;
+              this.tipoDeDocumentoSeleccionado = tipoDeDocumentoEncontrado;
 
-            this.tipoDocumentoForm.setValue({ documento, pais_id });
+              this.tipoDocumentoForm.setValue({ documento, pais_id });
+            }
           },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
+          error: (error) => {
+            const errores = error.error.errors as { [key: string]: { msg: string } };
+            const listaErrores: string[] = [];
 
             Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
+              listaErrores.push('° ' + value.msg + '<br>');
             });
 
             Swal.fire({
@@ -124,9 +135,9 @@ export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
               html: `${listaErrores.join('')}`,
             });
 
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_DOCUMENTO}`);
-          }
-        );
+            this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.TIPO_DE_DOCUMENTO}`);
+          },
+        });
     }
   }
 

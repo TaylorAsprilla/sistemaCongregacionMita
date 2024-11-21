@@ -4,11 +4,19 @@ import { delay } from 'rxjs/operators';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
 import { EstadoCivilService } from 'src/app/services/estado-civil/estado-civil.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-estado-civil',
-  templateUrl: './estado-civil.component.html',
-  styleUrls: ['./estado-civil.component.scss'],
+    selector: 'app-estado-civil',
+    templateUrl: './estado-civil.component.html',
+    styleUrls: ['./estado-civil.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class EstadoCivilComponent implements OnInit {
   public cargando: boolean = true;
@@ -75,17 +83,15 @@ export class EstadoCivilComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.estadoCivilService
-          .elimiminarEstadoCivil(estadoCivil)
-          .subscribe((estadoCivilEliminado: EstadoCivilModel) => {
-            Swal.fire(
-              '¡Deshabilitado!',
-              `El estado civil ${estadoCivil.estadoCivil} fue deshabilitado correctamente`,
-              'success'
-            );
+        this.estadoCivilService.eliminarEstadoCivil(estadoCivil).subscribe(() => {
+          Swal.fire(
+            '¡Deshabilitado!',
+            `El estado civil ${estadoCivil.estadoCivil} fue deshabilitado correctamente`,
+            'success'
+          );
 
-            this.cargarEstadosCiviles();
-          });
+          this.cargarEstadosCiviles();
+        });
       }
     });
   }

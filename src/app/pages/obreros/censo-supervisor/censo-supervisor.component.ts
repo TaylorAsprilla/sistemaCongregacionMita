@@ -8,19 +8,24 @@ import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-co
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
+import { NgIf } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
+import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.component';
 
 @Component({
   selector: 'app-censo-supervisor',
   templateUrl: './censo-supervisor.component.html',
   styleUrls: ['./censo-supervisor.component.scss'],
+  standalone: true,
+  imports: [NgIf, CargandoInformacionComponent, VerCensoComponent],
 })
-export class CensoSupervisorComponent implements OnInit {
+export default class CensoSupervisorComponent implements OnInit {
   nombreArchivo: string;
-  nombreCongregacionPais: string;
+  nombreCongregacionPais: string | undefined;
   cargando: boolean = true;
   usuarios: UsuariosPorCongregacionInterface[] = [];
   totalUsuarios: number = 0;
-  idUsuario: number;
+  idUsuario: number | undefined;
 
   // Subscription
   usuarioSubscription: Subscription;
@@ -45,13 +50,15 @@ export class CensoSupervisorComponent implements OnInit {
 
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioSubscription = this.usuariosPorCongregacionService
-      .listarUsuariosPorPais(this.idUsuario)
-      .subscribe(({ totalUsuarios, usuarios }) => {
-        this.totalUsuarios = totalUsuarios;
-        this.usuarios = usuarios;
-        this.cargando = false;
-      });
+    if (this.idUsuario) {
+      this.usuarioSubscription = this.usuariosPorCongregacionService
+        .listarUsuariosPorPais(this.idUsuario)
+        .subscribe(({ totalUsuarios, usuarios }) => {
+          this.totalUsuarios = totalUsuarios;
+          this.usuarios = usuarios;
+          this.cargando = false;
+        });
+    }
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {

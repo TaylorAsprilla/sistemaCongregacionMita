@@ -8,8 +8,8 @@ describe('VerCensoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VerCensoComponent ]
-    })
+    imports: [VerCensoComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(VerCensoComponent);

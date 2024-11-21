@@ -5,11 +5,19 @@ import { OpcionTransporteModel } from 'src/app/core/models/opcion-transporte.mod
 import { OpcionTransporteService } from 'src/app/services/opcion-transporte/opcion-transporte.service';
 
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-opcion-de-transporte',
-  templateUrl: './opcion-de-transporte.component.html',
-  styleUrls: ['./opcion-de-transporte.component.scss'],
+    selector: 'app-opcion-de-transporte',
+    templateUrl: './opcion-de-transporte.component.html',
+    styleUrls: ['./opcion-de-transporte.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
@@ -50,7 +58,7 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
           },
           (error) => {
             let errores = error.error.errors;
-            let listaErrores = [];
+            let listaErrores: string[] = [];
 
             Object.entries(errores).forEach(([key, value]) => {
               listaErrores.push('° ' + value['msg'] + '<br>');
@@ -106,17 +114,15 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.opcionTransporteService
-          .eliminarOpciontransporte(opcion)
-          .subscribe((opcionEliminada: OpcionTransporteModel) => {
-            Swal.fire(
-              '¡Deshabilitado!',
-              `La opción de transporte ${opcion.tipoTransporte} fue deshabilitado correctamente`,
-              'success'
-            );
+        this.opcionTransporteService.eliminarOpcionTransporte(opcion).subscribe(() => {
+          Swal.fire(
+            '¡Deshabilitado!',
+            `La opción de transporte ${opcion.tipoTransporte} fue deshabilitado correctamente`,
+            'success'
+          );
 
-            this.cargarOpcionesDeTransporte();
-          });
+          this.cargarOpcionesDeTransporte();
+        });
       }
     });
   }
@@ -133,15 +139,17 @@ export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.opcionTransporteService.activarTipoEmpleo(opcion).subscribe((opcionActiva: OpcionTransporteModel) => {
-          Swal.fire(
-            '¡Activado!',
-            `La opción de transporte ${opcion.tipoTransporte} fue activada correctamente`,
-            'success'
-          );
+        this.opcionTransporteService
+          .activarOpcionTransporte(opcion)
+          .subscribe((opcionActiva: OpcionTransporteModel) => {
+            Swal.fire(
+              '¡Activado!',
+              `La opción de transporte ${opcion.tipoTransporte} fue activada correctamente`,
+              'success'
+            );
 
-          this.cargarOpcionesDeTransporte();
-        });
+            this.cargarOpcionesDeTransporte();
+          });
       }
     });
   }

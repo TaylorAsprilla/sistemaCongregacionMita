@@ -28,13 +28,13 @@
               class="form-control form-control-lg"
               placeholder="Correo electrónico"
               [ngClass]="{
-                'is-invalid': isLoginFormSubmitted && loginForm.get('login').errors
+                'is-invalid': isLoginFormSubmitted && loginForm.get('login')?.errors
               }"
             />
 
             <small
               class="form-text text-danger"
-              *ngIf="isLoginFormSubmitted && loginForm.get('login').errors"
+              *ngIf="isLoginFormSubmitted && loginForm.get('login')?.errors"
               class="invalid-feedback"
             >
               El correo electrónico es requerido.
@@ -49,7 +49,7 @@
                 class="form-control form-control-lg"
                 placeholder="Contraseña"
                 [ngClass]="{
-                  'is-invalid': isLoginFormSubmitted && loginForm.get('password').errors
+                  'is-invalid': isLoginFormSubmitted && loginForm.get('password')?.errors
                 }"
               />
               <span class="input-group-text" (click)="togglePasswordVisibility()">
@@ -59,7 +59,7 @@
 
             <small
               class="form-text text-danger"
-              *ngIf="isLoginFormSubmitted && loginForm.get('password').hasError('required')"
+              *ngIf="isLoginFormSubmitted && loginForm.get('password')?.hasError('required')"
             >
               La contraseña es requerida.
             </small>

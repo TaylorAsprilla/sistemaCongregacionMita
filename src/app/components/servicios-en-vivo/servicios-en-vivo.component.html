@@ -17,21 +17,16 @@
   </div>
 
   <div
-  *ngIf="servicioPlataforma === PLATAFORMA.YOUTUBE"
-  class="card-body col-sm-12 col-md-12 col-lg-6 text-center"
-  #templateYouTubePlayer
->
-  <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO_ID.SERVICIO">
-    <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
-      <div class="responsive-video">
-        <youtube-player
-          [videoId]="videoUrl | youtube"
-          suggestedQuality="default"
-        >
-        </youtube-player>
+    *ngIf="servicioPlataforma === PLATAFORMA.YOUTUBE"
+    class="card-body col-sm-12 col-md-12 col-lg-6 text-center"
+    #templateYouTubePlayer
+  >
+    <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO_ID.SERVICIO">
+      <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+        <div class="responsive-video">
+          <youtube-player [videoId]="videoUrl | youtube" suggestedQuality="default"> </youtube-player>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
@@ -7,11 +7,18 @@ import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import Swal from 'sweetalert2';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-crear-actividad',
-  templateUrl: './crear-actividad.component.html',
-  styleUrls: ['./crear-actividad.component.scss'],
+    selector: 'app-crear-actividad',
+    templateUrl: './crear-actividad.component.html',
+    styleUrls: ['./crear-actividad.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgFor,
+    ],
 })
 export class CrearActividadComponent implements OnInit, OnDestroy {
   public tipoActividadForm: FormGroup;
@@ -63,8 +70,8 @@ export class CrearActividadComponent implements OnInit, OnDestroy {
         this.cargarTipoActividades();
       },
       (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
+        const errores = error.error.errors as { [key: string]: { msg: string } };
+        const listaErrores: string[] = [];
 
         Object.entries(errores).forEach(([key, value]) => {
           listaErrores.push('° ' + value['msg'] + '<br>');

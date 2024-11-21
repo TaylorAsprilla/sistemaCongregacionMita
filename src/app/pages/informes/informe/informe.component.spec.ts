@@ -8,8 +8,8 @@ describe('InformeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InformeComponent ]
-    })
+    imports: [InformeComponent]
+})
     .compileComponents();
   });
 

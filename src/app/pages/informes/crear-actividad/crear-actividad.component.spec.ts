@@ -8,8 +8,8 @@ describe('CrearActividadComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CrearActividadComponent ]
-    })
+    imports: [CrearActividadComponent]
+})
     .compileComponents();
   });
 

@@ -8,8 +8,8 @@ describe('VerInformeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VerInformeComponent ]
-    })
+    imports: [VerInformeComponent]
+})
     .compileComponents();
   });
 

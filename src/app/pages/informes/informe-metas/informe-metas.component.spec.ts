@@ -8,8 +8,8 @@ describe('InformeMetasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InformeMetasComponent ]
-    })
+    imports: [InformeMetasComponent]
+})
     .compileComponents();
   });
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ParentescoService } from 'src/app/services/parentesco/parentesco.service';
@@ -7,7 +7,7 @@ import { ParentescoService } from 'src/app/services/parentesco/parentesco.servic
 @Injectable({
   providedIn: 'root',
 })
-export class ParentescoResolver implements Resolve<boolean> {
+export class ParentescoResolver  {
   constructor(private parentescoService: ParentescoService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {

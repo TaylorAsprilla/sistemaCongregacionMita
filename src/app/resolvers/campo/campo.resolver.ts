@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CampoService } from 'src/app/services/campo/campo.service';
@@ -7,7 +7,7 @@ import { CampoService } from 'src/app/services/campo/campo.service';
 @Injectable({
   providedIn: 'root',
 })
-export class CampoResolver implements Resolve<Boolean> {
+export class CampoResolver  {
   constructor(private campoService: CampoService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {

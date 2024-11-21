@@ -6,23 +6,29 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { GENERO } from 'src/app/core/enums/genero.enum';
 import { configuracion } from 'src/environments/config/configuration';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { PermisosDirective } from '../../directive/permisos/permisos.directive';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 declare var $: any;
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
+  standalone: true,
+  imports: [RouterLink, NgIf, NgFor, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule],
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[] = [];
-  usuario: UsuarioModel;
-  multimediaCongregacion: MultimediaCongregacionModel;
+  usuario: UsuarioModel | undefined;
+  multimediaCongregacion: MultimediaCongregacionModel | undefined;
 
-  primerNombre: string = '';
-  segundoNombre: string = '';
-  primerApellido: string = '';
-  segundoApellido: string = '';
-  email: string = '';
+  primerNombre: string | undefined = '';
+  segundoNombre: string | undefined = '';
+  primerApellido: string | undefined = '';
+  segundoApellido: string | undefined = '';
+  email: string | undefined = '';
   numeroCelular: string = '';
   nombre: string = '';
 

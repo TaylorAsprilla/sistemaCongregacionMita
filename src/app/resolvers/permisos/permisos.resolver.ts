@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { PermisoService } from 'src/app/services/permiso/permiso.service';
@@ -8,7 +8,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 @Injectable({
   providedIn: 'root',
 })
-export class PermisosResolver implements Resolve<boolean> {
+export class PermisosResolver  {
   constructor(private router: Router, private permisoService: PermisoService, private usuarioService: UsuarioService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {

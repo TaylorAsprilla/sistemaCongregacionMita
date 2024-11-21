@@ -42,7 +42,7 @@ export class RolCasaService {
     return this.httpClient.put(`${base_url}/rolcasa/${rolCasa.id}`, rolCasa, this.headers);
   }
 
-  elimiminarRolCasa(rolCasa: RolCasaModel) {
+  eliminarRolCasa(rolCasa: RolCasaModel) {
     return this.httpClient.delete(`${base_url}/rolcasa/${rolCasa.id}`, this.headers);
   }
 

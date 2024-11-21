@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
@@ -7,7 +7,7 @@ import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-docum
 @Injectable({
   providedIn: 'root',
 })
-export class DocumentoResolver implements Resolve<boolean> {
+export class DocumentoResolver  {
   constructor(private tipoDocumentoService: TipoDocumentoService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {

@@ -34,11 +34,11 @@
               {{ solicitud.usuario.primerApellido }} {{ solicitud.usuario.segundoApellido }}
             </td>
 
-            <td>{{ solicitud?.usuario.numeroCelular }}</td>
+            <td>{{ solicitud?.usuario?.numeroCelular }}</td>
 
-            <td>{{ solicitud?.usuario.email }}</td>
+            <td>{{ solicitud?.usuario?.email }}</td>
 
-            <td>{{ solicitud?.razonSolicitud.solicitud }}</td>
+            <td>{{ solicitud?.razonSolicitud?.solicitud }}</td>
 
             <td>
               <span class="badge badge-primary" *ngIf="!!solicitud?.estado">Activo</span>
@@ -78,7 +78,7 @@
                 ><i class="fa fa-trash"></i
               ></a>
               <a
-                *ngIf="!solicitud?.estado && !!solicitud?.usuario.login"
+                *ngIf="!solicitud?.estado && !!solicitud?.usuario?.login"
                 data-toggle="tooltip"
                 data-original-title="Activar Acceso"
                 class="btn bg-secondary ms-1"

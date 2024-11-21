@@ -26,7 +26,7 @@
                       *ngFor="let permiso of permisosArr.controls; index as i"
                     >
                       <input type="checkbox" class="form-check-input" [formControlName]="i" />
-                      <span class="ms-2">{{ permisos[i]?.permiso }}</span>
+                      <span class="ms-2">{{ permisos[i].permiso }}</span>
                     </label>
                   </div>
                 </div>
@@ -52,8 +52,8 @@
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        passwordUsuarioForm.get('passwordNuevoUno').hasError('required') &&
-                        passwordUsuarioForm.get('passwordNuevoUno').touched
+                        passwordUsuarioForm.get('passwordNuevoUno')?.hasError('required') &&
+                        passwordUsuarioForm.get('passwordNuevoUno')?.touched
                       "
                     >
                       La contraseña actual es requerida.
@@ -61,8 +61,8 @@
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        passwordUsuarioForm.get('passwordNuevoUno').hasError('minlength') &&
-                        passwordUsuarioForm.get('passwordNuevoUno').touched
+                        passwordUsuarioForm.get('passwordNuevoUno')?.hasError('minlength') &&
+                        passwordUsuarioForm.get('passwordNuevoUno')?.touched
                       "
                     >
                       La contraseña debe tener al menos 8 caracteres.
@@ -70,8 +70,8 @@
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        passwordUsuarioForm.get('passwordNuevoUno').hasError('pattern') &&
-                        passwordUsuarioForm.get('passwordNuevoUno').touched
+                        passwordUsuarioForm.get('passwordNuevoUno')?.hasError('pattern') &&
+                        passwordUsuarioForm.get('passwordNuevoUno')?.touched
                       "
                     >
                       La contraseña debe contener al menos una letra mayúscula.

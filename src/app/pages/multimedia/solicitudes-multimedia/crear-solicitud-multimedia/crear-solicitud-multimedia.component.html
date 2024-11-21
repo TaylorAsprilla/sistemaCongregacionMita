@@ -65,8 +65,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('congregacionCercana').hasError('required') &&
-                      solicitudForm.get('congregacionCercana').touched
+                      solicitudForm.get('congregacionCercana')?.hasError('required') &&
+                      solicitudForm.get('congregacionCercana')?.touched
                     "
                   >
                     La congregación del feligrés es requerida.
@@ -120,8 +120,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('paisDondeEstudia').hasError('required') &&
-                      solicitudForm.get('paisDondeEstudia').touched
+                      solicitudForm.get('paisDondeEstudia')?.hasError('required') &&
+                      solicitudForm.get('paisDondeEstudia')?.touched
                     "
                   >
                     Por favor diligencie el país donde estudia el feligrés.
@@ -129,8 +129,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('paisDondeEstudia').hasError('minlength') &&
-                      solicitudForm.get('paisDondeEstudia').touched
+                      solicitudForm.get('paisDondeEstudia')?.hasError('minlength') &&
+                      solicitudForm.get('paisDondeEstudia')?.touched
                     "
                   >
                     El país donde estudia el feligrés no tiene la longitud mínima permitida.
@@ -150,8 +150,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('ciudadDondeEstudia').hasError('required') &&
-                      solicitudForm.get('ciudadDondeEstudia').touched
+                      solicitudForm.get('ciudadDondeEstudia')?.hasError('required') &&
+                      solicitudForm.get('ciudadDondeEstudia')?.touched
                     "
                   >
                     Por favor diligencie la ciudad donde estudia el feligrés.
@@ -159,8 +159,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('ciudadDondeEstudia').hasError('minlength') &&
-                      solicitudForm.get('ciudadDondeEstudia').touched
+                      solicitudForm.get('ciudadDondeEstudia')?.hasError('minlength') &&
+                      solicitudForm.get('ciudadDondeEstudia')?.touched
                     "
                   >
                     La ciudad donde estudia el feligrés no tiene la longitud mínima permitida.
@@ -179,8 +179,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('tipoDeEstudio_id').hasError('required') &&
-                      solicitudForm.get('tipoDeEstudio_id').touched
+                      solicitudForm.get('tipoDeEstudio_id')?.hasError('required') &&
+                      solicitudForm.get('tipoDeEstudio_id')?.touched
                     "
                   >
                     Por favor seleccione el tipo de estudio.
@@ -199,8 +199,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('duracionDelPeriodoDeEstudio').hasError('required') &&
-                      solicitudForm.get('duracionDelPeriodoDeEstudio').touched
+                      solicitudForm.get('duracionDelPeriodoDeEstudio')?.hasError('required') &&
+                      solicitudForm.get('duracionDelPeriodoDeEstudio')?.touched
                     "
                   >
                     Por favor diligencie la duración del estudio.
@@ -222,7 +222,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('baseMilitar').hasError('required') && solicitudForm.get('baseMilitar').touched
+                      solicitudForm.get('baseMilitar')?.hasError('required') &&
+                      solicitudForm.get('baseMilitar')?.touched
                     "
                   >
                     Por favor diligencie la base militar donde se encuentra el feligrés.
@@ -230,7 +231,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('baseMilitar').hasError('minlength') && solicitudForm.get('baseMilitar').touched
+                      solicitudForm.get('baseMilitar')?.hasError('minlength') &&
+                      solicitudForm.get('baseMilitar')?.touched
                     "
                   >
                     La base militar del feligrés no tiene la longitud mínima permitida.
@@ -247,8 +249,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('horaTemploMasCercano').hasError('required') &&
-                      solicitudForm.get('horaTemploMasCercano').touched
+                      solicitudForm.get('horaTemploMasCercano')?.hasError('required') &&
+                      solicitudForm.get('horaTemploMasCercano')?.touched
                     "
                   >
                     Campo requerido.
@@ -267,8 +269,8 @@
                   <small
                     class="form-text text-danger"
                     *ngIf="
-                      solicitudForm.get('opcionTransporte_id').hasError('required') &&
-                      solicitudForm.get('opcionTransporte_id').touched
+                      solicitudForm.get('opcionTransporte_id')?.hasError('required') &&
+                      solicitudForm.get('opcionTransporte_id')?.touched
                     "
                   >
                     Por favor seleccione una opción de transporte.
@@ -330,8 +332,8 @@
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        solicitudForm.get('personaEncargada').hasError('required') &&
-                        solicitudForm.get('personaEncargada').touched
+                        solicitudForm.get('personaEncargada')?.hasError('required') &&
+                        solicitudForm.get('personaEncargada')?.touched
                       "
                     >
                       El nombre de la persona encargada es requerido.
@@ -339,8 +341,8 @@
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        solicitudForm.get('personaEncargada').hasError('minlength') &&
-                        solicitudForm.get('personaEncargada').touched
+                        solicitudForm.get('personaEncargada')?.hasError('minlength') &&
+                        solicitudForm.get('personaEncargada')?.touched
                       "
                     >
                       El nombre de la persona encargada no tiene la longitud mínima permitida.
@@ -358,8 +360,8 @@
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        solicitudForm.get('parentesco_id').hasError('required') &&
-                        solicitudForm.get('parentesco_id').touched
+                        solicitudForm.get('parentesco_id')?.hasError('required') &&
+                        solicitudForm.get('parentesco_id')?.touched
                       "
                     >
                       Por favor seleccione el parentesco
@@ -389,22 +391,25 @@
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        !solicitudForm.get('celularPersonaEncargada').hasError('required') &&
-                        solicitudForm.get('celularPersonaEncargada').invalid &&
-                        solicitudForm.get('celularPersonaEncargada').touched
+                        !solicitudForm.get('celularPersonaEncargada')?.hasError('required') &&
+                        solicitudForm.get('celularPersonaEncargada')?.invalid &&
+                        solicitudForm.get('celularPersonaEncargada')?.touched
                       "
                     >
                       El número de celular no es válido
                     </small>
-                    <small class="form-text text-primary" *ngIf="!solicitudForm.get('celularPersonaEncargada').invalid">
+                    <small
+                      class="form-text text-primary"
+                      *ngIf="!solicitudForm.get('celularPersonaEncargada')?.invalid"
+                    >
                       El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
                     </small>
 
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        solicitudForm.get('celularPersonaEncargada').hasError('celularPersonaEncargada') &&
-                        solicitudForm.get('celularPersonaEncargada').touched
+                        solicitudForm.get('celularPersonaEncargada')?.hasError('celularPersonaEncargada') &&
+                        solicitudForm.get('celularPersonaEncargada')?.touched
                       "
                     >
                       El número de celular es requerido.
@@ -412,8 +417,8 @@
                     <small
                       class="form-text text-danger"
                       *ngIf="
-                        solicitudForm.get('celularPersonaEncargada').hasError('minlength') &&
-                        solicitudForm.get('celularPersonaEncargada').touched
+                        solicitudForm.get('celularPersonaEncargada')?.hasError('minlength') &&
+                        solicitudForm.get('celularPersonaEncargada')?.touched
                       "
                     >
                       El número de celular no tiene la longitud mínima permitida.

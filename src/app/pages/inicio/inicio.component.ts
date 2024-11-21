@@ -2,20 +2,26 @@ import { LinkEventoModel, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { generarSeccionHome } from 'src/app/core/interfaces/seccion-home.interface';
+import { generarSeccionHome, SeccionHomeInterface } from 'src/app/core/interfaces/seccion-home.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES } from 'src/app/routes/menu-items';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
+import { NgFor } from '@angular/common';
+import { PermisosDirective } from '../../directive/permisos/permisos.directive';
+import { SeccionHomeComponent } from '../../components/seccion-home/seccion-home.component';
+import { ServiciosEnVivoComponent } from '../../components/servicios-en-vivo/servicios-en-vivo.component';
 
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.css'],
+  standalone: true,
+  imports: [NgFor, PermisosDirective, SeccionHomeComponent, ServiciosEnVivoComponent],
 })
-export class InicioComponent implements OnInit {
+export default class InicioComponent implements OnInit {
   usuarios: UsuarioModel[] = [];
   totalUsuarios: number;
 
@@ -26,7 +32,7 @@ export class InicioComponent implements OnInit {
 
   roles: ROLES[] = [];
 
-  public generarSeccionHome: any[] = [];
+  public generarSeccionHome: SeccionHomeInterface[] = [];
 
   usuariosSubscription: Subscription;
   linEventosSubscription: Subscription;

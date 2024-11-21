@@ -50,11 +50,11 @@ export class OpcionTransporteService {
     return this.httpClient.put(`${base_url}/opciontransporte/${opcionTransporte.id}`, opcionTransporte, this.headers);
   }
 
-  eliminarOpciontransporte(opcionTransporte: OpcionTransporteModel) {
+  eliminarOpcionTransporte(opcionTransporte: OpcionTransporteModel) {
     return this.httpClient.delete(`${base_url}/opciontransporte/${opcionTransporte.id}`, this.headers);
   }
 
-  activarTipoEmpleo(opcionTransporte: OpcionTransporteModel) {
+  activarOpcionTransporte(opcionTransporte: OpcionTransporteModel) {
     return this.httpClient.put(
       `${base_url}/opciontransporte/activar/${opcionTransporte.id}`,
       opcionTransporte,

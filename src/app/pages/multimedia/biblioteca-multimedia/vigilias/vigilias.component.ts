@@ -2,11 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LinkEventoModel, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
+import { BibliotecaMultimediaComponent } from '../../../../components/biblioteca-multimedia/biblioteca-multimedia.component';
 
 @Component({
-  selector: 'app-vigilias',
-  templateUrl: './vigilias.component.html',
-  styleUrls: ['./vigilias.component.scss'],
+    selector: 'app-vigilias',
+    templateUrl: './vigilias.component.html',
+    styleUrls: ['./vigilias.component.scss'],
+    standalone: true,
+    imports: [BibliotecaMultimediaComponent],
 })
 export class VigiliasComponent implements OnInit, OnDestroy {
   linkEventos: LinkEventoModel[] = [];

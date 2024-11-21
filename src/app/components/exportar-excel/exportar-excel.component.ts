@@ -4,9 +4,10 @@ import { formatDate } from '@angular/common';
 import { UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
 
 @Component({
-  selector: 'app-exportar-excel',
-  templateUrl: './exportar-excel.component.html',
-  styleUrls: ['./exportar-excel.component.scss'],
+    selector: 'app-exportar-excel',
+    templateUrl: './exportar-excel.component.html',
+    styleUrls: ['./exportar-excel.component.scss'],
+    standalone: true,
 })
 export class ExportarExcelComponent implements OnInit {
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];

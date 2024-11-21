@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
@@ -8,13 +8,14 @@ import { MinisterioService } from 'src/app/services/ministerio/ministerio.servic
 @Injectable({
   providedIn: 'root',
 })
-export class MinisterioResolver implements Resolve<boolean> {
-  constructor(private ministerioService: MinisterioService) {}
+export class MinisterioResolver {
+  ministerioService = inject(MinisterioService);
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MinisterioModel[]> {
     return this.ministerioService.getMinisterios().pipe(
       catchError((error) => {
-        return of('No dara');
+        console.error('Error fetching ministerios:', error);
+        return of([]); // Retorna un array vacío en caso de error
       })
     );
   }

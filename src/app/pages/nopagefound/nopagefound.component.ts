@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { RUTAS } from 'src/app/routes/menu-items';
 
 @Component({
-  selector: 'app-nopagefound',
-  templateUrl: './nopagefound.component.html',
-  styleUrls: ['./nopagefound.component.css'],
+    selector: 'app-nopagefound',
+    templateUrl: './nopagefound.component.html',
+    styleUrls: ['./nopagefound.component.css'],
+    standalone: true,
 })
 export class NopagefoundComponent implements OnInit {
   fecha = new Date();

@@ -45,7 +45,7 @@ export class TipoDocumentoService {
     return this.httpClient.put(`${base_url}/tipodocumento/${tipoDocumento.id}`, tipoDocumento, this.headers);
   }
 
-  elimiminarTipoDocumento(tipoDocumento: TipoDocumentoModel) {
+  eliminarTipoDocumento(tipoDocumento: TipoDocumentoModel) {
     return this.httpClient.delete(`${base_url}/tipodocumento/${tipoDocumento.id}`, this.headers);
   }
 

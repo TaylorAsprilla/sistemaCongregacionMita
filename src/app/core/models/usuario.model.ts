@@ -1,4 +1,4 @@
-import { environment } from 'environment';
+import { environment } from 'src/environments/environment';
 import { EstadoCivilModel } from './estado-civil.model';
 import { GeneroModel } from './genero.model';
 import { GradoAcademicoModel } from './grado-academico.model';
@@ -73,9 +73,9 @@ export class UsuarioModel {
     public tipoDocumento?: TipoDocumentoModel,
     public numeroDocumento?: string,
     public anoConocimiento?: string,
-    public usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface,
-    public usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface,
-    public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface,
+    public usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface[],
+    public usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface[],
+    public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface[],
     public idUsuarioQueRegistra?: number,
     public congregacion?: string
   ) {}
@@ -90,27 +90,29 @@ export class UsuarioModel {
     }
   }
 
-  get paisId() {
-    return this.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id;
+  get paisId(): number | undefined {
+    return Array.isArray(this.usuarioCongregacion) && this.usuarioCongregacion.length > 0
+      ? this.usuarioCongregacion[0]?.UsuarioCongregacion?.pais_id
+      : undefined;
   }
 
-  get congregacionId() {
-    return this.usuarioCongregacion[0]?.id;
+  get congregacionId(): number | undefined {
+    return Array.isArray(this.usuarioCongregacion) && this.usuarioCongregacion.length > 0
+      ? this.usuarioCongregacion[0]?.id
+      : undefined;
   }
 
-  get campoId() {
-    return this.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id;
+  get campoId(): number | undefined {
+    return Array.isArray(this.usuarioCongregacion) && this.usuarioCongregacion.length > 0
+      ? this.usuarioCongregacion[0]?.UsuarioCongregacion?.campo_id
+      : undefined;
   }
 
-  get ministerios() {
-    return this.usuarioMinisterio?.map((ministerio: MinisterioModel) => {
-      return ministerio.id;
-    });
+  get ministerios(): number[] | undefined {
+    return this.usuarioMinisterio?.map((ministerio: MinisterioModel) => ministerio.id);
   }
 
-  get voluntariados() {
-    return this.usuarioVoluntariado?.map((voluntariado: VoluntariadoModel) => {
-      return voluntariado.id;
-    });
+  get voluntariados(): number[] | undefined {
+    return this.usuarioVoluntariado?.map((voluntariado: VoluntariadoModel) => voluntariado.id);
   }
 }

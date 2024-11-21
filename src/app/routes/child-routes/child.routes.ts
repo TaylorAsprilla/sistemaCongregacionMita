@@ -1,9 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { CamposComponent } from 'src/app/pages/administracion/campo/campos/campos.component';
 import { CongregacionesComponent } from 'src/app/pages/administracion/congregacion/congregaciones/congregaciones.component';
 import { MinisteriosComponent } from 'src/app/pages/administracion/ministerios/ministerios/ministerios.component';
-import { UsuariosComponent } from 'src/app/pages/administracion/usuario/usuarios/usuarios.component';
 import { CrearActividadComponent } from 'src/app/pages/informes/crear-actividad/crear-actividad.component';
 import { CrearCampoComponent } from 'src/app/pages/administracion/campo/crear-campo/crear-campo.component';
 import { CrearStatusComponent } from 'src/app/pages/informes/crear-status/crear-status.component';
@@ -14,9 +12,7 @@ import { InformeMetasComponent } from 'src/app/pages/informes/informe-metas/info
 import { InformeVisitasComponent } from 'src/app/pages/informes/informe-visitas/informe-visitas.component';
 import { InformeComponent } from 'src/app/pages/informes/informe/informe.component';
 import { VerInformeComponent } from 'src/app/pages/informes/ver-informe/ver-informe.component';
-import { InicioComponent } from 'src/app/pages/inicio/inicio.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
-import { RegistrarUsuarioComponent } from 'src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component';
 import { ROLES, RUTAS } from '../menu-items';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
 import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
@@ -40,7 +36,6 @@ import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
 import { VigiliasComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/vigilias/vigilias.component';
-import { ConfirmacionDeRegistroComponent } from 'src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component';
 import { ObreroResolver } from 'src/app/resolvers/obrero/obrero.resolver';
 import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
 import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
@@ -50,7 +45,6 @@ import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/op
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
 import { ConfigurarEventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/configurar-eventos/configurar-eventos.component';
 import { EventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos/eventos.component';
-import { CambiarPasswordUsuarioComponent } from 'src/app/pages/administracion/usuario/cambiar-password-usuario/cambiar-password-usuario.component';
 import { RolesGuard } from 'src/app/core/guards/roles/roles.guard';
 import { OpcionDeTransporteComponent } from 'src/app/pages/configuracion/opcion-de-transporte/opcion-de-transporte.component';
 import { GeneroComponent } from 'src/app/pages/configuracion/genero/genero.component';
@@ -59,27 +53,25 @@ import { RazonDeSolicitudComponent } from 'src/app/pages/configuracion/razon-de-
 import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/parentesco.component';
 import { UsuarioResolver } from 'src/app/resolvers/getUsuario/get-usuario.resolver';
 import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministerios/crear-ministerio/crear-ministerio.component';
-import { AsignarPermisosComponent } from 'src/app/pages/administracion/asignar-permisos/asignar-permisos.component';
-import { CensoObreroComponent } from 'src/app/pages/obreros/censo-obrero/censo-obrero.component';
-import { CensoSupervisorComponent } from 'src/app/pages/obreros/censo-supervisor/censo-supervisor.component';
 import { EstadoCivilComponent } from 'src/app/pages/configuracion/estado-civil/estado-civil.component';
 import { GradoAlcanzadoComponent } from 'src/app/pages/configuracion/grado-alcanzado/grado-alcanzado.component';
 import { RolEnCasaComponent } from 'src/app/pages/configuracion/rol-en-casa/rol-en-casa.component';
 import { VoluntarioComponent } from 'src/app/pages/configuracion/voluntario/voluntario.component';
 import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
-import { CensoAyudanteComponent } from 'src/app/pages/ayudantes/censo-ayudante/censo-ayudante.component';
 import { EventosEnVivoComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
+import InicioComponent from 'src/app/pages/inicio/inicio.component';
 
-const childRoutes: Routes = [
+export const childRoutes: Routes = [
   {
     path: 'inicio',
     component: InicioComponent,
     data: { titulo: 'Censo' },
   },
+
   // Administración
   {
     path: RUTAS.USUARIOS,
-    component: UsuariosComponent,
+    loadComponent: () => import('src/app/pages/administracion/usuario/usuarios/usuarios.component'),
     canActivate: [RolesGuard],
     data: {
       titulo: 'Usuarios Registrados',
@@ -88,7 +80,7 @@ const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.USUARIOS}/:id`,
-    component: RegistrarUsuarioComponent,
+    loadComponent: () => import('src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component'),
     canActivate: [RolesGuard],
     data: {
       role: [
@@ -119,7 +111,7 @@ const childRoutes: Routes = [
   },
   {
     path: RUTAS.USUARIOS_AYUDANTE,
-    component: CensoAyudanteComponent,
+    loadComponent: () => import('src/app/pages/ayudantes/censo-ayudante/censo-ayudante.component'),
     canActivate: [RolesGuard],
     data: {
       titulo: 'Censo Ayudante',
@@ -128,7 +120,7 @@ const childRoutes: Routes = [
   },
   {
     path: RUTAS.CENSO,
-    component: CensoObreroComponent,
+    loadComponent: () => import('src/app/pages/obreros/censo-obrero/censo-obrero.component'),
     canActivate: [RolesGuard],
     data: {
       titulo: 'Censo',
@@ -137,16 +129,17 @@ const childRoutes: Routes = [
   },
   {
     path: RUTAS.PERMISOS,
-    component: AsignarPermisosComponent,
+    loadComponent: () => import('src/app/pages/administracion/asignar-permisos/asignar-permisos.component'),
   },
   {
     path: RUTAS.RESET_PASSWORD_USUARIO,
-    component: CambiarPasswordUsuarioComponent,
+    loadComponent: () =>
+      import('src/app/pages/administracion/usuario/cambiar-password-usuario/cambiar-password-usuario.component'),
   },
 
   {
     path: RUTAS.USUARIOS_SUPERVISOR,
-    component: CensoSupervisorComponent,
+    loadComponent: () => import('src/app/pages/obreros/censo-supervisor/censo-supervisor.component'),
     canActivate: [RolesGuard],
     data: {
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
@@ -155,7 +148,8 @@ const childRoutes: Routes = [
 
   {
     path: `${RUTAS.CONFIRMAR_REGISTRO}/:id`,
-    component: ConfirmacionDeRegistroComponent,
+    loadComponent: () =>
+      import('src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component'),
   },
   {
     path: RUTAS.MINISTERIOS,
@@ -423,9 +417,4 @@ const childRoutes: Routes = [
   },
 ];
 
-@NgModule({
-  declarations: [],
-  imports: [RouterModule.forChild(childRoutes)],
-  exports: [RouterModule],
-})
-export class ChildRoutesModule {}
+export default childRoutes;

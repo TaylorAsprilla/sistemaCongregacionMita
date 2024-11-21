@@ -8,11 +8,23 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
+import { FiltrosComponent } from '../../../../components/filtros/filtros.component';
+import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/filter-by-nombre-pipe.pipe';
 
 @Component({
-  selector: 'app-campos',
-  templateUrl: './campos.component.html',
-  styleUrls: ['./campos.component.css'],
+    selector: 'app-campos',
+    templateUrl: './campos.component.html',
+    styleUrls: ['./campos.component.css'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        FiltrosComponent,
+        NgFor,
+        FilterByNombrePipePipe,
+    ],
 })
 export class CamposComponent implements OnInit {
   cargando: boolean = true;
@@ -114,16 +126,19 @@ export class CamposComponent implements OnInit {
     return nombreObrero;
   }
 
-  buscarPais(idPais: number): string {
+  buscarPais(idPais: number): string | undefined {
     return this.paises.find((pais) => pais.id === idPais)?.pais;
   }
 
-  buscarCongregacion(idCongregacion: number): object {
+  buscarCongregacion(idCongregacion: number): { congregacion?: string; pais?: string } {
     const congregacion = this.congregaciones.find((congregacion) => congregacion.id === idCongregacion);
 
-    this.buscarPais(congregacion?.pais_id);
+    if (congregacion) {
+      const pais = this.buscarPais(congregacion.pais_id);
+      return { congregacion: congregacion.congregacion, pais };
+    }
 
-    return { congregacion: congregacion?.congregacion, pais: this.buscarPais(congregacion?.pais_id) };
+    return {}; // Retorna un objeto vacío si no se encuentra la congregación
   }
 
   obtenerFiltroNombre(nombre: string) {

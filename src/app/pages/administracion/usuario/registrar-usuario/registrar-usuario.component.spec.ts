@@ -7,8 +7,8 @@ describe('RegistrarUsuarioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RegistrarUsuarioComponent],
-    }).compileComponents();
+    imports: [RegistrarUsuarioComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

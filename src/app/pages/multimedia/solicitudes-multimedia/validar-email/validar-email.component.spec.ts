@@ -8,8 +8,8 @@ describe('ValidarEmailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ValidarEmailComponent ]
-    })
+    imports: [ValidarEmailComponent]
+})
     .compileComponents();
   });
 

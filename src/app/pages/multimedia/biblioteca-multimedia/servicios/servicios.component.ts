@@ -3,11 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LinkEventoModel, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
+import { BibliotecaMultimediaComponent } from '../../../../components/biblioteca-multimedia/biblioteca-multimedia.component';
 
 @Component({
-  selector: 'app-servicios',
-  templateUrl: './servicios.component.html',
-  styleUrls: ['./servicios.component.scss'],
+    selector: 'app-servicios',
+    templateUrl: './servicios.component.html',
+    styleUrls: ['./servicios.component.scss'],
+    standalone: true,
+    imports: [BibliotecaMultimediaComponent],
 })
 export class ServiciosComponent implements OnInit, OnDestroy {
   linkEventos: LinkEventoModel[] = [];

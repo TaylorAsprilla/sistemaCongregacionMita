@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
@@ -9,8 +9,10 @@ import Swal from 'sweetalert2';
   selector: 'app-recuperar-cuenta',
   templateUrl: './recuperar-cuenta.component.html',
   styleUrls: ['./recuperar-cuenta.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
-export class RecuperarCuentaComponent implements OnInit {
+export default class RecuperarCuentaComponent implements OnInit {
   cuentaForm: FormGroup;
 
   get Rutas() {

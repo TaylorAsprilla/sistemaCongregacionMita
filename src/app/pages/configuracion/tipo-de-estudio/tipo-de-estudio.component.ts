@@ -5,11 +5,19 @@ import { delay } from 'rxjs/operators';
 import { TipoEstudioModel } from 'src/app/core/models/tipo-estudio.model';
 import { TipoEstudioService } from 'src/app/services/tipo-estudio/tipo-estudio.service';
 import Swal from 'sweetalert2';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-tipo-de-estudio',
-  templateUrl: './tipo-de-estudio.component.html',
-  styleUrls: ['./tipo-de-estudio.component.scss'],
+    selector: 'app-tipo-de-estudio',
+    templateUrl: './tipo-de-estudio.component.html',
+    styleUrls: ['./tipo-de-estudio.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+    ],
 })
 export class TipoDeEstudioComponent implements OnInit {
   public cargando: boolean = true;
@@ -78,7 +86,7 @@ export class TipoDeEstudioComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.tipoEstudioService.eliminarTipoEmpleo(tipoEstudio).subscribe((tipoEstudioEliminado: TipoEstudioModel) => {
+        this.tipoEstudioService.eliminarTipoEstudio(tipoEstudio).subscribe((tipoEstudioEliminado: TipoEstudioModel) => {
           Swal.fire(
             '¡Deshabilitado!',
             `El tipo estudio ${tipoEstudio.estudio} fue deshabilitado correctamente`,
@@ -103,7 +111,7 @@ export class TipoDeEstudioComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.tipoEstudioService.activarTipoEmpleo(tipoEstudio).subscribe((tipoEstudioActiva: TipoEstudioModel) => {
+        this.tipoEstudioService.activarTipoEstudio(tipoEstudio).subscribe((tipoEstudioActiva: TipoEstudioModel) => {
           Swal.fire('¡Activado!', `El tipo de estudio ${tipoEstudio.estudio} fue activada correctamente`, 'success');
 
           this.cargartipoEstudios();

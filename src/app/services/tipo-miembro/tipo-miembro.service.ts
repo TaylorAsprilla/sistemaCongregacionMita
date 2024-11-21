@@ -43,7 +43,7 @@ export class TipoMiembroService {
     return this.httpClient.put(`${base_url}/tipomiembro/${tipoMiembro.id}`, tipoMiembro, this.headers);
   }
 
-  eliminarYipoMiembro(tipoMiembro: TipoMiembroModel) {
+  eliminarTipoMiembro(tipoMiembro: TipoMiembroModel) {
     return this.httpClient.delete(`${base_url}/tipomiembro/${tipoMiembro.id}`, this.headers);
   }
 

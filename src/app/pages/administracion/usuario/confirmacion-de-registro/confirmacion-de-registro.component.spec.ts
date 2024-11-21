@@ -8,8 +8,8 @@ describe('ConfirmacionDeRegistroComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConfirmacionDeRegistroComponent ]
-    })
+    imports: [ConfirmacionDeRegistroComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ConfirmacionDeRegistroComponent);

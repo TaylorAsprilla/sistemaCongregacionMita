@@ -1,16 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
-
-import 'rxjs/add/operator/mergeMap';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-bredcrumbs',
-  templateUrl: './bredcrumbs.component.html',
-  styleUrls: ['./bredcrumbs.component.css'],
+    selector: 'app-bredcrumbs',
+    templateUrl: './bredcrumbs.component.html',
+    styleUrls: ['./bredcrumbs.component.css'],
+    standalone: true,
+    imports: [
+        NgFor,
+        NgIf,
+        RouterLink,
+    ],
 })
-export class BredcrumbsComponent implements OnInit {
+export class BredcrumbsComponent {
   @Input() layout: string = '';
   public pageInfo: any;
 
@@ -33,5 +38,4 @@ export class BredcrumbsComponent implements OnInit {
         this.pageInfo = event;
       });
   }
-  ngOnInit() {}
 }

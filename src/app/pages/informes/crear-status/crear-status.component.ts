@@ -1,16 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import Swal from 'sweetalert2';
+import { NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-crear-status',
-  templateUrl: './crear-status.component.html',
-  styleUrls: ['./crear-status.component.scss'],
+    selector: 'app-crear-status',
+    templateUrl: './crear-status.component.html',
+    styleUrls: ['./crear-status.component.scss'],
+    standalone: true,
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgFor,
+    ],
 })
 export class CrearStatusComponent implements OnInit {
   public estatusForm: UntypedFormGroup;
@@ -49,8 +56,8 @@ export class CrearStatusComponent implements OnInit {
         this.cargarListaEstatus();
       },
       (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
+        const errores = error.error.errors as { [key: string]: { msg: string } };
+        const listaErrores: string[] = [];
 
         Object.entries(errores).forEach(([key, value]) => {
           listaErrores.push('° ' + value['msg'] + '<br>');

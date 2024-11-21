@@ -43,7 +43,7 @@ export class EstadoCivilService {
     return this.httpClient.put(`${base_url}/estadocivil/${estadoCivil.id}`, estadoCivil, this.headers);
   }
 
-  elimiminarEstadoCivil(estadoCivil: EstadoCivilModel) {
+  eliminarEstadoCivil(estadoCivil: EstadoCivilModel) {
     return this.httpClient.delete(`${base_url}/estadocivil/${estadoCivil.id}`, this.headers);
   }
 

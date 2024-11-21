@@ -14,7 +14,6 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
-import { data } from 'jquery';
 import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
 import { VisitaModel } from 'src/app/core/models/visita.model';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
@@ -27,46 +26,48 @@ import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 
 @Component({
-  selector: 'app-ver-informe',
-  templateUrl: './ver-informe.component.html',
-  styleUrls: ['./ver-informe.component.css'],
+    selector: 'app-ver-informe',
+    templateUrl: './ver-informe.component.html',
+    styleUrls: ['./ver-informe.component.css'],
+    standalone: true,
 })
 export class VerInformeComponent implements OnInit, OnDestroy {
   @ViewChild('content', { static: false }) el!: ElementRef;
 
-  primerNombre: string;
-  segundoNombre: string;
-  primerApellido: string;
-  segundApellido: string;
-  fechaActual: Date;
-  trimestre: string;
-  fraccion: string;
-  idInforme = 1;
-  public fechaSeleccionada = '';
-  public obreroSeleccionado: UsuarioModel;
-  public paisObrero: string;
+  primerNombre: string = '';
+  segundoNombre: string = '';
+  primerApellido: string = '';
+  segundoApellido: string = '';
+  fechaActual: Date = new Date();
+  trimestre: string = '';
+  fraccion: string = '';
+  idInforme: number = 1;
 
-  public sumatoriaActividadesEspeciales: number = 0;
-  public sumatoriaActividadesEspirituales: number = 0;
-  public sumatoriaActividadesEnServicios: number = 0;
-  public sumatoriaActividadesEnReuniones: number = 0;
+  fechaSeleccionada: string = '';
+  obreroSeleccionado: UsuarioModel;
+  paisObrero: string = '';
 
-  public usuarios: UsuarioModel[] = [];
-  public usuarioSubscription: Subscription;
+  sumatoriaActividadesEspeciales: number = 0;
+  sumatoriaActividadesEspirituales: number = 0;
+  sumatoriaActividadesEnServicios: number = 0;
+  sumatoriaActividadesEnReuniones: number = 0;
 
-  public ministerios: MinisterioModel[] = [];
-  public ministerioSubcription: Subscription;
+  usuarios: UsuarioModel[] = [];
+  usuarioSubscription: Subscription;
 
-  public paises: CongregacionPaisModel[] = [];
-  public paisSubscription: Subscription;
+  ministerios: MinisterioModel[] = [];
+  ministerioSubcription: Subscription;
 
-  public actividadSubcription: Subscription;
-  public tipoActividadSubcription: Subscription;
-  public tipoActividades: TipoActividadModel[] = [];
+  paises: CongregacionPaisModel[] = [];
+  paisSubscription: Subscription;
 
-  public cargando: boolean = true;
+  actividadSubcription: Subscription;
+  tipoActividadSubcription: Subscription;
+  tipoActividades: TipoActividadModel[] = [];
 
-  public sumatoriaVisible: boolean = false;
+  cargando: boolean = true;
+
+  sumatoriaVisible: boolean = false;
 
   // desglosar informacion de informe
   informe: InformeModel[];
@@ -107,21 +108,20 @@ export class VerInformeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(
-      (data: { seccionInforme: SeccionInformeModel[]; congregacion: CongregacionModel[]; obrero: any[] }) => {
-        this.seccionesInformes = data.seccionInforme;
-        this.congregaciones = data.congregacion;
-        this.obreros = data.obrero;
-      }
-    );
+    this.activatedRoute.data.subscribe((data: any) => {
+      this.seccionesInformes = data.seccionInforme;
+      this.congregaciones = data.congregacion;
+      this.obreros = data.obrero;
+    });
 
-    this.primerNombre = sessionStorage.getItem('primerNombre');
-    this.segundoNombre = sessionStorage.getItem('segundoNombre');
-    this.primerApellido = sessionStorage.getItem('primerApellido');
-    this.segundApellido = sessionStorage.getItem('segundoApellido');
+    this.primerNombre = sessionStorage.getItem('primerNombre') || '';
+    this.segundoNombre = sessionStorage.getItem('segundoNombre') || '';
+    this.primerApellido = sessionStorage.getItem('primerApellido') || '';
+    this.segundoApellido = sessionStorage.getItem('segundoApellido') || '';
+
     this.fechaActual = new Date();
 
-    this.filtrarInformacionInforme();
+    // this.filtrarInformacionInforme();
     this.cargarUsuarios();
     this.cargarMinisterios();
     this.cargarPaises();
@@ -136,21 +136,21 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.informeSubscription?.unsubscribe();
   }
 
-  cargarInforme(idInforme) {
-    this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
-      this.informe = respuesta;
-      this.actividades = this.informe['actividades'];
-      /// data var
-      this.informacionInforme = this.informe['informacioninforme'];
+  // cargarInforme(idInforme: any) {
+  //   this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
+  //     this.informe = respuesta;
+  //     this.actividades = this.informe['actividades'];
+  //     /// data var
+  //     this.informacionInforme = this.informe['informacioninforme'];
 
-      this.dataVisitas = this.informe['visitas'];
-      this.dataSituacionVisitas = this.informe['situacionVisita'];
-      this.dataLogros = this.informe['logros'];
-      this.dataMetas = this.informe['metas'];
-      this.dataAspectoContable = this.informe['aspectoContable'];
-    });
-    return true;
-  }
+  //     this.dataVisitas = this.informe['visitas'];
+  //     this.dataSituacionVisitas = this.informe['situacionVisita'];
+  //     this.dataLogros = this.informe['logros'];
+  //     this.dataMetas = this.informe['metas'];
+  //     this.dataAspectoContable = this.informe['aspectoContable'];
+  //   });
+  //   return true;
+  // }
 
   cargarTipoActividad() {
     this.tipoActividadSubcription = this.tipoActividadService.getTipoActividad().subscribe((nombre) => {
@@ -158,11 +158,11 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     });
   }
 
-  clasificarActividad(conjunto) {
+  clasificarActividad(conjunto: ActividadModel[]) {
     if (conjunto) {
       conjunto.forEach((actividad) => {
         let idTipoAct = actividad.tipoActividad_id;
-        let idSec = this.tipoActividades.find((item) => item.id === idTipoAct).idSeccion;
+        let idSec = this.tipoActividades.find((item) => item.id === idTipoAct)?.idSeccion;
         // validar que existe seccion de la actividad/tipoActividad/idSeccion
         this.seccionesInformes.forEach((seccion) => {
           if (seccion.id === idSec) {
@@ -187,33 +187,33 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     }
   }
 
-  filtrarFecha(conjunto) {
-    let result: any[] = [];
-    let yearSelect = this.fechaSeleccionada.slice(0, 4);
-    let monthSelect = this.fechaSeleccionada.slice(5, 7);
-    let monthSelectNum = Number(monthSelect);
-    let daySelect = this.fechaSeleccionada.slice(8, 10);
-    conjunto.forEach((actividad) => {
-      let fecha = actividad.fecha;
-      let year = fecha.slice(0, 4);
-      let month = fecha.slice(5, 7);
-      let monthNum = Number(month);
+  // filtrarFecha(conjunto: any) {
+  //   let result: any[] = [];
+  //   let yearSelect = this.fechaSeleccionada.slice(0, 4);
+  //   let monthSelect = this.fechaSeleccionada.slice(5, 7);
+  //   let monthSelectNum = Number(monthSelect);
+  //   let daySelect = this.fechaSeleccionada.slice(8, 10);
+  //   conjunto.forEach((actividad: any) => {
+  //     let fecha = actividad.fecha;
+  //     let year = fecha.slice(0, 4);
+  //     let month = fecha.slice(5, 7);
+  //     let monthNum = Number(month);
 
-      let day = fecha.slice(8, 10);
+  //     let day = fecha.slice(8, 10);
 
-      let min = this.selectMinMaxMonth(monthSelect)[0];
-      let max = this.selectMinMaxMonth(monthSelect)[1];
-      if (yearSelect == year) {
-        if (monthNum >= min && monthNum <= max) {
-          result.push(actividad);
-        }
-      }
-    });
+  //     let min = this.selectMinMaxMonth(monthSelect)[0];
+  //     let max = this.selectMinMaxMonth(monthSelect)[1];
+  //     if (yearSelect == year) {
+  //       if (monthNum >= min && monthNum <= max) {
+  //         result.push(actividad);
+  //       }
+  //     }
+  //   });
 
-    return result;
-  }
+  //   return result;
+  // }
 
-  selectMinMaxMonth(mes) {
+  selectMinMaxMonth(mes: number) {
     let min, max;
     if (mes >= 1 && mes <= 3) {
       min = 1;
@@ -234,28 +234,28 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     return [min, max];
   }
 
-  filtrarFechaCreatedAt(conjunto) {
-    let result: any[] = [];
-    let yearSelect = this.fechaSeleccionada.slice(0, 4);
-    let monthSelect = this.fechaSeleccionada.slice(5, 7);
-    let monthSelectNum = Number(monthSelect);
-    conjunto.forEach((actividad) => {
-      let fecha = actividad.createdAt;
-      let year = fecha.slice(0, 4);
-      let month = fecha.slice(5, 7);
-      let monthNum = Number(month);
-      let min = this.selectMinMaxMonth(monthSelect)[0];
-      let max = this.selectMinMaxMonth(monthSelect)[1];
-      if (yearSelect == year) {
-        if (monthNum >= min && monthNum <= max) {
-          result.push(actividad);
-        }
-      }
-    });
-    return result;
-  }
+  // filtrarFechaCreatedAt(conjunto: any[]) {
+  //   let result: any[] = [];
+  //   let yearSelect = this.fechaSeleccionada.slice(0, 4);
+  //   let monthSelect = this.fechaSeleccionada.slice(5, 7);
+  //   let monthSelectNum = Number(monthSelect);
+  //   conjunto.forEach((actividad) => {
+  //     let fecha = actividad.createdAt;
+  //     let year = fecha.slice(0, 4);
+  //     let month = fecha.slice(5, 7);
+  //     let monthNum = Number(month);
+  //     let min = this.selectMinMaxMonth(monthSelect)[0];
+  //     let max = this.selectMinMaxMonth(monthSelect)[1];
+  //     if (yearSelect == year) {
+  //       if (monthNum >= min && monthNum <= max) {
+  //         result.push(actividad);
+  //       }
+  //     }
+  //   });
+  //   return result;
+  // }
 
-  getTipoActividadName(id) {
+  getTipoActividadName(id: number) {
     try {
       return this.tipoActividades[id]['nombre'];
     } catch (exception_var) {
@@ -288,7 +288,8 @@ export class VerInformeComponent implements OnInit, OnDestroy {
     this.usuarioService.getUsuario(obreroSeleccionado.id).subscribe((obrero: UsuarioInterface) => {
       obreroInforme = obrero.usuarioCongregacion;
 
-      this.paisObrero = this.paises.find((pais: CongregacionPaisModel) => pais.id === obreroInforme?.pais_id)?.pais;
+      this.paisObrero =
+        this.paises.find((pais: CongregacionPaisModel) => pais.id === obreroInforme?.pais_id)?.pais || '';
     });
   }
 
@@ -312,54 +313,54 @@ export class VerInformeComponent implements OnInit, OnDestroy {
       this.trimestre = 'octubre, noviembre y diciembre';
       this.fraccion = '4to Trimestre del año';
     }
-    this.filtrarInformacionInforme();
+    // this.filtrarInformacionInforme();
     this.sumatoriaActividadesEspeciales = this.sumatoriaActividades(this.especiales);
     this.sumatoriaActividadesEspirituales = this.sumatoriaActividades(this.espirituales);
     this.sumatoriaActividadesEnServicios = this.sumatoriaActividades(this.servicios);
     this.sumatoriaActividadesEnReuniones = this.sumatoriaActividades(this.reuniones);
   }
 
-  filtrarInformacionInforme() {
-    if (!!this.cargarInforme(this.idInforme)) {
-      this.clasificarActividad(this.actividades);
-      this.servicios = this.filtrarFecha(this.servicios);
-      this.especiales = this.filtrarFecha(this.especiales);
-      this.espirituales = this.filtrarFecha(this.espirituales);
-      this.reuniones = this.filtrarFecha(this.reuniones);
+  // filtrarInformacionInforme() {
+  //   if (!!this.cargarInforme(this.idInforme)) {
+  //     this.clasificarActividad(this.actividades);
+  //     this.servicios = this.filtrarFecha(this.servicios);
+  //     this.especiales = this.filtrarFecha(this.especiales);
+  //     this.espirituales = this.filtrarFecha(this.espirituales);
+  //     this.reuniones = this.filtrarFecha(this.reuniones);
 
-      this.visitas = this.filtrarFecha(this.dataVisitas);
-      this.situacionVisita = this.filtrarFecha(this.dataSituacionVisitas);
-      this.aspectoContable = this.filtrarFechaCreatedAt(this.dataAspectoContable);
-      this.metas = this.filtrarFecha(this.dataMetas);
-      this.logros = this.filtrarFechaCreatedAt(this.dataLogros);
-    }
-  }
+  //     this.visitas = this.filtrarFecha(this.dataVisitas);
+  //     this.situacionVisita = this.filtrarFecha(this.dataSituacionVisitas);
+  //     this.aspectoContable = this.filtrarFechaCreatedAt(this.dataAspectoContable);
+  //     this.metas = this.filtrarFecha(this.dataMetas);
+  //     this.logros = this.filtrarFechaCreatedAt(this.dataLogros);
+  //   }
+  // }
 
-  sumatoriaActividades(actividades) {
+  sumatoriaActividades(actividades: any) {
     var total = 0;
-    actividades.forEach((actividad) => {
+    actividades.forEach((actividad: any) => {
       total += +actividad.cantidadRecaudada;
     });
     this.sumatoriaVisible = true;
     return total;
   }
 
-  makePDF() {
-    let pdf = new jsPDF('p', 'pt', 'a4');
-    let pWidth = pdf.internal.pageSize.width; // 595.28 is the width of a4
-    let srcWidth = document.getElementById('content').scrollWidth;
-    let margin = 18; // narrow margin - 1.27 cm (36);
-    let scale = (pWidth - margin * 2) / srcWidth;
+  // makePDF() {
+  //   let pdf = new jsPDF('p', 'pt', 'a4');
+  //   let pWidth = pdf.internal.pageSize.width; // 595.28 is the width of a4
+  //   let srcWidth = document.getElementById('content')?.scrollWidth;
+  //   let margin = 18; // narrow margin - 1.27 cm (36);
+  //   let scale = (pWidth - margin * 2) / srcWidth;
 
-    pdf.html(document.getElementById('content'), {
-      x: margin,
-      y: margin,
-      html2canvas: {
-        scale: scale,
-      },
-      callback: function () {
-        window.open(pdf.output('bloburl'));
-      },
-    });
-  }
+  //   pdf.html(document.getElementById('content'), {
+  //     x: margin,
+  //     y: margin,
+  //     html2canvas: {
+  //       scale: scale,
+  //     },
+  //     callback: function () {
+  //       window.open(pdf.output('bloburl'));
+  //     },
+  //   });
+  // }
 }

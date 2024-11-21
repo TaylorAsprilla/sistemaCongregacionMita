@@ -1,6 +1,6 @@
 import { ROLES, RUTAS } from '../../routes/menu-items';
 
-export interface SeccionHome {
+export interface SeccionHomeInterface {
   nombreSeccion: string;
   nombreResponsable: string;
   email: string;
@@ -9,7 +9,7 @@ export interface SeccionHome {
   role?: ROLES[];
 }
 
-export const generarSeccionHome: SeccionHome[] = [
+export const generarSeccionHome: SeccionHomeInterface[] = [
   {
     nombreSeccion: 'CMAR Live',
     nombreResponsable: '',
@@ -56,7 +56,7 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-informes.png',
     ruta: `../${RUTAS.INFORME}`,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
   },
   {
     nombreSeccion: 'Congregaciones',
@@ -64,13 +64,6 @@ export const generarSeccionHome: SeccionHome[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-congregacion.png',
     ruta: `../${RUTAS.CONGREGACIONES}`,
-    role: [
-      ROLES.ADMINISTRADOR,
-      ROLES.SUPERVISOR,
-      ROLES.SUPERVISOR_LOCAL,
-      ROLES.OBRERO_CIUDAD,
-      ROLES.OBRERO_CAMPO,
-      ROLES.ASISTENTE_OOTS,
-    ],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
   },
 ];

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { SolicitudMultimediaInterface, TIEMPO_SUGERIDO_DIAS } from 'src/app/core/models/solicitud-multimedia.model';
+import { SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
@@ -12,11 +12,21 @@ import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
+import { NgIf, NgFor } from '@angular/common';
+import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
-  selector: 'app-solicitud-multimedia',
-  templateUrl: './solicitud-multimedia.component.html',
-  styleUrls: ['./solicitud-multimedia.component.scss'],
+    selector: 'app-solicitud-multimedia',
+    templateUrl: './solicitud-multimedia.component.html',
+    styleUrls: ['./solicitud-multimedia.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        CargandoInformacionComponent,
+        NgFor,
+        NgxPaginationModule,
+    ],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   solicitudesDeAccesos: SolicitudMultimediaInterface[] = [];
@@ -38,12 +48,10 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(
-      (data: { tipoMiembro: TipoMiembroModel[]; nacionalidad: NacionalidadModel[] }) => {
-        this.tipoMiembro = data.tipoMiembro;
-        this.nacionalidades = data.nacionalidad;
-      }
-    );
+    this.activatedRoute.data.subscribe((data: any) => {
+      this.tipoMiembro = data.tipoMiembro;
+      this.nacionalidades = data.nacionalidad;
+    });
 
     this.cargarSolicitudDeAccesos();
   }
@@ -74,57 +82,65 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   masInformacion(idSolicitud: number) {
     this.solicitudMultimediaServiceSubscription = this.solicitudMultimediaService
       .getSolicitud(idSolicitud)
-      .subscribe((informacionSolicitud: SolicitudMultimediaInterface) => {
-        const nombre = `${informacionSolicitud.usuario.primerNombre} ${informacionSolicitud.usuario.segundoNombre} ${informacionSolicitud.usuario.primerApellido} ${informacionSolicitud.usuario.segundoApellido}`;
-        const fecha = informacionSolicitud?.usuario.fechaNacimiento
-          ? informacionSolicitud?.usuario.fechaNacimiento
-          : '';
-        const login = informacionSolicitud?.usuario.login ? informacionSolicitud?.usuario?.login : '';
-        const usuarioQueLoRegistro = `${informacionSolicitud.usuarioQueRegistra?.primerNombre}
+      .subscribe((informacionSolicitud: SolicitudMultimediaInterface | null) => {
+        if (informacionSolicitud) {
+          const nombre = `${informacionSolicitud.usuario.primerNombre} ${informacionSolicitud.usuario.segundoNombre} ${informacionSolicitud.usuario.primerApellido} ${informacionSolicitud.usuario.segundoApellido}`;
+          const fecha = informacionSolicitud?.usuario.fechaNacimiento
+            ? informacionSolicitud?.usuario.fechaNacimiento
+            : '';
+          const login = informacionSolicitud?.usuario.login ? informacionSolicitud?.usuario?.login : '';
+          const usuarioQueLoRegistro = `${informacionSolicitud.usuarioQueRegistra?.primerNombre}
                                       ${informacionSolicitud?.usuarioQueRegistra?.segundoNombre}
                                       ${informacionSolicitud?.usuarioQueRegistra?.primerApellido}
                                       ${informacionSolicitud?.usuarioQueRegistra?.segundoApellido}`;
-        const tiempoDeAprobacion = informacionSolicitud?.tiempoAprobacion ? informacionSolicitud?.tiempoAprobacion : '';
-        const direccion = informacionSolicitud?.usuario.direccion ? informacionSolicitud?.usuario.direccion : '';
-        const ciudad = informacionSolicitud?.usuario.ciudadDireccion
-          ? informacionSolicitud?.usuario.ciudadDireccion
-          : '';
-        const departamento = informacionSolicitud?.usuario.departamentoDireccion
-          ? informacionSolicitud?.usuario.departamentoDireccion
-          : '';
-        const codigoPostal = informacionSolicitud?.usuario.codigoPostalDireccion
-          ? informacionSolicitud?.usuario.codigoPostalDireccion
-          : '';
-        const pais = informacionSolicitud?.usuario.paisDireccion ? informacionSolicitud?.usuario.paisDireccion : '';
-        const telefono = informacionSolicitud?.usuario.telefonoCasa ? informacionSolicitud?.usuario.telefonoCasa : '';
-        const celular = informacionSolicitud?.usuario.numeroCelular ? informacionSolicitud?.usuario.numeroCelular : '';
+          const tiempoDeAprobacion = informacionSolicitud?.tiempoAprobacion
+            ? informacionSolicitud?.tiempoAprobacion
+            : '';
+          const direccion = informacionSolicitud?.usuario.direccion ? informacionSolicitud?.usuario.direccion : '';
+          const ciudad = informacionSolicitud?.usuario.ciudadDireccion
+            ? informacionSolicitud?.usuario.ciudadDireccion
+            : '';
+          const departamento = informacionSolicitud?.usuario.departamentoDireccion
+            ? informacionSolicitud?.usuario.departamentoDireccion
+            : '';
+          const codigoPostal = informacionSolicitud?.usuario.codigoPostalDireccion
+            ? informacionSolicitud?.usuario.codigoPostalDireccion
+            : '';
+          const pais = informacionSolicitud?.usuario.paisDireccion ? informacionSolicitud?.usuario.paisDireccion : '';
+          const telefono = informacionSolicitud?.usuario.telefonoCasa ? informacionSolicitud?.usuario.telefonoCasa : '';
+          const celular = informacionSolicitud?.usuario.numeroCelular
+            ? informacionSolicitud?.usuario.numeroCelular
+            : '';
 
-        const tipoMiembro = this.buscarTipoMiembro(informacionSolicitud?.usuario.tipoMiembro_id);
-        const otraRazon =
-          informacionSolicitud?.razonSolicitud_id !== 5
-            ? informacionSolicitud?.razonSolicitud?.solicitud
-            : informacionSolicitud?.otraRazon;
-        const congregacionCercana = informacionSolicitud?.congregacionCercana
-          ? informacionSolicitud?.congregacionCercana
-          : '';
-        const tiempoSugerido = informacionSolicitud?.tiempoSugerido ? informacionSolicitud?.tiempoSugerido : '';
-        const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id);
-        const personaEncamada = informacionSolicitud.personaEncamada ? informacionSolicitud.personaEncamada : 'No';
-        const personaEncargada = informacionSolicitud.personaEncargada ? informacionSolicitud.personaEncargada : '';
-        const enfermedadCronica = informacionSolicitud.enfermedadCronica ? informacionSolicitud.enfermedadCronica : '';
-        const enfermedadQuePadece = informacionSolicitud.enfermedadQuePadece
-          ? informacionSolicitud.enfermedadQuePadece
-          : '';
-        const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
-        const fechaDeSolicitud = informacionSolicitud.createdAt;
-        const estado = !!informacionSolicitud?.estado
-          ? '<span class="badge badge-primary">Activo</span>'
-          : '<span class="badge badge-danger">Deshabilitado</span>';
+          const tipoMiembro = this.buscarTipoMiembro(informacionSolicitud?.usuario.tipoMiembro_id);
+          const otraRazon =
+            informacionSolicitud?.razonSolicitud_id !== 5
+              ? informacionSolicitud?.razonSolicitud?.solicitud
+              : informacionSolicitud?.otraRazon;
+          const congregacionCercana = informacionSolicitud?.congregacionCercana
+            ? informacionSolicitud?.congregacionCercana
+            : '';
+          const tiempoSugerido = informacionSolicitud?.tiempoSugerido ? informacionSolicitud?.tiempoSugerido : '';
+          const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id ?? 0);
+          const personaEncamada = informacionSolicitud.personaEncamada ? informacionSolicitud.personaEncamada : 'No';
+          const personaEncargada = informacionSolicitud.personaEncargada ? informacionSolicitud.personaEncargada : '';
+          const enfermedadCronica = informacionSolicitud.enfermedadCronica
+            ? informacionSolicitud.enfermedadCronica
+            : '';
+          const enfermedadQuePadece = informacionSolicitud.enfermedadQuePadece
+            ? informacionSolicitud.enfermedadQuePadece
+            : '';
+          const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
+          const fechaDeSolicitud = informacionSolicitud.createdAt;
 
-        Swal.fire({
-          icon: 'info',
-          text: `${nombre}`,
-          html: ` <table class="table table-hover text-start">
+          const estado = !!informacionSolicitud?.estado
+            ? '<span class="badge badge-primary">Activo</span>'
+            : '<span class="badge badge-danger">Deshabilitado</span>';
+
+          Swal.fire({
+            icon: 'info',
+            text: `${nombre}`,
+            html: ` <table class="table table-hover text-start">
                   <thead>
                     <tr>
                       <th scope="col">Item</th>
@@ -205,15 +221,19 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                     </tr>
                      <tr>
                       <td class="col-md-5">Fecha de solicitud</td>
-                      <td class="col-md-7">${new Date(fechaDeSolicitud)}</td>
+                     <td class="col-md-7">${fechaDeSolicitud ? new Date(fechaDeSolicitud) : 'Sin fecha'}</td>
                     </tr>
                   </tbody>
                 </table>`,
 
-          showCloseButton: true,
-          showConfirmButton: true,
-          confirmButtonText: 'Cerrar',
-        });
+            showCloseButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Cerrar',
+          });
+        } else {
+          // Handle the case where informacionSolicitud is null
+          console.error('Solicitud not found');
+        }
       });
   }
 
@@ -277,7 +297,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             login: formValues[0],
             password: formValues[1],
             solicitud_id: solicitud.id,
-            tiempoAprobacion: new Date(tiempoAprobacion),
+            tiempoAprobacion: tiempoAprobacion ? new Date(tiempoAprobacion) : null,
+
             estado: true,
           };
 
@@ -381,11 +402,13 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             },
             (error) => {
               let errores = error.error.errors;
-              let listaErrores = [];
+              let listaErrores: string[] = [];
 
               if (!!errores) {
                 Object.entries(errores).forEach(([key, value]) => {
-                  listaErrores.push('° ' + value['msg'] + '<br>');
+                  if (typeof value === 'object' && value !== null && 'msg' in value) {
+                    listaErrores.push('° ' + (value as { msg: string })['msg'] + '<br>');
+                  }
                 });
               }
 
@@ -480,14 +503,14 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     const miembroEncontrado = this.tipoMiembro.find((miembro) => {
       return miembro.id === id;
     });
-    return miembroEncontrado.miembro;
+    return miembroEncontrado ? miembroEncontrado.miembro : '';
   }
 
   buscarNacionalidad(id: number): string {
     const nacionalidadEncontrada = this.nacionalidades.find((nacionalidad) => {
       return nacionalidad.id === id;
     });
-    return nacionalidadEncontrada.nombre;
+    return nacionalidadEncontrada ? nacionalidadEncontrada.nombre : '';
   }
 
   generarPassword() {

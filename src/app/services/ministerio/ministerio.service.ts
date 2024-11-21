@@ -47,7 +47,7 @@ export class MinisterioService {
     return this.httpClient.delete(`${base_url}/ministerio/${ministerio.id}`, this.headers);
   }
 
-  activarministerio(ministerio: MinisterioModel) {
+  activarMinisterio(ministerio: MinisterioModel) {
     return this.httpClient.put(`${base_url}/ministerio/activar/${ministerio.id}`, ministerio, this.headers);
   }
 }

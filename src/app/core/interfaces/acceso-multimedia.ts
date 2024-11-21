@@ -2,7 +2,7 @@ export interface LoginUsuarioCmarLiveInterface {
   login: string;
   password: string;
   solicitud_id: number;
-  tiempoAprobacion: Date;
+  tiempoAprobacion: Date | null;
   estado: boolean;
 }
 

@@ -8,8 +8,8 @@ describe('BredcrumbsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BredcrumbsComponent ]
-    })
+    imports: [BredcrumbsComponent]
+})
     .compileComponents();
   });
 

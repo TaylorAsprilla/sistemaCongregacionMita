@@ -18,13 +18,16 @@ import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { InformacionUsuarioComponent } from '../../../../components/informacion-usuario/informacion-usuario.component';
 
 @Component({
   selector: 'app-registrar-usuario',
   templateUrl: './registrar-usuario.component.html',
   styleUrls: ['./registrar-usuario.component.scss'],
+  standalone: true,
+  imports: [InformacionUsuarioComponent],
 })
-export class RegistrarUsuarioComponent implements OnInit {
+export default class RegistrarUsuarioComponent implements OnInit {
   usuario: UsuarioModel;
   generos: GeneroModel[] = [];
   estadoCivil: EstadoCivilModel[] = [];
@@ -77,10 +80,10 @@ export class RegistrarUsuarioComponent implements OnInit {
         this.paises = data.pais.filter((pais) => pais.estado === true);
         this.campos = data.campo.filter((campo) => campo.estado === true);
         this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
-        this.usuario = data?.usuario?.usuario;
+        this.usuario = data.usuario?.usuario;
       }
     );
-    this.idUsuarioQueRegistra = this.usuarioService.usuarioId;
+    this.idUsuarioQueRegistra = this.usuarioService.usuarioId ?? 0;
   }
 
   arrayUsuarioData(dataType: string) {
@@ -108,17 +111,19 @@ export class RegistrarUsuarioComponent implements OnInit {
         this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONFIRMAR_REGISTRO}/${usuarioCreado.id}`);
       },
       (error) => {
-        let errores = error.error.errors;
-        let listaErrores = [];
-        if (!!errores) {
+        const errores = error.error.errors;
+        const listaErrores: string[] = [];
+        if (errores) {
           Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
+            if (typeof value === 'object' && value !== null && 'msg' in value) {
+              listaErrores.push('° ' + (value as { msg: string }).msg + '<br>');
+            }
           });
         }
         Swal.fire({
           title: 'El usuario NO ha sido creado',
           icon: 'error',
-          html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+          html: listaErrores.length ? listaErrores.join('') : error.error.msg,
         });
       }
     );
@@ -141,8 +146,8 @@ export class RegistrarUsuarioComponent implements OnInit {
             this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
           },
           (error) => {
-            let errores = error.error.errors;
-            let listaErrores = [];
+            const errores = error.error.errors;
+            const listaErrores: string[] = [];
 
             Object.entries(errores).forEach(([key, value]) => {
               listaErrores.push('° ' + value['msg'] + '<br>');

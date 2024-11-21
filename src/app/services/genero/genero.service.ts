@@ -43,7 +43,7 @@ export class GeneroService {
     return this.httpClient.put(`${base_url}/genero/${genero.id}`, genero, this.headers);
   }
 
-  elimiminarGenero(genero: GeneroModel) {
+  eliminarGenero(genero: GeneroModel) {
     return this.httpClient.delete(`${base_url}/genero/${genero.id}`, this.headers);
   }
 

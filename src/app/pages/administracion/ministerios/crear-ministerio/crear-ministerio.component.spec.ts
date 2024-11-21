@@ -8,8 +8,8 @@ describe('CrearMinisterioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CrearMinisterioComponent ]
-    })
+    imports: [CrearMinisterioComponent]
+})
     .compileComponents();
   });
 

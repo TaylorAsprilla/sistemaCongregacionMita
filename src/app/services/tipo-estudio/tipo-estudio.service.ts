@@ -49,11 +49,11 @@ export class TipoEstudioService {
     return this.httpClient.put(`${base_url}/tipoestudio/${tipoEstudio.id}`, tipoEstudio, this.headers);
   }
 
-  eliminarTipoEmpleo(tipoEstudio: TipoEstudioModel) {
+  eliminarTipoEstudio(tipoEstudio: TipoEstudioModel) {
     return this.httpClient.delete(`${base_url}/tipoestudio/${tipoEstudio.id}`, this.headers);
   }
 
-  activarTipoEmpleo(tipoEstudio: TipoEstudioModel) {
+  activarTipoEstudio(tipoEstudio: TipoEstudioModel) {
     return this.httpClient.put(`${base_url}/tipoestudio/activar/${tipoEstudio.id}`, tipoEstudio, this.headers);
   }
 }
