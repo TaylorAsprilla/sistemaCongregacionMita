@@ -122,7 +122,6 @@
           <th class="col-auto text-center">Edad</th>
           <th class="col-auto text-center">Celular</th>
           <th class="col-auto text-center">Congregación</th>
-          <th class="col-auto text-center">Estado</th>
           <th class="col-auto text-center">Acciones</th>
         </tr>
       </thead>
@@ -199,11 +198,6 @@
                 {{ usuario.usuarioCongregacionCampo?.[0]?.campo}}
               </span>
             </p>
-          </td>
-
-          <td>
-            <span *ngIf="usuario.estado" class="badge badge-primary">Activo</span>
-            <span *ngIf="!usuario.estado" class="badge badge-danger">Deshabilitado</span>
           </td>
           <td>
             <a
@@ -287,7 +281,6 @@
         <th class="text-center">Edad</th>
         <th class="text-center">Celular</th>
         <th class="text-center">Congregación</th>
-        <th class="text-center">Estado</th>
         <th class="text-center">Acciones</th>
       </tfoot>
     </table>
