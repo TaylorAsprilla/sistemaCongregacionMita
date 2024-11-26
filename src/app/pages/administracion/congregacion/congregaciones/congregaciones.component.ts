@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { AccesoCongregacionMultimedia } from 'src/app/core/interfaces/acceso-multimedia';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 import { FiltrosComponent } from '../../../../components/filtros/filtros.component';
 import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/filter-by-nombre-pipe.pipe';
@@ -22,12 +22,10 @@ import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/fil
     styleUrls: ['./congregaciones.component.css'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        FiltrosComponent,
-        NgFor,
-        FilterByNombrePipePipe,
-    ],
+    CargandoInformacionComponent,
+    FiltrosComponent,
+    FilterByNombrePipePipe
+],
 })
 export class CongregacionesComponent implements OnInit, OnDestroy {
   cargando: boolean = true;

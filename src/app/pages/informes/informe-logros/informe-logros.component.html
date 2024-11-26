@@ -44,9 +44,11 @@
         <h3 class="card-title">Resumen de logros</h3>
       </div>
       <div class="card-body px-5">
-        <div *ngFor="let logro of logros">
-          <li>{{ logro.logro }}</li>
-        </div>
+        @for (logro of logros; track logro) {
+          <div>
+            <li>{{ logro.logro }}</li>
+          </div>
+        }
       </div>
     </div>
   </div>

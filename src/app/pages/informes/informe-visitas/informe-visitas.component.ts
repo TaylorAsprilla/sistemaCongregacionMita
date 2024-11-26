@@ -6,7 +6,7 @@ import { VisitaModel } from 'src/app/core/models/visita.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { VisitaService } from 'src/app/services/visita/visita.service';
 import Swal from 'sweetalert2';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-informe-visitas',
@@ -14,10 +14,9 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./informe-visitas.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule
+],
 })
 export class InformeVisitasComponent implements OnInit, OnDestroy {
   public visitaForm: UntypedFormGroup;

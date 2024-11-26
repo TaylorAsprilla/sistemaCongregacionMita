@@ -3,17 +3,17 @@
     <img src="./assets/images/cmar-multimedia.png" alt="CMAR Multimedia" style="text-align: center; width: 400px" />
   </div>
 
-  <h3 *ngIf="!!solicitudValida; else noValido" class="card-title">Cuenta verificada correctamente</h3>
-  <a href="https://cmar.live/"> <span class="pointer">Cerrar Ventana</span></a>
-
-  <ng-template #noValido>
+  @if (!!solicitudValida) {
+    <h3 class="card-title">Cuenta verificada correctamente</h3>
+  } @else {
     <h4>
       <p>No pudo ser verificada la cuenta de correo electrónico</p>
       <p>
         Para mayor información contactarse a
-
         <a [href]="'mailto:' + email">{{ email }}</a>
       </p>
     </h4>
-  </ng-template>
+  }
+  <a href="https://cmar.live/"> <span class="pointer">Cerrar Ventana</span></a>
+
 </div>

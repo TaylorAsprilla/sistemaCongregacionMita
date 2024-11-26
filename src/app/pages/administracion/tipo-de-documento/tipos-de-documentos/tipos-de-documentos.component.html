@@ -1,87 +1,96 @@
 <section class="content">
   <!-- Cargado información -->
-  <app-cargando-informacion *ngIf="cargando"></app-cargando-informacion>
+  @if (cargando) {
+    <app-cargando-informacion></app-cargando-informacion>
+  }
 
-  <div class="card" *ngIf="!cargando">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-8 px-4 pt-4">
-          <h3 class="card-title">Total de Tipo de Documentos ({{ tipoDeDocumentos.length }})</h3>
-          <p>Tipo de Documentos registrados en la aplicación</p>
-        </div>
-        <div class="col">
-          <div class="float-end p-4">
-            <a class="btn btn-primary" (click)="crearTipoDeDocumento()">
-              <i class="fas fa-plus"></i> Crear un Tipo de documento
-            </a>
+  @if (!cargando) {
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-8 px-4 pt-4">
+            <h3 class="card-title">Total de Tipo de Documentos ({{ tipoDeDocumentos.length }})</h3>
+            <p>Tipo de Documentos registrados en la aplicación</p>
+          </div>
+          <div class="col">
+            <div class="float-end p-4">
+              <a class="btn btn-primary" (click)="crearTipoDeDocumento()">
+                <i class="fas fa-plus"></i> Crear un Tipo de documento
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped mx-auto">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Documento</th>
-              <th>País</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let tipoDeDocumento of tipoDeDocumentos; index as i">
-              <td>{{ i + 1 }}</td>
-              <td>{{ tipoDeDocumento.documento }}</td>
-
-              <td>{{ buscarPais(tipoDeDocumento.pais_id) }}</td>
-
-              <td>
-                <span *ngIf="tipoDeDocumento.estado" class="badge badge-primary">Activo</span>
-                <span *ngIf="!tipoDeDocumento.estado" class="badge badge-danger">Deshabilitado</span>
-              </td>
-
-              <td>
-                <a
-                  *ngIf="!!tipoDeDocumento.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Editar"
-                  class="btn bg-info"
-                  (click)="actualizarTipoDocumento(tipoDeDocumento.id)"
-                  ><i class="fas fa-pencil-alt ml-1"></i
-                ></a>
-                <a
-                  *ngIf="!!tipoDeDocumento.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Borrar"
-                  class="btn bg-danger ml-1"
-                  (click)="borrarTipoDeDocumento(tipoDeDocumento)"
-                  ><i class="fas fa-trash-alt"></i
-                ></a>
-                <a
-                  *ngIf="!tipoDeDocumento.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Activar"
-                  class="btn bg-secondary ml-1"
-                  (click)="activarTipoDeDocumento(tipoDeDocumento)"
-                  ><i class="fas fa-check-square"></i
-                ></a>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Item</th>
-              <th>Nombre</th>
-              <th>País</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </tfoot>
-        </table>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped mx-auto">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Documento</th>
+                <th>País</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (tipoDeDocumento of tipoDeDocumentos; track tipoDeDocumento; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ tipoDeDocumento.documento }}</td>
+                  <td>{{ buscarPais(tipoDeDocumento.pais_id) }}</td>
+                  <td>
+                    @if (tipoDeDocumento.estado) {
+                      <span class="badge badge-primary">Activo</span>
+                    }
+                    @if (!tipoDeDocumento.estado) {
+                      <span class="badge badge-danger">Deshabilitado</span>
+                    }
+                  </td>
+                  <td>
+                    @if (!!tipoDeDocumento.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Editar"
+                        class="btn bg-info"
+                        (click)="actualizarTipoDocumento(tipoDeDocumento.id)"
+                        ><i class="fas fa-pencil-alt ml-1"></i
+                      ></a>
+                    }
+                    @if (!!tipoDeDocumento.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Borrar"
+                        class="btn bg-danger ml-1"
+                        (click)="borrarTipoDeDocumento(tipoDeDocumento)"
+                        ><i class="fas fa-trash-alt"></i
+                      ></a>
+                    }
+                    @if (!tipoDeDocumento.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Activar"
+                        class="btn bg-secondary ml-1"
+                        (click)="activarTipoDeDocumento(tipoDeDocumento)"
+                        ><i class="fas fa-check-square"></i
+                      ></a>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Item</th>
+                <th>Nombre</th>
+                <th>País</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </section>

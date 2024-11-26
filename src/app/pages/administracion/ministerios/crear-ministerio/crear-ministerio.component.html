@@ -13,33 +13,35 @@
               formControlName="ministerio"
               class="form-control"
               placeholder="Digite el nombre del ministerio"
-            />
-          </div>
+              />
+            </div>
 
-          <div class="card">
-            <button type="submit" class="submit btn btn-primary" [disabled]="ministerioForm.invalid">
-              <i class="fa fa-save"></i> Guardar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Listado de Ministerios</h3>
-      </div>
-      <div class="card-body">
-        <div *ngFor="let ministerio of ministerios">
-          <a class="lista">
-            <li (click)="buscarMinisterio(ministerio.id.toString())">
-              <span class="font-light">{{ ministerio.ministerio }}</span>
-            </li></a
-          >
+            <div class="card">
+              <button type="submit" class="submit btn btn-primary" [disabled]="ministerioForm.invalid">
+                <i class="fa fa-save"></i> Guardar
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  </div>
-</div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Listado de Ministerios</h3>
+        </div>
+        <div class="card-body">
+          @for (ministerio of ministerios; track ministerio) {
+            <div>
+              <a class="lista">
+                <li (click)="buscarMinisterio(ministerio.id.toString())">
+                  <span class="font-light">{{ ministerio.ministerio }}</span>
+                </li></a
+                >
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>

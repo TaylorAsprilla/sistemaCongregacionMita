@@ -14,90 +14,96 @@
         ></app-buscar-usuario>
 
         <div #verPermisos>
-          <div *ngIf="!!usuarioEncontrado" class="row p-5">
-            <div *ngIf="!!asignarPermisos || usuarioEncontrado.login" class="col-md-6 px-4">
-              <form [formGroup]="permisosForm" (ngSubmit)="agregarPermisos()">
-                <div class="form-group">
-                  <label class="input-group obligatorio">Asignar Permisos </label>
-                  <div class="mt-3">
-                    <label
-                      class="form-check-label form-check checkbox-lg"
-                      formArrayName="permisos"
-                      *ngFor="let permiso of permisosArr.controls; index as i"
-                    >
-                      <input type="checkbox" class="form-check-input" [formControlName]="i" />
-                      <span class="ms-2">{{ permisos[i].permiso }}</span>
-                    </label>
-                  </div>
+          @if (!!usuarioEncontrado) {
+            <div class="row p-5">
+              @if (!!asignarPermisos || usuarioEncontrado.login) {
+                <div class="col-md-6 px-4">
+                  <form [formGroup]="permisosForm" (ngSubmit)="agregarPermisos()">
+                    <div class="form-group">
+                      <label class="input-group obligatorio">Asignar Permisos </label>
+                      <div class="mt-3">
+                        @for (permiso of permisosArr.controls; track permiso; let i = $index) {
+                          <label
+                            class="form-check-label form-check checkbox-lg"
+                            formArrayName="permisos"
+                            >
+                            <input type="checkbox" class="form-check-input" [formControlName]="i" />
+                            <span class="ms-2">{{ permisos[i].permiso }}</span>
+                          </label>
+                        }
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" [disabled]="permisosForm.invalid">
+                      Agregar Permisos
+                    </button>
+                  </form>
                 </div>
-
-                <button type="submit" class="btn btn-primary" [disabled]="permisosForm.invalid">
-                  Agregar Permisos
-                </button>
-              </form>
-            </div>
-
-            <div *ngIf="!!usuarioEncontrado.login && !!usuarioEncontrado.password" class="col-md-6 px-4">
-              <form [formGroup]="passwordUsuarioForm" (ngSubmit)="resetPassword()">
-                <div class="form-group col-sm-12 col-md-8 col-lg-8 ps-1">
-                  <label class="input-group obligatorio">Restablecer la Contraseña </label>
-                  <div class="form-outline mb-3">
-                    <input
-                      type="password"
-                      formControlName="passwordNuevoUno"
-                      class="form-control form-control-lg mt-3"
-                      placeholder="Contraseña Nueva"
-                    />
-
-                    <small
-                      class="form-text text-danger"
-                      *ngIf="
-                        passwordUsuarioForm.get('passwordNuevoUno')?.hasError('required') &&
-                        passwordUsuarioForm.get('passwordNuevoUno')?.touched
-                      "
-                    >
-                      La contraseña actual es requerida.
-                    </small>
-                    <small
-                      class="form-text text-danger"
-                      *ngIf="
-                        passwordUsuarioForm.get('passwordNuevoUno')?.hasError('minlength') &&
-                        passwordUsuarioForm.get('passwordNuevoUno')?.touched
-                      "
-                    >
-                      La contraseña debe tener al menos 8 caracteres.
-                    </small>
-                    <small
-                      class="form-text text-danger"
-                      *ngIf="
-                        passwordUsuarioForm.get('passwordNuevoUno')?.hasError('pattern') &&
-                        passwordUsuarioForm.get('passwordNuevoUno')?.touched
-                      "
-                    >
-                      La contraseña debe contener al menos una letra mayúscula.
-                    </small>
-                  </div>
-
-                  <div class="form-outline mb-3">
-                    <input
-                      type="password"
-                      formControlName="passwordNuevoDos"
-                      class="form-control form-control-lg"
-                      placeholder="Confirma la Contraseña Nueva"
-                    />
-                  </div>
-
-                  <p class="form-text text-danger" *ngIf="passwordNoValidos()">Las contraseñas deben ser iguales</p>
+              }
+              @if (!!usuarioEncontrado.login && !!usuarioEncontrado.password) {
+                <div class="col-md-6 px-4">
+                  <form [formGroup]="passwordUsuarioForm" (ngSubmit)="resetPassword()">
+                    <div class="form-group col-sm-12 col-md-8 col-lg-8 ps-1">
+                      <label class="input-group obligatorio">Restablecer la Contraseña </label>
+                      <div class="form-outline mb-3">
+                        <input
+                          type="password"
+                          formControlName="passwordNuevoUno"
+                          class="form-control form-control-lg mt-3"
+                          placeholder="Contraseña Nueva"
+                          />
+                          @if (
+                            passwordUsuarioForm.get('passwordNuevoUno')?.hasError('required') &&
+                            passwordUsuarioForm.get('passwordNuevoUno')?.touched
+                            ) {
+                            <small
+                              class="form-text text-danger"
+                              >
+                              La contraseña actual es requerida.
+                            </small>
+                          }
+                          @if (
+                            passwordUsuarioForm.get('passwordNuevoUno')?.hasError('minlength') &&
+                            passwordUsuarioForm.get('passwordNuevoUno')?.touched
+                            ) {
+                            <small
+                              class="form-text text-danger"
+                              >
+                              La contraseña debe tener al menos 8 caracteres.
+                            </small>
+                          }
+                          @if (
+                            passwordUsuarioForm.get('passwordNuevoUno')?.hasError('pattern') &&
+                            passwordUsuarioForm.get('passwordNuevoUno')?.touched
+                            ) {
+                            <small
+                              class="form-text text-danger"
+                              >
+                              La contraseña debe contener al menos una letra mayúscula.
+                            </small>
+                          }
+                        </div>
+                        <div class="form-outline mb-3">
+                          <input
+                            type="password"
+                            formControlName="passwordNuevoDos"
+                            class="form-control form-control-lg"
+                            placeholder="Confirma la Contraseña Nueva"
+                            />
+                          </div>
+                          @if (passwordNoValidos()) {
+                            <p class="form-text text-danger">Las contraseñas deben ser iguales</p>
+                          }
+                        </div>
+                        <button type="submit" class="btn btn-primary" [disabled]="passwordUsuarioForm.invalid">
+                          Cambiar Contraseña
+                        </button>
+                      </form>
+                    </div>
+                  }
                 </div>
-
-                <button type="submit" class="btn btn-primary" [disabled]="passwordUsuarioForm.invalid">
-                  Cambiar Contraseña
-                </button>
-              </form>
+              }
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>

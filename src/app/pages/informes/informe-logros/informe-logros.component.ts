@@ -6,7 +6,7 @@ import { LogroModel } from 'src/app/core/models/logro.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import Swal from 'sweetalert2';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-informe-logros',
@@ -14,10 +14,9 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./informe-logros.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule
+],
 })
 export class InformeLogrosComponent implements OnInit, OnDestroy {
   public logroForm: UntypedFormGroup;

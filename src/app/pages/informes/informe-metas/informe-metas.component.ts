@@ -9,7 +9,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import { MetaService } from 'src/app/services/meta/meta.service';
 import Swal from 'sweetalert2';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-informe-metas',
@@ -17,10 +17,9 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./informe-metas.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule
+],
 })
 export class InformeMetasComponent implements OnInit, OnDestroy {
   public metaForm: UntypedFormGroup;

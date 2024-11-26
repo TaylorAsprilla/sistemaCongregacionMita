@@ -7,14 +7,14 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, NgClass, RouterLink],
 })
 export default class LoginComponent implements OnInit {
   usuariosSubscription: Subscription;

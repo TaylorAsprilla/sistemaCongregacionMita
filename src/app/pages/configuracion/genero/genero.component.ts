@@ -5,7 +5,7 @@ import { delay } from 'rxjs/operators';
 import { GeneroModel } from 'src/app/core/models/genero.model';
 import { GeneroService } from 'src/app/services/genero/genero.service';
 import Swal from 'sweetalert2';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
@@ -14,10 +14,8 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
     styleUrls: ['./genero.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        NgFor,
-    ],
+    CargandoInformacionComponent
+],
 })
 export class GeneroComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

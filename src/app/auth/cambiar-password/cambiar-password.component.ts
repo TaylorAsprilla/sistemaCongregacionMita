@@ -11,14 +11,14 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
-import { NgIf } from '@angular/common';
+
 
 @Component({
   selector: 'app-cambiar-password',
   templateUrl: './cambiar-password.component.html',
   styleUrls: ['./cambiar-password.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgIf, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
 export default class CambiarPasswordComponent implements OnInit {
   passwordForm: FormGroup;

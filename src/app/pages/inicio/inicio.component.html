@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row no-gutters justify-content-start">
-    <ng-container *ngFor="let seccionHome of generarSeccionHome">
+    @for (seccionHome of generarSeccionHome; track seccionHome) {
       <div class="col-12 col-md-6 col-lg-4 col-xl-3" *appPermisos="seccionHome.role">
         <app-seccion-home
           [nombreSeccion]="seccionHome.nombreSeccion"
@@ -10,7 +10,7 @@
           [ruta]="seccionHome.ruta"
         ></app-seccion-home>
       </div>
-    </ng-container>
+    }
   </div>
 </div>
 
@@ -23,6 +23,6 @@
     ROLES.ADMINISTRADOR_MULTIMEDIA,
     ROLES.MULTIMEDIA
   ]"
->
+  >
   <app-servicios-en-vivo [servicios]="servicio" [tipoDeEvento]="TIPOEVENTO_ID.SERVICIO"></app-servicios-en-vivo>
 </ng-container>

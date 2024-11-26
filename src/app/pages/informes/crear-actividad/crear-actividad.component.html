@@ -15,9 +15,11 @@
             <label class="col-form-label">Sección del Informe</label>
             <select class="form-control" formControlName="idSeccion">
               <option value="" disabled>Seleccione la sección del informe</option>
-              <option *ngFor="let seccioneInforme of seccionesInformes" [value]="seccioneInforme.id">
-                {{ seccioneInforme.seccion }}
-              </option>
+              @for (seccioneInforme of seccionesInformes; track seccioneInforme) {
+                <option [value]="seccioneInforme.id">
+                  {{ seccioneInforme.seccion }}
+                </option>
+              }
             </select>
           </div>
 
@@ -27,7 +29,7 @@
               class="submit btn btn-primary"
               (click)="crearTipoActividad()"
               [disabled]="tipoActividadForm.invalid"
-            >
+              >
               <i class="fa fa-save"></i> Guardar
             </button>
           </div>
@@ -42,11 +44,13 @@
         <h3 class="card-title">Listado de Actividades</h3>
       </div>
       <div class="card-body">
-        <div *ngFor="let tipoActividad of tiposActividad">
-          <li>
-            {{ tipoActividad.nombre }}
-          </li>
-        </div>
+        @for (tipoActividad of tiposActividad; track tipoActividad) {
+          <div>
+            <li>
+              {{ tipoActividad.nombre }}
+            </li>
+          </div>
+        }
       </div>
     </div>
   </div>

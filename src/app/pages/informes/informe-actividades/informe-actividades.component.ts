@@ -7,7 +7,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import Swal from 'sweetalert2';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-informes-actividades',
@@ -15,10 +15,9 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./informe-actividades.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule
+],
 })
 export class InformeActividadesComponent implements OnInit, OnDestroy {
   public actividadForm: UntypedFormGroup;

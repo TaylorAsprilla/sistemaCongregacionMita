@@ -6,7 +6,7 @@ import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-crear-ministerio',
@@ -14,11 +14,10 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./crear-ministerio.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgxIntlTelInputModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    NgxIntlTelInputModule
+],
 })
 export class CrearMinisterioComponent implements OnInit {
   ministerioForm: UntypedFormGroup;

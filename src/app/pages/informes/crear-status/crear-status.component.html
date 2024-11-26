@@ -17,7 +17,7 @@
               class="submit btn btn-primary"
               (click)="crearEstatus()"
               [disabled]="estatusForm.invalid"
-            >
+              >
               <i class="fa fa-save"></i> Guardar
             </button>
           </div>
@@ -32,11 +32,13 @@
         <h3 class="card-title">Listado de Actividades</h3>
       </div>
       <div class="card-body">
-        <div *ngFor="let estatus of estatus">
-          <li>
-            {{ estatus.status }}
-          </li>
-        </div>
+        @for (estatus of estatus; track estatus) {
+          <div>
+            <li>
+              {{ estatus.status }}
+            </li>
+          </div>
+        }
       </div>
     </div>
   </div>

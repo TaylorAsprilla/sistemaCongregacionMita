@@ -23,7 +23,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CONGREGACION_PAIS, ID_PAIS } from 'src/app/core/enums/congregacionPais.enum';
-import { NgClass, NgIf, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-informacion-usuario',
@@ -31,13 +31,11 @@ import { NgClass, NgIf, NgFor } from '@angular/common';
     styleUrls: ['./informacion-usuario.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgClass,
-        NgIf,
-        NgxIntlTelInputModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    NgClass,
+    NgxIntlTelInputModule
+],
 })
 export class InformacionUsuarioComponent implements OnInit {
   registroUnoForm!: FormGroup;

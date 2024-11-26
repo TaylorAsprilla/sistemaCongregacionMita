@@ -4,7 +4,7 @@ import { delay } from 'rxjs/operators';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
 import { EstadoCivilService } from 'src/app/services/estado-civil/estado-civil.service';
 import Swal from 'sweetalert2';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
@@ -13,10 +13,8 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
     styleUrls: ['./estado-civil.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        NgFor,
-    ],
+    CargandoInformacionComponent
+],
 })
 export class EstadoCivilComponent implements OnInit {
   public cargando: boolean = true;

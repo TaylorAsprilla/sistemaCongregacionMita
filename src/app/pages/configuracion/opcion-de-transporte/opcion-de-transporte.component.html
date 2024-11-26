@@ -1,84 +1,93 @@
 <section class="content">
   <!-- Cargado información -->
-  <app-cargando-informacion *ngIf="cargando"></app-cargando-informacion>
+  @if (cargando) {
+    <app-cargando-informacion></app-cargando-informacion>
+  }
 
-  <div class="card" *ngIf="!cargando">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-8 px-4 pt-4">
-          <h3 class="card-title">Total de Opciones de Transporte ({{ opcionesTransporte.length }})</h3>
-          <p>Opciones de transporte registradas en la aplicación</p>
-        </div>
-        <div class="col">
-          <div class="float-end p-4">
-            <a class="btn btn-primary" (click)="crearOpcionDeTransporte()">
-              <i class="fas fa-plus"></i> Crear Opción
-            </a>
+  @if (!cargando) {
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-8 px-4 pt-4">
+            <h3 class="card-title">Total de Opciones de Transporte ({{ opcionesTransporte.length }})</h3>
+            <p>Opciones de transporte registradas en la aplicación</p>
+          </div>
+          <div class="col">
+            <div class="float-end p-4">
+              <a class="btn btn-primary" (click)="crearOpcionDeTransporte()">
+                <i class="fas fa-plus"></i> Crear Opción
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped mx-auto">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Nombre</th>
-
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let opcion of opcionesTransporte; index as i">
-              <td>{{ i + 1 }}</td>
-              <td>{{ opcion.tipoTransporte }}</td>
-
-              <td>
-                <span *ngIf="opcion.estado" class="badge badge-primary">Activo</span>
-                <span *ngIf="!opcion.estado" class="badge badge-danger">Deshabilitado</span>
-              </td>
-
-              <td>
-                <a
-                  *ngIf="!!opcion.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Editar"
-                  class="btn bg-info"
-                  (click)="actualizarOpcionDeTransporte(opcion.id)"
-                  ><i class="fas fa-pencil-alt ml-1"></i
-                ></a>
-                <a
-                  *ngIf="!!opcion.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Borrar"
-                  class="btn bg-danger ml-1"
-                  (click)="borrarOpcionDeTransporte(opcion)"
-                  ><i class="fas fa-trash-alt"></i
-                ></a>
-                <a
-                  *ngIf="!opcion.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Activar"
-                  class="btn bg-secondary ml-1"
-                  (click)="activarOpcionDeTransporte(opcion)"
-                  ><i class="fas fa-check-square"></i
-                ></a>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Item</th>
-              <th>Nombre</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </tfoot>
-        </table>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped mx-auto">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (opcion of opcionesTransporte; track opcion; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ opcion.tipoTransporte }}</td>
+                  <td>
+                    @if (opcion.estado) {
+                      <span class="badge badge-primary">Activo</span>
+                    }
+                    @if (!opcion.estado) {
+                      <span class="badge badge-danger">Deshabilitado</span>
+                    }
+                  </td>
+                  <td>
+                    @if (!!opcion.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Editar"
+                        class="btn bg-info"
+                        (click)="actualizarOpcionDeTransporte(opcion.id)"
+                        ><i class="fas fa-pencil-alt ml-1"></i
+                      ></a>
+                    }
+                    @if (!!opcion.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Borrar"
+                        class="btn bg-danger ml-1"
+                        (click)="borrarOpcionDeTransporte(opcion)"
+                        ><i class="fas fa-trash-alt"></i
+                      ></a>
+                    }
+                    @if (!opcion.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Activar"
+                        class="btn bg-secondary ml-1"
+                        (click)="activarOpcionDeTransporte(opcion)"
+                        ><i class="fas fa-check-square"></i
+                      ></a>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Item</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </section>
