@@ -6,7 +6,7 @@ import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
 import Swal from 'sweetalert2';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
@@ -15,10 +15,8 @@ import { CargandoInformacionComponent } from '../../../../components/cargando-in
     styleUrls: ['./tipos-de-documentos.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        NgFor,
-    ],
+    CargandoInformacionComponent
+],
 })
 export class TiposDeDocumentosComponent implements OnInit {
   public cargando: boolean = true;

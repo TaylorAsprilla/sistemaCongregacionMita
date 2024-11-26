@@ -13,7 +13,7 @@ import { generate } from 'generate-password-browser';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { AccesoCongregacionMultimedia } from 'src/app/core/interfaces/acceso-multimedia';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { NgFor, NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'app-crear-congregacion',
@@ -21,12 +21,10 @@ import { NgFor, NgIf } from '@angular/common';
     styleUrls: ['./crear-congregacion.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgxIntlTelInputModule,
-        NgFor,
-        NgIf,
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    NgxIntlTelInputModule
+],
 })
 export class CrearCongregacionComponent implements OnInit {
   public congregacionForm: UntypedFormGroup;

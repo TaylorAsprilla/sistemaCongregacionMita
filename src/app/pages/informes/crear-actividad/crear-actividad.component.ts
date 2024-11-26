@@ -7,7 +7,7 @@ import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import Swal from 'sweetalert2';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-crear-actividad',
@@ -15,10 +15,9 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./crear-actividad.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule
+],
 })
 export class CrearActividadComponent implements OnInit, OnDestroy {
   public tipoActividadForm: FormGroup;

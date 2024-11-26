@@ -8,7 +8,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
 import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
-import { NgIf } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.component';
 
@@ -17,7 +17,7 @@ import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.compo
   templateUrl: './censo-obrero.component.html',
   styleUrls: ['./censo-obrero.component.scss'],
   standalone: true,
-  imports: [NgIf, CargandoInformacionComponent, VerCensoComponent],
+  imports: [CargandoInformacionComponent, VerCensoComponent],
 })
 export default class CensoObreroComponent implements OnInit, OnDestroy {
   totalUsuarios: number = 0;

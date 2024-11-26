@@ -1,84 +1,93 @@
 <section class="content">
   <!-- Cargado información -->
-  <app-cargando-informacion *ngIf="cargando"></app-cargando-informacion>
+  @if (cargando) {
+    <app-cargando-informacion></app-cargando-informacion>
+  }
 
-  <div class="card" *ngIf="!cargando">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-8 px-4 pt-4">
-          <h3 class="card-title">Total de razones de solicitud ({{ razonSolicitudes.length }})</h3>
-          <p>Razones de solicitud registrados en la aplicación</p>
-        </div>
-        <div class="col">
-          <div class="float-end p-4">
-            <a class="btn btn-primary" (click)="crearRazonSolicitud()">
-              <i class="fas fa-plus"></i> Crear Razón de Solicitud
-            </a>
+  @if (!cargando) {
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-8 px-4 pt-4">
+            <h3 class="card-title">Total de razones de solicitud ({{ razonSolicitudes.length }})</h3>
+            <p>Razones de solicitud registrados en la aplicación</p>
+          </div>
+          <div class="col">
+            <div class="float-end p-4">
+              <a class="btn btn-primary" (click)="crearRazonSolicitud()">
+                <i class="fas fa-plus"></i> Crear Razón de Solicitud
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped mx-auto">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Nombre</th>
-
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let razonSolicitud of razonSolicitudes; index as i">
-              <td>{{ i + 1 }}</td>
-              <td>{{ razonSolicitud.solicitud }}</td>
-
-              <td>
-                <span *ngIf="razonSolicitud.estado" class="badge badge-primary">Activo</span>
-                <span *ngIf="!razonSolicitud.estado" class="badge badge-danger">Deshabilitado</span>
-              </td>
-
-              <td>
-                <a
-                  *ngIf="!!razonSolicitud.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Editar"
-                  class="btn bg-info"
-                  (click)="actualizarRazonSolicitud(razonSolicitud.id)"
-                  ><i class="fas fa-pencil-alt ml-1"></i
-                ></a>
-                <a
-                  *ngIf="!!razonSolicitud.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Borrar"
-                  class="btn bg-danger ml-1"
-                  (click)="borrarRazonSolicitud(razonSolicitud)"
-                  ><i class="fas fa-trash-alt"></i
-                ></a>
-                <a
-                  *ngIf="!razonSolicitud.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Activar"
-                  class="btn bg-secondary ml-1"
-                  (click)="activarRazonSolicitud(razonSolicitud)"
-                  ><i class="fas fa-check-square"></i
-                ></a>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Item</th>
-              <th>Nombre</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </tfoot>
-        </table>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped mx-auto">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (razonSolicitud of razonSolicitudes; track razonSolicitud; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ razonSolicitud.solicitud }}</td>
+                  <td>
+                    @if (razonSolicitud.estado) {
+                      <span class="badge badge-primary">Activo</span>
+                    }
+                    @if (!razonSolicitud.estado) {
+                      <span class="badge badge-danger">Deshabilitado</span>
+                    }
+                  </td>
+                  <td>
+                    @if (!!razonSolicitud.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Editar"
+                        class="btn bg-info"
+                        (click)="actualizarRazonSolicitud(razonSolicitud.id)"
+                        ><i class="fas fa-pencil-alt ml-1"></i
+                      ></a>
+                    }
+                    @if (!!razonSolicitud.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Borrar"
+                        class="btn bg-danger ml-1"
+                        (click)="borrarRazonSolicitud(razonSolicitud)"
+                        ><i class="fas fa-trash-alt"></i
+                      ></a>
+                    }
+                    @if (!razonSolicitud.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Activar"
+                        class="btn bg-secondary ml-1"
+                        (click)="activarRazonSolicitud(razonSolicitud)"
+                        ><i class="fas fa-check-square"></i
+                      ></a>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Item</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </section>

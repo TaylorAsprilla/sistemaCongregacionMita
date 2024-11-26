@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
-import { NgFor, NgIf } from '@angular/common';
+
 import { YouTubePlayer } from '@angular/youtube-player';
 import { YoutubePipe } from '../../pipes/youtube/youtube.pipe';
 
@@ -20,11 +20,9 @@ import { YoutubePipe } from '../../pipes/youtube/youtube.pipe';
     styleUrls: ['./biblioteca-multimedia.component.scss'],
     standalone: true,
     imports: [
-        NgFor,
-        NgIf,
-        YouTubePlayer,
-        YoutubePipe,
-    ],
+    YouTubePlayer,
+    YoutubePipe
+],
 })
 export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() serviciosYvigilias: LinkEventoModel[] = [];

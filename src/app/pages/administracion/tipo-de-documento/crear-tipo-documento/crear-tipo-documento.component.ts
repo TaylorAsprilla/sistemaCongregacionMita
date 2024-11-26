@@ -9,7 +9,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-documento.service';
 import Swal from 'sweetalert2';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-crear-tipo-documento',
@@ -17,11 +17,10 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./crear-tipo-documento.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgxIntlTelInputModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    NgxIntlTelInputModule
+],
 })
 export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
   public tipoDocumentoForm: FormGroup;

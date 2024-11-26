@@ -4,7 +4,7 @@ import { delay } from 'rxjs/operators';
 import { GradoAcademicoModel } from 'src/app/core/models/grado-academico.model';
 import { GradoAcademicoService } from 'src/app/services/grado-academico/grado-academico.service';
 import Swal from 'sweetalert2';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
@@ -13,10 +13,8 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
     styleUrls: ['./grado-alcanzado.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        NgFor,
-    ],
+    CargandoInformacionComponent
+],
 })
 export class GradoAlcanzadoComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

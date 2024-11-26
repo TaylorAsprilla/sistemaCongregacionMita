@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -22,11 +22,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
     styleUrls: ['./solicitud-multimedia.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        NgFor,
-        NgxPaginationModule,
-    ],
+    CargandoInformacionComponent,
+    NgxPaginationModule
+],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   solicitudesDeAccesos: SolicitudMultimediaInterface[] = [];

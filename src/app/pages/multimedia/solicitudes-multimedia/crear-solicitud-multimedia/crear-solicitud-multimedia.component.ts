@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { BuscarUsuarioComponent } from '../../../../components/buscar-usuario/buscar-usuario.component';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/core';
 
@@ -29,17 +29,15 @@ import { MatOption } from '@angular/material/core';
     styleUrls: ['./crear-solicitud-multimedia.component.scss'],
     standalone: true,
     imports: [
-        BuscarUsuarioComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        NgxIntlTelInputModule,
-        NgIf,
-        MatAutocompleteTrigger,
-        MatAutocomplete,
-        NgFor,
-        MatOption,
-        AsyncPipe,
-    ],
+    BuscarUsuarioComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxIntlTelInputModule,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatOption,
+    AsyncPipe
+],
 })
 export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   solicitudForm: FormGroup;

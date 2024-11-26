@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, Reactive
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-informe-situacion-visita',
@@ -11,10 +11,9 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./informe-situacion-visita.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule
+],
 })
 export class InformeSituacionVisitaComponent implements OnInit {
   public situacionVisitaForm: UntypedFormGroup;

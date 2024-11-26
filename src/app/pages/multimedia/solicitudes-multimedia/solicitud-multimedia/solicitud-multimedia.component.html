@@ -1,120 +1,127 @@
-<app-cargando-informacion *ngIf="!!cargando"></app-cargando-informacion>
+@if (!!cargando) {
+  <app-cargando-informacion></app-cargando-informacion>
+}
 
-<div class="card" *ngIf="!cargando">
-  <div class="card-header">
-    <h3 class="card-title float-left">Total de solicitudes: {{ solicitudesDeAccesos.length }}</h3>
-
-    <div class="col">
-      <div class="text-right mb-4">
-        <a class="btn btn-primary" (click)="crearSolicitud()"> <i class="fas fa-user"></i> Nueva Solicitud </a>
+@if (!cargando) {
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title float-left">Total de solicitudes: {{ solicitudesDeAccesos.length }}</h3>
+      <div class="col">
+        <div class="text-right mb-4">
+          <a class="btn btn-primary" (click)="crearSolicitud()"> <i class="fas fa-user"></i> Nueva Solicitud </a>
+        </div>
       </div>
     </div>
-  </div>
-  <!-- /.card-header -->
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped mx-auto">
-        <thead>
-          <tr>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped mx-auto">
+          <thead>
+            <tr>
+              <th># Mita</th>
+              <th>Nombre</th>
+              <th>Celular</th>
+              <th>Email</th>
+              <th>Tipo Solicitud</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (solicitud of solicitudesDeAccesos; track solicitud) {
+              <tr>
+                <td class="pointer" (click)="masInformacion(solicitud.id)">{{ solicitud.usuario.id }}</td>
+                <td>
+                  {{ solicitud.usuario.primerNombre }} {{ solicitud.usuario.segundoNombre }} <br />
+                  {{ solicitud.usuario.primerApellido }} {{ solicitud.usuario.segundoApellido }}
+                </td>
+                <td>{{ solicitud?.usuario?.numeroCelular }}</td>
+                <td>{{ solicitud?.usuario?.email }}</td>
+                <td>{{ solicitud?.razonSolicitud?.solicitud }}</td>
+                <td>
+                  @if (!!solicitud?.estado) {
+                    <span class="badge badge-primary">Activo</span>
+                  }
+                  @if (!solicitud?.estado) {
+                    <span class="badge badge-danger">Deshabilitado</span>
+                  }
+                </td>
+                <td>
+                  <a
+                    data-toggle="tooltip"
+                    data-original-title="Crear Acceso"
+                    class="btn bg-primary ms-1"
+                    (click)="masInformacion(solicitud.id)"
+                    ><i class="fa-solid fa fa-info"></i
+                  ></a>
+                  @if (!solicitud?.usuario?.password) {
+                    <a
+                      data-toggle="tooltip"
+                      data-original-title="Crear Acceso"
+                      class="btn bg-info ms-1"
+                      (click)="crearAccesoMultimedia(solicitud)"
+                      ><i class="fa-solid fa fa-key"></i
+                    ></a>
+                  }
+                  @if (!!solicitud?.usuario?.password) {
+                    <a
+                      data-toggle="tooltip"
+                      data-original-title="Editar Acceso"
+                      class="btn bg-warning ms-1"
+                      (click)="editarAccesoMultimedia(solicitud)"
+                      ><i class="fa fa-pen-to-square"></i
+                    ></a>
+                  }
+                  @if (!!solicitud?.estado) {
+                    <a
+                      data-toggle="tooltip"
+                      data-original-title="Eliminar Acceso"
+                      class="btn bg-danger ms-1"
+                      (click)="eliminarAccesoMultimedia(solicitud)"
+                      ><i class="fa fa-trash"></i
+                    ></a>
+                  }
+                  @if (!solicitud?.estado && !!solicitud?.usuario?.login) {
+                    <a
+                      data-toggle="tooltip"
+                      data-original-title="Activar Acceso"
+                      class="btn bg-secondary ms-1"
+                      (click)="activarAccesoMultimedia(solicitud)"
+                      ><i class="fa fa-check"></i
+                    ></a>
+                  }
+                  <a
+                    data-toggle="tooltip"
+                    data-original-title="Denegar Acceso"
+                    class="btn bg-danger ms-1"
+                    (click)="denegarAccesoMultimedia(solicitud)"
+                    ><i class="fa fa-x"></i
+                  ></a>
+                </td>
+              </tr>
+            }
+          </tbody>
+          <tfoot>
             <th># Mita</th>
             <th>Nombre</th>
             <th>Celular</th>
             <th>Email</th>
-            <th>Tipo Solicitud</th>
+            <th>Login</th>
             <th>Estado</th>
             <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let solicitud of solicitudesDeAccesos">
-            <td class="pointer" (click)="masInformacion(solicitud.id)">{{ solicitud.usuario.id }}</td>
-
-            <td>
-              {{ solicitud.usuario.primerNombre }} {{ solicitud.usuario.segundoNombre }} <br />
-              {{ solicitud.usuario.primerApellido }} {{ solicitud.usuario.segundoApellido }}
-            </td>
-
-            <td>{{ solicitud?.usuario?.numeroCelular }}</td>
-
-            <td>{{ solicitud?.usuario?.email }}</td>
-
-            <td>{{ solicitud?.razonSolicitud?.solicitud }}</td>
-
-            <td>
-              <span class="badge badge-primary" *ngIf="!!solicitud?.estado">Activo</span>
-              <span class="badge badge-danger" *ngIf="!solicitud?.estado">Deshabilitado</span>
-            </td>
-
-            <td>
-              <a
-                data-toggle="tooltip"
-                data-original-title="Crear Acceso"
-                class="btn bg-primary ms-1"
-                (click)="masInformacion(solicitud.id)"
-                ><i class="fa-solid fa fa-info"></i
-              ></a>
-              <a
-                *ngIf="!solicitud?.usuario?.password"
-                data-toggle="tooltip"
-                data-original-title="Crear Acceso"
-                class="btn bg-info ms-1"
-                (click)="crearAccesoMultimedia(solicitud)"
-                ><i class="fa-solid fa fa-key"></i
-              ></a>
-              <a
-                *ngIf="!!solicitud?.usuario?.password"
-                data-toggle="tooltip"
-                data-original-title="Editar Acceso"
-                class="btn bg-warning ms-1"
-                (click)="editarAccesoMultimedia(solicitud)"
-                ><i class="fa fa-pen-to-square"></i
-              ></a>
-              <a
-                *ngIf="!!solicitud?.estado"
-                data-toggle="tooltip"
-                data-original-title="Eliminar Acceso"
-                class="btn bg-danger ms-1"
-                (click)="eliminarAccesoMultimedia(solicitud)"
-                ><i class="fa fa-trash"></i
-              ></a>
-              <a
-                *ngIf="!solicitud?.estado && !!solicitud?.usuario?.login"
-                data-toggle="tooltip"
-                data-original-title="Activar Acceso"
-                class="btn bg-secondary ms-1"
-                (click)="activarAccesoMultimedia(solicitud)"
-                ><i class="fa fa-check"></i
-              ></a>
-              <a
-                data-toggle="tooltip"
-                data-original-title="Denegar Acceso"
-                class="btn bg-danger ms-1"
-                (click)="denegarAccesoMultimedia(solicitud)"
-                ><i class="fa fa-x"></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <th># Mita</th>
-          <th>Nombre</th>
-          <th>Celular</th>
-          <th>Email</th>
-          <th>Login</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tfoot>
-      </table>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center mt-2 mb-2">
+      <pagination-controls
+        (pageChange)="onTableDataChange($event)"
+        previousLabel="Anterior"
+        nextLabel="Próximo"
+        [autoHide]="true"
+        [responsive]="true"
+        >
+      </pagination-controls>
     </div>
   </div>
-  <div class="d-flex justify-content-center mt-2 mb-2">
-    <pagination-controls
-      (pageChange)="onTableDataChange($event)"
-      previousLabel="Anterior"
-      nextLabel="Próximo"
-      [autoHide]="true"
-      [responsive]="true"
-    >
-    </pagination-controls>
-  </div>
-</div>
+}

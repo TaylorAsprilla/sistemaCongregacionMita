@@ -15,9 +15,11 @@
             <label class="col-form-label">Congregación</label>
             <select class="form-control" id="inputCongregacion" formControlName="congregacion_id">
               <option value="" disabled>Seleccione congregación</option>
-              <option *ngFor="let congregacion of congregaciones" [value]="congregacion.id">
-                {{ congregacion.congregacion }}
-              </option>
+              @for (congregacion of congregaciones; track congregacion) {
+                <option [value]="congregacion.id">
+                  {{ congregacion.congregacion }}
+                </option>
+              }
             </select>
           </div>
 
@@ -26,10 +28,12 @@
             <select class="form-control" formControlName="idObreroEncargado">
               <option [value]="null" disabled>Seleccione el obrero encargado</option>
               <option [value]="null">Sin obrero Asignado</option>
-              <option *ngFor="let obrero of obreros" [value]="obrero.id">
-                {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
-                {{ obrero.segundoApellido }}
-              </option>
+              @for (obrero of obreros; track obrero) {
+                <option [value]="obrero.id">
+                  {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
+                  {{ obrero.segundoApellido }}
+                </option>
+              }
             </select>
           </div>
 
@@ -38,10 +42,12 @@
             <select class="form-control" formControlName="idObreroEncargadoDos">
               <option [value]="null" disabled>Seleccione el obrero auxiliar</option>
               <option [value]="null">Sin obrero auxiliar</option>
-              <option *ngFor="let obrero of obreros" [value]="obrero.id">
-                {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
-                {{ obrero.segundoApellido }}
-              </option>
+              @for (obrero of obreros; track obrero) {
+                <option [value]="obrero.id">
+                  {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
+                  {{ obrero.segundoApellido }}
+                </option>
+              }
             </select>
           </div>
 
@@ -61,14 +67,16 @@
         <h3 class="card-title">Listado de Campos</h3>
       </div>
       <div class="card-body">
-        <div *ngFor="let campo of campos">
-          <a class="lista">
-            <li (click)="buscarCampo(campo.id.toString())">
-              <span class="font-light">{{ campo.campo }}</span>
-            </li></a
-          >
+        @for (campo of campos; track campo) {
+          <div>
+            <a class="lista">
+              <li (click)="buscarCampo(campo.id.toString())">
+                <span class="font-light">{{ campo.campo }}</span>
+              </li></a
+              >
+            </div>
+          }
         </div>
       </div>
     </div>
   </div>
-</div>

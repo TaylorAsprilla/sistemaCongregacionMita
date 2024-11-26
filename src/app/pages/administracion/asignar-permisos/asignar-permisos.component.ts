@@ -18,7 +18,7 @@ import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { generate } from 'generate-password-browser';
 import { BuscarUsuarioComponent } from '../../../components/buscar-usuario/buscar-usuario.component';
-import { NgIf, NgFor } from '@angular/common';
+
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @Component({
@@ -26,7 +26,7 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
   templateUrl: './asignar-permisos.component.html',
   styleUrls: ['./asignar-permisos.component.scss'],
   standalone: true,
-  imports: [BuscarUsuarioComponent, NgIf, FormsModule, ReactiveFormsModule, NgFor, NgxIntlTelInputModule],
+  imports: [BuscarUsuarioComponent, FormsModule, ReactiveFormsModule, NgxIntlTelInputModule],
 })
 export default class AsignarPermisosComponent implements OnInit {
   permisosForm: FormGroup;

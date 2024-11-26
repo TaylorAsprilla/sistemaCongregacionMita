@@ -7,7 +7,7 @@ import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimed
 import { GENERO } from 'src/app/core/enums/genero.enum';
 import { configuracion } from 'src/environments/config/configuration';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { NgIf, NgFor, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { PermisosDirective } from '../../directive/permisos/permisos.directive';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 declare var $: any;
@@ -17,7 +17,7 @@ declare var $: any;
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   standalone: true,
-  imports: [RouterLink, NgIf, NgFor, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule],
+  imports: [RouterLink, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule],
 })
 export class SidebarComponent implements OnInit {
   menuItems: any[] = [];

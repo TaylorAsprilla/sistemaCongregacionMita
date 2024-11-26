@@ -8,12 +8,14 @@
     <!-- User profile text-->
     <div class="profile-text">
       <h5>{{ nombre }}</h5>
-      <div *ngIf="usuario">
-        <h5>Número Mita {{ usuario?.id }}</h5>
-        <a [routerLink]="[Rutas.PERFIL, usuario.id]" data-toggle="tooltip" title="Perfil">
-          <i class="fa fa-user"></i> Mi Perfil
-        </a>
-      </div>
+      @if (usuario) {
+        <div>
+          <h5>Número Mita {{ usuario?.id }}</h5>
+          <a [routerLink]="[Rutas.PERFIL, usuario.id]" data-toggle="tooltip" title="Perfil">
+            <i class="fa fa-user"></i> Mi Perfil
+          </a>
+        </div>
+      }
       <div>
         <a (click)="logout()" class="pointer" data-toggle="tooltip" title="Logout">
           <i class="mdi mdi-power"></i> Cerrar Sesión
@@ -28,84 +30,93 @@
   <nav class="sidebar-nav mb-5">
     <ul id="sidebarnav">
       <!-- First level menu -->
-      <li *ngFor="let sidebarnavItem of sidebarnavItems">
-        <ng-container
-          class="fondo pointer"
-          [class.active]="showMenu === sidebarnavItem.title"
-          *appPermisos="sidebarnavItem.role"
-        >
-          <div class="nav-small-cap pointer" *ngIf="sidebarnavItem.extralink === true">{{ sidebarnavItem.title }}</div>
-
-          <a
-            [routerLink]="sidebarnavItem.path === '' ? null : [sidebarnavItem.path]"
-            [ngClass]="sidebarnavItem.submenu.length === 0 ? '' : [sidebarnavItem.class]"
-            class="pointer"
-            *ngIf="!sidebarnavItem.extralink"
-            (click)="addExpandClass(sidebarnavItem.title)"
-          >
-            <i [ngClass]="[sidebarnavItem.icon]"></i>
-            <!-- Nombre -->
-            <span class="hide-menu">
-              {{ sidebarnavItem.title }}
-              <!-- Número -->
-
-              <span *ngIf="sidebarnavItem.submenu.length > 0" class="label label-rouded label-themecolor">
-                {{ sidebarnavItem.submenu.length }}
-              </span>
-            </span>
-          </a>
-          <!-- Second level menu -->
-
-          <ul
-            class="collapse"
-            *ngIf="sidebarnavItem.submenu.length > 0"
-            [ngClass]="{ in: showMenu === sidebarnavItem.title }"
-          >
-            <li
-              class=""
-              *ngFor="let sidebarnavSubItem of sidebarnavItem.submenu"
-              [class.active]="showSubMenu === sidebarnavSubItem.title"
-              [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'active'"
+      @for (sidebarnavItem of sidebarnavItems; track sidebarnavItem) {
+        <li>
+          <ng-container
+            class="fondo pointer"
+            [class.active]="showMenu === sidebarnavItem.title"
+            *appPermisos="sidebarnavItem.role"
             >
-              <ng-container *appPermisos="sidebarnavSubItem.role">
-                <a
-                  [routerLink]="sidebarnavSubItem.submenu.length > 0 ? null : [sidebarnavSubItem.path]"
-                  [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'router-link-active'"
-                  [ngClass]="[sidebarnavSubItem.class]"
-                  *ngIf="!sidebarnavSubItem.extralink"
-                  class="pointer"
-                  (click)="addActiveClass(sidebarnavSubItem.title)"
+            @if (sidebarnavItem.extralink === true) {
+              <div class="nav-small-cap pointer">{{ sidebarnavItem.title }}</div>
+            }
+            @if (!sidebarnavItem.extralink) {
+              <a
+                [routerLink]="sidebarnavItem.path === '' ? null : [sidebarnavItem.path]"
+                [ngClass]="sidebarnavItem.submenu.length === 0 ? '' : [sidebarnavItem.class]"
+                class="pointer"
+                (click)="addExpandClass(sidebarnavItem.title)"
                 >
-                  <i [ngClass]="[sidebarnavSubItem.icon]"></i>
-                  {{ sidebarnavSubItem.title }}
-                </a>
-              </ng-container>
-
-              <!-- Third level menu -->
+                <i [ngClass]="[sidebarnavItem.icon]"></i>
+                <!-- Nombre -->
+                <span class="hide-menu">
+                  {{ sidebarnavItem.title }}
+                  <!-- Número -->
+                  @if (sidebarnavItem.submenu.length > 0) {
+                    <span class="label label-rouded label-themecolor">
+                      {{ sidebarnavItem.submenu.length }}
+                    </span>
+                  }
+                </span>
+              </a>
+            }
+            <!-- Second level menu -->
+            @if (sidebarnavItem.submenu.length > 0) {
               <ul
                 class="collapse"
-                *ngIf="sidebarnavSubItem.submenu.length > 0"
-                [ngClass]="{ in: showSubMenu === sidebarnavSubItem.title }"
-              >
-                <li
-                  *ngFor="let sidebarnavSubsubItem of sidebarnavSubItem.submenu"
-                  routerLinkActive="active"
-                  [ngClass]="[sidebarnavSubsubItem.class]"
+                [ngClass]="{ in: showMenu === sidebarnavItem.title }"
                 >
-                  <a
-                    [routerLink]="[sidebarnavSubsubItem.path]"
-                    *ngIf="!sidebarnavSubsubItem.extralink"
-                    [routerLinkActive]="sidebarnavSubsubItem.submenu.length > 0 ? '' : 'router-link-active'"
-                  >
-                    <i [ngClass]="[sidebarnavSubsubItem.icon]"></i>
-                    {{ sidebarnavSubsubItem.title }}
-                  </a>
-                </li>
+                @for (sidebarnavSubItem of sidebarnavItem.submenu; track sidebarnavSubItem) {
+                  <li
+                    class=""
+                    [class.active]="showSubMenu === sidebarnavSubItem.title"
+                    [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'active'"
+                    >
+                    <ng-container *appPermisos="sidebarnavSubItem.role">
+                      @if (!sidebarnavSubItem.extralink) {
+                        <a
+                          [routerLink]="sidebarnavSubItem.submenu.length > 0 ? null : [sidebarnavSubItem.path]"
+                          [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'router-link-active'"
+                          [ngClass]="[sidebarnavSubItem.class]"
+                          class="pointer"
+                          (click)="addActiveClass(sidebarnavSubItem.title)"
+                          >
+                          <i [ngClass]="[sidebarnavSubItem.icon]"></i>
+                          {{ sidebarnavSubItem.title }}
+                        </a>
+                      }
+                    </ng-container>
+                    <!-- Third level menu -->
+                    @if (sidebarnavSubItem.submenu.length > 0) {
+                      <ul
+                        class="collapse"
+                        [ngClass]="{ in: showSubMenu === sidebarnavSubItem.title }"
+                        >
+                        @for (sidebarnavSubsubItem of sidebarnavSubItem.submenu; track sidebarnavSubsubItem) {
+                          <li
+                            routerLinkActive="active"
+                            [ngClass]="[sidebarnavSubsubItem.class]"
+                            >
+                            @if (!sidebarnavSubsubItem.extralink) {
+                              <a
+                                [routerLink]="[sidebarnavSubsubItem.path]"
+                                [routerLinkActive]="sidebarnavSubsubItem.submenu.length > 0 ? '' : 'router-link-active'"
+                                >
+                                <i [ngClass]="[sidebarnavSubsubItem.icon]"></i>
+                                {{ sidebarnavSubsubItem.title }}
+                              </a>
+                            }
+                          </li>
+                        }
+                      </ul>
+                    }
+                  </li>
+                }
               </ul>
-            </li>
-          </ul>
-        </ng-container>
-      </li>
+            }
+          </ng-container>
+        </li>
+      }
     </ul>
   </nav>
   <!-- End Sidebar navigation -->

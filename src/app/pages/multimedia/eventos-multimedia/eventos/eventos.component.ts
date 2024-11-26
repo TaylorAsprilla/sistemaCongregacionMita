@@ -5,7 +5,7 @@ import { LinkEventoModel, TIPOEVENTO, TIPOEVENTO_ID } from 'src/app/core/models/
 import { RUTAS } from 'src/app/routes/menu-items';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
 import Swal from 'sweetalert2';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
@@ -14,10 +14,8 @@ import { CargandoInformacionComponent } from '../../../../components/cargando-in
     styleUrls: ['./eventos.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        NgFor,
-    ],
+    CargandoInformacionComponent
+],
 })
 export class EventosComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

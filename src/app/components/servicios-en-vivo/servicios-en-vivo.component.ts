@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
-import { NgIf } from '@angular/common';
+
 import { YouTubePlayer } from '@angular/youtube-player';
 import { YoutubePipe } from '../../pipes/youtube/youtube.pipe';
 
@@ -21,10 +21,9 @@ import { YoutubePipe } from '../../pipes/youtube/youtube.pipe';
     styleUrls: ['./servicios-en-vivo.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        YouTubePlayer,
-        YoutubePipe,
-    ],
+    YouTubePlayer,
+    YoutubePipe
+],
 })
 export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() servicios: LinkEventoModel = null;

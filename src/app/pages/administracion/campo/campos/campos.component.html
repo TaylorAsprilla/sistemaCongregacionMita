@@ -1,99 +1,108 @@
 <section class="content">
-  <app-cargando-informacion *ngIf="cargando"></app-cargando-informacion>
+  @if (cargando) {
+    <app-cargando-informacion></app-cargando-informacion>
+  }
 
-  <div class="card" *ngIf="!cargando">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-8 px-4 pt-4">
-          <h3 class="card-title">Total de Campos ({{ campos.length }})</h3>
-          <p>Campos registradas en la aplicación</p>
-        </div>
-        <div class="col">
-          <div class="float-end p-4">
-            <a class="btn btn-primary" (click)="crearCampo()"> <i class="fas fa-plus"></i> Crear Campo </a>
+  @if (!cargando) {
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-8 px-4 pt-4">
+            <h3 class="card-title">Total de Campos ({{ campos.length }})</h3>
+            <p>Campos registradas en la aplicación</p>
+          </div>
+          <div class="col">
+            <div class="float-end p-4">
+              <a class="btn btn-primary" (click)="crearCampo()"> <i class="fas fa-plus"></i> Crear Campo </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="card-body">
-      <!-- Campo de búsqueda -->
-      <app-filtros (onFiltroNombre)="obtenerFiltroNombre($event)"></app-filtros>
-
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped mx-auto">
-          <thead>
-            <tr>
-              <th scope="col">Item</th>
-              <th class="col-auto text-center">Nombre</th>
-              <th class="col-auto text-center">Obrero Encargado</th>
-              <th class="col-auto text-center">Obrero Auxiliar</th>
-              <th class="col-auto text-center">Congregación</th>
-              <th class="col-auto text-center">País</th>
-              <th class="col-auto text-center">Estado</th>
-              <th class="col-auto text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let campo of campos | filterByNombrePipe : 'campo' : filtroNombre; index as i">
-              <td>{{ i + 1 }}</td>
-              <td>{{ campo.campo }}</td>
-              <td>{{ buscarObrero(campo.idObreroEncargado) }}</td>
-              <td>{{ buscarObrero(campo?.idObreroEncargadoDos) }}</td>
-              <td>
-                {{ buscarCongregacion(campo.congregacion_id)['congregacion'] }}
-              </td>
-              <td>
-                {{ buscarCongregacion(campo.congregacion_id)['pais'] }}
-              </td>
-
-              <td>
-                <span *ngIf="campo.estado" class="badge badge-primary">Activo</span>
-                <span *ngIf="!campo.estado" class="badge badge-danger">Deshabilitado</span>
-              </td>
-
-              <td>
-                <a
-                  *ngIf="!!campo.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Editar"
-                  class="btn bg-info"
-                  (click)="actualizarCampo(campo.id)"
-                  ><i class="fas fa-pencil-alt ml-1"></i
-                ></a>
-                <a
-                  *ngIf="!!campo.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Borrar"
-                  class="btn bg-danger ml-1"
-                  (click)="borrarCampo(campo)"
-                  ><i class="fas fa-trash-alt"></i
-                ></a>
-                <a
-                  *ngIf="!campo.estado"
-                  data-toggle="tooltip"
-                  data-original-title="Activar"
-                  class="btn bg-secondary ml-1"
-                  (click)="activarCampo(campo)"
-                  ><i class="fas fa-check-square"></i
-                ></a>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Item</th>
-              <th>Nombre</th>
-              <th>Obrero Encargado</th>
-              <th>Obrero Auxiliar</th>
-              <th>País</th>
-              <th>Congregación</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </tfoot>
-        </table>
+      <div class="card-body">
+        <!-- Campo de búsqueda -->
+        <app-filtros (onFiltroNombre)="obtenerFiltroNombre($event)"></app-filtros>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped mx-auto">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th class="col-auto text-center">Nombre</th>
+                <th class="col-auto text-center">Obrero Encargado</th>
+                <th class="col-auto text-center">Obrero Auxiliar</th>
+                <th class="col-auto text-center">Congregación</th>
+                <th class="col-auto text-center">País</th>
+                <th class="col-auto text-center">Estado</th>
+                <th class="col-auto text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (campo of campos | filterByNombrePipe : 'campo' : filtroNombre; track campo; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ campo.campo }}</td>
+                  <td>{{ buscarObrero(campo.idObreroEncargado) }}</td>
+                  <td>{{ buscarObrero(campo?.idObreroEncargadoDos) }}</td>
+                  <td>
+                    {{ buscarCongregacion(campo.congregacion_id)['congregacion'] }}
+                  </td>
+                  <td>
+                    {{ buscarCongregacion(campo.congregacion_id)['pais'] }}
+                  </td>
+                  <td>
+                    @if (campo.estado) {
+                      <span class="badge badge-primary">Activo</span>
+                    }
+                    @if (!campo.estado) {
+                      <span class="badge badge-danger">Deshabilitado</span>
+                    }
+                  </td>
+                  <td>
+                    @if (!!campo.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Editar"
+                        class="btn bg-info"
+                        (click)="actualizarCampo(campo.id)"
+                        ><i class="fas fa-pencil-alt ml-1"></i
+                      ></a>
+                    }
+                    @if (!!campo.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Borrar"
+                        class="btn bg-danger ml-1"
+                        (click)="borrarCampo(campo)"
+                        ><i class="fas fa-trash-alt"></i
+                      ></a>
+                    }
+                    @if (!campo.estado) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Activar"
+                        class="btn bg-secondary ml-1"
+                        (click)="activarCampo(campo)"
+                        ><i class="fas fa-check-square"></i
+                      ></a>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Item</th>
+                <th>Nombre</th>
+                <th>Obrero Encargado</th>
+                <th>Obrero Auxiliar</th>
+                <th>País</th>
+                <th>Congregación</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </section>

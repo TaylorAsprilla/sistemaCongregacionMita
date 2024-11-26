@@ -8,7 +8,7 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import Swal from 'sweetalert2';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 import { FiltrosComponent } from '../../../../components/filtros/filtros.component';
 import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/filter-by-nombre-pipe.pipe';
@@ -19,12 +19,10 @@ import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/fil
     styleUrls: ['./campos.component.css'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        FiltrosComponent,
-        NgFor,
-        FilterByNombrePipePipe,
-    ],
+    CargandoInformacionComponent,
+    FiltrosComponent,
+    FilterByNombrePipePipe
+],
 })
 export class CamposComponent implements OnInit {
   cargando: boolean = true;

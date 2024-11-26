@@ -4,7 +4,7 @@ import { delay } from 'rxjs/operators';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { VoluntariadoService } from 'src/app/services/voluntariado/voluntariado.service';
 import Swal from 'sweetalert2';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
@@ -13,10 +13,8 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
     styleUrls: ['./voluntario.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        NgFor,
-    ],
+    CargandoInformacionComponent
+],
 })
 export class VoluntarioComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

@@ -7,7 +7,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { GENERO } from 'src/app/core/enums/genero.enum';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+
 declare var $: any;
 
 @Component({
@@ -16,13 +16,12 @@ declare var $: any;
     styleUrls: ['./header.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        NgbDropdown,
-        NgbDropdownToggle,
-        NgbDropdownMenu,
-        NgIf,
-        RouterLink,
-    ],
+    FormsModule,
+    NgbDropdown,
+    NgbDropdownToggle,
+    NgbDropdownMenu,
+    RouterLink
+],
 })
 export class HeaderComponent implements OnInit {
   @Output() toggleSidebar = new EventEmitter<void>();

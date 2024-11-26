@@ -8,7 +8,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
 import Swal from 'sweetalert2';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { NgFor } from '@angular/common';
+
 import { BibliotecaMultimediaComponent } from '../../../../components/biblioteca-multimedia/biblioteca-multimedia.component';
 
 @Component({
@@ -17,12 +17,11 @@ import { BibliotecaMultimediaComponent } from '../../../../components/biblioteca
     styleUrls: ['./configurar-eventos.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgxIntlTelInputModule,
-        NgFor,
-        BibliotecaMultimediaComponent,
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    NgxIntlTelInputModule,
+    BibliotecaMultimediaComponent
+],
 })
 export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   eventosForm: FormGroup;

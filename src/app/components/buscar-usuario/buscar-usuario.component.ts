@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import { NgIf } from '@angular/common';
+
 import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
 
 @Component({
@@ -13,11 +13,10 @@ import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
     styleUrls: ['./buscar-usuario.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgIf,
-        CalcularEdadPipe,
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    CalcularEdadPipe
+],
 })
 export class BuscarUsuarioComponent implements OnInit, OnDestroy {
   @Output() onUsuarioEncontrado: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();

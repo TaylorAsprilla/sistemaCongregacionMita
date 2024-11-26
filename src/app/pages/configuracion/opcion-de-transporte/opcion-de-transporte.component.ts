@@ -5,7 +5,7 @@ import { OpcionTransporteModel } from 'src/app/core/models/opcion-transporte.mod
 import { OpcionTransporteService } from 'src/app/services/opcion-transporte/opcion-transporte.service';
 
 import Swal from 'sweetalert2';
-import { NgIf, NgFor } from '@angular/common';
+
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
@@ -14,10 +14,8 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
     styleUrls: ['./opcion-de-transporte.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        CargandoInformacionComponent,
-        NgFor,
-    ],
+    CargandoInformacionComponent
+],
 })
 export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;

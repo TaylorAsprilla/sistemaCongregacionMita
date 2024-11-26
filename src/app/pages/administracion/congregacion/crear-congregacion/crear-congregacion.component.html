@@ -14,95 +14,104 @@
               class="form-control"
               placeholder="Digite el nombre de la Congregación"
               #txtNombreCongregacion
-            />
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="inputPais" class="col-form-label obligatorio">País </label>
+              <select class="form-control" id="inputPais" formControlName="pais_id">
+                <option value="" disabled>Seleccione el país</option>
+                @for (pais of paises; track pais) {
+                  <option [value]="pais.id">
+                    {{ pais.pais }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="col-form-label obligatorio">Obrero Encargado </label>
+              <select class="form-control" formControlName="idObreroEncargado">
+                <option [value]="null" disabled>Seleccione el obrero encargado</option>
+                <option [value]="null">Sin obrero Asignado</option>
+                @for (obrero of obreros; track obrero) {
+                  <option [value]="obrero.id">
+                    {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
+                    {{ obrero.segundoApellido }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="col-form-label">Obrero Auxiliar </label>
+              <select class="form-control" formControlName="idObreroEncargadoDos">
+                <option [value]="null" disabled>Seleccione el obrero auxiliar</option>
+                <option [value]="null">Sin obrero auxiliar</option>
+                @for (obrero of obreros; track obrero) {
+                  <option [value]="obrero.id">
+                    {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
+                    {{ obrero.segundoApellido }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="inputEmail" class="col-form-label">Email </label>
+              <input
+                type="text"
+                formControlName="email"
+                class="form-control"
+                placeholder="Digite el email de la Congregación"
+                #txtEmailCongregacion
+                />
+              </div>
+
+              <div class="text-center">
+                <!-- Botón para crear la congregación -->
+                <button type="submit" class="btn btn-primary me-2" [disabled]="congregacionForm.invalid">
+                  <i class="fa fa-save"></i> Guardar
+                </button>
+
+                <!-- Botón para crear credenciales -->
+                @if (txtEmailCongregacion.value !== '') {
+                  <button
+                    type="button"
+                    class="btn btn-secondary me-2"
+                    title="Crear Credenciales"
+                    [disabled]="congregacionForm.invalid"
+                    (click)="crearCredenciales(txtNombreCongregacion.value, txtEmailCongregacion.value)"
+                    >
+                    <i class="fa fa-key"></i> Acceso
+                  </button>
+                }
+
+                <button type="button" class="btn btn-danger" title="Cancelar" (click)="cancelar()">
+                  <i class="fa-solid fa-ban"></i> Cancelar
+                </button>
+              </div>
+            </form>
           </div>
-
-          <div class="form-group">
-            <label for="inputPais" class="col-form-label obligatorio">País </label>
-            <select class="form-control" id="inputPais" formControlName="pais_id">
-              <option value="" disabled>Seleccione el país</option>
-              <option *ngFor="let pais of paises" [value]="pais.id">
-                {{ pais.pais }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="col-form-label obligatorio">Obrero Encargado </label>
-            <select class="form-control" formControlName="idObreroEncargado">
-              <option [value]="null" disabled>Seleccione el obrero encargado</option>
-              <option [value]="null">Sin obrero Asignado</option>
-              <option *ngFor="let obrero of obreros" [value]="obrero.id">
-                {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
-                {{ obrero.segundoApellido }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="col-form-label">Obrero Auxiliar </label>
-            <select class="form-control" formControlName="idObreroEncargadoDos">
-              <option [value]="null" disabled>Seleccione el obrero auxiliar</option>
-              <option [value]="null">Sin obrero auxiliar</option>
-              <option *ngFor="let obrero of obreros" [value]="obrero.id">
-                {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
-                {{ obrero.segundoApellido }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="inputEmail" class="col-form-label">Email </label>
-            <input
-              type="text"
-              formControlName="email"
-              class="form-control"
-              placeholder="Digite el email de la Congregación"
-              #txtEmailCongregacion
-            />
-          </div>
-
-          <div class="text-center">
-            <!-- Botón para crear la congregación -->
-            <button type="submit" class="btn btn-primary me-2" [disabled]="congregacionForm.invalid">
-              <i class="fa fa-save"></i> Guardar
-            </button>
-
-            <!-- Botón para crear credenciales -->
-            <button
-              *ngIf="txtEmailCongregacion.value !== ''"
-              type="button"
-              class="btn btn-secondary me-2"
-              title="Crear Credenciales"
-              [disabled]="congregacionForm.invalid"
-              (click)="crearCredenciales(txtNombreCongregacion.value, txtEmailCongregacion.value)"
-            >
-              <i class="fa fa-key"></i> Acceso
-            </button>
-
-            <button type="button" class="btn btn-danger" title="Cancelar" (click)="cancelar()">
-              <i class="fa-solid fa-ban"></i> Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Listado de Congregaciones</h3>
-      </div>
-      <div class="card-body">
-        <div *ngFor="let congregacion of congregaciones">
-          <a class="lista">
-            <li (click)="buscarCongregacion(congregacion.id.toString())">
-              <span class="font-light">{{ congregacion.congregacion }}</span>
-            </li></a
-          >
         </div>
       </div>
-    </div>
-  </div>
-</div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Listado de Congregaciones</h3>
+          </div>
+          <div class="card-body">
+            @for (congregacion of congregaciones; track congregacion) {
+              <div>
+                <a class="lista">
+                  <li (click)="buscarCongregacion(congregacion.id.toString())">
+                    <span class="font-light">{{ congregacion.congregacion }}</span>
+                  </li></a
+                  >
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>

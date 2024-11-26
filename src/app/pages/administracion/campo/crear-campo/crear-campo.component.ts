@@ -8,7 +8,7 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import Swal from 'sweetalert2';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-crear-campo',
@@ -16,10 +16,9 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./crear-campo.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule
+],
 })
 export class CrearCampoComponent implements OnInit {
   public campoForm: UntypedFormGroup;

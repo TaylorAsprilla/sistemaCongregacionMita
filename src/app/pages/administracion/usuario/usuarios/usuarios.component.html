@@ -1,4 +1,6 @@
-<app-cargando-informacion *ngIf="!!cargando"></app-cargando-informacion>
+@if (!!cargando) {
+  <app-cargando-informacion></app-cargando-informacion>
+}
 
 <app-ver-censo
   [usuarios]="usuarios"

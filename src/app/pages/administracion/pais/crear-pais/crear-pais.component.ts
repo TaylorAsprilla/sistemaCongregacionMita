@@ -14,7 +14,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { ObreroInterface, ObreroModel } from 'src/app/core/models/obrero.model';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-crear-pais',
@@ -22,11 +22,10 @@ import { NgFor } from '@angular/common';
     styleUrls: ['./crear-pais.component.scss'],
     standalone: true,
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgxIntlTelInputModule,
-        NgFor,
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    NgxIntlTelInputModule
+],
 })
 export class CrearPaisComponent implements OnInit, OnDestroy {
   public paisForm: FormGroup;

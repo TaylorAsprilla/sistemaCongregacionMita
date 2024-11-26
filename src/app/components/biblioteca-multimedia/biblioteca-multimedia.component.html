@@ -1,112 +1,123 @@
 <h2>{{ titulo }}</h2>
 <div class="row">
-  <div *ngFor="let item of serviciosYvigilias; index as i" class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
-    <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO.SERVICIO">
-      <h3>{{ item.titulo }}</h3>
-
-      <div>
-        <div
-          *ngIf="item.plataforma === PLATAFORMA.YOUTUBE"
-          class="card card-body col-sm-12 col-md-12 col-lg-12 text-center mx-auto"
-          #templateYouTubePlayer
-        >
-          <youtube-player
-            [videoId]="item.link | youtube"
-            suggestedQuality="default"
-            [width]="videoWidth"
-            [height]="videoHeight"
-          >
-          </youtube-player>
+  @for (item of serviciosYvigilias; track item; let i = $index) {
+    <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
+      @if (tipoDeEvento === TIPOEVENTO.SERVICIO) {
+        <div class="mb-5">
+          <h3>{{ item.titulo }}</h3>
+          <div>
+            @if (item.plataforma === PLATAFORMA.YOUTUBE) {
+              <div
+                class="card card-body col-sm-12 col-md-12 col-lg-12 text-center mx-auto"
+                #templateYouTubePlayer
+                >
+                <youtube-player
+                  [videoId]="item.link | youtube"
+                  suggestedQuality="default"
+                  [width]="videoWidth"
+                  [height]="videoHeight"
+                  >
+                </youtube-player>
+              </div>
+            }
+          </div>
+          @if (item.plataforma === PLATAFORMA.VIMEO) {
+            <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+              <div class="ratio ratio-16x9">
+                <iframe
+                  [src]="domSanitizerVideo(item.link)"
+                  width="400"
+                  height="255"
+                  frameborder="0"
+                  allow="autoplay"
+                  fullscreen="allowfullscreen"
+                  webkitallowfullscreen
+                  mozallowfullscreen
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+          }
         </div>
-      </div>
-
-      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
-        <div class="ratio ratio-16x9">
-          <iframe
-            [src]="domSanitizerVideo(item.link)"
-            width="400"
-            height="255"
-            frameborder="0"
-            allow="autoplay"
-            fullscreen="allowfullscreen"
-            webkitallowfullscreen
-            mozallowfullscreen
-            allowfullscreen
-          ></iframe>
+      }
+      <!-- Vigilias-->
+      @if (tipoDeEvento === TIPOEVENTO.VIGILIA) {
+        <div class="mb-5">
+          <h3>{{ item.titulo }}</h3>
+          <div>
+            @if (item.plataforma === PLATAFORMA.YOUTUBE) {
+              <div
+                class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3"
+                #templateYouTubePlayer
+                >
+                <youtube-player
+                  [videoId]="item.link | youtube"
+                  suggestedQuality="default"
+                  [width]="videoWidth"
+                  [height]="videoHeight"
+                  >
+                </youtube-player>
+              </div>
+            }
+          </div>
+          @if (item.plataforma === PLATAFORMA.VIMEO) {
+            <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+              <div class="ratio ratio-16x9">
+                <iframe
+                  [src]="domSanitizerVideo(item.link)"
+                  width="400"
+                  height="255"
+                  frameborder="0"
+                  allow="autoplay"
+                  fullscreen="allowfullscreen"
+                  webkitallowfullscreen
+                  mozallowfullscreen
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+          }
         </div>
-      </div>
+      }
+      <!-- Evento Especial -->
+      @if (tipoDeEvento === TIPOEVENTO.EVENTO_ESPECIAL) {
+        <div class="mb-5">
+          <h3>{{ item.titulo }}</h3>
+          <div>
+            @if (item.plataforma === PLATAFORMA.YOUTUBE) {
+              <div
+                class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3"
+                #templateYouTubePlayer
+                >
+                <youtube-player
+                  [videoId]="item.link | youtube"
+                  suggestedQuality="default"
+                  [width]="videoWidth"
+                  [height]="videoHeight"
+                  >
+                </youtube-player>
+              </div>
+            }
+          </div>
+          @if (item.plataforma === PLATAFORMA.VIMEO) {
+            <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+              <div class="ratio ratio-16x9">
+                <iframe
+                  [src]="domSanitizerVideo(item.link)"
+                  width="400"
+                  height="255"
+                  frameborder="0"
+                  allow="autoplay"
+                  fullscreen="allowfullscreen"
+                  webkitallowfullscreen
+                  mozallowfullscreen
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+          }
+        </div>
+      }
     </div>
-
-    <!-- Vigilias-->
-    <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO.VIGILIA">
-      <h3>{{ item.titulo }}</h3>
-
-      <div>
-        <div
-          *ngIf="item.plataforma === PLATAFORMA.YOUTUBE"
-          class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3"
-          #templateYouTubePlayer
-        >
-          <youtube-player
-            [videoId]="item.link | youtube"
-            suggestedQuality="default"
-            [width]="videoWidth"
-            [height]="videoHeight"
-          >
-          </youtube-player>
-        </div>
-      </div>
-      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
-        <div class="ratio ratio-16x9">
-          <iframe
-            [src]="domSanitizerVideo(item.link)"
-            width="400"
-            height="255"
-            frameborder="0"
-            allow="autoplay"
-            fullscreen="allowfullscreen"
-            webkitallowfullscreen
-            mozallowfullscreen
-            allowfullscreen
-          ></iframe>
-        </div>
-      </div>
-    </div>
-    <!-- Evento Especial -->
-
-    <div class="mb-5" *ngIf="tipoDeEvento === TIPOEVENTO.EVENTO_ESPECIAL">
-      <h3>{{ item.titulo }}</h3>
-
-      <div>
-        <div
-          *ngIf="item.plataforma === PLATAFORMA.YOUTUBE"
-          class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3"
-          #templateYouTubePlayer
-        >
-          <youtube-player
-            [videoId]="item.link | youtube"
-            suggestedQuality="default"
-            [width]="videoWidth"
-            [height]="videoHeight"
-          >
-          </youtube-player>
-        </div>
-      </div>
-      <div *ngIf="item.plataforma === PLATAFORMA.VIMEO" class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
-        <div class="ratio ratio-16x9">
-          <iframe
-            [src]="domSanitizerVideo(item.link)"
-            width="400"
-            height="255"
-            frameborder="0"
-            allow="autoplay"
-            fullscreen="allowfullscreen"
-            webkitallowfullscreen
-            mozallowfullscreen
-            allowfullscreen
-          ></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
+  }
 </div>

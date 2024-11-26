@@ -9,7 +9,7 @@ import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.mod
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES } from 'src/app/routes/menu-items';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
-import { NgFor } from '@angular/common';
+
 import { PermisosDirective } from '../../directive/permisos/permisos.directive';
 import { SeccionHomeComponent } from '../../components/seccion-home/seccion-home.component';
 import { ServiciosEnVivoComponent } from '../../components/servicios-en-vivo/servicios-en-vivo.component';
@@ -19,7 +19,7 @@ import { ServiciosEnVivoComponent } from '../../components/servicios-en-vivo/ser
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.css'],
   standalone: true,
-  imports: [NgFor, PermisosDirective, SeccionHomeComponent, ServiciosEnVivoComponent],
+  imports: [PermisosDirective, SeccionHomeComponent, ServiciosEnVivoComponent],
 })
 export default class InicioComponent implements OnInit {
   usuarios: UsuarioModel[] = [];

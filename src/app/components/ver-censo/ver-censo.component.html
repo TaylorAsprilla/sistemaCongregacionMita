@@ -2,115 +2,140 @@
   <div class="card-header d-flex justify-content-between align-items-center">
     <div>
       <h3 class="card-title pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios }}</h3>
-      <div *ngIf="titulo; else sinNombre">
-        <div>{{ titulo }}</div>
-      </div>
-      <ng-template #sinNombre>
+      @if (titulo) {
+        <div>
+          <div>{{ titulo }}</div>
+        </div>
+      } @else {
         <span><b> País:</b> {{ nombrePais }} </span>
-        <span *ngIf="!!mostrarNombreCongregacion"><b> - Congregación:</b> {{ nombreCongregacion }}</span>
-        <span *ngIf="!!mostrarNombreCampo"><b> - Campo:</b> {{ nombreCampo }}</span>
-      </ng-template>
+        @if (!!mostrarNombreCongregacion) {
+          <span><b> - Congregación:</b> {{ nombreCongregacion }}</span>
+        }
+        @if (!!mostrarNombreCampo) {
+          <span><b> - Campo:</b> {{ nombreCampo }}</span>
+        }
+      }
     </div>
 
     <div class="text-center mb-4 mt-2">
-      <a *ngIf="!(isMobile | async)?.matches" class="btn btn-primary mx-1" (click)="crearUsuario()">
-        <i class="fas fa-user"></i> Feligrés Nuevo
-      </a>
-
-      <div *ngIf="(isMobile | async)?.matches" class="btnMobile">
+      @if (!(isMobile | async)?.matches) {
         <a class="btn btn-primary mx-1" (click)="crearUsuario()">
-          <i class="fas fa-user btnMobile"></i>
+          <i class="fas fa-user"></i> Feligrés Nuevo
         </a>
-      </div>
+      }
 
-      <a
-        *ngIf="!(isMobile | async)?.matches && isFiltrosVisibles"
-        class="btn btn-secondary mx-1"
-        (click)="esconderFiltros()"
-        ><i class="fa fa-filter"></i> Ocultar Filtros
-      </a>
+      @if ((isMobile | async)?.matches) {
+        <div class="btnMobile">
+          <a class="btn btn-primary mx-1" (click)="crearUsuario()">
+            <i class="fas fa-user btnMobile"></i>
+          </a>
+        </div>
+      }
 
-      <a
-        *ngIf="!(isMobile | async)?.matches && !isFiltrosVisibles"
-        class="btn btn-outline-secondary mx-1"
-        (click)="esconderFiltros()"
-        ><i class="fa fa-filter"></i> Ver Filtros
-      </a>
+      @if (!(isMobile | async)?.matches && isFiltrosVisibles) {
+        <a
+          class="btn btn-secondary mx-1"
+          (click)="esconderFiltros()"
+          ><i class="fa fa-filter"></i> Ocultar Filtros
+        </a>
+      }
+
+      @if (!(isMobile | async)?.matches && !isFiltrosVisibles) {
+        <a
+          class="btn btn-outline-secondary mx-1"
+          (click)="esconderFiltros()"
+          ><i class="fa fa-filter"></i> Ver Filtros
+        </a>
+      }
 
       <app-exportar-excel [usuarios]="usuarios" [nombreArchivo]="nombreArchivo"></app-exportar-excel>
 
       <div class="btnHide">
-        <a *ngIf="(isMobile | async)?.matches" class="btn btn-secondary mx-1" (click)="esconderFiltros()">
-          <i class="fa fa-filter" aria-hidden="true"></i>
-        </a>
+        @if ((isMobile | async)?.matches) {
+          <a class="btn btn-secondary mx-1" (click)="esconderFiltros()">
+            <i class="fa fa-filter" aria-hidden="true"></i>
+          </a>
+        }
       </div>
     </div>
   </div>
 
-  <div *ngIf="isFiltrosVisibles">
-    <div *ngIf="usuarios.length > 0; else sinFeligreses" class="card-body">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="selectPais">País</label>
-            <select
-              id="selectPais"
-              class="form-select form-control"
-              (ngModelChange)="filtrarPais($event)"
-              [(ngModel)]="originalPais"
-            >
-              <option value="">Seleccione País</option>
-              <option *ngFor="let pais of paises" [ngValue]="pais">{{ pais.pais }}</option>
-            </select>
+  @if (isFiltrosVisibles) {
+    <div>
+      @if (usuarios.length > 0) {
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="selectPais">País</label>
+                <select
+                  id="selectPais"
+                  class="form-select form-control"
+                  (ngModelChange)="filtrarPais($event)"
+                  [(ngModel)]="originalPais"
+                  >
+                  <option value="">Seleccione País</option>
+                  @for (pais of paises; track pais) {
+                    <option [ngValue]="pais">{{ pais.pais }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="selectCongregacion">Congregación</label>
+                <select
+                  id="selectCongregacion"
+                  class="form-select form-control"
+                  (ngModelChange)="filtrarCongregacion($event)"
+                  [(ngModel)]="originalCongre"
+                  >
+                  <option value="">Seleccione Congregación</option>
+                  <option value="">Sin Congregación</option>
+                  @for (congregacion of congregacionesFiltradas; track congregacion) {
+                    <option [ngValue]="congregacion">
+                      {{ congregacion.congregacion }}
+                    </option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="selectCampo">Campo</label>
+                <select
+                  id="selectCampo"
+                  class="form-select form-control"
+                  (ngModelChange)="filtrarCampo($event)"
+                  [(ngModel)]="filtrarCampoTexto"
+                  >
+                  <option value="">Seleccione Campo</option>
+                  <option value="">Sin Campo</option>
+                  @for (campo of camposFiltrados; track campo) {
+                    <option>{{ campo.campo }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <div class="form-group w-100">
+                <button class="btn btn-primary w-100" (click)="resetFiltros()">Reset Filtros</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="form-group">
+              <input type="search" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+            </div>
           </div>
         </div>
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="selectCongregacion">Congregación</label>
-            <select
-              id="selectCongregacion"
-              class="form-select form-control"
-              (ngModelChange)="filtrarCongregacion($event)"
-              [(ngModel)]="originalCongre"
-            >
-              <option value="">Seleccione Congregación</option>
-              <option value="">Sin Congregación</option>
-              <option *ngFor="let congregacion of congregacionesFiltradas" [ngValue]="congregacion">
-                {{ congregacion.congregacion }}
-              </option>
-            </select>
-          </div>
+      } @else {
+        <div class="card">
+          <div class="card-body">No existen feligreses registrados en su congregación a cargo</div>
         </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="selectCampo">Campo</label>
-            <select
-              id="selectCampo"
-              class="form-select form-control"
-              (ngModelChange)="filtrarCampo($event)"
-              [(ngModel)]="filtrarCampoTexto"
-            >
-              <option value="">Seleccione Campo</option>
-              <option value="">Sin Campo</option>
-              <option *ngFor="let campo of camposFiltrados">{{ campo.campo }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-3 d-flex align-items-end">
-          <div class="form-group w-100">
-            <button class="btn btn-primary w-100" (click)="resetFiltros()">Reset Filtros</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="form-group">
-          <input type="search" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
-        </div>
-      </div>
+      }
     </div>
-  </div>
+  }
 
   <div class="table-responsive">
     <table class="table table-bordered table-striped" id="excel-table">
@@ -126,180 +151,177 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          *ngFor="
-            let usuario of usuariosFiltrados
-              | paginate
-                : {
-                    itemsPerPage: tableSize,
-                    currentPage: pagina,
-                    totalItems: totalUsuarios
-                  };
-            let i = index
-          "
-        >
-          <td class="pointer text-center" (click)="masInformacion(usuario.id)">
-            {{ usuario.id }}
-          </td>
-
-          <td>
-            {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
-            {{ usuario?.segundoApellido }}
-          </td>
-
-          <td>
-            <a *ngIf="usuario?.email" class="email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
-            <span *ngIf="!usuario?.email">Sin correo electrónico</span>
-          </td>
-
-          <td class="text-center">{{ usuario.fechaNacimiento | calcularEdad }}</td>
-
-          <td>
-            <ng-container *ngIf="!!usuario.numeroCelular; else noCelular">
-              <div class="contact-container">
-                <span>
-                  {{ usuario.numeroCelular }}
-                  <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(usuario)"></i>
-                </span>
-
-                <div class="phone-number">
-                  <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
-                    <a
-                      href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
-                      target="_blank"
-                    >
-                      <i class="fab fa-whatsapp mx-2"></i>
-                    </a>
-                    <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
-                      <i class="fab fa-telegram mx-2"></i>
-                    </a>
-                    <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank">
-                      <i class="fa fa-phone mx-2"></i>
-                    </a>
+        @for (
+          usuario of usuariosFiltrados
+          | paginate
+          : {
+          itemsPerPage: tableSize,
+          currentPage: pagina,
+          totalItems: totalUsuarios
+          }; track
+          usuario; let i = $index) {
+          <tr
+            >
+            <td class="pointer text-center" (click)="masInformacion(usuario.id)">
+              {{ usuario.id }}
+            </td>
+            <td>
+              {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
+              {{ usuario?.segundoApellido }}
+            </td>
+            <td>
+              @if (usuario?.email) {
+                <a class="email" [href]="'mailto:' + usuario.email">{{ usuario.email }}</a>
+              }
+              @if (!usuario?.email) {
+                <span>Sin correo electrónico</span>
+              }
+            </td>
+            <td class="text-center">{{ usuario.fechaNacimiento | calcularEdad }}</td>
+            <td>
+              @if (!!usuario.numeroCelular) {
+                <div class="contact-container">
+                  <span>
+                    {{ usuario.numeroCelular }}
+                    <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(usuario)"></i>
+                  </span>
+                  <div class="phone-number">
+                    <div class="contact-icons" [ngClass]="{ show: selectedContact === usuario.id }">
+                      <a
+                        href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
+                        target="_blank"
+                        >
+                        <i class="fab fa-whatsapp mx-2"></i>
+                      </a>
+                      <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
+                        <i class="fab fa-telegram mx-2"></i>
+                      </a>
+                      <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank">
+                        <i class="fa fa-phone mx-2"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </ng-container>
-
-            <ng-template #noCelular>
-              <td>Sin número de celular</td>
-            </ng-template>
-          </td>
-
-          <td>
-            <span *ngIf="!!usuario.usuarioCongregacionPais?.[0]?.pais" class="badge badge-primary">
-              {{ usuario.usuarioCongregacionPais?.[0]?.pais }}
-            </span>
-            <span *ngIf="!!usuario.usuarioCongregacionCongregacion?.[0]?.congregacion" class="badge badge-danger">
-              {{ usuario.usuarioCongregacionCongregacion?.[0]?.congregacion }}</span
-            >
-            <p>
-              <span *ngIf="!!usuario.usuarioCongregacionCampo?.[0]?.campo" class="badge badge-success">
-                {{ usuario.usuarioCongregacionCampo?.[0]?.campo}}
-              </span>
-            </p>
-          </td>
-          <td>
-            <a
-              *ngIf="!!usuario.estado"
-              data-toggle="tooltip"
-              data-original-title="Información"
-              title="Más Información"
-              class="btn btn-sm bg-info me-1 mb-1"
-              (click)="masInformacion(usuario.id)"
-            >
-              <i class="fa-solid fa-circle-info ml-1"></i>
-            </a>
-            <a
-              *ngIf="!!usuario.estado"
-              data-toggle="tooltip"
-              data-original-title="Editar"
-              title="Editar Feligrés"
-              class="btn btn-sm bg-primary me-1 mb-1"
-              (click)="actualizarUsuario(usuario.id)"
-            >
-              <i class="fas fa-pencil-alt ml-1"></i>
-            </a>
-
-            <a
-              *ngIf="!!usuario.estado"
-              data-toggle="tooltip"
-              data-original-title="Enviar Email"
-              title="Enviar Email"
-              class="btn btn-sm bg-info me-1 mb-1"
-              (click)="enviarEmail(usuario.id)"
-            >
-              <i class="fa-solid fa-envelope"></i>
-            </a>
-
-            <a
-              *ngIf="!usuario.estado"
-              data-toggle="tooltip"
-              data-original-title="Activar"
-              title="Activar Feligrés"
-              class="btn btn-sm bg-secondary me-1 mb-1"
-              (click)="activarUsuario(usuario.id)"
-            >
-              <i class="fas fa-check-square"></i>
-            </a>
-
-            <a
-              data-toggle="tooltip"
-              data-original-title="traslado"
-              class="btn btn-sm bg-success me-1 mb-1"
-              title="Transladar Feligrés"
-            >
-              <i class="fa fa-right-left"></i>
-            </a>
-
-            <a
-              data-toggle="tooltip"
-              data-original-title="trascendió"
-              class="btn btn-sm bg-warning me-1 mb-1"
-              title="Trascendió"
-            >
-              <i class="fa fa-cloud"></i>
-            </a>
-
-            <a
-              *ngIf="!!usuario.estado"
-              data-toggle="tooltip"
-              data-original-title="Borrar"
-              title="Eliminar Feligrés"
-              class="btn btn-sm bg-danger me-1 mb-1"
-              (click)="borrarUsuario(usuario)"
-            >
-              <i class="fas fa-trash-alt"></i>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <th scope="col"># Mita</th>
-        <th class="text-center">Nombre</th>
-        <th class="text-center">Correo</th>
-        <th class="text-center">Edad</th>
-        <th class="text-center">Celular</th>
-        <th class="text-center">Congregación</th>
-        <th class="text-center">Acciones</th>
-      </tfoot>
-    </table>
-  </div>
-
-  <div class="d-flex justify-content-center mt-2 mb-2">
-    <pagination-controls
-      (pageChange)="onTableDataChange($event)"
-      previousLabel="Anterior"
-      nextLabel="Próximo"
-      [autoHide]="true"
-      [responsive]="true"
-    >
-    </pagination-controls>
-  </div>
-
-  <ng-template #sinFeligreses>
-    <div class="card">
-      <div class="card-body">No existen feligreses registrados en su congregación a cargo</div>
+              } @else {
+                <td>Sin número de celular</td>
+              }
+            </td>
+            <td>
+              @if (!!usuario.usuarioCongregacionPais?.[0]?.pais) {
+                <span class="badge badge-primary">
+                  {{ usuario.usuarioCongregacionPais?.[0]?.pais }}
+                </span>
+              }
+              @if (!!usuario.usuarioCongregacionCongregacion?.[0]?.congregacion) {
+                <span class="badge badge-danger">
+                  {{ usuario.usuarioCongregacionCongregacion?.[0]?.congregacion }}</span
+                  >
+                }
+                <p>
+                  @if (!!usuario.usuarioCongregacionCampo?.[0]?.campo) {
+                    <span class="badge badge-success">
+                      {{ usuario.usuarioCongregacionCampo?.[0]?.campo}}
+                    </span>
+                  }
+                </p>
+              </td>
+              <td>
+                @if (!!usuario.estado) {
+                  <a
+                    data-toggle="tooltip"
+                    data-original-title="Información"
+                    title="Más Información"
+                    class="btn btn-sm bg-info me-1 mb-1"
+                    (click)="masInformacion(usuario.id)"
+                    >
+                    <i class="fa-solid fa-circle-info ml-1"></i>
+                  </a>
+                }
+                @if (!!usuario.estado) {
+                  <a
+                    data-toggle="tooltip"
+                    data-original-title="Editar"
+                    title="Editar Feligrés"
+                    class="btn btn-sm bg-primary me-1 mb-1"
+                    (click)="actualizarUsuario(usuario.id)"
+                    >
+                    <i class="fas fa-pencil-alt ml-1"></i>
+                  </a>
+                }
+                @if (!!usuario.estado) {
+                  <a
+                    data-toggle="tooltip"
+                    data-original-title="Enviar Email"
+                    title="Enviar Email"
+                    class="btn btn-sm bg-info me-1 mb-1"
+                    (click)="enviarEmail(usuario.id)"
+                    >
+                    <i class="fa-solid fa-envelope"></i>
+                  </a>
+                }
+                @if (!usuario.estado) {
+                  <a
+                    data-toggle="tooltip"
+                    data-original-title="Activar"
+                    title="Activar Feligrés"
+                    class="btn btn-sm bg-secondary me-1 mb-1"
+                    (click)="activarUsuario(usuario.id)"
+                    >
+                    <i class="fas fa-check-square"></i>
+                  </a>
+                }
+                <a
+                  data-toggle="tooltip"
+                  data-original-title="traslado"
+                  class="btn btn-sm bg-success me-1 mb-1"
+                  title="Transladar Feligrés"
+                  >
+                  <i class="fa fa-right-left"></i>
+                </a>
+                <a
+                  data-toggle="tooltip"
+                  data-original-title="trascendió"
+                  class="btn btn-sm bg-warning me-1 mb-1"
+                  title="Trascendió"
+                  >
+                  <i class="fa fa-cloud"></i>
+                </a>
+                @if (!!usuario.estado) {
+                  <a
+                    data-toggle="tooltip"
+                    data-original-title="Borrar"
+                    title="Eliminar Feligrés"
+                    class="btn btn-sm bg-danger me-1 mb-1"
+                    (click)="borrarUsuario(usuario)"
+                    >
+                    <i class="fas fa-trash-alt"></i>
+                  </a>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <th scope="col"># Mita</th>
+          <th class="text-center">Nombre</th>
+          <th class="text-center">Correo</th>
+          <th class="text-center">Edad</th>
+          <th class="text-center">Celular</th>
+          <th class="text-center">Congregación</th>
+          <th class="text-center">Acciones</th>
+        </tfoot>
+      </table>
     </div>
-  </ng-template>
-</div>
+
+    <div class="d-flex justify-content-center mt-2 mb-2">
+      <pagination-controls
+        (pageChange)="onTableDataChange($event)"
+        previousLabel="Anterior"
+        nextLabel="Próximo"
+        [autoHide]="true"
+        [responsive]="true"
+        >
+      </pagination-controls>
+    </div>
+
+  </div>
