@@ -70,6 +70,7 @@ export class SolicitudMultimediaModel {
     public horaTemploMasCercano?: string,
     public personaEncamada?: boolean,
     public personaEncargada?: string,
+    public celularPersonaEncargada?: string,
     public enfermedadCronica?: boolean,
     public enfermedadQuePadece?: string,
     public paisDondeEstudia?: string,
@@ -127,6 +128,7 @@ export interface crearSolicitudMultimediaInterface {
   horaTemploMasCercano: string;
   personaEncamada: boolean;
   personaEncargada: string;
+  celularPersonaEncargada: string;
   enfermedadCronica: boolean;
   enfermedadQuePadece: string;
   paisDondeEstudia: string;

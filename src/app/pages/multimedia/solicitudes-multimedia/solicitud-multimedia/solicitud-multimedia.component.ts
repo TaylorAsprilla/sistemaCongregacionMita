@@ -17,14 +17,11 @@ import { CargandoInformacionComponent } from '../../../../components/cargando-in
 import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
-    selector: 'app-solicitud-multimedia',
-    templateUrl: './solicitud-multimedia.component.html',
-    styleUrls: ['./solicitud-multimedia.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent,
-    NgxPaginationModule
-],
+  selector: 'app-solicitud-multimedia',
+  templateUrl: './solicitud-multimedia.component.html',
+  styleUrls: ['./solicitud-multimedia.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent, NgxPaginationModule],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   solicitudesDeAccesos: SolicitudMultimediaInterface[] = [];
@@ -65,9 +62,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       .getSolicitudes()
       .pipe(delay(100))
       .subscribe((solicitudesDeAcceso: SolicitudMultimediaInterface[]) => {
-        this.solicitudesDeAccesos = solicitudesDeAcceso.filter(
-          (solicitud: SolicitudMultimediaInterface) => solicitud.emailVerificado === true && solicitud.estado === true
-        );
+        this.solicitudesDeAccesos = solicitudesDeAcceso;
         this.cargando = false;
       });
   }
