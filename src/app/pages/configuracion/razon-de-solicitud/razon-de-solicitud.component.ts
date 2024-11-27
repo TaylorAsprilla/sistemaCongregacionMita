@@ -8,13 +8,11 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-razon-de-solicitud',
-    templateUrl: './razon-de-solicitud.component.html',
-    styleUrls: ['./razon-de-solicitud.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-razon-de-solicitud',
+  templateUrl: './razon-de-solicitud.component.html',
+  styleUrls: ['./razon-de-solicitud.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
 export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
   public cargando: boolean = true;
@@ -201,7 +199,7 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
         .subscribe((razonSolicitudActiva: RazonSolicitudModel) => {
           Swal.fire(
             'Creada!',
-            `La razón de la solicitud ${razonSolicitud.solicitud} fue creada correctamente`,
+            `La razón de la solicitud ${razonSolicitudActiva.solicitud} fue creada correctamente`,
             'success'
           );
 

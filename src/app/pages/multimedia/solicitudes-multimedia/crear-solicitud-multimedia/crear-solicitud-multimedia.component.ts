@@ -24,11 +24,11 @@ import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autoc
 import { MatOption } from '@angular/material/core';
 
 @Component({
-    selector: 'app-crear-solicitud-multimedia',
-    templateUrl: './crear-solicitud-multimedia.component.html',
-    styleUrls: ['./crear-solicitud-multimedia.component.scss'],
-    standalone: true,
-    imports: [
+  selector: 'app-crear-solicitud-multimedia',
+  templateUrl: './crear-solicitud-multimedia.component.html',
+  styleUrls: ['./crear-solicitud-multimedia.component.scss'],
+  standalone: true,
+  imports: [
     BuscarUsuarioComponent,
     FormsModule,
     ReactiveFormsModule,
@@ -36,8 +36,8 @@ import { MatOption } from '@angular/material/core';
     MatAutocompleteTrigger,
     MatAutocomplete,
     MatOption,
-    AsyncPipe
-],
+    AsyncPipe,
+  ],
 })
 export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   solicitudForm: FormGroup;
@@ -308,6 +308,8 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     if (this.solicitudForm.valid) {
       const formSolicitud = this.solicitudForm.value;
 
+      console.log(formSolicitud);
+
       const solicitudNueva: crearSolicitudMultimediaInterface = {
         usuario_id: this.usuario.id,
         razonSolicitud_id: formSolicitud.razonSolicitud_id,
@@ -328,8 +330,8 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         personaEncargada: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
         enfermedadCronica: formSolicitud.enfermedadCronica ? formSolicitud.enfermedadCronica : '',
         enfermedadQuePadece: formSolicitud.enfermedadQuePadece ? formSolicitud.enfermedadQuePadece : '',
-        paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
-        ciudadDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.personaEncargada : '',
+        paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.paisDondeEstudia : '',
+        ciudadDondeEstudia: formSolicitud.ciudadDondeEstudia ? formSolicitud.ciudadDondeEstudia : '',
         terminos: formSolicitud.terminos ? formSolicitud.terminos : false,
         emailVerificado: false,
         tiempoAprobacion: null,
@@ -338,6 +340,9 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         tipoMiembro: this.usuario.tipoMiembro,
         tiempoSugerido: formSolicitud.tiempoSugerido ? formSolicitud.tiempoSugerido : '',
         congregacionCercana: formSolicitud.congregacionCercana,
+        celularPersonaEncargada: formSolicitud.celularPersonaEncargada
+          ? formSolicitud.celularPersonaEncargada.internationalNumber
+          : '',
       };
 
       this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(
