@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia';
 import {
   SolicitudMultimediaInterface,
   SolicitudMultimediaModel,
@@ -50,6 +52,16 @@ export class SolicitudMultimediaService {
             respuesta.solicitudDeAcceso
         )
       );
+  }
+
+  getSolicitudesPendientes(usuarioId: number): Observable<UsuarioSolicitudInterface[]> {
+    const params = new HttpParams().set('usuario_id', usuarioId?.toString() || '');
+    return this.httpClient
+      .get<{ ok: boolean; usuarios: UsuarioSolicitudInterface[] }>(`${base_url}/solicitudmultimedia/pendientes`, {
+        ...this.headers,
+        params,
+      })
+      .pipe(map((response) => response.usuarios));
   }
 
   crearSolicitudMultimedia(solicitudDeacceso: crearSolicitudMultimediaInterface) {

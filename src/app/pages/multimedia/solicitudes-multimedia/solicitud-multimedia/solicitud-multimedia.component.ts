@@ -1,10 +1,11 @@
+import { CommonModule, DatePipe } from '@angular/common';
+import { TableModule } from 'primeng/table';
+import { SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
 import { configuracion } from 'src/environments/config/configuration';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { map, Subscription } from 'rxjs';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
@@ -12,24 +13,58 @@ import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
-
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { TagModule } from 'primeng/tag';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
+import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
+import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Component({
   selector: 'app-solicitud-multimedia',
   templateUrl: './solicitud-multimedia.component.html',
   styleUrls: ['./solicitud-multimedia.component.scss'],
   standalone: true,
-  imports: [CargandoInformacionComponent, NgxPaginationModule],
+  imports: [
+    CargandoInformacionComponent,
+    NgxPaginationModule,
+    TableModule,
+    TagModule,
+    IconFieldModule,
+    InputTextModule,
+    InputIconModule,
+    MultiSelectModule,
+    ButtonModule,
+    DropdownModule,
+    FormsModule,
+    CommonModule,
+    DatePipe,
+    TelegramPipe,
+    WhatsappPipe,
+  ],
+  providers: [SolicitudMultimediaService],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
-  solicitudesDeAccesos: SolicitudMultimediaInterface[] = [];
+  // solicitudesDeAccesos: SolicitudMultimediaInterface[] = [];
+  solicitudesDeAccesos: UsuarioSolicitudInterface[] = [];
   nacionalidades: NacionalidadModel[] = [];
   tipoMiembro: TipoMiembroModel[];
+  congregaciones: { nombre: string }[] = [];
   cargando: boolean = false;
   fieldTextType: boolean;
   pagina: number = 1;
+  filterTerm: string = '';
+  selectedContact: number | null;
+
+  usuarioId: number;
 
   // Subscription
   public solicitudAccesoSubscription: Subscription;
@@ -39,7 +74,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private solicitudMultimediaService: SolicitudMultimediaService,
-    private accesoMultimediaService: AccesoMultimediaService
+    private accesoMultimediaService: AccesoMultimediaService,
+    private usuarioService: UsuarioService
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +84,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       this.nacionalidades = data.nacionalidad;
     });
 
-    this.cargarSolicitudDeAccesos();
+    this.usuarioId = this.usuarioService.usuario.id;
+    // this.cargarSolicitudDeAccesos();
+    this.cargarSolicitudesPendientes(this.usuarioId);
   }
 
   ngOnDestroy(): void {
@@ -56,15 +94,49 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudMultimediaServiceSubscription?.unsubscribe;
   }
 
-  cargarSolicitudDeAccesos() {
+  cargarSolicitudesPendientes(usuarioId: number): void {
     this.cargando = true;
-    this.solicitudAccesoSubscription = this.solicitudMultimediaService
-      .getSolicitudes()
-      .pipe(delay(100))
-      .subscribe((solicitudesDeAcceso: SolicitudMultimediaInterface[]) => {
-        this.solicitudesDeAccesos = solicitudesDeAcceso;
-        this.cargando = false;
+    this.solicitudMultimediaService
+      .getSolicitudesPendientes(usuarioId)
+      .pipe(
+        map((data: UsuarioSolicitudInterface[]) => {
+          this.solicitudesDeAccesos = data;
+          // Extraer las congregaciones y eliminar duplicados
+          const congregaciones = Array.from(
+            new Set(data.map((solicitud) => solicitud.usuarioCongregacion?.congregacion?.congregacion).filter(Boolean))
+          );
+          // Transformar las congregaciones al formato deseado
+          return congregaciones.map((nombre) => ({ nombre }));
+        })
+      )
+      .subscribe({
+        next: (congregaciones: { nombre: string }[]) => {
+          this.congregaciones = congregaciones;
+          console.log(this.solicitudesDeAccesos);
+          console.log(this.congregaciones);
+          this.cargando = false;
+        },
+        error: (error) => {
+          console.error('Error al cargar las solicitudes pendientes', error);
+          this.cargando = false;
+        },
       });
+  }
+
+  toggleAccordion(id: number): void {
+    const elements = document.querySelectorAll('.accordion-collapse');
+    elements.forEach((element) => {
+      if (element.id === `collapse${id}`) {
+        const isCollapsed = element.classList.contains('show');
+        if (isCollapsed) {
+          element.classList.remove('show');
+        } else {
+          element.classList.add('show');
+        }
+      } else {
+        element.classList.remove('show');
+      }
+    });
   }
 
   crearSolicitud() {
@@ -230,9 +302,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       });
   }
 
-  crearAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
-    const nombreCompleto = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
-    const loginDefault = solicitud.usuario.email;
+  crearAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
+    const nombreCompleto = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
+    const loginDefault = solicitud.email;
     const password = this.generarPassword();
 
     Swal.fire({
@@ -289,7 +361,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           const dataAcceso: LoginUsuarioCmarLiveInterface = {
             login: formValues[0],
             password: formValues[1],
-            solicitud_id: solicitud.id,
+            solicitud_id: solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.id,
             tiempoAprobacion: tiempoAprobacion ? new Date(tiempoAprobacion) : null,
 
             estado: true,
@@ -299,19 +371,15 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           this.accesoMultimediaService.crearAccesoMultimedia(dataAcceso).subscribe(
             (accesoCreado: any) => {
               Swal.fire('Acceso creado', 'correctamente', 'success');
-              this.cargarSolicitudDeAccesos();
+              this.cargarSolicitudesPendientes(this.usuarioId);
             },
             (error) => {
-              let errorMessage = 'Error al crear el acceso';
-              if (error && error.error && error.error.errors) {
-                errorMessage = Object.values(error.error.errors)
-                  .map((error: any) => `° ${error.msg}`)
-                  .join('<br>');
-              }
+              let errorMessage = 'Error al crear el acceso.';
+
               Swal.fire({
                 title: 'Error',
                 icon: 'info',
-                html: errorMessage,
+                html: `${errorMessage} ${error.error.msg}`,
               });
             }
           );
@@ -336,8 +404,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     return fechaFutura;
   }
 
-  editarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
-    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
+  editarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
+    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
     const password = this.generarPassword();
     Swal.fire({
       title: 'CMAR LIVE',
@@ -356,11 +424,13 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           html:
             `<p>Credenciales para <b>${nombre}</b></p>` +
             `<label class="input-group obligatorio">Login: </label>
-              <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.usuario.login} required/>` +
+              <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.login} required/>` +
             `<label class="input-group obligatorio">Contraseña: </label>
               <input type="password" id="password" name="password" class="form-control" value="${password}" placeholder="Ingrese la contraseña"  required/>` +
             `<label class="input-group obligatorio">Tiempo de aprobación:</label>
-               <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${solicitud.tiempoAprobacion} required/>` +
+               <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${
+                 solicitud.solicitudes[-1].tiempoAprobacion
+               } required/>` +
             `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
           focusConfirm: true,
           allowOutsideClick: false,
@@ -391,7 +461,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
                 `Se han actualizado las credenciales de ingreso correctamente del usuario ${nombre}`,
                 'success'
               );
-              this.cargarSolicitudDeAccesos();
+              // this.cargarSolicitudDeAccesos();
             },
             (error) => {
               let errores = error.error.errors;
@@ -419,8 +489,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  eliminarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
-    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
+  eliminarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
+    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
     Swal.fire({
       title: 'CMAR LIVE',
       showCancelButton: true,
@@ -431,21 +501,23 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       html: `Desea deshabilitar el acceso a CMAR LIVE al usuario ${nombre}`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.accesoMultimediaService.eliminarAccesoMultimedia(solicitud.id).subscribe((respuesta: any) => {
-          Swal.fire({
-            title: 'CMAR LIVE',
-            icon: 'warning',
-            html: `Se deshabilitó el acceso a CMAR LIVE al usuario ${nombre}`,
-            showCloseButton: true,
+        this.accesoMultimediaService
+          .eliminarAccesoMultimedia(solicitud.solicitudes[-1].id)
+          .subscribe((respuesta: any) => {
+            Swal.fire({
+              title: 'CMAR LIVE',
+              icon: 'warning',
+              html: `Se deshabilitó el acceso a CMAR LIVE al usuario ${nombre}`,
+              showCloseButton: true,
+            });
           });
-        });
-        this.cargarSolicitudDeAccesos();
+        // this.cargarSolicitudDeAccesos();
       }
     });
   }
 
-  activarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
-    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
+  activarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
+    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
     Swal.fire({
       title: 'CMAR LIVE',
       showCancelButton: true,
@@ -463,13 +535,13 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
         //     html: `Se activo el acceso CMAR LIVE al usuario ${nombre}`,
         //   });
         // });
-        this.cargarSolicitudDeAccesos();
+        // this.cargarSolicitudDeAccesos();
       }
     });
   }
 
-  denegarAccesoMultimedia(solicitud: SolicitudMultimediaInterface) {
-    const nombre = `${solicitud.usuario.primerNombre} ${solicitud.usuario.segundoNombre} ${solicitud.usuario.primerApellido} ${solicitud.usuario.segundoApellido}`;
+  denegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
+    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
     Swal.fire({
       title: 'CMAR LIVE',
       showCancelButton: true,
@@ -480,14 +552,16 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       html: `Desea denegar la solicitud CMAR LIVE al usuario ${nombre}`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.solicitudMultimediaService.eliminarSolicitudMultimedia(solicitud.id).subscribe((respuesta: any) => {
-          Swal.fire({
-            title: 'CMAR LIVE',
-            icon: 'warning',
-            html: `Se denego la solicitud de acceso a CMAR LIVE al usuario ${nombre}`,
+        this.solicitudMultimediaService
+          .eliminarSolicitudMultimedia(solicitud.solicitudes[-1].id)
+          .subscribe((respuesta: any) => {
+            Swal.fire({
+              title: 'CMAR LIVE',
+              icon: 'warning',
+              html: `Se denego la solicitud de acceso a CMAR LIVE al usuario ${nombre}`,
+            });
           });
-        });
-        this.cargarSolicitudDeAccesos();
+        // this.cargarSolicitudDeAccesos();
       }
     });
   }
@@ -506,6 +580,18 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     return nacionalidadEncontrada ? nacionalidadEncontrada.nombre : '';
   }
 
+  formatTiempoSugerido(dias: number): string {
+    if (dias < 30) {
+      return `${dias} días`;
+    } else if (dias < 365) {
+      const meses = Math.floor(dias / 30);
+      return meses === 1 ? '1 Mes' : `${meses} Meses`;
+    } else {
+      const años = Math.floor(dias / 365);
+      return años === 1 ? '1 Año' : `${años} Años`;
+    }
+  }
+
   generarPassword() {
     const password = generate({
       length: 10,
@@ -517,5 +603,9 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   onTableDataChange(event: any) {
     this.pagina = event;
+  }
+
+  toggleIcons(solicitud: UsuarioSolicitudInterface) {
+    this.selectedContact = this.selectedContact === solicitud.id ? null : solicitud.id;
   }
 }

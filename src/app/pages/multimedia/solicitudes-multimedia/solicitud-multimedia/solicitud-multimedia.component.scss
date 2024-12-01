@@ -1,3 +1,122 @@
-.fa{
-  color: white;
+.icon-black {
+  color: #5d5d5d;
+  margin-right: 5px;
+}
+
+.accordion-body {
+  padding: 15px;
+}
+
+.accordion-body p {
+  margin-bottom: 10px;
+}
+
+.razon-solicitud {
+  color: #ff6347; /* Tomato */
+  font-weight: bold;
+}
+
+.fecha-solicitud {
+  color: #4682b4; /* SteelBlue */
+  font-weight: bold;
+}
+
+.usuario-registro {
+  color: #32cd32; /* LimeGreen */
+  font-weight: bold;
+}
+
+.mita-column {
+  width: 80px;
+}
+
+.phone-number {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle-icons {
+  margin-left: 5px;
+  font-size: 30px;
+}
+
+.contact-icons {
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  background-color: #333;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  font-size: 20px;
+  z-index: 10;
+}
+
+.contact-options a {
+  margin-left: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.contact-icons.show {
+  display: flex;
+}
+
+.contact-icons a {
+  margin-right: 5px;
+  color: #000;
+}
+
+.fa-whatsapp {
+  color: #25d366;
+}
+
+.fa-telegram {
+  color: #229ed9;
+}
+
+.fa-phone {
+  color: #ffffff;
+}
+
+.fa-chevron-circle-down {
+  color: #333;
+  font-size: 14px;
+}
+
+a.email {
+  text-decoration: none;
+  color: inherit;
+}
+
+a.email:hover {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+.inputBusqueda {
+  padding-bottom: 10px;
+  width: 40%;
+  padding-left: 10px;
+}
+
+.inputSelect {
+  padding-bottom: 10px;
+  width: 25%;
+  padding-right: 10px;
+}
+
+.accordion-collapse {
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+}
+
+.accordion-collapse.show {
+  max-height: 500px;
+  opacity: 1;
 }
