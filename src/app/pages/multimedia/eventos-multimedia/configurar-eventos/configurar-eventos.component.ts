@@ -12,16 +12,11 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { BibliotecaMultimediaComponent } from '../../../../components/biblioteca-multimedia/biblioteca-multimedia.component';
 
 @Component({
-    selector: 'app-configurar-eventos',
-    templateUrl: './configurar-eventos.component.html',
-    styleUrls: ['./configurar-eventos.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgxIntlTelInputModule,
-    BibliotecaMultimediaComponent
-],
+  selector: 'app-configurar-eventos',
+  templateUrl: './configurar-eventos.component.html',
+  styleUrls: ['./configurar-eventos.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgxIntlTelInputModule, BibliotecaMultimediaComponent],
 })
 export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   eventosForm: FormGroup;
@@ -72,6 +67,7 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   cargarEventos() {
     this.linkEventosSubscription = this.linkEventosService.getEventos().subscribe((linkEvento: LinkEventoModel[]) => {
       this.linkEventos = linkEvento.filter((linkEvento) => linkEvento.estado === true);
+      console.log(this.linkEventos);
     });
   }
 
