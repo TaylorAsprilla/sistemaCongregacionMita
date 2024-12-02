@@ -49,7 +49,6 @@ export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
         if (razonEncontrada) {
           // Manejar el caso en que la razón de solicitud es encontrada
           razonSolicitud = razonEncontrada.solicitud;
-          console.log('Razón de solicitud encontrada:', razonSolicitud);
         } else {
           // Manejar el caso en que la razón de solicitud no es encontrada
           Swal.fire({

@@ -43,7 +43,6 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
   constructor(private changeDetectorRef: ChangeDetectorRef, public domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
-    console.log(this.tipoDeEvento);
     const tag = document.createElement('script');
 
     tag.src = 'https://www.youtube.com/iframe_api';

@@ -67,7 +67,6 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   cargarEventos() {
     this.linkEventosSubscription = this.linkEventosService.getEventos().subscribe((linkEvento: LinkEventoModel[]) => {
       this.linkEventos = linkEvento.filter((linkEvento) => linkEvento.estado === true);
-      console.log(this.linkEventos);
     });
   }
 

@@ -308,8 +308,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     if (this.solicitudForm.valid) {
       const formSolicitud = this.solicitudForm.value;
 
-      console.log(formSolicitud);
-
       const solicitudNueva: crearSolicitudMultimediaInterface = {
         usuario_id: this.usuario.id,
         razonSolicitud_id: formSolicitud.razonSolicitud_id,
