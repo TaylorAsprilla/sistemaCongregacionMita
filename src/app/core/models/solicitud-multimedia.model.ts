@@ -153,3 +153,8 @@ export interface crearSolicitudMultimediaInterface {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface denegarSolicitudMultimediaInterface {
+  solicitud_id: number;
+  motivoDeNegacion: string;
+}

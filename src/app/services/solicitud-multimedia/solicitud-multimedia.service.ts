@@ -1,11 +1,14 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environment';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia';
 import {
   SolicitudMultimediaInterface,
   SolicitudMultimediaModel,
   crearSolicitudMultimediaInterface,
+  denegarSolicitudMultimediaInterface,
 } from 'src/app/core/models/solicitud-multimedia.model';
 
 const base_url = environment.base_url;
@@ -52,6 +55,16 @@ export class SolicitudMultimediaService {
       );
   }
 
+  getSolicitudesPendientes(usuarioId: number): Observable<UsuarioSolicitudInterface[]> {
+    const params = new HttpParams().set('usuario_id', usuarioId?.toString() || '');
+    return this.httpClient
+      .get<{ ok: boolean; usuarios: UsuarioSolicitudInterface[] }>(`${base_url}/solicitudmultimedia/pendientes`, {
+        ...this.headers,
+        params,
+      })
+      .pipe(map((response) => response.usuarios));
+  }
+
   crearSolicitudMultimedia(solicitudDeacceso: crearSolicitudMultimediaInterface) {
     return this.httpClient.post(`${base_url}/solicitudmultimedia`, solicitudDeacceso, this.headers);
   }
@@ -62,6 +75,10 @@ export class SolicitudMultimediaService {
 
   eliminarSolicitudMultimedia(idsolicitudDeacceso: number) {
     return this.httpClient.delete(`${base_url}/solicitudmultimedia/${idsolicitudDeacceso}`, this.headers);
+  }
+
+  denegarSolicitudMultimedia(denegarSolicitud: denegarSolicitudMultimediaInterface) {
+    return this.httpClient.post(`${base_url}/solicitudmultimedia/denegarSolicitud/`, denegarSolicitud, this.headers);
   }
 
   actualizarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface, id: number) {

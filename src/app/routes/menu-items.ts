@@ -70,6 +70,7 @@ export enum ROLES {
   ADMINISTRADOR_MULTIMEDIA = 'ADMINISTRADOR MULTIMEDIA',
   ASISTENTE_OOTS = 'ASISTENTE OOTS',
   AYUDANTE = 'AYUDANTE',
+  APROBADOR_MULTIMEDIA = 'APROBADOR MULTIMEDIA',
 }
 
 export const ROUTES: RouteInfo[] = [
@@ -309,7 +310,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
+        role: [ROLES.APROBADOR_MULTIMEDIA],
         submenu: [],
       },
       {
@@ -555,6 +556,15 @@ export const ROUTES: RouteInfo[] = [
         class: '',
         extralink: false,
         role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_CIUDAD, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        submenu: [],
+      },
+      {
+        path: RUTAS.SOLICITUDES_MULTIMEDIA,
+        title: 'Solicitudes de Acceso',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.APROBADOR_MULTIMEDIA],
         submenu: [],
       },
       {

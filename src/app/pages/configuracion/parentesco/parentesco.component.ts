@@ -8,13 +8,11 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-parentesco',
-    templateUrl: './parentesco.component.html',
-    styleUrls: ['./parentesco.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-parentesco',
+  templateUrl: './parentesco.component.html',
+  styleUrls: ['./parentesco.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
 export class ParentescoComponent implements OnInit {
   public cargando: boolean = true;
@@ -51,7 +49,6 @@ export class ParentescoComponent implements OnInit {
           if (parentescoEncontrado) {
             // Manejar el caso en que el parentesco es encontrado
             tipoDeParentesco = parentescoEncontrado.nombre;
-            console.log('Parentesco encontrado:', tipoDeParentesco);
           } else {
             // Manejar el caso en que el parentesco no es encontrado
             Swal.fire({

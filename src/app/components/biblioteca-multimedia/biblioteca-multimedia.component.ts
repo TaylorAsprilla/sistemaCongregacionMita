@@ -15,14 +15,11 @@ import { YouTubePlayer } from '@angular/youtube-player';
 import { YoutubePipe } from '../../pipes/youtube/youtube.pipe';
 
 @Component({
-    selector: 'app-biblioteca-multimedia',
-    templateUrl: './biblioteca-multimedia.component.html',
-    styleUrls: ['./biblioteca-multimedia.component.scss'],
-    standalone: true,
-    imports: [
-    YouTubePlayer,
-    YoutubePipe
-],
+  selector: 'app-biblioteca-multimedia',
+  templateUrl: './biblioteca-multimedia.component.html',
+  styleUrls: ['./biblioteca-multimedia.component.scss'],
+  standalone: true,
+  imports: [YouTubePlayer, YoutubePipe],
 })
 export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() serviciosYvigilias: LinkEventoModel[] = [];
