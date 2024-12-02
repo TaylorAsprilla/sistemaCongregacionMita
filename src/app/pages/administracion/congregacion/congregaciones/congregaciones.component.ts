@@ -17,15 +17,11 @@ import { FiltrosComponent } from '../../../../components/filtros/filtros.compone
 import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/filter-by-nombre-pipe.pipe';
 
 @Component({
-    selector: 'app-congregaciones',
-    templateUrl: './congregaciones.component.html',
-    styleUrls: ['./congregaciones.component.css'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent,
-    FiltrosComponent,
-    FilterByNombrePipePipe
-],
+  selector: 'app-congregaciones',
+  templateUrl: './congregaciones.component.html',
+  styleUrls: ['./congregaciones.component.css'],
+  standalone: true,
+  imports: [CargandoInformacionComponent, FiltrosComponent, FilterByNombrePipePipe],
 })
 export class CongregacionesComponent implements OnInit, OnDestroy {
   cargando: boolean = true;
