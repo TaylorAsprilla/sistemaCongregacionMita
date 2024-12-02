@@ -8,6 +8,7 @@ import {
   SolicitudMultimediaInterface,
   SolicitudMultimediaModel,
   crearSolicitudMultimediaInterface,
+  denegarSolicitudMultimediaInterface,
 } from 'src/app/core/models/solicitud-multimedia.model';
 
 const base_url = environment.base_url;
@@ -74,6 +75,10 @@ export class SolicitudMultimediaService {
 
   eliminarSolicitudMultimedia(idsolicitudDeacceso: number) {
     return this.httpClient.delete(`${base_url}/solicitudmultimedia/${idsolicitudDeacceso}`, this.headers);
+  }
+
+  denegarSolicitudMultimedia(denegarSolicitud: denegarSolicitudMultimediaInterface) {
+    return this.httpClient.post(`${base_url}/solicitudmultimedia/denegarSolicitud/`, denegarSolicitud, this.headers);
   }
 
   actualizarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface, id: number) {

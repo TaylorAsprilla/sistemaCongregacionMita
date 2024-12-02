@@ -99,7 +99,6 @@
     "@angular/compiler-cli": "^18.2.12",
     "@angular/language-service": "^18.2.12",
     "@types/chartist": "^1.0.4",
-    "@types/datatables.net": "^1.12.3",
     "@types/jasmine": "~5.1.4",
     "@types/jasminewd2": "^2.0.13",
     "@types/jquery": "^3.5.32",

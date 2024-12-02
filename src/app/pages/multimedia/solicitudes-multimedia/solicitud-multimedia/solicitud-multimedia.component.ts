@@ -1,6 +1,9 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { SolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
+import {
+  denegarSolicitudMultimediaInterface,
+  SolicitudMultimediaInterface,
+} from 'src/app/core/models/solicitud-multimedia.model';
 import { configuracion } from 'src/environments/config/configuration';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -85,7 +88,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
 
     this.usuarioId = this.usuarioService.usuario.id;
-    // this.cargarSolicitudDeAccesos();
+
     this.cargarSolicitudesPendientes(this.usuarioId);
   }
 
@@ -112,8 +115,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (congregaciones: { nombre: string }[]) => {
           this.congregaciones = congregaciones;
-          console.log(this.solicitudesDeAccesos);
-          console.log(this.congregaciones);
+
           this.cargando = false;
         },
         error: (error) => {
@@ -142,164 +144,6 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   crearSolicitud() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.SOLICITUD_MULTIMEDIA}/${nuevo}`);
-  }
-
-  masInformacion(idSolicitud: number) {
-    this.solicitudMultimediaServiceSubscription = this.solicitudMultimediaService
-      .getSolicitud(idSolicitud)
-      .subscribe((informacionSolicitud: SolicitudMultimediaInterface | null) => {
-        if (informacionSolicitud) {
-          const nombre = `${informacionSolicitud.usuario.primerNombre} ${informacionSolicitud.usuario.segundoNombre} ${informacionSolicitud.usuario.primerApellido} ${informacionSolicitud.usuario.segundoApellido}`;
-          const fecha = informacionSolicitud?.usuario.fechaNacimiento
-            ? informacionSolicitud?.usuario.fechaNacimiento
-            : '';
-          const login = informacionSolicitud?.usuario.login ? informacionSolicitud?.usuario?.login : '';
-          const usuarioQueLoRegistro = `${informacionSolicitud.usuarioQueRegistra?.primerNombre}
-                                      ${informacionSolicitud?.usuarioQueRegistra?.segundoNombre}
-                                      ${informacionSolicitud?.usuarioQueRegistra?.primerApellido}
-                                      ${informacionSolicitud?.usuarioQueRegistra?.segundoApellido}`;
-          const tiempoDeAprobacion = informacionSolicitud?.tiempoAprobacion
-            ? informacionSolicitud?.tiempoAprobacion
-            : '';
-          const direccion = informacionSolicitud?.usuario.direccion ? informacionSolicitud?.usuario.direccion : '';
-          const ciudad = informacionSolicitud?.usuario.ciudadDireccion
-            ? informacionSolicitud?.usuario.ciudadDireccion
-            : '';
-          const departamento = informacionSolicitud?.usuario.departamentoDireccion
-            ? informacionSolicitud?.usuario.departamentoDireccion
-            : '';
-          const codigoPostal = informacionSolicitud?.usuario.codigoPostalDireccion
-            ? informacionSolicitud?.usuario.codigoPostalDireccion
-            : '';
-          const pais = informacionSolicitud?.usuario.paisDireccion ? informacionSolicitud?.usuario.paisDireccion : '';
-          const telefono = informacionSolicitud?.usuario.telefonoCasa ? informacionSolicitud?.usuario.telefonoCasa : '';
-          const celular = informacionSolicitud?.usuario.numeroCelular
-            ? informacionSolicitud?.usuario.numeroCelular
-            : '';
-
-          const tipoMiembro = this.buscarTipoMiembro(informacionSolicitud?.usuario.tipoMiembro_id);
-          const otraRazon =
-            informacionSolicitud?.razonSolicitud_id !== 5
-              ? informacionSolicitud?.razonSolicitud?.solicitud
-              : informacionSolicitud?.otraRazon;
-          const congregacionCercana = informacionSolicitud?.congregacionCercana
-            ? informacionSolicitud?.congregacionCercana
-            : '';
-          const tiempoSugerido = informacionSolicitud?.tiempoSugerido ? informacionSolicitud?.tiempoSugerido : '';
-          const nacionalidad = this.buscarNacionalidad(informacionSolicitud?.usuario.nacionalidad_id ?? 0);
-          const personaEncamada = informacionSolicitud.personaEncamada ? informacionSolicitud.personaEncamada : 'No';
-          const personaEncargada = informacionSolicitud.personaEncargada ? informacionSolicitud.personaEncargada : '';
-          const enfermedadCronica = informacionSolicitud.enfermedadCronica
-            ? informacionSolicitud.enfermedadCronica
-            : '';
-          const enfermedadQuePadece = informacionSolicitud.enfermedadQuePadece
-            ? informacionSolicitud.enfermedadQuePadece
-            : '';
-          const observaciones = informacionSolicitud?.observaciones ? informacionSolicitud?.observaciones : '';
-          const fechaDeSolicitud = informacionSolicitud.createdAt;
-
-          const estado = !!informacionSolicitud?.estado
-            ? '<span class="badge badge-primary">Activo</span>'
-            : '<span class="badge badge-danger">Deshabilitado</span>';
-
-          Swal.fire({
-            icon: 'info',
-            text: `${nombre}`,
-            html: ` <table class="table table-hover text-start">
-                  <thead>
-                    <tr>
-                      <th scope="col">Item</th>
-                      <th scope="col">Valor</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="col-md-5">Nombre:</td>
-                      <td class="col-md-7">${nombre}</td>
-                    </tr>
-                    <tr>
-                      <td class="col-md-5">Login:</td>
-                      <td class="col-md-7">${login}</td>
-                    </tr>
-                    <tr>
-                      <td class="col-md-5">Registrado por:</td>
-                      <td class="col-md-7">
-                      ${usuarioQueLoRegistro}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="col-md-5">Tiempo de Aprobación:</td>
-                      <td class="col-md-7">${tiempoDeAprobacion}</td>
-                    </tr>
-                     <tr>
-                      <td class="col-md-5">Fecha de Nacimiento:</td>
-                      <td class="col-md-7">${fecha}</td>
-                    </tr>
-
-                     <tr>
-                      <td class="col-md-5">Celular:</td>
-                      <td class="col-md-7">${celular}</td>
-                    </tr>
-                      <tr>
-                      <td class="col-md-5">Tipo Miembro:</td>
-                      <td class="col-md-7">${tipoMiembro}</td>
-                    </tr>
-                    <tr>
-                      <td class="col-md-5">Razón de la solicitud:</td>
-                      <td class="col-md-7">${otraRazon}</td>
-                    </tr>
-                    <tr>
-                      <td class="col-md-5">Congregación Cerca:</td>
-                      <td class="col-md-7">${congregacionCercana}</td>
-                    </tr>
-                    <tr>
-                    <tr>
-                      <td class="col-md-5">Persona Encamada:</td>
-                      <td class="col-md-7">${personaEncamada}</td>
-                    </tr>
-                    <tr>
-                      <tr>
-                      <td class="col-md-5">Persona Encargada:</td>
-                      <td class="col-md-7">${personaEncargada}</td>
-                    </tr>
-                    <tr>
-                      <tr>
-                      <td class="col-md-5">Enfermedad Crónica:</td>
-                      <td class="col-md-7">${enfermedadCronica}</td>
-                    </tr>
-                    <tr>
-                      <tr>
-                      <td class="col-md-5">Enfermedad Que Padece:</td>
-                      <td class="col-md-7">${enfermedadQuePadece}</td>
-                    </tr>
-                    <tr>
-                      <td class="col-md-5">Tiempo Sugerido:</td>
-                      <td class="col-md-7">${tiempoSugerido}</td>
-                    </tr>
-                     <tr>
-                      <td class="col-md-5">Estado</td>
-                      <td class="col-md-7">${estado}</td>
-                    </tr>
-                     <tr>
-                      <td class="col-md-5">Observaciones</td>
-                      <td class="col-md-7">${observaciones}</td>
-                    </tr>
-                     <tr>
-                      <td class="col-md-5">Fecha de solicitud</td>
-                     <td class="col-md-7">${fechaDeSolicitud ? new Date(fechaDeSolicitud) : 'Sin fecha'}</td>
-                    </tr>
-                  </tbody>
-                </table>`,
-
-            showCloseButton: true,
-            showConfirmButton: true,
-            confirmButtonText: 'Cerrar',
-          });
-        } else {
-          // Handle the case where informacionSolicitud is null
-          console.error('Solicitud not found');
-        }
-      });
   }
 
   crearAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
@@ -540,7 +384,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  denegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
+  denegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
     const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
     Swal.fire({
       title: 'CMAR LIVE',
@@ -549,19 +393,32 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Sí',
       cancelButtonText: 'Cancelar',
       icon: 'question',
-      html: `Desea denegar la solicitud CMAR LIVE al usuario ${nombre}`,
+      html: `Desea denegar la solicitud CMAR LIVE al usuario <b>${nombre}</b><br><br>
+      <small>Por favor ingrese el motivo de la negación</small>
+             <textarea id="motivo" class="swal2-textarea" placeholder="Por favor ingrese el motivo de la negación"></textarea>`,
+      preConfirm: () => {
+        const motivo = (Swal.getPopup()!.querySelector('#motivo') as HTMLTextAreaElement).value;
+        if (!motivo) {
+          Swal.showValidationMessage('Por favor ingrese el motivo de la negación');
+        }
+        return { motivo };
+      },
     }).then((result) => {
       if (result.isConfirmed) {
-        this.solicitudMultimediaService
-          .eliminarSolicitudMultimedia(solicitud.solicitudes[-1].id)
-          .subscribe((respuesta: any) => {
-            Swal.fire({
-              title: 'CMAR LIVE',
-              icon: 'warning',
-              html: `Se denego la solicitud de acceso a CMAR LIVE al usuario ${nombre}`,
-            });
+        const motivo = result.value!.motivo;
+
+        const dataDenegar: denegarSolicitudMultimediaInterface = {
+          solicitud_id: solicitud.solicitudes[solicitud.solicitudes.length - 1].id,
+          motivoDeNegacion: motivo,
+        };
+        this.solicitudMultimediaService.denegarSolicitudMultimedia(dataDenegar).subscribe((respuesta: any) => {
+          Swal.fire({
+            title: 'CMAR LIVE',
+            icon: 'warning',
+            html: `Se denegó la solicitud de acceso a CMAR LIVE al usuario <b>${nombre}</b> por el siguiente motivo: <p><br><br>${motivo}</p>`,
           });
-        // this.cargarSolicitudDeAccesos();
+          this.cargarSolicitudesPendientes(this.usuarioId);
+        });
       }
     });
   }
