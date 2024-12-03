@@ -60,6 +60,7 @@ import { VoluntarioComponent } from 'src/app/pages/configuracion/voluntario/volu
 import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 import { EventosEnVivoComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
 import InicioComponent from 'src/app/pages/inicio/inicio.component';
+import { SolicitudesPendienteComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitudes-pendiente/solicitudes-pendiente.component';
 
 export const childRoutes: Routes = [
   {
@@ -386,6 +387,14 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.SOLICITUDES_MULTIMEDIA,
     component: SolicitudMultimediaComponent,
+    resolve: {
+      tipoMiembro: TipoMiembroResolver,
+      nacionalidad: NacionalidadResolver,
+    },
+  },
+  {
+    path: RUTAS.SOLICITUDES_MULTIMEDIA_PENDIENTES,
+    component: SolicitudesPendienteComponent,
     resolve: {
       tipoMiembro: TipoMiembroResolver,
       nacionalidad: NacionalidadResolver,

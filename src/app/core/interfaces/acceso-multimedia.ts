@@ -4,6 +4,7 @@ export interface LoginUsuarioCmarLiveInterface {
   solicitud_id: number;
   tiempoAprobacion: Date | null;
   estado: boolean;
+  usuarioQueAprobo_id: number | null;
 }
 
 export interface AccesoCongregacionMultimedia {

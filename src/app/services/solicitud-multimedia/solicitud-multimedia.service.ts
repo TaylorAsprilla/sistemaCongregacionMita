@@ -38,8 +38,7 @@ export class SolicitudMultimediaService {
       .get(`${base_url}/solicitudmultimedia`, this.headers)
       .pipe(
         map(
-          (respuesta: { ok: boolean; solicitudDeAccesos: SolicitudMultimediaInterface[] }) =>
-            respuesta.solicitudDeAccesos
+          (respuesta: { ok: boolean; solicitudDeAccesos: UsuarioSolicitudInterface[] }) => respuesta.solicitudDeAccesos
         )
       );
   }
@@ -49,7 +48,7 @@ export class SolicitudMultimediaService {
       .get(`${base_url}/solicitudmultimedia/${id}`, this.headers)
       .pipe(
         map(
-          (respuesta: { ok: boolean; solicitudDeAcceso: SolicitudMultimediaInterface; id: number }) =>
+          (respuesta: { ok: boolean; solicitudDeAcceso: SolicitudMultimediaModel; id: number }) =>
             respuesta.solicitudDeAcceso
         )
       );
