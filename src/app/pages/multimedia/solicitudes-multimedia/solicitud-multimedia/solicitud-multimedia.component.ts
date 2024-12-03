@@ -102,7 +102,6 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudMultimediaService.getSolicitudes().subscribe({
       next: (solicitudes: any) => {
         this.solicitudes = solicitudes;
-        console.log('Solicitudes', this.solicitudes);
 
         this.cargando = false;
       },
@@ -199,9 +198,6 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             estado: true,
           };
 
-          console.log('dataAcceso', dataAcceso);
-
-          // Call service to create multimedia access
           this.accesoMultimediaService.crearAccesoMultimedia(dataAcceso).subscribe(
             (accesoCreado: any) => {
               Swal.fire('Acceso creado', 'correctamente', 'success');
