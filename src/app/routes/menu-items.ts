@@ -45,6 +45,7 @@ export enum RUTAS {
   SOLICITUD = 'solicitud',
   SOLICITUD_MULTIMEDIA = 'solicitud-multimedia',
   SOLICITUDES_MULTIMEDIA = 'solicitudes-multimedia',
+  SOLICITUDES_MULTIMEDIA_PENDIENTES = 'solicitudes-multimedia-pendientes',
   TIPO_DE_DOCUMENTO = 'tipo-de-documento',
   VER_INFORME = 'ver-informe',
   OPCION_DE_TRANSPORTE = 'opcion-de-transporte',
@@ -310,7 +311,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.APROBADOR_MULTIMEDIA],
+        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -559,7 +560,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: RUTAS.SOLICITUDES_MULTIMEDIA,
+        path: RUTAS.SOLICITUDES_MULTIMEDIA_PENDIENTES,
         title: 'Solicitudes de Acceso',
         icon: '',
         class: '',

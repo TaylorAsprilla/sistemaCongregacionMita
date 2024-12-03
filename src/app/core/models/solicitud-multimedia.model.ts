@@ -1,7 +1,11 @@
+import { UsuarioQueRegistraInterface } from '../interfaces/solicitud-multimedia';
 import { AccesoMultimediaModel } from './acceso-multimedia.model';
 import { NacionalidadModel } from './nacionalidad.model';
+import { OpcionTransporteModel } from './opcion-transporte.model';
+import { ParentescoModel } from './parentesco.model';
 import { RazonSolicitudModel } from './razon-solicitud.model';
 import { TipoAprobacionModel } from './tiempo-aprobacion.model';
+import { TipoEstudioModel } from './tipo-estudio.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
 import { UsuarioModel } from './usuario.model';
 
@@ -40,49 +44,40 @@ export enum TIEMPO_SUGERIDO_DIAS {
 export class SolicitudMultimediaModel {
   constructor(
     public id: number,
-    public nombre: string,
-    public fechaNacimiento: Date,
-    public direccion: string,
-    public ciudad: string,
-    public celular: string,
-    public pais: string,
-    public email: string,
-    public miembroCongregacion: boolean,
+    public otraRazon: string | null,
+    public tiempoDistancia: string | null,
+    public horaTemploMasCercano: string | null,
+    public personaEncamada: boolean | null,
+    public personaEncargada: string | null,
+    public celularPersonaEncargada: string | null,
+    public enfermedadCronica: boolean | null,
+    public enfermedadQuePadece: string | null,
+    public paisDondeEstudia: string | null,
+    public ciudadDondeEstudia: string | null,
+    public duracionDelPeriodoDeEstudio: string | null,
+    public baseMilitar: string | null,
+    public observaciones: string,
+    public motivoDeNegacion: string | null,
     public estado: boolean,
     public emailVerificado: boolean,
     public razonSolicitud_id: number,
-    public nacionalidad_id: number,
     public usuarioQueRegistra_id: number,
-    public usuarioQueRegistra: UsuarioModel,
+    public opcionTransporte_id: number | null,
+    public tipoDeEstudio_id: number | null,
+    public parentesco_id: number | null,
+    public usuario_id: number,
     public terminos: boolean,
-    public createdAt: Date,
-    public updatedAt: Date,
-    public congregacionCercana?: string,
-    public departamento?: string,
-    public codigoPostal?: string,
-    public telefono?: string,
-    public nacionalidad?: NacionalidadModel,
-    public accesoMultimedia?: AccesoMultimediaModel,
-    public razonSolicitud?: RazonSolicitudModel,
-    public tiempoAprobación?: TipoAprobacionModel,
-    public otraRazon?: string,
-    public tiempoDistancia?: string,
-    public horaTemploMasCercano?: string,
-    public personaEncamada?: boolean,
-    public personaEncargada?: string,
-    public celularPersonaEncargada?: string,
-    public enfermedadCronica?: boolean,
-    public enfermedadQuePadece?: string,
-    public paisDondeEstudia?: string,
-    public ciudadDondeEstudia?: string,
-    public duracionDelPeriodoDeEstudio?: Date,
-    public baseMilitar?: string,
-    public observaciones?: string,
-    public tiempoAprobacion?: Date,
-    public opcionTransporte_id?: number,
-    public tipoDeEstudio_id?: number,
-    public parentesco_id?: number,
-    public tiempoSugerido?: string
+    public tiempoAprobacion: string | null,
+    public tiempoSugerido: string | null,
+    public congregacionCercana: string | null,
+    public createdAt: string,
+    public updatedAt: string,
+    public usuarioQueRegistra: UsuarioModel,
+    public usuario: UsuarioModel,
+    public razonSolicitud: RazonSolicitudModel,
+    public tipoEstudio: TipoEstudioModel,
+    public parentesco: ParentescoModel,
+    public opcionTransporte: OpcionTransporteModel
   ) {}
 }
 

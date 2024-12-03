@@ -5,7 +5,7 @@
 } @else {
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title float-left">Total de solicitudes: {{ solicitudes.length }}</h3>
+    <h3 class="card-title float-left">Total de solicitudes: {{ solicitudesDeAccesos.length }}</h3>
     <div class="col">
       <div class="text-right mb-4">
         <a class="btn btn-primary" (click)="crearSolicitud()"> <i class="fas fa-user"></i> Nueva Solicitud </a>
@@ -17,7 +17,7 @@
     <div class="">
       <p-table
         #dt
-        [value]="solicitudes"
+        [value]="solicitudesDeAccesos"
         styleClass="p-datatable-striped p-datatable"
         [paginator]="true"
         [rows]="10"
@@ -31,12 +31,12 @@
           'numeroCelular',
           'email',
           'usuarioCongregacion.congregacion.congregacion',
-          'solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion'
+          'usuarioCongregacion.campocampo'
         ]"
       >
         <ng-template pTemplate="caption">
           <div class="d-flex align-items-center justify-content-between">
-            <button class="btn btn-primary" (click)="cargarTodasLasSolicitudes()">
+            <button class="btn btn-primary" (click)="cargarSolicitudesPendientes(usuarioId)">
               <i class="fas fa-sync-alt"></i>
             </button>
             <div class="flex">
@@ -63,10 +63,6 @@
             <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
             <th pSortableColumn="usuarioCongregacion.congregacion.congregacion">
               Congregación <p-sortIcon field="usuarioCongregacion.congregacion.congregacion"></p-sortIcon>
-            </th>
-            <th pSortableColumn="solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion">
-              Tiempo de Aprobación
-              <p-sortIcon field="solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion"></p-sortIcon>
             </th>
             <th>Acciones</th>
           </tr>
@@ -121,16 +117,6 @@
                 placeholder="Filtrar Congregación"
               />
             </th>
-            <th>
-              <input
-                pInputText
-                type="text"
-                class="tiempo-aprobacion-column"
-                #txtTiempoAprobacion
-                (input)="dt.filterGlobal(txtTiempoAprobacion.value, 'contains')"
-                placeholder="Filtrar Tiempo de Aprobación"
-              />
-            </th>
             <th></th>
           </tr>
         </ng-template>
@@ -138,8 +124,7 @@
           <tr>
             <td class="mita-column">{{ solicitud.id }}</td>
             <td>
-              {{ solicitud.primerNombre }} {{ solicitud.segundoNombre }}
-              {{ solicitud.primerApellido }}
+              {{ solicitud.primerNombre }} {{ solicitud.segundoNombre }} {{ solicitud.primerApellido }}
               {{ solicitud.segundoApellido }}
             </td>
             <td>
@@ -177,8 +162,6 @@
               <span class="badge badge-danger">{{ solicitud.usuarioCongregacion.congregacion?.congregacion }}</span>
               <span class="badge badge-success">{{ solicitud.usuarioCongregacion.campo?.campo }}</span>
             </td>
-
-            <td>{{ solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion }}</td>
             <td>
               <a
                 data-toggle="tooltip"

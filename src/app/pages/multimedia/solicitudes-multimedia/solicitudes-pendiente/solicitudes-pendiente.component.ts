@@ -1,41 +1,35 @@
-import { CommonModule, DatePipe } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import {
-  denegarSolicitudMultimediaInterface,
-  SolicitudMultimediaInterface,
-  SolicitudMultimediaModel,
-} from 'src/app/core/models/solicitud-multimedia.model';
-import { configuracion } from 'src/environments/config/configuration';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { denegarSolicitudMultimediaInterface } from './../../../../core/models/solicitud-multimedia.model';
+import Swal from 'sweetalert2';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Subscription } from 'rxjs';
+import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
+import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
-import Swal from 'sweetalert2';
-import { generate } from 'generate-password-browser';
-import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { configuracion } from 'src/environments/config/configuration';
 import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
-import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
+import { generate } from 'generate-password-browser';
+import { CargandoInformacionComponent } from 'src/app/components/cargando-informacion/cargando-informacion.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { TagModule } from 'primeng/tag';
+import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { DropdownModule } from 'primeng/dropdown';
-import { ButtonModule } from 'primeng/button';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Component({
-  selector: 'app-solicitud-multimedia',
-  templateUrl: './solicitud-multimedia.component.html',
-  styleUrls: ['./solicitud-multimedia.component.scss'],
+  selector: 'app-solicitudes-pendiente',
   standalone: true,
   imports: [
     CargandoInformacionComponent,
@@ -54,10 +48,11 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
     TelegramPipe,
     WhatsappPipe,
   ],
-  providers: [SolicitudMultimediaService],
+  templateUrl: './solicitudes-pendiente.component.html',
+  styleUrl: './solicitudes-pendiente.component.scss',
 })
-export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
-  solicitudes: SolicitudMultimediaModel[] = [];
+export class SolicitudesPendienteComponent {
+  solicitudesDeAccesos: UsuarioSolicitudInterface[] = [];
   nacionalidades: NacionalidadModel[] = [];
   tipoMiembro: TipoMiembroModel[];
   congregaciones: { nombre: string }[] = [];
@@ -89,7 +84,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
 
     this.usuarioId = this.usuarioService.usuario.id;
 
-    this.cargarTodasLasSolicitudes();
+    this.cargarSolicitudesPendientes(this.usuarioId);
   }
 
   ngOnDestroy(): void {
@@ -97,20 +92,32 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudMultimediaServiceSubscription?.unsubscribe;
   }
 
-  cargarTodasLasSolicitudes(): void {
+  cargarSolicitudesPendientes(usuarioId: number): void {
     this.cargando = true;
-    this.solicitudMultimediaService.getSolicitudes().subscribe({
-      next: (solicitudes: any) => {
-        this.solicitudes = solicitudes;
-        console.log('Solicitudes', this.solicitudes);
+    this.solicitudMultimediaService
+      .getSolicitudesPendientes(usuarioId)
+      .pipe(
+        map((data: UsuarioSolicitudInterface[]) => {
+          this.solicitudesDeAccesos = data;
+          // Extraer las congregaciones y eliminar duplicados
+          const congregaciones = Array.from(
+            new Set(data.map((solicitud) => solicitud.usuarioCongregacion?.congregacion?.congregacion).filter(Boolean))
+          );
+          // Transformar las congregaciones al formato deseado
+          return congregaciones.map((nombre) => ({ nombre }));
+        })
+      )
+      .subscribe({
+        next: (congregaciones: { nombre: string }[]) => {
+          this.congregaciones = congregaciones;
 
-        this.cargando = false;
-      },
-      error: (error) => {
-        console.error('Error al cargar las solicitudes pendientes', error);
-        this.cargando = false;
-      },
-    });
+          this.cargando = false;
+        },
+        error: (error) => {
+          console.error('Error al cargar las solicitudes pendientes', error);
+          this.cargando = false;
+        },
+      });
   }
 
   toggleAccordion(id: number): void {
@@ -154,24 +161,24 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
         const { value: formValues } = await Swal.fire({
           title: `Credenciales para ${nombreCompleto}`,
           html: `
-          <div class="form-group">
-            <label class="input-group obligatorio">Login:</label>
-            <input type="text" id="login" name="login" class="form-control" value="${loginDefault}" required />
-          </div>
-          <div class="form-group">
-            <label class="input-group obligatorio">Contraseña:</label>
-            <input type="password" id="password" name="password" class="form-control" value="${password}" required />
-          </div>
-          <div class="form-group">
-            <label class="input-group obligatorio">Tiempo de aprobación:</label>
-            <select id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" required>
-              <option value="" disabled selected>Seleccionar tiempo de aprobación</option>
-              ${configuracion.tiempoSugerido
-                .map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`)
-                .join('')}
-            </select>
-          </div>
-        `,
+         <div class="form-group">
+           <label class="input-group obligatorio">Login:</label>
+           <input type="text" id="login" name="login" class="form-control" value="${loginDefault}" required />
+         </div>
+         <div class="form-group">
+           <label class="input-group obligatorio">Contraseña:</label>
+           <input type="password" id="password" name="password" class="form-control" value="${password}" required />
+         </div>
+         <div class="form-group">
+           <label class="input-group obligatorio">Tiempo de aprobación:</label>
+           <select id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" required>
+             <option value="" disabled selected>Seleccionar tiempo de aprobación</option>
+             ${configuracion.tiempoSugerido
+               .map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`)
+               .join('')}
+           </select>
+         </div>
+       `,
           focusConfirm: true,
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -199,13 +206,11 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             estado: true,
           };
 
-          console.log('dataAcceso', dataAcceso);
-
           // Call service to create multimedia access
           this.accesoMultimediaService.crearAccesoMultimedia(dataAcceso).subscribe(
             (accesoCreado: any) => {
               Swal.fire('Acceso creado', 'correctamente', 'success');
-              this.cargarTodasLasSolicitudes();
+              this.cargarSolicitudesPendientes(this.usuarioId);
             },
             (error) => {
               let errorMessage = 'Error al crear el acceso.';
@@ -258,13 +263,13 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           html:
             `<p>Credenciales para <b>${nombre}</b></p>` +
             `<label class="input-group obligatorio">Login: </label>
-              <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.login} required/>` +
+             <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.login} required/>` +
             `<label class="input-group obligatorio">Contraseña: </label>
-              <input type="password" id="password" name="password" class="form-control" value="${password}" placeholder="Ingrese la contraseña"  required/>` +
+             <input type="password" id="password" name="password" class="form-control" value="${password}" placeholder="Ingrese la contraseña"  required/>` +
             `<label class="input-group obligatorio">Tiempo de aprobación:</label>
-               <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${
-                 solicitud.solicitudes[-1].tiempoAprobacion
-               } required/>` +
+              <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${
+                solicitud.solicitudes[-1].tiempoAprobacion
+              } required/>` +
             `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
           focusConfirm: true,
           allowOutsideClick: false,
@@ -385,8 +390,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
       icon: 'question',
       html: `Desea denegar la solicitud CMAR LIVE al usuario <b>${nombre}</b><br><br>
-      <small>Por favor ingrese el motivo de la negación</small>
-             <textarea id="motivo" class="swal2-textarea" placeholder="Por favor ingrese el motivo de la negación"></textarea>`,
+     <small>Por favor ingrese el motivo de la negación</small>
+            <textarea id="motivo" class="swal2-textarea" placeholder="Por favor ingrese el motivo de la negación"></textarea>`,
       preConfirm: () => {
         const motivo = (Swal.getPopup()!.querySelector('#motivo') as HTMLTextAreaElement).value;
         if (!motivo) {
@@ -408,7 +413,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             icon: 'warning',
             html: `Se denegó la solicitud de acceso a CMAR LIVE al usuario <b>${nombre}</b> por el siguiente motivo: <p><br><br>${motivo}</p>`,
           });
-          this.cargarTodasLasSolicitudes();
+          this.cargarSolicitudesPendientes(this.usuarioId);
         });
       }
     });
