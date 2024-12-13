@@ -1,4 +1,4 @@
-import { ParentescoComponent } from 'src/app/pages/configuracion/parentesco/parentesco.component';
+import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from '../enums/solicitudMultimendia.enum';
 export interface UsuarioSolicitudInterface {
   id: number;
   primerNombre: string;
@@ -42,6 +42,7 @@ export interface SolicitudInterface {
   tipoEstudio: TipoEstudioInterface | null;
   opcionTransporte: OpcionTransporteInterface | null;
   usuarioQueRegistra: UsuarioQueRegistraInterface;
+  estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
   createdAt: Date;
 }
 
@@ -71,10 +72,14 @@ export interface TipoMiembroInterface {
 
 export interface UsuarioCongregacionInterface {
   id: number;
+  pais: PaisInterface;
   congregacion: CongregacionInterface;
   campo: CampoInterface;
 }
-
+export interface PaisInterface {
+  id: number;
+  pais: string;
+}
 export interface CongregacionInterface {
   id: number;
   congregacion: string;

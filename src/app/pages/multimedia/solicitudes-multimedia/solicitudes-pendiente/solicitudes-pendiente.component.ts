@@ -27,6 +27,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
+import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
 
 @Component({
   selector: 'app-solicitudes-pendiente',
@@ -203,7 +204,7 @@ export class SolicitudesPendienteComponent {
             solicitud_id: solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.id,
             tiempoAprobacion: tiempoAprobacion ? new Date(tiempoAprobacion) : null,
             usuarioQueAprobo_id: this.usuarioId,
-            estado: true,
+            estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA,
           };
 
           // Call service to create multimedia access
@@ -290,7 +291,7 @@ export class SolicitudesPendienteComponent {
             password: (document.getElementById('password') as HTMLInputElement).value,
             solicitud_id: solicitud.id,
             tiempoAprobacion: new Date((document.getElementById('tiempoAprobacion') as HTMLInputElement).value),
-            estado: true,
+            estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA,
             usuarioQueAprobo_id: this.usuarioId,
           };
 

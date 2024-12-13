@@ -13,12 +13,15 @@
     </div>
   </div>
   <!-- /.card-header -->
-  <div class="">
-    <div class="">
+  <div class="card-body">
+    <div class="table-responsive">
       <p-table
         #dt
         [value]="solicitudes"
+        dataKey="id"
         styleClass="p-datatable-striped p-datatable"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        responsiveLayout="scroll"
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[10, 25, 50]"
@@ -28,17 +31,25 @@
           'segundoNombre',
           'primerApellido',
           'segundoApellido',
-          'numeroCelular',
           'email',
-          'usuarioCongregacion.congregacion.congregacion',
-          'solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion'
+          'pais.nombre',
+          'congregacion.nombre',
+          'campo.nombre',
+          'estadoUltimaSolicitud'
         ]"
       >
         <ng-template pTemplate="caption">
           <div class="d-flex align-items-center justify-content-between">
-            <button class="btn btn-primary" (click)="cargarTodasLasSolicitudes()">
-              <i class="fas fa-sync-alt"></i>
-            </button>
+            <div class="d-flex align-items-center">
+              <p-button class="redondo p-2" icon="pi pi-refresh" (click)="cargarTodasLasSolicitudes()" />
+              <p-button
+                class="redondo"
+                [outlined]="true"
+                icon="pi pi-filter-slash"
+                (onClick)="clear(dt)"
+                severity="danger"
+              />
+            </div>
             <div class="flex">
               <p-iconField iconPosition="right" class="ml-auto">
                 <p-inputIcon>
@@ -57,128 +68,161 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id"># Mita <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="primerNombre">Nombre <p-sortIcon field="primerNombre"></p-sortIcon></th>
-            <th pSortableColumn="numeroCelular">Celular <p-sortIcon field="numeroCelular"></p-sortIcon></th>
-            <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
-            <th pSortableColumn="usuarioCongregacion.congregacion.congregacion">
-              Congregación <p-sortIcon field="usuarioCongregacion.congregacion.congregacion"></p-sortIcon>
+            <th pSortableColumn="id" style="width: 10%"># Mita <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="primerNombre" style="width: 15%">
+              Nombre <p-sortIcon field="primerNombre"></p-sortIcon>
             </th>
-            <th pSortableColumn="solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion">
-              Tiempo de Aprobación
-              <p-sortIcon field="solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion"></p-sortIcon>
+
+            <th pSortableColumn="email" style="width: 20%">Email <p-sortIcon field="email"></p-sortIcon></th>
+
+            <th pSortableColumn="pais" style="width: 15%">Pais <p-sortIcon field="pais"></p-sortIcon></th>
+
+            <th pSortableColumn="congregacion" style="width: 15%">
+              Congregación <p-sortIcon field="congregacion"></p-sortIcon>
             </th>
-            <th>Acciones</th>
+
+            <th pSortableColumn="campo" style="width: 15%">Campo <p-sortIcon field="campo"></p-sortIcon></th>
+
+            <th pSortableColumn="estado" style="width: 15%">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+            <th style="width: 10%">Acciones</th>
           </tr>
           <tr>
             <th>
-              <input
-                pInputText
-                class="mita-column"
+              <p-columnFilter
+                [showMenu]="false"
                 type="text"
-                #txtMita
-                (input)="dt.filterGlobal(txtMita.value, 'contains')"
-                placeholder="# Mita"
-              />
+                field="id"
+                placeholder="Buscar por # Mita"
+                ariaLabel="Filtrar por # Mita"
+              ></p-columnFilter>
             </th>
             <th>
-              <input
-                pInputText
+              <p-columnFilter
+                [showMenu]="false"
                 type="text"
-                class="nombre-column"
-                #txtxNombre
-                (input)="dt.filterGlobal(txtxNombre.value, 'contains')"
-                placeholder="Filtrar Nombre"
-              />
+                field="primerNombre"
+                placeholder="Buscar por Nombre"
+                ariaLabel="Filtrar por Nombre"
+              ></p-columnFilter>
             </th>
             <th>
-              <input
-                pInputText
+              <p-columnFilter
+                [showMenu]="false"
                 type="text"
-                class="celular-column"
-                #txtcelular
-                (input)="dt.filterGlobal(txtcelular.value, 'contains')"
-                placeholder="Filtrar Celular"
-              />
+                field="email"
+                placeholder="Buscar por Email"
+                ariaLabel="Filtrar por Email"
+              ></p-columnFilter>
+            </th>
+
+            <th>
+              <p-columnFilter field="pais" matchMode="in" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    [ngModel]="value"
+                    [options]="paises"
+                    placeholder="Any"
+                    (onChange)="onPaisChange($event.value, dt)"
+                    optionLabel="nombre"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="p-multiselect-representative-option">
+                        <span class="ml-1">{{ option.nombre }}</span>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
             </th>
             <th>
-              <input
-                pInputText
-                type="text"
-                class="email-column"
-                #txtEmail
-                (input)="dt.filterGlobal(txtEmail.value, 'contains')"
-                placeholder="Filtrar Email"
-              />
+              <p-columnFilter field="congregacion" matchMode="equals" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    [(ngModel)]="selectedCongregaciones"
+                    [options]="congregaciones"
+                    placeholder="Filtrar por Congregación"
+                    (onChange)="onCongregacionChange($event.value, dt)"
+                    optionLabel="nombre"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="inline-block vertical-align-middle">
+                        <span class="ml-1 mt-1">aquí {{ selectedCongregaciones }} - {{ option.nombre }}</span>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
             </th>
             <th>
-              <input
-                pInputText
-                type="text"
-                class="congregacion-column"
-                #txtCongregacion
-                (input)="dt.filterGlobal(txtCongregacion.value, 'contains')"
-                placeholder="Filtrar Congregación"
-              />
+              <p-columnFilter field="campo" matchMode="equals" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    [ngModel]="selectedCampos"
+                    [options]="campos"
+                    placeholder="Filtrar por Campo"
+                    (onChange)="onCampoChange($event.value, dt)"
+                    optionLabel="nombre"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="inline-block vertical-align-middle">
+                        <span class="ml-1 mt-1">{{ option.nombre }}</span>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
             </th>
+
             <th>
-              <input
-                pInputText
-                type="text"
-                class="tiempo-aprobacion-column"
-                #txtTiempoAprobacion
-                (input)="dt.filterGlobal(txtTiempoAprobacion.value, 'contains')"
-                placeholder="Filtrar Tiempo de Aprobación"
-              />
+              <p-columnFilter field="estado" matchMode="equals" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-dropdown
+                    [ngModel]="value"
+                    [options]="estados"
+                    (onChange)="onEstadoChange($event.value, dt)"
+                    placeholder="Seleccionar uno"
+                    [showClear]="true"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <p-tag [value]="option.value" [severity]="getSeverity(option.value)" />
+                    </ng-template>
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
             </th>
             <th></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-solicitud>
           <tr>
-            <td class="mita-column">{{ solicitud.id }}</td>
+            <td>{{ solicitud.id }}</td>
             <td>
-              {{ solicitud.primerNombre }} {{ solicitud.segundoNombre }}
-              {{ solicitud.primerApellido }}
+              {{ solicitud.primerNombre }} {{ solicitud.segundoNombre }} {{ solicitud.primerApellido }}
               {{ solicitud.segundoApellido }}
             </td>
-            <td>
-              @if (solicitud.numeroCelular) {
-              <div>
-                <div class="contact-container">
-                  <span>
-                    {{ solicitud.numeroCelular }}
-                    <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(solicitud)"></i>
-                  </span>
-                  <div class="phone-number">
-                    <div class="contact-icons" [ngClass]="{ show: selectedContact === solicitud.id }">
-                      <a
-                        href="https://api.whatsapp.com/send?phone={{ solicitud.numeroCelular | whatsapp }}"
-                        target="_blank"
-                      >
-                        <i class="fab fa-whatsapp mx-2"></i>
-                      </a>
-                      <a href="https://t.me/{{ solicitud.numeroCelular | telegram }}" target="_blank">
-                        <i class="fab fa-telegram mx-2"></i>
-                      </a>
-                      <a href="tel:{{ solicitud.numeroCelular | telegram }}" target="_blank">
-                        <i class="fa fa-phone mx-2"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              } @else {
-              <span>Sin número de celular</span>
-              }
-            </td>
+
             <td>{{ solicitud.email }}</td>
+
             <td>
-              <span class="badge badge-danger">{{ solicitud.usuarioCongregacion.congregacion?.congregacion }}</span>
-              <span class="badge badge-success">{{ solicitud.usuarioCongregacion.campo?.campo }}</span>
+              <span class="badge badge-primary"> {{ solicitud.pais }}</span>
             </td>
 
-            <td>{{ solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion }}</td>
+            <td>
+              <span class="badge badge-danger"> {{ solicitud.congregacion }}</span>
+            </td>
+
+            <td>
+              <span class="badge badge-success"> {{ solicitud.campo }}</span>
+            </td>
+
+            <td>
+              <span class="p-column-title">estado</span>
+              <p-tag
+                [value]="solicitud.estadoUltimaSolicitud"
+                [severity]="getSeverity(solicitud.estadoUltimaSolicitud)"
+              />
+            </td>
+
             <td>
               <a
                 data-toggle="tooltip"
@@ -214,164 +258,94 @@
               <div class="accordion-body">
                 <div class="container-fluid">
                   <div class="row">
+                    <!-- Columna 1 -->
                     <div class="col-md-4">
                       <div class="card">
                         <div class="card-body">
-                          @if (solicitud.tipoMiembro.miembro) {
-                          <p>
-                            <i class="fas fa-user-tag icon-black"></i> <strong>Tipo de Miembro:</strong>
-                            {{ solicitud.tipoMiembro.miembro }}
+                          <div *ngIf="solicitud.numeroCelular; else noCelular">
+                            <i class="fa-solid fa-phone"></i> <strong>Celular:</strong>
+                            <div class="contact-container">
+                              <span>
+                                {{ solicitud.numeroCelular }}
+                                <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(solicitud)"></i>
+                              </span>
+                              <div class="phone-number">
+                                <div class="contact-icons" [ngClass]="{ show: selectedContact === solicitud.id }">
+                                  <a
+                                    href="https://api.whatsapp.com/send?phone={{ solicitud.numeroCelular | whatsapp }}"
+                                    target="_blank"
+                                  >
+                                    <i class="fab fa-whatsapp mx-2"></i>
+                                  </a>
+                                  <a href="https://t.me/{{ solicitud.numeroCelular | telegram }}" target="_blank">
+                                    <i class="fab fa-telegram mx-2"></i>
+                                  </a>
+                                  <a href="tel:{{ solicitud.numeroCelular }}" target="_blank">
+                                    <i class="fa fa-phone mx-2"></i>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <ng-template #noCelular>
+                            <span>Sin número de celular</span>
+                          </ng-template>
+                          <p *ngIf="solicitud.tipoMiembro?.miembro">
+                            <i class="fas fa-user-tag icon-black"></i>
+                            <strong>Tipo de Miembro:</strong> {{ solicitud.tipoMiembro.miembro }}
                           </p>
-                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoSugerido) {
-                          <p>
-                            <i class="fas fa-clock icon-black"></i> <strong>Tiempo Sugerido:</strong>
-                            {{
-                              formatTiempoSugerido(
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoSugerido
-                              )
-                            }}
+                          <p *ngIf="solicitud.ultimaSolicitud?.tiempoSugerido">
+                            <i class="fas fa-clock icon-black"></i>
+                            <strong>Tiempo Sugerido:</strong>
+                            {{ formatTiempoSugerido(solicitud.ultimaSolicitud.tiempoSugerido) }}
                           </p>
-                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].createdAt) {
-                          <p>
-                            <i class="fas fa-calendar-alt icon-black"></i> <strong>Fecha de la solicitud:</strong>
-                            {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].createdAt | date }}
-                          </p>
-                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra) {
-                          <p>
-                            <i class="fas fa-user-tie icon-black"></i> <strong>Registrado por:</strong>
-                            {{
-                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.primerNombre
-                            }}
-                            {{
-                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.segundoNombre
-                            }}
-                            {{
-                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.primerApellido
-                            }}
-                            {{
-                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.segundoApellido
-                            }}
-                          </p>
-                          }
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="card">
-                        <div class="card-body">
-                          @if ( solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.razonSolicitud?.solicitud ) {
-                          <p>
-                            <i class="fas fa-question-circle icon-black"></i> <strong>Razón de la solicitud:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.razonSolicitud?.solicitud }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.otraRazon) {
-                          <p>
-                            <i class="fas fa-info-circle icon-black"></i> <strong>Otra Razón:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.otraRazon }}
-                          </p>
-                          } @if (solicitud.direccion) {
-                          <p>
-                            <i class="fas fa-map-marker-alt icon-black"></i>
-                            <strong>Dirección de residencia:</strong> {{ solicitud.direccion }},
-                            {{ solicitud.ciudadDireccion }}, {{ solicitud.departamentoDireccion }},
-                            {{ solicitud.paisDireccion }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncargada) {
-                          <p>
-                            <i class="fas fa-user-friends icon-black"></i> <strong>Persona Encargada:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncargada }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadCronica) {
-                          <p>
-                            <i class="fas fa-heartbeat icon-black"></i> <strong>Enfermedad Crónica:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadCronica }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadQuePadece) {
-                          <p>
-                            <i class="fas fa-procedures icon-black"></i> <strong>Enfermedad Que padece:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadQuePadece }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.celularPersonaEncargada) {
-                          <p>
-                            <i class="fas fa-user-md icon-black"></i> <strong>Celular Persona Encargada:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.celularPersonaEncargada }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncamada) {
-                          <p>
-                            <i class="fas fa-bed icon-black"></i> <strong>Persona Encamada:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncamada }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.parentesco?.nombre) {
-                          <p>
-                            <i class="fas fa-users icon-black"></i> <strong>Parentezco:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.parentesco?.nombre }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tiempoDistancia) {
-                          <p>
-                            <i class="fas fa-clock icon-black"></i> <strong>Tiempo Distancia:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tiempoDistancia }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.congregacionCercana) {
-                          <p>
-                            <i class="fas fa-map-marker-alt icon-black"></i> <strong>Congregación Cercana:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.congregacionCercana }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.horaTemploMasCercano) {
-                          <p>
-                            <i class="fas fa-road icon-black"></i> <strong>Distancia Templo más cercano:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.horaTemploMasCercano }} horas
-                          </p>
-                          } @if ( solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.opcionTransporte
-                          ?.tipoTransporte ) {
-                          <p>
-                            <i class="fas fa-bus icon-black"></i> <strong>Opción de Transporte:</strong>
-                            {{
-                              solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.opcionTransporte?.tipoTransporte
-                            }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.paisDondeEstudia) {
-                          <p>
-                            <i class="fas fa-globe icon-black"></i> <strong>País donde estudia:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.paisDondeEstudia }}
-                          </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.ciudadDondeEstudia) {
-                          <p>
-                            <i class="fas fa-city icon-black"></i> <strong>Ciudad donde estudia:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.ciudadDondeEstudia }}
-                          </p>
-                          } @if ( solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.duracionDelPeriodoDeEstudio
-                          ) {
-                          <p>
+                          <p *ngIf="solicitud.ultimaSolicitud?.createdAt">
                             <i class="fas fa-calendar-alt icon-black"></i>
-                            <strong>Duración del periodo de estudio:</strong>
-                            {{
-                              solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.duracionDelPeriodoDeEstudio
-                                | date
-                            }}
+                            <strong>Fecha de la solicitud:</strong> {{ solicitud.ultimaSolicitud.createdAt | date }}
                           </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tipoEstudio?.estudio) {
-                          <p>
-                            <i class="fas fa-book icon-black"></i> <strong>Tipo de estudio:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tipoEstudio?.estudio }}
+                          <p *ngIf="solicitud.ultimaSolicitud?.usuarioQueRegistra">
+                            <i class="fas fa-user-tie icon-black"></i>
+                            <strong>Registrado por:</strong>
+                            {{ solicitud.ultimaSolicitud.usuarioQueRegistra.primerNombre }}
+                            {{ solicitud.ultimaSolicitud.usuarioQueRegistra.segundoNombre }}
+                            {{ solicitud.ultimaSolicitud.usuarioQueRegistra.primerApellido }}
+                            {{ solicitud.ultimaSolicitud.usuarioQueRegistra.segundoApellido }}
                           </p>
-                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.baseMilitar) {
-                          <p>
-                            <i class="fas fa-shield-alt icon-black"></i> <strong>Base Militar:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.baseMilitar }}
-                          </p>
-                          }
                         </div>
                       </div>
                     </div>
+
+                    <!-- Columna 2 -->
                     <div class="col-md-4">
                       <div class="card">
                         <div class="card-body">
-                          @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones) {
-                          <p>
-                            <i class="fas fa-flag icon-black"></i> <strong>Observaciones:</strong>
-                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones }}
+                          <p *ngIf="solicitud.ultimaSolicitud?.razonSolicitud?.solicitud">
+                            <i class="fas fa-question-circle icon-black"></i>
+                            <strong>Razón de la solicitud:</strong>
+                            {{ solicitud.ultimaSolicitud.razonSolicitud.solicitud }}
                           </p>
-                          }
+                          <p *ngIf="solicitud.ultimaSolicitud?.otraRazon">
+                            <i class="fas fa-info-circle icon-black"></i>
+                            <strong>Otra Razón:</strong> {{ solicitud.ultimaSolicitud.otraRazon }}
+                          </p>
+                          <p *ngIf="solicitud.direccion">
+                            <i class="fas fa-map-marker-alt icon-black"></i>
+                            <strong>Dirección de residencia:</strong>
+                            {{ solicitud.direccion }}, {{ solicitud.ciudadDireccion }},
+                            {{ solicitud.departamentoDireccion }}, {{ solicitud.paisDireccion }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Columna 3 -->
+                    <div class="col-md-4">
+                      <div class="card">
+                        <div class="card-body">
+                          <p *ngIf="solicitud.ultimaSolicitud?.observaciones">
+                            <i class="fas fa-flag icon-black"></i>
+                            <strong>Observaciones:</strong> {{ solicitud.ultimaSolicitud.observaciones }}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -385,4 +359,5 @@
     </div>
   </div>
 </div>
+
 }

@@ -1,14 +1,10 @@
-import { CommonModule, DatePipe } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import {
-  denegarSolicitudMultimediaInterface,
-  SolicitudMultimediaInterface,
-  SolicitudMultimediaModel,
-} from 'src/app/core/models/solicitud-multimedia.model';
+import { CommonModule } from '@angular/common';
+import { Table, TableModule } from 'primeng/table';
+import { denegarSolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
 import { configuracion } from 'src/environments/config/configuration';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { map, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
@@ -31,6 +27,8 @@ import { ButtonModule } from 'primeng/button';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
+import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 
 @Component({
   selector: 'app-solicitud-multimedia',
@@ -50,24 +48,29 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
     DropdownModule,
     FormsModule,
     CommonModule,
-    DatePipe,
     TelegramPipe,
     WhatsappPipe,
   ],
   providers: [SolicitudMultimediaService],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
-  solicitudes: SolicitudMultimediaModel[] = [];
+  solicitudes: UsuarioSolicitudMultimediaModel[] = [];
   nacionalidades: NacionalidadModel[] = [];
   tipoMiembro: TipoMiembroModel[];
-  congregaciones: { nombre: string }[] = [];
   cargando: boolean = false;
   fieldTextType: boolean;
   pagina: number = 1;
   filterTerm: string = '';
   selectedContact: number | null;
-
+  paises: { nombre: string }[] = [];
+  congregaciones: { nombre: string }[] = [];
+  campos: { nombre: string }[] = [];
+  selectedPaises: string[] = [];
+  selectedCongregaciones: string[] = [];
+  selectedCampos: string[] = [];
+  estados: { label: string; value: string }[] = [];
   usuarioId: number;
+  searchValue: string | undefined;
 
   // Subscription
   public solicitudAccesoSubscription: Subscription;
@@ -75,19 +78,21 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private solicitudMultimediaService: SolicitudMultimediaService,
     private accesoMultimediaService: AccesoMultimediaService,
+    private solicitudMultimediaService: SolicitudMultimediaService,
     private usuarioService: UsuarioService
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: any) => {
-      this.tipoMiembro = data.tipoMiembro;
-      this.nacionalidades = data.nacionalidad;
-    });
-
     this.usuarioId = this.usuarioService.usuario.id;
+
+    this.estados = [
+      { label: 'Denegada', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.DENEGADA },
+      { label: 'Aprobada', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA },
+      { label: 'Eliminada', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.ELIMINADA },
+      { label: 'Caducada', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.CADUCADA },
+      { label: 'PENDIENTE', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.PENDIENTE },
+    ];
 
     this.cargarTodasLasSolicitudes();
   }
@@ -97,19 +102,110 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudMultimediaServiceSubscription?.unsubscribe;
   }
 
-  cargarTodasLasSolicitudes(): void {
+  async cargarTodasLasSolicitudes(): Promise<void> {
     this.cargando = true;
-    this.solicitudMultimediaService.getSolicitudes().subscribe({
-      next: (solicitudes: any) => {
-        this.solicitudes = solicitudes;
+    try {
+      const data = await this.solicitudMultimediaService.getSolicitudes().toPromise();
+      this.solicitudes = this.mapSolicitudes(data);
+      console.log(this.solicitudes);
+      this.transformarFiltros();
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.cargando = false;
+    }
+  }
 
-        this.cargando = false;
-      },
-      error: (error) => {
-        console.error('Error al cargar las solicitudes pendientes', error);
-        this.cargando = false;
-      },
+  mapSolicitudes(data: any[]): UsuarioSolicitudMultimediaModel[] {
+    return data.map(
+      (item: any) =>
+        new UsuarioSolicitudMultimediaModel(
+          item.id,
+          item.primerNombre,
+          item.segundoNombre,
+          item.primerApellido,
+          item.segundoApellido,
+          item.numeroCelular,
+          item.email,
+          item.fechaNacimiento,
+          item.direccion,
+          item.ciudadDireccion,
+          item.departamentoDireccion,
+          item.paisDireccion,
+          item.login,
+          item.solicitudes,
+          item.tipoMiembro,
+          item.usuarioCongregacion
+        )
+    );
+  }
+
+  transformarFiltros(): void {
+    const paisesSet = new Set<string>();
+    const congregacionesSet = new Set<string>();
+    const camposSet = new Set<string>();
+
+    this.solicitudes.forEach((solicitud) => {
+      if (solicitud.pais && solicitud.pais !== null && solicitud.pais !== undefined) {
+        paisesSet.add(solicitud.pais);
+      }
+      if (solicitud.congregacion && solicitud.congregacion !== null && solicitud.congregacion !== undefined) {
+        congregacionesSet.add(solicitud.congregacion);
+      }
+      if (solicitud.campo && solicitud.campo !== null && solicitud.campo !== undefined) {
+        camposSet.add(solicitud.campo);
+      }
     });
+
+    this.paises = Array.from(paisesSet).map((pais) => ({ nombre: pais }));
+    this.congregaciones = Array.from(congregacionesSet).map((congregacion) => ({ nombre: congregacion }));
+    this.campos = Array.from(camposSet).map((campo) => ({ nombre: campo }));
+
+    console.log(this.paises, this.congregaciones, this.campos);
+  }
+
+  onPaisChange(value: { nombre: string }[], dt: Table): void {
+    this.selectedPaises = value.map((pais) => pais.nombre);
+
+    console.log('this.selectedPaises', this.selectedPaises);
+    dt.filter(this.selectedPaises, 'pais', 'in');
+  }
+
+  onCongregacionChange(value: { nombre: string }[], dt: Table): void {
+    this.selectedCongregaciones = value.map((congregacion) => congregacion.nombre);
+    dt.filter(this.selectedCongregaciones, 'congregacion', 'in');
+  }
+
+  onCampoChange(value: { nombre: string }[], dt: Table): void {
+    this.selectedCampos = value.map((campo) => campo.nombre);
+    dt.filter(this.selectedCampos, 'campo', 'in');
+  }
+
+  onEstadoChange(value: string, dt: Table): void {
+    dt.filter(value, 'solicitudes.estadoUltimaSolicitud', 'equals');
+    console.log(dt);
+  }
+
+  getSeverity(status: string) {
+    switch (status) {
+      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.DENEGADA:
+        return 'danger';
+      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA:
+        return 'success';
+      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.ELIMINADA:
+        return 'warning';
+      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.CADUCADA:
+        return 'secondary';
+      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.PENDIENTE:
+        return 'info';
+      default:
+        return null;
+    }
+  }
+
+  clear(table: Table) {
+    table.clear();
+    this.searchValue = '';
   }
 
   toggleAccordion(id: number): void {
@@ -195,7 +291,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             solicitud_id: solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.id,
             tiempoAprobacion: tiempoAprobacion ? new Date(tiempoAprobacion) : null,
             usuarioQueAprobo_id: this.usuarioId,
-            estado: true,
+            estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA,
           };
 
           this.accesoMultimediaService.crearAccesoMultimedia(dataAcceso).subscribe(
@@ -281,7 +377,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             password: (document.getElementById('password') as HTMLInputElement).value,
             solicitud_id: solicitud.id,
             tiempoAprobacion: new Date((document.getElementById('tiempoAprobacion') as HTMLInputElement).value),
-            estado: true,
+            estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA,
             usuarioQueAprobo_id: this.usuarioId,
           };
 
@@ -410,18 +506,13 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
-  buscarTipoMiembro(id: number): string {
-    const miembroEncontrado = this.tipoMiembro.find((miembro) => {
-      return miembro.id === id;
+  handleError(error: any) {
+    console.error(error);
+    Swal.fire({
+      title: 'Error',
+      icon: 'error',
+      html: `Ocurrió un error al cargar las solicitudes de acceso a CMAR LIVE. <br> ${error.error.msg}`,
     });
-    return miembroEncontrado ? miembroEncontrado.miembro : '';
-  }
-
-  buscarNacionalidad(id: number): string {
-    const nacionalidadEncontrada = this.nacionalidades.find((nacionalidad) => {
-      return nacionalidad.id === id;
-    });
-    return nacionalidadEncontrada ? nacionalidadEncontrada.nombre : '';
   }
 
   formatTiempoSugerido(dias: number): string {

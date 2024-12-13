@@ -1,9 +1,11 @@
+import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from '../enums/solicitudMultimendia.enum';
+
 export interface LoginUsuarioCmarLiveInterface {
   login: string;
   password: string;
   solicitud_id: number;
   tiempoAprobacion: Date | null;
-  estado: boolean;
+  estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
   usuarioQueAprobo_id: number | null;
 }
 
