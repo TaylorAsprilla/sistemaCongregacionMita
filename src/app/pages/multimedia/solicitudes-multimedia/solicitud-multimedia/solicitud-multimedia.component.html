@@ -367,15 +367,17 @@
       </table>
     </div>
     <!-- Paginate -->
-    <pagination-controls
-      *ngIf="filteredSolicitudes?.length > 0"
-      class="pagination-bar"
-      (pageChange)="pagina = $event"
-      previousLabel="Anterior"
-      nextLabel="Próximo"
-      [autoHide]="true"
-      [responsive]="true"
-    ></pagination-controls>
+    <div class="d-flex justify-content-center mt-2 mb-2">
+      <pagination-controls
+        *ngIf="filteredSolicitudes?.length > 0"
+        class="pagination-bar"
+        (pageChange)="pagina = $event"
+        previousLabel="Anterior"
+        nextLabel="Próximo"
+        [autoHide]="true"
+        [responsive]="true"
+      ></pagination-controls>
+    </div>
   </div>
 </div>
 }
