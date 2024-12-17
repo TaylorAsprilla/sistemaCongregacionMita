@@ -23,11 +23,11 @@ import { WhatsappPipe } from '../../pipes/whatsapp/whatsapp.pipe';
 import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
 
 @Component({
-    selector: 'app-ver-censo',
-    templateUrl: './ver-censo.component.html',
-    styleUrls: ['./ver-censo.component.scss'],
-    standalone: true,
-    imports: [
+  selector: 'app-ver-censo',
+  templateUrl: './ver-censo.component.html',
+  styleUrls: ['./ver-censo.component.scss'],
+  standalone: true,
+  imports: [
     ExportarExcelComponent,
     FormsModule,
     NgClass,
@@ -35,8 +35,8 @@ import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
     AsyncPipe,
     TelegramPipe,
     WhatsappPipe,
-    CalcularEdadPipe
-],
+    CalcularEdadPipe,
+  ],
 })
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
@@ -199,14 +199,14 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   filterUsuarios(
     filterTerm: string,
-    country: string,
-    congre: string,
-    camp: string
+    pais: string,
+    congregacion: string,
+    campo: string
   ): UsuariosPorCongregacionInterface[] {
     const lowerFilterTerm = filterTerm.toLocaleLowerCase();
-    const lowerCountry = country.toLocaleLowerCase();
-    const lowerCongre = congre.toLocaleLowerCase();
-    const lowerCamp = camp.toLocaleLowerCase();
+    const lowerCountry = pais.toLocaleLowerCase();
+    const lowerCongre = congregacion.toLocaleLowerCase();
+    const lowerCamp = campo.toLocaleLowerCase();
 
     // Si no hay usuarios y los filtros están vacíos, devolvemos todos los usuarios
     if (this.usuarios.length === 0 && (lowerFilterTerm === '' || lowerCountry === '' || lowerCongre === '')) {
@@ -216,9 +216,17 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         // Utilizamos una función de utilidad para convertir a minúsculas de forma segura
         const getSafeString = (value: string | undefined): string => (value ? value.toLocaleLowerCase() : '');
 
-        const primerNombre = getSafeString(usuario.primerNombre);
-        const primerApellido = getSafeString(usuario.primerApellido);
-        const segundoApellido = getSafeString(usuario.segundoApellido);
+        // Concatenar el nombre completo del usuario
+        const nombreCompleto = `${getSafeString(usuario.primerNombre)} ${getSafeString(
+          usuario.segundoNombre
+        )} ${getSafeString(usuario.primerApellido)} ${getSafeString(usuario.segundoApellido)}`.trim();
+
+        // Dividir el término de búsqueda en palabras individuales
+        const searchTerms = lowerFilterTerm.split(' ');
+
+        // Verificar que cada palabra en el término de búsqueda exista en el nombre completo
+        const nombreCompletoMatches = searchTerms.every((term) => nombreCompleto.includes(term));
+
         const email = getSafeString(usuario.email);
         const numeroCelular = usuario.numeroCelular || '';
 
@@ -235,9 +243,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
         // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
         return (
-          (primerNombre.includes(lowerFilterTerm) ||
-            primerApellido.includes(lowerFilterTerm) ||
-            segundoApellido.includes(lowerFilterTerm) ||
+          (nombreCompletoMatches ||
             email.includes(lowerFilterTerm) ||
             numeroCelular.includes(lowerFilterTerm) ||
             usuario.id.toString().includes(lowerFilterTerm)) &&

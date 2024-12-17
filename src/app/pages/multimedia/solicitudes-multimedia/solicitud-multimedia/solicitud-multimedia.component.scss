@@ -140,3 +140,32 @@ a.email:hover {
   max-height: 500px;
   opacity: 1;
 }
+
+.estado-denegada {
+  background-color: #f8d7da; /* Rojo claro */
+  color: #721c24; /* Rojo oscuro */
+}
+
+.estado-aprobada {
+  background-color: #d4edda; /* Verde claro */
+  color: #155724; /* Verde oscuro */
+}
+
+.estado-eliminada {
+  background-color: #f1f1f1; /* Gris claro */
+  color: #6c757d; /* Gris oscuro */
+}
+
+.estado-caducada {
+  background-color: #ffeeba; /* Amarillo claro */
+  color: #856404; /* Amarillo oscuro */
+}
+
+.estado-pendiente {
+  background-color: #cce5ff; /* Azul claro */
+  color: #004085; /* Azul oscuro */
+}
+
+i.fas.fa-filter {
+  color: #b1b8bb;
+}
