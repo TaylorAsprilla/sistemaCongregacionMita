@@ -1,34 +1,24 @@
-import { CommonModule } from '@angular/common';
-import { Table, TableModule } from 'primeng/table';
-import { denegarSolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
-import { configuracion } from 'src/environments/config/configuration';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { NacionalidadModel } from 'src/app/core/models/nacionalidad.model';
-import { RUTAS } from 'src/app/routes/menu-items';
-import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
-import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import Swal from 'sweetalert2';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
+import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
+import { Subscription } from 'rxjs';
+import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
 import { generate } from 'generate-password-browser';
-import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
-import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
-import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
-import { NgxPaginationModule } from 'ngx-pagination';
+import { denegarSolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
+import { Router } from '@angular/router';
+import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { CargandoInformacionComponent } from 'src/app/components/cargando-informacion/cargando-informacion.component';
+import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { TagModule } from 'primeng/tag';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { DropdownModule } from 'primeng/dropdown';
-import { ButtonModule } from 'primeng/button';
+import { configuracion } from 'src/environments/config/configuration';
+import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
-import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
-import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 
 @Component({
   selector: 'app-solicitud-multimedia',
@@ -36,42 +26,55 @@ import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-sol
   styleUrls: ['./solicitud-multimedia.component.scss'],
   standalone: true,
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     CargandoInformacionComponent,
     NgxPaginationModule,
-    TableModule,
-    TagModule,
-    IconFieldModule,
-    InputTextModule,
-    InputIconModule,
-    MultiSelectModule,
-    ButtonModule,
-    DropdownModule,
-    FormsModule,
-    CommonModule,
     TelegramPipe,
     WhatsappPipe,
   ],
-  providers: [SolicitudMultimediaService],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   solicitudes: UsuarioSolicitudMultimediaModel[] = [];
-  nacionalidades: NacionalidadModel[] = [];
-  tipoMiembro: TipoMiembroModel[];
-  cargando: boolean = false;
-  fieldTextType: boolean;
-  pagina: number = 1;
-  filterTerm: string = '';
-  selectedContact: number | null;
-  paises: { nombre: string }[] = [];
-  congregaciones: { nombre: string }[] = [];
-  campos: { nombre: string }[] = [];
-  selectedPaises: string[] = [];
-  selectedCongregaciones: string[] = [];
-  selectedCampos: string[] = [];
-  estados: { label: string; value: string }[] = [];
+  filteredSolicitudes: UsuarioSolicitudMultimediaModel[] = [];
+  cargando = false;
   usuarioId: number;
-  searchValue: string | undefined;
+  paises = new FormControl();
+  congregaciones = new FormControl();
+  campos = new FormControl();
+  estados = new FormControl();
+  filterForm: FormGroup;
+  pagina = 1;
+  pageSize = 50;
 
+  solicitudSeleccionada: UsuarioSolicitudMultimediaModel | null = null;
+  filaExpandida: number | null = null;
+  selectedContact: number | null = null;
+
+  paisesList: string[] = [];
+  congregacionesList: string[] = [];
+  camposList: string[] = [];
+  estadosList: string[] = [];
+
+  paisSeleccionado: string = '';
+  congregacionSeleccionada: string = '';
+
+  filterText: string = '';
+
+  mostrarFiltros: boolean = false;
+
+  estadoColors: { [key in ESTADO_SOLICITUD_MULTIMEDIA_ENUM]: string } = {
+    [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.DENEGADA]: 'badge-danger', // Color rojo
+    [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA]: 'badge-success', // Color verde
+    [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.ELIMINADA]: 'badge-secondary', // Color gris
+    [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.PENDIENTE]: 'badge-warning', // Color amarillo
+    [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.CADUCADA]: 'badge-dark',
+  };
+
+  get estadosSolicitud() {
+    return ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
+  }
   // Subscription
   public solicitudAccesoSubscription: Subscription;
   public solicitudMultimediaServiceSubscription: Subscription;
@@ -80,45 +83,54 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     private router: Router,
     private accesoMultimediaService: AccesoMultimediaService,
     private solicitudMultimediaService: SolicitudMultimediaService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.usuarioId = this.usuarioService.usuario.id;
 
-    this.estados = [
-      { label: 'Denegada', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.DENEGADA },
-      { label: 'Aprobada', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA },
-      { label: 'Eliminada', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.ELIMINADA },
-      { label: 'Caducada', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.CADUCADA },
-      { label: 'PENDIENTE', value: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.PENDIENTE },
-    ];
+    this.filterForm = this.formBuilder.group({
+      paises: ['', Validators.required],
+      congregaciones: ['', Validators.required],
+      campos: ['', Validators.required],
+      estados: ['', Validators.required],
+      filtroGeneral: ['', Validators.required],
+    });
 
     this.cargarTodasLasSolicitudes();
+
+    this.filterForm.valueChanges.subscribe(() => {
+      this.applyFilter(); // Aplica el filtro cuando cambie cualquier campo
+    });
   }
 
   ngOnDestroy(): void {
-    this.solicitudAccesoSubscription?.unsubscribe;
-    this.solicitudMultimediaServiceSubscription?.unsubscribe;
+    this.solicitudAccesoSubscription?.unsubscribe();
+    this.solicitudMultimediaServiceSubscription?.unsubscribe();
   }
 
-  async cargarTodasLasSolicitudes(): Promise<void> {
+  cargarTodasLasSolicitudes(): void {
     this.cargando = true;
-    try {
-      const data = await this.solicitudMultimediaService.getSolicitudes().toPromise();
-      this.solicitudes = this.mapSolicitudes(data);
-      console.log(this.solicitudes);
-      this.transformarFiltros();
-    } catch (error) {
-      this.handleError(error);
-    } finally {
-      this.cargando = false;
-    }
+
+    this.solicitudMultimediaServiceSubscription = this.solicitudMultimediaService.getSolicitudes().subscribe({
+      next: (data) => {
+        this.solicitudes = this.mapSolicitudes(data);
+        this.filteredSolicitudes = [...this.solicitudes]; // Usar una copia para evitar modificaciones accidentales
+        this.transformarFiltros();
+        this.cargando = false;
+      },
+      error: (error) => {
+        this.handleError(error);
+        this.cargando = false;
+      },
+    });
   }
 
-  mapSolicitudes(data: any[]): UsuarioSolicitudMultimediaModel[] {
+  mapSolicitudes(data: UsuarioSolicitudMultimediaModel[]): UsuarioSolicitudMultimediaModel[] {
     return data.map(
-      (item: any) =>
+      (item: UsuarioSolicitudMultimediaModel) =>
         new UsuarioSolicitudMultimediaModel(
           item.id,
           item.primerNombre,
@@ -144,84 +156,126 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     const paisesSet = new Set<string>();
     const congregacionesSet = new Set<string>();
     const camposSet = new Set<string>();
+    const estadosSet = new Set<string>();
 
     this.solicitudes.forEach((solicitud) => {
-      if (solicitud.pais && solicitud.pais !== null && solicitud.pais !== undefined) {
-        paisesSet.add(solicitud.pais);
-      }
-      if (solicitud.congregacion && solicitud.congregacion !== null && solicitud.congregacion !== undefined) {
-        congregacionesSet.add(solicitud.congregacion);
-      }
-      if (solicitud.campo && solicitud.campo !== null && solicitud.campo !== undefined) {
-        camposSet.add(solicitud.campo);
-      }
+      paisesSet.add(solicitud.pais || '');
+      congregacionesSet.add(solicitud.congregacion || '');
+      camposSet.add(solicitud.campo || '');
+      estadosSet.add(solicitud.estadoUltimaSolicitud || '');
     });
 
-    this.paises = Array.from(paisesSet).map((pais) => ({ nombre: pais }));
-    this.congregaciones = Array.from(congregacionesSet).map((congregacion) => ({ nombre: congregacion }));
-    this.campos = Array.from(camposSet).map((campo) => ({ nombre: campo }));
-
-    console.log(this.paises, this.congregaciones, this.campos);
+    this.paisesList = Array.from(paisesSet);
+    this.congregacionesList = Array.from(congregacionesSet);
+    this.camposList = Array.from(camposSet);
+    this.estadosList = Array.from(estadosSet);
   }
 
-  onPaisChange(value: { nombre: string }[], dt: Table): void {
-    this.selectedPaises = value.map((pais) => pais.nombre);
-
-    console.log('this.selectedPaises', this.selectedPaises);
-    dt.filter(this.selectedPaises, 'pais', 'in');
+  applyFilter(): void {
+    const { paises, congregaciones, campos, estados, filtroGeneral } = this.filterForm.value;
+    this.filteredSolicitudes = this.solicitudes.filter((solicitud) => {
+      return (
+        (paises ? solicitud.pais === paises : true) &&
+        (congregaciones ? solicitud.congregacion === congregaciones : true) &&
+        (campos ? solicitud.campo === campos : true) &&
+        (estados ? solicitud.estadoUltimaSolicitud === estados : true) &&
+        (filtroGeneral
+          ? solicitud.nombreCompleto.includes(filtroGeneral) ||
+            solicitud.email.includes(filtroGeneral) ||
+            solicitud.numeroCelular.includes(filtroGeneral)
+          : true)
+      );
+    });
   }
 
-  onCongregacionChange(value: { nombre: string }[], dt: Table): void {
-    this.selectedCongregaciones = value.map((congregacion) => congregacion.nombre);
-    dt.filter(this.selectedCongregaciones, 'congregacion', 'in');
+  coincideFiltroGeneral(solicitud: any, filtro: string): boolean {
+    // Elimina todos los espacios (intermedios y al inicio o final) y convierte a minúsculas
+    const filtroSinEspacios = filtro.replace(/\s+/g, '').toLowerCase();
+
+    return (
+      solicitud.nombreCompleto?.replace(/\s+/g, '').toLowerCase().includes(filtroSinEspacios) ||
+      solicitud.email?.toLowerCase().includes(filtroSinEspacios) ||
+      solicitud.numeroCelular?.toLowerCase().includes(filtroSinEspacios)
+    );
   }
 
-  onCampoChange(value: { nombre: string }[], dt: Table): void {
-    this.selectedCampos = value.map((campo) => campo.nombre);
-    dt.filter(this.selectedCampos, 'campo', 'in');
+  onTableDataChange(event: any) {
+    this.pagina = event;
   }
 
-  onEstadoChange(value: string, dt: Table): void {
-    dt.filter(value, 'solicitudes.estadoUltimaSolicitud', 'equals');
-    console.log(dt);
-  }
+  onPaisChange(): void {
+    const selectedPais = this.filterForm.get('paises')?.value;
 
-  getSeverity(status: string) {
-    switch (status) {
-      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.DENEGADA:
-        return 'danger';
-      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA:
-        return 'success';
-      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.ELIMINADA:
-        return 'warning';
-      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.CADUCADA:
-        return 'secondary';
-      case ESTADO_SOLICITUD_MULTIMEDIA_ENUM.PENDIENTE:
-        return 'info';
-      default:
-        return null;
+    // Filtrar las solicitudes según el país seleccionado
+    this.filteredSolicitudes = this.solicitudes.filter((solicitud) => {
+      return !selectedPais || solicitud.pais === selectedPais;
+    });
+
+    // Resetear el campo 'campos' del formulario
+    this.filterForm.get('campos')?.reset('');
+    this.filterForm.get('congregaciones')?.reset('');
+
+    // Actualizar las congregaciones disponibles según el país seleccionado
+    this.actualizarCongregacionesDisponibles(selectedPais);
+
+    // Si no hay congregaciones para el país, resetear el valor de 'congregaciones'
+    if (!this.congregacionesList.length) {
+      this.filterForm.get('congregaciones')?.setValue('');
     }
+
+    // Aplicar el filtro de nuevo para que se actualice la vista
+    this.applyFilter();
   }
 
-  clear(table: Table) {
-    table.clear();
-    this.searchValue = '';
-  }
+  onCongregacionChange(): void {
+    const selectedCongregacion = this.filterForm.get('congregaciones')?.value;
 
-  toggleAccordion(id: number): void {
-    const elements = document.querySelectorAll('.accordion-collapse');
-    elements.forEach((element) => {
-      if (element.id === `collapse${id}`) {
-        const isCollapsed = element.classList.contains('show');
-        if (isCollapsed) {
-          element.classList.remove('show');
-        } else {
-          element.classList.add('show');
-        }
-      } else {
-        element.classList.remove('show');
+    // Actualizar la lista de campos disponibles según la congregación seleccionada
+    this.actualizarCamposDisponibles(selectedCongregacion);
+
+    // Resetear el campo 'campos' del formulario
+    this.filterForm.get('campos')?.reset('');
+
+    // Aplicar el filtro de nuevo para que se actualice la vista
+    this.applyFilter();
+  }
+  // Método que actualiza la lista de congregaciones
+  actualizarCongregacionesDisponibles(pais: string): void {
+    const congregacionesSet = new Set<string>();
+    this.solicitudes.forEach((solicitud) => {
+      if (solicitud.pais === pais) {
+        congregacionesSet.add(solicitud.congregacion || '');
       }
     });
+
+    this.congregacionesList = [...congregacionesSet];
+    this.cdr.detectChanges(); // Forzar la detección de cambios
+  }
+
+  actualizarCamposDisponibles(congregacion: string): void {
+    const camposSet = new Set<string>();
+    this.solicitudes.forEach((solicitud) => {
+      if (solicitud.congregacion === congregacion) {
+        camposSet.add(solicitud.campo || '');
+      }
+    });
+
+    this.camposList = [...camposSet];
+    this.cdr.detectChanges();
+  }
+
+  limpiarFiltros(): void {
+    // Resetear todos los campos del formulario a su valor por defecto
+    this.filterForm.reset({
+      paises: '',
+      congregaciones: '',
+      campos: '',
+      estados: '',
+      filtroGeneral: '',
+    });
+
+    // Aplicar el filtro sin ningún valor (esto limpiará las solicitudes filtradas)
+    this.applyFilter();
   }
 
   crearSolicitud() {
@@ -506,6 +560,16 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     });
   }
 
+  toggleExpand(index: number, solicitud: UsuarioSolicitudMultimediaModel): void {
+    this.solicitudSeleccionada = solicitud;
+    // Si la fila ya está expandida, la colapsamos
+    if (this.filaExpandida === index) {
+      this.filaExpandida = null;
+    } else {
+      this.filaExpandida = index;
+    }
+  }
+
   handleError(error: any) {
     console.error(error);
     Swal.fire({
@@ -536,11 +600,11 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     return password;
   }
 
-  onTableDataChange(event: any) {
-    this.pagina = event;
-  }
-
   toggleIcons(solicitud: UsuarioSolicitudInterface) {
     this.selectedContact = this.selectedContact === solicitud.id ? null : solicitud.id;
+  }
+
+  toggleFiltros(): void {
+    this.mostrarFiltros = !this.mostrarFiltros;
   }
 }

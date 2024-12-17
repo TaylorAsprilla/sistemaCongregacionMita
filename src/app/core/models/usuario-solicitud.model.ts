@@ -44,6 +44,10 @@ export class UsuarioSolicitudMultimediaModel {
     return this.solicitudes.length > 0 ? this.solicitudes[this.solicitudes.length - 1].estado : '';
   }
 
+  get nombreCompleto(): string {
+    return `${this.primerNombre} ${this.segundoNombre} ${this.primerApellido} ${this.segundoApellido}`.trim();
+  }
+
   get ultimaSolicitud(): SolicitudInterface | null {
     return this.solicitudes.length > 0 ? this.solicitudes[this.solicitudes.length - 1] : null;
   }

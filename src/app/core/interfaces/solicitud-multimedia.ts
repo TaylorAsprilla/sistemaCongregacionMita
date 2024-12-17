@@ -33,7 +33,7 @@ export interface SolicitudInterface {
   duracionDelPeriodoDeEstudio: number | null;
   baseMilitar: string;
   horaTemploMasCercano: string;
-  tiempoSugerido: string;
+  tiempoSugerido: number;
   tiempoAprobacion: string | null;
   congregacionCercana: string;
   observaciones: string;

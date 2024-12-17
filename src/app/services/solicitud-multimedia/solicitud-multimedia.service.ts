@@ -53,10 +53,10 @@ export class SolicitudMultimediaService {
       );
   }
 
-  getSolicitudesPendientes(usuarioId: number): Observable<UsuarioSolicitudInterface[]> {
+  getSolicitudesPendientes(usuarioId: number): Observable<UsuarioSolicitudMultimediaModel[]> {
     const params = new HttpParams().set('usuario_id', usuarioId?.toString() || '');
     return this.httpClient
-      .get<{ ok: boolean; usuarios: UsuarioSolicitudInterface[] }>(`${base_url}/solicitudmultimedia/pendientes`, {
+      .get<{ ok: boolean; usuarios: UsuarioSolicitudMultimediaModel[] }>(`${base_url}/solicitudmultimedia/pendientes`, {
         ...this.headers,
         params,
       })
