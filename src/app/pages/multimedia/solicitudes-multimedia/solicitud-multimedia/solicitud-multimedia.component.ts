@@ -173,29 +173,32 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   applyFilter(): void {
     const { paises, congregaciones, campos, estados, filtroGeneral } = this.filterForm.value;
+
     this.filteredSolicitudes = this.solicitudes.filter((solicitud) => {
       return (
         (paises ? solicitud.pais === paises : true) &&
         (congregaciones ? solicitud.congregacion === congregaciones : true) &&
         (campos ? solicitud.campo === campos : true) &&
         (estados ? solicitud.estadoUltimaSolicitud === estados : true) &&
-        (filtroGeneral
-          ? solicitud.nombreCompleto.includes(filtroGeneral) ||
-            solicitud.email.includes(filtroGeneral) ||
-            solicitud.numeroCelular.includes(filtroGeneral)
-          : true)
+        (filtroGeneral ? this.coincideFiltroGeneral(solicitud, filtroGeneral) : true)
       );
     });
   }
 
   coincideFiltroGeneral(solicitud: any, filtro: string): boolean {
-    // Elimina todos los espacios (intermedios y al inicio o final) y convierte a minúsculas
-    const filtroSinEspacios = filtro.replace(/\s+/g, '').toLowerCase();
+    // Función segura para manejar strings nulos
+    const getSafeString = (value: string | undefined | null): string => (value ? value.toLowerCase().trim() : '');
 
-    return (
-      solicitud.nombreCompleto?.replace(/\s+/g, '').toLowerCase().includes(filtroSinEspacios) ||
-      solicitud.email?.toLowerCase().includes(filtroSinEspacios) ||
-      solicitud.numeroCelular?.toLowerCase().includes(filtroSinEspacios)
+    const nombreCompleto = getSafeString(solicitud.nombreCompleto);
+    const email = getSafeString(solicitud.email);
+    const numeroCelular = getSafeString(solicitud.numeroCelular);
+
+    // Dividir el filtro en palabras individuales
+    const palabrasFiltro = filtro.toLowerCase().trim().split(/\s+/);
+
+    // Verificar si todas las palabras del filtro coinciden en alguno de los campos
+    return palabrasFiltro.every(
+      (palabra) => nombreCompleto.includes(palabra) || email.includes(palabra) || numeroCelular.includes(palabra)
     );
   }
 
