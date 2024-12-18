@@ -27,529 +27,427 @@
                     type="radio"
                     formControlName="estaCercaACongregacion"
                     [value]="true"
+                  />
+                  <label class="form-check-label"> Sí </label>
+                </div>
+                <div class="form-check checkbox-lg">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="estaCercaACongregacion"
+                    [value]="false"
+                    [checked]="true"
+                  />
+                  <label class="form-check-label"> No </label>
+                </div>
+              </div>
+
+              <div class="row">
+                @if (!!estaCercaACongregacion()) {
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">Congregación cercana</label>
+                  <input
+                    type="text"
+                    placeholder="Buscar la congregación más cercana"
+                    formControlName="congregacionCercana"
+                    [matAutocomplete]="autoCongregacion"
+                    class="form-control"
+                    (keypress)="buscarCongregacion('congregacionCercana')"
+                  />
+                  <mat-autocomplete #autoCongregacion="matAutocomplete">
+                    @for (congregacion of letrasFiltrarCongregacion | async; track congregacion) {
+                    <mat-option [value]="congregacion.congregacion">
+                      {{ congregacion.congregacion }}
+                    </mat-option>
+                    }
+                  </mat-autocomplete>
+                  @if ( solicitudForm.get('congregacionCercana')?.hasError('required') &&
+                  solicitudForm.get('congregacionCercana')?.touched ) {
+                  <small class="form-text text-danger"> La congregación del feligrés es requerida. </small>
+                  }
+                </div>
+                }
+                <hr />
+                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                  <label class="input-group obligatorio"
+                    >Especifique la razón por la cual desea ver los servicio por internet</label
+                  >
+
+                  <select
+                    class="form-select"
+                    formControlName="razonSolicitud_id"
+                    (change)="tipoDeSolicitud(txtRazonsolicitud.value)"
+                    #txtRazonsolicitud
+                  >
+                    <option value="" disabled>Seleccione una opción</option>
+                    @for (razonSolicitud of razonSolicitudes; track razonSolicitud) {
+                    <option [value]="razonSolicitud.id">
+                      {{ razonSolicitud.solicitud }}
+                    </option>
+                    }
+                  </select>
+                </div>
+
+                @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.OTRA) {
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">Específique la razón</label>
+                  <input type="tetx" class="form-control" formControlName="otraRazon" required />
+                </div>
+                }
+              </div>
+
+              @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.ESTUDIANTE) {
+              <div class="row">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">País donde está estudiando </label>
+                  <input
+                    type="text"
+                    placeholder="País donde está estudiando"
+                    formControlName="paisDondeEstudia"
+                    [matAutocomplete]="autoPaisDondeEstudia"
+                    class="form-control"
+                    (keypress)="buscarPais('paisDondeEstudia')"
+                  />
+                  <mat-autocomplete #autoPaisDondeEstudia="matAutocomplete">
+                    @for (item of letrasFiltrarNacionalidad | async; track item) {
+                    <mat-option [value]="item.nombre">
+                      {{ item.nombre }}
+                    </mat-option>
+                    }
+                  </mat-autocomplete>
+                  @if ( solicitudForm.get('paisDondeEstudia')?.hasError('required') &&
+                  solicitudForm.get('paisDondeEstudia')?.touched ) {
+                  <small class="form-text text-danger"> Por favor diligencie el país donde estudia el feligrés. </small>
+                  } @if ( solicitudForm.get('paisDondeEstudia')?.hasError('minlength') &&
+                  solicitudForm.get('paisDondeEstudia')?.touched ) {
+                  <small class="form-text text-danger">
+                    El país donde estudia el feligrés no tiene la longitud mínima permitida.
+                  </small>
+                  }
+                </div>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">Ciudad donde está estudiando</label>
+                  <input
+                    type="tetx"
+                    class="form-control"
+                    formControlName="ciudadDondeEstudia"
+                    placeholder="Ciudad donde está estudiando"
+                    required
+                  />
+                  @if ( solicitudForm.get('ciudadDondeEstudia')?.hasError('required') &&
+                  solicitudForm.get('ciudadDondeEstudia')?.touched ) {
+                  <small class="form-text text-danger">
+                    Por favor diligencie la ciudad donde estudia el feligrés.
+                  </small>
+                  } @if ( solicitudForm.get('ciudadDondeEstudia')?.hasError('minlength') &&
+                  solicitudForm.get('ciudadDondeEstudia')?.touched ) {
+                  <small class="form-text text-danger">
+                    La ciudad donde estudia el feligrés no tiene la longitud mínima permitida.
+                  </small>
+                  }
+                </div>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">Tipo de estudio</label>
+                  <select class="form-select" formControlName="tipoDeEstudio_id">
+                    <option value="" disabled>Seleccione una opción</option>
+                    @for (tipoEstudio of tipoEstudios; track tipoEstudio) {
+                    <option [value]="tipoEstudio.id">
+                      {{ tipoEstudio.estudio }}
+                    </option>
+                    }
+                  </select>
+                  @if ( solicitudForm.get('tipoDeEstudio_id')?.hasError('required') &&
+                  solicitudForm.get('tipoDeEstudio_id')?.touched ) {
+                  <small class="form-text text-danger"> Por favor seleccione el tipo de estudio. </small>
+                  }
+                </div>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">Duración del periodo de estudio</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    formControlName="duracionDelPeriodoDeEstudio"
+                    placeholder="Duración del periodo de estudio"
+                    required
+                  />
+                  @if ( solicitudForm.get('duracionDelPeriodoDeEstudio')?.hasError('required') &&
+                  solicitudForm.get('duracionDelPeriodoDeEstudio')?.touched ) {
+                  <small class="form-text text-danger"> Por favor diligencie la duración del estudio. </small>
+                  }
+                </div>
+              </div>
+              } @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.FUERZAS_ARMADAS) {
+              <div class="row">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">Base Militar</label>
+                  <input
+                    type="tetx"
+                    class="form-control"
+                    formControlName="baseMilitar"
+                    placeholder="Base Militar donde se encuentra"
+                    required
+                  />
+                  @if ( solicitudForm.get('baseMilitar')?.hasError('required') &&
+                  solicitudForm.get('baseMilitar')?.touched ) {
+                  <small class="form-text text-danger">
+                    Por favor diligencie la base militar donde se encuentra el feligrés.
+                  </small>
+                  } @if ( solicitudForm.get('baseMilitar')?.hasError('minlength') &&
+                  solicitudForm.get('baseMilitar')?.touched ) {
+                  <small class="form-text text-danger">
+                    La base militar del feligrés no tiene la longitud mínima permitida.
+                  </small>
+                  }
+                </div>
+              </div>
+              } @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.DISTANCIA_AL_TEMPLO_MAS_CERCANO) {
+              <div class="row">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group">¿A cuántas horas te encuentras del templo más cercano?</label>
+                  <small class="mensajeExplicativo">Rango de 1 a 24 Horas</small>
+                  <input type="number" formControlName="horaTemploMasCercano" min="01" max="24" required />
+                  @if ( solicitudForm.get('horaTemploMasCercano')?.hasError('required') &&
+                  solicitudForm.get('horaTemploMasCercano')?.touched ) {
+                  <small class="form-text text-danger"> Campo requerido. </small>
+                  }
+                </div>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">Opciones de Transportación</label>
+                  <select class="form-select" formControlName="opcionTransporte_id">
+                    <option value="" disabled>Opciónes de Transportación</option>
+                    @for (transporte of opcionTransporte; track transporte) {
+                    <option [value]="transporte.id">
+                      {{ transporte.tipoTransporte }}
+                    </option>
+                    }
+                  </select>
+                  @if ( solicitudForm.get('opcionTransporte_id')?.hasError('required') &&
+                  solicitudForm.get('opcionTransporte_id')?.touched ) {
+                  <small class="form-text text-danger"> Por favor seleccione una opción de transporte. </small>
+                  }
+                </div>
+                <small class="alert alert-primary text-start" role="alert"
+                  ><p>
+                    <b>Nota:</b> Para ser tenido en cuenta la persona debe vivir 2 horas o más de distancia del templo
+                    más cercano y dependerá de la zona geográfica en la que vivas, para efectos de aprobación y cada
+                    caso será evaluado de manera independiente por el obrero de cada congregación.
+                  </p>
+                  <p>
+                    (El obrero tiene el deber de agotar todas las alternativas posibles y viables para proveerle la
+                    posibilidad de que asista al servicio presencial, de agotar todos los recursos puede solicitar este
+                    apartado).
+                  </p></small
+                >
+              </div>
+              } @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.ENFERMEDAD) {
+              <div>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group obligatorio">¿Eres una persona encamada? </label>
+                  <div class="form-check checkbox-lg">
+                    <input
+                      [value]="true"
+                      class="form-check-input"
+                      type="radio"
+                      name="personaEncamada"
+                      formControlName="personaEncamada"
+                      (change)="agregarControlPersonaEncamada()"
                     />
                     <label class="form-check-label"> Sí </label>
                   </div>
                   <div class="form-check checkbox-lg">
                     <input
+                      [value]="false"
                       class="form-check-input"
                       type="radio"
-                      formControlName="estaCercaACongregacion"
-                      [value]="false"
-                      [checked]="true"
+                      name="personaEncamada"
+                      formControlName="personaEncamada"
+                      (change)="eliminarControlPersonaEncamada()"
+                    />
+                    <label class="form-check-label"> No </label>
+                  </div>
+                </div>
+                @if (!!esPersonaEncamada()) {
+                <div class="row">
+                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <label class="input-group obligatorio">Persona encargada</label>
+                    <input
+                      type="text"
+                      formControlName="personaEncargada"
+                      name="personaEncargada"
+                      class="form-control"
+                      placeholder="Nombre Completo de la persona encargada"
+                    />
+                    @if ( solicitudForm.get('personaEncargada')?.hasError('required') &&
+                    solicitudForm.get('personaEncargada')?.touched ) {
+                    <small class="form-text text-danger"> El nombre de la persona encargada es requerido. </small>
+                    } @if ( solicitudForm.get('personaEncargada')?.hasError('minlength') &&
+                    solicitudForm.get('personaEncargada')?.touched ) {
+                    <small class="form-text text-danger">
+                      El nombre de la persona encargada no tiene la longitud mínima permitida.
+                    </small>
+                    }
+                  </div>
+                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <label class="input-group obligatorio">Parentesco</label>
+                    <select class="form-select" formControlName="parentesco_id">
+                      <option value="" disabled>Seleccione un parentesco</option>
+                      @for (parentesco of parentescos; track parentesco) {
+                      <option [value]="parentesco.id">
+                        {{ parentesco.nombre }}
+                      </option>
+                      }
+                    </select>
+                    @if ( solicitudForm.get('parentesco_id')?.hasError('required') &&
+                    solicitudForm.get('parentesco_id')?.touched ) {
+                    <small class="form-text text-danger"> Por favor seleccione el parentesco </small>
+                    }
+                  </div>
+                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <label class="input-group obligatorio">Teléfono de la persona encargada</label>
+                    <ngx-intl-tel-input
+                      [cssClass]="'form-control'"
+                      [preferredCountries]="paisesPreferidos"
+                      [enableAutoCountrySelect]="true"
+                      [enablePlaceholder]="true"
+                      [searchCountryFlag]="true"
+                      [searchCountryField]="[buscarPaisTelefono.Iso2, buscarPaisTelefono.Name]"
+                      [selectFirstCountry]="false"
+                      [selectedCountryISO]="paisISO.PuertoRico"
+                      [maxLength]="15"
+                      [phoneValidation]="true"
+                      [separateDialCode]="codigoDeMarcadoSeparado"
+                      [numberFormat]="formatoNumeroTelefonico.International"
+                      name="celularPersonaEncargada"
+                      formControlName="celularPersonaEncargada"
+                    >
+                    </ngx-intl-tel-input>
+                    @if ( !solicitudForm.get('celularPersonaEncargada')?.hasError('required') &&
+                    solicitudForm.get('celularPersonaEncargada')?.invalid &&
+                    solicitudForm.get('celularPersonaEncargada')?.touched ) {
+                    <small class="form-text text-danger"> El número de celular no es válido </small>
+                    } @if (!solicitudForm.get('celularPersonaEncargada')?.invalid) {
+                    <small class="form-text text-primary">
+                      El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
+                    </small>
+                    } @if ( solicitudForm.get('celularPersonaEncargada')?.hasError('celularPersonaEncargada') &&
+                    solicitudForm.get('celularPersonaEncargada')?.touched ) {
+                    <small class="form-text text-danger"> El número de celular es requerido. </small>
+                    } @if ( solicitudForm.get('celularPersonaEncargada')?.hasError('minlength') &&
+                    solicitudForm.get('celularPersonaEncargada')?.touched ) {
+                    <small class="form-text text-danger">
+                      El número de celular no tiene la longitud mínima permitida.
+                    </small>
+                    }
+                  </div>
+                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <label class="input-group obligatorio">Tienes una enfermedad aguda o crónica discapacitante </label>
+                    <div class="form-check checkbox-lg">
+                      <input
+                        [value]="true"
+                        class="form-check-input"
+                        type="radio"
+                        name="enfermedadCronica"
+                        formControlName="enfermedadCronica"
+                      />
+                      <label class="form-check-label"> Sí </label>
+                    </div>
+                    <div class="form-check checkbox-lg">
+                      <input
+                        [value]="false"
+                        class="form-check-input"
+                        type="radio"
+                        name="enfermedadCronica"
+                        formControlName="enfermedadCronica"
                       />
                       <label class="form-check-label"> No </label>
                     </div>
                   </div>
+                </div>
+                }
+                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                  <label class="input-group"
+                    >Que enfermedad Padeces <small class="mensajeExplicativo">Opcional</small></label
+                  >
+                  <input
+                    type="text"
+                    formControlName="enfermedadQuePadece"
+                    name="enfermedadQuePadece"
+                    class="form-control"
+                    placeholder="Que enfermedad padeces"
+                  />
+                </div>
+                <div class="alert alert-primary text-start" role="alert">
+                  <b>Nota:</b> El obrero o encargado de llenar esta solicitud, reconoce que el solicitante padece de una
+                  condición crónica de enfermedad que no le permite allegarse al templo más cercano.
+                </div>
+              </div>
+              }
+              <hr />
 
-                  <div class="row">
-                    @if (!!estaCercaACongregacion()) {
-                      <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                        <label class="input-group obligatorio">Congregación cercana</label>
-                        <input
-                          type="text"
-                          placeholder="Buscar la congregación más cercana"
-                          formControlName="congregacionCercana"
-                          [matAutocomplete]="autoCongregacion"
-                          class="form-control"
-                          (keypress)="buscarCongregacion('congregacionCercana')"
-                          />
-                          <mat-autocomplete #autoCongregacion="matAutocomplete">
-                            @for (congregacion of letrasFiltrarCongregacion | async; track congregacion) {
-                              <mat-option
-                                [value]="congregacion.congregacion"
-                                >
-                                {{ congregacion.congregacion }}
-                              </mat-option>
-                            }
-                          </mat-autocomplete>
-                          @if (
-                            solicitudForm.get('congregacionCercana')?.hasError('required') &&
-                            solicitudForm.get('congregacionCercana')?.touched
-                            ) {
-                            <small
-                              class="form-text text-danger"
-                              >
-                              La congregación del feligrés es requerida.
-                            </small>
-                          }
-                        </div>
-                      }
-                      <hr />
-                      <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <label class="input-group obligatorio"
-                          >Especifique la razón por la cual desea ver los servicio por internet</label
-                          >
+              <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label class="input-group text-start"
+                  >Según la necesidad detectada ¿Qué periodo de tiempo sugieres que se le de acceso al
+                  solicitante?:</label
+                >
 
-                          <select
-                            class="form-select"
-                            formControlName="razonSolicitud_id"
-                            (change)="tipoDeSolicitud(txtRazonsolicitud.value)"
-                            #txtRazonsolicitud
-                            >
-                            <option value="" disabled>Seleccione una opción</option>
-                            @for (razonSolicitud of razonSolicitudes; track razonSolicitud) {
-                              <option [value]="razonSolicitud.id">
-                                {{ razonSolicitud.solicitud }}
-                              </option>
-                            }
-                          </select>
-                        </div>
+                <div class="col-sm-12">
+                  @for (tiempo of tiempoSugerido; track tiempo) {
+                  <div class="form-check checkbox-lg me-4 col-sm-12">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      [id]="tiempo.value"
+                      [value]="tiempo.value"
+                      formControlName="tiempoSugerido"
+                    />
+                    <label class="form-check-label" [for]="tiempo.value">{{ tiempo.label }}</label>
+                  </div>
+                  }
+                </div>
+              </div>
 
-                        @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.OTRA) {
-                          <div
-                            class="form-group col-sm-12 col-md-6 col-lg-6"
-                            >
-                            <label class="input-group">Específique la razón</label>
-                            <input type="tetx" class="form-control" formControlName="otraRazon" required />
-                          </div>
-                        }
-                      </div>
+              <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                <label class="input-group obligatorio">Observaciones:</label>
+                <small class="info input-group">
+                  Por favor, proporciona una breve descripción del motivo por el cual solicitas el acceso.
+                </small>
+                <textarea
+                  name="comentario"
+                  formControlName="observaciones"
+                  name="observaciones"
+                  class="form-control"
+                  rows="10"
+                  cols="40"
+                ></textarea>
 
-                      @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.ESTUDIANTE) {
-                        <div class="row">
-                          <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                            <label class="input-group obligatorio">País donde está estudiando </label>
-                            <input
-                              type="text"
-                              placeholder="País donde está estudiando"
-                              formControlName="paisDondeEstudia"
-                              [matAutocomplete]="autoPaisDondeEstudia"
-                              class="form-control"
-                              (keypress)="buscarPais('paisDondeEstudia')"
-                              />
-                              <mat-autocomplete #autoPaisDondeEstudia="matAutocomplete">
-                                @for (item of letrasFiltrarNacionalidad | async; track item) {
-                                  <mat-option [value]="item.nombre">
-                                    {{ item.nombre }}
-                                  </mat-option>
-                                }
-                              </mat-autocomplete>
-                              @if (
-                                solicitudForm.get('paisDondeEstudia')?.hasError('required') &&
-                                solicitudForm.get('paisDondeEstudia')?.touched
-                                ) {
-                                <small
-                                  class="form-text text-danger"
-                                  >
-                                  Por favor diligencie el país donde estudia el feligrés.
-                                </small>
-                              }
-                              @if (
-                                solicitudForm.get('paisDondeEstudia')?.hasError('minlength') &&
-                                solicitudForm.get('paisDondeEstudia')?.touched
-                                ) {
-                                <small
-                                  class="form-text text-danger"
-                                  >
-                                  El país donde estudia el feligrés no tiene la longitud mínima permitida.
-                                </small>
-                              }
-                            </div>
-                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                              <label class="input-group">Ciudad donde está estudiando</label>
-                              <input
-                                type="tetx"
-                                class="form-control"
-                                formControlName="ciudadDondeEstudia"
-                                placeholder="Ciudad donde está estudiando"
-                                required
-                                />
-                                @if (
-                                  solicitudForm.get('ciudadDondeEstudia')?.hasError('required') &&
-                                  solicitudForm.get('ciudadDondeEstudia')?.touched
-                                  ) {
-                                  <small
-                                    class="form-text text-danger"
-                                    >
-                                    Por favor diligencie la ciudad donde estudia el feligrés.
-                                  </small>
-                                }
-                                @if (
-                                  solicitudForm.get('ciudadDondeEstudia')?.hasError('minlength') &&
-                                  solicitudForm.get('ciudadDondeEstudia')?.touched
-                                  ) {
-                                  <small
-                                    class="form-text text-danger"
-                                    >
-                                    La ciudad donde estudia el feligrés no tiene la longitud mínima permitida.
-                                  </small>
-                                }
-                              </div>
-                              <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                <label class="input-group obligatorio">Tipo de estudio</label>
-                                <select class="form-select" formControlName="tipoDeEstudio_id">
-                                  <option value="" disabled>Seleccione una opción</option>
-                                  @for (tipoEstudio of tipoEstudios; track tipoEstudio) {
-                                    <option [value]="tipoEstudio.id">
-                                      {{ tipoEstudio.estudio }}
-                                    </option>
-                                  }
-                                </select>
-                                @if (
-                                  solicitudForm.get('tipoDeEstudio_id')?.hasError('required') &&
-                                  solicitudForm.get('tipoDeEstudio_id')?.touched
-                                  ) {
-                                  <small
-                                    class="form-text text-danger"
-                                    >
-                                    Por favor seleccione el tipo de estudio.
-                                  </small>
-                                }
-                              </div>
-                              <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                <label class="input-group">Duración del periodo de estudio</label>
-                                <input
-                                  type="date"
-                                  class="form-control"
-                                  formControlName="duracionDelPeriodoDeEstudio"
-                                  placeholder="Duración del periodo de estudio"
-                                  required
-                                  />
-                                  @if (
-                                    solicitudForm.get('duracionDelPeriodoDeEstudio')?.hasError('required') &&
-                                    solicitudForm.get('duracionDelPeriodoDeEstudio')?.touched
-                                    ) {
-                                    <small
-                                      class="form-text text-danger"
-                                      >
-                                      Por favor diligencie la duración del estudio.
-                                    </small>
-                                  }
-                                </div>
-                              </div>
-                            }
+                @if ( solicitudForm.get('observaciones')?.hasError('required') &&
+                solicitudForm.get('observaciones')?.touched ) {
+                <small class="form-text text-danger"> Por favor diligencie las observaciones. </small>
+                }
+              </div>
 
-                            @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.FUERZAS_ARMADAS) {
-                              <div class="row">
-                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                  <label class="input-group">Base Militar</label>
-                                  <input
-                                    type="tetx"
-                                    class="form-control"
-                                    formControlName="baseMilitar"
-                                    placeholder="Base Militar donde se encuentra"
-                                    required
-                                    />
-                                    @if (
-                                      solicitudForm.get('baseMilitar')?.hasError('required') &&
-                                      solicitudForm.get('baseMilitar')?.touched
-                                      ) {
-                                      <small
-                                        class="form-text text-danger"
-                                        >
-                                        Por favor diligencie la base militar donde se encuentra el feligrés.
-                                      </small>
-                                    }
-                                    @if (
-                                      solicitudForm.get('baseMilitar')?.hasError('minlength') &&
-                                      solicitudForm.get('baseMilitar')?.touched
-                                      ) {
-                                      <small
-                                        class="form-text text-danger"
-                                        >
-                                        La base militar del feligrés no tiene la longitud mínima permitida.
-                                      </small>
-                                    }
-                                  </div>
-                                </div>
-                              }
+              <hr />
 
-                              @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.DISTANCIA_AL_TEMPLO_MAS_CERCANO) {
-                                <div class="row">
-                                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <label class="input-group">¿A cuántas horas te encuentras del templo más cercano?</label>
-                                    <small class="mensajeExplicativo">Rango de 1 a 24 Horas</small>
-                                    <input type="number" formControlName="horaTemploMasCercano" min="01" max="24" required />
-                                    @if (
-                                      solicitudForm.get('horaTemploMasCercano')?.hasError('required') &&
-                                      solicitudForm.get('horaTemploMasCercano')?.touched
-                                      ) {
-                                      <small
-                                        class="form-text text-danger"
-                                        >
-                                        Campo requerido.
-                                      </small>
-                                    }
-                                  </div>
-                                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <label class="input-group obligatorio">Opciones de Transportación</label>
-                                    <select class="form-select" formControlName="opcionTransporte_id">
-                                      <option value="" disabled>Opciónes de Transportación</option>
-                                      @for (transporte of opcionTransporte; track transporte) {
-                                        <option [value]="transporte.id">
-                                          {{ transporte.tipoTransporte }}
-                                        </option>
-                                      }
-                                    </select>
-                                    @if (
-                                      solicitudForm.get('opcionTransporte_id')?.hasError('required') &&
-                                      solicitudForm.get('opcionTransporte_id')?.touched
-                                      ) {
-                                      <small
-                                        class="form-text text-danger"
-                                        >
-                                        Por favor seleccione una opción de transporte.
-                                      </small>
-                                    }
-                                  </div>
-                                  <small class="alert alert-primary text-start" role="alert"
-                                    ><p>
-                                    <b>Nota:</b> Para ser tenido en cuenta la persona debe vivir 2 horas o más de distancia del templo
-                                    más cercano y dependerá de la zona geográfica en la que vivas, para efectos de aprobación y cada
-                                    caso será evaluado de manera independiente por el obrero de cada congregación.
-                                  </p>
-                                  <p>
-                                    (El obrero tiene el deber de agotar todas las alternativas posibles y viables para proveerle la
-                                    posibilidad de que asista al servicio presencial, de agotar todos los recursos puede solicitar este
-                                    apartado).
-                                  </p></small
-                                  >
-                                </div>
-                              }
+              <div class="form-check form-check-inline px-5">
+                <input class="form-check-input" type="checkbox" name="terminos" formControlName="terminos" />
+                <label class="form-check-label ms-3">
+                  El obrero o encargado de llenar esta solicitud reconoce y da fe de que el solicitante tiene una razón
+                  válida y real para presentarla y que los datos suministrados son correctos.</label
+                >
+              </div>
+            </div>
 
-                              @if (txtRazonsolicitud.value == RAZON_SOLICITUD_ID.ENFERMEDAD) {
-                                <div>
-                                  <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <label class="input-group obligatorio">¿Eres una persona encamada? </label>
-                                    <div class="form-check checkbox-lg">
-                                      <input
-                                        [value]="true"
-                                        class="form-check-input"
-                                        type="radio"
-                                        name="personaEncamada"
-                                        formControlName="personaEncamada"
-                                        (change)="agregarControlPersonaEncamada()"
-                                        />
-                                        <label class="form-check-label"> Sí </label>
-                                      </div>
-                                      <div class="form-check checkbox-lg">
-                                        <input
-                                          [value]="false"
-                                          class="form-check-input"
-                                          type="radio"
-                                          name="personaEncamada"
-                                          formControlName="personaEncamada"
-                                          (change)="eliminarControlPersonaEncamada()"
-                                          />
-                                          <label class="form-check-label"> No </label>
-                                        </div>
-                                      </div>
-                                      @if (!!esPersonaEncamada()) {
-                                        <div class="row">
-                                          <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                            <label class="input-group obligatorio">Persona encargada</label>
-                                            <input
-                                              type="text"
-                                              formControlName="personaEncargada"
-                                              name="personaEncargada"
-                                              class="form-control"
-                                              placeholder="Nombre Completo de la persona encargada"
-                                              />
-                                              @if (
-                                                solicitudForm.get('personaEncargada')?.hasError('required') &&
-                                                solicitudForm.get('personaEncargada')?.touched
-                                                ) {
-                                                <small
-                                                  class="form-text text-danger"
-                                                  >
-                                                  El nombre de la persona encargada es requerido.
-                                                </small>
-                                              }
-                                              @if (
-                                                solicitudForm.get('personaEncargada')?.hasError('minlength') &&
-                                                solicitudForm.get('personaEncargada')?.touched
-                                                ) {
-                                                <small
-                                                  class="form-text text-danger"
-                                                  >
-                                                  El nombre de la persona encargada no tiene la longitud mínima permitida.
-                                                </small>
-                                              }
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                              <label class="input-group obligatorio">Parentesco</label>
-                                              <select class="form-select" formControlName="parentesco_id">
-                                                <option value="" disabled>Seleccione un parentesco</option>
-                                                @for (parentesco of parentescos; track parentesco) {
-                                                  <option [value]="parentesco.id">
-                                                    {{ parentesco.nombre }}
-                                                  </option>
-                                                }
-                                              </select>
-                                              @if (
-                                                solicitudForm.get('parentesco_id')?.hasError('required') &&
-                                                solicitudForm.get('parentesco_id')?.touched
-                                                ) {
-                                                <small
-                                                  class="form-text text-danger"
-                                                  >
-                                                  Por favor seleccione el parentesco
-                                                </small>
-                                              }
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                              <label class="input-group obligatorio">Teléfono de la persona encargada</label>
-                                              <ngx-intl-tel-input
-                                                [cssClass]="'form-control'"
-                                                [preferredCountries]="paisesPreferidos"
-                                                [enableAutoCountrySelect]="true"
-                                                [enablePlaceholder]="true"
-                                                [searchCountryFlag]="true"
-                                                [searchCountryField]="[buscarPaisTelefono.Iso2, buscarPaisTelefono.Name]"
-                                                [selectFirstCountry]="false"
-                                                [selectedCountryISO]="paisISO.PuertoRico"
-                                                [maxLength]="15"
-                                                [phoneValidation]="true"
-                                                [separateDialCode]="codigoDeMarcadoSeparado"
-                                                [numberFormat]="formatoNumeroTelefonico.International"
-                                                name="celularPersonaEncargada"
-                                                formControlName="celularPersonaEncargada"
-                                                >
-                                              </ngx-intl-tel-input>
-                                              @if (
-                                                !solicitudForm.get('celularPersonaEncargada')?.hasError('required') &&
-                                                solicitudForm.get('celularPersonaEncargada')?.invalid &&
-                                                solicitudForm.get('celularPersonaEncargada')?.touched
-                                                ) {
-                                                <small
-                                                  class="form-text text-danger"
-                                                  >
-                                                  El número de celular no es válido
-                                                </small>
-                                              }
-                                              @if (!solicitudForm.get('celularPersonaEncargada')?.invalid) {
-                                                <small
-                                                  class="form-text text-primary"
-                                                  >
-                                                  El número de celular es válido <i class="fa-solid fa-thumbs-up"></i>
-                                                </small>
-                                              }
-                                              @if (
-                                                solicitudForm.get('celularPersonaEncargada')?.hasError('celularPersonaEncargada') &&
-                                                solicitudForm.get('celularPersonaEncargada')?.touched
-                                                ) {
-                                                <small
-                                                  class="form-text text-danger"
-                                                  >
-                                                  El número de celular es requerido.
-                                                </small>
-                                              }
-                                              @if (
-                                                solicitudForm.get('celularPersonaEncargada')?.hasError('minlength') &&
-                                                solicitudForm.get('celularPersonaEncargada')?.touched
-                                                ) {
-                                                <small
-                                                  class="form-text text-danger"
-                                                  >
-                                                  El número de celular no tiene la longitud mínima permitida.
-                                                </small>
-                                              }
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                              <label class="input-group obligatorio">Tienes una enfermedad aguda o crónica discapacitante </label>
-                                              <div class="form-check checkbox-lg">
-                                                <input
-                                                  [value]="true"
-                                                  class="form-check-input"
-                                                  type="radio"
-                                                  name="enfermedadCronica"
-                                                  formControlName="enfermedadCronica"
-                                                  />
-                                                  <label class="form-check-label"> Sí </label>
-                                                </div>
-                                                <div class="form-check checkbox-lg">
-                                                  <input
-                                                    [value]="false"
-                                                    class="form-check-input"
-                                                    type="radio"
-                                                    name="enfermedadCronica"
-                                                    formControlName="enfermedadCronica"
-                                                    />
-                                                    <label class="form-check-label"> No </label>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            }
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                              <label class="input-group"
-                                                >Que enfermedad Padeces <small class="mensajeExplicativo">Opcional</small></label
-                                                >
-                                                <input
-                                                  type="text"
-                                                  formControlName="enfermedadQuePadece"
-                                                  name="enfermedadQuePadece"
-                                                  class="form-control"
-                                                  placeholder="Que enfermedad padeces"
-                                                  />
-                                                </div>
-                                                <div class="alert alert-primary text-start" role="alert">
-                                                  <b>Nota:</b> El obrero o encargado de llenar esta solicitud, reconoce que el solicitante padece de una
-                                                  condición crónica de enfermedad que no le permite allegarse al templo más cercano.
-                                                </div>
-                                              </div>
-                                            }
-                                            <hr />
-
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                              <label class="input-group text-start"
-                                                >Según la necesidad detectada ¿Qué periodo de tiempo sugieres que se le de acceso al
-                                                solicitante?:</label
-                                                >
-
-                                                <div class="col-sm-12">
-                                                  @for (tiempo of tiempoSugerido; track tiempo) {
-                                                    <div class="form-check checkbox-lg me-4 col-sm-12">
-                                                      <input
-                                                        class="form-check-input"
-                                                        type="radio"
-                                                        [id]="tiempo.value"
-                                                        [value]="tiempo.value"
-                                                        formControlName="tiempoSugerido"
-                                                        />
-                                                        <label class="form-check-label" [for]="tiempo.value">{{ tiempo.label }}</label>
-                                                      </div>
-                                                    }
-                                                  </div>
-                                                </div>
-
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                  <label class="input-group">Observaciones:</label>
-                                                  <small class="info input-group">
-                                                    Por favor, proporciona una breve descripción del motivo por el cual solicitas el acceso.
-                                                  </small>
-                                                  <textarea
-                                                    name="comentario"
-                                                    formControlName="observaciones"
-                                                    name="observaciones"
-                                                    class="form-control"
-                                                    rows="10"
-                                                    cols="40"
-                                                  ></textarea>
-                                                </div>
-
-                                                <hr />
-
-                                                <div class="form-check form-check-inline px-5">
-                                                  <input class="form-check-input" type="checkbox" name="terminos" formControlName="terminos" />
-                                                  <label class="form-check-label ms-3">
-                                                    El obrero o encargado de llenar esta solicitud reconoce y da fe de que el solicitante tiene una razón
-                                                    válida y real para presentarla y que los datos suministrados son correctos.</label
-                                                    >
-                                                  </div>
-                                                </div>
-
-                                                <div class="float-start">
-                                                  <div class="obligatorio text-start mt-2">Campos Obligatorios</div>
-                                                  <div class="mt-2"><b>Solicitud creada por:</b> {{ nombreUsuario }}</div>
-                                                </div>
-                                                <!-- disabled="solicitudForm.valid" -->
-                                                <button type="submit" class="submit btn btn-primary mt-4 float-end">
-                                                  <i class="fa fa-save"></i> Crear Solicitud
-                                                </button>
-                                              </form>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+            <div class="float-start">
+              <div class="obligatorio text-start mt-2">Campos Obligatorios</div>
+              <div class="mt-2"><b>Solicitud creada por:</b> {{ nombreUsuario }}</div>
+            </div>
+            <!-- disabled="solicitudForm.valid" -->
+            <button type="submit" class="submit btn btn-primary mt-4 float-end">
+              <i class="fa fa-save"></i> Crear Solicitud
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -42,6 +42,7 @@ export interface SolicitudInterface {
   tipoEstudio: TipoEstudioInterface | null;
   opcionTransporte: OpcionTransporteInterface | null;
   usuarioQueRegistra: UsuarioQueRegistraInterface;
+  usuarioQueAprobo: UsuarioQueAproboInterface;
   estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
   createdAt: Date;
 }
@@ -59,6 +60,14 @@ export interface TipoEstudioInterface {
 }
 
 export interface UsuarioQueRegistraInterface {
+  id: number;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+}
+
+export interface UsuarioQueAproboInterface {
   id: number;
   primerNombre: string;
   segundoNombre: string;
