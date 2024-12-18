@@ -141,7 +141,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       congregacionCercana: ['', [Validators.minLength(3)]],
       razonSolicitud_id: ['', [Validators.required]],
       otraRazon: ['', []],
-      observaciones: ['', [Validators.minLength(3)]],
+      observaciones: ['', [Validators.required, Validators.minLength(3)]],
       tiempoSugerido: ['', []],
       terminos: ['', [Validators.required, Validators.requiredTrue]],
     });
@@ -341,6 +341,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         celularPersonaEncargada: formSolicitud.celularPersonaEncargada
           ? formSolicitud.celularPersonaEncargada.internationalNumber
           : '',
+        usuarioQueAprobo_id: this.idUsuario,
       };
 
       this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(
