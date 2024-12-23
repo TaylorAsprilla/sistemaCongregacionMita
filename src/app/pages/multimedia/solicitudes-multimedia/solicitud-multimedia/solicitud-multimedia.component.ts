@@ -117,6 +117,8 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudMultimediaServiceSubscription = this.solicitudMultimediaService.getSolicitudes().subscribe({
       next: (data) => {
         this.solicitudes = this.mapSolicitudes(data);
+
+        console.log('Solicitudes:', this.solicitudes);
         this.filteredSolicitudes = [...this.solicitudes]; // Usar una copia para evitar modificaciones accidentales
         this.transformarFiltros();
         this.cargando = false;
@@ -317,7 +319,7 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           <div class="form-group">
             <label class="input-group obligatorio">Tiempo de aprobación:</label>
             <select id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" required>
-              <option value="" disabled selected>Seleccionar tiempo de aprobación</option>
+              <option value=null disabled selected>Seleccionar tiempo de aprobación</option>
               ${configuracion.tiempoSugerido
                 .map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`)
                 .join('')}
@@ -357,12 +359,20 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
               this.cargarTodasLasSolicitudes();
             },
             (error) => {
-              let errorMessage = 'Error al crear el acceso.';
+              let errores = error.error.errors;
+              let listaErrores: string[] = [];
+
+              if (!!errores) {
+                Object.entries(errores).forEach(([key, value]) => {
+                  if (typeof value === 'object' && value !== null && 'msg' in value) {
+                    listaErrores.push('° ' + (value as { msg: string })['msg'] + '<br>');
+                  }
+                });
+              }
 
               Swal.fire({
-                title: 'Error',
-                icon: 'info',
-                html: `${errorMessage} ${error.error.msg}`,
+                icon: 'error',
+                html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
               });
             }
           );

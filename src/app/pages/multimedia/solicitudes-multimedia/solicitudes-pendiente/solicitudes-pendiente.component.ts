@@ -328,7 +328,7 @@ export class SolicitudesPendienteComponent {
            <div class="form-group">
              <label class="input-group obligatorio">Tiempo de aprobación:</label>
              <select id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" required>
-               <option value="" disabled selected>Seleccionar tiempo de aprobación</option>
+               <option value=null disabled selected>Seleccionar tiempo de aprobación</option>
                ${configuracion.tiempoSugerido
                  .map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`)
                  .join('')}
@@ -368,12 +368,20 @@ export class SolicitudesPendienteComponent {
               this.cargarTodasLasSolicitudesPendientes();
             },
             (error) => {
-              let errorMessage = 'Error al crear el acceso.';
+              let errores = error.error.errors;
+              let listaErrores: string[] = [];
+
+              if (!!errores) {
+                Object.entries(errores).forEach(([key, value]) => {
+                  if (typeof value === 'object' && value !== null && 'msg' in value) {
+                    listaErrores.push('° ' + (value as { msg: string })['msg'] + '<br>');
+                  }
+                });
+              }
 
               Swal.fire({
-                title: 'Error',
-                icon: 'info',
-                html: `${errorMessage} ${error.error.msg}`,
+                icon: 'error',
+                html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
               });
             }
           );
