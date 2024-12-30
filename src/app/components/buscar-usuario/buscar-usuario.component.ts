@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -8,28 +8,18 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
 
 @Component({
-    selector: 'app-buscar-usuario',
-    templateUrl: './buscar-usuario.component.html',
-    styleUrls: ['./buscar-usuario.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    CalcularEdadPipe
-],
+  selector: 'app-buscar-usuario',
+  templateUrl: './buscar-usuario.component.html',
+  styleUrls: ['./buscar-usuario.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, CalcularEdadPipe],
 })
 export class BuscarUsuarioComponent implements OnInit, OnDestroy {
+  @Input() crearAccesoBoton: boolean = false;
   @Output() onUsuarioEncontrado: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
   @Output() onActualizarUsuario: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
   @Output() onCrearAcceso: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
   @Output() onScrollToSection: EventEmitter<any> = new EventEmitter<any>();
-
-  @HostListener('keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  }
 
   numeroMitaForm: FormGroup;
   usuario: UsuarioModel;
@@ -55,8 +45,8 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy {
 
   buscarFeligres(id: string) {
     this.asignarPermisos = false;
-    this.usuarioSubscription = this.usuarioService.getUsuario(Number(id)).subscribe(
-      (respuesta: any) => {
+    this.usuarioSubscription = this.usuarioService.getUsuario(Number(id)).subscribe({
+      next: (respuesta: any) => {
         if (!!respuesta.usuario) {
           this.usuario = respuesta.usuario;
 
@@ -80,7 +70,7 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy {
           });
         }
       },
-      (error) => {
+      error: (error) => {
         let errores = error.error.msg;
 
         Swal.fire({
@@ -88,8 +78,8 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy {
           icon: 'error',
           html: errores,
         });
-      }
-    );
+      },
+    });
   }
 
   actualizarUsuario() {

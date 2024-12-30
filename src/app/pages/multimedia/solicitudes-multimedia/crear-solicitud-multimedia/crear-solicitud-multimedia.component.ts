@@ -22,6 +22,7 @@ import { BuscarUsuarioComponent } from '../../../../components/buscar-usuario/bu
 import { AsyncPipe } from '@angular/common';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/core';
+import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
 
 @Component({
   selector: 'app-crear-solicitud-multimedia',
@@ -312,7 +313,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         usuario_id: this.usuario.id,
         razonSolicitud_id: formSolicitud.razonSolicitud_id,
         otraRazon: formSolicitud.otraRazon,
-        estado: true,
+        estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.PENDIENTE,
         usuarioQueRegistra_id: this.idUsuario,
         duracionDelPeriodoDeEstudio: formSolicitud.duracionDelPeriodoDeEstudio
           ? formSolicitud.duracionDelPeriodoDeEstudio
