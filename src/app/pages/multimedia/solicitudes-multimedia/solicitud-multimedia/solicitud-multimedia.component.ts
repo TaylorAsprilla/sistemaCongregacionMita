@@ -118,7 +118,6 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
       next: (data) => {
         this.solicitudes = this.mapSolicitudes(data);
 
-        console.log('Solicitudes:', this.solicitudes);
         this.filteredSolicitudes = [...this.solicitudes]; // Usar una copia para evitar modificaciones accidentales
         this.transformarFiltros();
         this.cargando = false;

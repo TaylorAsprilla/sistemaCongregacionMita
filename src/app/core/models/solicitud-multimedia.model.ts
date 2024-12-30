@@ -1,3 +1,4 @@
+import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from '../enums/solicitudMultimendia.enum';
 import {
   OpcionTransporteInterface,
   ParentescoInterface,
@@ -106,7 +107,7 @@ export interface SolicitudMultimediaInterface {
 }
 
 export interface crearSolicitudMultimediaInterface {
-  estado: boolean;
+  estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
   razonSolicitud_id: number;
   usuarioQueRegistra_id: number;
   tiempoDistancia: string;
