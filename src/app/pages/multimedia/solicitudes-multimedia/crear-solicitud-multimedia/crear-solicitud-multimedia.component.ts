@@ -342,7 +342,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         celularPersonaEncargada: formSolicitud.celularPersonaEncargada
           ? formSolicitud.celularPersonaEncargada.internationalNumber
           : '',
-        usuarioQueAprobo_id: this.idUsuario,
       };
 
       this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(

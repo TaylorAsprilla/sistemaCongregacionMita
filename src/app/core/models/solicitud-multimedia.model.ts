@@ -138,7 +138,7 @@ export interface crearSolicitudMultimediaInterface {
   terminos: boolean;
   createdAt?: Date;
   updatedAt?: Date;
-  usuarioQueAprobo_id: number | null;
+  usuarioQueAprobo_id?: number | null;
 }
 
 export interface denegarSolicitudMultimediaInterface {
