@@ -17,46 +17,30 @@
       }
     </div>
 
-    <div class="text-center mb-4 mt-2">
-      @if (!(isMobile | async)?.matches) {
-        <a class="btn btn-primary mx-1" (click)="crearUsuario()">
-          <i class="fas fa-user"></i> Feligrés Nuevo
-        </a>
-      }
-
-      @if ((isMobile | async)?.matches) {
-        <div class="btnMobile">
-          <a class="btn btn-primary mx-1" (click)="crearUsuario()">
-            <i class="fas fa-user btnMobile"></i>
-          </a>
-        </div>
-      }
+    <div class="d-flex align-items-center">
+      <a class="btn btn-primary mx-1" (click)="crearUsuario()">
+        <i class="fas fa-user"></i> Feligrés Nuevo
+      </a>
 
       @if (!(isMobile | async)?.matches && isFiltrosVisibles) {
-        <a
-          class="btn btn-secondary mx-1"
-          (click)="esconderFiltros()"
-          ><i class="fa fa-filter"></i> Ocultar Filtros
+        <a class="btn btn-secondary mx-1" (click)="esconderFiltros()">
+          <i class="fa fa-filter"></i> Ocultar Filtros
         </a>
       }
 
       @if (!(isMobile | async)?.matches && !isFiltrosVisibles) {
-        <a
-          class="btn btn-outline-secondary mx-1"
-          (click)="esconderFiltros()"
-          ><i class="fa fa-filter"></i> Ver Filtros
+        <a class="btn btn-outline-secondary mx-1" (click)="esconderFiltros()">
+          <i class="fa fa-filter"></i> Ver Filtros
         </a>
       }
 
-      <app-exportar-excel [usuarios]="usuarios" [nombreArchivo]="nombreArchivo"></app-exportar-excel>
-
-      <div class="btnHide">
-        @if ((isMobile | async)?.matches) {
-          <a class="btn btn-secondary mx-1" (click)="esconderFiltros()">
-            <i class="fa fa-filter" aria-hidden="true"></i>
-          </a>
-        }
-      </div>
+      <button
+        class="btn btn-outline-primary mx-1"
+        (click)="exportarDatosFiltrados()"
+        title="Exportar a Excel"
+      >
+        <i class="fa fa-download" aria-hidden="true"></i>
+      </button>
     </div>
   </div>
 
