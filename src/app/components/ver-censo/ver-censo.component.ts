@@ -79,6 +79,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   originalCongre: string = '';
   filtrarCampoTexto: string = '';
 
+  edadMinima: number | null = null;
+  edadMaxima: number | null = null;
+
   paisSubscription: Subscription;
   campoSubscription: Subscription;
   usuarioSubscription: Subscription;
@@ -121,6 +124,8 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['usuarios']?.currentValue) {
       this.usuariosFiltrados = this.usuarios;
+
+      console.log('Usuarios', this.usuariosFiltrados);
       this.nombrePais = this.usuarios[0]?.usuarioCongregacionPais?.[0]?.pais ?? '';
       this.nombreCongregacion = this.usuarios[0]?.usuarioCongregacionCongregacion?.[0]?.congregacion ?? '';
       this.nombreCampo = this.usuarios[0]?.usuarioCongregacionCampo?.[0]?.campo ?? '';
@@ -331,11 +336,33 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.pagina = 1;
   }
 
+  calcularEdad(fechaNacimiento: Date): number {
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
+  }
+
+  filtrarPorEdad() {
+    this.usuariosFiltrados = this.usuarios.filter((usuario) => {
+      const edad = this.calcularEdad(usuario.fechaNacimiento);
+      return (
+        (this.edadMinima === null || edad >= this.edadMinima) && (this.edadMaxima === null || edad <= this.edadMaxima)
+      );
+    });
+  }
+
   resetFiltros() {
     this.originalPais = '';
     this.originalCongre = '';
     this.filtrarCampoTexto = '';
     this.filterText = '';
+    this.edadMinima = null;
+    this.edadMaxima = null;
     this.usuariosFiltrados = this.usuarios;
   }
 
