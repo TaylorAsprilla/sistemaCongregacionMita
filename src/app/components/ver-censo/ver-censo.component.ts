@@ -340,12 +340,22 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   filtrarPorEdad() {
+    if (this.edadMinima === null && this.edadMaxima === null) {
+      this.usuariosFiltrados = [...this.usuarios]; // Mantén todos los usuarios si no hay filtros
+      return;
+    }
+
+    // Aplicar los filtros mínimos y máximos
     this.usuariosFiltrados = this.usuarios.filter((usuario) => {
       const edad = this.calcularEdad(usuario.fechaNacimiento);
-      return (
-        (this.edadMinima === null || edad >= this.edadMinima) && (this.edadMaxima === null || edad <= this.edadMaxima)
-      );
+      const cumpleMinima = this.edadMinima === null || edad >= this.edadMinima;
+      const cumpleMaxima = this.edadMaxima === null || edad <= this.edadMaxima;
+      return cumpleMinima && cumpleMaxima;
     });
+
+    // Actualizar el número total de usuarios filtrados
+    this.totalUsuarios = this.usuariosFiltrados.length;
+    this.pagina = 1; // Reinicia la página a la primera
   }
 
   resetFiltros() {
