@@ -15,7 +15,6 @@ import { PaisService } from 'src/app/services/pais/pais.service';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { NgClass, AsyncPipe } from '@angular/common';
-import { ExportarExcelComponent } from '../exportar-excel/exportar-excel.component';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
@@ -28,7 +27,7 @@ import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-e
   templateUrl: './ver-censo.component.html',
   styleUrls: ['./ver-censo.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgClass, NgxPaginationModule, AsyncPipe, TelegramPipe, WhatsappPipe, CalcularEdadPipe],
+  imports: [FormsModule, NgClass, NgxPaginationModule, TelegramPipe, WhatsappPipe, CalcularEdadPipe],
 })
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
@@ -340,32 +339,56 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   filtrarPorEdad() {
-    if (this.edadMinima === null && this.edadMaxima === null) {
-      this.usuariosFiltrados = [...this.usuarios];
+    // Si ambos campos están vacíos, reiniciar la lista filtrada
+    if (
+      (this.edadMinima === null || this.edadMinima === undefined) &&
+      (this.edadMaxima === null || this.edadMaxima === undefined)
+    ) {
+      this.usuariosFiltrados = [...this.usuarios]; // Restaurar lista original
+      this.totalUsuarios = this.usuariosFiltrados.length; // Actualizar total
+      this.pagina = 1; // Reiniciar la página a la primera
       return;
     }
 
-    // Aplicar los filtros mínimos y máximos
-    this.usuariosFiltrados = this.usuarios.filter((usuario) => {
-      const edad = this.calcularEdad(usuario.fechaNacimiento);
-      const cumpleMinima = this.edadMinima === null || edad >= this.edadMinima;
-      const cumpleMaxima = this.edadMaxima === null || edad <= this.edadMaxima;
-      return cumpleMinima && cumpleMaxima;
-    });
+    // Si ambos valores están definidos, realizar el filtrado
+    if (
+      this.edadMinima !== null &&
+      this.edadMinima !== undefined &&
+      this.edadMaxima !== null &&
+      this.edadMaxima !== undefined
+    ) {
+      this.usuariosFiltrados = this.usuarios.filter((usuario) => {
+        const edad = this.calcularEdad(usuario.fechaNacimiento);
+        return edad >= this.edadMinima && edad <= this.edadMaxima;
+      });
 
-    // Actualizar el número total de usuarios filtrados
-    this.totalUsuarios = this.usuariosFiltrados.length;
-    this.pagina = 1; // Reinicia la página a la primera
+      // Actualizar total y reiniciar la página
+      this.totalUsuarios = this.usuariosFiltrados.length;
+      this.pagina = 1;
+    }
   }
 
   resetFiltros() {
+    if (!this.usuarios || this.usuarios.length === 0) {
+      return; // Si no hay usuarios, no realiza ninguna operación
+    }
+
+    // Reinicia los filtros a sus valores iniciales
     this.originalPais = '';
     this.originalCongre = '';
+    this.filtrarPaisTexto = '';
+    this.filtrarCongreTexto = '';
     this.filtrarCampoTexto = '';
     this.filterText = '';
     this.edadMinima = null;
     this.edadMaxima = null;
-    this.usuariosFiltrados = this.usuarios;
+
+    // Restaura la lista completa sin cálculos adicionales
+    this.usuariosFiltrados = [...this.usuarios];
+
+    // Actualiza los contadores y reinicia la paginación
+    this.totalUsuarios = this.usuariosFiltrados.length;
+    this.pagina = 1;
   }
 
   esconderFiltros() {
