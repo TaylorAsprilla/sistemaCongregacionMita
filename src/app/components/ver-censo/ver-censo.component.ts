@@ -341,7 +341,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   filtrarPorEdad() {
     if (this.edadMinima === null && this.edadMaxima === null) {
-      this.usuariosFiltrados = [...this.usuarios]; // Mantén todos los usuarios si no hay filtros
+      this.usuariosFiltrados = [...this.usuarios];
       return;
     }
 
