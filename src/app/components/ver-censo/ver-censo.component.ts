@@ -21,22 +21,14 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from '../../pipes/whatsapp/whatsapp.pipe';
 import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
+import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
 
 @Component({
   selector: 'app-ver-censo',
   templateUrl: './ver-censo.component.html',
   styleUrls: ['./ver-censo.component.scss'],
   standalone: true,
-  imports: [
-    ExportarExcelComponent,
-    FormsModule,
-    NgClass,
-    NgxPaginationModule,
-    AsyncPipe,
-    TelegramPipe,
-    WhatsappPipe,
-    CalcularEdadPipe,
-  ],
+  imports: [FormsModule, NgClass, NgxPaginationModule, AsyncPipe, TelegramPipe, WhatsappPipe, CalcularEdadPipe],
 })
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
@@ -79,6 +71,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   originalCongre: string = '';
   filtrarCampoTexto: string = '';
 
+  edadMinima: number | null = null;
+  edadMaxima: number | null = null;
+
   paisSubscription: Subscription;
   campoSubscription: Subscription;
   usuarioSubscription: Subscription;
@@ -108,7 +103,8 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     private paisService: PaisService,
     private congregacionService: CongregacionService,
     private campoService: CampoService,
-    private breakpointService: BreakpointObserver
+    private breakpointService: BreakpointObserver,
+    private exportarExcelService: ExportarExcelService
   ) {}
 
   ngOnInit(): void {
@@ -121,6 +117,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['usuarios']?.currentValue) {
       this.usuariosFiltrados = this.usuarios;
+
       this.nombrePais = this.usuarios[0]?.usuarioCongregacionPais?.[0]?.pais ?? '';
       this.nombreCongregacion = this.usuarios[0]?.usuarioCongregacionCongregacion?.[0]?.congregacion ?? '';
       this.nombreCampo = this.usuarios[0]?.usuarioCongregacionCampo?.[0]?.campo ?? '';
@@ -331,11 +328,33 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.pagina = 1;
   }
 
+  calcularEdad(fechaNacimiento: Date): number {
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
+  }
+
+  filtrarPorEdad() {
+    this.usuariosFiltrados = this.usuarios.filter((usuario) => {
+      const edad = this.calcularEdad(usuario.fechaNacimiento);
+      return (
+        (this.edadMinima === null || edad >= this.edadMinima) && (this.edadMaxima === null || edad <= this.edadMaxima)
+      );
+    });
+  }
+
   resetFiltros() {
     this.originalPais = '';
     this.originalCongre = '';
     this.filtrarCampoTexto = '';
     this.filterText = '';
+    this.edadMinima = null;
+    this.edadMaxima = null;
     this.usuariosFiltrados = this.usuarios;
   }
 
@@ -353,6 +372,24 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     const nombresVoluntariados = voluntarios.map((voluntario) => voluntario.nombreVoluntariado);
     const nombresOrdenados = nombresVoluntariados.sort((a, b) => a.localeCompare(b));
     return nombresOrdenados.join(', ');
+  }
+
+  exportarDatosFiltrados(): void {
+    const datosParaExportar = this.usuariosFiltrados.map((usuario) => ({
+      ID: usuario.id,
+      Nombre: `${usuario.primerNombre} ${usuario.segundoNombre || ''} ${usuario.primerApellido} ${
+        usuario.segundoApellido || ''
+      }`,
+      Apodo: usuario.apodo || 'N/A',
+      Edad: this.calcularEdad(usuario.fechaNacimiento),
+      Email: usuario.email || 'N/A',
+      Celular: usuario.numeroCelular || 'N/A',
+      País: usuario.pais,
+      Congregación: usuario.usuarioCongregacionCongregacion?.[0]?.congregacion || 'N/A',
+      Campo: usuario.usuarioCongregacionCampo?.[0]?.campo || 'N/A',
+    }));
+
+    this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo);
   }
 
   masInformacion(idusuario: number) {
