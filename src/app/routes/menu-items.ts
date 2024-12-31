@@ -36,6 +36,7 @@ export enum RUTAS {
   USUARIOS_SUPERVISOR = 'usuarios-supervisor',
   RECUPERAR_CUENTA = '/recuperar-cuenta',
   REGISTRAR_USUARIO = 'registrar-usuario',
+  REPORTE_GENERAL = 'reporte-general',
   RESET_PASSWORD = '/reset-password',
   RESET_PASSWORD_USUARIO = 'reset-password-usuario',
   RUTA_NUEVA = 'ruta-nueva',
@@ -133,6 +134,15 @@ export const ROUTES: RouteInfo[] = [
       {
         path: RUTAS.USUARIOS,
         title: 'Feligreses General',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+        submenu: [],
+      },
+      {
+        path: RUTAS.REPORTE_GENERAL,
+        title: 'Reporte General',
         icon: '',
         class: '',
         extralink: false,

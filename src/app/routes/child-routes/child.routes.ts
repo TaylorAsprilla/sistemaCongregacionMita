@@ -152,6 +152,15 @@ export const childRoutes: Routes = [
     loadComponent: () =>
       import('src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component'),
   },
+
+  {
+    loadComponent: () => import('src/app/pages/administracion/reportes/reporte-general/reporte-general.component'),
+    canActivate: [RolesGuard],
+    path: RUTAS.REPORTE_GENERAL,
+    data: {
+      role: [ROLES.ADMINISTRADOR],
+    },
+  },
   {
     path: RUTAS.MINISTERIOS,
     component: MinisteriosComponent,
