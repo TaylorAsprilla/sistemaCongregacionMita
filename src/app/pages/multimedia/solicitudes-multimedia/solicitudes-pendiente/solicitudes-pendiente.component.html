@@ -29,6 +29,11 @@
       </div>
     </div>
   </div>
+
+  <div class="alert alert-info" role="alert">
+    <b>Nota:</b> No se puede crear el acceso hasta que el feligrés verifique su correo electrónico.
+  </div>
+
   <!-- /.card-header -->
   <div class="card-body">
     @if (mostrarFiltros) {
@@ -150,17 +155,15 @@
               <td>{{ solicitud.campo }}</td>
               <td>
                 <ng-container [ngSwitch]="solicitud.estadoUltimaSolicitud">
-                  <span *ngSwitchCase="estadosSolicitud.DENEGADA" class="badge badge-danger"> 🔴 Denegada </span>
-
-                  <span *ngSwitchCase="estadosSolicitud.APROBADA" class="badge badge-success"> 🟢 Aprobada </span>
-
-                  <span *ngSwitchCase="estadosSolicitud.CADUCADA" class="badge badge-secondary"> ⚫ Caducada </span>
-
-                  <span *ngSwitchCase="estadosSolicitud.PENDIENTE" class="badge badge-warning"> 🟡 Pendiente </span>
-
-                  <span *ngSwitchCase="estadosSolicitud.ELIMINADA" class="badge badge-info"> 🔵 Eliminada </span>
-
-                  <span *ngSwitchDefault class="badge badge-light text-muted"> ❓ Estado desconocido </span>
+                  <span *ngSwitchCase="estadosSolicitud.DENEGADA" class="badge bg-danger text-white">🔴 Denegada</span>
+                  <span *ngSwitchCase="estadosSolicitud.APROBADA" class="badge bg-success text-white">🟢 Aprobada</span>
+                  <span *ngSwitchCase="estadosSolicitud.CADUCADA" class="badge bg-dark text-white">⚫ Caducada</span>
+                  <span *ngSwitchCase="estadosSolicitud.PENDIENTE" class="badge bg-warning">🟡 Pendiente</span>
+                  <span *ngSwitchCase="estadosSolicitud.ELIMINADA" class="badge bg-info text-white">🔵 Eliminada</span>
+                  <span *ngSwitchCase="estadosSolicitud.EMAIL_NO_VERIFICADO" class="badge bg-info text-white"
+                    >🔵 Email No Verificado</span
+                  >
+                  <span *ngSwitchDefault class="badge bg-light text-muted">❓ Estado desconocido</span>
                 </ng-container>
               </td>
 
