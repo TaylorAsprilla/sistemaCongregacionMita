@@ -70,11 +70,13 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
     [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.ELIMINADA]: 'badge-secondary', // Color gris
     [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.PENDIENTE]: 'badge-warning', // Color amarillo
     [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.CADUCADA]: 'badge-dark',
+    [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.EMAIL_NO_VERIFICADO]: 'badge-info',
   };
 
   get estadosSolicitud() {
     return ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
   }
+
   // Subscription
   public solicitudAccesoSubscription: Subscription;
   public solicitudMultimediaServiceSubscription: Subscription;
