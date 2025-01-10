@@ -37,6 +37,7 @@ export interface SolicitudInterface {
   tiempoAprobacion: string | null;
   congregacionCercana: string;
   observaciones: string;
+  motivoDeNegacion: string | null;
   razonSolicitud: RazonSolicitudInterface;
   parentesco: ParentescoInterface | null;
   tipoEstudio: TipoEstudioInterface | null;
