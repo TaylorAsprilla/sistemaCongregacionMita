@@ -575,7 +575,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.APROBADOR_MULTIMEDIA],
+        role: [ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
         submenu: [],
       },
       {
