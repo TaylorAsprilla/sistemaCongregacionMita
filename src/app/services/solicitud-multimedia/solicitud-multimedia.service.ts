@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia';
+import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
 import {
   SolicitudMultimediaInterface,
   crearSolicitudMultimediaInterface,

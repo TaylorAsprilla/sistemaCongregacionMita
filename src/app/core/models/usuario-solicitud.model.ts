@@ -1,4 +1,4 @@
-import { SolicitudInterface, UsuarioCongregacionInterface } from '../interfaces/solicitud-multimedia';
+import { SolicitudInterface, UsuarioCongregacionInterface } from '../interfaces/solicitud-multimedia.interface';
 import { TipoMiembroModel } from './tipo.miembro.model';
 
 export class UsuarioSolicitudMultimediaModel {

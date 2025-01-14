@@ -177,7 +177,7 @@
                 >
                   <i class="fas fa-info-circle"></i>
                 </button>
-                <div *appPermisos="['ROLE.APROBADOR_MULTIMEDIA']">
+                <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA]">
                   @if (solicitud.estadoUltimaSolicitud !== estadosSolicitud.EMAIL_NO_VERIFICADO) {
                   <button
                     title="Crear Acceso"
