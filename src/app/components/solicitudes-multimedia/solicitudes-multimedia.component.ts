@@ -81,8 +81,6 @@ export class SolicitudesMultimediaComponent {
     return ROLES;
   }
 
-  solicitudMultimediaServiceSubscription: Subscription;
-
   constructor(
     private router: Router,
     private accesoMultimediaService: AccesoMultimediaService,
@@ -100,14 +98,14 @@ export class SolicitudesMultimediaComponent {
       filtroGeneral: ['', Validators.required],
     });
 
+    console.log('solicitudes', this.solicitudes);
+
     this.filterForm.valueChanges.subscribe(() => {
       this.applyFilter(); // Aplica el filtro cuando cambie cualquier campo
     });
   }
 
-  ngOnDestroy(): void {
-    // this.solicitudAccesoSubscription?.unsubscribe();
-  }
+  ngOnDestroy(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['solicitudes']?.currentValue) {
