@@ -264,6 +264,11 @@
                                 solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoApellido
                               }}
                             </p>
+                            } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion) {
+                            <p>
+                              <i class="fas fa-square-check icon-black"></i> <strong>Tiempo de Aprobación:</strong>
+                              {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion | date }}
+                            </p>
                             } }
                           </div>
                         </div>
