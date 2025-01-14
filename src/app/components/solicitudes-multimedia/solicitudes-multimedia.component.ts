@@ -3,9 +3,9 @@ import { ChangeDetectorRef, Component, Input, SimpleChanges } from '@angular/cor
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
-import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia';
+import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
-import { RUTAS } from 'src/app/routes/menu-items';
+import { ROLES, RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { configuracion } from 'src/environments/config/configuration';
 import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
@@ -17,11 +17,20 @@ import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
 import { Subscription } from 'rxjs';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
+import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
 
 @Component({
   selector: 'app-solicitudes-multimedia',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxPaginationModule, TelegramPipe, WhatsappPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxPaginationModule,
+    TelegramPipe,
+    WhatsappPipe,
+    PermisosDirective,
+  ],
   templateUrl: './solicitudes-multimedia.component.html',
   styleUrl: './solicitudes-multimedia.component.scss',
 })
@@ -66,6 +75,10 @@ export class SolicitudesMultimediaComponent {
 
   get estadosSolicitud() {
     return ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
+  }
+
+  get ROLES() {
+    return ROLES;
   }
 
   solicitudMultimediaServiceSubscription: Subscription;

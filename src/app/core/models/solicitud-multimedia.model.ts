@@ -5,7 +5,7 @@ import {
   RazonSolicitudInterface,
   TipoEstudioInterface,
   UsuarioQueRegistraInterface,
-} from '../interfaces/solicitud-multimedia';
+} from '../interfaces/solicitud-multimedia.interface';
 import { RazonSolicitudModel } from './razon-solicitud.model';
 import { TipoMiembroModel } from './tipo.miembro.model';
 import { UsuarioModel } from './usuario.model';
