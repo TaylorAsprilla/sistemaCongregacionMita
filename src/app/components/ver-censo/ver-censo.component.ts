@@ -621,7 +621,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   transferirUsuario(id: number) {
     Swal.fire({
-      title: 'Transferir feligreses',
+      title: 'Transferir Feligrés',
       html: `
             <div class="form-group mb-3">
                 <label for="swalPais" class="form-label">Congregación País</label>
