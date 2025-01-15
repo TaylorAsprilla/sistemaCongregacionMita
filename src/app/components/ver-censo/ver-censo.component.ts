@@ -10,11 +10,10 @@ import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
-import { delay } from 'rxjs/operators';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
-import { NgClass, AsyncPipe } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
@@ -91,7 +90,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filterText,
       this.filtrarPaisTexto,
       this.filtrarCongreTexto,
-      this.filtrarCampoTexto
+      this.filtrarCampoTexto,
+      this.edadMaxima,
+      this.edadMinima
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -138,7 +139,6 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.cargando = true;
     this.congregacionSubscription = this.congregacionService
       .getCongregaciones()
-      .pipe(delay(100))
       .subscribe((congregaciones: CongregacionModel[]) => {
         this.congregaciones = congregaciones;
         this.congregacionesFiltradas = congregaciones;
@@ -148,25 +148,19 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   cargarPaises() {
     this.cargando = true;
-    this.paisSubscription = this.paisService
-      .getPaises()
-      .pipe(delay(100))
-      .subscribe((paises: CongregacionPaisModel[]) => {
-        this.paises = paises;
-        this.cargando = false;
-      });
+    this.paisSubscription = this.paisService.getPaises().subscribe((paises: CongregacionPaisModel[]) => {
+      this.paises = paises;
+      this.cargando = false;
+    });
   }
 
   cargarCampos() {
     this.cargando = true;
-    this.campoSubscription = this.campoService
-      .getCampos()
-      .pipe(delay(100))
-      .subscribe((campos: CampoModel[]) => {
-        this.campos = campos;
-        this.camposFiltrados = campos;
-        this.cargando = false;
-      });
+    this.campoSubscription = this.campoService.getCampos().subscribe((campos: CampoModel[]) => {
+      this.campos = campos;
+      this.camposFiltrados = campos;
+      this.cargando = false;
+    });
   }
 
   crearUsuario() {
@@ -197,15 +191,17 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     filterTerm: string,
     pais: string,
     congregacion: string,
-    campo: string
+    campo: string,
+    edadMaxima?: number,
+    edadMinima?: number
   ): UsuariosPorCongregacionInterface[] {
     const lowerFilterTerm = filterTerm.toLocaleLowerCase();
-    const lowerCountry = pais.toLocaleLowerCase();
-    const lowerCongre = congregacion.toLocaleLowerCase();
-    const lowerCamp = campo.toLocaleLowerCase();
+    const lowerPais = pais.toLocaleLowerCase();
+    const lowerCongregacion = congregacion.toLocaleLowerCase();
+    const lowerCampo = campo.toLocaleLowerCase();
 
     // Si no hay usuarios y los filtros están vacíos, devolvemos todos los usuarios
-    if (this.usuarios.length === 0 && (lowerFilterTerm === '' || lowerCountry === '' || lowerCongre === '')) {
+    if (this.usuarios.length === 0 && (lowerFilterTerm === '' || lowerPais === '' || lowerCongregacion === '')) {
       return this.usuarios;
     } else {
       return this.usuarios.filter((usuario: UsuariosPorCongregacionInterface) => {
@@ -226,6 +222,10 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         const email = getSafeString(usuario.email);
         const numeroCelular = usuario.numeroCelular || '';
 
+        const edadUsuario = this.calcularEdad(usuario.fechaNacimiento);
+        const cumpleEdadMinima = edadMinima == null || edadUsuario >= edadMinima;
+        const cumpleEdadMaxima = edadMaxima == null || edadUsuario <= edadMaxima;
+
         // Obtener los valores relacionados con la congregación, país y campo de forma segura
         const congregacion = usuario.usuarioCongregacionCongregacion?.[0]?.congregacion
           ? usuario.usuarioCongregacionCongregacion[0].congregacion.toLocaleLowerCase()
@@ -243,9 +243,11 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
             email.includes(lowerFilterTerm) ||
             numeroCelular.includes(lowerFilterTerm) ||
             usuario.id.toString().includes(lowerFilterTerm)) &&
-          congregacion.includes(lowerCongre) &&
-          pais.includes(lowerCountry) &&
-          campo.includes(lowerCamp)
+          congregacion.includes(lowerCongregacion) &&
+          pais.includes(lowerPais) &&
+          campo.includes(lowerCampo) &&
+          cumpleEdadMinima &&
+          cumpleEdadMaxima
         );
       });
     }
@@ -288,7 +290,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filterText,
       this.filtrarPaisTexto,
       this.filtrarCongreTexto,
-      this.filtrarCampoTexto
+      this.filtrarCampoTexto,
+      this.edadMaxima,
+      this.edadMinima
     );
 
     this.totalUsuarios = this.usuariosFiltrados.length;
@@ -309,7 +313,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filterText,
       this.filtrarPaisTexto,
       this.filtrarCongreTexto,
-      this.filtrarCampoTexto
+      this.filtrarCampoTexto,
+      this.edadMaxima,
+      this.edadMinima
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -321,7 +327,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filterText,
       this.filtrarPaisTexto,
       this.filtrarCongreTexto,
-      this.filtrarCampoTexto
+      this.filtrarCampoTexto,
+      this.edadMaxima,
+      this.edadMinima
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -357,10 +365,14 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.edadMaxima !== null &&
       this.edadMaxima !== undefined
     ) {
-      this.usuariosFiltrados = this.usuarios.filter((usuario) => {
-        const edad = this.calcularEdad(usuario.fechaNacimiento);
-        return edad >= this.edadMinima && edad <= this.edadMaxima;
-      });
+      this.usuariosFiltrados = this.filterUsuarios(
+        this.filterText,
+        this.filtrarPaisTexto,
+        this.filtrarCongreTexto,
+        this.filtrarCampoTexto,
+        this.edadMaxima,
+        this.edadMinima
+      );
 
       // Actualizar total y reiniciar la página
       this.totalUsuarios = this.usuariosFiltrados.length;
