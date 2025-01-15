@@ -15,6 +15,7 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { environment } from 'environment';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { configuracion } from 'src/environments/config/configuration';
+import { CongregacionTransferirFeligresInterface } from 'src/app/core/interfaces/congregacion.interface';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -387,6 +388,10 @@ export class UsuarioService {
 
   actualizarUsuario(usuario: RegisterFormInterface, id: number) {
     return this.httpClient.put(`${base_url}/usuarios/${id}`, usuario, this.headers);
+  }
+
+  transferirUsuario(transferencia: CongregacionTransferirFeligresInterface, id: number) {
+    return this.httpClient.put(`${base_url}/usuarios/transferir/${id}`, transferencia, this.headers);
   }
 
   actualizarPermisos(id: number, usuarioPermiso: number[]) {

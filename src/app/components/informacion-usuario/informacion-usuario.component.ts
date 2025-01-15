@@ -1,5 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CountryISO, PhoneNumberFormat, SearchCountryField, NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -22,20 +30,15 @@ import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-corre
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
-import { CONGREGACION_PAIS, ID_PAIS } from 'src/app/core/enums/congregacionPais.enum';
+import { CONGREGACION_ID, ID_PAIS } from 'src/app/core/enums/congregacionPais.enum';
 import { NgClass } from '@angular/common';
 
 @Component({
-    selector: 'app-informacion-usuario',
-    templateUrl: './informacion-usuario.component.html',
-    styleUrls: ['./informacion-usuario.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgClass,
-    NgxIntlTelInputModule
-],
+  selector: 'app-informacion-usuario',
+  templateUrl: './informacion-usuario.component.html',
+  styleUrls: ['./informacion-usuario.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, NgxIntlTelInputModule],
 })
 export class InformacionUsuarioComponent implements OnInit {
   registroUnoForm!: FormGroup;
@@ -160,7 +163,7 @@ export class InformacionUsuarioComponent implements OnInit {
   }
 
   get CONGREGACION_PAIS() {
-    return CONGREGACION_PAIS;
+    return CONGREGACION_ID;
   }
 
   constructor(
