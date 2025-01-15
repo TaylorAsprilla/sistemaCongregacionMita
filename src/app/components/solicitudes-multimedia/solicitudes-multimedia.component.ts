@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
-import { Subscription } from 'rxjs';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
 
@@ -97,8 +96,6 @@ export class SolicitudesMultimediaComponent {
       estados: ['', Validators.required],
       filtroGeneral: ['', Validators.required],
     });
-
-    console.log('solicitudes', this.solicitudes);
 
     this.filterForm.valueChanges.subscribe(() => {
       this.applyFilter(); // Aplica el filtro cuando cambie cualquier campo

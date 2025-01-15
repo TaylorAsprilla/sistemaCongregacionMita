@@ -313,7 +313,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         usuario_id: this.usuario.id,
         razonSolicitud_id: formSolicitud.razonSolicitud_id,
         otraRazon: formSolicitud.otraRazon,
-        estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.PENDIENTE,
+        estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.EMAIL_NO_VERIFICADO,
         usuarioQueRegistra_id: this.idUsuario,
         duracionDelPeriodoDeEstudio: formSolicitud.duracionDelPeriodoDeEstudio
           ? formSolicitud.duracionDelPeriodoDeEstudio
