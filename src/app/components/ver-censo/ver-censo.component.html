@@ -122,7 +122,7 @@
                   id="edadMinima"
                   class="form-control"
                   [(ngModel)]="edadMinima"
-                  (input)="filtrarPorEdad()"
+                  (ngModelChange)="filtrarPorEdad()"
                   placeholder="Edad mínima"
                 />
               </div>
@@ -135,7 +135,7 @@
                   id="edadMaxima"
                   class="form-control"
                   [(ngModel)]="edadMaxima"
-                  (input)="filtrarPorEdad()"
+                  (ngModelChange)="filtrarPorEdad()"
                   placeholder="Edad máxima"
                 />
               </div>
@@ -302,6 +302,7 @@
                   data-original-title="traslado"
                   class="btn btn-sm bg-success me-1 mb-1"
                   title="Transladar Feligrés"
+                  (click)="transferirUsuario(usuario.id)"
                   >
                   <i class="fa fa-right-left"></i>
                 </a>

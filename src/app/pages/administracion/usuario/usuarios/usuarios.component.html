@@ -1,5 +1,5 @@
 @if (!!cargando) {
-  <app-cargando-informacion></app-cargando-informacion>
+<app-cargando-informacion></app-cargando-informacion>
 }
 
 <app-ver-censo
@@ -13,4 +13,7 @@
   (onActualizaUsuario)="actualizarUsuario($event)"
   (onBorrarUsuario)="borrarUsuario($event)"
   (onEnviarEmail)="enviarEmail($event)"
-></app-ver-censo>
+  (onTransferirUsuario)="realizarTransferencia($event)"
+>
+  ></app-ver-censo
+>

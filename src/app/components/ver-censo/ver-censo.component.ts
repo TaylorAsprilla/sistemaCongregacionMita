@@ -1,3 +1,4 @@
+import { CONGREGACION_ID } from './../../core/enums/congregacionPais.enum';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { UsuarioInterface, UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
@@ -10,11 +11,10 @@ import { MinisterioModel } from 'src/app/core/models/ministerio.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
-import { delay } from 'rxjs/operators';
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
-import { NgClass, AsyncPipe } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
@@ -49,6 +49,12 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Output() onBorrarUsuario: EventEmitter<UsuariosPorCongregacionInterface> =
     new EventEmitter<UsuariosPorCongregacionInterface>();
   @Output() onEnviarEmail: EventEmitter<number> = new EventEmitter<number>();
+  @Output() onTransferirUsuario = new EventEmitter<{
+    pais: number;
+    congregacion: number;
+    campo: number;
+    id: number;
+  }>();
 
   camposFiltrados: CampoModel[] = [];
 
@@ -91,7 +97,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filterText,
       this.filtrarPaisTexto,
       this.filtrarCongreTexto,
-      this.filtrarCampoTexto
+      this.filtrarCampoTexto,
+      this.edadMaxima,
+      this.edadMinima
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -138,7 +146,6 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.cargando = true;
     this.congregacionSubscription = this.congregacionService
       .getCongregaciones()
-      .pipe(delay(100))
       .subscribe((congregaciones: CongregacionModel[]) => {
         this.congregaciones = congregaciones;
         this.congregacionesFiltradas = congregaciones;
@@ -148,25 +155,19 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   cargarPaises() {
     this.cargando = true;
-    this.paisSubscription = this.paisService
-      .getPaises()
-      .pipe(delay(100))
-      .subscribe((paises: CongregacionPaisModel[]) => {
-        this.paises = paises;
-        this.cargando = false;
-      });
+    this.paisSubscription = this.paisService.getPaises().subscribe((paises: CongregacionPaisModel[]) => {
+      this.paises = paises;
+      this.cargando = false;
+    });
   }
 
   cargarCampos() {
     this.cargando = true;
-    this.campoSubscription = this.campoService
-      .getCampos()
-      .pipe(delay(100))
-      .subscribe((campos: CampoModel[]) => {
-        this.campos = campos;
-        this.camposFiltrados = campos;
-        this.cargando = false;
-      });
+    this.campoSubscription = this.campoService.getCampos().subscribe((campos: CampoModel[]) => {
+      this.campos = campos;
+      this.camposFiltrados = campos;
+      this.cargando = false;
+    });
   }
 
   crearUsuario() {
@@ -197,15 +198,17 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     filterTerm: string,
     pais: string,
     congregacion: string,
-    campo: string
+    campo: string,
+    edadMaxima?: number,
+    edadMinima?: number
   ): UsuariosPorCongregacionInterface[] {
     const lowerFilterTerm = filterTerm.toLocaleLowerCase();
-    const lowerCountry = pais.toLocaleLowerCase();
-    const lowerCongre = congregacion.toLocaleLowerCase();
-    const lowerCamp = campo.toLocaleLowerCase();
+    const lowerPais = pais.toLocaleLowerCase();
+    const lowerCongregacion = congregacion.toLocaleLowerCase();
+    const lowerCampo = campo.toLocaleLowerCase();
 
     // Si no hay usuarios y los filtros están vacíos, devolvemos todos los usuarios
-    if (this.usuarios.length === 0 && (lowerFilterTerm === '' || lowerCountry === '' || lowerCongre === '')) {
+    if (this.usuarios.length === 0 && (lowerFilterTerm === '' || lowerPais === '' || lowerCongregacion === '')) {
       return this.usuarios;
     } else {
       return this.usuarios.filter((usuario: UsuariosPorCongregacionInterface) => {
@@ -226,6 +229,10 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         const email = getSafeString(usuario.email);
         const numeroCelular = usuario.numeroCelular || '';
 
+        const edadUsuario = this.calcularEdad(usuario.fechaNacimiento);
+        const cumpleEdadMinima = edadMinima == null || edadUsuario >= edadMinima;
+        const cumpleEdadMaxima = edadMaxima == null || edadUsuario <= edadMaxima;
+
         // Obtener los valores relacionados con la congregación, país y campo de forma segura
         const congregacion = usuario.usuarioCongregacionCongregacion?.[0]?.congregacion
           ? usuario.usuarioCongregacionCongregacion[0].congregacion.toLocaleLowerCase()
@@ -243,9 +250,11 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
             email.includes(lowerFilterTerm) ||
             numeroCelular.includes(lowerFilterTerm) ||
             usuario.id.toString().includes(lowerFilterTerm)) &&
-          congregacion.includes(lowerCongre) &&
-          pais.includes(lowerCountry) &&
-          campo.includes(lowerCamp)
+          congregacion.includes(lowerCongregacion) &&
+          pais.includes(lowerPais) &&
+          campo.includes(lowerCampo) &&
+          cumpleEdadMinima &&
+          cumpleEdadMaxima
         );
       });
     }
@@ -288,7 +297,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filterText,
       this.filtrarPaisTexto,
       this.filtrarCongreTexto,
-      this.filtrarCampoTexto
+      this.filtrarCampoTexto,
+      this.edadMaxima,
+      this.edadMinima
     );
 
     this.totalUsuarios = this.usuariosFiltrados.length;
@@ -309,7 +320,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filterText,
       this.filtrarPaisTexto,
       this.filtrarCongreTexto,
-      this.filtrarCampoTexto
+      this.filtrarCampoTexto,
+      this.edadMaxima,
+      this.edadMinima
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -321,7 +334,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filterText,
       this.filtrarPaisTexto,
       this.filtrarCongreTexto,
-      this.filtrarCampoTexto
+      this.filtrarCampoTexto,
+      this.edadMaxima,
+      this.edadMinima
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -357,10 +372,14 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.edadMaxima !== null &&
       this.edadMaxima !== undefined
     ) {
-      this.usuariosFiltrados = this.usuarios.filter((usuario) => {
-        const edad = this.calcularEdad(usuario.fechaNacimiento);
-        return edad >= this.edadMinima && edad <= this.edadMaxima;
-      });
+      this.usuariosFiltrados = this.filterUsuarios(
+        this.filterText,
+        this.filtrarPaisTexto,
+        this.filtrarCongreTexto,
+        this.filtrarCampoTexto,
+        this.edadMaxima,
+        this.edadMinima
+      );
 
       // Actualizar total y reiniciar la página
       this.totalUsuarios = this.usuariosFiltrados.length;
@@ -597,6 +616,85 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         showConfirmButton: true,
         confirmButtonText: 'Cerrar',
       });
+    });
+  }
+
+  transferirUsuario(id: number) {
+    Swal.fire({
+      title: 'Transferir feligreses',
+      html: `
+            <div class="form-group mb-3">
+                <label for="swalPais" class="form-label">Congregación País</label>
+                <select id="swalPais" class="form-select">
+                    <option value="">Seleccione País</option>
+                    <option value=${CONGREGACION_ID.SIN_CONGREGACION_PAIS}>Sin Congregación País</option>
+                    ${this.paises.map((pais) => `<option value="${pais.id}">${pais.pais}</option>`).join('')}
+                </select>
+            </div>
+            <div class="form-group  mb-3">
+                <label for="swalCongregacion" class="form-label">Congregación Ciudad</label>
+                <select id="swalCongregacion" class="form-select">
+                    <option value="">Seleccione Congregación</option>
+                    <option value=${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}>Sin Congregación Ciudad</option>'
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label for="swalCampo" class="form-label">Congregación Campo</label>
+                <select id="swalCampo" class="form-select">
+                    <option value="">Seleccione Campo</option>
+                    <option value=${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}>Sin Campo</option>
+                </select>
+            </div>
+        `,
+      showCancelButton: true,
+      confirmButtonText: 'Actualizar',
+      didOpen: () => {
+        const paisSelect = document.getElementById('swalPais') as HTMLSelectElement;
+        const congregacionSelect = document.getElementById('swalCongregacion') as HTMLSelectElement;
+        const campoSelect = document.getElementById('swalCampo') as HTMLSelectElement;
+
+        // Evento para filtrar congregaciones al cambiar de país
+        paisSelect.addEventListener('change', () => {
+          const paisId = paisSelect.value;
+          const congregacionesFiltradas = this.congregaciones.filter((c) => c.pais_id === Number(paisId));
+          congregacionSelect.innerHTML = '<option value="">Seleccione Congregación</option>';
+          congregacionSelect.innerHTML =
+            '     <option value=${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}>Sin Congregación Ciudad</option>';
+          congregacionesFiltradas.forEach((c) => {
+            congregacionSelect.innerHTML += `<option value="${c.id}">${c.congregacion}</option>`;
+          });
+          campoSelect.innerHTML = '<option value="">Seleccione Campo</option>';
+
+          campoSelect.innerHTML = '<option value=${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}>Sin Campo</option>';
+          // Limpiar campos al cambiar país
+        });
+
+        // Evento para filtrar campos al cambiar de congregación
+        congregacionSelect.addEventListener('change', () => {
+          const congregacionId = congregacionSelect.value;
+          const camposFiltrados = this.campos.filter((c) => c.congregacion_id == Number(congregacionId));
+          campoSelect.innerHTML = '<option value="">Seleccione Campo</option>';
+          camposFiltrados.forEach((c) => {
+            campoSelect.innerHTML += `<option value="${c.id}">${c.campo}</option>`;
+          });
+        });
+      },
+      preConfirm: () => {
+        const pais = (document.getElementById('swalPais') as HTMLSelectElement).value;
+        const congregacion = (document.getElementById('swalCongregacion') as HTMLSelectElement).value;
+        const campo = (document.getElementById('swalCampo') as HTMLSelectElement).value;
+
+        if (!pais || !congregacion || !campo) {
+          Swal.showValidationMessage('Por favor complete todos los campos');
+        }
+
+        return { pais, congregacion, campo };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.onTransferirUsuario.emit({ ...result.value, id });
+        Swal.fire('Procesando...', 'Enviando la información al servidor.', 'info');
+      }
     });
   }
 }

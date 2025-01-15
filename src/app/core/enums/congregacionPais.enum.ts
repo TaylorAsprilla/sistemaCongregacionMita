@@ -1,5 +1,7 @@
-export enum CONGREGACION_PAIS {
+export enum CONGREGACION_ID {
   SIN_CONGREGACION_PAIS = '42',
+  SIN_CONGREGACION_CIUDAD = '1',
+  SIN_CONGREGACION_CAMPO = '1',
 }
 
 export enum ID_PAIS {

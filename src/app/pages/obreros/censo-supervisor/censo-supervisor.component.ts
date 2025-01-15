@@ -120,6 +120,31 @@ export default class CensoSupervisorComponent implements OnInit {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${id}`);
   }
 
+  realizarTransferencia(data: { pais: number; congregacion: number; campo: number; id: number }) {
+    this.usuarioService
+      .transferirUsuario(
+        {
+          pais_id: data.pais,
+          congregacion_id: data.congregacion,
+          campo_id: data.campo,
+        },
+        data.id
+      )
+      .subscribe({
+        next: () => {
+          Swal.fire('Éxito', 'La transferencia se realizó con éxito', 'success');
+          this.cargarUsuarios();
+        },
+        error: (error) => {
+          const errores = error.error.errors;
+          const listaErrores = Object.entries(errores)
+            .map(([key, value]) => `° ${value['msg']}<br>`)
+            .join('');
+          Swal.fire('Error', `Error al transferir: <p>${listaErrores}</p>`, 'error');
+        },
+      });
+  }
+
   crearUsuario() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
