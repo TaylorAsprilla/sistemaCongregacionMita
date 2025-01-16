@@ -621,7 +621,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   transferirUsuario(id: number) {
     Swal.fire({
-      title: 'Transferir feligreses',
+      title: 'Transferir Feligrés',
       html: `
             <div class="form-group mb-3">
                 <label for="swalPais" class="form-label">Congregación País</label>
@@ -674,6 +674,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
           const congregacionId = congregacionSelect.value;
           const camposFiltrados = this.campos.filter((c) => c.congregacion_id == Number(congregacionId));
           campoSelect.innerHTML = '<option value="">Seleccione Campo</option>';
+          campoSelect.innerHTML = '<option value=${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}>Sin Campo</option>';
           camposFiltrados.forEach((c) => {
             campoSelect.innerHTML += `<option value="${c.id}">${c.campo}</option>`;
           });
