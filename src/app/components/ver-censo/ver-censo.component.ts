@@ -659,7 +659,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
           const congregacionesFiltradas = this.congregaciones.filter((c) => c.pais_id === Number(paisId));
           congregacionSelect.innerHTML = '<option value="">Seleccione Congregación</option>';
           congregacionSelect.innerHTML =
-            '     <option value=${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}>Sin Congregación Ciudad</option>';
+            '<option value=${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}>Sin Congregación Ciudad</option>';
           congregacionesFiltradas.forEach((c) => {
             congregacionSelect.innerHTML += `<option value="${c.id}">${c.congregacion}</option>`;
           });
