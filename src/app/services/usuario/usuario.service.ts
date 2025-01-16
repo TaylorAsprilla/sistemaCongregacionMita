@@ -394,6 +394,11 @@ export class UsuarioService {
     return this.httpClient.put(`${base_url}/usuarios/transferir/${id}`, transferencia, this.headers);
   }
 
+  transcenderUsuario(id: number) {
+    console.log(id);
+    return this.httpClient.put(`${base_url}/usuarios/transcender/${id}`, {}, this.headers);
+  }
+
   actualizarPermisos(id: number, usuarioPermiso: number[]) {
     return this.httpClient.put(`${base_url}/usuarios/actualizarpermisos/${id}`, { usuarioPermiso }, this.headers);
   }

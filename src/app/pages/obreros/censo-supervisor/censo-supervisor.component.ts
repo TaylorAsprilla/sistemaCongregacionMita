@@ -145,6 +145,45 @@ export default class CensoSupervisorComponent implements OnInit {
       });
   }
 
+  transcenderUsuario(id: number) {
+    if (id === this.usuarioService.usuarioId) {
+      return Swal.fire({
+        title: 'Acción no permitida',
+        text: 'No puede marcarse a sí mismo como transcendido.',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: '#d33',
+      });
+    }
+
+    this.usuarioService.transcenderUsuario(id).subscribe({
+      next: () => {
+        Swal.fire({
+          title: 'Feligres Transcendido',
+          text: 'El feligrés ha sido marcado como transcendido exitosamente.',
+          icon: 'info',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        });
+        this.cargarUsuarios();
+      },
+      error: (error) => {
+        const errores = error.error.errors;
+        const listaErrores = Object.entries(errores)
+          .map(([key, value]) => `° ${value['msg']}<br>`)
+          .join('');
+        Swal.fire({
+          title: 'Error al Transcender',
+          html: `Hubo un error al marcar al feligrés como transcendido: <p>${listaErrores}</p>`,
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#d33',
+        });
+      },
+    });
+    return id;
+  }
+
   crearUsuario() {
     const nuevo = 'nuevo';
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.USUARIOS}/${nuevo}`);
