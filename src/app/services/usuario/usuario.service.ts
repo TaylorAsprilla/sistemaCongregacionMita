@@ -395,7 +395,6 @@ export class UsuarioService {
   }
 
   transcenderUsuario(id: number) {
-    console.log(id);
     return this.httpClient.put(`${base_url}/usuarios/transcender/${id}`, {}, this.headers);
   }
 
