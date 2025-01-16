@@ -7,7 +7,6 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
-
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 import { VerCensoComponent } from '../../../../components/ver-censo/ver-censo.component';
 
@@ -136,6 +135,45 @@ export default class UsuariosComponent implements OnInit, OnDestroy {
           Swal.fire('Error', `Error al transferir: <p>${listaErrores}</p>`, 'error');
         },
       });
+  }
+
+  transcenderUsuario(id: number) {
+    if (id === this.usuarioService.usuarioId) {
+      return Swal.fire({
+        title: 'Acción no permitida',
+        text: 'No puede marcarse a sí mismo como transcendido.',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: '#d33',
+      });
+    }
+
+    this.usuarioService.transcenderUsuario(id).subscribe({
+      next: () => {
+        Swal.fire({
+          title: 'Feligres Transcendido',
+          text: 'El feligrés ha sido marcado como transcendido exitosamente.',
+          icon: 'info',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        });
+        this.cargarUsuarios();
+      },
+      error: (error) => {
+        const errores = error.error.errors;
+        const listaErrores = Object.entries(errores)
+          .map(([key, value]) => `° ${value['msg']}<br>`)
+          .join('');
+        Swal.fire({
+          title: 'Error al Transcender',
+          html: `Hubo un error al marcar al feligrés como transcendido: <p>${listaErrores}</p>`,
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#d33',
+        });
+      },
+    });
+    return id;
   }
 
   actualizarUsuario(id: number) {

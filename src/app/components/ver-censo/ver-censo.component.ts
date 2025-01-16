@@ -21,6 +21,7 @@ import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from '../../pipes/whatsapp/whatsapp.pipe';
 import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
 import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
+import { configuracion } from 'src/environments/config/configuration';
 
 @Component({
   selector: 'app-ver-censo',
@@ -55,6 +56,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     campo: number;
     id: number;
   }>();
+  @Output() onTranscenderUsuario: EventEmitter<number> = new EventEmitter<number>();
 
   camposFiltrados: CampoModel[] = [];
 
@@ -188,6 +190,23 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
     this.onBorrarUsuario.emit(usuario);
+  }
+
+  transcenderUsuario(id: number) {
+    Swal.fire({
+      title: 'Transcendió',
+      text: '¿El feligrés transcendió?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: configuracion.CONFIRM_BUTTON_COLOR,
+      cancelButtonColor: configuracion.CANCEL_BUTTON_COLOR,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.onTranscenderUsuario.emit(id);
+      }
+    });
   }
 
   toggleIcons(usuario: UsuariosPorCongregacionInterface) {
@@ -659,7 +678,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
           const congregacionesFiltradas = this.congregaciones.filter((c) => c.pais_id === Number(paisId));
           congregacionSelect.innerHTML = '<option value="">Seleccione Congregación</option>';
           congregacionSelect.innerHTML =
-            '     <option value=${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}>Sin Congregación Ciudad</option>';
+            '<option value=${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}>Sin Congregación Ciudad</option>';
           congregacionesFiltradas.forEach((c) => {
             congregacionSelect.innerHTML += `<option value="${c.id}">${c.congregacion}</option>`;
           });

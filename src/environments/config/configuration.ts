@@ -1,10 +1,11 @@
-import { TIEMPO_SUGERIDO_DIAS, TIEMPO_SUGERIDO_TEXT } from '../../app/core/models/solicitud-multimedia.model';
+import { TIEMPO_SUGERIDO_DIAS, TIEMPO_SUGERIDO_TEXT } from 'src/app/core/models/solicitud-multimedia.model';
 
 export const configuracion = {
   inactividad: {
-    // HH: MM: SS: MS
-    INACTIVE_TIMEOUT_MS: 10 * 60 * 60 * 1000, // 10 horas en milisegundos
-    TIMER_MODEL: 5 * 60 * 1000, // 5 minutos en milisegundos,
+    // Tiempo de inactividad en milisegundos (10 horas)
+    INACTIVE_TIMEOUT_MS: 10 * 60 * 60 * 1000,
+    // Modelo de temporizador en milisegundos (5 minutos)
+    TIMER_MODEL: 5 * 60 * 1000,
   },
 
   tiempoSugerido: [
@@ -15,7 +16,12 @@ export const configuracion = {
     { value: TIEMPO_SUGERIDO_DIAS.DOS_ANOS, label: TIEMPO_SUGERIDO_TEXT.DOS_ANOS },
   ],
 
+  // Rutas de imágenes
   avatarMasculino: 'assets/images/users/perfil.png',
   avatarFemenino: 'assets/images/users/perfil-mujer.png',
   logoMultimedia: 'assets/images/users/multimedia.jpg',
+
+  // Colores de botones de confirmación y cancelación
+  CONFIRM_BUTTON_COLOR: '#3085d6',
+  CANCEL_BUTTON_COLOR: '#d33',
 };
