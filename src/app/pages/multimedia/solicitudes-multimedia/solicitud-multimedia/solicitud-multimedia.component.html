@@ -1,5 +1,10 @@
 @if (cargando) {
 <app-cargando-informacion></app-cargando-informacion>
 } @else {
-<app-solicitudes-multimedia [solicitudes]="solicitudes" [usuarioId]="usuarioId"></app-solicitudes-multimedia>
+<app-solicitudes-multimedia
+  [solicitudes]="solicitudes"
+  [usuarioId]="usuarioId"
+  (onCrearAccesoMultimedia)="crearAccesoMultimedia($event)"
+  (onDenegarAccesoMultimedia)="denegarAccesoMultimedia($event)"
+></app-solicitudes-multimedia>
 }
