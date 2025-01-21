@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { ChangeDetectorRef, Component, Input, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
@@ -7,15 +7,10 @@ import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-mul
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
-import { configuracion } from 'src/environments/config/configuration';
-import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
-import { denegarSolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
-import { generate } from 'generate-password-browser';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
-import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
 
 @Component({
@@ -36,6 +31,12 @@ import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive
 export class SolicitudesMultimediaComponent {
   @Input() solicitudes: UsuarioSolicitudMultimediaModel[] = [];
   @Input() usuarioId: number;
+
+  @Output() onCrearAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
+    new EventEmitter<UsuarioSolicitudInterface>();
+
+  @Output() onDenegarAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
+    new EventEmitter<UsuarioSolicitudInterface>();
 
   filteredSolicitudes: UsuarioSolicitudMultimediaModel[] = [];
 
@@ -83,7 +84,6 @@ export class SolicitudesMultimediaComponent {
   constructor(
     private router: Router,
     private accesoMultimediaService: AccesoMultimediaService,
-    private solicitudMultimediaService: SolicitudMultimediaService,
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef
   ) {}
@@ -271,98 +271,7 @@ export class SolicitudesMultimediaComponent {
   }
 
   crearAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
-    const nombreCompleto = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
-    const loginDefault = solicitud.email;
-    const password = this.generarPassword();
-
-    Swal.fire({
-      title: 'CMAR LIVE',
-      html: `Desea crear acceso a CMAR LIVE al usuario <b>${nombreCompleto}</b>`,
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar',
-      showCloseButton: true,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      icon: 'question',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const { value: formValues } = await Swal.fire({
-          title: `Credenciales para ${nombreCompleto}`,
-          html: `
-            <div class="form-group">
-              <label class="input-group obligatorio">Login:</label>
-              <input type="text" id="login" name="login" class="form-control" value="${loginDefault}" required />
-            </div>
-            <div class="form-group">
-              <label class="input-group obligatorio">Contraseña:</label>
-              <input type="password" id="password" name="password" class="form-control" value="${password}" required />
-            </div>
-            <div class="form-group">
-              <label class="input-group obligatorio">Tiempo de aprobación:</label>
-              <select id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" required>
-                <option value=null disabled selected>Seleccionar tiempo de aprobación</option>
-                ${configuracion.tiempoSugerido
-                  .map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`)
-                  .join('')}
-              </select>
-            </div>
-          `,
-          focusConfirm: true,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          showCloseButton: true,
-          preConfirm: () => {
-            return [
-              (document.getElementById('login') as HTMLInputElement).value,
-              (document.getElementById('password') as HTMLInputElement).value,
-              (document.getElementById('tiempoAprobacion') as HTMLSelectElement).value,
-            ];
-          },
-        });
-
-        if (formValues) {
-          const tiempoSeleccionado = formValues[2];
-
-          const tiempoAprobacion = this.calcularFechaDeAprobacion(tiempoSeleccionado);
-
-          const dataAcceso: LoginUsuarioCmarLiveInterface = {
-            login: formValues[0],
-            password: formValues[1],
-            solicitud_id: solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.id,
-            tiempoAprobacion: tiempoAprobacion ? new Date(tiempoAprobacion) : null,
-            usuarioQueAprobo_id: this.usuarioId,
-            estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA,
-          };
-
-          this.accesoMultimediaService.crearAccesoMultimedia(dataAcceso).subscribe(
-            (accesoCreado: any) => {
-              Swal.fire('Acceso creado', 'correctamente', 'success');
-              // this.cargarTodasLasSolicitudes();
-            },
-            (error) => {
-              let errores = error.error.errors;
-              let listaErrores: string[] = [];
-
-              if (!!errores) {
-                Object.entries(errores).forEach(([key, value]) => {
-                  if (typeof value === 'object' && value !== null && 'msg' in value) {
-                    listaErrores.push('° ' + (value as { msg: string })['msg'] + '<br>');
-                  }
-                });
-              }
-
-              Swal.fire({
-                icon: 'error',
-                html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
-              });
-            }
-          );
-        }
-      } else if (result.isDenied) {
-        Swal.fire('No se pudo crear las credenciales de CMAR LIVE', '', 'info');
-      }
-    });
+    this.onCrearAccesoMultimedia.emit(solicitud);
   }
 
   calcularFechaDeAprobacion(opcion: string): Date | null {
@@ -379,91 +288,91 @@ export class SolicitudesMultimediaComponent {
     return fechaFutura;
   }
 
-  editarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
-    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
-    const password = this.generarPassword();
-    Swal.fire({
-      title: 'CMAR LIVE',
-      html: `Desea editar las credenciales de ingreso del usuario ${nombre}`,
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar',
-      showCloseButton: true,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      icon: 'question',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const { value: formValues } = await Swal.fire({
-          text: `Credenciales para ${nombre}`,
-          html:
-            `<p>Credenciales para <b>${nombre}</b></p>` +
-            `<label class="input-group obligatorio">Login: </label>
-                <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.login} required/>` +
-            `<label class="input-group obligatorio">Contraseña: </label>
-                <input type="password" id="password" name="password" class="form-control" value="${password}" placeholder="Ingrese la contraseña"  required/>` +
-            `<label class="input-group obligatorio">Tiempo de aprobación:</label>
-                 <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${
-                   solicitud.solicitudes[-1].tiempoAprobacion
-                 } required/>` +
-            `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
-          focusConfirm: true,
-          allowOutsideClick: false,
-          showCloseButton: true,
-          allowEscapeKey: false,
-          preConfirm: () => {
-            return [
-              (document.getElementById('login') as HTMLInputElement).value,
-              (document.getElementById('password') as HTMLInputElement).value,
-              (document.getElementById('tiempoAprobacion') as HTMLInputElement).value,
-            ];
-          },
-        });
+  // editarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
+  //   const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
+  //   const password = this.generarPassword();
+  //   Swal.fire({
+  //     title: 'CMAR LIVE',
+  //     html: `Desea editar las credenciales de ingreso del usuario ${nombre}`,
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Sí',
+  //     cancelButtonText: 'Cancelar',
+  //     showCloseButton: true,
+  //     allowOutsideClick: false,
+  //     allowEscapeKey: false,
+  //     icon: 'question',
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       const { value: formValues } = await Swal.fire({
+  //         text: `Credenciales para ${nombre}`,
+  //         html:
+  //           `<p>Credenciales para <b>${nombre}</b></p>` +
+  //           `<label class="input-group obligatorio">Login: </label>
+  //               <input type="text" id="login" name="login" class="form-control" placeholder="Login" value=${solicitud.login} required/>` +
+  //           `<label class="input-group obligatorio">Contraseña: </label>
+  //               <input type="password" id="password" name="password" class="form-control" value="${password}" placeholder="Ingrese la contraseña"  required/>` +
+  //           `<label class="input-group obligatorio">Tiempo de aprobación:</label>
+  //                <input type="date" id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" placeholder="Ingrese el tiempo de aprobación" value=${
+  //                  solicitud.solicitudes[-1].tiempoAprobacion
+  //                } required/>` +
+  //           `<small class="text-danger text-start">Por favor, diligencie todos los campos</small>`,
+  //         focusConfirm: true,
+  //         allowOutsideClick: false,
+  //         showCloseButton: true,
+  //         allowEscapeKey: false,
+  //         preConfirm: () => {
+  //           return [
+  //             (document.getElementById('login') as HTMLInputElement).value,
+  //             (document.getElementById('password') as HTMLInputElement).value,
+  //             (document.getElementById('tiempoAprobacion') as HTMLInputElement).value,
+  //           ];
+  //         },
+  //       });
 
-        if (formValues) {
-          const dataAcceso: LoginUsuarioCmarLiveInterface = {
-            login: (document.getElementById('login') as HTMLInputElement).value,
-            password: (document.getElementById('password') as HTMLInputElement).value,
-            solicitud_id: solicitud.id,
-            tiempoAprobacion: new Date((document.getElementById('tiempoAprobacion') as HTMLInputElement).value),
-            estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA,
-            usuarioQueAprobo_id: this.usuarioId,
-          };
+  //       if (formValues) {
+  //         const dataAcceso: LoginUsuarioCmarLiveInterface = {
+  //           login: (document.getElementById('login') as HTMLInputElement).value,
+  //           password: (document.getElementById('password') as HTMLInputElement).value,
+  //           solicitud_id: solicitud.id,
+  //           tiempoAprobacion: new Date((document.getElementById('tiempoAprobacion') as HTMLInputElement).value),
+  //           estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA,
+  //           usuarioQueAprobo_id: this.usuarioId,
+  //         };
 
-          this.accesoMultimediaService.actualizarAccesoMultimedia(dataAcceso, solicitud.id).subscribe(
-            (accesoActualizado: any) => {
-              Swal.fire(
-                'CMAR LIVE',
-                `Se han actualizado las credenciales de ingreso correctamente del usuario ${nombre}`,
-                'success'
-              );
-              // this.cargarSolicitudDeAccesos();
-            },
-            (error) => {
-              let errores = error.error.errors;
-              let listaErrores: string[] = [];
+  //         this.accesoMultimediaService.actualizarAccesoMultimedia(dataAcceso, solicitud.id).subscribe(
+  //           (accesoActualizado: any) => {
+  //             Swal.fire(
+  //               'CMAR LIVE',
+  //               `Se han actualizado las credenciales de ingreso correctamente del usuario ${nombre}`,
+  //               'success'
+  //             );
+  //             // this.cargarSolicitudDeAccesos();
+  //           },
+  //           (error) => {
+  //             let errores = error.error.errors;
+  //             let listaErrores: string[] = [];
 
-              if (!!errores) {
-                Object.entries(errores).forEach(([key, value]) => {
-                  if (typeof value === 'object' && value !== null && 'msg' in value) {
-                    listaErrores.push('° ' + (value as { msg: string })['msg'] + '<br>');
-                  }
-                });
-              }
+  //             if (!!errores) {
+  //               Object.entries(errores).forEach(([key, value]) => {
+  //                 if (typeof value === 'object' && value !== null && 'msg' in value) {
+  //                   listaErrores.push('° ' + (value as { msg: string })['msg'] + '<br>');
+  //                 }
+  //               });
+  //             }
 
-              Swal.fire({
-                title: 'El acceso NO ha sido creado',
-                icon: 'error',
-                html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
-              });
-            }
-          );
-        }
-      } else if (result.isDenied) {
-        Swal.fire('No se pudo crear las credeciales de CMAR LIVE', '', 'info');
-      }
-    });
-  }
+  //             Swal.fire({
+  //               title: 'El acceso NO ha sido creado',
+  //               icon: 'error',
+  //               html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
+  //             });
+  //           }
+  //         );
+  //       }
+  //     } else if (result.isDenied) {
+  //       Swal.fire('No se pudo crear las credeciales de CMAR LIVE', '', 'info');
+  //     }
+  //   });
+  // }
 
   eliminarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
     const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
@@ -517,42 +426,7 @@ export class SolicitudesMultimediaComponent {
   }
 
   denegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
-    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
-    Swal.fire({
-      title: 'CMAR LIVE',
-      showCancelButton: true,
-      showCloseButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar',
-      icon: 'question',
-      html: `Desea denegar la solicitud CMAR LIVE al usuario <b>${nombre}</b><br><br>
-        <small>Por favor ingrese el motivo de la negación</small>
-               <textarea id="motivo" class="swal2-textarea" placeholder="Por favor ingrese el motivo de la negación"></textarea>`,
-      preConfirm: () => {
-        const motivo = (Swal.getPopup()!.querySelector('#motivo') as HTMLTextAreaElement).value;
-        if (!motivo) {
-          Swal.showValidationMessage('Por favor ingrese el motivo de la negación');
-        }
-        return { motivo };
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const motivo = result.value!.motivo;
-
-        const dataDenegar: denegarSolicitudMultimediaInterface = {
-          solicitud_id: solicitud.solicitudes[solicitud.solicitudes.length - 1].id,
-          motivoDeNegacion: motivo,
-        };
-        this.solicitudMultimediaService.denegarSolicitudMultimedia(dataDenegar).subscribe((respuesta: any) => {
-          Swal.fire({
-            title: 'CMAR LIVE',
-            icon: 'warning',
-            html: `Se denegó la solicitud de acceso a CMAR LIVE al usuario <b>${nombre}</b> por el siguiente motivo: <p><br><br>${motivo}</p>`,
-          });
-          // this.cargarTodasLasSolicitudes();
-        });
-      }
-    });
+    this.onDenegarAccesoMultimedia.emit(solicitud);
   }
 
   toggleExpand(index: number, solicitud: UsuarioSolicitudMultimediaModel): void {
@@ -584,15 +458,6 @@ export class SolicitudesMultimediaComponent {
       const años = Math.floor(dias / 365);
       return años === 1 ? '1 Año' : `${años} Años`;
     }
-  }
-
-  generarPassword() {
-    const password = generate({
-      length: 10,
-      numbers: true,
-    });
-
-    return password;
   }
 
   toggleIcons(solicitud: UsuarioSolicitudInterface) {
