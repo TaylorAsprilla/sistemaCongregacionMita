@@ -1,19 +1,33 @@
-<div class="card text-center p-3">
-  <div class="text-center">
-    <img src="./assets/images/cmar-multimedia.png" alt="CMAR Multimedia" style="text-align: center; width: 400px" />
+<div class="card text-center p-4">
+  <div class="text-center mb-3">
+    <img
+      src="./assets/images/cmar-multimedia.png"
+      alt="CMAR Multimedia"
+      style="width: 250px; max-width: 100%; height: auto"
+    />
   </div>
 
   @if (!!solicitudValida) {
-    <h3 class="card-title">Cuenta verificada correctamente</h3>
+  <h3 class="card-title text-success">¡Cuenta verificada con éxito!</h3>
+  <p class="text-muted">
+    Este es el primer paso para acceder a CMAR LIVE. Su solicitud ha sido enviada para revisión y está en proceso de
+    aprobación.
+  </p>
+  <p class="text-muted">
+    Una vez que su solicitud sea aprobada, recibirá un correo electrónico con su usuario y contraseña correspondientes
+    para acceder a la plataforma.
+  </p>
   } @else {
-    <h4>
-      <p>No pudo ser verificada la cuenta de correo electrónico</p>
-      <p>
-        Para mayor información contactarse a
-        <a [href]="'mailto:' + email">{{ email }}</a>
-      </p>
-    </h4>
-  }
-  <a href="https://cmar.live/"> <span class="pointer">Cerrar Ventana</span></a>
+  <h4 class="card-title text-danger">Cuenta ya verificada</h4>
+  <p class="text-muted">Esta cuenta ya había sido verificada previamente.</p>
 
+  <p class="text-muted">
+    Una vez que su solicitud sea aprobada, recibirá un correo electrónico con su usuario y contraseña correspondientes
+    para acceder a la plataforma.
+  </p>
+  }
+
+  <div class="mt-4">
+    <a href="https://cmar.live/" class="btn btn-primary">Cerrar Ventana</a>
+  </div>
 </div>
