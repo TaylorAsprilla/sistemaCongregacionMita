@@ -6,15 +6,26 @@
           <h3 class="card-title">Crear Solicitud</h3>
         </div>
         <div class="card-body p-4">
-          <div class="alert alert-primary" role="alert">
+          <div class="alert alert-info" role="alert">
             El solicitante accede libre y voluntariamente a compartir la información requerida y certifica que es real y
             válida, de ninguna forma proporcionará información falsa, en tal caso su solicitud podría ser descartada
           </div>
 
           <app-buscar-usuario
+            [ocultarBusqueda]="ocultarBusqueda"
             (onUsuarioEncontrado)="buscarFeligres($event)"
             (onActualizarUsuario)="actualizarUsuario($event)"
           ></app-buscar-usuario>
+
+          @if( usuario){ @if (!usuario.email) {
+
+          <div class="alert alert-warning" role="alert">
+            El feligrés no tiene un correo electrónico registrado. Es necesario registrar un correo electrónico para
+            poder crear la solicitud, ya que las credenciales de acceso (usuario y contraseña) serán enviadas a esa
+            dirección.
+          </div>
+
+          } @if(usuario.email){
 
           <form id="msform" autocomplete="off" [formGroup]="solicitudForm" (submit)="crearSolicitud()">
             <div class="row">
@@ -446,6 +457,7 @@
               <i class="fa fa-save"></i> Crear Solicitud
             </button>
           </form>
+          } }
         </div>
       </div>
     </div>
