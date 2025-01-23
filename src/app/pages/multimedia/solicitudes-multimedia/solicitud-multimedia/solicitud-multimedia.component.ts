@@ -2,7 +2,7 @@ import Swal from 'sweetalert2';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
-import { Subscription } from 'rxjs';
+import { delay, Subscription } from 'rxjs';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { CargandoInformacionComponent } from 'src/app/components/cargando-informacion/cargando-informacion.component';
 import { SolicitudesMultimediaComponent } from '../../../../components/solicitudes-multimedia/solicitudes-multimedia.component';
@@ -192,6 +192,35 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
           });
           this.cargarTodasLasSolicitudes();
         });
+      }
+    });
+  }
+
+  eliminarSolicitudMultimedia(solicitud: UsuarioSolicitudMultimediaModel): void {
+    const idUltimaSolicitud = solicitud.ultimaSolicitud.id;
+    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
+    Swal.fire({
+      title: 'CMAR LIVE',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+      showCloseButton: true,
+      icon: 'question',
+      html: `Desea eliminar la solicitud de acceso a CMAR LIVE del usuario ${nombre}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.solicitudMultimediaService
+          .eliminarSolicitudMultimedia(idUltimaSolicitud)
+          .pipe(delay(1000))
+          .subscribe((respuesta: any) => {
+            Swal.fire({
+              title: 'CMAR LIVE',
+              icon: 'warning',
+              html: `Solicitud eliminada correctamente`,
+              showCloseButton: true,
+            });
+          });
+        this.cargarTodasLasSolicitudes();
       }
     });
   }

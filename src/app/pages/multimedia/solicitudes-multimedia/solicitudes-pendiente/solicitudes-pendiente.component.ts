@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { delay, Subscription } from 'rxjs';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { CargandoInformacionComponent } from 'src/app/components/cargando-informacion/cargando-informacion.component';
@@ -191,6 +191,35 @@ export class SolicitudesPendienteComponent {
           });
           this.cargarTodasLasSolicitudes();
         });
+      }
+    });
+  }
+
+  eliminarSolicitudMultimedia(solicitud: UsuarioSolicitudMultimediaModel): void {
+    const idUltimaSolicitud = solicitud.ultimaSolicitud.id;
+    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
+    Swal.fire({
+      title: 'CMAR LIVE',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+      showCloseButton: true,
+      icon: 'question',
+      html: `Desea eliminar la solicitud de acceso a CMAR LIVE del usuario ${nombre}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.solicitudMultimediaService
+          .eliminarSolicitudMultimedia(idUltimaSolicitud)
+          .pipe(delay(1000))
+          .subscribe((respuesta: any) => {
+            Swal.fire({
+              title: 'CMAR LIVE',
+              icon: 'warning',
+              html: `Solicitud eliminada correctamente`,
+              showCloseButton: true,
+            });
+          });
+        this.cargarTodasLasSolicitudes();
       }
     });
   }

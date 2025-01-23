@@ -38,6 +38,9 @@ export class SolicitudesMultimediaComponent {
   @Output() onDenegarAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
     new EventEmitter<UsuarioSolicitudInterface>();
 
+  @Output() onEliminarSolicitudMultiemdia: EventEmitter<UsuarioSolicitudMultimediaModel> =
+    new EventEmitter<UsuarioSolicitudMultimediaModel>();
+
   filteredSolicitudes: UsuarioSolicitudMultimediaModel[] = [];
 
   paises = new FormControl();
@@ -288,55 +291,8 @@ export class SolicitudesMultimediaComponent {
     return fechaFutura;
   }
 
-  eliminarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
-    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
-    Swal.fire({
-      title: 'CMAR LIVE',
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar',
-      showCloseButton: true,
-      icon: 'question',
-      html: `Desea deshabilitar el acceso a CMAR LIVE al usuario ${nombre}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.accesoMultimediaService
-          .eliminarAccesoMultimedia(solicitud.solicitudes[-1].id)
-          .subscribe((respuesta: any) => {
-            Swal.fire({
-              title: 'CMAR LIVE',
-              icon: 'warning',
-              html: `Se deshabilitó el acceso a CMAR LIVE al usuario ${nombre}`,
-              showCloseButton: true,
-            });
-          });
-        // this.cargarSolicitudDeAccesos();
-      }
-    });
-  }
-
-  activarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
-    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
-    Swal.fire({
-      title: 'CMAR LIVE',
-      showCancelButton: true,
-      showCloseButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar',
-      icon: 'question',
-      html: `Desea activar el acceso a CMAR LIVE al usuario ${nombre}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // this.accesoMultimediaService.activarAccesoMultimedia('').subscribe((respuesta: any) => {
-        //   Swal.fire({
-        //     title: 'CMAR LIVE',
-        //     icon: 'warning',
-        //     html: `Se activo el acceso CMAR LIVE al usuario ${nombre}`,
-        //   });
-        // });
-        // this.cargarSolicitudDeAccesos();
-      }
-    });
+  eliminarSolicitudMultimedia(solicitud: UsuarioSolicitudMultimediaModel) {
+    this.onEliminarSolicitudMultiemdia.emit(solicitud);
   }
 
   denegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
