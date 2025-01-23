@@ -89,6 +89,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   letrasFiltrarNacionalidad: Observable<NacionalidadModel[]>;
   letrasFiltrarCongregacion: Observable<CongregacionModel[]>;
   pickerTwo: any;
+  ocultarBusqueda: boolean = false;
 
   get RAZON_SOLICITUD_ID() {
     return RAZON_SOLICITUD_ID;
@@ -355,6 +356,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
           });
           this.resetFormulario();
           this.usuario = null;
+          this.ocultarBusqueda = true;
         },
         (error) => {
           const errores = error.error.errors as { [key: string]: { msg: string } };

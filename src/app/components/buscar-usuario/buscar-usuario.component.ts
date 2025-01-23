@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -14,8 +14,10 @@ import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CalcularEdadPipe],
 })
-export class BuscarUsuarioComponent implements OnInit, OnDestroy {
+export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
   @Input() crearAccesoBoton: boolean = false;
+  @Input() ocultarBusqueda: boolean = false;
+
   @Output() onUsuarioEncontrado: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
   @Output() onActualizarUsuario: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
   @Output() onCrearAcceso: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
@@ -31,6 +33,13 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.crearFormularioNumeroMita();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['ocultarBusqueda'] && changes['ocultarBusqueda'].currentValue) {
+      this.usuario = null;
+      this.numeroMitaForm.reset();
+    }
   }
 
   ngOnDestroy(): void {
