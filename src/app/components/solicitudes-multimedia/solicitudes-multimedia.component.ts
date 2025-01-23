@@ -7,7 +7,7 @@ import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-mul
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
@@ -24,6 +24,7 @@ import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive
     TelegramPipe,
     WhatsappPipe,
     PermisosDirective,
+    DecimalPipe,
   ],
   templateUrl: './solicitudes-multimedia.component.html',
   styleUrl: './solicitudes-multimedia.component.scss',
