@@ -12,6 +12,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
 import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
+import { CalcularEdadPipe } from 'src/app/pipes/calcularEdad/calcular-edad.pipe';
 
 @Component({
   selector: 'app-solicitudes-multimedia',
@@ -25,6 +26,7 @@ import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive
     WhatsappPipe,
     PermisosDirective,
     DecimalPipe,
+    CalcularEdadPipe,
   ],
   templateUrl: './solicitudes-multimedia.component.html',
   styleUrl: './solicitudes-multimedia.component.scss',

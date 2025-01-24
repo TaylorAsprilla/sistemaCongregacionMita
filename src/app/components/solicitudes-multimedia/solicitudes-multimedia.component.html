@@ -220,6 +220,11 @@
                       <div class="col-md-4">
                         <div class="card">
                           <div class="card-body">
+                            <p>
+                              <i class="fas fa-birthday-cake icon-black"></i> <strong>Edad:</strong>
+                              {{ solicitud.fechaNacimiento | calcularEdad }} años
+                            </p>
+
                             @if (solicitud.tipoMiembro.miembro) {
                             <p>
                               <i class="fas fa-user-tag icon-black"></i> <strong>Tipo de Miembro:</strong>
