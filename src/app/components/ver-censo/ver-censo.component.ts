@@ -14,7 +14,7 @@ import { CongregacionService } from 'src/app/services/congregacion/congregacion.
 import { PaisService } from 'src/app/services/pais/pais.service';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
-import { NgClass } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
@@ -28,7 +28,7 @@ import { configuracion } from 'src/environments/config/configuration';
   templateUrl: './ver-censo.component.html',
   styleUrls: ['./ver-censo.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgClass, NgxPaginationModule, TelegramPipe, WhatsappPipe, CalcularEdadPipe],
+  imports: [FormsModule, NgClass, NgxPaginationModule, TelegramPipe, WhatsappPipe, CalcularEdadPipe, DecimalPipe],
 })
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];

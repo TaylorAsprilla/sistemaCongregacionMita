@@ -2,7 +2,7 @@
   <div class="card-header pt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <!-- Texto Total de Solicitudes -->
-      <h3 class="card-title m-0">Total de solicitudes: {{ filteredSolicitudes.length }}</h3>
+      <h3 class="card-title m-0">Total de solicitudes: {{ filteredSolicitudes.length | number }}</h3>
 
       <!-- Contenedor de botones alineados a la derecha -->
       <div class="d-flex">
@@ -161,7 +161,9 @@
                   <span *ngSwitchCase="estadosSolicitud.APROBADA" class="badge bg-success text-white">🟢 Aprobada</span>
                   <span *ngSwitchCase="estadosSolicitud.CADUCADA" class="badge bg-dark text-white">⚫ Caducada</span>
                   <span *ngSwitchCase="estadosSolicitud.PENDIENTE" class="badge bg-warning">🟡 Pendiente</span>
-                  <span *ngSwitchCase="estadosSolicitud.ELIMINADA" class="badge bg-info text-white">🔵 Eliminada</span>
+                  <span *ngSwitchCase="estadosSolicitud.ELIMINADA" class="badge bg-danger text-white"
+                    >⚪️ Eliminada</span
+                  >
                   <span *ngSwitchCase="estadosSolicitud.EMAIL_NO_VERIFICADO" class="badge bg-info text-white"
                     >🔵 Email No Verificado</span
                   >
@@ -171,31 +173,42 @@
 
               <td>
                 <button
-                  class="btn btn-sm bg-info me-1 mb-1"
+                  class="btn btn-sm btn-info me-1 mb-1"
                   title="Más Información"
                   (click)="toggleExpand(i, solicitud)"
                 >
                   <i class="fas fa-info-circle"></i>
                 </button>
                 <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
-                  @if (solicitud.estadoUltimaSolicitud !== estadosSolicitud.EMAIL_NO_VERIFICADO &&
-                  solicitud.estadoUltimaSolicitud !== estadosSolicitud.APROBADA) {
-                  <button
-                    title="Crear Acceso"
-                    class="btn btn-sm bg-primary me-1 mb-1"
-                    (click)="crearAccesoMultimedia(solicitud)"
+                  <ng-container
+                    *ngIf="
+                      solicitud.estadoUltimaSolicitud !== estadosSolicitud.EMAIL_NO_VERIFICADO &&
+                      solicitud.estadoUltimaSolicitud !== estadosSolicitud.APROBADA
+                    "
                   >
-                    <i class="fas fa-key"></i>
-                  </button>
-                  }
+                    <button
+                      title="Crear Acceso"
+                      class="btn btn-sm btn-primary me-1 mb-1"
+                      (click)="crearAccesoMultimedia(solicitud)"
+                    >
+                      <i class="fas fa-key"></i>
+                    </button>
+                  </ng-container>
                   <button
-                    class="btn btn-sm btn-danger btn-sm"
+                    class="btn btn-sm btn-warning me-1 mb-1"
                     title="Denegar Acceso"
                     (click)="denegarAccesoMultimedia(solicitud)"
                   >
                     <i class="fas fa-ban"></i>
                   </button>
                 </div>
+                <button
+                  class="btn btn-sm btn-danger me-1 mb-1"
+                  title="Eliminar Acceso"
+                  (click)="eliminarSolicitudMultimedia(solicitud)"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
               </td>
             </tr>
 
@@ -207,6 +220,11 @@
                       <div class="col-md-4">
                         <div class="card">
                           <div class="card-body">
+                            <p>
+                              <i class="fas fa-birthday-cake icon-black"></i> <strong>Edad:</strong>
+                              {{ solicitud.fechaNacimiento | calcularEdad }} años
+                            </p>
+
                             @if (solicitud.tipoMiembro.miembro) {
                             <p>
                               <i class="fas fa-user-tag icon-black"></i> <strong>Tipo de Miembro:</strong>

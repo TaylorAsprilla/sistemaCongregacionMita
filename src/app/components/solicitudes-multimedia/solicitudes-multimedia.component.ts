@@ -7,11 +7,12 @@ import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-mul
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
 import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
+import { CalcularEdadPipe } from 'src/app/pipes/calcularEdad/calcular-edad.pipe';
 
 @Component({
   selector: 'app-solicitudes-multimedia',
@@ -24,6 +25,8 @@ import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive
     TelegramPipe,
     WhatsappPipe,
     PermisosDirective,
+    DecimalPipe,
+    CalcularEdadPipe,
   ],
   templateUrl: './solicitudes-multimedia.component.html',
   styleUrl: './solicitudes-multimedia.component.scss',
@@ -37,6 +40,9 @@ export class SolicitudesMultimediaComponent {
 
   @Output() onDenegarAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
     new EventEmitter<UsuarioSolicitudInterface>();
+
+  @Output() onEliminarSolicitudMultiemdia: EventEmitter<UsuarioSolicitudMultimediaModel> =
+    new EventEmitter<UsuarioSolicitudMultimediaModel>();
 
   filteredSolicitudes: UsuarioSolicitudMultimediaModel[] = [];
 
@@ -288,55 +294,8 @@ export class SolicitudesMultimediaComponent {
     return fechaFutura;
   }
 
-  eliminarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
-    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
-    Swal.fire({
-      title: 'CMAR LIVE',
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar',
-      showCloseButton: true,
-      icon: 'question',
-      html: `Desea deshabilitar el acceso a CMAR LIVE al usuario ${nombre}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.accesoMultimediaService
-          .eliminarAccesoMultimedia(solicitud.solicitudes[-1].id)
-          .subscribe((respuesta: any) => {
-            Swal.fire({
-              title: 'CMAR LIVE',
-              icon: 'warning',
-              html: `Se deshabilitó el acceso a CMAR LIVE al usuario ${nombre}`,
-              showCloseButton: true,
-            });
-          });
-        // this.cargarSolicitudDeAccesos();
-      }
-    });
-  }
-
-  activarAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
-    const nombre = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
-    Swal.fire({
-      title: 'CMAR LIVE',
-      showCancelButton: true,
-      showCloseButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Cancelar',
-      icon: 'question',
-      html: `Desea activar el acceso a CMAR LIVE al usuario ${nombre}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // this.accesoMultimediaService.activarAccesoMultimedia('').subscribe((respuesta: any) => {
-        //   Swal.fire({
-        //     title: 'CMAR LIVE',
-        //     icon: 'warning',
-        //     html: `Se activo el acceso CMAR LIVE al usuario ${nombre}`,
-        //   });
-        // });
-        // this.cargarSolicitudDeAccesos();
-      }
-    });
+  eliminarSolicitudMultimedia(solicitud: UsuarioSolicitudMultimediaModel) {
+    this.onEliminarSolicitudMultiemdia.emit(solicitud);
   }
 
   denegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
