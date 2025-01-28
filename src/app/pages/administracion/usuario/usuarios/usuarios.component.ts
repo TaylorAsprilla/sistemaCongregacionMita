@@ -32,7 +32,6 @@ export default class UsuariosComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private usuarioService: UsuarioService,
-    private activatedRoute: ActivatedRoute,
     private enviarCorreoService: EnviarCorreoService
   ) {}
 

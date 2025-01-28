@@ -455,9 +455,14 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       Edad: this.calcularEdad(usuario.fechaNacimiento),
       Email: usuario.email || 'N/A',
       Celular: usuario.numeroCelular || 'N/A',
-      País: usuario.pais,
+      'Congregación País': usuario.usuarioCongregacionPais?.[0]?.pais || 'N/A',
       Congregación: usuario.usuarioCongregacionCongregacion?.[0]?.congregacion || 'N/A',
       Campo: usuario.usuarioCongregacionCampo?.[0]?.campo || 'N/A',
+      Direccion: usuario.direccion || '',
+      'Departamento/Estado/Provincia': usuario.departamentoDireccion || '',
+      'Ciudad Direccion': usuario.ciudadDireccion || '',
+      'Codigo Postal Direccion': usuario.codigoPostalDireccion || '',
+      'Pais Direccion': usuario.paisDireccion || '',
     }));
 
     this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo);
