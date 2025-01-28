@@ -113,6 +113,11 @@ export interface UsuariosPorCongregacionInterface {
   email: string;
   numeroCelular: string;
   pais: string;
+  direccion: string;
+  ciudadDireccion: string;
+  departamentoDireccion: string;
+  codigoPostalDireccion: string;
+  paisDireccion: string;
   usuarioCongregacionPais?: usuarioCongregacionPaisInterface[];
   usuarioCongregacionCongregacion?: usuarioCongregacionCongregacionInterface[];
   usuarioCongregacionCampo?: usuarioCongregacionCampoInterface[];
