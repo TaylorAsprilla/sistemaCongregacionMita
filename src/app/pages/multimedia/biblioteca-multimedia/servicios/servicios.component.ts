@@ -26,24 +26,21 @@ export class ServiciosComponent implements OnInit, OnDestroy {
   pageSize = 6; // Número de videos por página
   currentPage = 0;
 
-  private linkEventosSubscription!: Subscription;
-
   constructor(private linkEventosService: LinkEventosService, private sanitizer: DomSanitizer) {}
+  ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
+  }
 
   ngOnInit(): void {
     this.cargarEventos();
   }
 
-  ngOnDestroy(): void {
-    this.linkEventosSubscription?.unsubscribe();
-  }
-
   cargarEventos(): void {
     this.loading = true;
-    this.linkEventosSubscription = this.linkEventosService.getEventos().subscribe({
+    this.linkEventosService.getEventos().subscribe({
       next: (eventos: LinkEventoModel[]) => {
-        this.videos = eventos.map((video) => ({ ...video, isVisible: false }));
-        this.loadMore(); // Cargar la primera página
+        this.videos = eventos;
+        this.applyFilters(); // Aplicar filtros iniciales
         this.loading = false;
       },
       error: (err) => {
@@ -84,54 +81,37 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     return this.visibleVideos.length < this.videos.length;
   }
 
-  // Obtener la URL segura para iframes
-  getSafeUrl(url: string): SafeResourceUrl {
-    let safeUrl = url;
-
-    // Extraer el ID de YouTube si la URL es de YouTube
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      const videoId = this.getYouTubeId(url);
-
-      if (videoId) {
-        safeUrl = `https://www.youtube.com/embed/${videoId}`;
-      }
-    }
-
-    // Asegurarse de que la URL de Vimeo sea de embed
-    if (url.includes('vimeo.com') && !url.includes('/embed/')) {
-      const parts = url.split('/');
-      const eventId = parts[parts.length - 2];
-      const hash = parts[parts.length - 1];
-      safeUrl = `https://vimeo.com/event/${eventId}/embed/${hash}`;
-    }
-
-    return this.sanitizer.bypassSecurityTrustResourceUrl(safeUrl);
-  }
-
-  // Obtener la miniatura del video
-  getThumbnailUrl(url: string): string {
-    return `assets/images/miniatura-video.jpg`; // Miniatura de YouTube
-  }
-
-  // Extraer el ID de YouTube de una URL
+  // Extraer el ID de YouTube
   getYouTubeId(url: string): string | null {
     const regex = /(?:youtube\.com\/(?:live\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
     return match && match[1] ? match[1] : null;
   }
 
-  // Reproducir video en modal
-  playVideo(link: string): void {
-    this.selectedVideoLink = this.getSafeUrl(link);
+  // Extraer el ID de Vimeo
+  getVimeoId(url: string): string | null {
+    const regex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/;
+    const match = url.match(regex);
+    return match && match[1] ? match[1] : null;
   }
 
-  // Cerrar reproductor de video
-  closePlayer(): void {
-    this.selectedVideoLink = null;
-  }
+  // Obtener la URL de embed segura
+  getSafeEmbedUrl(url: string): SafeResourceUrl | null {
+    let embedUrl: string | null = null;
 
-  // Optimizar el rendimiento del DOM
-  trackByVideoId(index: number, video: LinkEventoModel): number {
-    return video.id;
+    // Verificar si es YouTube
+    const youtubeId = this.getYouTubeId(url);
+    if (youtubeId) {
+      embedUrl = `https://www.youtube.com/embed/${youtubeId}`;
+    }
+
+    // Verificar si es Vimeo
+    const vimeoId = this.getVimeoId(url);
+    if (vimeoId) {
+      embedUrl = `https://player.vimeo.com/video/${vimeoId}`;
+    }
+
+    // Marcar la URL como segura
+    return embedUrl ? this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl) : null;
   }
 }

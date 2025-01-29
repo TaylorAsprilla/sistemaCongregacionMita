@@ -1,72 +1,52 @@
-<div class="servicios-container">
-  <!-- Formulario de búsqueda -->
-  <div class="search-container">
-    <form (ngSubmit)="applyFilters()">
-      <input type="text" [(ngModel)]="searchTitle" name="searchTitle" placeholder="Buscar por título" />
-      <select [(ngModel)]="searchService" name="searchService">
-        <option value="">Todos los servicios</option>
-        <option value="Servicio">Servicio</option>
-        <!-- Agrega más opciones según tus necesidades -->
-      </select>
-      <input type="date" [(ngModel)]="searchDate" name="searchDate" placeholder="Buscar por fecha" />
-      <button type="submit">Buscar</button>
-    </form>
-  </div>
-
-  <!-- Mensaje de carga -->
-  <div *ngIf="loading" class="loading-message">Cargando videos...</div>
-
-  <!-- Lista de videos -->
-  <div *ngIf="!loading" class="video-library">
-    <div
-      *ngFor="let video of visibleVideos; trackBy: trackByVideoId"
-      class="video-item"
-      (click)="playVideo(video.link)"
-    >
-      <h3>{{ video.titulo }}</h3>
-      <p>{{ video.fecha | date }}</p>
-      <div *ngIf="video.plataforma === 'youtube'" class="video-container">
-        <img [src]="getThumbnailUrl(video.link)" alt="Miniatura del video" class="video-thumbnail" />
-        <iframe
-          *ngIf="video.eventoEnBiblioteca"
-          width="560"
-          height="315"
-          [src]="getSafeUrl(video.link)"
-          frameborder="0"
-          allowfullscreen
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        ></iframe>
-      </div>
-      <div *ngIf="video.plataforma === 'vimeo'" class="video-container">
-        <img [src]="getThumbnailUrl(video.link)" alt="Miniatura del video" class="video-thumbnail" />
-        <iframe
-          *ngIf="video.eventoEnBiblioteca"
-          [src]="getSafeUrl(video.link)"
-          width="640"
-          height="360"
-          frameborder="0"
-          allowfullscreen
-          allow="autoplay; fullscreen; picture-in-picture"
-        ></iframe>
-      </div>
+<div class="row">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Biblioteca de Servicios y Vigilias</h3>
     </div>
-  </div>
 
-  <!-- Botón para cargar más videos -->
-  <button *ngIf="hasMoreVideos && !loading" (click)="loadMore()" class="load-more-button">Cargar más videos</button>
+    <div class="servicios-container">
+      <!-- Formulario de búsqueda -->
+      <div class="search-container">
+        <form (ngSubmit)="applyFilters()">
+          <input type="text" [(ngModel)]="searchTitle" name="searchTitle" placeholder="Buscar por título" />
+          <input type="date" [(ngModel)]="searchDate" name="searchDate" placeholder="Buscar por fecha" />
+          <button type="submit">Buscar</button>
+        </form>
+      </div>
 
-  <!-- Reproductor de video modal -->
-  <div *ngIf="selectedVideoLink" class="video-modal">
-    <div class="modal-content">
-      <span class="close-button" (click)="closePlayer()">&times;</span>
-      <iframe
-        [src]="selectedVideoLink"
-        width="800"
-        height="450"
-        frameborder="0"
-        allowfullscreen
-        allow="autoplay; fullscreen; picture-in-picture"
-      ></iframe>
+      <!-- Mensaje de carga -->
+      @if (loading) {
+      <div class="loading-message">Cargando videos...</div>
+      }
+
+      <!-- Lista de videos -->
+      @if (!loading) {
+      <div class="video-library">
+        @for (video of visibleVideos; track video.id) {
+        <div class="video-item">
+          <h3>{{ video.titulo }}</h3>
+          <p>{{ video.fecha | date }}</p>
+          <div class="video-container">
+            @if (getSafeEmbedUrl(video.link)) {
+            <iframe
+              [src]="getSafeEmbedUrl(video.link)"
+              width="640"
+              height="360"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Botón para cargar más videos -->
+      @if (hasMoreVideos && !loading) {
+      <button (click)="loadMore()" class="load-more-button">Cargar más videos</button>
+      }
     </div>
   </div>
 </div>
