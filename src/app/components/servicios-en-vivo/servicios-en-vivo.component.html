@@ -1,39 +1,44 @@
 <div class="row">
   <h2 class="text-center">{{ servicios?.titulo }}</h2>
-  @if (servicioPlataforma === PLATAFORMA.VIMEO) {
-    <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
-      @if (tipoDeEvento === TIPOEVENTO_ID.SERVICIO) {
-        <div class="mb-5">
-          <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
-            <div class="ratio ratio-16x9">
-              <iframe
-                [src]="videoUrl"
-                frameborder="0"
-                allow="autoplay; fullscreen; picture-in-picture"
-                webkitallowfullscreen
-                mozallowfullscreen
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      }
-    </div>
-  }
 
-  @if (servicioPlataforma === PLATAFORMA.YOUTUBE) {
-    <div
-      class="card-body col-sm-12 col-md-12 col-lg-6 text-center"
-      #templateYouTubePlayer
-      >
-      @if (tipoDeEvento === TIPOEVENTO_ID.SERVICIO) {
-        <div class="mb-5">
-          <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
-            <div class="responsive-video">
-              <youtube-player [videoId]="videoUrl | youtube" suggestedQuality="default"> </youtube-player>
-            </div>
-          </div>
+  @if (servicioPlataforma === PLATAFORMA.VIMEO) {
+  <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
+    @if (tipoDeEvento === TIPOEVENTO_ID.SERVICIO) {
+    <div class="mb-5">
+      <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+        <div class="ratio ratio-16x9">
+          <iframe
+            [src]="videoUrl"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            webkitallowfullscreen
+            mozallowfullscreen
+          ></iframe>
         </div>
-      }
+      </div>
     </div>
+    }
+  </div>
+  } @if (servicioPlataforma === PLATAFORMA.YOUTUBE) {
+  <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center" #templateYouTubePlayer>
+    @if (tipoDeEvento === TIPOEVENTO_ID.SERVICIO) {
+    <div class="mb-5">
+      <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto">
+        <div class="responsive-video">
+          <iframe
+            id="ytplayer"
+            type="text/html"
+            width="720"
+            height="405"
+            [src]="videoUrl"
+            frameborder="0"
+            allowfullscreen
+          >
+          </iframe>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
   }
 </div>
