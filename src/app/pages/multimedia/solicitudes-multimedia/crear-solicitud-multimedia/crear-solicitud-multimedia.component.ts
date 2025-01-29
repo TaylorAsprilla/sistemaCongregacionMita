@@ -58,6 +58,8 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   nombreUsuario: string;
   usuarioQueRegistra: UsuarioModel;
 
+  loading: boolean = false;
+
   tiempoSugerido = configuracion.tiempoSugerido;
 
   // Subscription
@@ -308,72 +310,114 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
 
   crearSolicitud() {
     if (this.solicitudForm.valid) {
-      const formSolicitud = this.solicitudForm.value;
-
-      const solicitudNueva: crearSolicitudMultimediaInterface = {
-        usuario_id: this.usuario.id,
-        razonSolicitud_id: formSolicitud.razonSolicitud_id,
-        otraRazon: formSolicitud.otraRazon,
-        estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.EMAIL_NO_VERIFICADO,
-        usuarioQueRegistra_id: this.idUsuario,
-        duracionDelPeriodoDeEstudio: formSolicitud.duracionDelPeriodoDeEstudio
-          ? formSolicitud.duracionDelPeriodoDeEstudio
-          : null,
-        baseMilitar: formSolicitud.baseMilitar ? formSolicitud.baseMilitar : '',
-        observaciones: formSolicitud.observaciones ? formSolicitud.observaciones : '',
-        opcionTransporte_id: formSolicitud.opcionTransporte_id ? formSolicitud.opcionTransporte_id : null,
-        tipoDeEstudio_id: formSolicitud.tipoDeEstudio_id ? formSolicitud.tipoDeEstudio_id : null,
-        parentesco_id: formSolicitud.parentesco_id ? formSolicitud.parentesco_id : null,
-        tiempoDistancia: formSolicitud.tiempoDistancia ? formSolicitud.tiempoDistancia : '',
-        horaTemploMasCercano: formSolicitud.horaTemploMasCercano ? formSolicitud.horaTemploMasCercano : '',
-        personaEncamada: formSolicitud.personaEncamada ? formSolicitud.personaEncamada : 0,
-        personaEncargada: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
-        enfermedadCronica: formSolicitud.enfermedadCronica ? formSolicitud.enfermedadCronica : '',
-        enfermedadQuePadece: formSolicitud.enfermedadQuePadece ? formSolicitud.enfermedadQuePadece : '',
-        paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.paisDondeEstudia : '',
-        ciudadDondeEstudia: formSolicitud.ciudadDondeEstudia ? formSolicitud.ciudadDondeEstudia : '',
-        terminos: formSolicitud.terminos ? formSolicitud.terminos : false,
-        emailVerificado: false,
-        tiempoAprobacion: null,
-        usuario: this.usuario,
-        usuarioQueRegistra: this.usuarioQueRegistra,
-        tipoMiembro: this.usuario.tipoMiembro,
-        tiempoSugerido: formSolicitud.tiempoSugerido ? formSolicitud.tiempoSugerido : '',
-        congregacionCercana: formSolicitud.congregacionCercana,
-        celularPersonaEncargada: formSolicitud.celularPersonaEncargada
-          ? formSolicitud.celularPersonaEncargada.internationalNumber
-          : '',
-      };
-
-      this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe(
-        (respuesta: any) => {
-          Swal.fire({
-            title: 'Solicitud Acceso a cmar.live',
-            html: `<b>${this.usuario.primerNombre} ${this.usuario.segundoNombre}
-                ${this.usuario.primerApellido} ${this.usuario.segundoApellido} </b>,
-               por favor revise el correo electrónico <b> ${this.usuario.email} </b> y realice el proceso de validación para que sea procesada su solicitud`,
-            icon: 'success',
-          });
-          this.resetFormulario();
-          this.usuario = null;
-          this.ocultarBusqueda = true;
+      this.solicitudMultimediaService.obtenerSolicitudPorUsuario(this.usuario.id).subscribe({
+        next: (respuesta: { ok: boolean; msg: string; usuario_id: string }) => {
+          if (respuesta.ok) {
+            Swal.fire({
+              title: 'Solicitud existente',
+              text: respuesta.msg + ' ¿Desea eliminarla y crear una nueva?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Sí, eliminar y crear nueva',
+              cancelButtonText: 'Cancelar',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.eliminarYCrearNuevaSolicitud();
+              }
+            });
+          } else {
+            this.crearNuevaSolicitud();
+          }
         },
-        (error) => {
-          const errores = error.error.errors as { [key: string]: { msg: string } };
-          const listaErrores: string[] = [];
-
-          Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
-          });
-
-          Swal.fire({
-            title: 'Error al crear la solicitud de acceso a cmar.live',
-            icon: 'error',
-            html: `${listaErrores.join('')}`,
-          });
-        }
-      );
+        error: (error) => {
+          console.error('Error al verificar la solicitud existente', error);
+        },
+      });
     }
+  }
+
+  eliminarYCrearNuevaSolicitud() {
+    this.loading = true;
+    this.solicitudMultimediaService.eliminarSolicitudMultimediaDeUnUsuario(this.usuario.id).subscribe({
+      next: () => {
+        this.crearNuevaSolicitud();
+      },
+      error: (error) => {
+        console.error('Error al eliminar la solicitud existente', error);
+      },
+    });
+  }
+
+  crearNuevaSolicitud() {
+    const formSolicitud = this.solicitudForm.value;
+
+    const solicitudNueva: crearSolicitudMultimediaInterface = {
+      usuario_id: this.usuario.id,
+      razonSolicitud_id: formSolicitud.razonSolicitud_id,
+      otraRazon: formSolicitud.otraRazon,
+      estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.EMAIL_NO_VERIFICADO,
+      usuarioQueRegistra_id: this.idUsuario,
+      duracionDelPeriodoDeEstudio: formSolicitud.duracionDelPeriodoDeEstudio
+        ? formSolicitud.duracionDelPeriodoDeEstudio
+        : null,
+      baseMilitar: formSolicitud.baseMilitar ? formSolicitud.baseMilitar : '',
+      observaciones: formSolicitud.observaciones ? formSolicitud.observaciones : '',
+      opcionTransporte_id: formSolicitud.opcionTransporte_id ? formSolicitud.opcionTransporte_id : null,
+      tipoDeEstudio_id: formSolicitud.tipoDeEstudio_id ? formSolicitud.tipoDeEstudio_id : null,
+      parentesco_id: formSolicitud.parentesco_id ? formSolicitud.parentesco_id : null,
+      tiempoDistancia: formSolicitud.tiempoDistancia ? formSolicitud.tiempoDistancia : '',
+      horaTemploMasCercano: formSolicitud.horaTemploMasCercano ? formSolicitud.horaTemploMasCercano : '',
+      personaEncamada: formSolicitud.personaEncamada ? formSolicitud.personaEncamada : 0,
+      personaEncargada: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
+      enfermedadCronica: formSolicitud.enfermedadCronica ? formSolicitud.enfermedadCronica : '',
+      enfermedadQuePadece: formSolicitud.enfermedadQuePadece ? formSolicitud.enfermedadQuePadece : '',
+      paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.paisDondeEstudia : '',
+      ciudadDondeEstudia: formSolicitud.ciudadDondeEstudia ? formSolicitud.ciudadDondeEstudia : '',
+      terminos: formSolicitud.terminos ? formSolicitud.terminos : false,
+      emailVerificado: false,
+      tiempoAprobacion: null,
+      usuario: this.usuario,
+      usuarioQueRegistra: this.usuarioQueRegistra,
+      tipoMiembro: this.usuario.tipoMiembro,
+      tiempoSugerido: formSolicitud.tiempoSugerido ? formSolicitud.tiempoSugerido : '',
+      congregacionCercana: formSolicitud.congregacionCercana,
+      celularPersonaEncargada: formSolicitud.celularPersonaEncargada
+        ? formSolicitud.celularPersonaEncargada.internationalNumber
+        : '',
+    };
+
+    this.solicitudMultimediaService.crearSolicitudMultimedia(solicitudNueva).subscribe({
+      next: (respuesta: any) => {
+        Swal.fire({
+          title: 'Solicitud Acceso a cmar.live',
+          html: `<b>${this.usuario.primerNombre} ${this.usuario.segundoNombre}
+              ${this.usuario.primerApellido} ${this.usuario.segundoApellido} </b>,
+             por favor revise el correo electrónico <b> ${this.usuario.email} </b> y realice el proceso de validación para que sea procesada su solicitud`,
+          icon: 'success',
+        });
+        this.resetFormulario();
+        this.usuario = null;
+        this.ocultarBusqueda = true;
+        this.loading = false;
+      },
+      error: (error) => {
+        const errores = error.error.errors as { [key: string]: { msg: string } };
+        const listaErrores: string[] = [];
+
+        Object.entries(errores).forEach(([key, value]) => {
+          listaErrores.push('° ' + value['msg'] + '<br>');
+        });
+
+        Swal.fire({
+          title: 'Error al crear la solicitud de acceso a cmar.live',
+          icon: 'error',
+          html: `${listaErrores.join('')}`,
+        });
+      },
+      complete: () => {
+        console.log('Solicitud de multimedia completada');
+      },
+    });
   }
 
   actualizarUsuario(usuario: UsuarioModel) {
