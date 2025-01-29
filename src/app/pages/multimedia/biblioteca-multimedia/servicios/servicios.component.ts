@@ -39,7 +39,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.linkEventosService.getEventos().subscribe({
       next: (eventos: LinkEventoModel[]) => {
-        this.videos = eventos;
+        this.videos = eventos.filter((evento) => evento.estado === true && evento.eventoEnBiblioteca === true);
         this.applyFilters(); // Aplicar filtros iniciales
         this.loading = false;
       },

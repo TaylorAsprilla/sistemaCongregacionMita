@@ -513,7 +513,7 @@ export const ROUTES: RouteInfo[] = [
         path: RUTAS.BIBLIOTECA_SERVICIOS,
         title: 'Biblioteca Multimedia',
         icon: '',
-        class: 'has-arrow',
+        class: '',
         extralink: false,
         role: [
           ROLES.ADMINISTRADOR,
