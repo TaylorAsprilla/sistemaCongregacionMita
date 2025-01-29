@@ -165,7 +165,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -174,7 +174,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
     ],
@@ -185,7 +185,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-gear',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
     submenu: [
       {
         path: RUTAS.MINISTERIOS,
@@ -202,7 +202,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -211,7 +211,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -220,7 +220,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -229,7 +229,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -238,7 +238,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
         submenu: [],
       },
       {
@@ -255,7 +255,7 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
-            role: [ROLES.ADMINISTRADOR],
+            role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
             submenu: [],
           },
           {
@@ -295,7 +295,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-users',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
     submenu: [],
   },
   {
@@ -484,6 +484,7 @@ export const ROUTES: RouteInfo[] = [
       ROLES.ADMINISTRADOR,
       ROLES.SUPERVISOR,
       ROLES.SUPERVISOR_LOCAL,
+      ROLES.ASISTENTE_OOTS,
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
       ROLES.ADMINISTRADOR_MULTIMEDIA,
@@ -501,6 +502,7 @@ export const ROUTES: RouteInfo[] = [
       ROLES.ADMINISTRADOR,
       ROLES.SUPERVISOR,
       ROLES.SUPERVISOR_LOCAL,
+      ROLES.ASISTENTE_OOTS,
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
       ROLES.ADMINISTRADOR_MULTIMEDIA,
@@ -517,6 +519,7 @@ export const ROUTES: RouteInfo[] = [
           ROLES.ADMINISTRADOR,
           ROLES.SUPERVISOR,
           ROLES.SUPERVISOR_LOCAL,
+          ROLES.ASISTENTE_OOTS,
           ROLES.OBRERO_CIUDAD,
           ROLES.OBRERO_CAMPO,
           ROLES.ADMINISTRADOR_MULTIMEDIA,
@@ -531,7 +534,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_CIUDAD, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
         submenu: [],
       },
       {
@@ -549,7 +552,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_CIUDAD, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
         submenu: [],
       },
     ],
