@@ -63,6 +63,14 @@ export class SolicitudMultimediaService {
       .pipe(map((response) => response.usuarios));
   }
 
+  obtenerSolicitudPorUsuario(id: number): Observable<{ ok: boolean; msg: string; usuario_id: string }> {
+    const params = new HttpParams().set('usuario_id', id.toString());
+    return this.httpClient.get<{ ok: boolean; msg: string; usuario_id: string }>(
+      `${base_url}/accesomultimedia/usuario`,
+      { ...this.headers, params }
+    );
+  }
+
   crearSolicitudMultimedia(solicitudDeacceso: crearSolicitudMultimediaInterface) {
     return this.httpClient.post(`${base_url}/solicitudmultimedia`, solicitudDeacceso, this.headers);
   }
@@ -73,6 +81,14 @@ export class SolicitudMultimediaService {
 
   eliminarSolicitudMultimedia(idsolicitudDeacceso: number) {
     return this.httpClient.delete(`${base_url}/solicitudmultimedia/${idsolicitudDeacceso}`, this.headers);
+  }
+
+  eliminarSolicitudMultimediaDeUnUsuario(idUsuario: number) {
+    const params = new HttpParams().set('usuario_id', idUsuario.toString());
+    return this.httpClient.delete(`${base_url}/accesomultimedia/usuario`, {
+      ...this.headers,
+      params,
+    });
   }
 
   denegarSolicitudMultimedia(denegarSolicitud: denegarSolicitudMultimediaInterface) {
