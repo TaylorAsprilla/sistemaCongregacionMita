@@ -179,6 +179,7 @@ export class SolicitudesMultimediaComponent {
     // Función segura para manejar strings nulos
     const getSafeString = (value: string | undefined | null): string => (value ? value.toLowerCase().trim() : '');
 
+    const numeroMita = solicitud.id ? solicitud.id.toString() : '';
     const nombreCompleto = getSafeString(solicitud.nombreCompleto);
     const email = getSafeString(solicitud.email);
     const numeroCelular = getSafeString(solicitud.numeroCelular);
@@ -188,7 +189,11 @@ export class SolicitudesMultimediaComponent {
 
     // Verificar si todas las palabras del filtro coinciden en alguno de los campos
     return palabrasFiltro.every(
-      (palabra) => nombreCompleto.includes(palabra) || email.includes(palabra) || numeroCelular.includes(palabra)
+      (palabra) =>
+        nombreCompleto.includes(palabra) ||
+        email.includes(palabra) ||
+        numeroCelular.includes(palabra) ||
+        numeroMita.includes(palabra)
     );
   }
 
