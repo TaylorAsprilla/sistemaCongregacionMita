@@ -50,7 +50,7 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy {
         this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(videos.link);
       } else if (videos.plataforma === PLATAFORMA.YOUTUBE) {
         const videoId = this.extractYouTubeVideoId(videos.link);
-        console.log('videoId', videoId);
+
         this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(
           `https://www.youtube.com/embed/${videoId}?autoplay=1`
         );
