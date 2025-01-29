@@ -442,7 +442,7 @@ export const ROUTES: RouteInfo[] = [
     icon: '',
     class: 'nav-small-cap',
     extralink: true,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    role: [ROLES.ADMINISTRADOR],
     submenu: [],
   },
   {
@@ -451,7 +451,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-book',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    role: [ROLES.ADMINISTRADOR],
     submenu: [
       {
         path: RUTAS.INFORME,
@@ -459,7 +459,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
       {
@@ -468,7 +468,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+        role: [ROLES.ADMINISTRADOR],
         submenu: [],
       },
     ],
