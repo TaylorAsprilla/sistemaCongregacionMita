@@ -508,7 +508,7 @@ export const ROUTES: RouteInfo[] = [
     ],
     submenu: [
       {
-        path: '',
+        path: RUTAS.BIBLIOTECA_SERVICIOS,
         title: 'Biblioteca Multimedia',
         icon: '',
         class: 'has-arrow',
@@ -521,44 +521,9 @@ export const ROUTES: RouteInfo[] = [
           ROLES.OBRERO_CAMPO,
           ROLES.ADMINISTRADOR_MULTIMEDIA,
           ROLES.MULTIMEDIA,
+          ROLES.ASISTENTE_OOTS,
         ],
-        submenu: [
-          {
-            path: RUTAS.BIBLIOTECA_SERVICIOS,
-            title: 'Servicios',
-            icon: '',
-            class: '',
-            extralink: false,
-            role: [
-              ROLES.ADMINISTRADOR,
-              ROLES.SUPERVISOR,
-              ROLES.SUPERVISOR_LOCAL,
-              ROLES.OBRERO_CIUDAD,
-              ROLES.OBRERO_CAMPO,
-              ROLES.ADMINISTRADOR_MULTIMEDIA,
-              ROLES.MULTIMEDIA,
-            ],
-            submenu: [],
-          },
-          {
-            path: RUTAS.BIBLIOTECA_VIGILIAS,
-            title: 'Vigilias',
-            icon: '',
-            class: '',
-            extralink: false,
-            role: [
-              ROLES.ADMINISTRADOR,
-              ROLES.SUPERVISOR,
-              ROLES.SUPERVISOR_LOCAL,
-              ROLES.OBRERO_CIUDAD,
-              ROLES.OBRERO_CAMPO,
-              ROLES.ADMINISTRADOR_MULTIMEDIA,
-
-              ROLES.MULTIMEDIA,
-            ],
-            submenu: [],
-          },
-        ],
+        submenu: [],
       },
       {
         path: `${RUTAS.SOLICITUD_MULTIMEDIA}/nuevo`,

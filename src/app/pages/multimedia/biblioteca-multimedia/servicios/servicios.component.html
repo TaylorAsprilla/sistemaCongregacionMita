@@ -1,11 +1,52 @@
 <div class="row">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">Historial de Servicios</h3>
+      <h3 class="card-title">Biblioteca de Servicios y Vigilias</h3>
     </div>
-    <app-biblioteca-multimedia
-      [serviciosYvigilias]="servicios"
-      [tipoDeEvento]="TIPOEVENTO.SERVICIO"
-    ></app-biblioteca-multimedia>
+
+    <div class="servicios-container">
+      <!-- Formulario de búsqueda -->
+      <div class="search-container">
+        <form (ngSubmit)="applyFilters()">
+          <input type="text" [(ngModel)]="searchTitle" name="searchTitle" placeholder="Buscar por título" />
+          <input type="date" [(ngModel)]="searchDate" name="searchDate" placeholder="Buscar por fecha" />
+          <button type="submit">Buscar</button>
+        </form>
+      </div>
+
+      <!-- Mensaje de carga -->
+      @if (loading) {
+      <div class="loading-message">Cargando videos...</div>
+      }
+
+      <!-- Lista de videos -->
+      @if (!loading) {
+      <div class="video-library">
+        @for (video of visibleVideos; track video.id) {
+        <div class="video-item">
+          <h3>{{ video.titulo }}</h3>
+          <p>{{ video.fecha | date }}</p>
+          <div class="video-container">
+            @if (getSafeEmbedUrl(video.link)) {
+            <iframe
+              [src]="getSafeEmbedUrl(video.link)"
+              width="640"
+              height="360"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Botón para cargar más videos -->
+      @if (hasMoreVideos && !loading) {
+      <button (click)="loadMore()" class="load-more-button">Cargar más videos</button>
+      }
+    </div>
   </div>
 </div>
