@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LinkEventoModel } from 'src/app/core/models/link-evento.model';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
@@ -12,6 +12,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrls: ['./servicios.component.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush, // Optimiza la detección de cambios
 })
 export class ServiciosComponent implements OnInit, OnDestroy {
   videos: LinkEventoModel[] = [];
@@ -22,13 +23,20 @@ export class ServiciosComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   selectedVideoLink: SafeResourceUrl | null = null;
 
+  videosSubscription: Subscription | null = null;
+
   // Paginación
   pageSize = 6; // Número de videos por página
   currentPage = 0;
 
-  constructor(private linkEventosService: LinkEventosService, private sanitizer: DomSanitizer) {}
+  constructor(
+    private linkEventosService: LinkEventosService,
+    private sanitizer: DomSanitizer,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
+
   ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
+    this.videosSubscription?.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -37,11 +45,12 @@ export class ServiciosComponent implements OnInit, OnDestroy {
 
   cargarEventos(): void {
     this.loading = true;
-    this.linkEventosService.getEventos().subscribe({
+    this.videosSubscription = this.linkEventosService.getEventos().subscribe({
       next: (eventos: LinkEventoModel[]) => {
         this.videos = eventos.filter((evento) => evento.estado === true && evento.eventoEnBiblioteca === true);
         this.applyFilters(); // Aplicar filtros iniciales
         this.loading = false;
+        this.changeDetectorRef.markForCheck();
       },
       error: (err) => {
         console.error('Error al cargar eventos:', err);

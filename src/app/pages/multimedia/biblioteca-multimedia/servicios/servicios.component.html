@@ -27,9 +27,9 @@
           <h3>{{ video.titulo }}</h3>
           <p>{{ video.fecha | date }}</p>
           <div class="video-container">
-            @if (getSafeEmbedUrl(video.link)) {
+            @if (getSafeEmbedUrl(video.link); as safeUrl) {
             <iframe
-              [src]="getSafeEmbedUrl(video.link)"
+              [src]="safeUrl"
               width="640"
               height="360"
               frameborder="0"
