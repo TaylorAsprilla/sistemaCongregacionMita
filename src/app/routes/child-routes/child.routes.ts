@@ -157,7 +157,17 @@ export const childRoutes: Routes = [
     canActivate: [RolesGuard],
     path: RUTAS.REPORTE_GENERAL,
     data: {
-      role: [ROLES.ADMINISTRADOR],
+      role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+    },
+  },
+
+  {
+    loadComponent: () =>
+      import('src/app/pages/administracion/reportes/reporte-congregacion/reporte-congregacion.component'),
+    canActivate: [RolesGuard],
+    path: RUTAS.REPORTE_CONGREGACION,
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
     },
   },
   {
