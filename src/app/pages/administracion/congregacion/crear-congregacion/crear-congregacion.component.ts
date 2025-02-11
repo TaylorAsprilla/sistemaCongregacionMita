@@ -14,17 +14,12 @@ import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acce
 import { AccesoCongregacionMultimedia } from 'src/app/core/interfaces/acceso-multimedia';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
-
 @Component({
-    selector: 'app-crear-congregacion',
-    templateUrl: './crear-congregacion.component.html',
-    styleUrls: ['./crear-congregacion.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgxIntlTelInputModule
-],
+  selector: 'app-crear-congregacion',
+  templateUrl: './crear-congregacion.component.html',
+  styleUrls: ['./crear-congregacion.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgxIntlTelInputModule],
 })
 export class CrearCongregacionComponent implements OnInit {
   public congregacionForm: UntypedFormGroup;
@@ -116,8 +111,8 @@ export class CrearCongregacionComponent implements OnInit {
       id: this.congregacionSeleccionada.id,
     };
 
-    this.congregacionService.actualizarCongregacion(data).subscribe(
-      (congregacion: any) => {
+    this.congregacionService.actualizarCongregacion(data).subscribe({
+      next: (congregacion: any) => {
         Swal.fire({
           title: 'Congregación Actualizada',
           icon: 'success',
@@ -127,13 +122,13 @@ export class CrearCongregacionComponent implements OnInit {
         this.resetFormulario();
         this.cargarCongregaciones();
       },
-      (error) => this.manejarError(error, 'actualizar')
-    );
+      error: (error) => this.manejarError(error, 'actualizar'),
+    });
   }
 
   procesarCreacionCongregacion(congregacionNueva: any) {
-    this.congregacionService.crearCongregacion(congregacionNueva).subscribe(
-      (congregacionCreado: any) => {
+    this.congregacionService.crearCongregacion(congregacionNueva).subscribe({
+      next: (congregacionCreado: any) => {
         Swal.fire({
           title: 'Congregación creada',
           html: `La congregación ${congregacionCreado.congregacion.congregacion} se creó correctamente`,
@@ -143,10 +138,10 @@ export class CrearCongregacionComponent implements OnInit {
         this.resetFormulario();
         this.cargarCongregaciones();
       },
-      (error) => {
+      error: (error) => {
         this.manejarError(error, 'crear');
-      }
-    );
+      },
+    });
   }
 
   buscarCongregacion(id: string) {

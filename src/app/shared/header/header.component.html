@@ -6,10 +6,10 @@
     <div class="navbar-header">
       <a href="index.html" class="navbar-brand"
         ><b
-        ><img src="assets/images/escudo-CMI.png" alt="homepage" class="dark-logo" /><img
-        src="assets/images/escudo-CMI.png"
-        alt="Congregación Mita INC"
-        class="light-logo" /></b
+          ><img src="assets/images/escudo-CMI.png" alt="homepage" class="dark-logo" /><img
+            src="assets/images/escudo-CMI.png"
+            alt="Congregación Mita INC"
+            class="light-logo" /></b
       ></a>
     </div>
 
@@ -37,20 +37,6 @@
 
       <ul class="navbar-nav ms-auto my-lg-0">
         <!-- ============================================================== -->
-        <!-- Search -->
-        <!-- ============================================================== -->
-        <li class="nav-item hidden-sm-down search-box">
-          <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)">
-            <i class="ti-search"></i>
-          </a>
-          <form class="app-search ng-untouched ng-pristine ng-valid">
-            <input type="text" class="form-control" placeholder="Search & enter" />
-            <a class="srh-btn">
-              <i class="ti-close"></i>
-            </a>
-          </form>
-        </li>
-        <!-- ============================================================== -->
         <!-- Profile -->
         <!-- ============================================================== -->
         <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
@@ -61,7 +47,7 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-            >
+          >
             <img [src]="fotoPerfil" [alt]="nombre" class="profile-pic" />
           </a>
 
@@ -78,52 +64,52 @@
                     <h4>{{ nombre }}</h4>
                     <a class="informacion" href="mailto:{{ email }}">
                       <p class="text-muted">{{ email }}</p></a
+                    >
+                    @if (usuario) {
+                    <div>
+                      <a class="informacion" href="tel:{{ numeroCelular }}">
+                        <p class="text-muted">{{ numeroCelular }}</p></a
                       >
-                      @if (usuario) {
-                        <div>
-                          <a class="informacion" href="tel:{{ numeroCelular }}">
-                            <p class="text-muted">{{ numeroCelular }}</p></a
-                            >
-                            <a class="informacion">
-                              <p class="text-muted"><b>Número Mita: </b>{{ usuario?.id }}</p></a
-                              >
-                            </div>
-                          }
-                        </div>
-                      </div>
-                    </li>
-                    @if (usuario) {
-                      <div>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                          <a [routerLink]="[Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
-                        </li>
-                      </div>
+                      <a class="informacion">
+                        <p class="text-muted"><b>Número Mita: </b>{{ usuario?.id }}</p></a
+                      >
+                    </div>
                     }
-                    <li role="separator" class="divider"></li>
-                    <li>
-                      <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
-                    </li>
-                    <li role="separator" class="divider"></li>
-                    @if (usuario) {
-                      <div>
-                        <li>
-                          <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                          <a href="#"> <i class="ti-settings"></i> Configuración</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                      </div>
-                    }
-                    <li>
-                      <a (click)="logout()" class="pointer"> <i class="fa fa-power-off"></i> Cerrar Sesión</a>
-                    </li>
-                  </ul>
+                  </div>
                 </div>
+              </li>
+              @if (usuario) {
+              <div>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a [routerLink]="[Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
+                </li>
+              </div>
+              }
+              <li role="separator" class="divider"></li>
+              <li>
+                <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
+              </li>
+              <li role="separator" class="divider"></li>
+              @if (usuario) {
+              <div>
+                <li>
+                  <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a href="#"> <i class="ti-settings"></i> Configuración</a>
+                </li>
+                <li role="separator" class="divider"></li>
+              </div>
+              }
+              <li>
+                <a (click)="logout()" class="pointer"> <i class="fa fa-power-off"></i> Cerrar Sesión</a>
               </li>
             </ul>
           </div>
-        </nav>
-      </header>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
