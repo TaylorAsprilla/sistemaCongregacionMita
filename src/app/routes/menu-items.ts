@@ -264,7 +264,7 @@ export const ROUTES: RouteInfo[] = [
       {
         path: '',
         title: 'Solicitud Multimedia',
-        icon: '',
+        icon: 'fa fa-tv',
         class: 'has-arrow',
         extralink: false,
         role: [ROLES.ADMINISTRADOR],
