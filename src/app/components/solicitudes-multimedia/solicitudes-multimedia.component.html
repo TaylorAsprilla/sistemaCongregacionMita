@@ -194,6 +194,7 @@
                       <i class="fas fa-key"></i>
                     </button>
                   </ng-container>
+
                   <button
                     class="btn btn-sm btn-warning me-1 mb-1"
                     title="Eliminar Acceso"
@@ -201,6 +202,8 @@
                   >
                     <i class="fas fa-trash"></i>
                   </button>
+                </div>
+                <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
                   <button
                     class="btn btn-sm btn-danger me-1 mb-1"
                     title="Denegar Acceso"
