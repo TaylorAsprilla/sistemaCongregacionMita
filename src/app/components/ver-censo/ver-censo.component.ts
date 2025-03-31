@@ -262,7 +262,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         const campo = usuario.usuarioCongregacionCampo?.[0]?.campo
           ? usuario.usuarioCongregacionCampo[0].campo.toLocaleLowerCase()
           : '';
-
+        console.log(lowerPais);
         // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
         return (
           (nombreCompletoMatches ||

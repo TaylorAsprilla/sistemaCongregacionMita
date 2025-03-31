@@ -3,24 +3,95 @@
   <app-cargando-informacion></app-cargando-informacion>
   } @if (!cargando) {
   <div class="card">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-8 px-4 pt-4">
-          <h3 class="card-title">Total de Congregaciones ({{ congregaciones.length }})</h3>
-          <p>Congregaciones registradas en la aplicación</p>
-        </div>
-        <div class="col">
-          <div class="float-end p-4">
-            <a class="btn btn-primary" (click)="crearCongregacion()">
-              <i class="fas fa-plus"></i> Crear Congregación
-            </a>
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div class="col-8 px-4 pt-4">
+        <h3 class="card-title">Total de Congregaciones ({{ congregaciones.length }})</h3>
+        <p>Congregaciones registradas en la aplicación</p>
+      </div>
+      <!-- Botón Mostrar/Ocultar Filtros -->
+      <!-- <div class="col "> -->
+      <!-- empiezan botones -->
+      <div class="d-flex align-items-center">
+        <a class="btn btn-primary" (click)="crearCongregacion()"> <i class="fas fa-plus"></i> Crear Congregación </a>
+
+        <button
+          class="btn mx-1 d-flex align-items-center"
+          [ngClass]="{ 'btn-secondary': isFiltrosVisibles, 'btn-outline-secondary': !isFiltrosVisibles }"
+          (click)="esconderFiltros()"
+        >
+          <i class="fa fa-filter"></i>
+          <span class="d-none d-md-inline-block ms-2">
+            {{ isFiltrosVisibles ? 'Ocultar Filtros' : 'Ver Filtros' }}
+          </span>
+        </button>
+
+        <!-- Botón Exportar a Excel -->
+        <button
+          class="btn btn-outline-primary mx-1 d-flex align-items-center"
+          (click)="exportarDatosFiltrados()"
+          title="Exportar a Excel"
+        >
+          <i class="fa fa-download" aria-hidden="true"></i>
+          <span class="d-none d-md-inline-block ms-2">Exportar</span>
+        </button>
+      </div>
+
+      <!-- terminan botones -->
+    </div>
+
+    <div class="card-body">
+      @if (isFiltrosVisibles) {
+      <div>
+        <!-- Campo de búsqueda -->
+        <!-- <app-filtros (onFiltroNombre)="obtenerFiltroNombre($event)"></app-filtros> -->
+        @if (congregaciones.length > 0) {
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="selectPais">País</label>
+                <select
+                  id="selectPais"
+                  class="form-select form-control"
+                  (ngModelChange)="filtrarPais($event)"
+                  [(ngModel)]="originalPais"
+                >
+                  <option value="">Seleccione País</option>
+                  @for (pais of paises; track pais) {
+                  <option [ngValue]="pais">{{ pais.pais }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+              <div class="form-group">
+                <label>Buscar</label>
+                <input
+                  type="search"
+                  class="form-control"
+                  [(ngModel)]="filterText"
+                  placeholder="Buscar por nombre, e-mail u obreros..."
+                  name="filtro"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+              <div class="form-group w-100">
+                <button class="btn btn-primary w-100" (click)="resetFiltros()">Reset Filtros</button>
+              </div>
+            </div>
           </div>
         </div>
+        } @else {
+        <div class="card">
+          <div class="card-body">No existen feligreses registrados en su congregación a cargo</div>
+        </div>
+        }
       </div>
-    </div>
-    <div class="card-body">
-      <!-- Campo de búsqueda -->
-      <app-filtros (onFiltroNombre)="obtenerFiltroNombre($event)"></app-filtros>
+      }
+
       <div class="table-responsive">
         <table class="table table-bordered table-striped mx-auto">
           <thead>
@@ -36,7 +107,7 @@
             </tr>
           </thead>
           <tbody>
-            @for ( congregacion of congregaciones | filterByNombrePipe : 'congregacion' : filtroNombre; track
+            @for ( congregacion of congregacionesFiltradas | filterByNombrePipe : 'congregacion' : filtroNombre; track
             congregacion; let i = $index) {
             <tr>
               <td>{{ i + 1 }}</td>
