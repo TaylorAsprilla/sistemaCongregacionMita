@@ -644,33 +644,33 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  transferirUsuario(id: number) {
+  transferirUsuario(id: number): void {
     Swal.fire({
       title: 'Transferir Feligrés',
       html: `
-            <div class="form-group mb-3">
-                <label for="swalPais" class="form-label">Congregación País</label>
-                <select id="swalPais" class="form-select">
-                    <option value="">Seleccione País</option>
-                    <option value=${CONGREGACION_ID.SIN_CONGREGACION_PAIS}>Sin Congregación País</option>
-                    ${this.paises.map((pais) => `<option value="${pais.id}">${pais.pais}</option>`).join('')}
-                </select>
-            </div>
-            <div class="form-group  mb-3">
-                <label for="swalCongregacion" class="form-label">Congregación Ciudad</label>
-                <select id="swalCongregacion" class="form-select">
-                    <option value="">Seleccione Congregación</option>
-                    <option value=${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}>Sin Congregación Ciudad</option>'
-                </select>
-            </div>
-            <div class="form-group mb-3">
-                <label for="swalCampo" class="form-label">Congregación Campo</label>
-                <select id="swalCampo" class="form-select">
-                    <option value="">Seleccione Campo</option>
-                    <option value=${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}>Sin Campo</option>
-                </select>
-            </div>
-        `,
+        <div class="form-group mb-3">
+          <label for="swalPais" class="form-label">Congregación País</label>
+          <select id="swalPais" class="form-select">
+            <option value="">Seleccione País</option>
+            <option value="${CONGREGACION_ID.SIN_CONGREGACION_PAIS}">Sin Congregación País</option>
+            ${this.paises.map((pais) => `<option value="${pais.id}">${pais.pais}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="swalCongregacion" class="form-label">Congregación Ciudad</label>
+          <select id="swalCongregacion" class="form-select">
+            <option value="">Seleccione Congregación</option>
+            <option value="${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}">Sin Congregación Ciudad</option>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="swalCampo" class="form-label">Congregación Campo</label>
+          <select id="swalCampo" class="form-select">
+            <option value="">Seleccione Campo</option>
+            <option value="${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}">Sin Campo</option>
+          </select>
+        </div>
+      `,
       showCancelButton: true,
       confirmButtonText: 'Actualizar',
       didOpen: () => {
@@ -682,24 +682,27 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         paisSelect.addEventListener('change', () => {
           const paisId = paisSelect.value;
           const congregacionesFiltradas = this.congregaciones.filter((c) => c.pais_id === Number(paisId));
-          congregacionSelect.innerHTML = '<option value="">Seleccione Congregación</option>';
-          congregacionSelect.innerHTML =
-            '<option value=${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}>Sin Congregación Ciudad</option>';
+          congregacionSelect.innerHTML = `
+            <option value="">Seleccione Congregación</option>
+            <option value="${CONGREGACION_ID.SIN_CONGREGACION_CIUDAD}">Sin Congregación Ciudad</option>
+          `;
           congregacionesFiltradas.forEach((c) => {
             congregacionSelect.innerHTML += `<option value="${c.id}">${c.congregacion}</option>`;
           });
-          campoSelect.innerHTML = '<option value="">Seleccione Campo</option>';
-
-          campoSelect.innerHTML = '<option value=${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}>Sin Campo</option>';
-          // Limpiar campos al cambiar país
+          campoSelect.innerHTML = `
+            <option value="">Seleccione Campo</option>
+            <option value="${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}">Sin Campo</option>
+          `;
         });
 
         // Evento para filtrar campos al cambiar de congregación
         congregacionSelect.addEventListener('change', () => {
           const congregacionId = congregacionSelect.value;
-          const camposFiltrados = this.campos.filter((c) => c.congregacion_id == Number(congregacionId));
-          campoSelect.innerHTML = '<option value="">Seleccione Campo</option>';
-          campoSelect.innerHTML = '<option value=${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}>Sin Campo</option>';
+          const camposFiltrados = this.campos.filter((c) => c.congregacion_id === Number(congregacionId));
+          campoSelect.innerHTML = `
+            <option value="">Seleccione Campo</option>
+            <option value="${CONGREGACION_ID.SIN_CONGREGACION_CAMPO}">Sin Campo</option>
+          `;
           camposFiltrados.forEach((c) => {
             campoSelect.innerHTML += `<option value="${c.id}">${c.campo}</option>`;
           });
@@ -714,7 +717,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
           Swal.showValidationMessage('Por favor complete todos los campos');
         }
 
-        return { pais, congregacion, campo };
+        return { pais: Number(pais), congregacion: Number(congregacion), campo: Number(campo) };
       },
     }).then((result) => {
       if (result.isConfirmed) {
