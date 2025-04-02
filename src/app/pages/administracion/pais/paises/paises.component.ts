@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -12,17 +12,17 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 import { FiltrosComponent } from '../../../../components/filtros/filtros.component';
 import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/filter-by-nombre-pipe.pipe';
+import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
+
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-paises',
-    templateUrl: './paises.component.html',
-    styleUrls: ['./paises.component.css'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent,
-    FiltrosComponent,
-    FilterByNombrePipePipe
-],
+  selector: 'app-paises',
+  templateUrl: './paises.component.html',
+  styleUrls: ['./paises.component.css'],
+  standalone: true,
+  imports: [CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
 })
 export class PaisesComponent implements OnInit, OnDestroy {
   cargando: boolean = true;
@@ -35,7 +35,20 @@ export class PaisesComponent implements OnInit, OnDestroy {
   // Subscription
   paisSubscription: Subscription;
 
-  constructor(private router: Router, private paisService: PaisService, private activatedRoute: ActivatedRoute) {}
+  isFiltrosVisibles: boolean = false;
+  filtrarTexto: string = '';
+
+  @Input() nombreArchivo: string = '';
+  @Input() totalPaises: number = 0;
+  paisesFiltrados: CongregacionPaisModel[] = [];
+  pagina: number = 1;
+
+  constructor(
+    private router: Router,
+    private paisService: PaisService,
+    private activatedRoute: ActivatedRoute,
+    private exportarExcelService: ExportarExcelService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: { divisas: DivisaModel[]; obrero: UsuarioModel[] }) => {
@@ -57,6 +70,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
       .pipe(delay(100))
       .subscribe((pais: CongregacionPaisModel[]) => {
         this.paises = pais;
+        this.paisesFiltrados = pais;
         this.cargando = false;
       });
   }
@@ -140,5 +154,62 @@ export class PaisesComponent implements OnInit, OnDestroy {
 
   obtenerFiltroNombre(nombre: string) {
     this.filtroNombre = nombre;
+  }
+
+  exportarDatosFiltrados(): void {
+    const datosParaExportar = this.paisesFiltrados.map((pais) => ({
+      ID: pais.id,
+      Nombre: pais.pais,
+      Obrero: this.buscarObrero(pais.idObreroEncargado) || 'N/A',
+      Divisa: this.buscarDivisa(pais.idDivisa),
+    }));
+    this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo);
+  }
+
+  esconderFiltros() {
+    this.isFiltrosVisibles = !this.isFiltrosVisibles;
+  }
+
+  get filterText() {
+    return this.filtrarTexto;
+  }
+
+  set filterText(value: string) {
+    this.filtrarTexto = value;
+    this.paisesFiltrados = this.filterPaises(this.filterText);
+    this.totalPaises = this.paisesFiltrados.length;
+    this.pagina = 1;
+  }
+
+  resetFiltros() {
+    this.filterText = '';
+  }
+
+  filterPaises(filterTerm: string): CongregacionPaisModel[] {
+    const lowerFilterTerm = this.normalizeString(filterTerm);
+
+    // Si no hay usuarios y los filtros están vacíos, devolvemos todos los usuarios
+    if (this.paises.length === 0 && lowerFilterTerm === '') {
+      return this.paisesFiltrados;
+    } else {
+      return this.paises.filter((country: CongregacionPaisModel) => {
+        // Utilizamos una función de utilidad para convertir a minúsculas de forma segura
+        const getSafeString = (value: string | undefined): string => (value ? value.toLocaleLowerCase() : '');
+
+        const pais = this.normalizeString(getSafeString(country.pais));
+        const obrero = this.normalizeString(getSafeString(this.buscarObrero(country.idObreroEncargado)));
+
+        // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
+        return pais.includes(lowerFilterTerm) || obrero.includes(lowerFilterTerm);
+      });
+    }
+  }
+
+  // Función para convertir a minúsculas y eliminar acentos
+  private normalizeString(str: string): string {
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // elimina tildes para la busqueda
+      .toLowerCase();
   }
 }
