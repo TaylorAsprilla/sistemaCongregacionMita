@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { delay, filter } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -11,26 +11,19 @@ import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { AccesoCongregacionMultimedia } from 'src/app/core/interfaces/acceso-multimedia';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
-
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
-import { FiltrosComponent } from '../../../../components/filtros/filtros.component';
 import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/filter-by-nombre-pipe.pipe';
-import { CongregacionInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
-
 import { FormsModule } from '@angular/forms';
-
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
-import { CongregacionInterfase } from 'src/app/core/interfaces/register-form.interface';
 
 @Component({
   selector: 'app-congregaciones',
   templateUrl: './congregaciones.component.html',
   styleUrls: ['./congregaciones.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, CargandoInformacionComponent, FiltrosComponent, FilterByNombrePipePipe],
+  imports: [CommonModule, FormsModule, CargandoInformacionComponent, FilterByNombrePipePipe],
 })
 export class CongregacionesComponent implements OnInit, OnDestroy {
   cargando: boolean = true;

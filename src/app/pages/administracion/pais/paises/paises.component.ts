@@ -22,7 +22,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './paises.component.html',
   styleUrls: ['./paises.component.css'],
   standalone: true,
-  imports: [CargandoInformacionComponent, FiltrosComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
+  imports: [CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
 })
 export class PaisesComponent implements OnInit, OnDestroy {
   cargando: boolean = true;

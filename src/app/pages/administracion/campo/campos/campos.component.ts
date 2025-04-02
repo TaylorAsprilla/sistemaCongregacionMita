@@ -24,7 +24,7 @@ import { CongregacionService } from 'src/app/services/congregacion/congregacion.
   templateUrl: './campos.component.html',
   styleUrls: ['./campos.component.css'],
   standalone: true,
-  imports: [CargandoInformacionComponent, FiltrosComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
+  imports: [CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
 })
 export class CamposComponent implements OnInit {
   cargando: boolean = true;
