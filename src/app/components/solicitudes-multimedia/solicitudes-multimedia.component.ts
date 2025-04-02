@@ -13,6 +13,7 @@ import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
 import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
 import { CalcularEdadPipe } from 'src/app/pipes/calcularEdad/calcular-edad.pipe';
+import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
 
 @Component({
   selector: 'app-solicitudes-multimedia',
@@ -34,6 +35,8 @@ import { CalcularEdadPipe } from 'src/app/pipes/calcularEdad/calcular-edad.pipe'
 export class SolicitudesMultimediaComponent {
   @Input() solicitudes: UsuarioSolicitudMultimediaModel[] = [];
   @Input() usuarioId: number;
+
+  @Input() nombreArchivo: string = '';
 
   @Output() onCrearAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
     new EventEmitter<UsuarioSolicitudInterface>();
@@ -91,7 +94,8 @@ export class SolicitudesMultimediaComponent {
     private router: Router,
     private accesoMultimediaService: AccesoMultimediaService,
     private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private exportarExcelService: ExportarExcelService
   ) {}
 
   ngOnInit(): void {
@@ -344,5 +348,18 @@ export class SolicitudesMultimediaComponent {
 
   toggleFiltros(): void {
     this.mostrarFiltros = !this.mostrarFiltros;
+  }
+
+  exportarDatosFiltrados(): void {
+    const datosParaExportar = this.filteredSolicitudes.map((solicitud) => ({
+      Numero_mita: solicitud.id,
+      Nombre: solicitud.nombreCompleto,
+      Email: solicitud.email,
+      Celular: solicitud.numeroCelular,
+      Congregacion: solicitud.congregacion,
+      Campo: solicitud.campo,
+      Estado: solicitud.estadoUltimaSolicitud,
+    }));
+    this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo);
   }
 }

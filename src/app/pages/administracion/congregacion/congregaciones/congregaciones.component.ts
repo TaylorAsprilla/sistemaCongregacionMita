@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -11,17 +11,19 @@ import Swal from 'sweetalert2';
 import { generate } from 'generate-password-browser';
 import { AccesoCongregacionMultimedia } from 'src/app/core/interfaces/acceso-multimedia';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
-
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
-import { FiltrosComponent } from '../../../../components/filtros/filtros.component';
 import { FilterByNombrePipePipe } from '../../../../pipes/FilterByNombrePipe/filter-by-nombre-pipe.pipe';
+import { CampoModel } from 'src/app/core/models/campo.model';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
 
 @Component({
   selector: 'app-congregaciones',
   templateUrl: './congregaciones.component.html',
   styleUrls: ['./congregaciones.component.css'],
   standalone: true,
-  imports: [CargandoInformacionComponent, FiltrosComponent, FilterByNombrePipePipe],
+  imports: [CommonModule, FormsModule, CargandoInformacionComponent, FilterByNombrePipePipe],
 })
 export class CongregacionesComponent implements OnInit, OnDestroy {
   cargando: boolean = true;
@@ -34,11 +36,29 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
   // Subscription
   congregacionSubscription: Subscription;
 
+  isFiltrosVisibles: boolean = false;
+
+  pagina: number = 1;
+  filtrarTexto: string = '';
+  filtrarCongreTexto: string = '';
+  filtrarPaisTexto: string = '';
+  originalPais: string = '';
+  originalCongre: string = '';
+  filtrarCampoTexto: string = '';
+
+  congregacionesFiltradas: CongregacionModel[] = [];
+  camposFiltrados: CampoModel[] = [];
+
+  @Input() totalCongregaciones: number = 0;
+  @Input() nombrePais: string = '';
+  @Input() nombreArchivo: string = '';
+
   constructor(
     private router: Router,
     private congregacionService: CongregacionService,
     private accesoMultimediaService: AccesoMultimediaService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private exportarExcelService: ExportarExcelService
   ) {}
 
   ngOnInit(): void {
@@ -46,8 +66,15 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
       this.obreros = data.obrero;
       this.paises = data.pais;
     });
-
     this.cargarCongregaciones();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['congregaciones']?.currentValue) {
+      this.congregacionesFiltradas = this.congregaciones;
+
+      this.nombrePais = this.congregaciones[0]?.pais_id?.toString() ?? '';
+    }
   }
 
   ngOnDestroy(): void {
@@ -61,6 +88,7 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
       .pipe(delay(100))
       .subscribe((congregaciones: CongregacionModel[]) => {
         this.congregaciones = congregaciones;
+        this.congregacionesFiltradas = congregaciones;
         this.cargando = false;
       });
   }
@@ -138,10 +166,6 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
 
   buscarPais(idPais: number): string | undefined {
     return this.paises.find((pais) => pais.id === idPais)?.pais;
-  }
-
-  obtenerFiltroNombre(nombre: string) {
-    this.filtroNombre = nombre;
   }
 
   async crearCredenciales(nombreCongregacion: string, email: string): Promise<void> {
@@ -257,5 +281,118 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
     });
 
     return password;
+  }
+
+  filtrarCongregacionesPorPais(pais: string) {
+    this.congregacionesFiltradas = this.congregaciones?.filter(
+      (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
+    );
+  }
+
+  filtrarPais(value: any) {
+    if (value.pais === undefined) {
+      this.filtrarPaisTexto = '';
+      this.congregacionesFiltradas = this.congregaciones;
+    } else {
+      this.originalPais = value.pais;
+      this.filtrarPaisTexto = value.pais;
+      this.filtrarCongregacionesPorPais(value.id);
+    }
+    this.congregacionesFiltradas = this.filterCongregaciones(this.filterText, this.filtrarPaisTexto);
+
+    this.totalCongregaciones = this.congregacionesFiltradas.length;
+    this.pagina = 1;
+  }
+
+  get filterText() {
+    return this.filtrarTexto;
+  }
+
+  set filterText(value: string) {
+    this.filtrarTexto = value;
+    this.congregacionesFiltradas = this.filterCongregaciones(this.filterText, this.filtrarPaisTexto);
+    this.totalCongregaciones = this.congregacionesFiltradas.length;
+    this.pagina = 1;
+  }
+
+  esconderFiltros() {
+    this.isFiltrosVisibles = !this.isFiltrosVisibles;
+  }
+
+  resetFiltros() {
+    if (!this.congregaciones || this.congregaciones.length === 0) {
+      return; // Si no hay usuarios, no realiza ninguna operación
+    }
+
+    // Reinicia los filtros a sus valores iniciales
+    this.originalPais = '';
+    this.originalCongre = '';
+    this.filtrarPaisTexto = '';
+    this.filtrarCongreTexto = '';
+    this.filtrarCampoTexto = '';
+    this.filterText = '';
+
+    // Restaura la lista completa sin cálculos adicionales
+    this.congregacionesFiltradas = [...this.congregaciones];
+
+    // Actualiza los contadores y reinicia la paginación
+    this.totalCongregaciones = this.congregacionesFiltradas.length;
+    this.pagina = 1;
+  }
+
+  exportarDatosFiltrados(): void {
+    const datosParaExportar = this.congregacionesFiltradas.map((congre) => ({
+      ID: congre.id,
+      Nombre: congre.congregacion,
+      Obrero: this.buscarObrero(congre.idObreroEncargado) || 'N/A',
+      Obrero_Auxiliar: this.buscarObrero(congre.idObreroEncargadoDos) || 'N/A',
+      Pais: this.buscarPais(congre.pais_id),
+      email: congre.email || 'N/A',
+      estado: congre.estado,
+    }));
+    this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo);
+  }
+
+  filterCongregaciones(
+    filterTerm: string,
+
+    pais: string
+  ): CongregacionModel[] {
+    const lowerFilterTerm = this.normalizeString(filterTerm);
+    const lowerPais = pais.toLocaleLowerCase();
+
+    // Si no hay usuarios y los filtros están vacíos, devolvemos todos los usuarios
+    if (this.congregaciones.length === 0 && (lowerFilterTerm === '' || lowerPais === '')) {
+      return this.congregacionesFiltradas;
+    } else {
+      return this.congregaciones.filter((congre: CongregacionModel) => {
+        // Utilizamos una función de utilidad para convertir a minúsculas de forma segura
+        const getSafeString = (value: string | undefined): string => (value ? value.toLocaleLowerCase() : '');
+
+        const email = getSafeString(congre.email).toLocaleLowerCase();
+        const pais = getSafeString(this.buscarPais(congre.pais_id)).toLocaleLowerCase();
+
+        const obrero = this.normalizeString(getSafeString(this.buscarObrero(congre.idObreroEncargado)));
+        const obreroDos = this.normalizeString(getSafeString(this.buscarObrero(congre.idObreroEncargadoDos)));
+
+        const congregacion = this.normalizeString(congre.congregacion.toLowerCase());
+
+        // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
+        return (
+          pais.includes(lowerPais) &&
+          (email.includes(lowerFilterTerm) ||
+            congregacion.includes(lowerFilterTerm) ||
+            obrero.includes(lowerFilterTerm) ||
+            obreroDos.includes(lowerFilterTerm))
+        );
+      });
+    }
+  }
+  // Función para convertir a minúsculas y eliminar acentos
+  private normalizeString(str: string): string {
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // elimina tildes para la busqueda
+      .toLowerCase();
   }
 }
