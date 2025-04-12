@@ -85,13 +85,13 @@
                   <a [routerLink]="[Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
                 </li>
               </div>
-              }
+              } @if(!isQrLogin){
               <li role="separator" class="divider"></li>
               <li>
                 <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
               </li>
               <li role="separator" class="divider"></li>
-              @if (usuario) {
+              } @if (usuario) {
               <div>
                 <li>
                   <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>

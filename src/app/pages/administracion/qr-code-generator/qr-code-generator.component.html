@@ -1,0 +1,68 @@
+<div class="solicitud">
+  <div class="row crearSolicitud">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Generar Código QR</h3>
+        </div>
+
+        @if (cargando) {
+        <app-cargando-informacion></app-cargando-informacion>
+        } @if (!cargando) {
+
+        <div class="card-body">
+          <form [formGroup]="qrForm" (ngSubmit)="generateQRCode()">
+            <div class="form-group">
+              <label for="idCongregacion">Selecciona la Congregación</label>
+              <select id="idCongregacion" class="form-control" formControlName="idCongregacion">
+                <option value="">-- Selecciona una opción --</option>
+                @for (congregacion of congregaciones; track $index) {
+                <option [value]="congregacion.id">
+                  {{ congregacion.congregacion }}
+                </option>
+                }
+              </select>
+              @if (qrForm.get('idCongregacion')?.invalid && qrForm.get('idCongregacion')?.touched) {
+              <small class="text-danger">Debes seleccionar una congregación.</small>
+              }
+            </div>
+
+            <div class="alert alert-info mt-2" role="alert">
+              Si ya existe un código QR activo para esta congregación, se desactivará automáticamente al generar uno
+              nuevo.
+            </div>
+
+            <div class="form-group mt-3">
+              <label for="descripcion">Descripción</label>
+              <input
+                type="text"
+                id="descripcion"
+                formControlName="descripcion"
+                class="form-control"
+                placeholder="Ingresa la descripción"
+              />
+              @if (qrForm.get('descripcion')?.invalid && qrForm.get('descripcion')?.touched) {
+              <small class="text-danger">Descripción es obligatoria y debe tener al menos 3 caracteres.</small>
+              }
+            </div>
+
+            <div class="mt-4">
+              <button type="submit" class="btn btn-primary" [disabled]="qrForm.invalid">Generar QR</button>
+            </div>
+          </form>
+
+          @if (qrImage) {
+          <div class="qr-container mt-4 text-center">
+            <img [src]="qrImage" alt="Código QR" class="img-fluid" style="max-width: 300px" />
+            <div class="mt-3">
+              <button class="btn btn-outline-primary me-2" (click)="downloadQRCode()">Descargar QR</button>
+              <button class="btn btn-outline-secondary" (click)="copyQRCode()">Copiar</button>
+            </div>
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
