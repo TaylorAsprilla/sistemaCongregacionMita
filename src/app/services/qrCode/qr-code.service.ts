@@ -24,6 +24,6 @@ export class QrCodeService {
   }
 
   getQRCode(idCongregacion: number, descripcion: string): Observable<any> {
-    return this.httpClient.post<any>(`${base_url}/accesoqr/generarQr`, { idCongregacion, descripcion });
+    return this.httpClient.post<any>(`${base_url}/accesoqr/generarQr`, { idCongregacion, descripcion }, this.headers);
   }
 }
