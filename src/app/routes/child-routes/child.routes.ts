@@ -178,7 +178,7 @@ export const childRoutes: Routes = [
     path: `${RUTAS.MINISTERIOS}/:id`,
     component: CrearMinisterioComponent,
     resolve: { ministerio: MinisterioResolver },
-    data: { titulo: 'Crear Pais' },
+    data: { titulo: 'Crear Ministerio' },
   },
 
   {
@@ -307,6 +307,11 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.PARENTESCO,
     component: ParentescoComponent,
+  },
+
+  {
+    path: RUTAS.GENERAR_QR,
+    loadComponent: () => import('src/app/pages/administracion/qr-code-generator/qr-code-generator.component'),
   },
 
   // Perfil
