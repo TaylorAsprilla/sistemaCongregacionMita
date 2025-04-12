@@ -7,21 +7,16 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { GENERO } from 'src/app/core/enums/genero.enum';
 import { FormsModule } from '@angular/forms';
+import { configuracion } from 'src/environments/config/configuration';
 
 declare var $: any;
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    NgbDropdown,
-    NgbDropdownToggle,
-    NgbDropdownMenu,
-    RouterLink
-],
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink],
 })
 export class HeaderComponent implements OnInit {
   @Output() toggleSidebar = new EventEmitter<void>();
@@ -37,6 +32,8 @@ export class HeaderComponent implements OnInit {
   email: string | undefined = '';
   numeroCelular: string = '';
 
+  isQrLogin: boolean = false;
+
   fotoPerfil: string = '';
 
   get Rutas() {
@@ -48,6 +45,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.usuario = this.usuarioService.usuario;
     this.multimediaCongregacion = this.usuarioService.multimediaCongregacion;
+    this.isQrLogin = this.usuarioService.isQRLogin;
 
     if (this.usuario) {
       const { primerNombre, segundoNombre, primerApellido, segundoApellido, email, numeroCelular, genero } =
@@ -58,7 +56,10 @@ export class HeaderComponent implements OnInit {
       this.numeroCelular = numeroCelular;
 
       this.fotoPerfil =
-        genero?.genero === GENERO.MASCULINO ? 'assets/images/users/perfil.png' : 'assets/images/users/perfil-mujer.png';
+        genero?.genero === GENERO.MASCULINO ? configuracion.avatarMasculino : configuracion.avatarFemenino;
+    } else if (this.usuarioService.nombreQR) {
+      this.nombre = this.usuarioService.nombreQR;
+      this.fotoPerfil = configuracion.logoMultimedia;
     } else if (this.multimediaCongregacion) {
       const { congregacion, email } = this.multimediaCongregacion;
 

@@ -87,6 +87,9 @@ export class SidebarComponent implements OnInit {
 
       this.fotoPerfil =
         genero?.genero === GENERO.MASCULINO ? configuracion.avatarMasculino : configuracion.avatarFemenino;
+    } else if (this.usuarioService.nombreQR) {
+      this.fotoPerfil = configuracion.logoMultimedia;
+      this.nombre = this.usuarioService.nombreQR;
     } else if (this.multimediaCongregacion) {
       const { congregacion, email } = this.multimediaCongregacion;
 

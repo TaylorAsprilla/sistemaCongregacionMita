@@ -19,6 +19,7 @@ export enum RUTAS {
   CENSO = 'censo',
   EVENTOS = 'eventos',
   EVENTOS_EN_VIVO = 'eventos-en-vivo',
+  GENERAR_QR = 'generar-qr',
   HOME = '/#/sistema/inicio',
   INICIO = 'inicio',
   INFORME = 'informe',
@@ -31,6 +32,7 @@ export enum RUTAS {
   MINISTERIOS = 'ministerios',
   PAISES = 'paises',
   PERFIL = 'perfil',
+
   USUARIOS = 'usuarios',
   USUARIOS_AYUDANTE = 'usuarios-ayudante',
   USUARIOS_SUPERVISOR = 'usuarios-supervisor',
@@ -191,6 +193,15 @@ export const ROUTES: RouteInfo[] = [
       {
         path: RUTAS.PERMISOS,
         title: 'Asignar Permisos',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+        submenu: [],
+      },
+      {
+        path: RUTAS.GENERAR_QR,
+        title: 'Generar QR',
         icon: '',
         class: '',
         extralink: false,
