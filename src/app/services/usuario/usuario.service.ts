@@ -25,6 +25,7 @@ export class UsuarioService {
   public usuario: UsuarioModel;
   public idUsuario: number;
   public multimediaCongregacion: MultimediaCongregacionModel;
+  public nombreQR: string;
 
   private inactiveTimeout: any;
   public timeRemaining: EventEmitter<number> = new EventEmitter<number>();
@@ -73,6 +74,10 @@ export class UsuarioService {
     return this.usuario.usuarioPermiso.map((permiso) => {
       return permiso.permiso;
     });
+  }
+
+  get isQRLogin() {
+    return localStorage.getItem('isQRLogin') === 'isQRLogin';
   }
 
   get headers() {
@@ -146,6 +151,7 @@ export class UsuarioService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('isQRLogin');
     this.router.navigateByUrl('/login');
     sessionStorage.clear();
   }
@@ -159,7 +165,7 @@ export class UsuarioService {
       })
       .pipe(
         map((respuesta: any) => {
-          if (!!respuesta.congregacion) {
+          if (!!respuesta.congregacion && !sessionStorage.getItem('nombre')) {
             const { id, congregacion, email, pais_id, idObreroEncargado } = respuesta.congregacion;
             this.usuario = null;
 
@@ -172,6 +178,22 @@ export class UsuarioService {
             );
 
             localStorage.setItem('token', respuesta.token);
+            return true;
+          } else if (!!this.isQRLogin) {
+            const { id, congregacion, email, pais_id, idObreroEncargado } = respuesta.congregacion;
+
+            const nombre = sessionStorage.getItem('nombre') || '';
+            this.nombreQR = nombre;
+
+            this.multimediaCongregacion = new MultimediaCongregacionModel(
+              id,
+              congregacion,
+              email,
+              pais_id,
+              idObreroEncargado
+            );
+
+            localStorage.setItem('token', localStorage.getItem('token'));
             return true;
           } else {
             const {
@@ -320,6 +342,19 @@ export class UsuarioService {
           localStorage.setItem('token', resp.token);
           this.idUsuario = resp.usuario.id;
         }
+      })
+    );
+  }
+
+  loginPorQr(ticket: string, nombre: string) {
+    return this.httpClient.post(`${base_url}/accesoqr/loginQr`, { qrCode: ticket, nombre }).pipe(
+      tap((resp: any) => {
+        localStorage.setItem('token', resp.token);
+        localStorage.setItem('isQRLogin', 'isQRLogin');
+        sessionStorage.setItem('nombre', nombre);
+        sessionStorage.setItem('congregacion', resp.congregacion.congregacion);
+        this.idUsuario = resp.congregacion.id;
+        this.nombreQR = resp.nombre;
       })
     );
   }

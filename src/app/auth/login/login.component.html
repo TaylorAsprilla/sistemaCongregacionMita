@@ -6,85 +6,114 @@
           src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
           class="img-fluid"
           alt="Sample image"
+        />
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <div class="text-center">
+          <img
+            src="assets/images/escudo-congregacion-mita.png"
+            width="30%"
+            alt="Congregación Mita INC"
+            class="img-fluid"
           />
         </div>
-        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-          <div class="text-center">
-            <img
-              src="assets/images/escudo-congregacion-mita.png"
-              width="30%"
-              alt="Congregación Mita INC"
-              class="img-fluid"
-              />
+
+        @if (ticketQr && qrLoginForm) {
+        <div class="alert alert-primary mt-4" role="alert">
+          Has escaneado un código QR. Para continuar, por favor ingresa tu nombre completo y presiona el botón
+          <strong>“Iniciar sesión con QR”</strong>.
+        </div>
+
+        <form [formGroup]="qrLoginForm" (ngSubmit)="loginConQr()">
+          <div class="form-outline mb-4">
+            <input
+              type="text"
+              formControlName="nombre"
+              class="form-control form-control-lg"
+              placeholder="Tu nombre completo"
+              [ngClass]="{
+                'is-invalid': qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched
+              }"
+            />
+
+            @if (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) {
+            <div class="invalid-feedback">
+              @if (qrLoginForm.get('nombre')?.errors?.['required']) {
+              <small>El nombre es obligatorio.</small>
+              } @if (qrLoginForm.get('nombre')?.errors?.['minlength']) {
+              <small>Debe tener al menos 2 caracteres.</small>
+              } @if (qrLoginForm.get('nombre')?.errors?.['maxlength']) {
+              <small>Debe tener menos de 50 caracteres.</small>
+              }
             </div>
+            }
+          </div>
 
-            <form [formGroup]="loginForm" autocomplete="off" class="form-signin">
-              <h2 class="mb-3 text-center">Iniciar Sesión</h2>
+          <div class="text-lg-start mt-4 pt-2">
+            <button type="submit" class="btn btn-primary btn-lg">Iniciar sesión con QR</button>
+          </div>
+        </form>
+        } @else{
 
-              <div class="form-outline mb-4">
-                <input
-                  type="text"
-                  formControlName="login"
-                  class="form-control form-control-lg"
-                  placeholder="Correo electrónico"
+        <form [formGroup]="loginForm" autocomplete="off" class="form-signin">
+          <h2 class="mb-3 text-center">Iniciar Sesión</h2>
+
+          <div class="form-outline mb-4">
+            <input
+              type="text"
+              formControlName="login"
+              class="form-control form-control-lg"
+              placeholder="Correo electrónico"
               [ngClass]="{
                 'is-invalid': isLoginFormSubmitted && loginForm.get('login')?.errors
               }"
-                  />
+            />
 
-                  @if (isLoginFormSubmitted && loginForm.get('login')?.errors) {
-                    <small
-                      class="form-text text-danger"
-                      class="invalid-feedback"
-                      >
-                      El correo electrónico es requerido.
-                    </small>
-                  }
-                </div>
+            @if (isLoginFormSubmitted && loginForm.get('login')?.errors) {
+            <small class="form-text text-danger" class="invalid-feedback"> El correo electrónico es requerido. </small>
+            }
+          </div>
 
-                <div>
-                  <div class="input-group form-outline mb-3">
-                    <input
-                      type="{{ showPassword ? 'text' : 'password' }}"
-                      formControlName="password"
-                      class="form-control form-control-lg"
-                      placeholder="Contraseña"
+          <div>
+            <div class="input-group form-outline mb-3">
+              <input
+                type="{{ showPassword ? 'text' : 'password' }}"
+                formControlName="password"
+                class="form-control form-control-lg"
+                placeholder="Contraseña"
                 [ngClass]="{
                   'is-invalid': isLoginFormSubmitted && loginForm.get('password')?.errors
                 }"
-                      />
-                      <span class="input-group-text" (click)="togglePasswordVisibility()">
-                        <i class="feather" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
-                      </span>
-                    </div>
-
-                    @if (isLoginFormSubmitted && loginForm.get('password')?.hasError('required')) {
-                      <small
-                        class="form-text text-danger"
-                        >
-                        La contraseña es requerida.
-                      </small>
-                    }
-                  </div>
-
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="form-check mb-0">
-                      <input class="form-check-input me-2" type="checkbox" formControlName="remember" id="recordar" />
-                      <label class="form-check-label mt-3" for="recordar"> Recordar </label>
-                    </div>
-                    <a [routerLink]="[Rutas.RECUPERAR_CUENTA]" class="text-body">¿Has olvidado tu contraseña?</a>
-                  </div>
-
-                  <div class="text-lg-start mt-4 pt-2">
-                    <button type="submit" class="btn btn-primary btn-lg" (click)="login()">Iniciar Sesión</button>
-                  </div>
-                </form>
-              </div>
+              />
+              <span class="input-group-text" (click)="togglePasswordVisibility()">
+                <i class="feather" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+              </span>
             </div>
+
+            @if (isLoginFormSubmitted && loginForm.get('password')?.hasError('required')) {
+            <small class="form-text text-danger"> La contraseña es requerida. </small>
+            }
           </div>
-          <div class="text-center py-4 px-4 px-xl-5 bg-primary">
-            <div class="text-white mb-3 mb-md-0">
-              Congregación Mita Inc. Copyright © {{ obtenerAnioActual() }} Derechos Reservados. Términos y Condiciones
+
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="form-check mb-0">
+              <input class="form-check-input me-2" type="checkbox" formControlName="remember" id="recordar" />
+              <label class="form-check-label mt-3" for="recordar"> Recordar </label>
             </div>
+            <a [routerLink]="[Rutas.RECUPERAR_CUENTA]" class="text-body">¿Has olvidado tu contraseña?</a>
           </div>
-        </section>
+
+          <div class="text-lg-start mt-4 pt-2">
+            <button type="submit" class="btn btn-primary btn-lg" (click)="login()">Iniciar Sesión</button>
+          </div>
+        </form>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="text-center py-4 px-4 px-xl-5 bg-primary">
+    <div class="text-white mb-3 mb-md-0">
+      Congregación Mita Inc. Copyright © {{ obtenerAnioActual() }} Derechos Reservados. Términos y Condiciones
+    </div>
+  </div>
+</section>
