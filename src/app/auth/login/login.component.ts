@@ -22,6 +22,9 @@ export default class LoginComponent implements OnInit {
   qrLoginForm!: FormGroup;
   isLoginFormSubmitted: Boolean;
 
+  submitted = false;
+  loading = false;
+
   ticketQr: string | null = null;
   nombreUsuarioQr: string = '';
 
@@ -117,10 +120,14 @@ export default class LoginComponent implements OnInit {
   }
 
   loginConQr() {
+    this.submitted = true;
+
     if (this.qrLoginForm.invalid) {
       this.qrLoginForm.markAllAsTouched();
       return;
     }
+
+    this.loading = true;
 
     this.nombreUsuarioQr = this.qrLoginForm.value.nombre.trim();
 

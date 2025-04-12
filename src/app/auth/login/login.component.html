@@ -24,7 +24,7 @@
           <strong>“Iniciar sesión con QR”</strong>.
         </div>
 
-        <form [formGroup]="qrLoginForm" (ngSubmit)="loginConQr()">
+        <form [formGroup]="qrLoginForm" (ngSubmit)="loginConQr()" autocomplete="off">
           <div class="form-outline mb-4">
             <input
               type="text"
@@ -32,12 +32,15 @@
               class="form-control form-control-lg"
               placeholder="Tu nombre completo"
               [ngClass]="{
-                'is-invalid': qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched
+                'is-invalid':
+                  (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) ||
+                  (submitted && qrLoginForm.get('nombre')?.invalid)
               }"
             />
 
-            @if (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) {
-            <div class="invalid-feedback">
+            @if ( (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) || (submitted &&
+            qrLoginForm.get('nombre')?.invalid) ) {
+            <div class="invalid-feedback d-block mt-1">
               @if (qrLoginForm.get('nombre')?.errors?.['required']) {
               <small>El nombre es obligatorio.</small>
               } @if (qrLoginForm.get('nombre')?.errors?.['minlength']) {
@@ -50,9 +53,18 @@
           </div>
 
           <div class="text-lg-start mt-4 pt-2">
-            <button type="submit" class="btn btn-primary btn-lg">Iniciar sesión con QR</button>
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg w-100 d-flex justify-content-center align-items-center"
+              [disabled]="loading"
+            >
+              @if (loading) {
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Cargando... } @else { Iniciar sesión con QR }
+            </button>
           </div>
         </form>
+
         } @else{
 
         <form [formGroup]="loginForm" autocomplete="off" class="form-signin">
