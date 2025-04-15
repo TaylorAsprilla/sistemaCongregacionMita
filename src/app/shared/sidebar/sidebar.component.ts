@@ -50,6 +50,7 @@ export class SidebarComponent implements OnInit {
       this.showMenu = element;
     }
   }
+
   addActiveClass(element: any) {
     if (element === this.showSubMenu) {
       this.showSubMenu = '0';

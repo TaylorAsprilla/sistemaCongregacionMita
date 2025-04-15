@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit {
     } else if (this.multimediaCongregacion) {
       const { congregacion, email } = this.multimediaCongregacion;
 
-      this.fotoPerfil = 'assets/images/users/multimedia.jpg';
+      this.fotoPerfil = configuracion.logoMultimedia;
       this.nombre = congregacion;
       this.email = email;
     }

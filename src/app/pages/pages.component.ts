@@ -49,6 +49,10 @@ export class PagesComponent implements OnInit {
     if (this.multimediaCongregacion) {
       this.showMinisidebar = !this.showMinisidebar;
     }
+
+    if (this.usuarioService.isQRLogin) {
+      this.showMinisidebar = !this.showMinisidebar;
+    }
   }
 
   @HostListener('window:resize', ['$event'])

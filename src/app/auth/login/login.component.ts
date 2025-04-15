@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -34,12 +34,16 @@ export default class LoginComponent implements OnInit {
     return RUTAS;
   }
 
-  private route = inject(ActivatedRoute);
-
-  constructor(private router: Router, private formBuilder: FormBuilder, private usuarioService: UsuarioService) {}
+  constructor(
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private usuarioService: UsuarioService,
+    private ngZone: NgZone,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
+    this.activatedRoute.queryParams.subscribe((params) => {
       const ticket = params['ticket'];
       if (ticket) {
         this.ticketQr = ticket;
@@ -138,9 +142,15 @@ export default class LoginComponent implements OnInit {
           html: `Bienvenido ${this.nombreUsuarioQr}`,
           showConfirmButton: false,
           timer: 1500,
+        }).then(() => {
+          this.ngZone.run(() => {
+            this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`).catch((err) => {
+              console.error('Error en el redireccionamiento:', err);
+            });
+          });
         });
 
-        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
+        console.log('resp', resp);
       },
       (err) => {
         Swal.fire({ icon: 'error', html: `${err.error.msg}` });
