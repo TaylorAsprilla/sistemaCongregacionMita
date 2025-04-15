@@ -149,8 +149,6 @@ export default class LoginComponent implements OnInit {
             });
           });
         });
-
-        console.log('resp', resp);
       },
       (err) => {
         Swal.fire({ icon: 'error', html: `${err.error.msg}` });
