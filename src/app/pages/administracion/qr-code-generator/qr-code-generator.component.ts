@@ -25,6 +25,7 @@ export default class QrCodeGeneratorComponent {
 
   // Subscription
   congregacionSubscription: Subscription;
+  ultimoQrGeneradoSubscription: Subscription;
 
   constructor(
     private qrCodeService: QrCodeService,
@@ -39,10 +40,15 @@ export default class QrCodeGeneratorComponent {
     });
 
     this.cargarCongregaciones();
+
+    this.ultimoQrGeneradoSubscription = this.qrCodeService.getUltimoQrGenerado().subscribe((response) => {
+      this.qrImage = `data:image/png;base64,${response.qrImage}`;
+    });
   }
 
   ngOnDestroy(): void {
     this.congregacionSubscription?.unsubscribe();
+    this.ultimoQrGeneradoSubscription?.unsubscribe();
   }
 
   cargarCongregaciones() {
