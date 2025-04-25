@@ -312,6 +312,10 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.GENERAR_QR,
     loadComponent: () => import('src/app/pages/administracion/qr-code-generator/qr-code-generator.component'),
+    canActivate: [RolesGuard],
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS, ROLES.COMITE_RECTOR],
+    },
   },
 
   // Perfil
