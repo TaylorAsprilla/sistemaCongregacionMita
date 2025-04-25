@@ -76,6 +76,7 @@ export enum ROLES {
   ASISTENTE_OOTS = 'ASISTENTE OOTS',
   AYUDANTE = 'AYUDANTE',
   APROBADOR_MULTIMEDIA = 'APROBADOR MULTIMEDIA',
+  COMITE_RECTOR = 'COMITE RECTOR',
 }
 
 export const ROUTES: RouteInfo[] = [
@@ -193,15 +194,6 @@ export const ROUTES: RouteInfo[] = [
       {
         path: RUTAS.PERMISOS,
         title: 'Asignar Permisos',
-        icon: '',
-        class: '',
-        extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
-        submenu: [],
-      },
-      {
-        path: RUTAS.GENERAR_QR,
-        title: 'Generar QR',
         icon: '',
         class: '',
         extralink: false,
@@ -504,7 +496,24 @@ export const ROUTES: RouteInfo[] = [
       },
     ],
   },
-
+  {
+    path: '',
+    title: 'Código QR',
+    icon: '',
+    class: 'nav-small-cap',
+    extralink: true,
+    role: [ROLES.ADMINISTRADOR, ROLES.COMITE_RECTOR, ROLES.ASISTENTE_OOTS],
+    submenu: [],
+  },
+  {
+    path: RUTAS.GENERAR_QR,
+    title: 'Generar QR',
+    icon: 'fa fa-qrcode',
+    class: '',
+    extralink: false,
+    role: [ROLES.ADMINISTRADOR, ROLES.COMITE_RECTOR, ROLES.ASISTENTE_OOTS],
+    submenu: [],
+  },
   {
     path: '',
     title: 'Live',

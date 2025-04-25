@@ -77,7 +77,7 @@ export class UsuarioService {
   }
 
   get isQRLogin() {
-    return localStorage.getItem('isQRLogin') === 'isQRLogin';
+    return sessionStorage.getItem('isQRLogin') === 'isQRLogin';
   }
 
   get headers() {
@@ -151,7 +151,7 @@ export class UsuarioService {
 
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('isQRLogin');
+    sessionStorage.removeItem('isQRLogin');
     this.router.navigateByUrl('/login');
     sessionStorage.clear();
   }
@@ -350,7 +350,7 @@ export class UsuarioService {
     return this.httpClient.post(`${base_url}/accesoqr/loginQr`, { qrCode: ticket, nombre }).pipe(
       tap((resp: any) => {
         localStorage.setItem('token', resp.token);
-        localStorage.setItem('isQRLogin', 'isQRLogin');
+        sessionStorage.setItem('isQRLogin', 'isQRLogin');
         sessionStorage.setItem('nombre', nombre);
         sessionStorage.setItem('congregacion', resp.congregacion.congregacion);
         this.idUsuario = resp.congregacion.id;
