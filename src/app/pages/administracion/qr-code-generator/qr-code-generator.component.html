@@ -54,7 +54,13 @@
           @if (qrImage) {
           <div class="qr-container mt-4 text-center">
             <h3>Último Código QR Generado</h3>
-            <img [src]="qrImage" alt="Código QR" class="img-fluid" style="max-width: 300px" />
+            <h4>{{ fechaUltimoQr | date : 'dd/MM/yyyy' }}</h4>
+
+            <p>
+              <b>Descripción: </b>
+              {{ descripcion }}
+            </p>
+            <img [src]="qrImage" alt="Código QR" class="img-fluid" alt="Código QR" width="500" />
             <div class="mt-3">
               <button class="btn btn-outline-primary me-2" (click)="downloadQRCode()">Descargar QR</button>
               <button class="btn btn-outline-secondary" (click)="copyQRCode()">Copiar</button>

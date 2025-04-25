@@ -1,16 +1,17 @@
 import Swal from 'sweetalert2';
-import { Component } from '@angular/core';
+import { Component, Pipe } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { QrCodeService } from 'src/app/services/qrCode/qr-code.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { delay, Subscription } from 'rxjs';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CargandoInformacionComponent } from 'src/app/components/cargando-informacion/cargando-informacion.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-qr-code-generator',
   standalone: true,
-  imports: [ReactiveFormsModule, CargandoInformacionComponent],
+  imports: [ReactiveFormsModule, CargandoInformacionComponent, CommonModule],
   templateUrl: './qr-code-generator.component.html',
   styleUrl: './qr-code-generator.component.scss',
 })
@@ -19,6 +20,10 @@ export default class QrCodeGeneratorComponent {
   qrCode: string;
   qrUrl: string;
   qrImage: string;
+
+  descripcion: string;
+
+  fechaUltimoQr: Date;
 
   cargando: boolean = true;
   congregaciones: CongregacionModel[] = [];
@@ -40,15 +45,20 @@ export default class QrCodeGeneratorComponent {
     });
 
     this.cargarCongregaciones();
-
-    this.ultimoQrGeneradoSubscription = this.qrCodeService.getUltimoQrGenerado().subscribe((response) => {
-      this.qrImage = `data:image/png;base64,${response.qrImage}`;
-    });
+    this.cargarUltimoQrGenerado();
   }
 
   ngOnDestroy(): void {
     this.congregacionSubscription?.unsubscribe();
     this.ultimoQrGeneradoSubscription?.unsubscribe();
+  }
+
+  cargarUltimoQrGenerado() {
+    this.ultimoQrGeneradoSubscription = this.qrCodeService.getUltimoQrGenerado().subscribe((response) => {
+      this.qrImage = `data:image/png;base64,${response.qrImage}`;
+      this.fechaUltimoQr = response.qr.createdAt;
+      this.descripcion = response.qr.descripcion;
+    });
   }
 
   cargarCongregaciones() {
