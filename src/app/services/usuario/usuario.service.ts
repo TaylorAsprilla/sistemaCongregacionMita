@@ -417,6 +417,15 @@ export class UsuarioService {
     );
   }
 
+  buscarNumerosMitas(numerosMitas: number[], fechaNacimiento: Date): Observable<any> {
+    const body = {
+      numerosMitas,
+      fechaNacimiento,
+    };
+
+    return this.httpClient.post(`${base_url}/usuarios/buscar-numeros-mitas`, body, this.headers);
+  }
+
   eliminarUsuario(idUsuario: number) {
     return this.httpClient.delete(`${base_url}/usuarios/${idUsuario}`, this.headers);
   }
