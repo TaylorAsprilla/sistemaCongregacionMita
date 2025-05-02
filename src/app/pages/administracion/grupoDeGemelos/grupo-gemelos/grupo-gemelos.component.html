@@ -1,0 +1,75 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-12 px-4 pt-2">
+        <h4 class="card-title mb-0">Registro de Grupo de gemelos, mellizos, trillizos y otros</h4>
+        <small>Complete los datos para registrar el grupo correctamente</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <form (ngSubmit)="enviarFormulario()" [formGroup]="gemelosForm" novalidate>
+      <!-- Tipo de Grupo -->
+      <div class="mb-3">
+        <label class="form-label">Tipo de grupo <span class="text-danger">*</span></label>
+        <select class="form-select" formControlName="tipo" [class.is-invalid]="tipo.invalid && tipo.touched">
+          @for (opcion of tiposGrupo; track opcion) {
+          <option [value]="opcion">{{ opcion }}</option>
+          }
+        </select>
+        @if (tipo.invalid && tipo.touched) {
+        <div class="invalid-feedback">Seleccione un tipo de grupo.</div>
+        }
+      </div>
+
+      <!-- Números MITA -->
+      <div formArrayName="numerosMita">
+        @for (control of numerosMita.controls; let i = $index; track i) {
+        <div [formGroupName]="i" class="mb-3 d-flex align-items-start">
+          <input
+            type="number"
+            class="form-control me-2"
+            formControlName="numero"
+            placeholder="Número Mita"
+            (blur)="generarDescripcion()"
+            [class.is-invalid]="control.get('numero')?.invalid && control.get('numero')?.touched"
+          />
+          @if (numerosMita.length > 2) {
+          <button type="button" class="btn btn-outline-danger" (click)="eliminarCampo(i)" title="Eliminar número">
+            <i class="fa fa-user-xmark"></i>
+          </button>
+          } @if (control.get('numero')?.invalid && control.get('numero')?.touched) {
+          <small class="invalid-feedback d-block ms-2">Ingrese un número válido.</small>
+          }
+        </div>
+        }
+
+        <button type="button" class="btn btn-outline-primary mb-3" (click)="agregarCampo()">
+          <i class="fa fa-plus"></i> Agregar número
+        </button>
+      </div>
+
+      <!-- Fecha de nacimiento -->
+      <div class="mb-3">
+        <label class="form-label">Fecha de nacimiento común <span class="text-danger">*</span></label>
+        <input
+          type="date"
+          class="form-control"
+          formControlName="fechaNacimientoComun"
+          [class.is-invalid]="fechaNacimientoComun.invalid && fechaNacimientoComun.touched"
+        />
+        @if (fechaNacimientoComun.invalid && fechaNacimientoComun.touched) {
+        <div class="invalid-feedback">Ingrese una fecha válida.</div>
+        }
+      </div>
+
+      <!-- Botón de guardar -->
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary" [disabled]="gemelosForm.invalid">
+          <i class="bi bi-check-circle"></i> Guardar grupo
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

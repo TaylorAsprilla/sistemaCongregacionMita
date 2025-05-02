@@ -318,6 +318,25 @@ export const childRoutes: Routes = [
     },
   },
 
+  {
+    path: RUTAS.GRUPO_GEMELOS,
+    loadComponent: () => import('src/app/pages/administracion/grupoDeGemelos/grupo-gemelos/grupo-gemelos.component'),
+    canActivate: [RolesGuard],
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+    },
+  },
+
+  {
+    path: RUTAS.VER_GRUPO_DE_GEMELOS,
+    loadComponent: () =>
+      import('src/app/pages/administracion/grupoDeGemelos/ver-grupo-de-gemelos/ver-grupo-de-gemelos.component'),
+    canActivate: [RolesGuard],
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+    },
+  },
+
   // Perfil
   {
     path: `${RUTAS.PERFIL}/:id`,

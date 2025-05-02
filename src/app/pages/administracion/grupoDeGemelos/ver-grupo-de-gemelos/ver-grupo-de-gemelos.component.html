@@ -1,0 +1,53 @@
+<div class="card shadow-sm rounded-3 border-0">
+  <div class="card-header bg-white border-bottom-0 px-4 pt-4 pb-2">
+    <h4 class="mb-0 fw-medium text-dark">Grupos de Gemelos, Mellizos y Trillizos</h4>
+  </div>
+
+  <div class="card-body px-4">
+    <div class="d-flex flex-column gap-4">
+      @for (grupo of grupos; track grupo.id) {
+      <div class="border rounded-3 p-3 bg-light-subtle">
+        <div class="mb-2">
+          <h5 class="fw-semibold mb-1">{{ grupo.tipo }}</h5>
+          <p class="mb-1">{{ grupo.descripcion }}</p>
+          <p class="mb-0 small">
+            <strong>Fecha común:</strong> {{ grupo.fechaNacimientoComun | date }} | <strong>Miembros:</strong>
+            {{ grupo.usuarios.length }}
+          </p>
+        </div>
+
+        @if (grupo.usuarios.length > 0) {
+        <div class="row row-cols-1 row-cols-md-2 g-3 mt-3">
+          @for (usuario of grupo.usuarios; track usuario.id) {
+          <div class="col">
+            <div class="border rounded p-3 bg-white h-100">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <h6 class="mb-0 fw-semibold">
+                  {{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }}
+                  {{ usuario.segundoApellido }}
+                </h6>
+                <a
+                  [routerLink]="['/sistema/usuarios', usuario.id]"
+                  class="text-decoration-none text-primary-emphasis"
+                  title="Ver usuario"
+                >
+                  <i class="fa fa-eye"></i>
+                </a>
+              </div>
+
+              <p class="mb-1 small"><strong>Apodo:</strong> {{ usuario.apodo || 'N/A' }}</p>
+              <p class="mb-1 small"><strong>Fecha de nacimiento:</strong> {{ usuario.fechaNacimiento | date }}</p>
+              <p class="mb-1 small"><strong>Email:</strong> {{ usuario.email }}</p>
+              <p class="mb-0 small"><strong>Celular:</strong> {{ usuario.numeroCelular || 'No disponible' }}</p>
+            </div>
+          </div>
+          }
+        </div>
+        } @else {
+        <div class="fst-italic mt-2 small">No hay usuarios registrados en este grupo.</div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>
