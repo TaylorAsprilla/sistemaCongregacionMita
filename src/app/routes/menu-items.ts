@@ -2,6 +2,7 @@ import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 
 export enum RUTAS {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
+  AYUDA = 'ayuda',
   BIBLIOTECA_MULTIMEDIA = 'biblioteca-multimedia',
   BIBLIOTECA_SERVICIOS = 'biblioteca-servicios',
   BIBLIOTECA_VIGILIAS = 'biblioteca-vigilias',

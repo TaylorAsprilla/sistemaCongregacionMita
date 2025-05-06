@@ -79,6 +79,23 @@ export const childRoutes: Routes = [
     },
   },
   {
+    path: RUTAS.AYUDA,
+    loadComponent: () => import('src/app/pages/ayuda/ayuda.component'),
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Ayuda',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.ADMINISTRADOR_MULTIMEDIA,
+        ROLES.COMITE_RECTOR,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
+  },
+  {
     path: `${RUTAS.USUARIOS}/:id`,
     loadComponent: () => import('src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component'),
     canActivate: [RolesGuard],

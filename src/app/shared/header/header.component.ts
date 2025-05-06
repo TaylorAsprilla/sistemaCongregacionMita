@@ -2,12 +2,13 @@ import { NgbModal, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-b
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { RUTAS } from 'src/app/routes/menu-items';
+import { ROLES, RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { GENERO } from 'src/app/core/enums/genero.enum';
 import { FormsModule } from '@angular/forms';
 import { configuracion } from 'src/environments/config/configuration';
+import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
 
 declare var $: any;
 
@@ -16,7 +17,7 @@ declare var $: any;
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink],
+  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink, PermisosDirective],
 })
 export class HeaderComponent implements OnInit {
   @Output() toggleSidebar = new EventEmitter<void>();
@@ -38,6 +39,10 @@ export class HeaderComponent implements OnInit {
 
   get Rutas() {
     return RUTAS;
+  }
+
+  get Roles() {
+    return ROLES;
   }
 
   constructor(private usuarioService: UsuarioService, private router: Router, private modalService: NgbModal) {}
