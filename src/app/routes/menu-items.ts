@@ -2,6 +2,7 @@ import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 
 export enum RUTAS {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
+  AYUDA = 'ayuda',
   BIBLIOTECA_MULTIMEDIA = 'biblioteca-multimedia',
   BIBLIOTECA_SERVICIOS = 'biblioteca-servicios',
   BIBLIOTECA_VIGILIAS = 'biblioteca-vigilias',
@@ -28,6 +29,7 @@ export enum RUTAS {
   INFORME_CONTABLE = 'informe-contable',
   INFORME_LOGROS = 'informe-logros',
   INFORME_VISITAS = 'informe-visitas',
+  LISTAR_ACCESOS_QR = 'listar-accesos-qr',
   LOGIN = '/login',
   METAS = 'metas',
   MINISTERIOS = 'ministerios',
@@ -535,13 +537,32 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: RUTAS.GENERAR_QR,
-    title: 'Generar QR',
+    path: '',
+    title: 'Administrar QR',
     icon: 'fa fa-qrcode',
-    class: '',
+    class: 'has-arrow',
     extralink: false,
     role: [ROLES.ADMINISTRADOR, ROLES.COMITE_RECTOR, ROLES.ASISTENTE_OOTS],
-    submenu: [],
+    submenu: [
+      {
+        path: RUTAS.GENERAR_QR,
+        title: 'Generar QR',
+        icon: 'fa fa-qrcode',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.COMITE_RECTOR, ROLES.ASISTENTE_OOTS],
+        submenu: [],
+      },
+      {
+        path: RUTAS.LISTAR_ACCESOS_QR,
+        title: 'Accesos por QR',
+        icon: 'fa fa-qrcode',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.COMITE_RECTOR, ROLES.ASISTENTE_OOTS],
+        submenu: [],
+      },
+    ],
   },
   {
     path: '',

@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component, Pipe } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { QrCodeService } from 'src/app/services/qrCode/qr-code.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';

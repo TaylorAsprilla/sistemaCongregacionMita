@@ -1,0 +1,47 @@
+<section class="content">
+  <!-- Cargando información -->
+  @if (cargando) {
+  <app-cargando-informacion></app-cargando-informacion>
+  } @if (!cargando && accesosQr.length > 0) {
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-8 px-4 pt-4">
+          <h3 class="card-title">Total de Accesos QR ({{ accesosQr.length }})</h3>
+          <p>Accesos registrados mediante código QR</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped mx-auto">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Dispositivo</th>
+              <th>País</th>
+              <th>Ciudad</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (acceso of accesosQr; track $index) {
+            <tr>
+              <td>{{ acceso.qrAcceso?.nombre }}</td>
+              <td>{{ acceso.dispositivo }}</td>
+              <td>{{ acceso.pais }}</td>
+              <td>{{ acceso.ciudad }}</td>
+              <td>{{ acceso.createdAt | date : 'short' }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  } @if (!cargando && accesosQr.length === 0) {
+  <div class="text-center text-gray-500 mt-6">
+    <p>No se encontraron accesos registrados.</p>
+  </div>
+  }
+</section>

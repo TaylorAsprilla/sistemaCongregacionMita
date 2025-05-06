@@ -79,6 +79,23 @@ export const childRoutes: Routes = [
     },
   },
   {
+    path: RUTAS.AYUDA,
+    loadComponent: () => import('src/app/pages/ayuda/ayuda.component'),
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Ayuda',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.ADMINISTRADOR_MULTIMEDIA,
+        ROLES.COMITE_RECTOR,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
+  },
+  {
     path: `${RUTAS.USUARIOS}/:id`,
     loadComponent: () => import('src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component'),
     canActivate: [RolesGuard],
@@ -311,7 +328,16 @@ export const childRoutes: Routes = [
 
   {
     path: RUTAS.GENERAR_QR,
-    loadComponent: () => import('src/app/pages/administracion/qr-code-generator/qr-code-generator.component'),
+    loadComponent: () => import('src/app/pages/accesosQr/qr-code-generator/qr-code-generator.component'),
+    canActivate: [RolesGuard],
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS, ROLES.COMITE_RECTOR],
+    },
+  },
+
+  {
+    path: RUTAS.LISTAR_ACCESOS_QR,
+    loadComponent: () => import('src/app/pages/accesosQr/listado-accesos-qr/listado-accesos-qr.component'),
     canActivate: [RolesGuard],
     data: {
       role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS, ROLES.COMITE_RECTOR],
