@@ -190,10 +190,10 @@ export class InformacionUsuarioComponent implements OnInit {
     this.segundoApellio = this.usuario?.segundoApellido ? this.usuario.segundoApellido : '';
     this.apodo = this.usuario?.apodo ? this.usuario.apodo : '';
     this.email = this.usuario?.email ? this.usuario.email : null;
-    this.genero_id = this.usuario?.genero_id ? this.usuario.genero_id : null;
-    this.estadoCivil_id = this.usuario?.estadoCivil_id ? this.usuario.estadoCivil_id : null;
+    this.genero_id = this.usuario?.genero.id ? this.usuario?.genero.id : null;
+    this.estadoCivil_id = this.usuario?.estadoCivil.id ? this.usuario.estadoCivil.id : null;
     this.nacionalidad = this.usuario?.nacionalidad?.nombre ? this.usuario.nacionalidad?.nombre : '';
-    this.rolEnCasa = this.usuario?.rolCasa_id ? this.usuario.rolCasa_id : null;
+    this.rolEnCasa = this.usuario?.rolCasa.id ? this.usuario.rolCasa.id : null;
     this.celular = this.usuario?.numeroCelular ? this.usuario.numeroCelular : null;
     this.telefonoCasa = this.usuario?.telefonoCasa ? this.usuario.telefonoCasa : '';
     this.direccion = this.usuario?.direccion;
@@ -206,26 +206,26 @@ export class InformacionUsuarioComponent implements OnInit {
     this.departamentoPostal = this.usuario?.departamentoPostal;
     this.codigoPostal = this.usuario?.codigoPostal;
     this.paisPostal = this.usuario?.paisPostal;
-    this.gradoAcademico = this.usuario?.gradoAcademico_id ? this.usuario.gradoAcademico_id : null;
+    this.gradoAcademico = this.usuario?.gradoAcademico.id ? this.usuario.gradoAcademico.id : null;
     this.ocupacion = this.usuario?.ocupacion ? this.usuario?.ocupacion : '';
     this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
-    this.tipoMiembro = this.usuario?.tipoMiembro_id ? this.usuario.tipoMiembro_id : null;
+    this.tipoMiembro = this.usuario?.tipoMiembro.id ? this.usuario.tipoMiembro.id : null;
     this.esjoven = this.usuario?.esJoven ? 1 : 0;
     this.ejerMinisterio = !!this.usuario?.usuarioMinisterio?.length;
     this.voluntario = !!this.usuario?.usuarioVoluntariado?.length;
     this.ministerioUsuario = this.usuarioMinisterios ? this.usuarioMinisterios : null;
     this.voluntarioUsuario = this.usuarioVoluntariados ? this.usuarioVoluntariados : null;
-    this.congregacionPais = this.usuario?.usuarioCongregacionPais[0]?.pais
-      ? this.usuario?.usuarioCongregacionPais[0]?.pais
+    this.congregacionPais = this.usuario?.usuarioCongregacionPais?.pais
+      ? this.usuario?.usuarioCongregacionPais?.pais
       : null;
-    this.congreacionCiudad = this.usuario?.usuarioCongregacionCongregacion[0]?.congregacion
-      ? this.usuario?.usuarioCongregacionCongregacion[0]?.congregacion
+    this.congreacionCiudad = this.usuario?.usuarioCongregacionCongregacion.congregacion
+      ? this.usuario?.usuarioCongregacionCongregacion?.congregacion
       : null;
     this.congregacionCampo = this.usuario?.usuarioCongregacionCampo[0]?.campo
       ? this.usuario?.usuarioCongregacionCampo[0]?.campo
       : null;
-    this.tipoDeDocumento = this.usuario?.tipoDocumento_id
-      ? this.usuario.tipoDocumento_id.toString()
+    this.tipoDeDocumento = this.usuario?.tipoDocumento.id
+      ? this.usuario.tipoDocumento.id.toString()
       : TIPO_DOCUMENTO_ID.SIN_DOCUMENTO;
     this.numeroDocumento = this.usuario?.numeroDocumento ? this.usuario?.numeroDocumento : '';
     this.anoConocimiento = this.usuario?.anoConocimiento ? this.usuario?.anoConocimiento : '';

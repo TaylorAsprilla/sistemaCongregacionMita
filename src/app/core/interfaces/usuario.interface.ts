@@ -47,8 +47,6 @@ export interface UsuarioCongregacionPaisInterface {
   estado: boolean;
   idDivisa: number;
   idObreroEncargado: number;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface ActualizarUsuarioInterface {

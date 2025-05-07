@@ -4,6 +4,7 @@ import {
   ParentescoInterface,
   RazonSolicitudInterface,
   TipoEstudioInterface,
+  TipoMiembroInterface,
   UsuarioQueRegistraInterface,
 } from '../interfaces/solicitud-multimedia.interface';
 import { RazonSolicitudModel } from './razon-solicitud.model';
@@ -129,7 +130,7 @@ export interface crearSolicitudMultimediaInterface {
   razonSolicitud?: RazonSolicitudModel;
   parentesco_id: number;
   tiempoAprobacion: Date;
-  tipoMiembro: TipoMiembroModel;
+  tipoMiembro: TipoMiembroInterface;
   congregacionCercana: string;
   usuario_id: number;
   usuario: UsuarioModel;
