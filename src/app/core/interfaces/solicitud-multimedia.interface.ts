@@ -77,6 +77,7 @@ export interface UsuarioQueAproboInterface {
 }
 
 export interface TipoMiembroInterface {
+  id: number;
   miembro: string;
 }
 

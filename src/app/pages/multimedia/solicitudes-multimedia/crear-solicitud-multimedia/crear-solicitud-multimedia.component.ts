@@ -415,7 +415,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
         });
       },
       complete: () => {
-        console.log('Solicitud de multimedia completada');
+        console.info('Solicitud de multimedia completada');
       },
     });
   }

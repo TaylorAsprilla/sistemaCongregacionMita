@@ -6,8 +6,8 @@ import { ROLES } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Directive({
-    selector: '[appPermisos]',
-    standalone: true,
+  selector: '[appPermisos]',
+  standalone: true,
 })
 export class PermisosDirective implements OnInit {
   private permisos = [];

@@ -3,17 +3,17 @@ import { EstadoCivilModel } from './estado-civil.model';
 import { GeneroModel } from './genero.model';
 import { GradoAcademicoModel } from './grado-academico.model';
 import { MinisterioModel } from './ministerio.model';
-import { NacionalidadModel } from './nacionalidad.model';
 import { PermisoModel } from './permisos.model';
 import { RolCasaModel } from './rol-casa.model';
-import { TipoMiembroModel } from './tipo.miembro.model';
 import { UsuarioCongregacionModel } from './usuarioCongregacion.model';
 import { VoluntariadoModel } from './voluntariado.model';
 import {
-  UsuarioCongregacionCampoInterface,
-  UsuarioCongregacionCiudadInterface,
+  usuarioCongregacionCampoInterface,
+  usuarioCongregacionCongregacionInterface,
   UsuarioCongregacionPaisInterface,
 } from '../interfaces/usuario.interface';
+import { TipoMiembroInterface } from '../interfaces/solicitud-multimedia.interface';
+import { NacionalidadInterface } from '../interfaces/nacionalidad.interface';
 import { TipoDocumentoModel } from './tipo-documento.model';
 
 const base_url = environment.base_url;
@@ -31,53 +31,44 @@ export class UsuarioModel {
     public primerApellido: string,
     public numeroCelular: string,
     public fechaNacimiento: Date,
-    public esJoven: boolean,
     public estado: boolean,
-    public direccion: string,
-    public ciudadDireccion: string,
-    public paisDireccion: string,
-    public ocupacion: string,
-    public genero_id: number,
-    public estadoCivil_id: number,
-    public tipoMiembro_id: number,
+    public tipoMiembro: TipoMiembroInterface,
+    public nacionalidad: NacionalidadInterface,
+    public rolCasa: RolCasaModel,
+    public esJoven: boolean,
+    public genero: GeneroModel,
+    public password?: string,
+    public numeroDocumento?: string,
     public segundoNombre?: string,
     public segundoApellido?: string,
     public apodo?: string,
     public email?: string,
-    public especializacionEmpleo?: string,
-    public telefonoCasa?: string,
     public login?: string,
-    public password?: string,
     public foto?: string,
-    public rolCasa_id?: number,
-    public nacionalidad_id?: number,
-    public gradoAcademico_id?: number,
-    public genero?: GeneroModel,
-    public estadoCivil?: EstadoCivilModel,
-    public rolCasa?: RolCasaModel,
-    public nacionalidad?: NacionalidadModel,
-    public gradoAcademico?: GradoAcademicoModel,
-    public tipoMiembro?: TipoMiembroModel,
+    public telefonoCasa?: string,
+    public direccion?: string,
+    public ciudadDireccion?: string,
     public departamentoDireccion?: string,
     public codigoPostalDireccion?: string,
+    public paisDireccion?: string,
     public direccionPostal?: string,
     public ciudadPostal?: string,
     public departamentoPostal?: string,
     public codigoPostal?: string,
     public paisPostal?: string,
+    public anoConocimiento?: string,
+    public ocupacion?: string,
+    public especializacionEmpleo?: string,
+    public estadoCivil?: EstadoCivilModel,
+    public gradoAcademico?: GradoAcademicoModel,
+    public tipoDocumento?: TipoDocumentoModel,
     public usuarioCongregacion?: UsuarioCongregacionModel,
     public usuarioMinisterio?: MinisterioModel[],
     public usuarioVoluntariado?: VoluntariadoModel[],
     public usuarioPermiso?: PermisoModel[],
-    public tipoDocumento_id?: number,
-    public tipoDocumento?: TipoDocumentoModel,
-    public numeroDocumento?: string,
-    public anoConocimiento?: string,
-    public usuarioCongregacionCongregacion?: UsuarioCongregacionCiudadInterface[],
-    public usuarioCongregacionCampo?: UsuarioCongregacionCampoInterface[],
-    public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface[],
-    public idUsuarioQueRegistra?: number,
-    public congregacion?: string
+    public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface,
+    public usuarioCongregacionCongregacion?: usuarioCongregacionCongregacionInterface,
+    public usuarioCongregacionCampo?: usuarioCongregacionCampoInterface
   ) {}
 
   get fotoUrl() {
