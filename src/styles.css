@@ -56,17 +56,13 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-html, body { height: 100%; }
-body { margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
-  overflow: -moz-scrollbars-none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */ 
+html,
+body {
+  height: 100%;
 }
 
-/* Hide scrollbars on WebKit browsers (Chrome, Safari) */
-::-webkit-scrollbar {
-  display: none;
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  overflow: auto;
 }
-
-
