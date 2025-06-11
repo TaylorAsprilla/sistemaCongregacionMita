@@ -2,7 +2,7 @@ import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 
 export enum RUTAS {
   ASUNTO_PENDIENTE = 'asunto-pendiente',
-  AYUDA = 'ayuda',
+  AYUDA = 'https://congregacionmita-my.sharepoint.com/:b:/g/personal/t_asprilla_congregacionmita_org/ERf5fbR38JhBs_kuJRS3n30BJaDQxDsq4DNgffjHDYNAxg?e=xzEQ9p',
   BIBLIOTECA_MULTIMEDIA = 'biblioteca-multimedia',
   BIBLIOTECA_SERVICIOS = 'biblioteca-servicios',
   BIBLIOTECA_VIGILIAS = 'biblioteca-vigilias',
