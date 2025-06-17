@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, Pipe } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { GemelosService } from 'src/app/services/gemelos/gemelos.service';
 import { FormsModule } from '@angular/forms';
-import { UsuarioInterface, UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
+import { UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 
@@ -22,12 +22,10 @@ export default class VerGrupoDeGemelosComponent {
   @Output() onCrearGemelos = new EventEmitter<void>();
 
   @Input() totalGemelos: number = 0;
-  // @Input() gemelos: GemelosService[] = [];
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
 
   isFiltrosVisibles: boolean = false;
   filtrarTexto: string = '';
-  // usuariosFiltrados: UsuariosPorCongregacionInterface[] = [];
 
   constructor(private gemelosService: GemelosService, private router: Router) {}
 
@@ -66,7 +64,6 @@ export default class VerGrupoDeGemelosComponent {
     this.gruposFiltrados = [...this.grupos];
     // Actualiza los contadores y reinicia la paginación
     this.totalGemelos = this.gruposFiltrados.length;
-    // this.pagina = 1;
   }
 
   get filterText() {
@@ -75,47 +72,10 @@ export default class VerGrupoDeGemelosComponent {
 
   set filterText(value: string) {
     this.filtrarTexto = value;
-    console.log(this.selectedDate);
-    // const fecha = this.selectedDate ? new Date(this.selectedDate) : undefined;
-    this.gruposFiltrados = this.filterUsuarios(this.filterText, this.selectedDate);
-    // console.log(this.gruposFiltrados.length);
-    // this.grupos.forEach((grupo: any) => {
-    //   console.log(grupo.usuarios);
-    // });
-    this.totalGemelos = this.gruposFiltrados.length;
-    // this.pagina = 1;
-  }
 
-  filtrarPorEdad() {
-    // Si ambos campos están vacíos, reiniciar la lista filtrada
-    // if (
-    //   (this.edadMinima === null || this.edadMinima === undefined) &&
-    //   (this.edadMaxima === null || this.edadMaxima === undefined)
-    // ) {
-    //   this.usuariosFiltrados = [...this.usuarios]; // Restaurar lista original
-    //   this.totalUsuarios = this.usuariosFiltrados.length; // Actualizar total
-    //   this.pagina = 1; // Reiniciar la página a la primera
-    //   return;
-    // }
-    // // Si ambos valores están definidos, realizar el filtrado
-    // if (
-    //   this.edadMinima !== null &&
-    //   this.edadMinima !== undefined &&
-    //   this.edadMaxima !== null &&
-    //   this.edadMaxima !== undefined
-    // ) {
-    //   this.usuariosFiltrados = this.filterUsuarios(
-    //     this.filterText,
-    //     this.filtrarPaisTexto,
-    //     this.filtrarCongreTexto,
-    //     this.filtrarCampoTexto,
-    //     this.edadMaxima,
-    //     this.edadMinima
-    //   );
-    //   // Actualizar total y reiniciar la página
-    //   this.totalUsuarios = this.usuariosFiltrados.length;
-    //   this.pagina = 1;
-    // }
+    this.gruposFiltrados = this.filterUsuarios(this.filterText, this.selectedDate);
+
+    this.totalGemelos = this.gruposFiltrados.length;
   }
 
   filterUsuarios(filterTerm: string, fecha?: string): any[] {
@@ -142,7 +102,7 @@ export default class VerGrupoDeGemelosComponent {
 
         // Comparar fecha en formato YYYY-MM-DD directamente (sin convertir a Date)
         let fechaMatches = false;
-        console.log(fecha + ' = ' + grupo.fechaNacimientoComun);
+
         if (fecha && grupo.fechaNacimientoComun) {
           // Normalizar fecha del grupo a solo la parte YYYY-MM-DD
           const grupoFechaStr = grupo.fechaNacimientoComun.substring(0, 10);
@@ -158,10 +118,9 @@ export default class VerGrupoDeGemelosComponent {
 
   onDateChange(value: string) {
     this.selectedDate = value;
-    console.log('Fecha seleccionada:', this.selectedDate);
-    // const fecha = this.selectedDate ? new Date(this.selectedDate) : undefined;
+
     this.gruposFiltrados = this.filterUsuarios(this.filterText, this.selectedDate);
-    console.log(this.gruposFiltrados.length);
+
     this.totalGemelos = this.gruposFiltrados.length;
   }
 }

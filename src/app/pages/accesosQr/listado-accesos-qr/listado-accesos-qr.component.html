@@ -6,24 +6,17 @@
   <div class="card">
     <!-- Single clean card-header -->
     <div class="card-header d-flex justify-content-between align-items-center bg-white text-dark">
-      <div class="col-8 px-4 pt-4">
+      <div class="col-lg-8 col-md-7 col-12 px-4 pt-4">
         <h3 class="card-title">Total de Accesos QR ({{ accesosQr.length }})</h3>
         <p>Accesos registrados mediante código QR</p>
       </div>
-      <div class="d-flex align-items-center">
-        <!-- Botón Crear accesoqr -->
-        <button
-          class="btn btn-primary mx-1 d-flex align-items-center"
-          (click)="crearAccesoqr()"
-          [ngClass]="{ 'd-md-inline-block': true, 'd-sm-none': true }"
-        >
+      <div class="d-flex align-items-center flex-wrap">
+        <button class="btn btn-primary mx-1 mb-2 mb-md-0 d-flex align-items-center" (click)="crearAccesoqr()">
           <i class="fas fa-user"></i>
           <span class="d-none d-md-inline-block ms-2">Generar QR</span>
         </button>
-
-        <!-- Botón Mostrar/Ocultar Filtros -->
         <button
-          class="btn mx-1 d-flex align-items-center"
+          class="btn mx-1 mb-2 mb-md-0 d-flex align-items-center"
           [ngClass]="{ 'btn-secondary': isFiltrosVisibles, 'btn-outline-secondary': !isFiltrosVisibles }"
           (click)="esconderFiltros()"
         >
@@ -39,43 +32,66 @@
     <div>
       @if (accesosQr.length > 0) {
       <div class="card-body">
-        <div class="row">
-          <div class="col-md-4">
+        <div class="row g-3">
+          <div class="col-lg-4 col-md-6 col-12">
             <div class="form-group">
               <label for="selectPais">País</label>
               <select
                 id="selectPais"
-                class="form-select form-control"
-                (ngModelChange)="filtrarPais($event)"
+                class="form-select"
                 [(ngModel)]="originalPais"
+                (ngModelChange)="filtrarPais($event)"
+                #txtPais
               >
                 <option value="">Seleccione País</option>
                 @for (pais of paises; track pais) {
-                <option [ngValue]="pais">{{ pais.pais }}</option>
+                <option [ngValue]="pais">{{ pais }}</option>
                 }
               </select>
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-lg-4 col-md-6 col-12">
             <div class="form-group">
-              <label for="selectCampo">Ciudad</label>
+              <label for="selectCiudad">Ciudad</label>
               <select
-                id="selectCampo"
-                class="form-select form-control"
-                (ngModelChange)="filtrarCongregacion($event)"
-                [(ngModel)]="originalCongre"
+                id="selectCiudad"
+                class="form-select"
+                (ngModelChange)="filtrarCiudad($event)"
+                [(ngModel)]="originalCiudad"
               >
-                <option value="">Seleccione Campo</option>
-                <option value="">Sin Campo</option>
-                @for (congre of congregacionesFiltradas; track congre) {
-                <option>{{ congre.congregacion }}</option>
+                <option value="">Seleccione la Ciudad</option>
+                <option value="">Sin Ciudad</option>
+                @for (ciudad of ciudades; track ciudad) {
+                <option>{{ ciudad }}</option>
                 }
               </select>
             </div>
           </div>
 
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <div class="col-lg-4 col-md-12 col-12">
+            <div class="form-group">
+              <label>Rango de Fechas</label>
+              <div class="d-flex flex-column flex-md-row gap-2">
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="fechaInicio"
+                  (change)="filtrarPorRangoFechas()"
+                  placeholder="Desde"
+                />
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="fechaFin"
+                  (change)="filtrarPorRangoFechas()"
+                  placeholder="Hasta"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8 col-md-8 col-12">
             <div class="form-group">
               <label>Buscar</label>
               <input
@@ -88,16 +104,12 @@
             </div>
           </div>
 
-          <div class="col-md-3 d-flex align-items-end">
+          <div class="col-lg-4 col-md-4 col-12 d-flex align-items-end">
             <div class="form-group w-100">
               <button class="btn btn-primary w-100" (click)="resetFiltros()">Reset Filtros</button>
             </div>
           </div>
         </div>
-      </div>
-      } @else {
-      <div class="card">
-        <div class="card-body">No existen feligreses registrados en su congregación a cargo</div>
       </div>
       }
     </div>
@@ -118,11 +130,11 @@
           <tbody>
             @for (acceso of accesosQrFiltrados; track $index) {
             <tr>
-              <td>{{ acceso.qrAcceso?.nombre }}</td>
-              <td>{{ acceso.dispositivo }}</td>
-              <td>{{ acceso.pais }}</td>
-              <td>{{ acceso.ciudad }}</td>
-              <td>{{ acceso.createdAt | date : 'short' }}</td>
+              <td class="text-nowrap">{{ acceso.qrAcceso?.nombre }}</td>
+              <td class="text-nowrap">{{ acceso.dispositivo }}</td>
+              <td class="text-nowrap">{{ acceso.pais }}</td>
+              <td class="text-nowrap">{{ acceso.ciudad }}</td>
+              <td class="text-nowrap">{{ acceso.createdAt | date : 'short' }}</td>
             </tr>
             }
           </tbody>
