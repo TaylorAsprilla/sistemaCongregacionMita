@@ -556,7 +556,7 @@ export const ROUTES: RouteInfo[] = [
       {
         path: RUTAS.LISTAR_ACCESOS_QR,
         title: 'Accesos por QR',
-        icon: 'fa fa-qrcode',
+        icon: 'fa fa-list',
         class: '',
         extralink: false,
         role: [ROLES.ADMINISTRADOR, ROLES.COMITE_RECTOR, ROLES.ASISTENTE_OOTS],
