@@ -3,15 +3,12 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/rout
 import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
-
 @Component({
-    selector: 'app-bredcrumbs',
-    templateUrl: './bredcrumbs.component.html',
-    styleUrls: ['./bredcrumbs.component.css'],
-    standalone: true,
-    imports: [
-    RouterLink
-],
+  selector: 'app-bredcrumbs',
+  templateUrl: './bredcrumbs.component.html',
+  styleUrls: ['./bredcrumbs.component.css'],
+  standalone: true,
+  imports: [RouterLink],
 })
 export class BredcrumbsComponent {
   private router = inject(Router);
@@ -20,9 +17,6 @@ export class BredcrumbsComponent {
 
   @Input() layout: string = '';
   public pageInfo: any;
-
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
 
   constructor() {
     this.router.events

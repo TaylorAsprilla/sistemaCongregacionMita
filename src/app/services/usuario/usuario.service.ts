@@ -35,9 +35,6 @@ export class UsuarioService {
   private readonly INACTIVE_TIMEOUT_MS: number = configuracion.inactividad.INACTIVE_TIMEOUT_MS;
   private readonly timerModal: number = configuracion.inactividad.TIMER_MODEL;
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
   constructor() {
     this.resetInactiveTimer();
     window.addEventListener('mousemove', () => this.resetInactiveTimer());
