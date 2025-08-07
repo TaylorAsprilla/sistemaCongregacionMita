@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as XLSX from 'xlsx';
+import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver';
 
 @Injectable({
@@ -7,21 +7,19 @@ import { saveAs } from 'file-saver';
 })
 export class ExportarExcelService {
   exportToExcel(data: any[], fileName: string): void {
-    // Crea un libro de trabajo y una hoja
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
-    const workbook: XLSX.WorkBook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('Datos');
 
-    // Genera el archivo Excel
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    if (data.length > 0) {
+      worksheet.columns = Object.keys(data[0]).map((key) => ({ header: key, key }));
+      data.forEach((row) => {
+        worksheet.addRow(row);
+      });
+    }
 
-    // Guarda el archivo
-    this.saveAsExcelFile(excelBuffer, fileName);
-  }
-
-  private saveAsExcelFile(buffer: any, fileName: string): void {
-    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
-    saveAs(data, `${fileName}_${new Date().getTime()}.xlsx`);
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, `${fileName}_${new Date().getTime()}.xlsx`);
+    });
   }
 }
-
-const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
