@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { delay, Subscription } from 'rxjs';
@@ -22,6 +22,10 @@ import { generate } from 'generate-password-browser';
   imports: [CargandoInformacionComponent, SolicitudesMultimediaComponent],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
+  private accesoMultimediaService = inject(AccesoMultimediaService);
+  private solicitudMultimediaService = inject(SolicitudMultimediaService);
+  private usuarioService = inject(UsuarioService);
+
   solicitudes: UsuarioSolicitudMultimediaModel[] = [];
   cargando = false;
   usuarioId: number;
@@ -29,12 +33,6 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   // Subscription
   public solicitudAccesoSubscription: Subscription;
   public solicitudMultimediaServiceSubscription: Subscription;
-
-  constructor(
-    private accesoMultimediaService: AccesoMultimediaService,
-    private solicitudMultimediaService: SolicitudMultimediaService,
-    private usuarioService: UsuarioService
-  ) {}
 
   ngOnInit(): void {
     this.usuarioId = this.usuarioService.usuario.id;

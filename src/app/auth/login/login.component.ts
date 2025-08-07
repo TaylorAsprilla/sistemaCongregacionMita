@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,13 @@ import { NgClass } from '@angular/common';
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, NgClass, RouterLink],
 })
-export default class LoginComponent implements OnInit {
+export default class LoginComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private formBuilder = inject(FormBuilder);
+  private usuarioService = inject(UsuarioService);
+  private ngZone = inject(NgZone);
+  private activatedRoute = inject(ActivatedRoute);
+
   usuariosSubscription: Subscription;
   loginForm: FormGroup;
   qrLoginForm!: FormGroup;
@@ -33,14 +39,6 @@ export default class LoginComponent implements OnInit {
   get Rutas() {
     return RUTAS;
   }
-
-  constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private usuarioService: UsuarioService,
-    private ngZone: NgZone,
-    private activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {

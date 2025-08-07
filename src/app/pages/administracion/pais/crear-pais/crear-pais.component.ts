@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -15,19 +15,21 @@ import Swal from 'sweetalert2';
 import { ObreroInterface, ObreroModel } from 'src/app/core/models/obrero.model';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
-
 @Component({
-    selector: 'app-crear-pais',
-    templateUrl: './crear-pais.component.html',
-    styleUrls: ['./crear-pais.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgxIntlTelInputModule
-],
+  selector: 'app-crear-pais',
+  templateUrl: './crear-pais.component.html',
+  styleUrls: ['./crear-pais.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgxIntlTelInputModule],
 })
 export class CrearPaisComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private paisService = inject(PaisService);
+  private divisaService = inject(DivisaService);
+  private usuariosService = inject(UsuarioService);
+  private activatedRoute = inject(ActivatedRoute);
+
   public paisForm: FormGroup;
 
   public paises: CongregacionPaisModel[] = [];
@@ -41,15 +43,6 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   public paisSubscription: Subscription;
   public divisaSubscription: Subscription;
   public usuariosSubscription: Subscription;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private paisService: PaisService,
-    private divisaService: DivisaService,
-    private usuariosService: UsuarioService,
-    private activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {

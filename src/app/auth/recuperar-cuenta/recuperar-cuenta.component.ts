@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -13,13 +13,15 @@ import Swal from 'sweetalert2';
   imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
 export default class RecuperarCuentaComponent implements OnInit {
+  private router = inject(Router);
+  private formBuilder = inject(FormBuilder);
+  private usuarioservice = inject(UsuarioService);
+
   cuentaForm: FormGroup;
 
   get Rutas() {
     return RUTAS;
   }
-
-  constructor(private router: Router, private formBuilder: FormBuilder, private usuarioservice: UsuarioService) {}
 
   ngOnInit(): void {
     this.cuentaForm = this.formBuilder.group({

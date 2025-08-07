@@ -8,10 +8,10 @@
 
         <app-buscar-usuario
           [crearAccesoBoton]="true"
-          (onUsuarioEncontrado)="buscarFeligres($event)"
-          (onActualizarUsuario)="actualizarUsuario($event)"
-          (onCrearAcceso)="crearAcceso($event)"
-          (onScrollToSection)="scrollToSection()"
+          (usuarioEncontrado)="buscarFeligres($event)"
+          (actualizarUsuario)="actualizarUsuario($event)"
+          (crearAcceso)="crearAcceso($event)"
+          (scrollToSection)="scrollToSection()"
         ></app-buscar-usuario>
 
         <div #verPermisos>

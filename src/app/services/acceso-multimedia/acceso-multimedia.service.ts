@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'environment';
 import { tap } from 'rxjs/operators';
@@ -12,7 +12,8 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class AccesoMultimediaService {
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  private httpClient = inject(HttpClient);
+  private router = inject(Router);
 
   get token(): string {
     return localStorage.getItem('token') || '';

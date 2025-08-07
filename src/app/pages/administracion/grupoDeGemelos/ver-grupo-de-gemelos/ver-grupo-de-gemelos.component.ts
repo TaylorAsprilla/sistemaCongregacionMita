@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { GemelosService } from 'src/app/services/gemelos/gemelos.service';
 import { FormsModule } from '@angular/forms';
@@ -14,20 +14,21 @@ import { RUTAS } from 'src/app/routes/menu-items';
   templateUrl: './ver-grupo-de-gemelos.component.html',
   styleUrl: './ver-grupo-de-gemelos.component.scss',
 })
-export default class VerGrupoDeGemelosComponent {
+export default class VerGrupoDeGemelosComponent implements OnInit {
+  private gemelosService = inject(GemelosService);
+  private router = inject(Router);
+
   grupos: any[] = [];
   gruposFiltrados: any[] = [];
   selectedDate: string = ''; // tipo string para enlazar con input date
 
-  @Output() onCrearGemelos = new EventEmitter<void>();
+  @Output() crearGemelos = new EventEmitter<void>();
 
   @Input() totalGemelos: number = 0;
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
 
   isFiltrosVisibles: boolean = false;
   filtrarTexto: string = '';
-
-  constructor(private gemelosService: GemelosService, private router: Router) {}
 
   ngOnInit(): void {
     this.gemelosService.getGruposGemelos().subscribe({
@@ -44,7 +45,7 @@ export default class VerGrupoDeGemelosComponent {
     });
   }
 
-  crearGemelos() {
+  emitirCrearGemelos() {
     this.router.navigateByUrl(`/${RUTAS.SISTEMA}/${RUTAS.GRUPO_GEMELOS}`);
   }
 

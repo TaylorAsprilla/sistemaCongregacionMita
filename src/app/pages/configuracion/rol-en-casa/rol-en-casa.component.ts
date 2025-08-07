@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { RolCasaModel } from 'src/app/core/models/rol-casa.model';
@@ -8,21 +8,19 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-rol-en-casa',
-    templateUrl: './rol-en-casa.component.html',
-    styleUrls: ['./rol-en-casa.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-rol-en-casa',
+  templateUrl: './rol-en-casa.component.html',
+  styleUrls: ['./rol-en-casa.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
 export class RolEnCasaComponent implements OnInit, OnDestroy {
+  private rolCasaService = inject(RolCasaService);
+
   public cargando: boolean = true;
   public rolesCasa: RolCasaModel[] = [];
 
   public rolCasaSubscription: Subscription;
-
-  constructor(private rolCasaService: RolCasaService) {}
 
   ngOnInit(): void {
     this.cargarRolCasas();

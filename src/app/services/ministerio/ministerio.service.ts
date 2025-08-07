@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
@@ -9,7 +9,7 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class MinisterioService {
-  constructor(private httpClient: HttpClient) {}
+  private httpClient = inject(HttpClient);
 
   get token(): string {
     return localStorage.getItem('token') || '';

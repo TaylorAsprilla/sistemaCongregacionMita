@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { ObreroService } from 'src/app/services/obrero/obrero.service';
   providedIn: 'root',
 })
 export class ObreroResolver {
-  constructor(private obreroService: ObreroService) {}
+  private obreroService = inject(ObreroService);
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ObreroModel[]> {
     return this.obreroService.getObreros().pipe(

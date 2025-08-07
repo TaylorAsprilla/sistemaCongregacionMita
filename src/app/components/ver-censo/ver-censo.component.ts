@@ -1,5 +1,15 @@
 import { CONGREGACION_ID } from './../../core/enums/congregacionPais.enum';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { UsuarioInterface, UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
@@ -31,6 +41,13 @@ import { configuracion } from 'src/environments/config/configuration';
   imports: [FormsModule, NgClass, NgxPaginationModule, TelegramPipe, WhatsappPipe, CalcularEdadPipe, DecimalPipe],
 })
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
+  private usuarioService = inject(UsuarioService);
+  private paisService = inject(PaisService);
+  private congregacionService = inject(CongregacionService);
+  private campoService = inject(CampoService);
+  private breakpointService = inject(BreakpointObserver);
+  private exportarExcelService = inject(ExportarExcelService);
+
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
   @Input() campos: CampoModel[] = [];
 
@@ -44,19 +61,19 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() mostrarNombreCampo: boolean = false;
   @Input() titulo: string = '';
 
-  @Output() onCrearUsuario = new EventEmitter<void>();
-  @Output() onActualizaUsuario: EventEmitter<number> = new EventEmitter<number>();
-  @Output() onActivarUsuario: EventEmitter<number> = new EventEmitter<number>();
-  @Output() onBorrarUsuario: EventEmitter<UsuariosPorCongregacionInterface> =
+  @Output() crearUsuario = new EventEmitter<void>();
+  @Output() actualizaUsuario: EventEmitter<number> = new EventEmitter<number>();
+  @Output() activarUsuario: EventEmitter<number> = new EventEmitter<number>();
+  @Output() borrarUsuario: EventEmitter<UsuariosPorCongregacionInterface> =
     new EventEmitter<UsuariosPorCongregacionInterface>();
-  @Output() onEnviarEmail: EventEmitter<number> = new EventEmitter<number>();
-  @Output() onTransferirUsuario = new EventEmitter<{
+  @Output() enviarEmail: EventEmitter<number> = new EventEmitter<number>();
+  @Output() transferirUsuario = new EventEmitter<{
     pais: number;
     congregacion: number;
     campo: number;
     id: number;
   }>();
-  @Output() onTranscenderUsuario: EventEmitter<number> = new EventEmitter<number>();
+  @Output() transcenderUsuario: EventEmitter<number> = new EventEmitter<number>();
 
   camposFiltrados: CampoModel[] = [];
 
@@ -106,15 +123,6 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
   }
-
-  constructor(
-    private usuarioService: UsuarioService,
-    private paisService: PaisService,
-    private congregacionService: CongregacionService,
-    private campoService: CampoService,
-    private breakpointService: BreakpointObserver,
-    private exportarExcelService: ExportarExcelService
-  ) {}
 
   ngOnInit(): void {
     this.isMobile = this.breakpointService.observe(Breakpoints.Handset);
@@ -172,27 +180,28 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  crearUsuario() {
-    this.onCrearUsuario.emit();
+  // Métodos renombrados para evitar duplicados con los EventEmitter
+  crearUsuarioHandler() {
+    this.crearUsuario.emit();
   }
 
-  actualizarUsuario(usuarioId: number) {
-    this.onActualizaUsuario.emit(usuarioId);
+  actualizarUsuarioHandler(usuarioId: number) {
+    this.actualizaUsuario.emit(usuarioId);
   }
 
-  activarUsuario(usuarioId: number) {
-    this.onActivarUsuario.emit(usuarioId);
+  activarUsuarioHandler(usuarioId: number) {
+    this.activarUsuario.emit(usuarioId);
   }
 
-  enviarEmail(usuarioId: number) {
-    this.onEnviarEmail.emit(usuarioId);
+  enviarEmailHandler(usuarioId: number) {
+    this.enviarEmail.emit(usuarioId);
   }
 
-  borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
-    this.onBorrarUsuario.emit(usuario);
+  borrarUsuarioHandler(usuario: UsuariosPorCongregacionInterface) {
+    this.borrarUsuario.emit(usuario);
   }
 
-  transcenderUsuario(id: number) {
+  transcenderUsuarioHandler(id: number) {
     Swal.fire({
       title: 'Transcendió',
       text: '¿El feligrés transcendió?',
@@ -204,7 +213,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.onTranscenderUsuario.emit(id);
+        this.transcenderUsuario.emit(id);
       }
     });
   }
@@ -644,7 +653,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  transferirUsuario(id: number): void {
+  transferirUsuarioHandler(id: number): void {
     Swal.fire({
       title: 'Transferir Feligrés',
       html: `
@@ -721,7 +730,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        this.onTransferirUsuario.emit({ ...result.value, id });
+        this.transferirUsuario.emit({ ...result.value, id });
         Swal.fire('Procesando...', 'Enviando la información al servidor.', 'info');
       }
     });

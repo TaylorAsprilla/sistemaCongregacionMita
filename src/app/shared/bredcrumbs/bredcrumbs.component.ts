@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap } from 'rxjs/operators';
@@ -14,10 +14,17 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 ],
 })
 export class BredcrumbsComponent {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private titleService = inject(Title);
+
   @Input() layout: string = '';
   public pageInfo: any;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),

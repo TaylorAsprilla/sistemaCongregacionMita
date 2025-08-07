@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -6,20 +6,18 @@ import { ContabilidadService } from 'src/app/services/contabilidad/contabilidad.
 import Swal from 'sweetalert2';
 
 @Component({
-    selector: 'app-informe-contables',
-    templateUrl: './informe-contables.component.html',
-    styleUrls: ['./informe-contables.component.scss'],
-    standalone: true,
-    imports: [FormsModule, ReactiveFormsModule],
+  selector: 'app-informe-contables',
+  templateUrl: './informe-contables.component.html',
+  styleUrls: ['./informe-contables.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule],
 })
-export class InformeContablesComponent implements OnInit, OnDestroy {
-  public contabilidadForm: UntypedFormGroup;
+export class InformeContablesComponent implements OnInit {
+  private formBuilder = inject(UntypedFormBuilder);
+  private router = inject(Router);
+  private contabilidadService = inject(ContabilidadService);
 
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private router: Router,
-    private contabilidadService: ContabilidadService
-  ) {}
+  public contabilidadForm: UntypedFormGroup;
 
   ngOnInit(): void {
     this.contabilidadForm = this.formBuilder.group({
@@ -31,8 +29,6 @@ export class InformeContablesComponent implements OnInit, OnDestroy {
       informe_id: ['1', [Validators.required]],
     });
   }
-
-  ngOnDestroy(): void {}
 
   guardarInformeContable() {
     const informeContabilidad = this.contabilidadForm.value;

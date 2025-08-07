@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { AccesoQrInterface, AccesosQrResponseInterface } from 'src/app/core/interfaces/acceso-qr.interface';
 import { QrCodeService } from 'src/app/services/qrCode/qr-code.service';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
@@ -17,7 +17,10 @@ import { RUTAS } from 'src/app/routes/menu-items';
   styleUrl: './listado-accesos-qr.component.scss',
 })
 export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
-  @Output() onCrearAcceso = new EventEmitter<void>();
+  private router = inject(Router);
+  private qrCodeService = inject(QrCodeService);
+
+  @Output() crearAcceso = new EventEmitter<void>();
 
   paises: string[] = [];
   ciudades: string[] = [];
@@ -40,8 +43,6 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
   totalAccesosQr: number;
 
   private accesosQrSubscription: Subscription | null = null;
-
-  constructor(private router: Router, private qrCodeService: QrCodeService) {}
 
   get filterText() {
     return this.filtrarTexto;

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -8,8 +8,8 @@ import { RazonSolicitudService } from 'src/app/services/razon-solicitud/razon-so
 @Injectable({
   providedIn: 'root',
 })
-export class RazonSolicitudResolver  {
-  constructor(private razonsolicitudService: RazonSolicitudService) {}
+export class RazonSolicitudResolver {
+  private razonsolicitudService = inject(RazonSolicitudService);
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<RazonSolicitudModel[]> {
     return this.razonsolicitudService.getRazonsolicitud().pipe(

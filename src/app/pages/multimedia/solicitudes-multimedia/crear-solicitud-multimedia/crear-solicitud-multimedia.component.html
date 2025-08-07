@@ -13,8 +13,8 @@
 
           <app-buscar-usuario
             [ocultarBusqueda]="ocultarBusqueda"
-            (onUsuarioEncontrado)="buscarFeligres($event)"
-            (onActualizarUsuario)="actualizarUsuario($event)"
+            (usuarioEncontrado)="buscarFeligres($event)"
+            (actualizarUsuario)="actualizarUsuario($event)"
           ></app-buscar-usuario>
 
           @if( usuario){ @if (!usuario.email) {

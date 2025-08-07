@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,29 +8,24 @@ import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
-    selector: 'app-informes-actividades',
-    templateUrl: './informe-actividades.component.html',
-    styleUrls: ['./informe-actividades.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule
-],
+  selector: 'app-informes-actividades',
+  templateUrl: './informe-actividades.component.html',
+  styleUrls: ['./informe-actividades.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule],
 })
 export class InformeActividadesComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(UntypedFormBuilder);
+  private router = inject(Router);
+  private tipoActividadService = inject(TipoActividadService);
+  private actividadService = inject(ActividadService);
+
   public actividadForm: UntypedFormGroup;
 
   public tipoActividades: TipoActividadModel[] = [];
   // Subscription
   public tipoActividadSubscription: Subscription;
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private router: Router,
-    private tipoActividadService: TipoActividadService,
-    private actividadService: ActividadService
-  ) {}
 
   ngOnInit(): void {
     this.actividadForm = this.formBuilder.group({

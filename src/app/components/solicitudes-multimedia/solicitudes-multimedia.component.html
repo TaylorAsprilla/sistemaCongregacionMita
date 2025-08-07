@@ -114,329 +114,316 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container
-            *ngFor="
-              let solicitud of filteredSolicitudes | paginate : { itemsPerPage: pageSize, currentPage: pagina };
-              let i = index
-            "
-          >
-            <tr>
-              <td>{{ solicitud.id }}</td>
-              <td>{{ solicitud.nombreCompleto }}</td>
-              <td>
-                @if (solicitud?.email) {
-                <a class="email" [href]="'mailto:' + solicitud.email">{{ solicitud.email }}</a>
-                } @if (!solicitud?.email) {
-                <span>Sin correo electrónico</span>
+          @for (solicitud of filteredSolicitudes | paginate : { itemsPerPage: pageSize, currentPage: pagina }; track
+          solicitud; let i = $index) {
+          <tr>
+            <td>{{ solicitud.id }}</td>
+            <td>{{ solicitud.nombreCompleto }}</td>
+            <td>
+              @if (solicitud?.email) {
+              <a class="email" [href]="'mailto:' + solicitud.email">{{ solicitud.email }}</a>
+              } @if (!solicitud?.email) {
+              <span>Sin correo electrónico</span>
+              }
+            </td>
+            <td>
+              @if (solicitud.numeroCelular) {
+              <div>
+                <div class="contact-container">
+                  <span>
+                    {{ solicitud.numeroCelular }}
+                    <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(solicitud)"></i>
+                  </span>
+                  <div class="phone-number">
+                    <div class="contact-icons" [ngClass]="{ show: selectedContact === solicitud.id }">
+                      <a
+                        href="https://api.whatsapp.com/send?phone={{ solicitud.numeroCelular | whatsapp }}"
+                        target="_blank"
+                      >
+                        <i class="fab fa-whatsapp mx-2"></i>
+                      </a>
+                      <a href="https://t.me/{{ solicitud.numeroCelular | telegram }}" target="_blank">
+                        <i class="fab fa-telegram mx-2"></i>
+                      </a>
+                      <a href="tel:{{ solicitud.numeroCelular | telegram }}" target="_blank">
+                        <i class="fa fa-phone mx-2"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              } @else {
+              <span>Sin número de celular</span>
+              }
+            </td>
+            <td>{{ solicitud.pais }}</td>
+            <td>{{ solicitud.congregacion }}</td>
+            <td>{{ solicitud.campo }}</td>
+            <td>
+              @switch (solicitud.estadoUltimaSolicitud) { @case (estadosSolicitud.DENEGADA) {
+              <span class="badge bg-danger text-white">🔴 Denegada</span>
+              } @case (estadosSolicitud.APROBADA) {
+              <span class="badge bg-success text-white">🟢 Aprobada</span>
+              } @case (estadosSolicitud.CADUCADA) {
+              <span class="badge bg-dark text-white">⚫ Caducada</span>
+              } @case (estadosSolicitud.PENDIENTE) {
+              <span class="badge bg-warning">🟡 Pendiente</span>
+              } @case (estadosSolicitud.ELIMINADA) {
+              <span class="badge bg-danger text-white">⚪️ Eliminada</span>
+              } @case (estadosSolicitud.EMAIL_NO_VERIFICADO) {
+              <span class="badge bg-info text-white">🔵 Email No Verificado</span>
+              } @default {
+              <span class="badge bg-light text-muted">❓ Estado desconocido</span>
+              } }
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-info me-1 mb-1"
+                title="Más Información"
+                (click)="toggleExpand(i, solicitud)"
+              >
+                <i class="fas fa-info-circle"></i>
+              </button>
+              <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
+                @if ( solicitud.estadoUltimaSolicitud !== estadosSolicitud.EMAIL_NO_VERIFICADO &&
+                solicitud.estadoUltimaSolicitud !== estadosSolicitud.APROBADA ) {
+                <button
+                  type="button"
+                  title="Crear Acceso"
+                  class="btn btn-sm btn-primary me-1 mb-1"
+                  (click)="emitirCrearAccesoMultimedia(solicitud)"
+                  aria-label="Crear Acceso"
+                >
+                  <i class="fas fa-key"></i>
+                </button>
                 }
-              </td>
-              <td>
-                <div *ngIf="solicitud.numeroCelular; else noNumeroCelular">
-                  <div>
-                    <div class="contact-container">
-                      <span>
-                        {{ solicitud.numeroCelular }}
-                        <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(solicitud)"></i>
-                      </span>
-                      <div class="phone-number">
-                        <div class="contact-icons" [ngClass]="{ show: selectedContact === solicitud.id }">
-                          <a
-                            href="https://api.whatsapp.com/send?phone={{ solicitud.numeroCelular | whatsapp }}"
-                            target="_blank"
-                          >
-                            <i class="fab fa-whatsapp mx-2"></i>
-                          </a>
-                          <a href="https://t.me/{{ solicitud.numeroCelular | telegram }}" target="_blank">
-                            <i class="fab fa-telegram mx-2"></i>
-                          </a>
-                          <a href="tel:{{ solicitud.numeroCelular | telegram }}" target="_blank">
-                            <i class="fa fa-phone mx-2"></i>
-                          </a>
+              </div>
+              <button
+                type="button"
+                class="btn btn-sm btn-warning me-1 mb-1"
+                title="Eliminar Acceso"
+                (click)="emitirEliminarSolicitudMultimedia(solicitud)"
+                aria-label="Eliminar Acceso"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+              <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger me-1 mb-1"
+                  title="Denegar Acceso"
+                  (click)="emitirDenegarAccesoMultimedia(solicitud)"
+                  aria-label="Denegar Acceso"
+                >
+                  <i class="fas fa-ban"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          @if (filaExpandida === i) {
+          <tr class="accordion-collapse collapse show">
+            <td colspan="9">
+              <div class="accordion-body">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="card">
+                        <div class="card-body">
+                          <p>
+                            <i class="fas fa-birthday-cake icon-black"></i> <strong>Edad:</strong>
+                            {{ solicitud.fechaNacimiento | calcularEdad }} años
+                          </p>
+                          @if (solicitud.tipoMiembro.miembro) {
+                          <p>
+                            <i class="fas fa-user-tag icon-black"></i> <strong>Tipo de Miembro:</strong>
+                            {{ solicitud.tipoMiembro.miembro }}
+                          </p>
+                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoSugerido) {
+                          <p>
+                            <i class="fas fa-clock icon-black"></i> <strong>Tiempo Sugerido:</strong>
+                            {{
+                              formatTiempoSugerido(
+                                solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoSugerido
+                              )
+                            }}
+                          </p>
+                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].createdAt) {
+                          <p>
+                            <i class="fas fa-calendar-alt icon-black"></i> <strong>Fecha de la solicitud:</strong>
+                            {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].createdAt | date }}
+                          </p>
+                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra) {
+                          <p>
+                            <i class="fas fa-user-tie icon-black"></i> <strong>Registrado por:</strong>
+                            {{
+                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.primerNombre
+                            }}
+                            {{
+                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.segundoNombre
+                            }}
+                            {{
+                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.primerApellido
+                            }}
+                            {{
+                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.segundoApellido
+                            }}
+                          </p>
+                          @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].estado) {
+                          <p>
+                            <i class="fas fa-info-circle icon-black"></i> <strong>Estado:</strong>
+                            {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].estado }}
+                          </p>
+                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo) {
+                          <p>
+                            <i class="fas fa-user-check icon-black"></i> <strong>Acción realizada por:</strong>
+                            {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.primerNombre }}
+                            {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoNombre }}
+                            {{
+                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.primerApellido
+                            }}
+                            {{
+                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoApellido
+                            }}
+                          </p>
+                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion) {
+                          <p>
+                            <i class="fas fa-square-check icon-black"></i> <strong>Tiempo de Aprobación:</strong>
+                            {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion | date }}
+                          </p>
+                          } }
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="card">
+                        <div class="card-body">
+                          @if ( solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.razonSolicitud?.solicitud ) {
+                          <p>
+                            <i class="fas fa-question-circle icon-black"></i> <strong>Razón de la solicitud:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.razonSolicitud?.solicitud }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.otraRazon) {
+                          <p>
+                            <i class="fas fa-info-circle icon-black"></i> <strong>Otra Razón:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.otraRazon }}
+                          </p>
+                          } @if (solicitud.direccion) {
+                          <p>
+                            <i class="fas fa-map-marker-alt icon-black"></i>
+                            <strong>Dirección de residencia:</strong> {{ solicitud.direccion }},
+                            {{ solicitud.ciudadDireccion }}, {{ solicitud.departamentoDireccion }},
+                            {{ solicitud.paisDireccion }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncargada) {
+                          <p>
+                            <i class="fas fa-user-friends icon-black"></i> <strong>Persona Encargada:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncargada }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadCronica) {
+                          <p>
+                            <i class="fas fa-heartbeat icon-black"></i> <strong>Enfermedad Crónica:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadCronica }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadQuePadece) {
+                          <p>
+                            <i class="fas fa-procedures icon-black"></i> <strong>Enfermedad Que padece:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadQuePadece }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.celularPersonaEncargada) {
+                          <p>
+                            <i class="fas fa-user-md icon-black"></i> <strong>Celular Persona Encargada:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.celularPersonaEncargada }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncamada) {
+                          <p>
+                            <i class="fas fa-bed icon-black"></i> <strong>Persona Encamada:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncamada }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.parentesco?.nombre) {
+                          <p>
+                            <i class="fas fa-users icon-black"></i> <strong>Parentezco:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.parentesco?.nombre }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tiempoDistancia) {
+                          <p>
+                            <i class="fas fa-clock icon-black"></i> <strong>Tiempo Distancia:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tiempoDistancia }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.congregacionCercana) {
+                          <p>
+                            <i class="fas fa-map-marker-alt icon-black"></i> <strong>Congregación Cercana:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.congregacionCercana }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.horaTemploMasCercano) {
+                          <p>
+                            <i class="fas fa-road icon-black"></i> <strong>Distancia Templo más cercano:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.horaTemploMasCercano }} horas
+                          </p>
+                          } @if ( solicitud?.solicitudes[solicitud.solicitudes.length -
+                          1]?.opcionTransporte?.tipoTransporte ) {
+                          <p>
+                            <i class="fas fa-bus icon-black"></i> <strong>Opción de Transporte:</strong>
+                            {{
+                              solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.opcionTransporte?.tipoTransporte
+                            }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.paisDondeEstudia) {
+                          <p>
+                            <i class="fas fa-globe icon-black"></i> <strong>País donde estudia:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.paisDondeEstudia }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.ciudadDondeEstudia) {
+                          <p>
+                            <i class="fas fa-city icon-black"></i> <strong>Ciudad donde estudia:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.ciudadDondeEstudia }}
+                          </p>
+                          } @if ( solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.duracionDelPeriodoDeEstudio
+                          ) {
+                          <p>
+                            <i class="fas fa-calendar-alt icon-black"></i>
+                            <strong>Duración del periodo de estudio:</strong>
+                            {{
+                              solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.duracionDelPeriodoDeEstudio
+                                | date
+                            }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tipoEstudio?.estudio) {
+                          <p>
+                            <i class="fas fa-book icon-black"></i> <strong>Tipo de estudio:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tipoEstudio?.estudio }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.baseMilitar) {
+                          <p>
+                            <i class="fas fa-shield-alt icon-black"></i> <strong>Base Militar:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.baseMilitar }}
+                          </p>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="card">
+                        <div class="card-body">
+                          @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones) {
+                          <p>
+                            <i class="fas fa-flag icon-black"></i> <strong>Observaciones:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.motivoDeNegacion) {
+                          <p>
+                            <i class="fas fa-user-minus icon-black"></i> <strong>Motivo de la Negación:</strong>
+                            {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.motivoDeNegacion }}
+                          </p>
+                          }
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <ng-template #noNumeroCelular>
-                  <span>Sin número de celular</span>
-                </ng-template>
-              </td>
-              <td>{{ solicitud.pais }}</td>
-              <td>{{ solicitud.congregacion }}</td>
-              <td>{{ solicitud.campo }}</td>
-              <td>
-                <ng-container [ngSwitch]="solicitud.estadoUltimaSolicitud">
-                  <span *ngSwitchCase="estadosSolicitud.DENEGADA" class="badge bg-danger text-white">🔴 Denegada</span>
-                  <span *ngSwitchCase="estadosSolicitud.APROBADA" class="badge bg-success text-white">🟢 Aprobada</span>
-                  <span *ngSwitchCase="estadosSolicitud.CADUCADA" class="badge bg-dark text-white">⚫ Caducada</span>
-                  <span *ngSwitchCase="estadosSolicitud.PENDIENTE" class="badge bg-warning">🟡 Pendiente</span>
-                  <span *ngSwitchCase="estadosSolicitud.ELIMINADA" class="badge bg-danger text-white"
-                    >⚪️ Eliminada</span
-                  >
-                  <span *ngSwitchCase="estadosSolicitud.EMAIL_NO_VERIFICADO" class="badge bg-info text-white"
-                    >🔵 Email No Verificado</span
-                  >
-                  <span *ngSwitchDefault class="badge bg-light text-muted">❓ Estado desconocido</span>
-                </ng-container>
-              </td>
-
-              <td>
-                <button
-                  class="btn btn-sm btn-info me-1 mb-1"
-                  title="Más Información"
-                  (click)="toggleExpand(i, solicitud)"
-                >
-                  <i class="fas fa-info-circle"></i>
-                </button>
-                <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
-                  <ng-container
-                    *ngIf="
-                      solicitud.estadoUltimaSolicitud !== estadosSolicitud.EMAIL_NO_VERIFICADO &&
-                      solicitud.estadoUltimaSolicitud !== estadosSolicitud.APROBADA
-                    "
-                  >
-                    <button
-                      title="Crear Acceso"
-                      class="btn btn-sm btn-primary me-1 mb-1"
-                      (click)="crearAccesoMultimedia(solicitud)"
-                    >
-                      <i class="fas fa-key"></i>
-                    </button>
-                  </ng-container>
-                </div>
-
-                <button
-                  class="btn btn-sm btn-warning me-1 mb-1"
-                  title="Eliminar Acceso"
-                  (click)="eliminarSolicitudMultimedia(solicitud)"
-                >
-                  <i class="fas fa-trash"></i>
-                </button>
-
-                <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
-                  <button
-                    class="btn btn-sm btn-danger me-1 mb-1"
-                    title="Denegar Acceso"
-                    (click)="denegarAccesoMultimedia(solicitud)"
-                  >
-                    <i class="fas fa-ban"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-
-            <tr *ngIf="filaExpandida === i" class="accordion-collapse collapse show">
-              <td colspan="9">
-                <div class="accordion-body">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div class="card">
-                          <div class="card-body">
-                            <p>
-                              <i class="fas fa-birthday-cake icon-black"></i> <strong>Edad:</strong>
-                              {{ solicitud.fechaNacimiento | calcularEdad }} años
-                            </p>
-
-                            @if (solicitud.tipoMiembro.miembro) {
-                            <p>
-                              <i class="fas fa-user-tag icon-black"></i> <strong>Tipo de Miembro:</strong>
-                              {{ solicitud.tipoMiembro.miembro }}
-                            </p>
-                            } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoSugerido) {
-                            <p>
-                              <i class="fas fa-clock icon-black"></i> <strong>Tiempo Sugerido:</strong>
-                              {{
-                                formatTiempoSugerido(
-                                  solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoSugerido
-                                )
-                              }}
-                            </p>
-                            } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].createdAt) {
-                            <p>
-                              <i class="fas fa-calendar-alt icon-black"></i> <strong>Fecha de la solicitud:</strong>
-                              {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].createdAt | date }}
-                            </p>
-                            } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra) {
-                            <p>
-                              <i class="fas fa-user-tie icon-black"></i> <strong>Registrado por:</strong>
-                              {{
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.primerNombre
-                              }}
-                              {{
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra.segundoNombre
-                              }}
-                              {{
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra
-                                  .primerApellido
-                              }}
-                              {{
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueRegistra
-                                  .segundoApellido
-                              }}
-                            </p>
-                            @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].estado) {
-                            <p>
-                              <i class="fas fa-info-circle icon-black"></i> <strong>Estado:</strong>
-                              {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].estado }}
-                            </p>
-                            } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo) {
-                            <p>
-                              <i class="fas fa-user-check icon-black"></i> <strong>Acción realizada por:</strong>
-                              {{
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.primerNombre
-                              }}
-                              {{
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoNombre
-                              }}
-                              {{
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.primerApellido
-                              }}
-                              {{
-                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoApellido
-                              }}
-                            </p>
-                            } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion) {
-                            <p>
-                              <i class="fas fa-square-check icon-black"></i> <strong>Tiempo de Aprobación:</strong>
-                              {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion | date }}
-                            </p>
-                            } }
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card">
-                          <div class="card-body">
-                            @if ( solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.razonSolicitud?.solicitud )
-                            {
-                            <p>
-                              <i class="fas fa-question-circle icon-black"></i> <strong>Razón de la solicitud:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.razonSolicitud?.solicitud }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.otraRazon) {
-                            <p>
-                              <i class="fas fa-info-circle icon-black"></i> <strong>Otra Razón:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.otraRazon }}
-                            </p>
-                            } @if (solicitud.direccion) {
-                            <p>
-                              <i class="fas fa-map-marker-alt icon-black"></i>
-                              <strong>Dirección de residencia:</strong> {{ solicitud.direccion }},
-                              {{ solicitud.ciudadDireccion }}, {{ solicitud.departamentoDireccion }},
-                              {{ solicitud.paisDireccion }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncargada) {
-                            <p>
-                              <i class="fas fa-user-friends icon-black"></i> <strong>Persona Encargada:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncargada }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadCronica) {
-                            <p>
-                              <i class="fas fa-heartbeat icon-black"></i> <strong>Enfermedad Crónica:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadCronica }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadQuePadece) {
-                            <p>
-                              <i class="fas fa-procedures icon-black"></i> <strong>Enfermedad Que padece:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadQuePadece }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.celularPersonaEncargada) {
-                            <p>
-                              <i class="fas fa-user-md icon-black"></i> <strong>Celular Persona Encargada:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.celularPersonaEncargada }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncamada) {
-                            <p>
-                              <i class="fas fa-bed icon-black"></i> <strong>Persona Encamada:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaEncamada }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.parentesco?.nombre) {
-                            <p>
-                              <i class="fas fa-users icon-black"></i> <strong>Parentezco:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.parentesco?.nombre }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tiempoDistancia) {
-                            <p>
-                              <i class="fas fa-clock icon-black"></i> <strong>Tiempo Distancia:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tiempoDistancia }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.congregacionCercana) {
-                            <p>
-                              <i class="fas fa-map-marker-alt icon-black"></i> <strong>Congregación Cercana:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.congregacionCercana }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.horaTemploMasCercano) {
-                            <p>
-                              <i class="fas fa-road icon-black"></i> <strong>Distancia Templo más cercano:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.horaTemploMasCercano }} horas
-                            </p>
-                            } @if ( solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.opcionTransporte
-                            ?.tipoTransporte ) {
-                            <p>
-                              <i class="fas fa-bus icon-black"></i> <strong>Opción de Transporte:</strong>
-                              {{
-                                solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.opcionTransporte
-                                  ?.tipoTransporte
-                              }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.paisDondeEstudia) {
-                            <p>
-                              <i class="fas fa-globe icon-black"></i> <strong>País donde estudia:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.paisDondeEstudia }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.ciudadDondeEstudia) {
-                            <p>
-                              <i class="fas fa-city icon-black"></i> <strong>Ciudad donde estudia:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.ciudadDondeEstudia }}
-                            </p>
-                            } @if ( solicitud?.solicitudes[solicitud.solicitudes.length -
-                            1]?.duracionDelPeriodoDeEstudio ) {
-                            <p>
-                              <i class="fas fa-calendar-alt icon-black"></i>
-                              <strong>Duración del periodo de estudio:</strong>
-                              {{
-                                solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.duracionDelPeriodoDeEstudio
-                                  | date
-                              }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tipoEstudio?.estudio) {
-                            <p>
-                              <i class="fas fa-book icon-black"></i> <strong>Tipo de estudio:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.tipoEstudio?.estudio }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.baseMilitar) {
-                            <p>
-                              <i class="fas fa-shield-alt icon-black"></i> <strong>Base Militar:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.baseMilitar }}
-                            </p>
-                            }
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card">
-                          <div class="card-body">
-                            @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones) {
-                            <p>
-                              <i class="fas fa-flag icon-black"></i> <strong>Observaciones:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones }}
-                            </p>
-                            } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.motivoDeNegacion) {
-                            <p>
-                              <i class="fas fa-user-minus icon-black"></i> <strong>Motivo de la Negación:</strong>
-                              {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.motivoDeNegacion }}
-                            </p>
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </ng-container>
+              </div>
+            </td>
+          </tr>
+          } }
         </tbody>
       </table>
     </div>

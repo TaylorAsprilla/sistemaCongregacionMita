@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LinkEventoModel } from 'src/app/core/models/link-evento.model';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
@@ -15,6 +15,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush, // Optimiza la detección de cambios
 })
 export class ServiciosComponent implements OnInit, OnDestroy {
+  private linkEventosService = inject(LinkEventosService);
+  private sanitizer = inject(DomSanitizer);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+
   videos: LinkEventoModel[] = [];
   visibleVideos: LinkEventoModel[] = [];
   searchTitle: string = '';
@@ -28,12 +32,6 @@ export class ServiciosComponent implements OnInit, OnDestroy {
   // Paginación
   pageSize = 6; // Número de videos por página
   currentPage = 0;
-
-  constructor(
-    private linkEventosService: LinkEventosService,
-    private sanitizer: DomSanitizer,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
 
   ngOnDestroy(): void {
     this.videosSubscription?.unsubscribe();

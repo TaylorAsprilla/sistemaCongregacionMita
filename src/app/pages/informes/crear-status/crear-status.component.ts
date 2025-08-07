@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -7,29 +7,23 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
-    selector: 'app-crear-status',
-    templateUrl: './crear-status.component.html',
-    styleUrls: ['./crear-status.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule
-],
+  selector: 'app-crear-status',
+  templateUrl: './crear-status.component.html',
+  styleUrls: ['./crear-status.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule],
 })
 export class CrearStatusComponent implements OnInit {
+  private formBuilder = inject(UntypedFormBuilder);
+  private router = inject(Router);
+  private estatusService = inject(EstatusService);
+
   public estatusForm: UntypedFormGroup;
 
   public estatus: EstatusModel[] = [];
   // Subscription
   public estatusSubscription: Subscription;
-
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private router: Router,
-    private estatusService: EstatusService
-  ) {}
 
   ngOnInit(): void {
     this.estatusForm = this.formBuilder.group({

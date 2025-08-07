@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -7,25 +7,24 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
-    selector: 'app-informe-logros',
-    templateUrl: './informe-logros.component.html',
-    styleUrls: ['./informe-logros.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule
-],
+  selector: 'app-informe-logros',
+  templateUrl: './informe-logros.component.html',
+  styleUrls: ['./informe-logros.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule],
 })
 export class InformeLogrosComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(UntypedFormBuilder);
+  private router = inject(Router);
+  private logroService = inject(LogroService);
+
   public logroForm: UntypedFormGroup;
 
   public logros: LogroModel[] = [];
 
   // Subscription
   public logroSubscription: Subscription;
-  constructor(private formBuilder: UntypedFormBuilder, private router: Router, private logroService: LogroService) {}
 
   ngOnInit(): void {
     this.logroForm = this.formBuilder.group({

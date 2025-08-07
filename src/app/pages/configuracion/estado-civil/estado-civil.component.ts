@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { EstadoCivilModel } from 'src/app/core/models/estado-civil.model';
@@ -8,21 +8,19 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-estado-civil',
-    templateUrl: './estado-civil.component.html',
-    styleUrls: ['./estado-civil.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-estado-civil',
+  templateUrl: './estado-civil.component.html',
+  styleUrls: ['./estado-civil.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
-export class EstadoCivilComponent implements OnInit {
+export class EstadoCivilComponent implements OnInit, OnDestroy {
+  private estadoCivilService = inject(EstadoCivilService);
+
   public cargando: boolean = true;
   public estadosCiviles: EstadoCivilModel[] = [];
 
   public estadoCivilSubscription: Subscription;
-
-  constructor(private estadoCivilService: EstadoCivilService) {}
 
   ngOnInit(): void {
     this.cargarEstadosCiviles();

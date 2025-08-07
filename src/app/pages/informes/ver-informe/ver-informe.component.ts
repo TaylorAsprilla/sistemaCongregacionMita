@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import { Subscription } from 'rxjs';
@@ -26,12 +26,20 @@ import { ObreroModel } from 'src/app/core/models/obrero.model';
 import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
 
 @Component({
-    selector: 'app-ver-informe',
-    templateUrl: './ver-informe.component.html',
-    styleUrls: ['./ver-informe.component.css'],
-    standalone: true,
+  selector: 'app-ver-informe',
+  templateUrl: './ver-informe.component.html',
+  styleUrls: ['./ver-informe.component.css'],
+  standalone: true,
 })
 export class VerInformeComponent implements OnInit, OnDestroy {
+  private usuarioService = inject(UsuarioService);
+  private ministerioService = inject(MinisterioService);
+  private paisService = inject(PaisService);
+  private informeService = inject(InformeService);
+  private actividadService = inject(ActividadService);
+  private tipoActividadService = inject(TipoActividadService);
+  private activatedRoute = inject(ActivatedRoute);
+
   @ViewChild('content', { static: false }) el!: ElementRef;
 
   primerNombre: string = '';
@@ -96,16 +104,6 @@ export class VerInformeComponent implements OnInit, OnDestroy {
 
   public seccionesInformes: SeccionInformeModel[];
   informeSubscription: Subscription;
-
-  constructor(
-    private usuarioService: UsuarioService,
-    private ministerioService: MinisterioService,
-    private paisService: PaisService,
-    private informeService: InformeService,
-    private actividadService: ActividadService,
-    private tipoActividadService: TipoActividadService,
-    private activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: any) => {

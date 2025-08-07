@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,14 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, NgxIntlTelInputModule],
 })
-export class CrearCongregacionComponent implements OnInit {
+export class CrearCongregacionComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(UntypedFormBuilder);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private congregacionService = inject(CongregacionService);
+  private paisService = inject(PaisService);
+  private accesoMultimediaService = inject(AccesoMultimediaService);
+
   public congregacionForm: UntypedFormGroup;
 
   public congregaciones: CongregacionModel[] = [];
@@ -36,15 +43,6 @@ export class CrearCongregacionComponent implements OnInit {
   public paisSubscription: Subscription;
   activatedRouteParamsSubscription: Subscription;
   activatedRouteDataSubscription: Subscription;
-
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private congregacionService: CongregacionService,
-    private paisService: PaisService,
-    private accesoMultimediaService: AccesoMultimediaService
-  ) {}
 
   ngOnInit(): void {
     this.activatedRouteParamsSubscription = this.activatedRoute.params.subscribe(({ id }) => {

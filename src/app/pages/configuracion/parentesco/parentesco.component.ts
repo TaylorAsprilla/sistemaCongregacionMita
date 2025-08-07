@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ParentescoModel } from 'src/app/core/models/parentesco.model';
@@ -14,13 +14,13 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
   standalone: true,
   imports: [CargandoInformacionComponent],
 })
-export class ParentescoComponent implements OnInit {
+export class ParentescoComponent implements OnInit, OnDestroy {
+  private parentescoService = inject(ParentescoService);
+
   public cargando: boolean = true;
   public parentescos: ParentescoModel[] = [];
 
   public parentescoSubscription: Subscription;
-
-  constructor(private parentescoService: ParentescoService) {}
 
   ngOnInit(): void {
     this.cargarParentescos();

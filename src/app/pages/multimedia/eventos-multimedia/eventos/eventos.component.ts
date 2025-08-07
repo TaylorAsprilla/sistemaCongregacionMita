@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LinkEventoModel, TIPOEVENTO, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
@@ -9,21 +9,20 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-eventos',
-    templateUrl: './eventos.component.html',
-    styleUrls: ['./eventos.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-eventos',
+  templateUrl: './eventos.component.html',
+  styleUrls: ['./eventos.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
 export class EventosComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private linkEventosService = inject(LinkEventosService);
+
   public cargando: boolean = true;
   public linkEventos: LinkEventoModel[] = [];
   public linkEventosSubscription: Subscription;
   public tipoEventoSubscription: Subscription;
-
-  constructor(private router: Router, private linkEventosService: LinkEventosService) {}
 
   ngOnInit(): void {
     this.cargarEventos();

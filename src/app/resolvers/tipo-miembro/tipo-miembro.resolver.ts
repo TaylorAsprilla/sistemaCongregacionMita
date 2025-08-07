@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -7,8 +7,8 @@ import { TipoMiembroService } from 'src/app/services/tipo-miembro/tipo-miembro.s
 @Injectable({
   providedIn: 'root',
 })
-export class TipoMiembroResolver  {
-  constructor(private tipoMiembroService: TipoMiembroService) {}
+export class TipoMiembroResolver {
+  private tipoMiembroService = inject(TipoMiembroService);
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return this.tipoMiembroService.getTipoMiembro().pipe(

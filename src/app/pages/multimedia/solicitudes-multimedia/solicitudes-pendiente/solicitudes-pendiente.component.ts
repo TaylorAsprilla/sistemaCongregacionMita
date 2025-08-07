@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { delay, Subscription } from 'rxjs';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -21,7 +21,11 @@ import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acce
   templateUrl: './solicitudes-pendiente.component.html',
   styleUrl: './solicitudes-pendiente.component.scss',
 })
-export class SolicitudesPendienteComponent {
+export class SolicitudesPendienteComponent implements OnInit, OnDestroy {
+  private accesoMultimediaService = inject(AccesoMultimediaService);
+  private solicitudMultimediaService = inject(SolicitudMultimediaService);
+  private usuarioService = inject(UsuarioService);
+
   solicitudes: UsuarioSolicitudMultimediaModel[] = [];
 
   cargando: boolean = false;
@@ -29,12 +33,6 @@ export class SolicitudesPendienteComponent {
 
   // Subscription
   solicitudMultimediaServiceSubscription: Subscription;
-
-  constructor(
-    private accesoMultimediaService: AccesoMultimediaService,
-    private solicitudMultimediaService: SolicitudMultimediaService,
-    private usuarioService: UsuarioService
-  ) {}
 
   ngOnInit(): void {
     this.usuarioId = this.usuarioService.usuario.id;

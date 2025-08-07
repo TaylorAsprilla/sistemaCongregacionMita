@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -7,8 +7,8 @@ import { InformeService } from 'src/app/services/informe/informe.service';
 @Injectable({
   providedIn: 'root',
 })
-export class InformesResolver  {
-  constructor(private informeService: InformeService) {}
+export class InformesResolver {
+  private informeService = inject(InformeService);
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return this.informeService.getInformes().pipe(

@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
@@ -22,6 +23,9 @@ import { YoutubePipe } from '../../pipes/youtube/youtube.pipe';
   imports: [YouTubePlayer, YoutubePipe],
 })
 export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnDestroy {
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  domSanitizer = inject(DomSanitizer);
+
   @Input() serviciosYvigilias: LinkEventoModel[] = [];
   @Input() titulo: string = '';
   @Input() tipoDeEvento: TIPOEVENTO_ID | string | undefined;
@@ -39,8 +43,6 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
   get TIPOEVENTO() {
     return TIPOEVENTO_ID;
   }
-
-  constructor(private changeDetectorRef: ChangeDetectorRef, public domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const tag = document.createElement('script');

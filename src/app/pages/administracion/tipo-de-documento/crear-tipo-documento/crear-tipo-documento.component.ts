@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,32 +10,25 @@ import { TipoDocumentoService } from 'src/app/services/tipo-documento/tipo-docum
 import Swal from 'sweetalert2';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
-
 @Component({
-    selector: 'app-crear-tipo-documento',
-    templateUrl: './crear-tipo-documento.component.html',
-    styleUrls: ['./crear-tipo-documento.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgxIntlTelInputModule
-],
+  selector: 'app-crear-tipo-documento',
+  templateUrl: './crear-tipo-documento.component.html',
+  styleUrls: ['./crear-tipo-documento.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgxIntlTelInputModule],
 })
 export class CrearTipoDocumentoComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private tipoDocumentoService = inject(TipoDocumentoService);
+
   public tipoDocumentoForm: FormGroup;
   public paises: CongregacionPaisModel[] = [];
   public tiposDeDocumentos: TipoDocumentoModel[] = [];
   public tipoDeDocumentoSeleccionado: TipoDocumentoModel;
 
   public tipoDeDocumentoSubscription: Subscription;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private tipoDocumentoService: TipoDocumentoService
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: { pais: CongregacionPaisModel[] }) => {

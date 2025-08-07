@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROUTES, RUTAS } from 'src/app/routes/menu-items';
@@ -20,6 +20,9 @@ declare var $: any;
   imports: [RouterLink, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule],
 })
 export class SidebarComponent implements OnInit {
+  private usuarioService = inject(UsuarioService);
+  private modalService = inject(NgbModal);
+
   menuItems: any[] = [];
   usuario: UsuarioModel | undefined;
   multimediaCongregacion: MultimediaCongregacionModel | undefined;
@@ -59,7 +62,6 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  constructor(private usuarioService: UsuarioService, private modalService: NgbModal) {}
   // End open close
   ngOnInit() {
     this.sidebarnavItems = ROUTES.filter((sidebarnavItem) => sidebarnavItem);
