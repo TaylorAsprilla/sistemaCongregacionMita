@@ -8,6 +8,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { NgClass } from '@angular/common';
+import { NumeroMitaResponse, DatosQrLogin } from 'src/app/core/interfaces/usuario.interface';
 
 @Component({
   selector: 'app-login',
@@ -63,7 +64,9 @@ export default class LoginComponent implements OnInit, OnDestroy {
     });
 
     this.qrLoginForm = this.formBuilder.group({
+      numeroMita: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
       nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      tipoPuesto: ['', [Validators.required]],
     });
   }
 
@@ -123,24 +126,41 @@ export default class LoginComponent implements OnInit, OnDestroy {
 
   loginConQr() {
     this.submitted = true;
+    this.loading = true;
+
+    // Limpieza y validación robusta
+    this.qrLoginForm.patchValue({
+      numeroMita: (this.qrLoginForm.value.numeroMita || '').toString().trim(),
+      nombre: (this.qrLoginForm.value.nombre || '').trim(),
+      tipoPuesto: (this.qrLoginForm.value.tipoPuesto || '').trim(),
+    });
 
     if (this.qrLoginForm.invalid) {
       this.qrLoginForm.markAllAsTouched();
+      this.loading = false;
       return;
     }
 
-    this.loading = true;
+    const datos: DatosQrLogin = {
+      qrCode: this.ticketQr!,
+      numeroMita: this.qrLoginForm.value.numeroMita,
+      nombre: this.qrLoginForm.value.nombre,
+      tipoPuesto: this.qrLoginForm.value.tipoPuesto,
+    };
 
-    this.nombreUsuarioQr = this.qrLoginForm.value.nombre.trim();
+    this.nombreUsuarioQr = datos.nombre;
 
-    this.usuarioService.loginPorQr(this.ticketQr!, this.nombreUsuarioQr).subscribe(
-      (resp: any) => {
+    this.usuarioService.loginPorQr(datos).subscribe({
+      next: (resp: any) => {
         Swal.fire({
           position: 'bottom-end',
           html: `Bienvenido ${this.nombreUsuarioQr}`,
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
+          this.qrLoginForm.reset();
+          this.submitted = false;
+          this.loading = false;
           this.ngZone.run(() => {
             this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`).catch((err) => {
               console.error('Error en el redireccionamiento:', err);
@@ -148,10 +168,11 @@ export default class LoginComponent implements OnInit, OnDestroy {
           });
         });
       },
-      (err) => {
-        Swal.fire({ icon: 'error', html: `${err.error.msg}` });
-      }
-    );
+      error: (err) => {
+        this.loading = false;
+        Swal.fire({ icon: 'error', html: `${err?.error?.msg || 'Error al iniciar sesión con QR.'}` });
+      },
+    });
   }
 
   obtenerAnioActual = (): number => {
@@ -161,5 +182,32 @@ export default class LoginComponent implements OnInit, OnDestroy {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  usuarioPorNumeroMita() {
+    const numeroMita = Number(this.qrLoginForm.get('numeroMita')?.value);
+
+    this.usuarioService.buscarPorNumeroMita(numeroMita).subscribe({
+      next: (respuesta: NumeroMitaResponse) => {
+        console.log('Respuesta del servidor:', respuesta);
+        // Solo mostrar los campos que existan y no estén vacíos
+        const partes = [
+          respuesta.usuario.primerNombre,
+          respuesta.usuario.segundoNombre,
+          respuesta.usuario.primerApellido,
+          respuesta.usuario.segundoApellido,
+        ].filter(Boolean);
+        const nombre = partes.join(' ');
+        this.qrLoginForm.patchValue({
+          nombre: nombre,
+        });
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          html: `No se encuentra el feligres con el número Mita ${numeroMita}`,
+        });
+      },
+    });
   }
 }
