@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import {
+  DatosQrLogin,
   ListarUsuario,
+  NumeroMitaResponse,
   UsuarioInterface,
   UsuariosPorCongregacionRespuesta,
 } from 'src/app/core/interfaces/usuario.interface';
@@ -331,12 +333,12 @@ export class UsuarioService {
     );
   }
 
-  loginPorQr(ticket: string, nombre: string) {
-    return this.httpClient.post(`${base_url}/accesoqr/loginQr`, { qrCode: ticket, nombre }).pipe(
+  loginPorQr(datos: DatosQrLogin) {
+    return this.httpClient.post(`${base_url}/accesoqr/loginQr`, datos).pipe(
       tap((resp: any) => {
         localStorage.setItem('token', resp.token);
         sessionStorage.setItem('isQRLogin', 'isQRLogin');
-        sessionStorage.setItem('nombre', nombre);
+        sessionStorage.setItem('nombre', datos.nombre);
         sessionStorage.setItem('congregacion', resp.congregacion.congregacion);
         this.idUsuario = resp.congregacion.id;
         this.nombreQR = resp.nombre;
@@ -409,6 +411,13 @@ export class UsuarioService {
     };
 
     return this.httpClient.post(`${base_url}/usuarios/buscar-numeros-mitas`, body, this.headers);
+  }
+
+  buscarPorNumeroMita(numeroMita: number): Observable<NumeroMitaResponse> {
+    return this.httpClient.get<NumeroMitaResponse>(
+      `${base_url}/usuarios/buscarnumeromita?numeroMita=${numeroMita}`,
+      this.headers
+    );
   }
 
   eliminarUsuario(idUsuario: number) {
