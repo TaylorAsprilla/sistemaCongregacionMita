@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MinisterioModel } from 'src/app/core/models/ministerio.model';
@@ -9,22 +9,21 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-ministerios',
-    templateUrl: './ministerios.component.html',
-    styleUrls: ['./ministerios.component.css'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-ministerios',
+  templateUrl: './ministerios.component.html',
+  styleUrls: ['./ministerios.component.css'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
 export class MinisteriosComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private ministerioService = inject(MinisterioService);
+
   public cargando: boolean = true;
   public ministerios: MinisterioModel[] = [];
 
   // Subscription
   public ministerioSubscription: Subscription;
-
-  constructor(private router: Router, private ministerioService: MinisterioService) {}
 
   ngOnInit(): void {
     this.cargarMinisterios();

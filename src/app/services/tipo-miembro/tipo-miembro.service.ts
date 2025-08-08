@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
@@ -9,7 +9,7 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class TipoMiembroService {
-  constructor(private httpClient: HttpClient) {}
+  private httpClient = inject(HttpClient);
 
   get token(): string {
     return localStorage.getItem('token') || '';

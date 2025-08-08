@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy, inject } from '@angular/core';
 import {
   AbstractControlOptions,
   FormArray,
@@ -28,7 +28,12 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
   standalone: true,
   imports: [BuscarUsuarioComponent, FormsModule, ReactiveFormsModule, NgxIntlTelInputModule],
 })
-export default class AsignarPermisosComponent implements OnInit {
+export default class AsignarPermisosComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
+  private usuarioService = inject(UsuarioService);
+  private permisosService = inject(PermisoService);
+  private router = inject(Router);
+
   permisosForm: FormGroup;
   passwordUsuarioForm: FormGroup;
 
@@ -43,13 +48,6 @@ export default class AsignarPermisosComponent implements OnInit {
   permisoSubscription: Subscription;
 
   @ViewChild('verPermisos') verPermisos: ElementRef;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private usuarioService: UsuarioService,
-    private permisosService: PermisoService,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
     this.permisoSubscription = this.permisosService.getPermisos().subscribe((permiso: PermisoModel[]) => {

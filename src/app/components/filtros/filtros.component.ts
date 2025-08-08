@@ -8,15 +8,11 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule],
 })
-export class FiltrosComponent implements OnInit {
-  @Output() onFiltroNombre: EventEmitter<string> = new EventEmitter<string>();
+export class FiltrosComponent {
+  @Output() filtroNombreChange: EventEmitter<string> = new EventEmitter<string>();
   filtroNombre: string = '';
 
-  constructor() {}
-
-  ngOnInit(): void {}
-
   filtrar() {
-    this.onFiltroNombre.emit(this.filtroNombre);
+    this.filtroNombreChange.emit(this.filtroNombre);
   }
 }

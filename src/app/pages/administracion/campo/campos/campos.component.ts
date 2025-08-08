@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { delay } from 'rxjs/operators';
 import { CampoModel } from 'src/app/core/models/campo.model';
@@ -27,6 +27,15 @@ import { CongregacionService } from 'src/app/services/congregacion/congregacion.
   imports: [CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
 })
 export class CamposComponent implements OnInit {
+  private router = inject(Router);
+  private campoService = inject(CampoService);
+  private activatedRoute = inject(ActivatedRoute);
+  private exportarExcelService = inject(ExportarExcelService);
+  private congregacionService = inject(CongregacionService);
+
+  @Input() nombreArchivo: string = '';
+  @Input() totalCampos: number = 0;
+
   cargando: boolean = true;
   campos: CampoModel[] = [];
   obreros: UsuarioModel[] = [];
@@ -38,7 +47,6 @@ export class CamposComponent implements OnInit {
   congregacionesFiltradas: CongregacionModel[] = [];
   camposFiltrados: CampoModel[] = [];
   filtrarTexto: string = '';
-  @Input() nombreArchivo: string = '';
   filtrarPaisTexto: string = '';
   originalPais: string = '';
   congregacionSubscription: Subscription;
@@ -48,16 +56,7 @@ export class CamposComponent implements OnInit {
   filtrarCongreTexto: string = '';
   originalCongre: string = '';
   filtrarCampoTexto: string = '';
-  @Input() totalCampos: number = 0;
   congregacionesFiltradasId: number[];
-
-  constructor(
-    private router: Router,
-    private campoService: CampoService,
-    private activatedRoute: ActivatedRoute,
-    private exportarExcelService: ExportarExcelService,
-    private congregacionService: CongregacionService
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(

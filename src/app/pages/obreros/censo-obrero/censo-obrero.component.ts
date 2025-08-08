@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { UsuariosPorCongregacionInterface } from './../../../core/interfaces/usuario.interface';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -20,6 +20,11 @@ import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.compo
   imports: [CargandoInformacionComponent, VerCensoComponent],
 })
 export default class CensoObreroComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private usuarioService = inject(UsuarioService);
+  private usuariosPorCongregacionService = inject(UsuariosPorCongregacionService);
+  private enviarCorreoService = inject(EnviarCorreoService);
+
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
 
@@ -33,13 +38,6 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
 
   // Subscription
   usuarioSubscription: Subscription;
-
-  constructor(
-    private router: Router,
-    private usuarioService: UsuarioService,
-    private usuariosPorCongregacionService: UsuariosPorCongregacionService,
-    private enviarCorreoService: EnviarCorreoService
-  ) {}
 
   ngOnInit(): void {
     this.idUsuario = this.usuarioService.usuarioId;

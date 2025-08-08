@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { QrCodeService } from 'src/app/services/qrCode/qr-code.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
@@ -15,7 +15,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './qr-code-generator.component.html',
   styleUrl: './qr-code-generator.component.scss',
 })
-export default class QrCodeGeneratorComponent {
+export default class QrCodeGeneratorComponent implements OnInit, OnDestroy {
+  private qrCodeService = inject(QrCodeService);
+  private formBuilder = inject(FormBuilder);
+  private congregacionService = inject(CongregacionService);
+
   qrForm: FormGroup;
   qrCode: string;
   qrUrl: string;
@@ -31,12 +35,6 @@ export default class QrCodeGeneratorComponent {
   // Subscription
   congregacionSubscription: Subscription;
   ultimoQrGeneradoSubscription: Subscription;
-
-  constructor(
-    private qrCodeService: QrCodeService,
-    private formBuilder: FormBuilder,
-    private congregacionService: CongregacionService
-  ) {}
 
   ngOnInit() {
     this.qrForm = this.formBuilder.group({

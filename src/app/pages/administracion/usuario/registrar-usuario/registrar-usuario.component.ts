@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CampoModel } from 'src/app/core/models/campo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
@@ -28,6 +28,10 @@ import { InformacionUsuarioComponent } from '../../../../components/informacion-
   imports: [InformacionUsuarioComponent],
 })
 export default class RegistrarUsuarioComponent implements OnInit {
+  private usuarioService = inject(UsuarioService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+
   usuario: UsuarioModel;
   generos: GeneroModel[] = [];
   estadoCivil: EstadoCivilModel[] = [];
@@ -47,8 +51,6 @@ export default class RegistrarUsuarioComponent implements OnInit {
   get OPERACION() {
     return OPERACION;
   }
-
-  constructor(private usuarioService: UsuarioService, private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(

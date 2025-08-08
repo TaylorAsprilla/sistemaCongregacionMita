@@ -1,6 +1,6 @@
 import { configuracion } from 'src/environments/config/configuration';
 import { UsuarioService } from './../../../../services/usuario/usuario.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryISO, PhoneNumberFormat, SearchCountryField, NgxIntlTelInputModule } from 'ngx-intl-tel-input';
@@ -41,6 +41,12 @@ import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMu
   ],
 })
 export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
+  private activatedRoute = inject(ActivatedRoute);
+  private solicitudMultimediaService = inject(SolicitudMultimediaService);
+  private usuarioService = inject(UsuarioService);
+  private router = inject(Router);
+
   solicitudForm: FormGroup;
 
   paises: CongregacionPaisModel[] = [];
@@ -96,14 +102,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   get RAZON_SOLICITUD_ID() {
     return RAZON_SOLICITUD_ID;
   }
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private solicitudMultimediaService: SolicitudMultimediaService,
-    private usuarioService: UsuarioService,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(

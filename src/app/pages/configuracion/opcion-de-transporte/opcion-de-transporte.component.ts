@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { OpcionTransporteModel } from 'src/app/core/models/opcion-transporte.model';
@@ -9,21 +9,19 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-opcion-de-transporte',
-    templateUrl: './opcion-de-transporte.component.html',
-    styleUrls: ['./opcion-de-transporte.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-opcion-de-transporte',
+  templateUrl: './opcion-de-transporte.component.html',
+  styleUrls: ['./opcion-de-transporte.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
 export class OpcionDeTransporteComponent implements OnInit, OnDestroy {
+  private opcionTransporteService = inject(OpcionTransporteService);
+
   public cargando: boolean = true;
   public opcionesTransporte: OpcionTransporteModel[] = [];
 
   public opcionTransporteSubscription: Subscription;
-
-  constructor(private opcionTransporteService: OpcionTransporteService) {}
 
   ngOnInit(): void {
     this.cargarOpcionesDeTransporte();

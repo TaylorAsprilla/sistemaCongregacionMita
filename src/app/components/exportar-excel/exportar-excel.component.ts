@@ -10,13 +10,9 @@ import { UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuari
   styleUrls: ['./exportar-excel.component.scss'],
   standalone: true,
 })
-export class ExportarExcelComponent implements OnInit {
+export class ExportarExcelComponent {
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
   @Input() nombreArchivo: string = '';
-
-  constructor() {}
-
-  ngOnInit(): void {}
 
   exportarExcel(): void {
     const workbook = new Workbook();

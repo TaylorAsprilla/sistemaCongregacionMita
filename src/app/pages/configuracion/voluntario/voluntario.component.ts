@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
@@ -8,21 +8,19 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-voluntario',
-    templateUrl: './voluntario.component.html',
-    styleUrls: ['./voluntario.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-voluntario',
+  templateUrl: './voluntario.component.html',
+  styleUrls: ['./voluntario.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
 export class VoluntarioComponent implements OnInit, OnDestroy {
+  private voluntariadoService = inject(VoluntariadoService);
+
   public cargando: boolean = true;
   public voluntariados: VoluntariadoModel[] = [];
 
   public voluntariadoSubscription: Subscription;
-
-  constructor(private voluntariadoService: VoluntariadoService) {}
 
   ngOnInit(): void {
     this.cargarVoluntariados();

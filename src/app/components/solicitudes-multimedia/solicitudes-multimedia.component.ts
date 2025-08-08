@@ -1,5 +1,15 @@
 import Swal from 'sweetalert2';
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+  OnInit,
+  OnChanges,
+  inject,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
@@ -32,19 +42,25 @@ import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-e
   templateUrl: './solicitudes-multimedia.component.html',
   styleUrl: './solicitudes-multimedia.component.scss',
 })
-export class SolicitudesMultimediaComponent {
+export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
+  private router = inject(Router);
+  private accesoMultimediaService = inject(AccesoMultimediaService);
+  private formBuilder = inject(FormBuilder);
+  private cdr = inject(ChangeDetectorRef);
+  private exportarExcelService = inject(ExportarExcelService);
+
   @Input() solicitudes: UsuarioSolicitudMultimediaModel[] = [];
   @Input() usuarioId: number;
 
   @Input() nombreArchivo: string = '';
 
-  @Output() onCrearAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
+  @Output() crearAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
     new EventEmitter<UsuarioSolicitudInterface>();
 
-  @Output() onDenegarAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
+  @Output() denegarAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
     new EventEmitter<UsuarioSolicitudInterface>();
 
-  @Output() onEliminarSolicitudMultiemdia: EventEmitter<UsuarioSolicitudMultimediaModel> =
+  @Output() eliminarSolicitudMultimedia: EventEmitter<UsuarioSolicitudMultimediaModel> =
     new EventEmitter<UsuarioSolicitudMultimediaModel>();
 
   filteredSolicitudes: UsuarioSolicitudMultimediaModel[] = [];
@@ -90,14 +106,6 @@ export class SolicitudesMultimediaComponent {
     return ROLES;
   }
 
-  constructor(
-    private router: Router,
-    private accesoMultimediaService: AccesoMultimediaService,
-    private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef,
-    private exportarExcelService: ExportarExcelService
-  ) {}
-
   ngOnInit(): void {
     this.filterForm = this.formBuilder.group({
       paises: ['', Validators.required],
@@ -111,8 +119,6 @@ export class SolicitudesMultimediaComponent {
       this.applyFilter(); // Aplica el filtro cuando cambie cualquier campo
     });
   }
-
-  ngOnDestroy(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['solicitudes']?.currentValue) {
@@ -285,8 +291,8 @@ export class SolicitudesMultimediaComponent {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.SOLICITUD_MULTIMEDIA}/${nuevo}`);
   }
 
-  crearAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
-    this.onCrearAccesoMultimedia.emit(solicitud);
+  emitirCrearAccesoMultimedia(solicitud: UsuarioSolicitudInterface) {
+    this.crearAccesoMultimedia.emit(solicitud);
   }
 
   calcularFechaDeAprobacion(opcion: string): Date | null {
@@ -303,12 +309,12 @@ export class SolicitudesMultimediaComponent {
     return fechaFutura;
   }
 
-  eliminarSolicitudMultimedia(solicitud: UsuarioSolicitudMultimediaModel) {
-    this.onEliminarSolicitudMultiemdia.emit(solicitud);
+  emitirEliminarSolicitudMultimedia(solicitud: UsuarioSolicitudMultimediaModel) {
+    this.eliminarSolicitudMultimedia.emit(solicitud);
   }
 
-  denegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
-    this.onDenegarAccesoMultimedia.emit(solicitud);
+  emitirDenegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
+    this.denegarAccesoMultimedia.emit(solicitud);
   }
 
   toggleExpand(index: number, solicitud: UsuarioSolicitudMultimediaModel): void {

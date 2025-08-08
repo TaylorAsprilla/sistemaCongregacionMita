@@ -1,5 +1,5 @@
 import { NgbModal, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
@@ -20,6 +20,10 @@ declare var $: any;
   imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink, PermisosDirective],
 })
 export class HeaderComponent implements OnInit {
+  private usuarioService = inject(UsuarioService);
+  private router = inject(Router);
+  private modalService = inject(NgbModal);
+
   @Output() toggleSidebar = new EventEmitter<void>();
 
   usuario: UsuarioModel | undefined;
@@ -44,8 +48,6 @@ export class HeaderComponent implements OnInit {
   get Roles() {
     return ROLES;
   }
-
-  constructor(private usuarioService: UsuarioService, private router: Router, private modalService: NgbModal) {}
 
   ngOnInit(): void {
     this.usuario = this.usuarioService.usuario;
@@ -73,8 +75,6 @@ export class HeaderComponent implements OnInit {
       this.email = email;
     }
   }
-
-  ngAfterViewInit() {}
 
   logout() {
     this.usuarioService.logout();

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
@@ -22,13 +22,17 @@ import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { InformacionUsuarioComponent } from '../../components/informacion-usuario/informacion-usuario.component';
 
 @Component({
-    selector: 'app-perfil',
-    templateUrl: './perfil.component.html',
-    styleUrls: ['./perfil.component.css'],
-    standalone: true,
-    imports: [InformacionUsuarioComponent],
+  selector: 'app-perfil',
+  templateUrl: './perfil.component.html',
+  styleUrls: ['./perfil.component.css'],
+  standalone: true,
+  imports: [InformacionUsuarioComponent],
 })
 export class PerfilComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private usuarioService = inject(UsuarioService);
+
   public usuario: UsuarioModel;
   public generos: GeneroModel[] = [];
   public estadoCivil: EstadoCivilModel[] = [];
@@ -49,8 +53,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
   get OPERACION() {
     return OPERACION;
   }
-
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(

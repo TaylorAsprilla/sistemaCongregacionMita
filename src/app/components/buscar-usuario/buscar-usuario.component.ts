@@ -1,5 +1,15 @@
 import Swal from 'sweetalert2';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -15,21 +25,22 @@ import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
   imports: [FormsModule, ReactiveFormsModule, CalcularEdadPipe],
 })
 export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
+  private formBuilder = inject(FormBuilder);
+  private usuarioService = inject(UsuarioService);
+
   @Input() crearAccesoBoton: boolean = false;
   @Input() ocultarBusqueda: boolean = false;
 
-  @Output() onUsuarioEncontrado: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
-  @Output() onActualizarUsuario: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
-  @Output() onCrearAcceso: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
-  @Output() onScrollToSection: EventEmitter<any> = new EventEmitter<any>();
+  @Output() usuarioEncontrado: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
+  @Output() actualizarUsuario: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
+  @Output() crearAcceso: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
+  @Output() scrollToSection: EventEmitter<any> = new EventEmitter<any>();
 
   numeroMitaForm: FormGroup;
   usuario: UsuarioModel;
   asignarPermisos: boolean = false;
 
   usuarioSubscription: Subscription;
-
-  constructor(private formBuilder: FormBuilder, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     this.crearFormularioNumeroMita();
@@ -68,7 +79,7 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
             showConfirmButton: false,
           });
 
-          this.onUsuarioEncontrado.emit(this.usuario);
+          this.usuarioEncontrado.emit(this.usuario);
         } else {
           Swal.fire({
             position: 'top-end',
@@ -91,15 +102,15 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  actualizarUsuario() {
-    this.onActualizarUsuario.emit(this.usuario);
+  emitirActualizarUsuario() {
+    this.actualizarUsuario.emit(this.usuario);
   }
 
-  crearAcceso() {
-    this.onCrearAcceso.emit(this.usuario);
+  emitirCrearAcceso() {
+    this.crearAcceso.emit(this.usuario);
   }
 
-  scrollToSection() {
-    this.onScrollToSection.emit();
+  emitirScrollToSection() {
+    this.scrollToSection.emit();
   }
 }

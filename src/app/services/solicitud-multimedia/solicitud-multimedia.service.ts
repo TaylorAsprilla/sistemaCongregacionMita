@@ -1,6 +1,6 @@
 import { UsuarioSolicitudMultimediaModel } from './../../core/models/usuario-solicitud.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class SolicitudMultimediaService {
-  constructor(private httpClient: HttpClient) {}
+  private httpClient = inject(HttpClient);
 
   get token(): string {
     return localStorage.getItem('token') || '';

@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -22,6 +22,9 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class UsuarioService {
+  private httpClient = inject(HttpClient);
+  private router = inject(Router);
+
   public usuario: UsuarioModel;
   public idUsuario: number;
   public multimediaCongregacion: MultimediaCongregacionModel;
@@ -32,7 +35,7 @@ export class UsuarioService {
   private readonly INACTIVE_TIMEOUT_MS: number = configuracion.inactividad.INACTIVE_TIMEOUT_MS;
   private readonly timerModal: number = configuracion.inactividad.TIMER_MODEL;
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor() {
     this.resetInactiveTimer();
     window.addEventListener('mousemove', () => this.resetInactiveTimer());
     window.addEventListener('keypress', () => this.resetInactiveTimer());

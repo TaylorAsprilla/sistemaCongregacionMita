@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
@@ -18,6 +18,10 @@ import { VerCensoComponent } from '../../../../components/ver-censo/ver-censo.co
   imports: [CargandoInformacionComponent, VerCensoComponent],
 })
 export default class UsuariosComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private usuarioService = inject(UsuarioService);
+  private enviarCorreoService = inject(EnviarCorreoService);
+
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
 
@@ -28,12 +32,6 @@ export default class UsuariosComponent implements OnInit, OnDestroy {
 
   // Subscription
   usuarioSubscription: Subscription;
-
-  constructor(
-    private router: Router,
-    private usuarioService: UsuarioService,
-    private enviarCorreoService: EnviarCorreoService
-  ) {}
 
   ngOnInit(): void {
     this.nombreArchivo = 'Censo General';

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -9,21 +9,19 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-genero',
-    templateUrl: './genero.component.html',
-    styleUrls: ['./genero.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-genero',
+  templateUrl: './genero.component.html',
+  styleUrls: ['./genero.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
 export class GeneroComponent implements OnInit, OnDestroy {
+  private generoService = inject(GeneroService);
+
   public cargando: boolean = true;
   public generos: GeneroModel[] = [];
 
   public generoSubscription: Subscription;
-
-  constructor(private generoService: GeneroService) {}
 
   ngOnInit(): void {
     this.cargarGeneros();

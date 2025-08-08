@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 
@@ -10,9 +10,10 @@ import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedi
   imports: [],
 })
 export class ValidarEmailComponent implements OnInit {
-  solicitudValida: boolean = false;
+  private activatedRoute = inject(ActivatedRoute);
+  private solicitudMultimediaService = inject(SolicitudMultimediaService);
 
-  constructor(private activatedRoute: ActivatedRoute, private solicitudMultimediaService: SolicitudMultimediaService) {}
+  solicitudValida: boolean = false;
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {

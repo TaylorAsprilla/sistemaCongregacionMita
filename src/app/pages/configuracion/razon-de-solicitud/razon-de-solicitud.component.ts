@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { RazonSolicitudModel } from 'src/app/core/models/razon-solicitud.model';
@@ -15,12 +15,12 @@ import { CargandoInformacionComponent } from '../../../components/cargando-infor
   imports: [CargandoInformacionComponent],
 })
 export class RazonDeSolicitudComponent implements OnInit, OnDestroy {
+  private razonSolicitudService = inject(RazonSolicitudService);
+
   public cargando: boolean = true;
   public razonSolicitudes: RazonSolicitudModel[] = [];
 
   public razonSolicitudSubscription: Subscription;
-
-  constructor(private razonSolicitudService: RazonSolicitudService) {}
 
   ngOnInit(): void {
     this.cargarRazonSolicitud();

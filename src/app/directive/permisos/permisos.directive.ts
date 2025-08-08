@@ -1,4 +1,4 @@
-import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, OnInit, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { PermisoModel } from 'src/app/core/models/permisos.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -10,15 +10,13 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
   standalone: true,
 })
 export class PermisosDirective implements OnInit {
+  private templateRef = inject<TemplateRef<any>>(TemplateRef);
+  private viewContainer = inject(ViewContainerRef);
+  private usuarioServices = inject(UsuarioService);
+
   private permisos = [];
   private usuario: UsuarioModel;
   private multimediaCongregacion: MultimediaCongregacionModel;
-
-  constructor(
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private usuarioServices: UsuarioService
-  ) {}
 
   ngOnInit(): void {
     this.usuario = this.usuarioServices.usuario;
