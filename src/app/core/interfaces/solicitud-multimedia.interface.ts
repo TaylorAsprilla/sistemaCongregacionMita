@@ -90,17 +90,28 @@ export interface UsuarioCongregacionInterface {
 export interface PaisInterface {
   id: number;
   pais: string;
+  obreroEncargado: ObreroEncargadoInterface;
 }
 export interface CongregacionInterface {
   id: number;
   congregacion: string;
+  obreroEncargado: ObreroEncargadoInterface;
 }
 
 export interface CampoInterface {
   id: number;
   campo: string;
+  obreroEncargado: ObreroEncargadoInterface;
 }
 
 export interface OpcionTransporteInterface {
   tipoTransporte: string;
+}
+
+export interface ObreroEncargadoInterface {
+  id: number;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
 }
