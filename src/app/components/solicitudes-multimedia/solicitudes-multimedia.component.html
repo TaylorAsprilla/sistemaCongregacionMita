@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div class="alert alert-info" role="alert">
+  <div class="alert alert-danger" role="alert">
     <b>Nota:</b> No se puede crear el acceso hasta que el feligrés verifique su correo electrónico.
   </div>
   <!-- /.card-header -->
@@ -195,17 +195,30 @@
                 >
                   <i class="fas fa-key"></i>
                 </button>
+                } @if ( solicitud.estadoUltimaSolicitud === estadosSolicitud.CADUCADA || solicitud.estadoUltimaSolicitud
+                === estadosSolicitud.APROBADA ) {
+                <button
+                  type="button"
+                  class="btn btn-sm btn-warning me-1 mb-1"
+                  title="Extender Acceso"
+                  (click)="emitirExtenderAccesoMultimedia(solicitud)"
+                  aria-label="Extender Acceso"
+                >
+                  <i class="fas fa-calendar"></i>
+                </button>
                 }
               </div>
+
               <button
                 type="button"
-                class="btn btn-sm btn-warning me-1 mb-1"
+                class="btn btn-sm btn-danger me-1 mb-1"
                 title="Eliminar Acceso"
                 (click)="emitirEliminarSolicitudMultimedia(solicitud)"
                 aria-label="Eliminar Acceso"
               >
                 <i class="fas fa-trash"></i>
               </button>
+
               <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
                 <button
                   type="button"
@@ -403,7 +416,32 @@
                     <div class="col-md-4">
                       <div class="card">
                         <div class="card-body">
-                          @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones) {
+                          @if (solicitud?.usuarioCongregacion?.pais.obreroEncargado) {
+                          <p>
+                            <i class="fas fa-info-circle icon-black"></i> <strong>Obrero del Pais:</strong>
+                            {{ solicitud?.usuarioCongregacion?.pais.obreroEncargado?.primerNombre }}
+                            {{ solicitud?.usuarioCongregacion?.pais.obreroEncargado?.segundoNombre }}
+                            {{ solicitud?.usuarioCongregacion?.pais.obreroEncargado?.primerApellido }}
+                            {{ solicitud?.usuarioCongregacion?.pais.obreroEncargado?.segundoApellido }}
+                          </p>
+                          } @if (solicitud?.usuarioCongregacion?.congregacion.obreroEncargado) {
+
+                          <p>
+                            <i class="fas fa-info-circle icon-black"></i> <strong>Obrero de la Congregación:</strong>
+                            {{ solicitud?.usuarioCongregacion?.congregacion.obreroEncargado?.primerNombre }}
+                            {{ solicitud?.usuarioCongregacion?.congregacion.obreroEncargado?.segundoNombre }}
+                            {{ solicitud?.usuarioCongregacion?.congregacion.obreroEncargado?.primerApellido }}
+                            {{ solicitud?.usuarioCongregacion?.congregacion.obreroEncargado?.segundoApellido }}
+                          </p>
+                          } @if (solicitud?.usuarioCongregacion?.campo.obreroEncargado) {
+                          <p>
+                            <i class="fas fa-info-circle icon-black"></i> <strong>Obrero del Campo:</strong>
+                            {{ solicitud?.usuarioCongregacion?.campo.obreroEncargado?.primerNombre }}
+                            {{ solicitud?.usuarioCongregacion?.campo.obreroEncargado?.segundoNombre }}
+                            {{ solicitud?.usuarioCongregacion?.campo.obreroEncargado?.primerApellido }}
+                            {{ solicitud?.usuarioCongregacion?.campo.obreroEncargado?.segundoApellido }}
+                          </p>
+                          } @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones) {
                           <p>
                             <i class="fas fa-flag icon-black"></i> <strong>Observaciones:</strong>
                             {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.observaciones }}
@@ -428,8 +466,8 @@
     </div>
     <!-- Paginate -->
     <div class="d-flex justify-content-center mt-2 mb-2">
+      @if (filteredSolicitudes?.length > 0) {
       <pagination-controls
-        *ngIf="filteredSolicitudes?.length > 0"
         class="pagination-bar"
         (pageChange)="pagina = $event"
         previousLabel="Anterior"
@@ -437,6 +475,7 @@
         [autoHide]="true"
         [responsive]="true"
       ></pagination-controls>
+      }
     </div>
   </div>
 </div>

@@ -189,7 +189,6 @@ export default class LoginComponent implements OnInit, OnDestroy {
 
     this.usuarioService.buscarPorNumeroMita(numeroMita).subscribe({
       next: (respuesta: NumeroMitaResponse) => {
-        console.log('Respuesta del servidor:', respuesta);
         // Solo mostrar los campos que existan y no estén vacíos
         const partes = [
           respuesta.usuario.primerNombre,

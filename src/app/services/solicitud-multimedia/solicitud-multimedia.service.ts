@@ -4,7 +4,7 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
+import { extenderAccesoCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
 import {
   SolicitudMultimediaInterface,
   crearSolicitudMultimediaInterface,
@@ -95,7 +95,10 @@ export class SolicitudMultimediaService {
     return this.httpClient.post(`${base_url}/solicitudmultimedia/denegarSolicitud/`, denegarSolicitud, this.headers);
   }
 
-  actualizarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface, id: number) {
+  actualizarSolicitudMultimedia(
+    solicitudDeacceso: SolicitudMultimediaInterface | extenderAccesoCmarLiveInterface,
+    id: number
+  ) {
     return this.httpClient.put(`${base_url}/solicitudmultimedia/${id}`, solicitudDeacceso, this.headers);
   }
 

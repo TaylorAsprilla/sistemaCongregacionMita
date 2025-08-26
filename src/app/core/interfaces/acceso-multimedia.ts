@@ -9,6 +9,14 @@ export interface LoginUsuarioCmarLiveInterface {
   usuarioQueAprobo_id: number | null;
 }
 
+export interface extenderAccesoCmarLiveInterface {
+  login: string;
+  solicitud_id: number;
+  tiempoAprobacion: Date | null;
+  estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
+  usuarioQueAprobo_id: number | null;
+}
+
 export interface AccesoCongregacionMultimedia {
   email: string;
   password: string;

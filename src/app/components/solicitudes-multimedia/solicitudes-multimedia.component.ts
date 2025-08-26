@@ -63,6 +63,9 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
   @Output() eliminarSolicitudMultimedia: EventEmitter<UsuarioSolicitudMultimediaModel> =
     new EventEmitter<UsuarioSolicitudMultimediaModel>();
 
+  @Output() extenderAccesoMultimedia: EventEmitter<UsuarioSolicitudInterface> =
+    new EventEmitter<UsuarioSolicitudInterface>();
+
   filteredSolicitudes: UsuarioSolicitudMultimediaModel[] = [];
 
   paises = new FormControl();
@@ -315,6 +318,10 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
 
   emitirDenegarAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
     this.denegarAccesoMultimedia.emit(solicitud);
+  }
+
+  emitirExtenderAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
+    this.extenderAccesoMultimedia.emit(solicitud);
   }
 
   toggleExpand(index: number, solicitud: UsuarioSolicitudMultimediaModel): void {
