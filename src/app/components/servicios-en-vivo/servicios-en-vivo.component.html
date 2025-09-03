@@ -10,9 +10,9 @@
           <iframe
             [src]="videoUrl"
             frameborder="0"
-            allow="autoplay; fullscreen; picture-in-picture"
-            webkitallowfullscreen
-            mozallowfullscreen
+            allow="autoplay; fullscreen; picture-in-picture; encrypted-media; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
           ></iframe>
         </div>
       </div>
