@@ -47,7 +47,18 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['servicios'] && changes['servicios'].currentValue) {
       const videos = changes['servicios'].currentValue as LinkEventoModel;
       if (videos.plataforma === PLATAFORMA.VIMEO) {
-        this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(videos.link);
+        // Asegurarse de que sea el link embed
+        let embedUrl = videos.link;
+
+        // Si por error te guardaron el link público (https://vimeo.com/event/4874306)
+        if (embedUrl.includes('vimeo.com/event/') && !embedUrl.includes('/embed')) {
+          embedUrl = embedUrl.replace('vimeo.com/event/', 'vimeo.com/event/') + '/embed';
+        }
+
+        // Opcional: agregar parámetros
+        embedUrl += '?autoplay=1&title=0&byline=0&portrait=0';
+
+        this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(embedUrl);
       } else if (videos.plataforma === PLATAFORMA.YOUTUBE) {
         const videoId = this.extractYouTubeVideoId(videos.link);
 
