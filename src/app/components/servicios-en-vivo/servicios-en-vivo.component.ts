@@ -8,6 +8,8 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  AfterViewInit,
+  inject,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
@@ -19,7 +21,10 @@ import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/
   standalone: true,
   imports: [],
 })
-export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy {
+export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  domSanitizer = inject(DomSanitizer);
+
   @Input() servicios: LinkEventoModel = null;
   @Input() tipoDeEvento: TIPOEVENTO_ID | string;
 
@@ -33,8 +38,6 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy {
 
   readonly PLATAFORMA = PLATAFORMA;
   readonly TIPOEVENTO_ID = TIPOEVENTO_ID;
-
-  constructor(private changeDetectorRef: ChangeDetectorRef, public domSanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const tag = document.createElement('script');

@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuariosPorCongregacionInterface } from 'src/app/core/interfaces/usuario.interface';
@@ -20,6 +20,11 @@ import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.compo
   imports: [CargandoInformacionComponent, VerCensoComponent],
 })
 export default class CensoAyudanteComponent implements OnInit {
+  private router = inject(Router);
+  private usuarioService = inject(UsuarioService);
+  private ayudanteServices = inject(AyudanteService);
+  private enviarCorreoService = inject(EnviarCorreoService);
+
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
   nombreUsuario: string;
@@ -35,13 +40,6 @@ export default class CensoAyudanteComponent implements OnInit {
 
   // Subscription
   usuarioSubscription: Subscription;
-
-  constructor(
-    private router: Router,
-    private usuarioService: UsuarioService,
-    private ayudanteServices: AyudanteService,
-    private enviarCorreoService: EnviarCorreoService
-  ) {}
 
   ngOnInit(): void {
     this.nombreUsuario = this.usuarioService.usuarioNombre;

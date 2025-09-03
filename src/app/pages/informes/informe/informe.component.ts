@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { generarSeccioninforme, Seccion } from 'src/app/core/interfaces/seccion-informe.interface';
 import { InformeModel } from 'src/app/core/models/informe.model';
@@ -7,13 +7,15 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { SeccionInformeComponent } from '../../../components/seccion-informe/seccion-informe.component';
 
 @Component({
-    selector: 'app-informe',
-    templateUrl: './informe.component.html',
-    styleUrls: ['./informe.component.scss'],
-    standalone: true,
-    imports: [SeccionInformeComponent],
+  selector: 'app-informe',
+  templateUrl: './informe.component.html',
+  styleUrls: ['./informe.component.scss'],
+  standalone: true,
+  imports: [SeccionInformeComponent],
 })
 export class InformeComponent implements OnInit {
+  private activatedRoute = inject(ActivatedRoute);
+
   get Rutas() {
     return RUTAS;
   }
@@ -21,8 +23,6 @@ export class InformeComponent implements OnInit {
   informes: InformeModel[] = [];
 
   public generarSeccioninforme: Seccion[] = generarSeccioninforme;
-
-  constructor(private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: { informes: InformeModel[] }) => {

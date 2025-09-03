@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
@@ -10,27 +10,23 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-tipos-de-documentos',
-    templateUrl: './tipos-de-documentos.component.html',
-    styleUrls: ['./tipos-de-documentos.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-tipos-de-documentos',
+  templateUrl: './tipos-de-documentos.component.html',
+  styleUrls: ['./tipos-de-documentos.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
-export class TiposDeDocumentosComponent implements OnInit {
+export class TiposDeDocumentosComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private tipoDocumentoService = inject(TipoDocumentoService);
+  private activatedRoute = inject(ActivatedRoute);
+
   public cargando: boolean = true;
   public tipoDeDocumentos: TipoDocumentoModel[] = [];
   public paises: CongregacionPaisModel[] = [];
 
   // Subscription
   public tipoDeDocumentosSubscription: Subscription;
-
-  constructor(
-    private router: Router,
-    private tipoDocumentoService: TipoDocumentoService,
-    private activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: { pais: CongregacionPaisModel[] }) => {

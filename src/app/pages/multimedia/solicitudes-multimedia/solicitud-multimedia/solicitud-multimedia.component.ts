@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { SolicitudMultimediaService } from 'src/app/services/solicitud-multimedia/solicitud-multimedia.service';
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { delay, Subscription } from 'rxjs';
@@ -8,7 +8,10 @@ import { CargandoInformacionComponent } from 'src/app/components/cargando-inform
 import { SolicitudesMultimediaComponent } from '../../../../components/solicitudes-multimedia/solicitudes-multimedia.component';
 import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
 import { configuracion } from 'src/environments/config/configuration';
-import { LoginUsuarioCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
+import {
+  extenderAccesoCmarLiveInterface,
+  LoginUsuarioCmarLiveInterface,
+} from 'src/app/core/interfaces/acceso-multimedia';
 import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
 import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { denegarSolicitudMultimediaInterface } from 'src/app/core/models/solicitud-multimedia.model';
@@ -22,6 +25,10 @@ import { generate } from 'generate-password-browser';
   imports: [CargandoInformacionComponent, SolicitudesMultimediaComponent],
 })
 export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
+  private accesoMultimediaService = inject(AccesoMultimediaService);
+  private solicitudMultimediaService = inject(SolicitudMultimediaService);
+  private usuarioService = inject(UsuarioService);
+
   solicitudes: UsuarioSolicitudMultimediaModel[] = [];
   cargando = false;
   usuarioId: number;
@@ -29,12 +36,6 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
   // Subscription
   public solicitudAccesoSubscription: Subscription;
   public solicitudMultimediaServiceSubscription: Subscription;
-
-  constructor(
-    private accesoMultimediaService: AccesoMultimediaService,
-    private solicitudMultimediaService: SolicitudMultimediaService,
-    private usuarioService: UsuarioService
-  ) {}
 
   ngOnInit(): void {
     this.usuarioId = this.usuarioService.usuario.id;
@@ -221,6 +222,93 @@ export class SolicitudMultimediaComponent implements OnInit, OnDestroy {
             });
           });
         this.cargarTodasLasSolicitudes();
+      }
+    });
+  }
+
+  extenderAccesoMultimedia(solicitud: UsuarioSolicitudInterface): void {
+    const nombreCompleto = `${solicitud.primerNombre} ${solicitud.segundoNombre} ${solicitud.primerApellido} ${solicitud.segundoApellido}`;
+    const loginDefault = solicitud.email;
+
+    Swal.fire({
+      title: 'CMAR LIVE',
+      html: `Desea extender el acceso a CMAR LIVE al usuario <b>${nombreCompleto}</b>`,
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar',
+      showCloseButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      icon: 'question',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const { value: formValues } = await Swal.fire({
+          title: `Extender acceso a ${nombreCompleto}`,
+          html: `
+          <div class="form-group">
+            <label class="input-group obligatorio">Login:</label>
+            <input type="text" id="login" name="login" class="form-control" value="${loginDefault}" required />
+          </div>
+          <div class="form-group">
+            <label class="input-group obligatorio">Tiempo de aprobación a partir de hoy:</b></label>
+            <select id="tiempoAprobacion" name="tiempoAprobacion" class="form-control" required>
+              <option value=null disabled selected>Seleccionar tiempo de aprobación</option>
+              ${configuracion.tiempoSugerido
+                .map((tiempo) => `<option value="${tiempo.value}">${tiempo.label}</option>`)
+                .join('')}
+            </select>
+          </div>
+
+        `,
+          focusConfirm: true,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showCloseButton: true,
+          showCancelButton: true,
+          cancelButtonText: 'Cancelar',
+          preConfirm: () => [
+            (document.getElementById('login') as HTMLInputElement).value,
+            (document.getElementById('tiempoAprobacion') as HTMLSelectElement).value,
+          ],
+        });
+
+        if (formValues) {
+          const tiempoSeleccionado = formValues[1];
+          const tiempoAprobacion = this.calcularFechaDeAprobacion(tiempoSeleccionado);
+
+          const dataAcceso: extenderAccesoCmarLiveInterface = {
+            login: formValues[0],
+            solicitud_id: solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.id,
+            tiempoAprobacion: tiempoAprobacion ? new Date(tiempoAprobacion) : null,
+            usuarioQueAprobo_id: this.usuarioId,
+            estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA,
+          };
+
+          this.solicitudMultimediaService.actualizarSolicitudMultimedia(dataAcceso, dataAcceso.solicitud_id).subscribe({
+            next: (accesoActualizado: any) => {
+              Swal.fire('Acceso actualizado', 'correctamente', 'success');
+              this.cargarTodasLasSolicitudes();
+            },
+            error: (error) => {
+              const errores = error?.error?.errors;
+              let listaErrores: string[] = [];
+              if (errores && typeof errores === 'object') {
+                Object.values(errores).forEach((value) => {
+                  if (typeof value === 'object' && value !== null && 'msg' in value) {
+                    const msg = (value as { msg: string })['msg'];
+                    if (!listaErrores.includes(msg)) {
+                      listaErrores.push('° ' + msg + '<br>');
+                    }
+                  }
+                });
+              }
+              Swal.fire({
+                icon: 'error',
+                html: listaErrores.length > 0 ? listaErrores.join('') : error?.error?.msg || 'Error desconocido',
+              });
+            },
+          });
+        }
       }
     });
   }

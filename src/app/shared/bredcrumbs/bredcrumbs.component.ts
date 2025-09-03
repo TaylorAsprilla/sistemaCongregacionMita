@@ -1,23 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
-
 @Component({
-    selector: 'app-bredcrumbs',
-    templateUrl: './bredcrumbs.component.html',
-    styleUrls: ['./bredcrumbs.component.css'],
-    standalone: true,
-    imports: [
-    RouterLink
-],
+  selector: 'app-bredcrumbs',
+  templateUrl: './bredcrumbs.component.html',
+  styleUrls: ['./bredcrumbs.component.css'],
+  standalone: true,
+  imports: [RouterLink],
 })
 export class BredcrumbsComponent {
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private titleService = inject(Title);
+
   @Input() layout: string = '';
   public pageInfo: any;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title) {
+  constructor() {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),

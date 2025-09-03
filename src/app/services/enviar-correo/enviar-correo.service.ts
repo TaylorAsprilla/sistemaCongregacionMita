@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 
 const base_url = environment.base_url;
@@ -8,7 +8,7 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class EnviarCorreoService {
-  constructor(private httpClient: HttpClient) {}
+  private httpClient = inject(HttpClient);
 
   get token(): string {
     return localStorage.getItem('token') || '';

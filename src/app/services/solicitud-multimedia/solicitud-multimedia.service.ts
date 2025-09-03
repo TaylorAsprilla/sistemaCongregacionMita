@@ -1,10 +1,10 @@
 import { UsuarioSolicitudMultimediaModel } from './../../core/models/usuario-solicitud.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
+import { extenderAccesoCmarLiveInterface } from 'src/app/core/interfaces/acceso-multimedia';
 import {
   SolicitudMultimediaInterface,
   crearSolicitudMultimediaInterface,
@@ -17,7 +17,7 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class SolicitudMultimediaService {
-  constructor(private httpClient: HttpClient) {}
+  private httpClient = inject(HttpClient);
 
   get token(): string {
     return localStorage.getItem('token') || '';
@@ -95,7 +95,10 @@ export class SolicitudMultimediaService {
     return this.httpClient.post(`${base_url}/solicitudmultimedia/denegarSolicitud/`, denegarSolicitud, this.headers);
   }
 
-  actualizarSolicitudMultimedia(solicitudDeacceso: SolicitudMultimediaInterface, id: number) {
+  actualizarSolicitudMultimedia(
+    solicitudDeacceso: SolicitudMultimediaInterface | extenderAccesoCmarLiveInterface,
+    id: number
+  ) {
     return this.httpClient.put(`${base_url}/solicitudmultimedia/${id}`, solicitudDeacceso, this.headers);
   }
 

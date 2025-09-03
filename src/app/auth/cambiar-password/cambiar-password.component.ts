@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   AbstractControlOptions,
   FormBuilder,
@@ -12,7 +12,6 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-cambiar-password',
   templateUrl: './cambiar-password.component.html',
@@ -21,6 +20,11 @@ import Swal from 'sweetalert2';
   imports: [FormsModule, ReactiveFormsModule, RouterLink],
 })
 export default class CambiarPasswordComponent implements OnInit {
+  private router = inject(Router);
+  private formBuilder = inject(FormBuilder);
+  private usuarioservice = inject(UsuarioService);
+  private activatedRouter = inject(ActivatedRoute);
+
   passwordForm: FormGroup;
   formSubmitted: boolean = false;
   token: string = '';
@@ -28,13 +32,6 @@ export default class CambiarPasswordComponent implements OnInit {
   get Rutas() {
     return RUTAS;
   }
-
-  constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private usuarioservice: UsuarioService,
-    private activatedRouter: ActivatedRoute
-  ) {}
 
   ngOnInit(): void {
     this.activatedRouter.params.subscribe(({ token }) => {

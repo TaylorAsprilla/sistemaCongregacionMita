@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -7,8 +7,8 @@ import { CampoService } from 'src/app/services/campo/campo.service';
 @Injectable({
   providedIn: 'root',
 })
-export class CampoResolver  {
-  constructor(private campoService: CampoService) {}
+export class CampoResolver {
+  private campoService = inject(CampoService);
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return this.campoService.getCampos().pipe(

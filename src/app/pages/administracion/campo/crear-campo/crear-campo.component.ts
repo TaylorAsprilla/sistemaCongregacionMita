@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -9,18 +9,19 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
-    selector: 'app-crear-campo',
-    templateUrl: './crear-campo.component.html',
-    styleUrls: ['./crear-campo.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule
-],
+  selector: 'app-crear-campo',
+  templateUrl: './crear-campo.component.html',
+  styleUrls: ['./crear-campo.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule],
 })
-export class CrearCampoComponent implements OnInit {
+export class CrearCampoComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(UntypedFormBuilder);
+  private router = inject(Router);
+  private campoService = inject(CampoService);
+  private activatedRoute = inject(ActivatedRoute);
+
   public campoForm: UntypedFormGroup;
 
   public campos: CampoModel[] = [];
@@ -33,13 +34,6 @@ export class CrearCampoComponent implements OnInit {
   public usuariosSubscription: Subscription;
 
   public campoSeleccionado: CampoModel;
-
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private router: Router,
-    private campoService: CampoService,
-    private activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {

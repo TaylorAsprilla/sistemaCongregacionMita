@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -7,26 +7,24 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { VisitaService } from 'src/app/services/visita/visita.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
-    selector: 'app-informe-visitas',
-    templateUrl: './informe-visitas.component.html',
-    styleUrls: ['./informe-visitas.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule
-],
+  selector: 'app-informe-visitas',
+  templateUrl: './informe-visitas.component.html',
+  styleUrls: ['./informe-visitas.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule],
 })
 export class InformeVisitasComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(UntypedFormBuilder);
+  private router = inject(Router);
+  private visitaService = inject(VisitaService);
+
   public visitaForm: UntypedFormGroup;
 
   public visitas: VisitaModel[] = [];
 
   // Subscription
   public visitaSubscription: Subscription;
-
-  constructor(private formBuilder: UntypedFormBuilder, private router: Router, private visitaService: VisitaService) {}
 
   ngOnInit(): void {
     this.visitaForm = this.formBuilder.group({

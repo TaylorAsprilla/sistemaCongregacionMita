@@ -1,11 +1,13 @@
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import {
+  DatosQrLogin,
   ListarUsuario,
+  NumeroMitaResponse,
   UsuarioInterface,
   UsuariosPorCongregacionRespuesta,
 } from 'src/app/core/interfaces/usuario.interface';
@@ -22,6 +24,9 @@ const base_url = environment.base_url;
   providedIn: 'root',
 })
 export class UsuarioService {
+  private httpClient = inject(HttpClient);
+  private router = inject(Router);
+
   public usuario: UsuarioModel;
   public idUsuario: number;
   public multimediaCongregacion: MultimediaCongregacionModel;
@@ -32,7 +37,7 @@ export class UsuarioService {
   private readonly INACTIVE_TIMEOUT_MS: number = configuracion.inactividad.INACTIVE_TIMEOUT_MS;
   private readonly timerModal: number = configuracion.inactividad.TIMER_MODEL;
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor() {
     this.resetInactiveTimer();
     window.addEventListener('mousemove', () => this.resetInactiveTimer());
     window.addEventListener('keypress', () => this.resetInactiveTimer());
@@ -328,12 +333,12 @@ export class UsuarioService {
     );
   }
 
-  loginPorQr(ticket: string, nombre: string) {
-    return this.httpClient.post(`${base_url}/accesoqr/loginQr`, { qrCode: ticket, nombre }).pipe(
+  loginPorQr(datos: DatosQrLogin) {
+    return this.httpClient.post(`${base_url}/accesoqr/loginQr`, datos).pipe(
       tap((resp: any) => {
         localStorage.setItem('token', resp.token);
         sessionStorage.setItem('isQRLogin', 'isQRLogin');
-        sessionStorage.setItem('nombre', nombre);
+        sessionStorage.setItem('nombre', datos.nombre);
         sessionStorage.setItem('congregacion', resp.congregacion.congregacion);
         this.idUsuario = resp.congregacion.id;
         this.nombreQR = resp.nombre;
@@ -406,6 +411,13 @@ export class UsuarioService {
     };
 
     return this.httpClient.post(`${base_url}/usuarios/buscar-numeros-mitas`, body, this.headers);
+  }
+
+  buscarPorNumeroMita(numeroMita: number): Observable<NumeroMitaResponse> {
+    return this.httpClient.get<NumeroMitaResponse>(
+      `${base_url}/usuarios/buscarnumeromita?numeroMita=${numeroMita}`,
+      this.headers
+    );
   }
 
   eliminarUsuario(idUsuario: number) {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -41,6 +41,10 @@ import { NgClass } from '@angular/common';
   imports: [FormsModule, ReactiveFormsModule, NgClass, NgxIntlTelInputModule],
 })
 export class InformacionUsuarioComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private buscarCorreoService = inject(BuscarCorreoService);
+  private router = inject(Router);
+
   registroUnoForm!: FormGroup;
   registroDosForm!: FormGroup;
   registroTresForm!: FormGroup;
@@ -165,12 +169,6 @@ export class InformacionUsuarioComponent implements OnInit {
   get CONGREGACION_PAIS() {
     return CONGREGACION_ID;
   }
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private buscarCorreoService: BuscarCorreoService,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
     this.informacionDelUsuario();

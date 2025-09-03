@@ -141,3 +141,23 @@ export interface CambioPaginaEvent {
   valor: number;
   numeroPagina: number;
 }
+
+export interface NumeroMitaResponse {
+  ok: boolean;
+  usuario: NumeroMita;
+}
+export interface NumeroMita {
+  id: number;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+  email: string;
+}
+
+export interface DatosQrLogin {
+  qrCode: string;
+  numeroMita: string;
+  nombre: string;
+  tipoPuesto: string;
+}

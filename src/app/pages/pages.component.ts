@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { RUTAS } from '../routes/menu-items';
 import { MultimediaCongregacionModel } from '../core/models/acceso-multimedia.model';
@@ -26,6 +26,9 @@ import { FooterComponent } from '../shared/footer/footer.component';
   ],
 })
 export class PagesComponent implements OnInit {
+  private router = inject(Router);
+  private usuarioService = inject(UsuarioService);
+
   color = 'blue';
   showSettings = false;
   showMinisidebar = false;
@@ -35,8 +38,6 @@ export class PagesComponent implements OnInit {
   multimediaCongregacion: MultimediaCongregacionModel | undefined = undefined;
 
   public innerWidth: any;
-
-  constructor(private router: Router, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     if (this.router.url === '/') {

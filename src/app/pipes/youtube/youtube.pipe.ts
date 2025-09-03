@@ -1,13 +1,14 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({
-    name: 'youtube',
-    standalone: true,
+  name: 'youtube',
+  standalone: true,
 })
 export class YoutubePipe implements PipeTransform {
+  protected domSanitizer = inject(DomSanitizer);
+
   currentVideoId: string = '';
-  constructor(protected domSanitizer: DomSanitizer) {}
 
   transform(video: any, args?: any[]): any {
     const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\/)|(\?v=|\&v=))([^#\&\?]*).*/;

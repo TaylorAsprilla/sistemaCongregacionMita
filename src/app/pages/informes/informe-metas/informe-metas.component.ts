@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ObjectUnsubscribedError, Subscription } from 'rxjs';
@@ -10,18 +10,19 @@ import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import { MetaService } from 'src/app/services/meta/meta.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
-    selector: 'app-informe-metas',
-    templateUrl: './informe-metas.component.html',
-    styleUrls: ['./informe-metas.component.scss'],
-    standalone: true,
-    imports: [
-    FormsModule,
-    ReactiveFormsModule
-],
+  selector: 'app-informe-metas',
+  templateUrl: './informe-metas.component.html',
+  styleUrls: ['./informe-metas.component.scss'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule],
 })
 export class InformeMetasComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(UntypedFormBuilder);
+  private router = inject(Router);
+  private estatusService = inject(EstatusService);
+  private metaService = inject(MetaService);
+
   public metaForm: UntypedFormGroup;
 
   public estatus: EstatusModel[] = [];
@@ -33,13 +34,6 @@ export class InformeMetasComponent implements OnInit, OnDestroy {
   // Subscription
   public metaSubscription: Subscription;
   public estatusSubscription: Subscription;
-
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private router: Router,
-    private estatusService: EstatusService,
-    private metaService: MetaService
-  ) {}
 
   ngOnInit(): void {
     this.metaForm = this.formBuilder.group({

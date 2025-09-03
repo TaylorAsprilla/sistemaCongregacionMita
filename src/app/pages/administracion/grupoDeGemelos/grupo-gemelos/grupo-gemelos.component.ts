@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GRUPOGEMELOS } from 'src/app/core/enums/grupoGemelos.enum';
 import { GemelosService } from 'src/app/services/gemelos/gemelos.service';
@@ -12,17 +12,15 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
   templateUrl: './grupo-gemelos.component.html',
   styleUrl: './grupo-gemelos.component.scss',
 })
-export default class GrupoGemelosComponent {
+export default class GrupoGemelosComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private gemelosService = inject(GemelosService);
+  private usuarioService = inject(UsuarioService);
+
   gemelosForm!: FormGroup;
   descripcionGenerada = '';
   tiposGrupo = Object.values(GRUPOGEMELOS);
   usuariosEncontrados: any[] = [];
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private gemelosService: GemelosService,
-    private usuarioService: UsuarioService
-  ) {}
 
   ngOnInit(): void {
     this.gemelosForm = this.formBuilder.group({

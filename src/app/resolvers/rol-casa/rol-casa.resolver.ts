@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -8,8 +8,8 @@ import { RolCasaService } from 'src/app/services/rol-casa/rol-casa.service';
 @Injectable({
   providedIn: 'root',
 })
-export class RolCasaResolver  {
-  constructor(private rolCasaService: RolCasaService) {}
+export class RolCasaResolver {
+  private rolCasaService = inject(RolCasaService);
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return this.rolCasaService.getRolCasa().pipe(

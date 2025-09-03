@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { delay } from 'rxjs/operators';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -12,9 +12,11 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
   standalone: true,
 })
 export default class ConfirmacionDeRegistroComponent implements OnInit {
-  usuario: UsuarioModel;
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private usuarioService = inject(UsuarioService);
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private usuarioService: UsuarioService) {}
+  usuario: UsuarioModel;
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {

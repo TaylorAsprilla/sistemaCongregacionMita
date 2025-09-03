@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -25,6 +25,11 @@ import { FormsModule } from '@angular/forms';
   imports: [CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
 })
 export class PaisesComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private paisService = inject(PaisService);
+  private activatedRoute = inject(ActivatedRoute);
+  private exportarExcelService = inject(ExportarExcelService);
+
   cargando: boolean = true;
   paises: CongregacionPaisModel[] = [];
   divisas: DivisaModel[] = [];
@@ -38,17 +43,11 @@ export class PaisesComponent implements OnInit, OnDestroy {
   isFiltrosVisibles: boolean = false;
   filtrarTexto: string = '';
 
-  @Input() nombreArchivo: string = '';
-  @Input() totalPaises: number = 0;
   paisesFiltrados: CongregacionPaisModel[] = [];
   pagina: number = 1;
 
-  constructor(
-    private router: Router,
-    private paisService: PaisService,
-    private activatedRoute: ActivatedRoute,
-    private exportarExcelService: ExportarExcelService
-  ) {}
+  @Input() nombreArchivo: string = '';
+  @Input() totalPaises: number = 0;
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: { divisas: DivisaModel[]; obrero: UsuarioModel[] }) => {

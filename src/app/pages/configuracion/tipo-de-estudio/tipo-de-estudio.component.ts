@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -9,21 +9,19 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-    selector: 'app-tipo-de-estudio',
-    templateUrl: './tipo-de-estudio.component.html',
-    styleUrls: ['./tipo-de-estudio.component.scss'],
-    standalone: true,
-    imports: [
-    CargandoInformacionComponent
-],
+  selector: 'app-tipo-de-estudio',
+  templateUrl: './tipo-de-estudio.component.html',
+  styleUrls: ['./tipo-de-estudio.component.scss'],
+  standalone: true,
+  imports: [CargandoInformacionComponent],
 })
-export class TipoDeEstudioComponent implements OnInit {
+export class TipoDeEstudioComponent implements OnInit, OnDestroy {
+  private tipoEstudioService = inject(TipoEstudioService);
+
   public cargando: boolean = true;
   public tipoEstudios: TipoEstudioModel[] = [];
 
   public tipoEstudioSubscription: Subscription;
-
-  constructor(private tipoEstudioService: TipoEstudioService) {}
 
   ngOnInit(): void {
     this.cargartipoEstudios();

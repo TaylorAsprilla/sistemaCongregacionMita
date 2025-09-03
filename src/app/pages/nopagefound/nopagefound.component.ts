@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { RUTAS } from 'src/app/routes/menu-items';
 
 @Component({
-    selector: 'app-nopagefound',
-    templateUrl: './nopagefound.component.html',
-    styleUrls: ['./nopagefound.component.css'],
-    standalone: true,
+  selector: 'app-nopagefound',
+  templateUrl: './nopagefound.component.html',
+  styleUrls: ['./nopagefound.component.css'],
+  standalone: true,
 })
-export class NopagefoundComponent implements OnInit {
+export class NopagefoundComponent {
   fecha = new Date();
 
   year = new Date().getFullYear();
@@ -15,8 +15,4 @@ export class NopagefoundComponent implements OnInit {
   get Rutas() {
     return RUTAS;
   }
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

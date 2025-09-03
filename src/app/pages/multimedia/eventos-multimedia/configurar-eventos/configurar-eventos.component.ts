@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -19,6 +19,11 @@ import { BibliotecaMultimediaComponent } from '../../../../components/biblioteca
   imports: [FormsModule, ReactiveFormsModule, NgxIntlTelInputModule, BibliotecaMultimediaComponent],
 })
 export class ConfigurarEventosComponent implements OnInit, OnDestroy {
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private linkEventosService = inject(LinkEventosService);
+
   eventosForm: FormGroup;
 
   linkEventos: LinkEventoModel[] = [];
@@ -33,13 +38,6 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   get TIPOEVENTO() {
     return TIPOEVENTO_ID;
   }
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private linkEventosService: LinkEventosService
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(({ id }) => {

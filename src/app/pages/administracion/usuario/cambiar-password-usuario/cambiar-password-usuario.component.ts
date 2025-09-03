@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   AbstractControlOptions,
   FormBuilder,
@@ -12,7 +12,6 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-cambiar-password-usuario',
   templateUrl: './cambiar-password-usuario.component.html',
@@ -21,6 +20,10 @@ import Swal from 'sweetalert2';
   imports: [FormsModule, ReactiveFormsModule],
 })
 export default class CambiarPasswordUsuarioComponent implements OnInit {
+  private router = inject(Router);
+  private formBuilder = inject(FormBuilder);
+  private usuarioservice = inject(UsuarioService);
+
   passwordUsuarioForm: FormGroup;
   formSubmitted: boolean = false;
   idusuario: number;
@@ -29,8 +32,6 @@ export default class CambiarPasswordUsuarioComponent implements OnInit {
   get Rutas() {
     return RUTAS;
   }
-
-  constructor(private router: Router, private formBuilder: FormBuilder, private usuarioservice: UsuarioService) {}
 
   ngOnInit(): void {
     this.idusuario = this.usuarioservice.usuarioId;

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -7,8 +7,9 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 @Injectable({
   providedIn: 'root',
 })
-export class RolesGuard  {
-  constructor(private usuarioService: UsuarioService, private router: Router) {}
+export class RolesGuard {
+  private usuarioService = inject(UsuarioService);
+  private router = inject(Router);
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     return this.checkUserLogin(route);

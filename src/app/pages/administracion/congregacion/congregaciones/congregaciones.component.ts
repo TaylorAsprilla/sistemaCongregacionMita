@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges, OnChanges, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -25,7 +25,13 @@ import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-e
   standalone: true,
   imports: [CommonModule, FormsModule, CargandoInformacionComponent, FilterByNombrePipePipe],
 })
-export class CongregacionesComponent implements OnInit, OnDestroy {
+export class CongregacionesComponent implements OnInit, OnDestroy, OnChanges {
+  private router = inject(Router);
+  private congregacionService = inject(CongregacionService);
+  private accesoMultimediaService = inject(AccesoMultimediaService);
+  private activatedRoute = inject(ActivatedRoute);
+  private exportarExcelService = inject(ExportarExcelService);
+
   cargando: boolean = true;
   congregaciones: CongregacionModel[] = [];
   obreros: UsuarioModel[] = [];
@@ -52,14 +58,6 @@ export class CongregacionesComponent implements OnInit, OnDestroy {
   @Input() totalCongregaciones: number = 0;
   @Input() nombrePais: string = '';
   @Input() nombreArchivo: string = '';
-
-  constructor(
-    private router: Router,
-    private congregacionService: CongregacionService,
-    private accesoMultimediaService: AccesoMultimediaService,
-    private activatedRoute: ActivatedRoute,
-    private exportarExcelService: ExportarExcelService
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe((data: any) => {
