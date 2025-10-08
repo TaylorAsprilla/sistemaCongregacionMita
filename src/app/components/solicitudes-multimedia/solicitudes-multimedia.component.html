@@ -285,24 +285,33 @@
                             <i class="fas fa-info-circle icon-black"></i> <strong>Estado:</strong>
                             {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].estado }}
                           </p>
-                          } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo) {
-                          <p>
-                            <i class="fas fa-user-check icon-black"></i> <strong>Acción realizada por:</strong>
-                            {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.primerNombre }}
-                            {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoNombre }}
-                            {{
-                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.primerApellido
-                            }}
-                            {{
-                              solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoApellido
-                            }}
-                          </p>
                           } @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion) {
                           <p>
                             <i class="fas fa-square-check icon-black"></i> <strong>Tiempo de Aprobación:</strong>
                             {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].tiempoAprobacion | date }}
                           </p>
-                          } }
+                          }
+
+                          <div *appPermisos="[ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL]">
+                            @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo) {
+                            <p>
+                              <i class="fas fa-user-check icon-black"></i> <strong>Solicitud aprobada por:</strong>
+                              {{
+                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.primerNombre
+                              }}
+                              {{
+                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoNombre
+                              }}
+                              {{
+                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.primerApellido
+                              }}
+                              {{
+                                solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo.segundoApellido
+                              }}
+                            </p>
+                            }
+                          </div>
+                          }
                         </div>
                       </div>
                     </div>

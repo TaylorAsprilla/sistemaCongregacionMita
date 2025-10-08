@@ -16,7 +16,6 @@ import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMu
 import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
-import { AccesoMultimediaService } from 'src/app/services/acceso-multimedia/acceso-multimedia.service';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
@@ -44,7 +43,6 @@ import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-e
 })
 export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
   private router = inject(Router);
-  private accesoMultimediaService = inject(AccesoMultimediaService);
   private formBuilder = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
   private exportarExcelService = inject(ExportarExcelService);
