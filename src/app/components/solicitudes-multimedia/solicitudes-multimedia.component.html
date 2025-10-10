@@ -292,7 +292,15 @@
                           </p>
                           }
 
-                          <div *appPermisos="[ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL]">
+                          <div
+                            *appPermisos="[
+                              ROLES.SUPERVISOR,
+                              ROLES.SUPERVISOR_LOCAL,
+                              ROLES.ADMINISTRADOR,
+                              ROLES.APROBADOR_MULTIMEDIA,
+                              ROLES.ASISTENTE_OOTS
+                            ]"
+                          >
                             @if (solicitud.solicitudes[solicitud.solicitudes.length - 1].usuarioQueAprobo) {
                             <p>
                               <i class="fas fa-user-check icon-black"></i> <strong>Solicitud aprobada por:</strong>
