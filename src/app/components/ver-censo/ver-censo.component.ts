@@ -460,6 +460,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       Nombre: `${usuario.primerNombre} ${usuario.segundoNombre || ''} ${usuario.primerApellido} ${
         usuario.segundoApellido || ''
       }`,
+      'Estado Civil': usuario.estadoCivil?.estadoCivil || 'N/A',
       Apodo: usuario.apodo || 'N/A',
       Edad: this.calcularEdad(usuario.fechaNacimiento),
       'Fecha Nacimiento': usuario.fechaNacimiento,

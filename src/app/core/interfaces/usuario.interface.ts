@@ -108,6 +108,7 @@ export interface UsuariosPorCongregacionInterface {
   segundoApellido?: string;
   apodo?: string;
   fechaNacimiento: Date;
+  estadoCivil?: EstadoCivilModel;
   email: string;
   numeroCelular: string;
   pais: string;
