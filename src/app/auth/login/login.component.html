@@ -2,20 +2,13 @@
   <div class="container-fluid h-custom">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-md-9 col-lg-6 col-xl-5 d-none d-sm-none d-md-none d-lg-block">
-        <img
-          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-          class="img-fluid"
-          alt="Sample image"
-        />
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid"
+          alt="Sample image" />
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <div class="text-center">
-          <img
-            src="assets/images/escudo-congregacion-mita.png"
-            width="30%"
-            alt="Congregación Mita INC"
-            class="img-fluid"
-          />
+          <img src="assets/images/escudo-congregacion-mita.png" width="30%" alt="Congregación Mita INC"
+            class="img-fluid" />
         </div>
 
         @if (ticketQr && qrLoginForm) {
@@ -30,19 +23,12 @@
         <form [formGroup]="qrLoginForm" (ngSubmit)="loginConQr()" autocomplete="off">
           <div class="form-outline mb-4">
             <div class="input-group">
-              <input
-                type="number"
-                formControlName="numeroMita"
-                class="form-control form-control-lg"
-                placeholder="Ingresa tu número Mita"
-                [ngClass]="{
+              <input type="number" formControlName="numeroMita" class="form-control form-control-lg"
+                placeholder="Ingresa tu número Mita" [ngClass]="{
                   'is-invalid':
                     (qrLoginForm.get('numeroMita')?.invalid && qrLoginForm.get('numeroMita')?.touched) ||
                     (submitted && qrLoginForm.get('numeroMita')?.invalid)
-                }"
-                (blur)="usuarioPorNumeroMita()"
-                (keydown.enter)="usuarioPorNumeroMita()"
-              />
+                }" (blur)="usuarioPorNumeroMita()" (keydown.enter)="usuarioPorNumeroMita()" />
               <button type="button" class="btn btn-outline-secondary" (click)="usuarioPorNumeroMita()" tabindex="-1">
                 <i class="fa fa-search"></i>
               </button>
@@ -63,17 +49,12 @@
           </div>
 
           <div class="form-outline mb-4">
-            <input
-              type="text"
-              formControlName="nombre"
-              class="form-control form-control-lg"
-              placeholder="Tu nombre completo"
-              [ngClass]="{
+            <input type="text" formControlName="nombre" class="form-control form-control-lg"
+              placeholder="Tu nombre completo" [ngClass]="{
                 'is-invalid':
                   (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) ||
                   (submitted && qrLoginForm.get('nombre')?.invalid)
-              }"
-            />
+              }" />
 
             @if ( (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) || (submitted &&
             qrLoginForm.get('nombre')?.invalid) ) {
@@ -94,6 +75,7 @@
               <option value="" disabled selected>Selecciona el tipo de puesto</option>
               <option value="guarda">Guarda de Mita</option>
               <option value="casita">Miembro de la Casita</option>
+              <option value="Acceso Retiro Juventud">Acceso Retiro Juventud</option>
             </select>
             @if (qrLoginForm.get('tipoPuesto')?.invalid && (qrLoginForm.get('tipoPuesto')?.touched || submitted)) {
             <div class="invalid-feedback d-block mt-1">
@@ -103,18 +85,14 @@
           </div>
 
           <div class="text-lg-start mt-4 pt-2 d-flex gap-2">
-            <button
-              type="submit"
+            <button type="submit"
               class="btn btn-primary btn-lg flex-fill d-flex justify-content-center align-items-center"
-              [disabled]="qrLoginForm.invalid"
-            >
+              [disabled]="qrLoginForm.invalid">
               Iniciar sesión con QR
             </button>
-            <button
-              type="button"
+            <button type="button"
               class="btn btn-secondary btn-lg flex-fill d-flex justify-content-center align-items-center"
-              (click)="qrLoginForm.reset()"
-            >
+              (click)="qrLoginForm.reset()">
               Limpiar
             </button>
           </div>
@@ -126,15 +104,10 @@
           <h2 class="mb-3 text-center">Iniciar Sesión</h2>
 
           <div class="form-outline mb-4">
-            <input
-              type="text"
-              formControlName="login"
-              class="form-control form-control-lg"
-              placeholder="Correo electrónico"
-              [ngClass]="{
+            <input type="text" formControlName="login" class="form-control form-control-lg"
+              placeholder="Correo electrónico" [ngClass]="{
                 'is-invalid': isLoginFormSubmitted && loginForm.get('login')?.errors
-              }"
-            />
+              }" />
 
             @if (isLoginFormSubmitted && loginForm.get('login')?.errors) {
             <small class="form-text text-danger" class="invalid-feedback"> El correo electrónico es requerido. </small>
@@ -143,15 +116,10 @@
 
           <div>
             <div class="input-group form-outline mb-3">
-              <input
-                type="{{ showPassword ? 'text' : 'password' }}"
-                formControlName="password"
-                class="form-control form-control-lg"
-                placeholder="Contraseña"
-                [ngClass]="{
+              <input type="{{ showPassword ? 'text' : 'password' }}" formControlName="password"
+                class="form-control form-control-lg" placeholder="Contraseña" [ngClass]="{
                   'is-invalid': isLoginFormSubmitted && loginForm.get('password')?.errors
-                }"
-              />
+                }" />
               <span class="input-group-text" (click)="togglePasswordVisibility()">
                 <i class="feather" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
               </span>
