@@ -63,40 +63,39 @@ File: scss
  *	8. Custom Templates
  */
 
-@import 'variable';
-@import 'app';
-@import 'pages';
-@import 'sidebar';
-@import '../scss/icons/font-awesome/css/font-awesome.min.css';
-
-@import '../scss/icons/simple-line-icons/css/simple-line-icons.css';
-@import '../scss/icons/themify-icons/themify-icons.css';
-@import '../scss/icons/material-design-iconic-font/css/materialdesignicons.min.css';
-@import 'rtl/rtl';
-@import 'widgets';
-@import 'grid';
-@import 'responsive';
-@import 'spinners.scss';
-@import 'animate.css';
-@import 'theme-settings.scss';
+@use 'variable' as *;
+@use 'app';
+@use 'pages';
+@use 'sidebar';
+@use '../scss/icons/font-awesome/css/font-awesome.min.css';
+@use '../scss/icons/simple-line-icons/css/simple-line-icons.css';
+@use '../scss/icons/themify-icons/themify-icons.css';
+@use '../scss/icons/material-design-iconic-font/css/materialdesignicons.min.css';
+@use 'rtl/rtl';
+@use 'widgets';
+@use 'grid';
+@use 'responsive';
+@use 'spinners.scss';
+@use 'animate.css';
+@use 'theme-settings.scss';
 
 // color css
 
-@import 'colors/blue-dark';
-@import 'colors/default-dark';
-@import 'colors/red-dark';
-@import 'colors/green-dark';
-@import 'colors/purple-dark';
-@import 'colors/megna-dark';
-@import 'colors/megna';
-@import 'colors/blue';
-@import 'colors/red';
-@import 'colors/green';
-@import 'colors/purple';
-@import 'colors/default';
+@use 'colors/blue-dark';
+@use 'colors/default-dark';
+@use 'colors/red-dark';
+@use 'colors/green-dark';
+@use 'colors/purple-dark';
+@use 'colors/megna-dark';
+@use 'colors/megna';
+@use 'colors/blue';
+@use 'colors/red';
+@use 'colors/green';
+@use 'colors/purple';
+@use 'colors/default';
 
 // dark theme
-@import 'dark';
+@use 'dark';
 
 i.fas {
   color: $white;

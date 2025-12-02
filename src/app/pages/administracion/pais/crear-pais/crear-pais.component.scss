@@ -1,9 +1,9 @@
-@import '../../../../../assets/scss/variable.scss';
+@use '../../../../../assets/scss/variable.scss' as *;
 
-a{
+a {
   color: $headingtext;
 }
 
-a:hover{
+a:hover {
   color: $info;
 }
