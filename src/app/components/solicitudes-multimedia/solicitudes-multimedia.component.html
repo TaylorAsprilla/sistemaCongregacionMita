@@ -184,30 +184,31 @@
               >
                 <i class="fas fa-info-circle"></i>
               </button>
-              <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
-                @if ( solicitud.estadoUltimaSolicitud === estadosSolicitud.PENDIENTE ) {
-                <button
-                  type="button"
-                  title="Crear Acceso"
-                  class="btn btn-sm btn-primary me-1 mb-1"
-                  (click)="emitirCrearAccesoMultimedia(solicitud)"
-                  aria-label="Crear Acceso"
-                >
-                  <i class="fas fa-key"></i>
-                </button>
-                } @if ( solicitud.estadoUltimaSolicitud === estadosSolicitud.CADUCADA || solicitud.estadoUltimaSolicitud
-                === estadosSolicitud.APROBADA ) {
-                <button
-                  type="button"
-                  class="btn btn-sm btn-warning me-1 mb-1"
-                  title="Extender Acceso"
-                  (click)="emitirExtenderAccesoMultimedia(solicitud)"
-                  aria-label="Extender Acceso"
-                >
-                  <i class="fas fa-calendar"></i>
-                </button>
-                }
-              </div>
+
+              @if ( solicitud.estadoUltimaSolicitud === estadosSolicitud.PENDIENTE ) {
+              <button
+                *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]"
+                type="button"
+                title="Crear Acceso"
+                class="btn btn-sm btn-primary me-1 mb-1"
+                (click)="emitirCrearAccesoMultimedia(solicitud)"
+                aria-label="Crear Acceso"
+              >
+                <i class="fas fa-key"></i>
+              </button>
+              } @if ( solicitud.estadoUltimaSolicitud === estadosSolicitud.CADUCADA || solicitud.estadoUltimaSolicitud
+              === estadosSolicitud.APROBADA ) {
+              <button
+                *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]"
+                type="button"
+                class="btn btn-sm btn-warning me-1 mb-1"
+                title="Extender Acceso"
+                (click)="emitirExtenderAccesoMultimedia(solicitud)"
+                aria-label="Extender Acceso"
+              >
+                <i class="fas fa-calendar"></i>
+              </button>
+              }
 
               <button
                 type="button"
@@ -219,17 +220,16 @@
                 <i class="fas fa-trash"></i>
               </button>
 
-              <div *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-danger me-1 mb-1"
-                  title="Denegar Acceso"
-                  (click)="emitirDenegarAccesoMultimedia(solicitud)"
-                  aria-label="Denegar Acceso"
-                >
-                  <i class="fas fa-ban"></i>
-                </button>
-              </div>
+              <button
+                *appPermisos="[ROLES.APROBADOR_MULTIMEDIA, ROLES.ADMINISTRADOR]"
+                type="button"
+                class="btn btn-sm btn-danger me-1 mb-1"
+                title="Denegar Acceso"
+                (click)="emitirDenegarAccesoMultimedia(solicitud)"
+                aria-label="Denegar Acceso"
+              >
+                <i class="fas fa-ban"></i>
+              </button>
             </td>
           </tr>
           @if (filaExpandida === i) {
