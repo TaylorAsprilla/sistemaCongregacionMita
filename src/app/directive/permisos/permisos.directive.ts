@@ -33,8 +33,10 @@ export class PermisosDirective implements OnInit {
   }
 
   private actualizarVista(): void {
+    const tienePermiso = this.validarPermisos();
+
     this.viewContainer.clear();
-    if (this.validarPermisos()) {
+    if (tienePermiso) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     }
   }
@@ -47,14 +49,21 @@ export class PermisosDirective implements OnInit {
         //TODO Solo tienen permiso Multimedia los que solicitaron acceso a CMAR.live
         if (!this.usuario?.usuarioPermiso && permiso === ROLES.MULTIMEDIA) {
           tienePermiso = true;
+
           break;
         } else {
-          const permisosUsuario = this.usuario?.usuarioPermiso.find(
-            (permisosUsuario: PermisoModel) => permisosUsuario.permiso.toUpperCase() === permiso
-          );
+          // Normalizar ambos strings: uppercase y trim
+          const permisoNormalizado = permiso.toUpperCase().trim();
+
+          const permisosUsuario = this.usuario?.usuarioPermiso.find((permisosUsuario: PermisoModel) => {
+            const permisoUsuarioNormalizado = permisosUsuario.permiso.toUpperCase().trim();
+
+            return permisoUsuarioNormalizado === permisoNormalizado;
+          });
 
           if (permisosUsuario) {
             tienePermiso = true;
+
             break;
           }
         }
