@@ -121,6 +121,7 @@ export interface UsuariosPorCongregacionInterface {
   usuarioCongregacionCongregacion?: usuarioCongregacionCongregacionInterface[];
   usuarioCongregacionCampo?: usuarioCongregacionCampoInterface[];
   campo: string;
+  esJoven: boolean;
   estado: boolean;
 }
 
