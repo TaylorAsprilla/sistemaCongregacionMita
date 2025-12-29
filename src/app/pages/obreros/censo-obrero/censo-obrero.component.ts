@@ -42,7 +42,6 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.idUsuario = this.usuarioService.usuarioId;
     this.congregacion = this.usuarioService.nombreCongregacion;
-
     this.nombreArchivo = `Censo`;
     this.cargarUsuarios();
   }
