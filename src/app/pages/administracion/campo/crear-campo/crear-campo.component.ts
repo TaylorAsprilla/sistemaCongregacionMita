@@ -81,8 +81,8 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
         id: this.campoSeleccionado.id,
       };
 
-      this.campoService.actualizarCampo(data).subscribe(
-        (campo: any) => {
+      this.campoService.actualizarCampo(data).subscribe({
+        next: (campo: any) => {
           Swal.fire({
             title: 'Campo Actualizado',
             icon: 'success',
@@ -91,7 +91,7 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
           this.resetFormulario();
           this.cargarCampos();
         },
-        (error) => {
+        error: (error) => {
           const errores = error.error.errors;
           const listaErrores = Object.values(errores)
             .map((err: any) => `° ${err.msg}<br>`)
@@ -102,10 +102,10 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
             html: `${listaErrores}`,
           });
         },
-      );
+      });
     } else {
-      this.campoService.crearCampo(campoNuevo).subscribe(
-        (campoCreado: any) => {
+      this.campoService.crearCampo(campoNuevo).subscribe({
+        next: (campoCreado: any) => {
           Swal.fire({
             title: 'Campo Creado',
             icon: 'success',
@@ -114,7 +114,7 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
           this.resetFormulario();
           this.cargarCampos();
         },
-        (error) => {
+        error: (error) => {
           const errores = error.error.errors;
           const listaErrores = Object.values(errores)
             .map((err: any) => `° ${err.msg}<br>`)
@@ -126,20 +126,20 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
           });
           this.router.navigateByUrl(RUTAS.INICIO);
         },
-      );
+      });
     }
   }
 
   buscarCampo(id: string) {
     if (id !== 'nuevo') {
-      this.campoService.getCampo(Number(id)).subscribe(
-        (campoActualizado: CampoModel) => {
+      this.campoService.getCampo(Number(id)).subscribe({
+        next: (campoActualizado: CampoModel) => {
           const { campo, congregacion_id, idObreroEncargado, idObreroEncargadoDos } = campoActualizado;
           this.campoSeleccionado = campoActualizado;
 
           this.campoForm.setValue({ campo, congregacion_id, idObreroEncargado, idObreroEncargadoDos });
         },
-        (error) => {
+        error: (error) => {
           const errores = error.error.errors as { [key: string]: { msg: string } };
           const listaErrores: string[] = [];
 
@@ -155,7 +155,7 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
 
           return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
         },
-      );
+      });
     }
   }
 
