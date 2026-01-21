@@ -37,6 +37,9 @@ a.lista {
   color: #7d8b92;
   cursor: pointer;
   text-decoration: none;
+  li {
+    margin-left: 20px;
+  }
 }
 
 a.lista :hover {
