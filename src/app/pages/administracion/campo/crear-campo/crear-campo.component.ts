@@ -68,10 +68,10 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
   crearCampo() {
     const campoNuevo = { ...this.campoForm.value };
 
-    // Eliminar los campos que no son números válidos
+    // Convertir los campos con valor 'null' (string) a null o eliminarlos si son vacíos
     ['idObreroEncargado', 'idObreroEncargadoDos'].forEach((campo) => {
-      if (campoNuevo[campo] === 'null') {
-        delete campoNuevo[campo];
+      if (campoNuevo[campo] === 'null' || campoNuevo[campo] === null || campoNuevo[campo] === '') {
+        campoNuevo[campo] = null;
       }
     });
 
@@ -101,7 +101,7 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
             icon: 'error',
             html: `${listaErrores}`,
           });
-        }
+        },
       );
     } else {
       this.campoService.crearCampo(campoNuevo).subscribe(
@@ -125,7 +125,7 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
             html: `${listaErrores}`,
           });
           this.router.navigateByUrl(RUTAS.INICIO);
-        }
+        },
       );
     }
   }
@@ -154,7 +154,7 @@ export class CrearCampoComponent implements OnInit, OnDestroy {
           });
 
           return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
-        }
+        },
       );
     }
   }

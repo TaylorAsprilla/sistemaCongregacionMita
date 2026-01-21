@@ -96,8 +96,8 @@ export class CrearCongregacionComponent implements OnInit, OnDestroy {
   prepararDatosCongregacion(congregacionFormValue: any): any {
     const congregacion = { ...congregacionFormValue };
     ['idObreroEncargado', 'idObreroEncargadoDos'].forEach((campo) => {
-      if (congregacion[campo] === 'null') {
-        delete congregacion[campo];
+      if (congregacion[campo] === 'null' || congregacion[campo] === null || congregacion[campo] === '') {
+        congregacion[campo] = null;
       }
     });
     return congregacion;
@@ -172,7 +172,7 @@ export class CrearCongregacionComponent implements OnInit, OnDestroy {
           });
 
           return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CONGREGACIONES}`);
-        }
+        },
       );
     }
   }
