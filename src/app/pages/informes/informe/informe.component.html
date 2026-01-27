@@ -1,9 +1,12 @@
 <div class="titulo">
   <h1>Informe:</h1>
-  <h4>2do Trimestre del año</h4>
+  <h4>
+    {{ getTrimestresActual()
+    }}{{ getTrimestresActual() === 1 ? 'er' : getTrimestresActual() === 3 ? 'er' : 'do' }} Trimestre del año
+  </h4>
   <hr />
 
-  <h4>ATENCION: Quedan {{ display }} días para terminar el informe</h4>
+  <h4 class="alert alert-secondary">Quedan {{ calcularDiasFinTrimestre() }} días para terminar el informe</h4>
 </div>
 
 <div class="container mt-4">

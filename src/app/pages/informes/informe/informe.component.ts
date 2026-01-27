@@ -16,21 +16,10 @@ import { SeccionInformeComponent } from '../../../components/seccion-informe/sec
 export class InformeComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
 
-  get Rutas() {
-    return RUTAS;
-  }
-
   informes: InformeModel[] = [];
+  generarSeccioninforme: Seccion[] = generarSeccioninforme;
 
-  public generarSeccioninforme: Seccion[] = generarSeccioninforme;
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { informes: InformeModel[] }) => {
-      this.informes = data.informes;
-    });
-
-    this.calcularDias();
-  }
+  diasFinTrimestre: number;
 
   currYear = new Date().getFullYear();
 
@@ -43,35 +32,45 @@ export class InformeComponent implements OnInit {
 
   trimestres = [this.finPrimerTrimestre, this.finSegundoTrimestre, this.finTercerTrimestre, this.finCuartoTrimestre];
 
-  escogerTrimestre(finalTrimestreActual: number) {
-    var ahora = new Date().getTime();
-
-    for (var i = 0; i < this.trimestres.length; i++) {
-      var distancia = this.trimestres[i] - ahora;
-
-      if (distancia >= 0) {
-        finalTrimestreActual = this.trimestres[i];
-        break;
-      }
-    }
-
-    return finalTrimestreActual;
+  get Rutas() {
+    return RUTAS;
   }
 
-  demo: any;
-  display: any;
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe((data: { informes: InformeModel[] }) => {
+      this.informes = data.informes;
+    });
 
-  calcularDias() {
-    var now = new Date().getTime();
+    this.diasFinTrimestre = this.calcularDiasFinTrimestre();
+    console.log('Trimestre actual:', this.getTrimestresActual());
+    console.log('Días para fin de trimestre:', this.diasFinTrimestre);
+  }
 
-    this.escogerTrimestre(this.trimestreActual);
+  /**
+   * Retorna el número del trimestre actual (1, 2, 3 o 4)
+   * basándose en el mes actual
+   */
+  getTrimestresActual(): number {
+    const mesActual = new Date().getMonth(); // 0-11 (0=Enero, 11=Diciembre)
+    return Math.floor(mesActual / 3) + 1;
+  }
 
-    var distance = this.trimestreActual - now;
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    this.demo = days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
-    this.display = days;
+  /**
+   * Calcula cuántos días faltan para el fin del trimestre actual
+   */
+  calcularDiasFinTrimestre(): number {
+    const ahora = new Date().getTime();
+    const trimestreActual = this.getTrimestresActual();
+
+    // Obtener la fecha de fin del trimestre actual
+    const fechaFinTrimestre = this.trimestres[trimestreActual - 1];
+
+    // Calcular la diferencia en milisegundos
+    const diferencia = fechaFinTrimestre - ahora;
+
+    // Convertir a días
+    const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+
+    return dias;
   }
 }
