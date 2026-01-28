@@ -430,9 +430,6 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.INFORME,
     component: InformeComponent,
-    resolve: {
-      informes: InformesResolver,
-    },
   },
   {
     path: RUTAS.VER_INFORME,

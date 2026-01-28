@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { InformeModel } from 'src/app/core/models/informe.model';
+import { VerificarInformeAbiertoResponseInterface } from 'src/app/core/interfaces/informe.interface';
 
 const base_url = environment.base_url;
 
@@ -43,5 +44,12 @@ export class InformeService {
 
   actualizarInforme(informe: InformeModel) {
     return this.httpClient.put(`${base_url}/informe/${informe.id}`, informe, this.headers);
+  }
+
+  verificarInformeAbierto(usuarioId: number, fechaInicio: string, fechaFin: string) {
+    return this.httpClient.get<VerificarInformeAbiertoResponseInterface>(
+      `${base_url}/informe/verificar-abierto?usuario_id=${usuarioId}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`,
+      this.headers,
+    );
   }
 }
