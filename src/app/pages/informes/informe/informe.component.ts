@@ -65,11 +65,13 @@ export class InformeComponent implements OnInit {
     const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
     const usuarioId = this.usuarioService.usuarioId;
 
-    this.informeService.verificarInformeAbierto(usuarioId, fechaInicio, fechaFin).subscribe(
+    // Usar cargarInformeActivo para guardar el informe en el servicio
+    this.informeService.cargarInformeActivo(usuarioId, fechaInicio, fechaFin).subscribe(
       (respuesta) => {
         console.log('Respuesta de verificación de informe abierto:', respuesta);
         this.hayInformeAbierto = respuesta.tieneInformeAbierto;
         console.log('Hay informe abierto:', this.hayInformeAbierto);
+        console.log('ID del informe activo:', this.informeService.informeActivoId);
       },
       (error) => {
         console.error('Error al verificar informe abierto:', error);
