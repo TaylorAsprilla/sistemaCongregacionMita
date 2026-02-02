@@ -316,4 +316,11 @@ export class InformeComponent implements OnInit {
       },
     );
   }
+
+  /**
+   * Navega a la página de ver informe completo
+   */
+  verInformeCompleto(): void {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.VER_INFORME}`);
+  }
 }

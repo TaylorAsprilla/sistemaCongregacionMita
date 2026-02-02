@@ -9,6 +9,9 @@
   @if (hayInformeAbierto) {
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h4 class="alert alert-secondary mb-0">Quedan {{ calcularDiasFinTrimestre() }} días para terminar el informe</h4>
+      <button class="btn btn-primary" (click)="verInformeCompleto()">
+        <i class="fa fa-file-alt"></i> Ver Informe Completo
+      </button>
     </div>
   }
 </div>
