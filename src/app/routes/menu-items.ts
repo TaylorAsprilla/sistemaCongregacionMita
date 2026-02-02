@@ -80,6 +80,7 @@ export enum ROLES {
   AYUDANTE = 'AYUDANTE',
   APROBADOR_MULTIMEDIA = 'APROBADOR MULTIMEDIA',
   COMITE_RECTOR = 'COMITE RECTOR',
+  PRUEBA_INFORMES = 'PRUEBA INFORMES',
 }
 
 export const ROUTES: RouteInfo[] = [
@@ -496,7 +497,7 @@ export const ROUTES: RouteInfo[] = [
     icon: '',
     class: 'nav-small-cap',
     extralink: true,
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES],
     submenu: [],
   },
   {
@@ -505,7 +506,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-book',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR],
+    role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES],
     submenu: [
       {
         path: RUTAS.INFORME,
@@ -513,7 +514,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES],
         submenu: [],
       },
       {
@@ -522,7 +523,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR],
+        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES],
         submenu: [],
       },
     ],
