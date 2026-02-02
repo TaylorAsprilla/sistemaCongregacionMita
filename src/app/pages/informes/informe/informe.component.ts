@@ -177,7 +177,7 @@ export class InformeComponent implements OnInit {
     this.informeService.cargarInformeActivo(usuarioId, fechaInicio, fechaFin).subscribe(
       (respuesta) => {
         this.hayInformeAbierto = respuesta.tieneInformeAbierto;
-        
+
         if (respuesta.tieneInformeAbierto) {
           // Si hay informe abierto, cargar las secciones con su estatus
           this.cargarSeccionesConEstatus();
