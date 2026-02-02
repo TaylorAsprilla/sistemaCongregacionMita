@@ -85,7 +85,11 @@ export class InformeVisitasComponent implements OnInit {
       .subscribe({
         next: () => {
           Swal.fire('Informe de visitas', 'Se registró el informe de visitas correctamente', 'success');
-          this.navegarAlInforme();
+          this.cargarVisitas();
+          this.visitaForm.reset();
+          const informeId = this.informeService.informeActivoId;
+          const fechaActual = new Date().toISOString().split('T')[0];
+          this.visitaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
         },
         error: (error) => {
           this.mostrarErrores('Informe de visitas', error, 'Error al guardar el informe de visitas');
@@ -93,7 +97,7 @@ export class InformeVisitasComponent implements OnInit {
       });
   }
 
-  private navegarAlInforme(): void {
+  navegarAlInforme(): void {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
   }
 

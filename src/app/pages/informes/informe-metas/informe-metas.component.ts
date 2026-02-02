@@ -122,7 +122,11 @@ export class InformeMetasComponent implements OnInit {
       .subscribe({
         next: () => {
           Swal.fire('Informe de metas', 'Se registró la meta correctamente', 'success');
-          this.navegarAlInforme();
+          this.cargarMetas();
+          this.metaForm.reset();
+          const informeId = this.informeService.informeActivoId;
+          const fechaActual = new Date().toISOString().split('T')[0];
+          this.metaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
         },
         error: (error) => {
           this.mostrarErrores('Informe de metas', error, 'Error al guardar el informe de metas');

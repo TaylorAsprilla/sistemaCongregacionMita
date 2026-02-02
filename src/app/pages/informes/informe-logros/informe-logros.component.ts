@@ -82,7 +82,10 @@ export class InformeLogrosComponent implements OnInit {
       .subscribe({
         next: () => {
           Swal.fire('Logros', 'Se registró el logro correctamente', 'success');
-          this.navegarAlInforme();
+          this.cargarLogros();
+          this.logroForm.reset();
+          const informeId = this.informeService.informeActivoId;
+          this.logroForm.patchValue({ informe_id: informeId, responsable: this.usuarioService.usuarioNombre });
         },
         error: (error) => {
           this.mostrarErrores('Logros', error, 'Error al guardar el logro');
@@ -90,7 +93,7 @@ export class InformeLogrosComponent implements OnInit {
       });
   }
 
-  private navegarAlInforme(): void {
+  navegarAlInforme(): void {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
   }
 

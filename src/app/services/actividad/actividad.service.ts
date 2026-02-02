@@ -27,7 +27,7 @@ export class ActividadService {
   getActividad() {
     return this.httpClient
       .get(`${base_url}/actividad/`, this.headers)
-      .pipe(map((actividad: { ok: boolean; actividad: ActividadModel[] }) => actividad.actividad));
+      .pipe(map((response: { ok: boolean; atividad: ActividadModel[] }) => response.atividad || []));
   }
 
   crearActividad(actividad: ActividadModel) {

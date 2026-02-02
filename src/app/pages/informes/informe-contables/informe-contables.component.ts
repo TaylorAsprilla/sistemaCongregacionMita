@@ -51,7 +51,9 @@ export class InformeContablesComponent implements OnInit {
     this.contabilidadService.crearContabilidad(informeContabilidad).subscribe(
       (conbailidadCreada: any) => {
         Swal.fire('Informe Contable', 'Se registró el informe contable correctamente', 'success');
-        this.navegarAlInforme();
+        this.contabilidadForm.reset();
+        const informeId = this.informeService.informeActivoId;
+        this.contabilidadForm.patchValue({ informe_id: informeId });
       },
       (error) => {
         const errores = error.error.errors as { [key: string]: { msg: string } };

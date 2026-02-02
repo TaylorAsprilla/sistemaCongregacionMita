@@ -84,7 +84,11 @@ export class InformeSituacionVisitaComponent implements OnInit {
       .subscribe({
         next: () => {
           Swal.fire('Situación de Visita', 'Se registró la situación de visita correctamente', 'success');
-          this.navegarAlInforme();
+          this.cargarSituacionVisitas();
+          this.situacionVisitaForm.reset();
+          const informeId = this.informeService.informeActivoId;
+          const fechaActual = new Date().toISOString().split('T')[0];
+          this.situacionVisitaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
         },
         error: (error) => {
           this.mostrarErrores('Situación de Visita', error, 'Error al guardar la situación de visita');
@@ -92,7 +96,7 @@ export class InformeSituacionVisitaComponent implements OnInit {
       });
   }
 
-  private navegarAlInforme(): void {
+  navegarAlInforme(): void {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
   }
 
