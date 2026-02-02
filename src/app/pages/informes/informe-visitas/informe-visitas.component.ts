@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { VisitaModel } from 'src/app/core/models/visita.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { VisitaService } from 'src/app/services/visita/visita.service';
+import { InformeService } from 'src/app/services/informe/informe.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,61 +15,107 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule],
 })
-export class InformeVisitasComponent implements OnInit, OnDestroy {
+export class InformeVisitasComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
   private visitaService = inject(VisitaService);
+  private informeService = inject(InformeService);
 
   public visitaForm: UntypedFormGroup;
 
   public visitas: VisitaModel[] = [];
 
-  // Subscription
-  public visitaSubscription: Subscription;
-
   ngOnInit(): void {
+    const informeId = this.informeService.informeActivoId;
+    const fechaActual = new Date().toISOString().split('T')[0];
+
+    // Verificar si hay informe activo
+    if (!informeId) {
+      Swal.fire({
+        title: 'Sin informe activo',
+        text: 'No hay un informe activo. Por favor, genera un informe primero.',
+        icon: 'warning',
+        confirmButtonText: 'Ir a Informes',
+      }).then(() => {
+        this.navegarAlInforme();
+      });
+      return;
+    }
+
     this.visitaForm = this.formBuilder.group({
-      fecha: ['', [Validators.required]],
+      fecha: [fechaActual, [Validators.required]],
       visitasHogares: ['', []],
       cantidad: ['', []],
       efectivo: ['', []],
       referidasOots: ['', []],
       visitaHospital: ['', []],
       observaciones: ['', []],
-      informe_id: ['1', [Validators.required]],
+      informe_id: [informeId, [Validators.required]],
     });
 
-    this.visitaSubscription = this.visitaService.getVisita().subscribe((visita: VisitaModel[]) => {
-      this.visitas = visita;
-    });
+    this.cargarVisitas();
   }
 
-  ngOnDestroy(): void {
-    this.visitaSubscription?.unsubscribe();
+  private cargarVisitas(): void {
+    this.visitaService
+      .getVisita()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((visitas) => {
+        this.visitas = visitas;
+      });
   }
 
-  guardarVisita() {
+  guardarVisita(): void {
+    if (this.visitaForm.invalid) {
+      this.visitaForm.markAllAsTouched();
+      Swal.fire({
+        title: 'Formulario incompleto',
+        text: 'Por favor, complete todos los campos requeridos',
+        icon: 'warning',
+      });
+      return;
+    }
+
     const informeVisita = this.visitaForm.value;
 
-    this.visitaService.crearVisita(informeVisita).subscribe(
-      (visitaCreada: any) => {
-        Swal.fire('Informe de visitas', 'Se registró el informe de visitas correctamente', 'success');
-        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
-      },
-      (error) => {
-        let errores = error.error.errors;
-        let listaErrores: string[] = [];
+    this.visitaService
+      .crearVisita(informeVisita)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          Swal.fire('Informe de visitas', 'Se registró el informe de visitas correctamente', 'success');
+          this.navegarAlInforme();
+        },
+        error: (error) => {
+          this.mostrarErrores('Informe de visitas', error, 'Error al guardar el informe de visitas');
+        },
+      });
+  }
 
-        Object.entries(errores).forEach(([key, value]) => {
-          listaErrores.push('° ' + value['msg'] + '<br>');
-        });
+  private navegarAlInforme(): void {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
+  }
 
-        Swal.fire({
-          title: 'Informe de visitas',
-          icon: 'error',
-          html: `Error al guardar el informe de visitas <p> ${listaErrores.join('')}`,
-        });
-      }
-    );
+  private mostrarErrores(titulo: string, error: any, mensajeExtra: string = ''): void {
+    const errores = error?.error?.errors as { [key: string]: { msg: string } };
+    if (!errores) {
+      Swal.fire({
+        title: titulo,
+        text: 'Ocurrió un error inesperado',
+        icon: 'error',
+      });
+      return;
+    }
+
+    const listaErrores = Object.values(errores)
+      .map((value) => `° ${value.msg}`)
+      .join('<br>');
+
+    Swal.fire({
+      title: titulo,
+      icon: 'error',
+      html: `${mensajeExtra ? mensajeExtra + '<p>' : ''}${listaErrores}`,
+    });
   }
 }
