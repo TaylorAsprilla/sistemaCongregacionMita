@@ -6,6 +6,8 @@ import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { InformeService } from 'src/app/services/informe/informe.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,6 +22,8 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private tipoActividadService = inject(TipoActividadService);
   private actividadService = inject(ActividadService);
+  private usuarioService = inject(UsuarioService);
+  private informeService = inject(InformeService);
 
   public actividadForm: UntypedFormGroup;
 
@@ -28,14 +32,31 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
   public tipoActividadSubscription: Subscription;
 
   ngOnInit(): void {
+    const fechaActual = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    const nombreUsuario = this.usuarioService.usuarioNombre;
+    const informeId = this.informeService.informeActivoId;
+
+    // Verificar si hay informe activo
+    if (!informeId) {
+      Swal.fire({
+        title: 'Sin informe activo',
+        text: 'No hay un informe activo. Por favor, genera un informe primero.',
+        icon: 'warning',
+        confirmButtonText: 'Ir a Informes',
+      }).then(() => {
+        this.navegarAlInforme();
+      });
+      return;
+    }
+
     this.actividadForm = this.formBuilder.group({
-      fecha: ['', [Validators.required]],
-      cantidadRecaudada: ['', []],
-      responsable: ['', [Validators.required, Validators.minLength(3)]],
-      asistencia: ['', [Validators.required]],
+      fecha: [fechaActual, [Validators.required]],
       tipoActividad_id: ['', [Validators.required]],
+      asistencia: ['', [Validators.required]],
+      cantidadRecaudada: ['', []],
+      responsable: [nombreUsuario, [Validators.required, Validators.minLength(3)]],
       observaciones: ['', []],
-      informe_id: ['1', [Validators.required]],
+      informe_id: [informeId, [Validators.required]],
     });
 
     this.tipoActividadSubscription = this.tipoActividadService.getTipoActividad().subscribe((tipoActividad) => {
@@ -48,6 +69,11 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
   }
 
   guardarInformeActividad() {
+    if (this.actividadForm.invalid) {
+      Swal.fire('Formulario incompleto', 'Por favor complete todos los campos requeridos', 'warning');
+      return;
+    }
+
     const informeActividad = this.actividadForm.value;
 
     this.actividadService.crearActividad(informeActividad).subscribe(
@@ -69,7 +95,7 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
           html: `${listaErrores.join('')}`,
         });
         this.navegarAlInforme();
-      }
+      },
     );
   }
 

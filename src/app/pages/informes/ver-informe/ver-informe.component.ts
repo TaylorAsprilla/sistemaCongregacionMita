@@ -1,364 +1,341 @@
-import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, DestroyRef, OnInit, ViewChild, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
 import { jsPDF } from 'jspdf';
-import { Subscription } from 'rxjs';
-import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
+import html2canvas from 'html2canvas';
+import { forkJoin } from 'rxjs';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
-import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
-import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
-import { UsuarioModel } from 'src/app/core/models/usuario.model';
-import { MinisterioModel } from 'src/app/core/models/ministerio.model';
-import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
+import { ContabilidadService } from 'src/app/services/contabilidad/contabilidad.service';
+import { MetaService } from 'src/app/services/meta/meta.service';
+import { VisitaService } from 'src/app/services/visita/visita.service';
+import { SituacionVisitaService } from 'src/app/services/situacion-visita/situacion-visita.service';
+import { LogroService } from 'src/app/services/logro/logro.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import { PaisService } from 'src/app/services/pais/pais.service';
-import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
-import { UsuarioCongregacionModel } from 'src/app/core/models/usuarioCongregacion.model';
+import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
+import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
 import { VisitaModel } from 'src/app/core/models/visita.model';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
 import { LogroModel } from 'src/app/core/models/logro.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { ActividadModel } from 'src/app/core/models/actividad.model';
-import { InformeModel } from 'src/app/core/models/informe.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
-import { ObreroModel } from 'src/app/core/models/obrero.model';
-import { MinisterioService } from 'src/app/services/ministerio/ministerio.service';
+import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { RUTAS } from 'src/app/routes/menu-items';
 
 @Component({
   selector: 'app-ver-informe',
   templateUrl: './ver-informe.component.html',
-  styleUrls: ['./ver-informe.component.css'],
+  styleUrls: ['./ver-informe.component.scss'],
   standalone: true,
+  imports: [CommonModule],
 })
-export class VerInformeComponent implements OnInit, OnDestroy {
+export class VerInformeComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private usuarioService = inject(UsuarioService);
-  private ministerioService = inject(MinisterioService);
-  private paisService = inject(PaisService);
+  private congregacionService = inject(CongregacionService);
+  private tipoActividadService = inject(TipoActividadService);
   private informeService = inject(InformeService);
   private actividadService = inject(ActividadService);
-  private tipoActividadService = inject(TipoActividadService);
-  private activatedRoute = inject(ActivatedRoute);
+  private contabilidadService = inject(ContabilidadService);
+  private metaService = inject(MetaService);
+  private visitaService = inject(VisitaService);
+  private situacionVisitaService = inject(SituacionVisitaService);
+  private logroService = inject(LogroService);
+  private router = inject(Router);
 
-  @ViewChild('content', { static: false }) el!: ElementRef;
+  @ViewChild('content', { static: false }) content!: ElementRef;
 
-  primerNombre: string = '';
-  segundoNombre: string = '';
-  primerApellido: string = '';
-  segundoApellido: string = '';
+  cargando: boolean = false;
+  descargandoPDF: boolean = false;
+
+  // Información del usuario
+  nombreUsuario: string = '';
   fechaActual: Date = new Date();
+  congregacionPais: string = 'N/A';
+  congregacionCiudad: string = 'N/A';
+  congregacionCampo: string = 'N/A';
+
+  // Información del trimestre
   trimestre: string = '';
-  fraccion: string = '';
-  idInforme: number = 1;
+  numeroTrimestre: number = 1;
+  anioTrimestre: number = new Date().getFullYear();
 
-  fechaSeleccionada: string = '';
-  obreroSeleccionado: UsuarioModel;
-  paisObrero: string = '';
-
-  sumatoriaActividadesEspeciales: number = 0;
-  sumatoriaActividadesEspirituales: number = 0;
-  sumatoriaActividadesEnServicios: number = 0;
-  sumatoriaActividadesEnReuniones: number = 0;
-
-  usuarios: UsuarioModel[] = [];
-  usuarioSubscription: Subscription;
-
-  ministerios: MinisterioModel[] = [];
-  ministerioSubcription: Subscription;
-
-  paises: CongregacionPaisModel[] = [];
-  paisSubscription: Subscription;
-
-  actividadSubcription: Subscription;
-  tipoActividadSubcription: Subscription;
-  tipoActividades: TipoActividadModel[] = [];
-
-  cargando: boolean = true;
-
-  sumatoriaVisible: boolean = false;
-
-  // desglosar informacion de informe
-  informe: InformeModel[];
-  actividades: ActividadModel[];
-
-  servicios: ActividadModel[] = [];
-  especiales: ActividadModel[] = [];
-  espirituales: ActividadModel[] = [];
-  reuniones: ActividadModel[] = [];
-
-  aspectoContable: ContabilidadModel[] = [];
-  informacionInforme: InformeModel[];
-  logros: LogroModel[] = [];
+  // Datos del informe
+  actividades: ActividadModel[] = [];
+  contabilidad: ContabilidadModel[] = [];
   metas: MetaModel[] = [];
-  situacionVisita: SituacionVisitaModel[] = [];
   visitas: VisitaModel[] = [];
-
-  dataVisitas: VisitaModel[] = [];
-  dataSituacionVisitas: SituacionVisitaModel[] = [];
-  dataLogros: LogroModel[] = [];
-  dataMetas: MetaModel[] = [];
-  dataAspectoContable: ContabilidadModel[] = [];
-
-  congregaciones: CongregacionModel[] = [];
-  obreros: UsuarioModel[] = [];
-
-  public seccionesInformes: SeccionInformeModel[];
-  informeSubscription: Subscription;
+  situacionVisitas: SituacionVisitaModel[] = [];
+  logros: LogroModel[] = [];
+  tiposActividad: TipoActividadModel[] = [];
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: any) => {
-      this.seccionesInformes = data.seccionInforme;
-      this.congregaciones = data.congregacion;
-      this.obreros = data.obrero;
-    });
-
-    this.primerNombre = sessionStorage.getItem('primerNombre') || '';
-    this.segundoNombre = sessionStorage.getItem('segundoNombre') || '';
-    this.primerApellido = sessionStorage.getItem('primerApellido') || '';
-    this.segundoApellido = sessionStorage.getItem('segundoApellido') || '';
-
-    this.fechaActual = new Date();
-
-    // this.filtrarInformacionInforme();
-    this.cargarUsuarios();
-    this.cargarMinisterios();
-    this.cargarPaises();
-    this.cargarTipoActividad();
+    this.nombreUsuario = this.usuarioService.usuarioNombre || '';
+    this.cargarInformacionCongregacion();
+    this.cargarTiposActividad();
+    this.calcularTrimestre();
+    this.verificarYCargarInforme();
   }
 
-  ngOnDestroy(): void {
-    this.usuarioSubscription?.unsubscribe();
-    this.paisSubscription?.unsubscribe();
-    this.actividadSubcription?.unsubscribe();
-    this.tipoActividadSubcription?.unsubscribe();
-    this.informeSubscription?.unsubscribe();
-  }
+  /**
+   * Carga la información de congregación del usuario
+   */
+  private cargarInformacionCongregacion(): void {
+    const usuarioId = this.usuarioService.usuarioId;
 
-  // cargarInforme(idInforme: any) {
-  //   this.informeSubscription = this.informeService.getInforme(idInforme).subscribe((respuesta: any[]) => {
-  //     this.informe = respuesta;
-  //     this.actividades = this.informe['actividades'];
-  //     /// data var
-  //     this.informacionInforme = this.informe['informacioninforme'];
+    // Cargar congregaciones y buscar donde el usuario es obrero encargado
+    this.congregacionService
+      .getCongregaciones()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (congregaciones: CongregacionModel[]) => {
+          // Buscar congregaciones donde el usuario es obrero encargado o obrero encargado dos
+          const congregacionesDelUsuario = congregaciones.filter(
+            (cong) => cong.idObreroEncargado === usuarioId || cong.idObreroEncargadoDos === usuarioId,
+          );
 
-  //     this.dataVisitas = this.informe['visitas'];
-  //     this.dataSituacionVisitas = this.informe['situacionVisita'];
-  //     this.dataLogros = this.informe['logros'];
-  //     this.dataMetas = this.informe['metas'];
-  //     this.dataAspectoContable = this.informe['aspectoContable'];
-  //   });
-  //   return true;
-  // }
+          if (congregacionesDelUsuario.length > 0) {
+            // Tomar la primera congregación encontrada
+            const congregacion = congregacionesDelUsuario[0];
 
-  cargarTipoActividad() {
-    this.tipoActividadSubcription = this.tipoActividadService.getTipoActividad().subscribe((nombre) => {
-      this.tipoActividades = nombre;
-    });
-  }
+            // Obtener información adicional de país, ciudad y campo desde el usuario
+            try {
+              // País
+              if (this.usuarioService.usuario?.usuarioCongregacionPais?.[0]?.pais) {
+                this.congregacionPais = this.usuarioService.usuario.usuarioCongregacionPais[0].pais;
+              }
 
-  clasificarActividad(conjunto: ActividadModel[]) {
-    if (conjunto) {
-      conjunto.forEach((actividad) => {
-        let idTipoAct = actividad.tipoActividad_id;
-        let idSec = this.tipoActividades.find((item) => item.id === idTipoAct)?.idSeccion;
-        // validar que existe seccion de la actividad/tipoActividad/idSeccion
-        this.seccionesInformes.forEach((seccion) => {
-          if (seccion.id === idSec) {
-            // colocar array de seccion segun id
-            switch (idSec) {
-              case 1:
-                this.servicios.push(actividad);
-                break;
-              case 4:
-                this.especiales.push(actividad);
-                break;
-              case 5:
-                this.espirituales.push(actividad);
-                break;
-              case 6:
-                this.reuniones.push(actividad);
-                break;
+              // Ciudad/Congregación - usar el nombre de la congregación donde es obrero encargado
+              this.congregacionCiudad = congregacion.congregacion;
+
+              // Campo
+              if (this.usuarioService.usuario?.usuarioCongregacionCampo?.[0]?.campo) {
+                this.congregacionCampo = this.usuarioService.usuario.usuarioCongregacionCampo[0].campo;
+              }
+            } catch (error) {
+              console.warn('Error al cargar información adicional de congregación:', error);
             }
+          } else {
+            // Si no es obrero encargado, mantener valores por defecto 'N/A'
+            console.warn('El usuario no es obrero encargado de ninguna congregación');
           }
-        });
+        },
+        error: (error) => {
+          console.error('Error al cargar congregaciones:', error);
+        },
+      });
+  }
+
+  /**
+   * Carga los tipos de actividad
+   */
+  private cargarTiposActividad(): void {
+    this.tipoActividadService
+      .getTipoActividad()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (tipos: TipoActividadModel[]) => {
+          this.tiposActividad = tipos;
+        },
+        error: (error) => {
+          console.error('Error al cargar tipos de actividad:', error);
+        },
+      });
+  }
+
+  /**
+   * Busca el nombre del tipo de actividad por ID
+   */
+  buscarNombreTipoActividad(idTipoActividad: number): string {
+    const tipo = this.tiposActividad.find((t) => t.id === idTipoActividad);
+    return tipo?.nombre || 'N/A';
+  }
+
+  /**
+   * Calcula el trimestre actual y sus meses
+   */
+  private calcularTrimestre(): void {
+    const mesActual = new Date().getMonth(); // 0-11
+    this.numeroTrimestre = Math.floor(mesActual / 3) + 1;
+
+    switch (this.numeroTrimestre) {
+      case 1:
+        this.trimestre = 'Enero, Febrero y Marzo';
+        break;
+      case 2:
+        this.trimestre = 'Abril, Mayo y Junio';
+        break;
+      case 3:
+        this.trimestre = 'Julio, Agosto y Septiembre';
+        break;
+      case 4:
+        this.trimestre = 'Octubre, Noviembre y Diciembre';
+        break;
+    }
+  }
+
+  /**
+   * Verifica si hay un informe activo y carga sus datos
+   */
+  private verificarYCargarInforme(): void {
+    const informeId = this.informeService.informeActivoId;
+
+    if (!informeId) {
+      Swal.fire({
+        title: 'Sin informe activo',
+        text: 'No hay un informe activo. Por favor, genera un informe primero.',
+        icon: 'warning',
+        confirmButtonText: 'Ir a Informes',
+      }).then(() => {
+        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
+      });
+      return;
+    }
+
+    this.cargarDatosInforme(informeId);
+  }
+
+  /**
+   * Carga todos los datos del informe en paralelo
+   */
+  private cargarDatosInforme(informeId: number): void {
+    this.cargando = true;
+
+    forkJoin({
+      actividades: this.actividadService.getActividad(),
+      contabilidad: this.contabilidadService.getContabilidad(),
+      metas: this.metaService.getMetas(),
+      visitas: this.visitaService.getVisita(),
+      situacionVisitas: this.situacionVisitaService.getSituacionVisitas(),
+      logros: this.logroService.getLogros(),
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (datos) => {
+          // Filtrar datos por informe_id
+          this.actividades = (datos.actividades || []).filter((a: any) => Number(a.informe_id) === Number(informeId));
+          this.contabilidad = (datos.contabilidad || []).filter((c: any) => Number(c.informe_id) === Number(informeId));
+          this.metas = (datos.metas || []).filter((m: any) => Number(m.informe_id) === Number(informeId));
+          this.visitas = (datos.visitas || []).filter((v: any) => Number(v.informe_id) === Number(informeId));
+          this.situacionVisitas = (datos.situacionVisitas || []).filter(
+            (s: any) => Number(s.informe_id) === Number(informeId),
+          );
+          this.logros = (datos.logros || []).filter((l: any) => Number(l.informe_id) === Number(informeId));
+
+          this.cargando = false;
+        },
+        error: (error) => {
+          this.cargando = false;
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudieron cargar los datos del informe',
+            icon: 'error',
+          });
+        },
+      });
+  }
+
+  /**
+   * Obtiene el ordinal del trimestre (1er, 2do, 3er, 4to)
+   */
+  getOrdinalTrimestre(): string {
+    switch (this.numeroTrimestre) {
+      case 1:
+        return '1er';
+      case 2:
+        return '2do';
+      case 3:
+        return '3er';
+      case 4:
+        return '4to';
+      default:
+        return '';
+    }
+  }
+
+  /**
+   * Descarga el informe como PDF
+   */
+  async descargarPDF(): Promise<void> {
+    if (!this.content) {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo generar el PDF',
+        icon: 'error',
+      });
+      return;
+    }
+
+    this.descargandoPDF = true;
+
+    try {
+      const element = this.content.nativeElement;
+
+      // Generar canvas del contenido
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Agregar primera página
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Agregar páginas adicionales si es necesario
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // Descargar PDF
+      pdf.save(`Informe_${this.getOrdinalTrimestre()}_Trimestre_${this.anioTrimestre}.pdf`);
+
+      this.descargandoPDF = false;
+
+      Swal.fire({
+        title: 'Éxito',
+        text: 'El informe se ha descargado correctamente',
+        icon: 'success',
+        timer: 2000,
+      });
+    } catch (error) {
+      this.descargandoPDF = false;
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo generar el PDF. Intente nuevamente.',
+        icon: 'error',
       });
     }
   }
 
-  // filtrarFecha(conjunto: any) {
-  //   let result: any[] = [];
-  //   let yearSelect = this.fechaSeleccionada.slice(0, 4);
-  //   let monthSelect = this.fechaSeleccionada.slice(5, 7);
-  //   let monthSelectNum = Number(monthSelect);
-  //   let daySelect = this.fechaSeleccionada.slice(8, 10);
-  //   conjunto.forEach((actividad: any) => {
-  //     let fecha = actividad.fecha;
-  //     let year = fecha.slice(0, 4);
-  //     let month = fecha.slice(5, 7);
-  //     let monthNum = Number(month);
-
-  //     let day = fecha.slice(8, 10);
-
-  //     let min = this.selectMinMaxMonth(monthSelect)[0];
-  //     let max = this.selectMinMaxMonth(monthSelect)[1];
-  //     if (yearSelect == year) {
-  //       if (monthNum >= min && monthNum <= max) {
-  //         result.push(actividad);
-  //       }
-  //     }
-  //   });
-
-  //   return result;
-  // }
-
-  selectMinMaxMonth(mes: number) {
-    let min, max;
-    if (mes >= 1 && mes <= 3) {
-      min = 1;
-      max = 3;
-    }
-    if (mes >= 4 && mes <= 6) {
-      min = 4;
-      max = 6;
-    }
-    if (mes >= 7 && mes <= 9) {
-      min = 7;
-      max = 9;
-    }
-    if (mes >= 10 && mes <= 12) {
-      min = 10;
-      max = 12;
-    }
-    return [min, max];
+  /**
+   * Navega de regreso a la página de informe
+   */
+  volverAlInforme(): void {
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
   }
 
-  // filtrarFechaCreatedAt(conjunto: any[]) {
-  //   let result: any[] = [];
-  //   let yearSelect = this.fechaSeleccionada.slice(0, 4);
-  //   let monthSelect = this.fechaSeleccionada.slice(5, 7);
-  //   let monthSelectNum = Number(monthSelect);
-  //   conjunto.forEach((actividad) => {
-  //     let fecha = actividad.createdAt;
-  //     let year = fecha.slice(0, 4);
-  //     let month = fecha.slice(5, 7);
-  //     let monthNum = Number(month);
-  //     let min = this.selectMinMaxMonth(monthSelect)[0];
-  //     let max = this.selectMinMaxMonth(monthSelect)[1];
-  //     if (yearSelect == year) {
-  //       if (monthNum >= min && monthNum <= max) {
-  //         result.push(actividad);
-  //       }
-  //     }
-  //   });
-  //   return result;
-  // }
-
-  getTipoActividadName(id: number) {
-    try {
-      return this.tipoActividades[id]['nombre'];
-    } catch (exception_var) {
-      ('cant find name with that id');
-    }
-    return id;
+  /**
+   * Calcula el total de una propiedad numérica en un array
+   */
+  calcularTotal(items: any[], propiedad: string): number {
+    return items.reduce((total, item) => total + (Number(item[propiedad]) || 0), 0);
   }
-
-  cargarUsuarios() {
-    this.usuarioSubscription = this.usuarioService.listarTodosLosUsuarios().subscribe(({ totalUsuarios, usuarios }) => {
-      this.usuarios = usuarios.filter((usuario: UsuarioModel) => usuario.estado == true);
-    });
-  }
-
-  cargarMinisterios() {
-    this.ministerioSubcription = this.ministerioService.getMinisterios().subscribe((ministerios) => {
-      this.ministerios = ministerios.filter((ministerio: MinisterioModel) => ministerio.estado === true);
-    });
-  }
-
-  cargarPaises() {
-    this.paisSubscription = this.paisService.getPaises().subscribe((pais) => {
-      this.paises = pais.filter((pais: CongregacionPaisModel) => pais.estado === true);
-    });
-  }
-
-  seleccionarObrero(obreroSeleccionado: UsuarioModel) {
-    let obreroInforme: UsuarioCongregacionModel;
-
-    this.usuarioService.getUsuario(obreroSeleccionado.id).subscribe((obrero: UsuarioInterface) => {
-      obreroInforme = obrero.usuarioCongregacion;
-
-      this.paisObrero =
-        this.paises.find((pais: CongregacionPaisModel) => pais.id === obreroInforme?.pais_id)?.pais || '';
-    });
-  }
-
-  seleccionarTrimestre() {
-    let fecha = this.fechaSeleccionada.slice(5, 7);
-    let mes = parseInt(fecha);
-
-    if (mes >= 1 && mes <= 3) {
-      this.trimestre = 'enero, febrero y marzo';
-      this.fraccion = '1er Trimestre del año';
-    }
-    if (mes >= 4 && mes <= 6) {
-      this.trimestre = 'abril, mayo y junio';
-      this.fraccion = '2do Trimestre del año';
-    }
-    if (mes >= 7 && mes <= 9) {
-      this.trimestre = 'julio, agosto y septiembre';
-      this.fraccion = '3er Trimestre del año';
-    }
-    if (mes >= 10 && mes <= 12) {
-      this.trimestre = 'octubre, noviembre y diciembre';
-      this.fraccion = '4to Trimestre del año';
-    }
-    // this.filtrarInformacionInforme();
-    this.sumatoriaActividadesEspeciales = this.sumatoriaActividades(this.especiales);
-    this.sumatoriaActividadesEspirituales = this.sumatoriaActividades(this.espirituales);
-    this.sumatoriaActividadesEnServicios = this.sumatoriaActividades(this.servicios);
-    this.sumatoriaActividadesEnReuniones = this.sumatoriaActividades(this.reuniones);
-  }
-
-  // filtrarInformacionInforme() {
-  //   if (!!this.cargarInforme(this.idInforme)) {
-  //     this.clasificarActividad(this.actividades);
-  //     this.servicios = this.filtrarFecha(this.servicios);
-  //     this.especiales = this.filtrarFecha(this.especiales);
-  //     this.espirituales = this.filtrarFecha(this.espirituales);
-  //     this.reuniones = this.filtrarFecha(this.reuniones);
-
-  //     this.visitas = this.filtrarFecha(this.dataVisitas);
-  //     this.situacionVisita = this.filtrarFecha(this.dataSituacionVisitas);
-  //     this.aspectoContable = this.filtrarFechaCreatedAt(this.dataAspectoContable);
-  //     this.metas = this.filtrarFecha(this.dataMetas);
-  //     this.logros = this.filtrarFechaCreatedAt(this.dataLogros);
-  //   }
-  // }
-
-  sumatoriaActividades(actividades: any) {
-    var total = 0;
-    actividades.forEach((actividad: any) => {
-      total += +actividad.cantidadRecaudada;
-    });
-    this.sumatoriaVisible = true;
-    return total;
-  }
-
-  // makePDF() {
-  //   let pdf = new jsPDF('p', 'pt', 'a4');
-  //   let pWidth = pdf.internal.pageSize.width; // 595.28 is the width of a4
-  //   let srcWidth = document.getElementById('content')?.scrollWidth;
-  //   let margin = 18; // narrow margin - 1.27 cm (36);
-  //   let scale = (pWidth - margin * 2) / srcWidth;
-
-  //   pdf.html(document.getElementById('content'), {
-  //     x: margin,
-  //     y: margin,
-  //     html2canvas: {
-  //       scale: scale,
-  //     },
-  //     callback: function () {
-  //       window.open(pdf.output('bloburl'));
-  //     },
-  //   });
-  // }
 }

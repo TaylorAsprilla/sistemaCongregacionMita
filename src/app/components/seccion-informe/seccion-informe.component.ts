@@ -15,4 +15,6 @@ export class SeccionInformeComponent {
   @Input() imagen: string = '';
   @Input() estatus: string = '';
   @Input() color: string = '';
+
+
 }

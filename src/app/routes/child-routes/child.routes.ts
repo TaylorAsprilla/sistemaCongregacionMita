@@ -430,18 +430,10 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.INFORME,
     component: InformeComponent,
-    resolve: {
-      informes: InformesResolver,
-    },
   },
   {
     path: RUTAS.VER_INFORME,
     component: VerInformeComponent,
-    resolve: {
-      seccionInforme: SeccionInformeResolver,
-      congregacion: CongregacionResolver,
-      obrero: ObreroResolver,
-    },
   },
   {
     path: `${RUTAS.SOLICITUD_MULTIMEDIA}/:id`,

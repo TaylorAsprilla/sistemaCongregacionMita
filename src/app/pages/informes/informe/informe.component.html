@@ -1,24 +1,54 @@
 <div class="titulo">
   <h1>Informe:</h1>
-  <h4>2do Trimestre del año</h4>
+  <h4>
+    {{ getTrimestresActual()
+    }}{{ getTrimestresActual() === 1 ? 'er' : getTrimestresActual() === 3 ? 'er' : 'do' }} Trimestre del año
+  </h4>
   <hr />
 
-  <h4>ATENCION: Quedan {{ display }} días para terminar el informe</h4>
+  @if (hayInformeAbierto) {
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="alert alert-secondary mb-0">Quedan {{ calcularDiasFinTrimestre() }} días para terminar el informe</h4>
+      <button class="btn btn-primary" (click)="verInformeCompleto()">
+        <i class="fa fa-file-alt"></i> Ver Informe Completo
+      </button>
+    </div>
+  }
 </div>
 
 <div class="container mt-4">
-  <div class="row">
-    @for (seccionInforme of generarSeccioninforme; track seccionInforme) {
-      <div class="col-md-6">
-        <app-seccion-informe
-          [nombre]="seccionInforme.nombre"
-          [ruta]="seccionInforme.ruta"
-          [imagen]="seccionInforme.imagen"
-          [descripcion]="seccionInforme.descripcion"
-          [estatus]="seccionInforme.estatus"
-          [color]="seccionInforme.color"
-        ></app-seccion-informe>
+  @if (cargando) {
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 300px">
+      <div class="text-center">
+        <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem">
+          <span class="sr-only">Cargando...</span>
+        </div>
+        <p class="mt-3 h5 text-muted">Cargando información del informe...</p>
       </div>
-    }
-  </div>
+    </div>
+  } @else if (hayInformeAbierto) {
+    <div class="row">
+      @for (seccionInforme of generarSeccioninforme; track seccionInforme) {
+        <div class="col-md-6">
+          <app-seccion-informe
+            [nombre]="seccionInforme.nombre"
+            [ruta]="seccionInforme.ruta"
+            [imagen]="seccionInforme.imagen"
+            [descripcion]="seccionInforme.descripcion"
+            [estatus]="seccionInforme.estatus"
+            [color]="seccionInforme.color"
+          ></app-seccion-informe>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="alert alert-warning text-center py-5" role="alert">
+      <i class="fa fa-exclamation-triangle fa-3x mb-3"></i>
+      <h4 class="mb-3">No hay informe abierto</h4>
+      <p class="mb-4">Por favor, genera un informe para comenzar a trabajar.</p>
+      <button class="btn btn-primary btn-lg" (click)="generarInforme()">
+        <i class="fa fa-plus"></i> Generar Informe
+      </button>
+    </div>
+  }
 </div>

@@ -1,240 +1,268 @@
-<!-- <div class="titulo">
-  <h1>Informe:</h1>
-  <h4>{{ fraccion }}</h4>
-
-  <hr />
-  <div class="row">
-    <div class="col-md-4">
-      <label>Seleccione La fecha del informe</label>
-      <div class="form-group">
-        <input
-          type="date"
-          (change)="seleccionarTrimestre()"
-          [(ngModel)]="fechaSeleccionada"
-          class="form-control"
-          placeholder="Fecha del trimestre"
-        />
-      </div>
-
-      <hr />
-    </div>
-    <div class="col-md-4">
-      <label>Seleccione un Obrero</label>
-      <select [(ngModel)]="obreroSeleccionado" class="form-control" (change)="seleccionarObrero(obreroSeleccionado)">
-        <option value="" disabled>Obrero no seleccionado</option>
-        <option *ngFor="let obrero of obreros" [ngValue]="obrero">
-          {{ obrero.primerNombre }} {{ obrero.segundoNombre }} {{ obrero.primerApellido }}
-          {{ obrero.segundoApellido }}
-        </option>
-      </select>
-    </div>
-
-    <div class="col-md-4">
-      <label>Seleccione una Congregación</label>
-      <select class="form-control">
-        <option value="" disabled>Seleccione una congregación</option>
-        <option *ngFor="let congregacion of congregaciones">
-          {{ congregacion.congregacion }}
-        </option>
-      </select>
-    </div>
-
-    <div class="ml-5">
-      <button (click)="makePDF()" class="btn btn-primary descargar">Descargar Informe</button>
-    </div>
+<div class="container-fluid py-4">
+  <!-- Barra de acciones -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <button class="btn btn-secondary" (click)="volverAlInforme()">
+      <i class="fa fa-arrow-left"></i> Volver al Informe
+    </button>
+    <button class="btn btn-primary" (click)="descargarPDF()" [disabled]="descargandoPDF || cargando">
+      <i class="fa" [ngClass]="descargandoPDF ? 'fa-spinner fa-spin' : 'fa-download'"></i>
+      {{ descargandoPDF ? 'Generando PDF...' : 'Descargar PDF' }}
+    </button>
   </div>
-  <br />
 
-  <div class="pretty">
-    <div id="content" class="fontColor p-5" #content>
-      <div class="header">
-        <p class="title">Congregación Mita Inc.</p>
-        <p>({{ paisObrero }})</p>
-
-        <p class="heading">Informe Trimestral</p>
-        <table class="tableCenter">
-          <tr>
-            <td>
-              <p class="heading">Trimestre {{ fechaSeleccionada.slice(0, 4) }} :</p>
-            </td>
-            <td class="info">{{ trimestre }}</td>
-          </tr>
-          <tr>
-            <td>
-              <p class="heading">Obrero/a:</p>
-            </td>
-            <td class="info">
-              {{ obreroSeleccionado?.primerNombre }} {{ obreroSeleccionado?.segundoNombre }}
-              {{ obreroSeleccionado?.primerApellido }} {{ obreroSeleccionado?.segundoApellido }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <p class="heading">Fecha de Informe:</p>
-            </td>
-            <td class="info">{{ fechaActual.toString().slice(0, 15) }}</td>
-          </tr>
-        </table>
-        <hr />
+  <!-- Spinner de carga -->
+  @if (cargando) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem">
+        <span class="sr-only">Cargando...</span>
       </div>
-      <div class="body bodyMargin">
-        <p class="heading spacingHeading">A. RESUMEN DE SERVICIOS, ORACIONES Y VIGILIAS REALIZADAS:</p>
+      <p class="mt-3 h5 text-muted">Cargando datos del informe...</p>
+    </div>
+  }
 
-        <table class="tabla">
-          <thead>
+  <!-- Contenido del informe -->
+  @if (!cargando) {
+    <div #content class="informe-content bg-white p-5 shadow-sm">
+      <!-- Encabezado -->
+      <div class="text-center mb-4">
+        <h2 class="font-weight-bold mb-3">Congregación Mita Inc.</h2>
+        <h3 class="mb-4">Informe Trimestral</h3>
+
+        <div class="info-box mx-auto" style="max-width: 600px">
+          <table class="table table-bordered mb-0">
             <tr>
-              <th *ngFor="let head of servicios[0] | keys">{{ head }}</th>
+              <td class="font-weight-bold bg-light" style="width: 40%">Trimestre {{ anioTrimestre }}:</td>
+              <td>{{ getOrdinalTrimestre() }} - {{ trimestre }}</td>
             </tr>
-          </thead>
-          <tbody>
-            <tr (change)="seleccionarTrimestre()" *ngFor="let actividad of servicios">
-              <td (change)="seleccionarTrimestre()" *ngFor="let list of actividad | keys">{{ actividad[list] }}</td>
-            </tr>
-          </tbody>
-          <tr *ngIf="sumatoriaVisible">
-            <td class="bold">Total de dinero recaudado:</td>
-            <td>{{ sumatoriaActividadesEnServicios }}</td>
-          </tr>
-        </table>
-
-        <p class="heading spacingHeading">B. RESUMEN DE VISITAS REALIZADAS A LOS/AS FELIGRESES:</p>
-
-        <table class="tabla">
-          <thead>
             <tr>
-              <th *ngFor="let head of visitas[0] | keys">{{ head }}</th>
+              <td class="font-weight-bold bg-light">Obrero/a:</td>
+              <td>{{ nombreUsuario }}</td>
             </tr>
-          </thead>
-          <tbody>
-            <tr (change)="seleccionarTrimestre()" *ngFor="let visita of visitas">
-              <td (change)="seleccionarTrimestre()" *ngFor="let list of visita | keys">{{ visita[list] }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="heading spacingHeading">C. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS:</p>
-
-        <table class="tabla">
-          <thead>
             <tr>
-              <th *ngFor="let head of situacionVisita[0] | keys">{{ head }}</th>
+              <td class="font-weight-bold bg-light">Congregación País:</td>
+              <td>{{ congregacionPais }}</td>
             </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let sv of situacionVisita">
-              <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="heading spacingHeading">D. ACTIVIDADES ESPECIALES REALIZADAS:</p>
-
-        <table class="tabla">
-          <thead>
             <tr>
-              <th *ngFor="let head of especiales[0] | keys">{{ head }}</th>
+              <td class="font-weight-bold bg-light">Congregación Ciudad:</td>
+              <td>{{ congregacionCiudad }}</td>
             </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let sv of especiales">
-              <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
-            </tr>
-          </tbody>
-
-          <tr *ngIf="sumatoriaVisible">
-            <td class="bold">Total de dinero recaudado:</td>
-            <td>{{ sumatoriaActividadesEspeciales }}</td>
-          </tr>
-        </table>
-
-        <p class="heading spacingHeading">E. ACTIVIDADES RELACIONADAS AL ASPECTO ESPIRITUAL:</p>
-
-        <table class="tabla">
-          <thead>
             <tr>
-              <th *ngFor="let head of espirituales[0] | keys">{{ head }}</th>
+              <td class="font-weight-bold bg-light">Congregación Campo:</td>
+              <td>{{ congregacionCampo }}</td>
             </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let sv of espirituales">
-              <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
-            </tr>
-          </tbody>
-          <tr *ngIf="sumatoriaVisible">
-            <td class="bold">Total de dinero recaudado:</td>
-            <td>{{ sumatoriaActividadesEspirituales }}</td>
-          </tr>
-        </table>
-
-        <p class="heading spacingHeading">F. REUNIONES:</p>
-
-        <table class="tabla">
-          <thead>
             <tr>
-              <th *ngFor="let head of reuniones[0] | keys">{{ head }}</th>
+              <td class="font-weight-bold bg-light">Fecha de Informe:</td>
+              <td>{{ fechaActual | date: 'dd/MM/yyyy' }}</td>
             </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let sv of reuniones">
-              <td *ngFor="let list of sv | keys">{{ sv[list] }}</td>
-            </tr>
-          </tbody>
-          <tr *ngIf="sumatoriaVisible">
-            <td class="bold">Total de dinero recaudado:</td>
-            <td>{{ sumatoriaActividadesEnReuniones }}</td>
-          </tr>
-        </table>
-
-        <p class="heading spacingHeading">G. ASPECTOS CONTABLES:</p>
-
-        <table class="tabla">
-          <thead>
-            <tr>
-              <th *ngFor="let head of aspectoContable[0] | keys">{{ head }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ac of aspectoContable">
-              <td *ngFor="let list of ac | keys">{{ ac[list] }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="heading spacingHeading">H. LOGROS OBTENIDOS:</p>
-
-        <table class="tabla">
-          <thead>
-            <tr>
-              <th *ngFor="let head of logros[0] | keys">{{ head }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let logro of logros">
-              <td *ngFor="let list of logro | keys">{{ logro[list] }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="heading spacingHeading">J. METAS PARA EL PRÓXIMO TRIMESTRE:</p>
-
-        <table class="tabla">
-          <thead>
-            <tr>
-              <th *ngFor="let head of metas[0] | keys">{{ head }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let meta of metas">
-              <td *ngFor="let list of meta | keys">{{ meta[list] }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <br />
-        <div class="">
-          <p>Informe generado por: {{ primerNombre }} {{ segundoNombre }} {{ primerApellido }} {{ segundApellido }}</p>
-          <p>Fecha Actual: {{ fechaActual }}</p>
+          </table>
         </div>
       </div>
+
+      <hr class="my-4" />
+
+      <!-- A. Informe de Actividades -->
+      <div class="seccion mb-5">
+        <h4 class="seccion-titulo mb-3">A. INFORME DE ACTIVIDADES</h4>
+        @if (actividades.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo de Actividad</th>
+                  <th>Responsable</th>
+                  <th>Asistencia</th>
+                  <th>Cantidad Recaudada</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (actividad of actividades; track actividad.id) {
+                  <tr>
+                    <td>{{ actividad.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ buscarNombreTipoActividad(actividad.tipoActividad_id) }}</td>
+                    <td>{{ actividad.responsable }}</td>
+                    <td>{{ actividad.asistencia || 0 }}</td>
+                    <td>{{ actividad.cantidadRecaudada || 0 | currency }}</td>
+                    <td>{{ actividad.observaciones || '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="alert alert-info">No se registraron actividades en este trimestre.</div>
+        }
+      </div>
+
+      <!-- B. Aspectos Contables -->
+      <div class="seccion mb-5">
+        <h4 class="seccion-titulo mb-3">B. ASPECTOS CONTABLES</h4>
+        @if (contabilidad.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Sobres</th>
+                  <th>Restrictos</th>
+                  <th>No Restrictos</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of contabilidad; track item.id) {
+                  <tr>
+                    <td>{{ item.sobres || 0 }}</td>
+                    <td>{{ item.restrictos || 0 | currency }}</td>
+                    <td>{{ item.noRestrictos || 0 | currency }}</td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot>
+                <tr class="font-weight-bold bg-light">
+                  <td>TOTAL:</td>
+                  <td>{{ calcularTotal(contabilidad, 'restrictos') | currency }}</td>
+                  <td>{{ calcularTotal(contabilidad, 'noRestrictos') | currency }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        } @else {
+          <div class="alert alert-info">No se registraron datos contables en este trimestre.</div>
+        }
+      </div>
+
+      <!-- C. Visitas -->
+      <div class="seccion mb-5">
+        <h4 class="seccion-titulo mb-3">C. RESUMEN DE VISITAS REALIZADAS</h4>
+        @if (visitas.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Referida OOTS</th>
+                  <th>Visitas Hospital</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (visita of visitas; track visita.id) {
+                  <tr>
+                    <td>{{ visita.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ visita.referidaOots || 0 }}</td>
+                    <td>{{ visita.visitaHospital || 0 }}</td>
+                    <td>{{ visita.observaciones || '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="alert alert-info">No se registraron visitas en este trimestre.</div>
+        }
+      </div>
+
+      <!-- D. Situación en las Visitas -->
+      <div class="seccion mb-5">
+        <h4 class="seccion-titulo mb-3">D. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS</h4>
+        @if (situacionVisitas.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Nombre Feligrés</th>
+                  <th>Situación</th>
+                  <th>Intervención</th>
+                  <th>Seguimiento</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (situacion of situacionVisitas; track situacion.id) {
+                  <tr>
+                    <td>{{ situacion.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ situacion.nombreFeligres }}</td>
+                    <td>{{ situacion.situacion || '-' }}</td>
+                    <td>{{ situacion.intervension || '-' }}</td>
+                    <td>{{ situacion.seguimiento || '-' }}</td>
+                    <td>{{ situacion.observaciones || '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="alert alert-info">No se registraron situaciones de visitas en este trimestre.</div>
+        }
+      </div>
+
+      <!-- E. Logros Obtenidos -->
+      <div class="seccion mb-5">
+        <h4 class="seccion-titulo mb-3">E. LOGROS OBTENIDOS</h4>
+        @if (logros.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Logro</th>
+                  <th>Responsable</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (logro of logros; track logro.id) {
+                  <tr>
+                    <td>{{ logro.logro }}</td>
+                    <td>{{ logro.respondable }}</td>
+                    <td>{{ logro.comentarios || '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="alert alert-info">No se registraron logros en este trimestre.</div>
+        }
+      </div>
+
+      <!-- F. Metas para el Próximo Trimestre -->
+      <div class="seccion mb-5">
+        <h4 class="seccion-titulo mb-3">F. METAS PARA EL PRÓXIMO TRIMESTRE</h4>
+        @if (metas.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Meta</th>
+                  <th>Fecha</th>
+                  <th>Acción</th>
+                  <th>Comentarios</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (meta of metas; track meta.id) {
+                  <tr>
+                    <td>{{ meta.meta }}</td>
+                    <td>{{ meta.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ meta.accion || '-' }}</td>
+                    <td>{{ meta.comentarios || '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="alert alert-info">No se registraron metas para el próximo trimestre.</div>
+        }
+      </div>
+
+      <!-- Pie de página -->
+      <hr class="my-4" />
+      <div class="footer-info text-muted">
+        <p><strong>Informe generado por:</strong> {{ nombreUsuario }}</p>
+        <p><strong>Fecha de generación:</strong> {{ fechaActual | date: 'dd/MM/yyyy HH:mm' }}</p>
+      </div>
     </div>
-  </div>
-</div> -->
+  }
+</div>
