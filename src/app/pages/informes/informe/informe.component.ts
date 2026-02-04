@@ -129,7 +129,7 @@ export class InformeComponent implements OnInit {
           let color = ColorEstatus.PENDIENTE;
 
           // Determinar estatus basado en la sección
-          if (seccion.nombre === NombreSeccion.INFORME_ACTIVIDADES && actividadesFiltradas.length > 0) {
+          if (seccion.nombre === NombreSeccion.ACTIVIDADES_ECLESIASTICAS && actividadesFiltradas.length > 0) {
             estatus = EstatusSeccion.COMPLETADO;
             color = ColorEstatus.COMPLETADO;
           } else if (seccion.nombre === NombreSeccion.ASPECTOS_CONTABLES && contabilidadFiltrada.length > 0) {

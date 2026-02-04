@@ -1,0 +1,180 @@
+@if (actividadEconomicaForm) {
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-secondary" (click)="navegarAlInforme()">
+        <i class="fa fa-arrow-left mr-1"></i> Volver al Informe
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Columna izquierda: Formulario -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">{{ editando ? 'Editar' : 'Nueva' }} Actividad Económica</h3>
+        </div>
+        <div class="card-body">
+          <form autocomplete="off" [formGroup]="actividadEconomicaForm">
+            <div class="form-group">
+              <label for="inputFecha">Fecha</label>
+              <input
+                type="date"
+                formControlName="fecha"
+                class="form-control"
+                id="inputFecha"
+                [min]="fechaMinima"
+                [max]="fechaMaxima"
+                placeholder="Digite la fecha de la actividad"
+              />
+              @if (actividadEconomicaForm.get('fecha')?.invalid && actividadEconomicaForm.get('fecha')?.touched) {
+                <small class="text-danger">La fecha es requerida</small>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="inputTipoActividad">Tipo de Actividad Económica</label>
+              <select class="form-control" formControlName="tipoActividadEconomica_id" id="inputTipoActividad">
+                <option value="" disabled>Seleccione el tipo de actividad</option>
+                @for (tipo of tiposActividadEconomica; track tipo.id) {
+                  <option [value]="tipo.id">
+                    {{ tipo.nombre }}
+                  </option>
+                }
+              </select>
+              @if (
+                actividadEconomicaForm.get('tipoActividadEconomica_id')?.invalid &&
+                actividadEconomicaForm.get('tipoActividadEconomica_id')?.touched
+              ) {
+                <small class="text-danger">Debe seleccionar un tipo de actividad</small>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="inputCantidadRecaudada">Cantidad Recaudada</label>
+              <input
+                type="number"
+                formControlName="cantidadRecaudada"
+                class="form-control"
+                id="inputCantidadRecaudada"
+                placeholder="$ 0.00"
+                step="0.01"
+              />
+              @if (
+                actividadEconomicaForm.get('cantidadRecaudada')?.invalid &&
+                actividadEconomicaForm.get('cantidadRecaudada')?.touched
+              ) {
+                <small class="text-danger">La cantidad recaudada es requerida</small>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="inputResponsable">Responsable</label>
+              <input
+                type="text"
+                formControlName="responsable"
+                class="form-control"
+                id="inputResponsable"
+                placeholder="Responsable de la actividad"
+              />
+              @if (
+                actividadEconomicaForm.get('responsable')?.invalid && actividadEconomicaForm.get('responsable')?.touched
+              ) {
+                <small class="text-danger">El responsable es requerido (mínimo 3 caracteres)</small>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="inputAsistencia">Asistencia</label>
+              <input
+                type="number"
+                formControlName="asistencia"
+                class="form-control"
+                id="inputAsistencia"
+                placeholder="0"
+              />
+              @if (
+                actividadEconomicaForm.get('asistencia')?.invalid && actividadEconomicaForm.get('asistencia')?.touched
+              ) {
+                <small class="text-danger">La asistencia es requerida</small>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="inputObservaciones">Observaciones</label>
+              <textarea
+                class="form-control"
+                formControlName="observaciones"
+                id="inputObservaciones"
+                rows="3"
+                placeholder="Observaciones opcionales"
+              >
+              </textarea>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button
+            type="submit"
+            class="btn btn-primary mr-2"
+            (click)="crearActividadEconomica()"
+            [disabled]="actividadEconomicaForm.invalid"
+          >
+            <i class="fa fa-save mr-1"></i> {{ editando ? 'Actualizar' : 'Guardar' }}
+          </button>
+          @if (editando) {
+            <button type="button" class="btn btn-secondary ml-2" (click)="cancelarEdicion()">
+              <i class="fa fa-times mr-1"></i> Cancelar
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha: Tabla de actividades -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Listado de Actividades Económicas</h3>
+        </div>
+        <div class="card-body">
+          @if (actividadesEconomicas.length === 0) {
+            <p class="text-center text-muted">No hay actividades económicas registradas</p>
+          } @else {
+            <div class="table-responsive">
+              <table class="table table-striped table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Recaudado</th>
+                    <th>Asist.</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (actividad of actividadesEconomicas; track actividad.id) {
+                    <tr>
+                      <td>{{ actividad.fecha | date: 'dd/MM/yyyy' }}</td>
+                      <td>{{ getNombreTipoActividad(actividad.tipoActividadEconomica_id) }}</td>
+                      <td>{{ actividad.cantidadRecaudada | currency }}</td>
+                      <td>{{ actividad.asistencia }}</td>
+                      <td>
+                        <button class="btn btn-sm btn-warning mr-1" (click)="editarActividad(actividad)" title="Editar">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" (click)="eliminarActividad(actividad)" title="Eliminar">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}

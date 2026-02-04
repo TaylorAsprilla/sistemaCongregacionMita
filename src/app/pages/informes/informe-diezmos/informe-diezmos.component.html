@@ -1,0 +1,150 @@
+<div class="row mb-3">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-secondary" (click)="navegarAlInforme()">
+      <i class="fa fa-arrow-left mr-1"></i> Volver al Informe
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Columna izquierda: Formulario -->
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">{{ editando ? 'Editar' : 'Registrar' }} Diezmo</h3>
+      </div>
+      <div class="card-body">
+        <form autocomplete="off" [formGroup]="diezmoForm">
+          <div class="form-group">
+            <label for="inputMes">Mes</label>
+            <select class="form-control" formControlName="mes" id="inputMes">
+              <option value="" disabled>Seleccione el mes</option>
+              @for (mes of meses; track mes.valor) {
+                <option [value]="mes.valor">
+                  {{ mes.nombre }}
+                </option>
+              }
+            </select>
+            @if (diezmoForm.get('mes')?.invalid && diezmoForm.get('mes')?.touched) {
+              <small class="text-danger">El mes es requerido</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="inputSobresRestrictos">Sobres Restrictos</label>
+            <input
+              type="number"
+              formControlName="sobresRestrictos"
+              class="form-control"
+              id="inputSobresRestrictos"
+              placeholder="Cantidad de sobres restrictos"
+            />
+            @if (diezmoForm.get('sobresRestrictos')?.invalid && diezmoForm.get('sobresRestrictos')?.touched) {
+              <small class="text-danger">Los sobres restrictos son requeridos</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="inputSobresNoRestrictos">Sobres No Restrictos</label>
+            <input
+              type="number"
+              formControlName="sobresNoRestrictos"
+              class="form-control"
+              id="inputSobresNoRestrictos"
+              placeholder="Cantidad de sobres no restrictos"
+            />
+            @if (diezmoForm.get('sobresNoRestrictos')?.invalid && diezmoForm.get('sobresNoRestrictos')?.touched) {
+              <small class="text-danger">Los sobres no restrictos son requeridos</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="inputRestrictos">Monto Restrictos</label>
+            <input
+              type="number"
+              formControlName="restrictos"
+              class="form-control"
+              id="inputRestrictos"
+              placeholder="$ 0.00"
+              step="0.01"
+            />
+            @if (diezmoForm.get('restrictos')?.invalid && diezmoForm.get('restrictos')?.touched) {
+              <small class="text-danger">El monto restricto es requerido</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="inputNoRestrictos">Monto No Restrictos</label>
+            <input
+              type="number"
+              formControlName="noRestrictos"
+              class="form-control"
+              id="inputNoRestrictos"
+              placeholder="$ 0.00"
+              step="0.01"
+            />
+            @if (diezmoForm.get('noRestrictos')?.invalid && diezmoForm.get('noRestrictos')?.touched) {
+              <small class="text-danger">El monto no restricto es requerido</small>
+            }
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary mr-2" (click)="guardarDiezmo()" [disabled]="diezmoForm.invalid">
+          <i class="fa fa-save mr-1"></i> {{ editando ? 'Actualizar' : 'Guardar' }}
+        </button>
+        @if (editando) {
+          <button type="button" class="btn btn-secondary ml-2" (click)="cancelarEdicion()">
+            <i class="fa fa-times mr-1"></i> Cancelar
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Columna derecha: Tabla de diezmos -->
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Listado de Diezmos</h3>
+      </div>
+      <div class="card-body">
+        @if (diezmos.length === 0) {
+          <p class="text-center text-muted">No hay diezmos registrados</p>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>S. Restrictos</th>
+                  <th>S. No Restrictos</th>
+                  <th>Total</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (diezmo of diezmos; track diezmo.id) {
+                  <tr>
+                    <td>{{ getNombreMes(diezmo.mes) }}</td>
+                    <td>{{ diezmo.sobresRestrictos }}</td>
+                    <td>{{ diezmo.sobresNoRestrictos }}</td>
+                    <td>{{ diezmo.restrictos + diezmo.noRestrictos | currency }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning mr-1" (click)="editarDiezmo(diezmo)" title="Editar">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-danger" (click)="eliminarDiezmo(diezmo)" title="Eliminar">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

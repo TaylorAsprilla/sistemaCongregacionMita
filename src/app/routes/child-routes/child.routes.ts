@@ -6,7 +6,7 @@ import { CrearActividadComponent } from 'src/app/pages/informes/crear-actividad/
 import { CrearCampoComponent } from 'src/app/pages/administracion/campo/crear-campo/crear-campo.component';
 import { CrearStatusComponent } from 'src/app/pages/informes/crear-status/crear-status.component';
 import { InformeActividadesComponent } from 'src/app/pages/informes/informe-actividades/informe-actividades.component';
-import { InformeContablesComponent } from 'src/app/pages/informes/informe-contables/informe-contables.component';
+import { InformeDiezmosComponent } from 'src/app/pages/informes/informe-diezmos/informe-diezmos.component';
 import { InformeLogrosComponent } from 'src/app/pages/informes/informe-logros/informe-logros.component';
 import { InformeMetasComponent } from 'src/app/pages/informes/informe-metas/informe-metas.component';
 import { InformeVisitasComponent } from 'src/app/pages/informes/informe-visitas/informe-visitas.component';
@@ -39,6 +39,8 @@ import { ObreroResolver } from 'src/app/resolvers/obrero/obrero.resolver';
 import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
 import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
 import { DocumentoResolver } from 'src/app/resolvers/tipo-documento/documento.resolver';
+import { TipoActividadEconomicaComponent } from 'src/app/pages/informes/tipo-actividad-economica/tipo-actividad-economica.component';
+import { ActividadEconomicaComponent } from 'src/app/pages/informes/actividad-economica/actividad-economica.component';
 import { TipoEstudioResolver } from 'src/app/resolvers/tipo-estudio/tipo-estudio.resolver';
 import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/opcion-transporte.resolver';
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
@@ -287,6 +289,24 @@ export const childRoutes: Routes = [
     component: CrearTipoDocumentoComponent,
     resolve: { pais: PaisResolver },
   },
+  {
+    path: RUTAS.CREAR_TIPO_ACTIVIDAD_ECONOMICA,
+    component: TipoActividadEconomicaComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Tipos de Actividad Económica',
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
+    },
+  },
+  {
+    path: RUTAS.INFORME_ACTIVIDAD_ECONOMICA,
+    component: ActividadEconomicaComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Actividades Económicas',
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
+    },
+  },
 
   // Configuracion
   {
@@ -403,12 +423,12 @@ export const childRoutes: Routes = [
     component: CrearStatusComponent,
   },
   {
-    path: RUTAS.INFORME_ACTIVIDADES,
+    path: RUTAS.INFORME_ACTIVIDADES_ECLESIASTICAS,
     component: InformeActividadesComponent,
   },
   {
-    path: RUTAS.INFORME_CONTABLE,
-    component: InformeContablesComponent,
+    path: RUTAS.INFORME_DIEZMOS,
+    component: InformeDiezmosComponent,
   },
   {
     path: RUTAS.INFORME_LOGROS,

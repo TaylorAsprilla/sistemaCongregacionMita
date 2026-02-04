@@ -11,8 +11,9 @@ export enum ColorEstatus {
 }
 
 export enum NombreSeccion {
-  INFORME_ACTIVIDADES = 'Informe de Actividades',
-  ASPECTOS_CONTABLES = 'Aspectos Contables',
+  ACTIVIDADES_ECLESIASTICAS = 'Actividades Eclesiasticas',
+  ACTIVIDADES_ECONOMICAS = 'Actividades Económicas',
+  ASPECTOS_CONTABLES = 'Diezmos',
   METAS = 'Metas',
   VISITAS = 'Visitas',
   SITUACION_VISITAS = 'Situación en las visitas',
@@ -30,16 +31,24 @@ export interface Seccion {
 
 export const generarSeccioninforme: Seccion[] = [
   {
-    nombre: NombreSeccion.INFORME_ACTIVIDADES,
-    ruta: `../${RUTAS.INFORME_ACTIVIDADES}`,
+    nombre: NombreSeccion.ACTIVIDADES_ECLESIASTICAS,
+    ruta: `../${RUTAS.INFORME_ACTIVIDADES_ECLESIASTICAS}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Servicios, vigilias, oraciones, reuniones, actividades',
     estatus: EstatusSeccion.COMPLETADO,
     color: ColorEstatus.COMPLETADO,
   },
   {
+    nombre: NombreSeccion.ACTIVIDADES_ECONOMICAS,
+    ruta: `../${RUTAS.INFORME_ACTIVIDAD_ECONOMICA}`,
+    imagen: '../assets/images/iconSeccionInforme.jpeg',
+    descripcion: 'Actividades económicas realizadas, ventas, etc',
+    estatus: EstatusSeccion.COMPLETADO,
+    color: ColorEstatus.COMPLETADO,
+  },
+  {
     nombre: NombreSeccion.ASPECTOS_CONTABLES,
-    ruta: `../${RUTAS.INFORME_CONTABLE}`,
+    ruta: `../${RUTAS.INFORME_DIEZMOS}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
     descripcion: 'Diezmos, transferencias, etc',
     estatus: EstatusSeccion.PENDIENTE,
