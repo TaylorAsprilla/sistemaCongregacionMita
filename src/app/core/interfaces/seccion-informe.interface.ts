@@ -15,7 +15,7 @@ export enum NombreSeccion {
   ACTIVIDADES_ECONOMICAS = 'Actividades Económicas',
   ASPECTOS_CONTABLES = 'Diezmos',
   METAS = 'Metas',
-  VISITAS = 'Visitas',
+  VISITAS = 'Atenciones y seguimiento a los hermanos',
   SITUACION_VISITAS = 'Situación en las visitas',
   LOGROS_OBTENIDOS = 'Logros obtenidos',
 }
@@ -66,7 +66,8 @@ export const generarSeccioninforme: Seccion[] = [
     nombre: NombreSeccion.VISITAS,
     ruta: `../${RUTAS.INFORME_VISITAS}`,
     imagen: '../assets/images/iconSeccionInforme.jpeg',
-    descripcion: 'Informe de las visitas realizadas a los/as feligreses',
+    descripcion:
+      'Atenciones y seguimiento a los hermanos mediante visitas presenciales, virtuales (Zoom, WhatsApp), llamadas y consultas',
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
   },

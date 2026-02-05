@@ -7,5 +7,6 @@ export class DiezmoModel {
     public mes: number,
     public informe_id: number,
     public id?: number,
+    public estado?: boolean,
   ) {}
 }

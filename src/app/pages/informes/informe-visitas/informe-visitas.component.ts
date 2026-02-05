@@ -6,6 +6,7 @@ import { VisitaModel } from 'src/app/core/models/visita.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { VisitaService } from 'src/app/services/visita/visita.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
+import { MESES, MesItem, getNombreMes, obtenerMesesTrimestreActual } from 'src/app/core/constants/meses.constant';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -25,10 +26,19 @@ export class InformeVisitasComponent implements OnInit {
   public visitaForm: UntypedFormGroup;
 
   public visitas: VisitaModel[] = [];
+  public editando: boolean = false;
+  public visitaSeleccionada: VisitaModel | null = null;
+
+  // Array de todos los meses
+  private readonly todosMeses = MESES;
+
+  // Array de meses del trimestre actual
+  public meses: MesItem[] = [];
 
   ngOnInit(): void {
+    // Calcular meses del trimestre actual
+    this.meses = obtenerMesesTrimestreActual();
     const informeId = this.informeService.informeActivoId;
-    const fechaActual = new Date().toISOString().split('T')[0];
 
     // Verificar si hay informe activo
     if (!informeId) {
@@ -44,12 +54,10 @@ export class InformeVisitasComponent implements OnInit {
     }
 
     this.visitaForm = this.formBuilder.group({
-      fecha: [fechaActual, [Validators.required]],
-      visitasHogares: ['', []],
-      cantidad: ['', []],
-      efectivo: ['', []],
-      referidasOots: ['', []],
-      visitaHospital: ['', []],
+      mes: ['', [Validators.required]],
+      visitasHogares: ['', [Validators.required]],
+      referidasOots: ['', [Validators.required]],
+      visitaHospital: ['', [Validators.required]],
       observaciones: ['', []],
       informe_id: [informeId, [Validators.required]],
     });
@@ -58,12 +66,70 @@ export class InformeVisitasComponent implements OnInit {
   }
 
   private cargarVisitas(): void {
+    const informeId = this.informeService.informeActivoId;
+    if (!informeId) return;
+
     this.visitaService
       .getVisita()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((visitas) => {
-        this.visitas = visitas;
+        this.visitas = visitas.filter(
+          (visita: VisitaModel) => visita.informe_id === informeId && visita.estado !== false,
+        );
       });
+  }
+
+  editarVisita(visita: VisitaModel): void {
+    this.editando = true;
+    this.visitaSeleccionada = visita;
+    this.visitaForm.patchValue({
+      mes: visita.mes,
+      visitasHogares: visita.visitasHogares,
+      referidasOots: visita.referidasOots,
+      visitaHospital: visita.visitaHospital,
+      observaciones: visita.observaciones,
+      informe_id: visita.informe_id,
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  eliminarVisita(id: number): void {
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: 'Esta acción no se puede revertir',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.visitaService
+          .eliminarVisita(id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              Swal.fire('Eliminado', 'La visita ha sido eliminada correctamente', 'success');
+              this.cargarVisitas();
+              if (this.visitaSeleccionada?.id === id) {
+                this.cancelarEdicion();
+              }
+            },
+            error: (error) => {
+              this.mostrarErrores('Error', error, 'No se pudo eliminar la visita');
+            },
+          });
+      }
+    });
+  }
+
+  cancelarEdicion(): void {
+    this.editando = false;
+    this.visitaSeleccionada = null;
+    this.visitaForm.reset();
+    const informeId = this.informeService.informeActivoId;
+    this.visitaForm.patchValue({ informe_id: informeId });
   }
 
   guardarVisita(): void {
@@ -79,22 +145,44 @@ export class InformeVisitasComponent implements OnInit {
 
     const informeVisita = this.visitaForm.value;
 
-    this.visitaService
-      .crearVisita(informeVisita)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          Swal.fire('Informe de visitas', 'Se registró el informe de visitas correctamente', 'success');
-          this.cargarVisitas();
-          this.visitaForm.reset();
-          const informeId = this.informeService.informeActivoId;
-          const fechaActual = new Date().toISOString().split('T')[0];
-          this.visitaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
-        },
-        error: (error) => {
-          this.mostrarErrores('Informe de visitas', error, 'Error al guardar el informe de visitas');
-        },
-      });
+    if (this.editando && this.visitaSeleccionada) {
+      // Actualizar visita existente
+      const visitaActualizada = { ...informeVisita, id: this.visitaSeleccionada.id };
+      this.visitaService
+        .actualizarVisita(visitaActualizada)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            Swal.fire('Visitas', 'Se actualizó el informe de visitas correctamente', 'success');
+            this.cargarVisitas();
+            this.cancelarEdicion();
+          },
+          error: (error) => {
+            this.mostrarErrores('Visitas', error, 'Error al actualizar el informe de visitas');
+          },
+        });
+    } else {
+      // Crear nueva visita
+      this.visitaService
+        .crearVisita(informeVisita)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            Swal.fire('Informe de visitas', 'Se registró el informe de visitas correctamente', 'success');
+            this.cargarVisitas();
+            this.visitaForm.reset();
+            const informeId = this.informeService.informeActivoId;
+            this.visitaForm.patchValue({ informe_id: informeId });
+          },
+          error: (error) => {
+            this.mostrarErrores('Informe de visitas', error, 'Error al guardar el informe de visitas');
+          },
+        });
+    }
+  }
+
+  getNombreMes(mes: number): string {
+    return getNombreMes(mes);
   }
 
   navegarAlInforme(): void {

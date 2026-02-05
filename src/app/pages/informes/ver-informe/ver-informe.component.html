@@ -60,10 +60,10 @@
 
       <hr class="my-4" />
 
-      <!-- A. Informe de Actividades -->
+      <!-- A. Actividades Eclesiásticas -->
       <div class="seccion mb-5">
-        <h4 class="seccion-titulo mb-3">A. INFORME DE ACTIVIDADES</h4>
-        @if (actividades.length > 0) {
+        <h4 class="seccion-titulo mb-3">A. ACTIVIDADES ECLESIÁSTICAS</h4>
+        @if (actividadesEclesiasticas.length > 0) {
           <div class="table-responsive">
             <table class="table table-bordered table-hover">
               <thead class="thead-light">
@@ -72,12 +72,11 @@
                   <th>Tipo de Actividad</th>
                   <th>Responsable</th>
                   <th>Asistencia</th>
-                  <th>Cantidad Recaudada</th>
                   <th>Observaciones</th>
                 </tr>
               </thead>
               <tbody>
-                @for (actividad of actividades; track actividad.id) {
+                @for (actividad of actividadesEclesiasticas; track actividad.id) {
                   <tr>
                     <td>{{ actividad.fecha | date: 'dd/MM/yyyy' }}</td>
                     <td>{{ buscarNombreTipoActividad(actividad.tipoActividad_id) }}</td>
@@ -90,43 +89,40 @@
             </table>
           </div>
         } @else {
-          <div class="alert alert-info">No se registraron actividades en este trimestre.</div>
+          <div class="alert alert-info">No se registraron actividades eclesiásticas en este trimestre.</div>
         }
       </div>
 
-      <!-- B. Aspectos Contables -->
+      <!-- B. Actividades Económicas -->
       <div class="seccion mb-5">
-        <h4 class="seccion-titulo mb-3">B. ASPECTOS CONTABLES</h4>
-        @if (contabilidad.length > 0) {
+        <h4 class="seccion-titulo mb-3">B. ACTIVIDADES ECONÓMICAS</h4>
+        @if (actividadesEconomicas.length > 0) {
           <div class="table-responsive">
             <table class="table table-bordered table-hover">
               <thead class="thead-light">
                 <tr>
-                  <th>Sobres</th>
-                  <th>Restrictos</th>
-                  <th>No Restrictos</th>
+                  <th>Fecha</th>
+                  <th>Tipo de Actividad</th>
+                  <th>Responsable</th>
+                  <th>Cantidad Recaudada</th>
+                  <th>Observaciones</th>
                 </tr>
               </thead>
               <tbody>
-                @for (item of contabilidad; track item.id) {
+                @for (actividad of actividadesEconomicas; track actividad.id) {
                   <tr>
-                    <td>{{ item.sobres || 0 }}</td>
-                    <td>{{ item.restrictos || 0 | currency }}</td>
-                    <td>{{ item.noRestrictos || 0 | currency }}</td>
+                    <td>{{ actividad.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ buscarNombreTipoActividadEconomica(actividad.tipoActividadEconomica_id) }}</td>
+                    <td>{{ actividad.responsable }}</td>
+                    <td>{{ actividad.cantidadRecaudada || 0 | currency: 'USD' : 'symbol' : '1.2-2' }}</td>
+                    <td>{{ actividad.observaciones || '-' }}</td>
                   </tr>
                 }
               </tbody>
-              <tfoot>
-                <tr class="font-weight-bold bg-light">
-                  <td>TOTAL:</td>
-                  <td>{{ calcularTotal(contabilidad, 'restrictos') | currency }}</td>
-                  <td>{{ calcularTotal(contabilidad, 'noRestrictos') | currency }}</td>
-                </tr>
-              </tfoot>
             </table>
           </div>
         } @else {
-          <div class="alert alert-info">No se registraron datos contables en este trimestre.</div>
+          <div class="alert alert-info">No se registraron actividades económicas en este trimestre.</div>
         }
       </div>
 
@@ -138,8 +134,9 @@
             <table class="table table-bordered table-hover">
               <thead class="thead-light">
                 <tr>
-                  <th>Fecha</th>
-                  <th>Referida OOTS</th>
+                  <th>Mes</th>
+                  <th>Visitas Hogares</th>
+                  <th>Referidas OOTS</th>
                   <th>Visitas Hospital</th>
                   <th>Observaciones</th>
                 </tr>
@@ -147,8 +144,9 @@
               <tbody>
                 @for (visita of visitas; track visita.id) {
                   <tr>
-                    <td>{{ visita.fecha | date: 'dd/MM/yyyy' }}</td>
-                    <td>{{ visita.referidaOots || 0 }}</td>
+                    <td>{{ getNombreMes(visita.mes) }}</td>
+                    <td>{{ visita.visitasHogares || 0 }}</td>
+                    <td>{{ visita.referidasOots || 0 }}</td>
                     <td>{{ visita.visitaHospital || 0 }}</td>
                     <td>{{ visita.observaciones || '-' }}</td>
                   </tr>
@@ -161,9 +159,56 @@
         }
       </div>
 
-      <!-- D. Situación en las Visitas -->
+      <!-- D. Diezmos -->
       <div class="seccion mb-5">
-        <h4 class="seccion-titulo mb-3">D. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS</h4>
+        <h4 class="seccion-titulo mb-3">D. RESUMEN DE DIEZMOS</h4>
+        @if (diezmos.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Mes</th>
+                  <th>Sobres Restrictos</th>
+                  <th>Sobres No Restrictos</th>
+                  <th>Restrictos ($)</th>
+                  <th>No Restrictos ($)</th>
+                  <th>Total ($)</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (diezmo of diezmos; track diezmo.id) {
+                  <tr>
+                    <td>{{ getNombreMes(diezmo.mes) }}</td>
+                    <td>{{ diezmo.sobresRestrictos || 0 }}</td>
+                    <td>{{ diezmo.sobresNoRestrictos || 0 }}</td>
+                    <td>{{ diezmo.restrictos || 0 | number: '1.2-2' }}</td>
+                    <td>{{ diezmo.noRestrictos || 0 | number: '1.2-2' }}</td>
+                    <td>{{ (diezmo.restrictos || 0) + (diezmo.noRestrictos || 0) | number: '1.2-2' }}</td>
+                  </tr>
+                }
+                <tr class="font-weight-bold bg-light">
+                  <td>TOTAL</td>
+                  <td>{{ calcularTotal(diezmos, 'sobresRestrictos') }}</td>
+                  <td>{{ calcularTotal(diezmos, 'sobresNoRestrictos') }}</td>
+                  <td>{{ calcularTotal(diezmos, 'restrictos') | number: '1.2-2' }}</td>
+                  <td>{{ calcularTotal(diezmos, 'noRestrictos') | number: '1.2-2' }}</td>
+                  <td>
+                    {{
+                      calcularTotal(diezmos, 'restrictos') + calcularTotal(diezmos, 'noRestrictos') | number: '1.2-2'
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="alert alert-info">No se registraron diezmos en este trimestre.</div>
+        }
+      </div>
+
+      <!-- E. Situación en las Visitas -->
+      <div class="seccion mb-5">
+        <h4 class="seccion-titulo mb-3">E. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS</h4>
         @if (situacionVisitas.length > 0) {
           <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -196,9 +241,9 @@
         }
       </div>
 
-      <!-- E. Logros Obtenidos -->
+      <!-- F. Logros Obtenidos -->
       <div class="seccion mb-5">
-        <h4 class="seccion-titulo mb-3">E. LOGROS OBTENIDOS</h4>
+        <h4 class="seccion-titulo mb-3">F. LOGROS OBTENIDOS</h4>
         @if (logros.length > 0) {
           <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -213,7 +258,7 @@
                 @for (logro of logros; track logro.id) {
                   <tr>
                     <td>{{ logro.logro }}</td>
-                    <td>{{ logro.respondable }}</td>
+                    <td>{{ logro.responsable }}</td>
                     <td>{{ logro.comentarios || '-' }}</td>
                   </tr>
                 }
@@ -225,9 +270,9 @@
         }
       </div>
 
-      <!-- F. Metas para el Próximo Trimestre -->
+      <!-- G. Metas para el Próximo Trimestre -->
       <div class="seccion mb-5">
-        <h4 class="seccion-titulo mb-3">F. METAS PARA EL PRÓXIMO TRIMESTRE</h4>
+        <h4 class="seccion-titulo mb-3">G. METAS PARA EL PRÓXIMO TRIMESTRE</h4>
         @if (metas.length > 0) {
           <div class="table-responsive">
             <table class="table table-bordered table-hover">

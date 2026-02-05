@@ -30,11 +30,21 @@ export class VisitaService {
       .pipe(map((visita: { ok: boolean; visitas: VisitaModel[] }) => visita.visitas));
   }
 
+  getVisitaById(id: number) {
+    return this.httpClient
+      .get(`${base_url}/visita/${id}`, this.headers)
+      .pipe(map((response: { ok: boolean; visita: VisitaModel }) => response.visita));
+  }
+
   crearVisita(visita: VisitaModel) {
     return this.httpClient.post(`${base_url}/visita`, visita, this.headers);
   }
 
   actualizarVisita(visita: VisitaModel) {
-    return this.httpClient.put(`${base_url}/visita/${visita.id}`, this.headers);
+    return this.httpClient.put(`${base_url}/visita/${visita.id}`, visita, this.headers);
+  }
+
+  eliminarVisita(id: number) {
+    return this.httpClient.delete(`${base_url}/visita/${id}`, this.headers);
   }
 }

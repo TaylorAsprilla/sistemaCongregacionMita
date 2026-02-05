@@ -7,6 +7,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { DiezmoService } from 'src/app/services/diezmo/diezmo.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { CurrencyPipe } from '@angular/common';
+import { MESES, MesItem, getNombreMes, obtenerMesesTrimestreActual } from 'src/app/core/constants/meses.constant';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -27,22 +28,8 @@ export class InformeDiezmosComponent implements OnInit, OnDestroy {
   public editando: boolean = false;
   public diezmoSeleccionado: DiezmoModel | null = null;
 
-  public todosMeses = [
-    { valor: 1, nombre: 'Enero' },
-    { valor: 2, nombre: 'Febrero' },
-    { valor: 3, nombre: 'Marzo' },
-    { valor: 4, nombre: 'Abril' },
-    { valor: 5, nombre: 'Mayo' },
-    { valor: 6, nombre: 'Junio' },
-    { valor: 7, nombre: 'Julio' },
-    { valor: 8, nombre: 'Agosto' },
-    { valor: 9, nombre: 'Septiembre' },
-    { valor: 10, nombre: 'Octubre' },
-    { valor: 11, nombre: 'Noviembre' },
-    { valor: 12, nombre: 'Diciembre' },
-  ];
-
-  public meses: { valor: number; nombre: string }[] = [];
+  public readonly todosMeses = MESES;
+  public meses: MesItem[] = [];
 
   // Subscription
   public diezmoSubscription: Subscription;
@@ -51,7 +38,7 @@ export class InformeDiezmosComponent implements OnInit, OnDestroy {
     const informeId = this.informeService.informeActivoId;
 
     // Calcular trimestre actual y filtrar meses
-    this.meses = this.obtenerMesesTrimestreActual();
+    this.meses = obtenerMesesTrimestreActual();
 
     this.diezmoForm = this.formBuilder.group({
       sobresRestrictos: ['', [Validators.required, Validators.min(0)]],
@@ -61,17 +48,6 @@ export class InformeDiezmosComponent implements OnInit, OnDestroy {
       mes: ['', [Validators.required]],
       informe_id: [informeId, [Validators.required]],
     });
-  }
-
-  obtenerMesesTrimestreActual(): { valor: number; nombre: string }[] {
-    const mesActual = new Date().getMonth() + 1; // getMonth() devuelve 0-11
-    const trimestre = Math.ceil(mesActual / 3);
-    const primerMesTrimestre = (trimestre - 1) * 3 + 1;
-    const ultimoMesTrimestre = trimestre * 3;
-
-    return this.todosMeses.filter(
-      (mes) => mes.valor >= primerMesTrimestre && mes.valor <= ultimoMesTrimestre,
-    );
   }
 
   ngOnInit(): void {
@@ -102,7 +78,7 @@ export class InformeDiezmosComponent implements OnInit, OnDestroy {
     if (!informeId) return;
 
     this.diezmoSubscription = this.diezmoService.getDiezmos().subscribe((diezmos) => {
-      this.diezmos = diezmos.filter((d: DiezmoModel) => d.informe_id === informeId);
+      this.diezmos = diezmos.filter((d: DiezmoModel) => d.informe_id === informeId && d.estado !== false);
     });
   }
 
@@ -180,8 +156,7 @@ export class InformeDiezmosComponent implements OnInit, OnDestroy {
   }
 
   getNombreMes(mes: number): string {
-    const mesEncontrado = this.todosMeses.find((m) => m.valor === mes);
-    return mesEncontrado ? mesEncontrado.nombre : 'N/A';
+    return getNombreMes(mes);
   }
 
   resetFormulario() {

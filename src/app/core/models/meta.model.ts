@@ -6,6 +6,7 @@ export class MetaModel {
     public accion: string,
     public informe_id: number,
     public tipoStatus_id: number,
-    public comentarios?: string
+    public comentarios?: string,
+    public estado?: boolean,
   ) {}
 }

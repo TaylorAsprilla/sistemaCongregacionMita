@@ -1,10 +1,12 @@
 export class VisitaModel {
   constructor(
     public id: number,
-    public fecha: Date,
-    public referidaOots: number,
+    public mes: number,
+    public visitasHogares: number,
+    public referidasOots: number,
+    public visitaHospital: number,
     public informe_id: number,
-    public visitaHospital?: number,
-    public observaciones?: string
+    public observaciones?: string,
+    public estado?: boolean,
   ) {}
 }

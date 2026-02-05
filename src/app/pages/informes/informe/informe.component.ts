@@ -12,7 +12,6 @@ import {
 import { InformeModel } from 'src/app/core/models/informe.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
-import { ContabilidadService } from 'src/app/services/contabilidad/contabilidad.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import { MetaService } from 'src/app/services/meta/meta.service';
@@ -36,7 +35,6 @@ export class InformeComponent implements OnInit {
   private informeService = inject(InformeService);
   private usuarioService = inject(UsuarioService);
   private actividadService = inject(ActividadService);
-  private contabilidadService = inject(ContabilidadService);
   private metaService = inject(MetaService);
   private visitaService = inject(VisitaService);
   private situacionVisitaService = inject(SituacionVisitaService);
@@ -102,7 +100,6 @@ export class InformeComponent implements OnInit {
     // Cargar datos de todas las secciones en paralelo
     forkJoin({
       actividades: this.actividadService.getActividad(),
-      contabilidad: this.contabilidadService.getContabilidad(),
       metas: this.metaService.getMetas(),
       visitas: this.visitaService.getVisita(),
       situacionVisitas: this.situacionVisitaService.getSituacionVisitas(),
@@ -112,9 +109,6 @@ export class InformeComponent implements OnInit {
         // Filtrar por informe_id actual (con validación de datos)
         const actividadesFiltradas = (datos.actividades || []).filter(
           (a: any) => Number(a.informe_id) === Number(informeId),
-        );
-        const contabilidadFiltrada = (datos.contabilidad || []).filter(
-          (c: any) => Number(c.informe_id) === Number(informeId),
         );
         const metasFiltradas = (datos.metas || []).filter((m: any) => Number(m.informe_id) === Number(informeId));
         const visitasFiltradas = (datos.visitas || []).filter((v: any) => Number(v.informe_id) === Number(informeId));
@@ -130,9 +124,6 @@ export class InformeComponent implements OnInit {
 
           // Determinar estatus basado en la sección
           if (seccion.nombre === NombreSeccion.ACTIVIDADES_ECLESIASTICAS && actividadesFiltradas.length > 0) {
-            estatus = EstatusSeccion.COMPLETADO;
-            color = ColorEstatus.COMPLETADO;
-          } else if (seccion.nombre === NombreSeccion.ASPECTOS_CONTABLES && contabilidadFiltrada.length > 0) {
             estatus = EstatusSeccion.COMPLETADO;
             color = ColorEstatus.COMPLETADO;
           } else if (seccion.nombre === NombreSeccion.METAS && metasFiltradas.length > 0) {
