@@ -41,6 +41,10 @@ export class MetaService {
   }
 
   actualizarMeta(meta: MetaModel) {
-    return this.httpClient.put(`${base_url}/meta/${meta.id}`, this.headers);
+    return this.httpClient.put(`${base_url}/meta/${meta.id}`, meta, this.headers);
+  }
+
+  eliminarMeta(id: number) {
+    return this.httpClient.delete(`${base_url}/meta/${id}`, this.headers);
   }
 }

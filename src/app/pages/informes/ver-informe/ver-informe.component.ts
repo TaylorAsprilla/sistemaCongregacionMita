@@ -6,22 +6,26 @@ import html2canvas from 'html2canvas';
 import { forkJoin } from 'rxjs';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
-import { ContabilidadService } from 'src/app/services/contabilidad/contabilidad.service';
+import { ActividadEconomicaService } from 'src/app/services/actividad-economica/actividad-economica.service';
 import { MetaService } from 'src/app/services/meta/meta.service';
 import { VisitaService } from 'src/app/services/visita/visita.service';
 import { SituacionVisitaService } from 'src/app/services/situacion-visita/situacion-visita.service';
 import { LogroService } from 'src/app/services/logro/logro.service';
+import { DiezmoService } from 'src/app/services/diezmo/diezmo.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
-import { ContabilidadModel } from 'src/app/core/models/contabilidad.model';
+import { TipoActividadEconomicaService } from 'src/app/services/tipo-actividad-economica/tipo-actividad-economica.service';
 import { VisitaModel } from 'src/app/core/models/visita.model';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
 import { LogroModel } from 'src/app/core/models/logro.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { ActividadModel } from 'src/app/core/models/actividad.model';
+import { ActividadEconomicaModel } from 'src/app/core/models/actividad-economica.model';
+import { DiezmoModel } from 'src/app/core/models/diezmo.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
+import { TipoActividadEconomicaModel } from 'src/app/core/models/tipo-actividad-economica.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -38,13 +42,15 @@ export class VerInformeComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
   private congregacionService = inject(CongregacionService);
   private tipoActividadService = inject(TipoActividadService);
+  private tipoActividadEconomicaService = inject(TipoActividadEconomicaService);
   private informeService = inject(InformeService);
   private actividadService = inject(ActividadService);
-  private contabilidadService = inject(ContabilidadService);
+  private actividadEconomicaService = inject(ActividadEconomicaService);
   private metaService = inject(MetaService);
   private visitaService = inject(VisitaService);
   private situacionVisitaService = inject(SituacionVisitaService);
   private logroService = inject(LogroService);
+  private diezmoService = inject(DiezmoService);
   private router = inject(Router);
 
   @ViewChild('content', { static: false }) content!: ElementRef;
@@ -66,17 +72,21 @@ export class VerInformeComponent implements OnInit {
 
   // Datos del informe
   actividades: ActividadModel[] = [];
-  contabilidad: ContabilidadModel[] = [];
+  actividadesEclesiasticas: ActividadModel[] = [];
+  actividadesEconomicas: ActividadEconomicaModel[] = [];
   metas: MetaModel[] = [];
   visitas: VisitaModel[] = [];
   situacionVisitas: SituacionVisitaModel[] = [];
   logros: LogroModel[] = [];
+  diezmos: DiezmoModel[] = [];
   tiposActividad: TipoActividadModel[] = [];
+  tiposActividadEconomica: TipoActividadEconomicaModel[] = [];
 
   ngOnInit(): void {
     this.nombreUsuario = this.usuarioService.usuarioNombre || '';
     this.cargarInformacionCongregacion();
     this.cargarTiposActividad();
+    this.cargarTiposActividadEconomica();
     this.calcularTrimestre();
     this.verificarYCargarInforme();
   }
@@ -148,6 +158,23 @@ export class VerInformeComponent implements OnInit {
   }
 
   /**
+   * Carga los tipos de actividad económica
+   */
+  private cargarTiposActividadEconomica(): void {
+    this.tipoActividadEconomicaService
+      .getTipoActividadEconomica()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (tipos: TipoActividadEconomicaModel[]) => {
+          this.tiposActividadEconomica = tipos;
+        },
+        error: (error) => {
+          console.error('Error al cargar tipos de actividad económica:', error);
+        },
+      });
+  }
+
+  /**
    * Busca el nombre del tipo de actividad por ID
    */
   buscarNombreTipoActividad(idTipoActividad: number): string {
@@ -207,24 +234,41 @@ export class VerInformeComponent implements OnInit {
 
     forkJoin({
       actividades: this.actividadService.getActividad(),
-      contabilidad: this.contabilidadService.getContabilidad(),
+      actividadesEconomicas: this.actividadEconomicaService.getActividadEconomica(),
       metas: this.metaService.getMetas(),
       visitas: this.visitaService.getVisita(),
       situacionVisitas: this.situacionVisitaService.getSituacionVisitas(),
       logros: this.logroService.getLogros(),
+      diezmos: this.diezmoService.getDiezmos(),
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (datos) => {
-          // Filtrar datos por informe_id
-          this.actividades = (datos.actividades || []).filter((a: any) => Number(a.informe_id) === Number(informeId));
-          this.contabilidad = (datos.contabilidad || []).filter((c: any) => Number(c.informe_id) === Number(informeId));
-          this.metas = (datos.metas || []).filter((m: any) => Number(m.informe_id) === Number(informeId));
-          this.visitas = (datos.visitas || []).filter((v: any) => Number(v.informe_id) === Number(informeId));
-          this.situacionVisitas = (datos.situacionVisitas || []).filter(
-            (s: any) => Number(s.informe_id) === Number(informeId),
+          // Filtrar datos por informe_id y estado activo
+          this.actividades = (datos.actividades || []).filter(
+            (a: any) => Number(a.informe_id) === Number(informeId) && a.estado !== false,
           );
-          this.logros = (datos.logros || []).filter((l: any) => Number(l.informe_id) === Number(informeId));
+          this.actividadesEclesiasticas = this.actividades;
+
+          this.actividadesEconomicas = (datos.actividadesEconomicas || []).filter(
+            (a: any) => Number(a.informe_id) === Number(informeId) && a.estado !== false,
+          );
+
+          this.metas = (datos.metas || []).filter(
+            (m: any) => Number(m.informe_id) === Number(informeId) && m.estado !== false,
+          );
+          this.visitas = (datos.visitas || []).filter(
+            (v: any) => Number(v.informe_id) === Number(informeId) && v.estado !== false,
+          );
+          this.situacionVisitas = (datos.situacionVisitas || []).filter(
+            (s: any) => Number(s.informe_id) === Number(informeId) && s.estado !== false,
+          );
+          this.logros = (datos.logros || []).filter(
+            (l: any) => Number(l.informe_id) === Number(informeId) && l.estado !== false,
+          );
+          this.diezmos = (datos.diezmos || []).filter(
+            (d: any) => Number(d.informe_id) === Number(informeId) && d.estado !== false,
+          );
 
           this.cargando = false;
         },
@@ -333,9 +377,38 @@ export class VerInformeComponent implements OnInit {
   }
 
   /**
+   * Busca el nombre del tipo de actividad económica por ID
+   */
+  buscarNombreTipoActividadEconomica(id: number): string {
+    const tipo = this.tiposActividadEconomica.find((t) => t.id === id);
+    return tipo?.nombre || 'N/A';
+  }
+
+  /**
    * Calcula el total de una propiedad numérica en un array
    */
   calcularTotal(items: any[], propiedad: string): number {
     return items.reduce((total, item) => total + (Number(item[propiedad]) || 0), 0);
+  }
+
+  /**
+   * Obtiene el nombre del mes a partir del número
+   */
+  getNombreMes(mes: number): string {
+    const meses = [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
+    ];
+    return meses[mes - 1] || '-';
   }
 }

@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">{{ editando ? 'Editar' : 'Nueva' }} Actividad Económica</h3>
+      </div>
+      <div class="card-body">
+        <form class="form-signin" autocomplete="off" [formGroup]="tipoActividadEconomicaForm">
+          <div class="form-group">
+            <label>Tipo de Actividad Económica:</label>
+            <input type="text" formControlName="nombre" class="form-control" placeholder="Ej: Venta de Productos" />
+            @if (
+              tipoActividadEconomicaForm.get('nombre')?.invalid && tipoActividadEconomicaForm.get('nombre')?.touched
+            ) {
+              <small class="text-danger">El nombre es requerido (mínimo 3 caracteres)</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="col-form-label">Estado:</label>
+            <select class="form-control" formControlName="estado">
+              <option [value]="true">Activo</option>
+              <option [value]="false">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="form-group d-flex">
+            <button
+              type="submit"
+              class="submit btn btn-primary mr-2"
+              (click)="crearTipoActividadEconomica()"
+              [disabled]="tipoActividadEconomicaForm.invalid"
+            >
+              <i class="fa fa-save"></i> {{ editando ? 'Actualizar' : 'Guardar' }}
+            </button>
+            @if (editando) {
+              <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+                <i class="fa fa-times"></i> Cancelar
+              </button>
+            }
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Listado de Actividades Económicas</h3>
+      </div>
+      <div class="card-body">
+        @if (tiposActividadEconomica.length === 0) {
+          <p class="text-center text-muted">No hay actividades económicas registradas</p>
+        }
+        @for (tipoActividad of tiposActividadEconomica; track tipoActividad.id) {
+          <div class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
+            <div>
+              <strong>{{ tipoActividad.nombre }}</strong>
+              <br />
+              <span class="badge" [ngClass]="tipoActividad.estado ? 'badge-success' : 'badge-danger'">
+                {{ tipoActividad.estado ? 'Activo' : 'Inactivo' }}
+              </span>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-warning mr-2" (click)="editarActividad(tipoActividad)" title="Editar">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="eliminarActividad(tipoActividad)" title="Eliminar">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

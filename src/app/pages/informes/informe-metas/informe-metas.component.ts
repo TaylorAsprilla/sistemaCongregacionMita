@@ -32,6 +32,7 @@ export class InformeMetasComponent implements OnInit {
 
   public metas: MetaModel[] = [];
 
+  public editando: boolean = false;
   public metaSeleccionada: MetaModel | null = null;
 
   ngOnInit(): void {
@@ -74,33 +75,69 @@ export class InformeMetasComponent implements OnInit {
   }
 
   private cargarMetas(): void {
+    const informeId = this.informeService.informeActivoId;
+    if (!informeId) return;
+
     this.metaService
       .getMetas()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((metas) => {
-        this.metas = metas;
+        this.metas = metas.filter((meta: MetaModel) => meta.informe_id === informeId && meta.estado !== false);
       });
   }
 
-  buscarMeta(id: string): void {
-    if (id === 'nuevo') {
-      return;
-    }
+  editarMeta(meta: MetaModel): void {
+    this.editando = true;
+    this.metaSeleccionada = meta;
+    this.metaForm.patchValue({
+      meta: meta.meta,
+      fecha: meta.fecha,
+      accion: meta.accion,
+      tipoStatus_id: meta.tipoStatus_id,
+      comentarios: meta.comentarios,
+      informe_id: meta.informe_id,
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-    this.metaService
-      .getMeta(Number(id))
-      .pipe(delay(100), takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (metaEncontrada: MetaModel) => {
-          const { meta, fecha, accion, tipoStatus_id, comentarios, informe_id } = metaEncontrada;
-          this.metaSeleccionada = metaEncontrada;
-          this.metaForm.setValue({ meta, fecha, accion, tipoStatus_id, comentarios, informe_id });
-        },
-        error: (error) => {
-          this.mostrarErrores('Metas', error);
-          this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.METAS}`);
-        },
-      });
+  eliminarMeta(id: number): void {
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: 'Esta acción no se puede revertir',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.metaService
+          .eliminarMeta(id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              Swal.fire('Eliminado', 'La meta ha sido eliminada correctamente', 'success');
+              this.cargarMetas();
+              if (this.metaSeleccionada?.id === id) {
+                this.cancelarEdicion();
+              }
+            },
+            error: (error) => {
+              this.mostrarErrores('Error', error, 'No se pudo eliminar la meta');
+            },
+          });
+      }
+    });
+  }
+
+  cancelarEdicion(): void {
+    this.editando = false;
+    this.metaSeleccionada = null;
+    this.metaForm.reset();
+    const informeId = this.informeService.informeActivoId;
+    const fechaActual = new Date().toISOString().split('T')[0];
+    this.metaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
   }
 
   guardarMeta(): void {
@@ -116,23 +153,41 @@ export class InformeMetasComponent implements OnInit {
 
     const informeMeta = this.metaForm.value;
 
-    this.metaService
-      .crearMeta(informeMeta)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          Swal.fire('Informe de metas', 'Se registró la meta correctamente', 'success');
-          this.cargarMetas();
-          this.metaForm.reset();
-          const informeId = this.informeService.informeActivoId;
-          const fechaActual = new Date().toISOString().split('T')[0];
-          this.metaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
-        },
-        error: (error) => {
-          this.mostrarErrores('Informe de metas', error, 'Error al guardar el informe de metas');
-          this.navegarAlInforme();
-        },
-      });
+    if (this.editando && this.metaSeleccionada) {
+      // Actualizar meta existente
+      const metaActualizada = { ...informeMeta, id: this.metaSeleccionada.id };
+      this.metaService
+        .actualizarMeta(metaActualizada)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            Swal.fire('Metas', 'Se actualizó la meta correctamente', 'success');
+            this.cargarMetas();
+            this.cancelarEdicion();
+          },
+          error: (error) => {
+            this.mostrarErrores('Metas', error, 'Error al actualizar la meta');
+          },
+        });
+    } else {
+      // Crear nueva meta
+      this.metaService
+        .crearMeta(informeMeta)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            Swal.fire('Informe de metas', 'Se registró la meta correctamente', 'success');
+            this.cargarMetas();
+            this.metaForm.reset();
+            const informeId = this.informeService.informeActivoId;
+            const fechaActual = new Date().toISOString().split('T')[0];
+            this.metaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
+          },
+          error: (error) => {
+            this.mostrarErrores('Informe de metas', error, 'Error al guardar el informe de metas');
+          },
+        });
+    }
   }
 
   navegarAlInforme(): void {

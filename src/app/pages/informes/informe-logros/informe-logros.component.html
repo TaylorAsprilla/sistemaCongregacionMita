@@ -1,53 +1,127 @@
+<div class="row mb-3">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-secondary" (click)="navegarAlInforme()">
+      <i class="fa fa-arrow-left mr-1"></i> Volver al Informe
+    </button>
+  </div>
+</div>
+
 <div class="row">
+  <!-- Columna izquierda: Formulario -->
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Logros Obtenidos</h3>
+        <h3 class="card-title">{{ editando ? 'Editar' : 'Nuevo' }} Logro</h3>
       </div>
-      <div class="card-body px-5">
-        <div class="form mx-auto">
-          <form class="form-signin" autocomplete="off" [formGroup]="logroForm" (ngSubmit)="guardarLogro()">
-            <div class="form-group row">
-              <label for="inputLogro" class="col-sm-4 col-form-label">Logros</label>
-              <div class="col-sm-8">
-                <textarea class="form-control" formControlName="logro" id="inputLogro" rows="5" cols="30"> </textarea>
-              </div>
-            </div>
+      <div class="card-body">
+        <form autocomplete="off" [formGroup]="logroForm">
+          <div class="form-group">
+            <label for="inputFecha">Fecha</label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="fecha"
+              id="inputFecha"
+              [min]="fechaMinima"
+              [max]="fechaMaxima"
+              placeholder="Digite la fecha del logro"
+            />
+            @if (logroForm.get('fecha')?.invalid && logroForm.get('fecha')?.touched) {
+              <small class="text-danger">La fecha es requerida</small>
+            }
+          </div>
 
-            <div class="form-group row">
-              <label for="inputResponsable" class="col-sm-4 col-form-label">Responsable</label>
-              <div class="col-sm-8">
-                <input class="form-control" formControlName="responsable" id="inputResponsable" />
-              </div>
-            </div>
+          <div class="form-group">
+            <label for="inputLogro">Logro</label>
+            <textarea
+              class="form-control"
+              formControlName="logro"
+              id="inputLogro"
+              rows="5"
+              placeholder="Describa el logro obtenido"
+            ></textarea>
+            @if (logroForm.get('logro')?.invalid && logroForm.get('logro')?.touched) {
+              <small class="text-danger">El logro es requerido</small>
+            }
+          </div>
 
-            <div class="form-group row">
-              <label for="inputComentarios" class="col-sm-4 col-form-label">Observaciones</label>
-              <div class="col-sm-8">
-                <textarea class="form-control" formControlName="observaciones" id="inputComentarios" rows="5" cols="30">
-                </textarea>
-              </div>
-            </div>
-            <div class="card-footer">
-              <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
-              <button type="button" class="btn btn-secondary ml-2" (click)="navegarAlInforme()">
-                <i class="fa fa-arrow-left"></i> Volver al informe
-              </button>
-            </div>
-          </form>
-        </div>
+          <div class="form-group">
+            <label for="inputResponsable">Responsable</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="responsable"
+              id="inputResponsable"
+              placeholder="Responsable del logro"
+            />
+            @if (logroForm.get('responsable')?.invalid && logroForm.get('responsable')?.touched) {
+              <small class="text-danger">El responsable es requerido</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="inputComentarios">Observaciones</label>
+            <textarea
+              class="form-control"
+              formControlName="comentarios"
+              id="inputComentarios"
+              rows="3"
+              placeholder="Observaciones opcionales"
+            ></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary mr-2" (click)="guardarLogro()" [disabled]="logroForm.invalid">
+          <i class="fa fa-save mr-1"></i> {{ editando ? 'Actualizar' : 'Guardar' }}
+        </button>
+        @if (editando) {
+          <button type="button" class="btn btn-secondary ml-2" (click)="cancelarEdicion()">
+            <i class="fa fa-times mr-1"></i> Cancelar
+          </button>
+        }
       </div>
     </div>
   </div>
+
+  <!-- Columna derecha: Tabla de logros -->
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Resumen de logros</h3>
+        <h3 class="card-title">Listado de Logros</h3>
       </div>
-      <div class="card-body px-5">
-        @for (logro of logros; track logro) {
-          <div>
-            <li>{{ logro.logro }}</li>
+      <div class="card-body">
+        @if (logros.length === 0) {
+          <p class="text-center text-muted">No hay logros registrados</p>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Logro</th>
+                  <th>Responsable</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (logro of logros; track logro.id) {
+                  <tr>
+                    <td>{{ logro.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ logro.logro }}</td>
+                    <td>{{ logro.responsable }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning mr-1" (click)="editarLogro(logro)" title="Editar">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-danger" (click)="eliminarLogro(logro.id)" title="Eliminar">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           </div>
         }
       </div>

@@ -30,11 +30,21 @@ export class LogroService {
       .pipe(map((logros: { ok: boolean; logros: LogroModel[] }) => logros.logros));
   }
 
+  getLogroById(id: number) {
+    return this.httpClient
+      .get(`${base_url}/logro/${id}`, this.headers)
+      .pipe(map((response: { ok: boolean; logro: LogroModel }) => response.logro));
+  }
+
   crearLogro(logro: LogroModel) {
     return this.httpClient.post(`${base_url}/logro`, logro, this.headers);
   }
 
   actualizarLogro(logro: LogroModel) {
     return this.httpClient.put(`${base_url}/logro/${logro.id}`, logro, this.headers);
+  }
+
+  eliminarLogro(id: number) {
+    return this.httpClient.delete(`${base_url}/logro/${id}`, this.headers);
   }
 }

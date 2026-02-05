@@ -7,6 +7,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,7 +15,7 @@ import Swal from 'sweetalert2';
   templateUrl: './informe-logros.component.html',
   styleUrls: ['./informe-logros.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, DatePipe],
 })
 export class InformeLogrosComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);
@@ -27,9 +28,20 @@ export class InformeLogrosComponent implements OnInit {
   public logroForm: UntypedFormGroup;
 
   public logros: LogroModel[] = [];
+  public editando: boolean = false;
+  public logroSeleccionado: LogroModel | null = null;
+  public fechaMinima: string;
+  public fechaMaxima: string;
 
-  ngOnInit(): void {
+  constructor() {
+    const fechaActual = new Date().toISOString().split('T')[0];
+    const nombreUsuario = this.usuarioService.usuarioNombre;
     const informeId = this.informeService.informeActivoId;
+
+    // Calcular fechas del trimestre actual
+    const fechasTrimestre = this.obtenerFechasTrimestreActual();
+    this.fechaMinima = fechasTrimestre.min;
+    this.fechaMaxima = fechasTrimestre.max;
 
     // Verificar si hay informe activo
     if (!informeId) {
@@ -45,21 +57,50 @@ export class InformeLogrosComponent implements OnInit {
     }
 
     this.logroForm = this.formBuilder.group({
+      fecha: [fechaActual, [Validators.required]],
       logro: ['', [Validators.required]],
-      responsable: [this.usuarioService.usuarioNombre, [Validators.required]],
-      observaciones: ['', []],
+      responsable: [nombreUsuario, [Validators.required]],
+      comentarios: ['', []],
       informe_id: [informeId, [Validators.required]],
     });
+  }
 
+  ngOnInit(): void {
     this.cargarLogros();
   }
 
+  private obtenerFechasTrimestreActual(): { min: string; max: string } {
+    const hoy = new Date();
+    const mes = hoy.getMonth();
+    const anio = hoy.getFullYear();
+
+    // Determinar el trimestre (0=Q1, 1=Q2, 2=Q3, 3=Q4)
+    const trimestre = Math.floor(mes / 3);
+
+    // Primer mes del trimestre (0, 3, 6, 9)
+    const primerMesTrimestre = trimestre * 3;
+
+    // Fecha mínima: primer día del primer mes del trimestre
+    const fechaMinima = new Date(anio, primerMesTrimestre, 1);
+
+    // Fecha máxima: último día del último mes del trimestre
+    const fechaMaxima = new Date(anio, primerMesTrimestre + 3, 0);
+
+    return {
+      min: fechaMinima.toISOString().split('T')[0],
+      max: fechaMaxima.toISOString().split('T')[0],
+    };
+  }
+
   private cargarLogros(): void {
+    const informeId = this.informeService.informeActivoId;
+    if (!informeId) return;
+
     this.logroService
       .getLogros()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((logros) => {
-        this.logros = logros;
+        this.logros = logros.filter((logro: LogroModel) => logro.informe_id === informeId && logro.estado !== false);
       });
   }
 
@@ -76,21 +117,102 @@ export class InformeLogrosComponent implements OnInit {
 
     const informeLogro = this.logroForm.value;
 
-    this.logroService
-      .crearLogro(informeLogro)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          Swal.fire('Logros', 'Se registró el logro correctamente', 'success');
-          this.cargarLogros();
-          this.logroForm.reset();
-          const informeId = this.informeService.informeActivoId;
-          this.logroForm.patchValue({ informe_id: informeId, responsable: this.usuarioService.usuarioNombre });
-        },
-        error: (error) => {
-          this.mostrarErrores('Logros', error, 'Error al guardar el logro');
-        },
-      });
+    if (this.editando && this.logroSeleccionado) {
+      // Actualizar logro existente
+      const logroActualizado = { ...informeLogro, id: this.logroSeleccionado.id };
+      this.logroService
+        .actualizarLogro(logroActualizado)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            Swal.fire('Logros', 'Se actualizó el logro correctamente', 'success');
+            this.cargarLogros();
+            this.cancelarEdicion();
+          },
+          error: (error) => {
+            this.mostrarErrores('Logros', error, 'Error al actualizar el logro');
+          },
+        });
+    } else {
+      // Crear nuevo logro
+      this.logroService
+        .crearLogro(informeLogro)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            Swal.fire('Logros', 'Se registró el logro correctamente', 'success');
+            this.cargarLogros();
+            this.logroForm.reset();
+            const informeId = this.informeService.informeActivoId;
+            const fechaActual = new Date().toISOString().split('T')[0];
+            this.logroForm.patchValue({
+              informe_id: informeId,
+              responsable: this.usuarioService.usuarioNombre,
+              fecha: fechaActual,
+            });
+          },
+          error: (error) => {
+            this.mostrarErrores('Logros', error, 'Error al guardar el logro');
+          },
+        });
+    }
+  }
+
+  editarLogro(logro: LogroModel): void {
+    this.editando = true;
+    this.logroSeleccionado = logro;
+    this.logroForm.patchValue({
+      fecha: logro.fecha,
+      logro: logro.logro,
+      responsable: logro.responsable,
+      comentarios: logro.comentarios,
+      informe_id: logro.informe_id,
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  eliminarLogro(id: number): void {
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: 'Esta acción no se puede revertir',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.logroService
+          .eliminarLogro(id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              Swal.fire('Eliminado', 'El logro ha sido eliminado correctamente', 'success');
+              this.cargarLogros();
+              if (this.logroSeleccionado?.id === id) {
+                this.cancelarEdicion();
+              }
+            },
+            error: (error) => {
+              this.mostrarErrores('Error', error, 'No se pudo eliminar el logro');
+            },
+          });
+      }
+    });
+  }
+
+  cancelarEdicion(): void {
+    this.editando = false;
+    this.logroSeleccionado = null;
+    this.logroForm.reset();
+    const informeId = this.informeService.informeActivoId;
+    const fechaActual = new Date().toISOString().split('T')[0];
+    this.logroForm.patchValue({
+      informe_id: informeId,
+      responsable: this.usuarioService.usuarioNombre,
+      fecha: fechaActual,
+    });
   }
 
   navegarAlInforme(): void {

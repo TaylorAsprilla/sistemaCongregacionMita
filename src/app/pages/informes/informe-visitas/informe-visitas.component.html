@@ -1,99 +1,142 @@
+<div class="row mb-3">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-secondary" (click)="navegarAlInforme()">
+      <i class="fa fa-arrow-left mr-1"></i> Volver al Informe
+    </button>
+  </div>
+</div>
+
 <div class="row">
+  <!-- Columna izquierda: Formulario -->
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Informe de visitas</h3>
+        <h3 class="card-title">{{ editando ? 'Editar' : 'Nuevo' }} Informe de Visitas</h3>
       </div>
-      <div class="card-body px-5">
-        <div class="form mx-auto">
-          <form class="form-signin" autocomplete="off" [formGroup]="visitaForm">
-            <div class="form-group row">
-              <label for="inputFecha" class="col-sm-4 col-form-label">Seleccione la fecha de las visita</label>
-              <div class="col-sm-8">
-                <input
-                  type="date"
-                  formControlName="fecha"
-                  class="form-control"
-                  id="inputFecha"
-                  placeholder="Digite la fecha de la actividad"
-                />
-              </div>
-            </div>
+      <div class="card-body">
+        <form autocomplete="off" [formGroup]="visitaForm">
+          <div class="form-group">
+            <label for="inputMes">Mes</label>
+            <select class="form-control" formControlName="mes" id="inputMes">
+              <option value="" disabled>Seleccione el mes</option>
+              @for (mes of meses; track mes.valor) {
+                <option [value]="mes.valor">
+                  {{ mes.nombre }}
+                </option>
+              }
+            </select>
+            @if (visitaForm.get('mes')?.invalid && visitaForm.get('mes')?.touched) {
+              <small class="text-danger">Debe seleccionar un mes</small>
+            }
+          </div>
 
-            <div class="form-group row">
-              <label for="inputVisitasHogares" class="col-sm-4 col-form-label">Visitas a Hogares</label>
-              <div class="col-sm-8">
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="visitasHogares"
-                  id="inputVisitasHogares"
-                  placeholder="Número de visitas a hogares"
-                />
-              </div>
-            </div>
+          <div class="form-group">
+            <label for="inputVisitasHogares">Visitas a Hogares</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="visitasHogares"
+              id="inputVisitasHogares"
+              placeholder="Número de visitas a hogares"
+            />
+            @if (visitaForm.get('visitasHogares')?.invalid && visitaForm.get('visitasHogares')?.touched) {
+              <small class="text-danger">El número de visitas a hogares es requerido</small>
+            }
+          </div>
 
-            <div class="form-group row">
-              <label for="inputReferidasOots" class="col-sm-4 col-form-label">Referidas a la OOTS</label>
-              <div class="col-sm-8">
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="referidasOots"
-                  id="inputReferidasOots"
-                  placeholder="Situaciónes de la visita refereidas a la OOTS"
-                />
-              </div>
-            </div>
+          <div class="form-group">
+            <label for="inputReferidasOots">Referidas a la OOTS</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="referidasOots"
+              id="inputReferidasOots"
+              placeholder="Situaciones referidas a la OOTS"
+            />
+            @if (visitaForm.get('referidasOots')?.invalid && visitaForm.get('referidasOots')?.touched) {
+              <small class="text-danger">El número de referidos es requerido</small>
+            }
+          </div>
 
-            <div class="form-group row">
-              <label for="inputVisitaHospital" class="col-sm-4 col-form-label">Visitas a Hospitales</label>
-              <div class="col-sm-8">
-                <input
-                  type="number"
-                  class="form-control"
-                  formControlName="visitaHospital"
-                  id="inputVisitaHospital"
-                  placeholder="Número de visitas realizadas en los hospitales"
-                />
-              </div>
-            </div>
+          <div class="form-group">
+            <label for="inputVisitaHospital">Visitas a Hospitales</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="visitaHospital"
+              id="inputVisitaHospital"
+              placeholder="Número de visitas a hospitales"
+            />
+            @if (visitaForm.get('visitaHospital')?.invalid && visitaForm.get('visitaHospital')?.touched) {
+              <small class="text-danger">El número de visitas a hospitales es requerido</small>
+            }
+          </div>
 
-            <div class="form-group row">
-              <label for="inputObservaciones" class="col-sm-4 col-form-label">Observaciones</label>
-              <div class="col-sm-8">
-                <textarea
-                  class="form-control"
-                  formControlName="observaciones"
-                  id="inputObservaciones"
-                  rows="5"
-                  cols="30"
-                >
-                </textarea>
-              </div>
-            </div>
-          </form>
-        </div>
+          <div class="form-group">
+            <label for="inputObservaciones">Observaciones</label>
+            <textarea
+              class="form-control"
+              formControlName="observaciones"
+              id="inputObservaciones"
+              rows="3"
+              placeholder="Observaciones opcionales"
+            ></textarea>
+          </div>
+        </form>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-primary" (click)="guardarVisita()">
-          <i class="fa fa-save"></i> Guardar
+        <button type="submit" class="btn btn-primary mr-2" (click)="guardarVisita()" [disabled]="visitaForm.invalid">
+          <i class="fa fa-save mr-1"></i> {{ editando ? 'Actualizar' : 'Guardar' }}
         </button>
-        <button type="button" class="btn btn-secondary ml-2" (click)="navegarAlInforme()">
-          <i class="fa fa-arrow-left"></i> Volver al informe
-        </button>
+        @if (editando) {
+          <button type="button" class="btn btn-secondary ml-2" (click)="cancelarEdicion()">
+            <i class="fa fa-times mr-1"></i> Cancelar
+          </button>
+        }
       </div>
     </div>
   </div>
+
+  <!-- Columna derecha: Tabla de visitas -->
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Resumen de visitas</h3>
+        <h3 class="card-title">Listado de Visitas</h3>
       </div>
-      <div class="card-body px-5">
-        @for (visita of visitas; track visita) {
-          <div>
-            <li>{{ visita.fecha }} - {{ visita.observaciones }}</li>
+      <div class="card-body">
+        @if (visitas.length === 0) {
+          <p class="text-center text-muted">No hay visitas registradas</p>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>Hogares</th>
+                  <th>OOTS</th>
+                  <th>Hospitales</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (visita of visitas; track visita.id) {
+                  <tr>
+                    <td>{{ getNombreMes(visita.mes) }}</td>
+                    <td>{{ visita.visitasHogares }}</td>
+                    <td>{{ visita.referidasOots }}</td>
+                    <td>{{ visita.visitaHospital }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning mr-1" (click)="editarVisita(visita)" title="Editar">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-danger" (click)="eliminarVisita(visita.id)" title="Eliminar">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           </div>
         }
       </div>

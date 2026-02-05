@@ -30,11 +30,21 @@ export class ActividadService {
       .pipe(map((response: { ok: boolean; atividad: ActividadModel[] }) => response.atividad || []));
   }
 
+  getActividadById(id: number) {
+    return this.httpClient
+      .get(`${base_url}/actividad/${id}`, this.headers)
+      .pipe(map((response: { ok: boolean; actividad: ActividadModel }) => response.actividad));
+  }
+
   crearActividad(actividad: ActividadModel) {
     return this.httpClient.post(`${base_url}/actividad`, actividad, this.headers);
   }
 
   actualizarActividad(actividad: ActividadModel) {
-    return this.httpClient.put(`${base_url}/actividad/${actividad.id}`, this.headers);
+    return this.httpClient.put(`${base_url}/actividad/${actividad.id}`, actividad, this.headers);
+  }
+
+  eliminarActividad(id: number) {
+    return this.httpClient.delete(`${base_url}/actividad/${id}`, this.headers);
   }
 }
