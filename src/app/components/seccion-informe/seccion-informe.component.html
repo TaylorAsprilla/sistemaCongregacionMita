@@ -10,7 +10,15 @@
             <div class="nombre col-md-9 mt-3">{{ nombre }}</div>
 
             <div class="ribbon-wrapper ribbon-lg">
-              <div class="ribbon text-xl bg-primary">{{ estatus }}</div>
+              <div
+                class="ribbon text-xl"
+                [ngClass]="{
+                  'bg-primary': estatus === 'Completado',
+                  'bg-danger': estatus === 'Pendiente',
+                }"
+              >
+                {{ estatus }}
+              </div>
             </div>
           </div>
           <div class="row">

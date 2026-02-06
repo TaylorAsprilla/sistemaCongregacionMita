@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { SeccionInformeModel } from 'src/app/core/models/seccion-informe.model';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
@@ -13,29 +13,26 @@ import Swal from 'sweetalert2';
   templateUrl: './crear-actividad.component.html',
   styleUrls: ['./crear-actividad.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class CrearActividadComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private tipoActividadService = inject(TipoActividadService);
-  private activatedRoute = inject(ActivatedRoute);
 
   public tipoActividadForm: FormGroup;
 
   public tiposActividad: TipoActividadModel[] = [];
-  public seccionesInformes: SeccionInformeModel[] = [];
+  public editando: boolean = false;
+  public actividadIdEditando: number | null = null;
+
   // Subscription
   public tipoActividadSubscription: Subscription;
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe((data: { seccionInforme: SeccionInformeModel[] }) => {
-      this.seccionesInformes = data.seccionInforme;
-    });
-
     this.tipoActividadForm = this.formBuilder.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
-      idSeccion: ['', [Validators.required]],
+      estado: [true, [Validators.required]],
     });
 
     this.cargarTipoActividades();
@@ -54,6 +51,11 @@ export class CrearActividadComponent implements OnInit, OnDestroy {
   }
 
   crearTipoActividad() {
+    if (this.editando && this.actividadIdEditando) {
+      this.actualizarActividad();
+      return;
+    }
+
     const tipoActividadNueva = this.tipoActividadForm.value;
 
     this.tipoActividadService.crearTipoActividad(tipoActividadNueva).subscribe(
@@ -71,16 +73,82 @@ export class CrearActividadComponent implements OnInit, OnDestroy {
         });
 
         Swal.fire({
-          title: 'Error al creat el tipo de Actividad',
+          title: 'Error al crear el tipo de Actividad',
           icon: 'error',
           html: `${listaErrores.join('')}`,
         });
-        this.router.navigateByUrl(RUTAS.INICIO);
-      }
+      },
     );
+  }
+
+  editarActividad(actividad: TipoActividadModel) {
+    this.editando = true;
+    this.actividadIdEditando = actividad.id;
+    this.tipoActividadForm.patchValue({
+      nombre: actividad.nombre,
+      estado: actividad.estado,
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  actualizarActividad() {
+    const actividadActualizada = {
+      ...this.tipoActividadForm.value,
+      id: this.actividadIdEditando,
+    };
+
+    this.tipoActividadService.actualizarTipoActividad(actividadActualizada).subscribe(
+      (response: any) => {
+        Swal.fire('Tipo de actividad actualizada', response.actividadActualizada.nombre, 'success');
+        this.cancelarEdicion();
+        this.cargarTipoActividades();
+      },
+      (error) => {
+        Swal.fire('Error', 'No se pudo actualizar el tipo de actividad', 'error');
+      },
+    );
+  }
+
+  eliminarActividad(actividad: TipoActividadModel) {
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: `¿Desea eliminar la actividad "${actividad.nombre}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tipoActividadService.eliminarTipoActividad(actividad.id).subscribe(
+          () => {
+            Swal.fire('Eliminado', 'La actividad ha sido eliminada', 'success');
+            this.cargarTipoActividades();
+          },
+          (error) => {
+            Swal.fire('Error', 'No se pudo eliminar la actividad', 'error');
+          },
+        );
+      }
+    });
+  }
+
+  cancelarEdicion() {
+    this.editando = false;
+    this.actividadIdEditando = null;
+    this.resetFormulario();
+  }
+
+  obtenerEstadoTexto(estado: boolean): string {
+    return estado ? 'Activo' : 'Inactivo';
   }
 
   resetFormulario() {
     this.tipoActividadForm.reset();
+    this.tipoActividadForm.patchValue({
+      nombre: '',
+      estado: true,
+    });
   }
 }

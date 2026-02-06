@@ -403,7 +403,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: RUTAS.CREAR_TIPO_ACTIVIDAD,
-        title: 'Crear Actividad',
+        title: 'Tipo Actividad Eclesiastica',
         icon: '',
         class: '',
         extralink: false,
@@ -421,16 +421,7 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         path: RUTAS.CREAR_TIPO_ACTIVIDAD_ECONOMICA,
-        title: 'Crear Tipo Actividad Económica',
-        icon: '',
-        class: '',
-        extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
-        submenu: [],
-      },
-      {
-        path: RUTAS.ACTIVIDAD_ECONOMICA,
-        title: 'Actividades Económicas',
+        title: 'Tipo Actividad Económica',
         icon: '',
         class: '',
         extralink: false,
