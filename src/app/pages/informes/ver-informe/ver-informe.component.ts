@@ -1,9 +1,9 @@
-import { Component, ElementRef, DestroyRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 import { forkJoin } from 'rxjs';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { ActividadEconomicaService } from 'src/app/services/actividad-economica/actividad-economica.service';
@@ -52,8 +52,6 @@ export class VerInformeComponent implements OnInit {
   private logroService = inject(LogroService);
   private diezmoService = inject(DiezmoService);
   private router = inject(Router);
-
-  @ViewChild('content', { static: false }) content!: ElementRef;
 
   cargando: boolean = false;
   descargandoPDF: boolean = false;
@@ -302,54 +300,190 @@ export class VerInformeComponent implements OnInit {
   }
 
   /**
-   * Descarga el informe como PDF
+   * Descarga el informe como PDF usando pdfmake
    */
-  async descargarPDF(): Promise<void> {
-    if (!this.content) {
-      Swal.fire({
-        title: 'Error',
-        text: 'No se pudo generar el PDF',
-        icon: 'error',
-      });
-      return;
-    }
-
+  descargarPDF(): void {
     this.descargandoPDF = true;
 
     try {
-      const element = this.content.nativeElement;
+      // Definir el documento PDF
+      const docDefinition: any = {
+        pageSize: 'A4',
+        pageMargins: [40, 60, 40, 60],
+        content: [
+          // Encabezado principal con mejor diseño
+          {
+            canvas: [
+              {
+                type: 'rect',
+                x: 0,
+                y: 0,
+                w: 515,
+                h: 120,
+                r: 5,
+                lineColor: '#3498db',
+                lineWidth: 2,
+              },
+            ],
+            margin: [0, 0, 0, 10],
+          },
+          {
+            text: 'INFORME TRIMESTRAL',
+            style: 'header',
+            alignment: 'center',
+            margin: [0, -110, 0, 15],
+          },
+          {
+            text: `${this.getOrdinalTrimestre()} Trimestre ${this.anioTrimestre}`,
+            style: 'subheader',
+            alignment: 'center',
+            margin: [0, 0, 0, 8],
+          },
+          {
+            text: this.trimestre,
+            style: 'trimestre',
+            alignment: 'center',
+            margin: [0, 0, 0, 25],
+          },
 
-      // Generar canvas del contenido
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-      });
+          // Información del usuario y congregación con mejor formato
+          {
+            table: {
+              widths: ['*', '*'],
+              body: [
+                [
+                  { text: 'Obrero:', style: 'infoLabel', border: [false, false, false, false] },
+                  { text: this.nombreUsuario, style: 'infoValue', border: [false, false, false, false] },
+                ],
+                [
+                  { text: 'Fecha:', style: 'infoLabel', border: [false, false, false, false] },
+                  {
+                    text: this.fechaActual.toLocaleDateString(),
+                    style: 'infoValue',
+                    border: [false, false, false, false],
+                  },
+                ],
+                [
+                  { text: 'País:', style: 'infoLabel', border: [false, false, false, false] },
+                  { text: this.congregacionPais, style: 'infoValue', border: [false, false, false, false] },
+                ],
+                [
+                  { text: 'Campo:', style: 'infoLabel', border: [false, false, false, false] },
+                  { text: this.congregacionCampo, style: 'infoValue', border: [false, false, false, false] },
+                ],
+                [
+                  { text: 'Congregación:', style: 'infoLabel', border: [false, false, false, false] },
+                  { text: this.congregacionCiudad, style: 'infoValue', border: [false, false, false, false] },
+                ],
+              ],
+            },
+            margin: [40, 10, 40, 30],
+          },
 
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+          // A. ACTIVIDADES ECLESIÁSTICAS
+          { text: 'A. ACTIVIDADES ECLESIÁSTICAS', style: 'sectionTitle', pageBreak: 'before' },
+          this.actividadesEclesiasticas.length > 0
+            ? this.crearTablaActividades()
+            : { text: 'No hay actividades eclesiásticas registradas.', style: 'noData' },
 
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
+          // B. ACTIVIDADES ECONÓMICAS
+          { text: 'B. ACTIVIDADES ECONÓMICAS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          this.actividadesEconomicas.length > 0
+            ? this.crearTablaActividadesEconomicas()
+            : { text: 'No hay actividades económicas registradas.', style: 'noData' },
 
-      // Agregar primera página
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+          // C. RESUMEN DE VISITAS REALIZADAS
+          { text: 'C. RESUMEN DE VISITAS REALIZADAS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          this.visitas.length > 0 ? this.crearTablaVisitas() : { text: 'No hay visitas registradas.', style: 'noData' },
 
-      // Agregar páginas adicionales si es necesario
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+          // D. RESUMEN DE DIEZMOS
+          { text: 'D. RESUMEN DE DIEZMOS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          this.diezmos.length > 0 ? this.crearTablaDiezmos() : { text: 'No hay diezmos registrados.', style: 'noData' },
+
+          // E. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS
+          {
+            text: 'E. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS',
+            style: 'sectionTitle',
+            margin: [0, 20, 0, 10],
+            pageBreak: 'before',
+          },
+          this.situacionVisitas.length > 0
+            ? this.crearTablaSituaciones()
+            : { text: 'No hay situaciones registradas.', style: 'noData' },
+
+          // F. LOGROS OBTENIDOS
+          { text: 'F. LOGROS OBTENIDOS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          this.logros.length > 0 ? this.crearTablaLogros() : { text: 'No hay logros registrados.', style: 'noData' },
+
+          // G. METAS PARA EL PRÓXIMO TRIMESTRE
+          { text: 'G. METAS PARA EL PRÓXIMO TRIMESTRE', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          this.metas.length > 0 ? this.crearTablaMetas() : { text: 'No hay metas registradas.', style: 'noData' },
+        ],
+        styles: {
+          header: {
+            fontSize: 24,
+            bold: true,
+            color: '#2c3e50',
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            color: '#2980b9',
+          },
+          trimestre: {
+            fontSize: 13,
+            color: '#7f8c8d',
+            italics: true,
+          },
+          infoLabel: {
+            fontSize: 11,
+            bold: true,
+            color: '#34495e',
+          },
+          infoValue: {
+            fontSize: 11,
+            color: '#2c3e50',
+          },
+          info: {
+            fontSize: 11,
+            color: '#7f8c8d',
+          },
+          sectionTitle: {
+            fontSize: 14,
+            bold: true,
+            color: '#2980b9',
+            margin: [0, 10, 0, 10],
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 11,
+            color: '#ffffff',
+            fillColor: '#3498db',
+          },
+          tableCell: {
+            fontSize: 10,
+          },
+          noData: {
+            fontSize: 10,
+            italics: true,
+            color: '#95a5a6',
+            margin: [0, 5, 0, 15],
+          },
+        },
+        defaultStyle: {
+          fontSize: 10,
+        },
+      };
+
+      // Inicializar fuentes de pdfmake si aún no están configuradas
+      if (!(pdfMake as any).vfs) {
+        (pdfMake as any).vfs = (pdfFonts as any).pdfMake?.vfs || pdfFonts;
       }
 
-      // Descargar PDF
-      pdf.save(`Informe_${this.getOrdinalTrimestre()}_Trimestre_${this.anioTrimestre}.pdf`);
+      // Generar y descargar el PDF
+      pdfMake
+        .createPdf(docDefinition)
+        .download(`Informe_${this.getOrdinalTrimestre()}_Trimestre_${this.anioTrimestre}.pdf`);
 
       this.descargandoPDF = false;
 
@@ -361,12 +495,221 @@ export class VerInformeComponent implements OnInit {
       });
     } catch (error) {
       this.descargandoPDF = false;
+      console.error('Error al generar PDF:', error);
       Swal.fire({
         title: 'Error',
         text: 'No se pudo generar el PDF. Intente nuevamente.',
         icon: 'error',
       });
     }
+  }
+
+  /**
+   * Crea la tabla de actividades eclesiásticas para el PDF
+   */
+  private crearTablaActividades(): any {
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['auto', '*', 'auto', 'auto', '*'],
+        body: [
+          [
+            { text: 'Fecha', style: 'tableHeader' },
+            { text: 'Tipo de Actividad', style: 'tableHeader' },
+            { text: 'Responsable', style: 'tableHeader' },
+            { text: 'Asistencia', style: 'tableHeader' },
+            { text: 'Observaciones', style: 'tableHeader' },
+          ],
+          ...this.actividadesEclesiasticas.map((act) => [
+            { text: new Date(act.fecha).toLocaleDateString(), style: 'tableCell' },
+            { text: this.buscarNombreTipoActividad(act.tipoActividad_id), style: 'tableCell' },
+            { text: act.responsable || '-', style: 'tableCell' },
+            { text: act.asistencia?.toString() || '0', style: 'tableCell', alignment: 'center' },
+            { text: act.observaciones || '-', style: 'tableCell' },
+          ]),
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
+  }
+
+  /**
+   * Crea la tabla de actividades económicas para el PDF
+   */
+  private crearTablaActividadesEconomicas(): any {
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['auto', '*', 'auto', 'auto', '*'],
+        body: [
+          [
+            { text: 'Fecha', style: 'tableHeader' },
+            { text: 'Tipo de Actividad', style: 'tableHeader' },
+            { text: 'Responsable', style: 'tableHeader' },
+            { text: 'Cantidad Recaudada', style: 'tableHeader' },
+            { text: 'Observaciones', style: 'tableHeader' },
+          ],
+          ...this.actividadesEconomicas.map((act) => [
+            { text: new Date(act.fecha).toLocaleDateString(), style: 'tableCell' },
+            { text: this.buscarNombreTipoActividadEconomica(act.tipoActividadEconomica_id), style: 'tableCell' },
+            { text: act.responsable || '-', style: 'tableCell' },
+            { text: `$${Number(act.cantidadRecaudada || 0).toFixed(2)}`, style: 'tableCell', alignment: 'right' },
+            { text: act.observaciones || '-', style: 'tableCell' },
+          ]),
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
+  }
+
+  /**
+   * Crea la tabla de visitas para el PDF
+   */
+  private crearTablaVisitas(): any {
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['auto', 'auto', 'auto', 'auto', '*'],
+        body: [
+          [
+            { text: 'Mes', style: 'tableHeader' },
+            { text: 'Visitas Hogares', style: 'tableHeader' },
+            { text: 'Referidas OOTS', style: 'tableHeader' },
+            { text: 'Visitas Hospital', style: 'tableHeader' },
+            { text: 'Observaciones', style: 'tableHeader' },
+          ],
+          ...this.visitas.map((visita) => [
+            { text: this.getNombreMes(visita.mes), style: 'tableCell' },
+            { text: (visita.visitasHogares || 0).toString(), style: 'tableCell', alignment: 'center' },
+            { text: (visita.referidasOots || 0).toString(), style: 'tableCell', alignment: 'center' },
+            { text: (visita.visitaHospital || 0).toString(), style: 'tableCell', alignment: 'center' },
+            { text: visita.observaciones || '-', style: 'tableCell' },
+          ]),
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
+  }
+
+  /**
+   * Crea la tabla de diezmos para el PDF
+   */
+  private crearTablaDiezmos(): any {
+    const totalSobresRestrictos = this.calcularTotal(this.diezmos, 'sobresRestrictos');
+    const totalSobresNoRestrictos = this.calcularTotal(this.diezmos, 'sobresNoRestrictos');
+    const totalRestrictos = this.calcularTotal(this.diezmos, 'restrictos');
+    const totalNoRestrictos = this.calcularTotal(this.diezmos, 'noRestrictos');
+    const totalGeneral = totalRestrictos + totalNoRestrictos;
+
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+        body: [
+          [
+            { text: 'Mes', style: 'tableHeader' },
+            { text: 'Sobres Restrictos', style: 'tableHeader' },
+            { text: 'Sobres No Restrictos', style: 'tableHeader' },
+            { text: 'Restrictos ($)', style: 'tableHeader' },
+            { text: 'No Restrictos ($)', style: 'tableHeader' },
+            { text: 'Total ($)', style: 'tableHeader' },
+          ],
+          ...this.diezmos.map((diezmo) => [
+            { text: this.getNombreMes(diezmo.mes), style: 'tableCell' },
+            { text: (diezmo.sobresRestrictos || 0).toString(), style: 'tableCell', alignment: 'center' },
+            { text: (diezmo.sobresNoRestrictos || 0).toString(), style: 'tableCell', alignment: 'center' },
+            { text: `$${Number(diezmo.restrictos || 0).toFixed(2)}`, style: 'tableCell', alignment: 'right' },
+            { text: `$${Number(diezmo.noRestrictos || 0).toFixed(2)}`, style: 'tableCell', alignment: 'right' },
+            {
+              text: `$${(Number(diezmo.restrictos || 0) + Number(diezmo.noRestrictos || 0)).toFixed(2)}`,
+              style: 'tableCell',
+              alignment: 'right',
+            },
+          ]),
+          [
+            { text: 'TOTAL', style: 'tableHeader' },
+            { text: totalSobresRestrictos.toString(), style: 'tableHeader', alignment: 'center' },
+            { text: totalSobresNoRestrictos.toString(), style: 'tableHeader', alignment: 'center' },
+            { text: `$${totalRestrictos.toFixed(2)}`, style: 'tableHeader', alignment: 'right' },
+            { text: `$${totalNoRestrictos.toFixed(2)}`, style: 'tableHeader', alignment: 'right' },
+            { text: `$${totalGeneral.toFixed(2)}`, style: 'tableHeader', alignment: 'right' },
+          ],
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
+  }
+
+  /**
+   * Crea la tabla de situaciones para el PDF
+   */
+  private crearTablaSituaciones(): any {
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['auto', 'auto', '*', '*', 'auto', '*'],
+        body: [
+          [
+            { text: 'Fecha', style: 'tableHeader' },
+            { text: 'Nombre Feligrés', style: 'tableHeader' },
+            { text: 'Situación', style: 'tableHeader' },
+            { text: 'Intervención', style: 'tableHeader' },
+            { text: 'Seguimiento', style: 'tableHeader' },
+            { text: 'Observaciones', style: 'tableHeader' },
+          ],
+          ...this.situacionVisitas.map((sit) => [
+            { text: new Date(sit.fecha).toLocaleDateString(), style: 'tableCell' },
+            { text: sit.nombreFeligres || '-', style: 'tableCell' },
+            { text: sit.situacion || '-', style: 'tableCell' },
+            { text: sit.intervension || '-', style: 'tableCell' },
+            { text: sit.seguimiento || '-', style: 'tableCell' },
+            { text: sit.observaciones || '-', style: 'tableCell' },
+          ]),
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
+  }
+
+  /**
+   * Crea la tabla de logros para el PDF
+   */
+  private crearTablaLogros(): any {
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['*'],
+        body: [
+          [{ text: 'Logro', style: 'tableHeader' }],
+          ...this.logros.map((logro) => [{ text: logro.logro || '-', style: 'tableCell' }]),
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
+  }
+
+  /**
+   * Crea la tabla de metas para el PDF
+   */
+  private crearTablaMetas(): any {
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['*'],
+        body: [
+          [{ text: 'Meta', style: 'tableHeader' }],
+          ...this.metas.map((meta) => [{ text: meta.meta || '-', style: 'tableCell' }]),
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
   }
 
   /**

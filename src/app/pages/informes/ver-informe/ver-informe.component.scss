@@ -253,6 +253,58 @@ tfoot tr {
   }
 }
 
+// Estilos específicos para exportación a PDF
+.pdf-export {
+  h2 {
+    font-size: 2rem !important;
+    margin-bottom: 1.2rem !important;
+  }
+
+  h3 {
+    font-size: 1.6rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  h4.seccion-titulo {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .info-box td {
+    font-size: 1.2rem !important;
+    padding: 0.8rem !important;
+  }
+
+  .table {
+    font-size: 1.15rem !important;
+
+    th {
+      font-size: 1.25rem !important;
+      padding: 0.9rem 0.6rem !important;
+      font-weight: 600 !important;
+    }
+
+    td {
+      font-size: 1.1rem !important;
+      padding: 0.7rem 0.5rem !important;
+    }
+  }
+
+  .alert {
+    font-size: 1.1rem !important;
+    padding: 0.9rem !important;
+  }
+
+  .footer-info {
+    font-size: 1.05rem !important;
+
+    p {
+      font-size: 1.05rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .informe-content {
     padding: $spacing-xl !important;
