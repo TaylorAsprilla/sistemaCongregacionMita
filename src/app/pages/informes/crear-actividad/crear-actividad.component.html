@@ -2,36 +2,40 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Nueva Actividad</h3>
+        <h3 class="card-title">{{ editando ? 'Editar' : 'Nueva' }} Actividad</h3>
       </div>
       <div class="card-body">
         <form class="form-signin" autocomplete="off" [formGroup]="tipoActividadForm">
           <div class="form-group">
             <label>Tipo de Actividad:</label>
-            <input type="text" formControlName="nombre" class="form-control" placeholder="Actividad" />
+            <input type="text" formControlName="nombre" class="form-control" placeholder="Ej: Culto Divino" />
+            @if (tipoActividadForm.get('nombre')?.invalid && tipoActividadForm.get('nombre')?.touched) {
+              <small class="text-danger">El nombre es requerido (mínimo 3 caracteres)</small>
+            }
           </div>
 
           <div class="form-group">
-            <label class="col-form-label">Sección del Informe</label>
-            <select class="form-control" formControlName="idSeccion">
-              <option value="" disabled>Seleccione la sección del informe</option>
-              @for (seccioneInforme of seccionesInformes; track seccioneInforme) {
-                <option [value]="seccioneInforme.id">
-                  {{ seccioneInforme.seccion }}
-                </option>
-              }
+            <label class="col-form-label">Estado</label>
+            <select class="form-control" formControlName="estado">
+              <option [value]="true">Activo</option>
+              <option [value]="false">Inactivo</option>
             </select>
           </div>
 
-          <div class="card">
+          <div class="form-group d-flex">
             <button
               type="submit"
-              class="submit btn btn-primary"
+              class="submit btn btn-primary mr-2"
               (click)="crearTipoActividad()"
               [disabled]="tipoActividadForm.invalid"
-              >
-              <i class="fa fa-save"></i> Guardar
+            >
+              <i class="fa fa-save"></i> {{ editando ? 'Actualizar' : 'Guardar' }}
             </button>
+            @if (editando) {
+              <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+                <i class="fa fa-times"></i> Cancelar
+              </button>
+            }
           </div>
         </form>
       </div>
@@ -44,11 +48,26 @@
         <h3 class="card-title">Listado de Actividades</h3>
       </div>
       <div class="card-body">
-        @for (tipoActividad of tiposActividad; track tipoActividad) {
-          <div>
-            <li>
-              {{ tipoActividad.nombre }}
-            </li>
+        @if (tiposActividad.length === 0) {
+          <p class="text-center text-muted">No hay actividades registradas</p>
+        }
+        @for (tipoActividad of tiposActividad; track tipoActividad.id) {
+          <div class="d-flex justify-content-between align-items-center mb-3 p-2 border rounded">
+            <div>
+              <strong>{{ tipoActividad.nombre }}</strong>
+              <br />
+              <span class="badge" [ngClass]="tipoActividad.estado ? 'badge-success' : 'badge-secondary'">
+                {{ obtenerEstadoTexto(tipoActividad.estado) }}
+              </span>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-warning mr-2" (click)="editarActividad(tipoActividad)" title="Editar">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="eliminarActividad(tipoActividad)" title="Eliminar">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
           </div>
         }
       </div>

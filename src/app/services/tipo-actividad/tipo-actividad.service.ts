@@ -34,7 +34,11 @@ export class TipoActividadService {
     return this.httpClient.post(`${base_url}/tipoactividad`, tipoActividad, this.headers);
   }
 
-  elimiminarTipoActividad(tipoActividad: TipoActividadModel) {
-    return this.httpClient.delete(`${base_url}/tipoactividad/${tipoActividad.id}`, this.headers);
+  actualizarTipoActividad(tipoActividad: TipoActividadModel) {
+    return this.httpClient.put(`${base_url}/tipoactividad/${tipoActividad.id}`, tipoActividad, this.headers);
+  }
+
+  eliminarTipoActividad(id: number) {
+    return this.httpClient.delete(`${base_url}/tipoactividad/${id}`, this.headers);
   }
 }
