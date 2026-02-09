@@ -41,6 +41,7 @@ export interface UsuarioInforme {
   primerApellido: string;
   segundoApellido: string;
   email: string;
+  numeroCelular?: string;
   congregacion?: {
     nombre: string;
   };

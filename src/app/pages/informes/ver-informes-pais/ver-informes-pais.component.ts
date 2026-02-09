@@ -9,6 +9,8 @@ import { InformeCompletoPais, EstadisticasPais } from 'src/app/core/interfaces/i
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CampoModel } from 'src/app/core/models/campo.model';
+import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
+import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import Swal from 'sweetalert2';
 import { RUTAS } from 'src/app/routes/menu-items';
 
@@ -17,7 +19,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
   templateUrl: './ver-informes-pais.component.html',
   styleUrls: ['./ver-informes-pais.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, WhatsappPipe, TelegramPipe],
 })
 export class VerInformesPaisComponent implements OnInit {
   private informeService = inject(InformeService);
@@ -54,6 +56,9 @@ export class VerInformesPaisComponent implements OnInit {
   // Estados
   cargando: boolean = false;
   errorCarga: boolean = false;
+  mostrarFiltros: boolean = false;
+  selectedContact: number | null = null;
+  informeInfoExpandido: number | null = null;
 
   // Trimestres disponibles
   trimestres = [
@@ -370,6 +375,27 @@ export class VerInformesPaisComponent implements OnInit {
         fromListaPais: true,
       },
     });
+  }
+
+  /**
+   * Alterna la visibilidad de los filtros
+   */
+  toggleFiltros(): void {
+    this.mostrarFiltros = !this.mostrarFiltros;
+  }
+
+  /**
+   * Alterna la visibilidad de los iconos de contacto
+   */
+  toggleIcons(informe: InformeCompletoPais): void {
+    this.selectedContact = this.selectedContact === informe.id ? null : informe.id;
+  }
+
+  /**
+   * Alterna la visibilidad de la información del obrero
+   */
+  toggleInfoObrero(informeId: number): void {
+    this.informeInfoExpandido = this.informeInfoExpandido === informeId ? null : informeId;
   }
 
   /**
