@@ -464,6 +464,10 @@ export const childRoutes: Routes = [
     path: RUTAS.VER_INFORMES_PAIS,
     component: VerInformesPaisComponent,
     canActivate: [RolesGuard],
+    resolve: {
+      congregaciones: CongregacionResolver,
+      campos: CampoResolver,
+    },
     data: {
       titulo: 'Ver Informes del País',
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],

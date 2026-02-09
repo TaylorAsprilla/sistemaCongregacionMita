@@ -11,28 +11,40 @@
 
           <!-- Estadísticas -->
           <div class="row" *ngIf="estadisticas && !cargando">
-            <div class="col-md-3 col-sm-6 mb-3">
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
               <div class="estadistica-box bg-info">
                 <div class="numero">{{ estadisticas.totalInformes }}</div>
                 <div class="etiqueta">Informes Recibidos</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-3">
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
               <div class="estadistica-box bg-success">
                 <div class="numero">{{ estadisticas.totalObreros }}</div>
                 <div class="etiqueta">Obreros</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-3">
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
               <div class="estadistica-box bg-warning">
                 <div class="numero">{{ estadisticas.totalCongregaciones }}</div>
                 <div class="etiqueta">Congregaciones</div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-6 mb-3">
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
               <div class="estadistica-box bg-primary">
                 <div class="numero">{{ estadisticas.totalCampos }}</div>
                 <div class="etiqueta">Campos</div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+              <div class="estadistica-box bg-purple">
+                <div class="numero">{{ getTotalActividadesEclesiasticas() }}</div>
+                <div class="etiqueta">Act. Eclesiásticas</div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+              <div class="estadistica-box bg-teal">
+                <div class="numero">{{ getTotalActividadesEconomicasGlobal() }}</div>
+                <div class="etiqueta">Act. Económicas</div>
               </div>
             </div>
           </div>
@@ -55,12 +67,7 @@
             <!-- Selección de Trimestre -->
             <div class="col-md-3 mb-3">
               <label for="trimestre" class="form-label">Trimestre</label>
-              <select
-                id="trimestre"
-                class="form-control"
-                [(ngModel)]="trimestre"
-                (change)="cargarInformes()"
-              >
+              <select id="trimestre" class="form-control" [(ngModel)]="trimestre" (change)="cargarInformes()">
                 <option *ngFor="let t of trimestres" [value]="t.value">
                   {{ t.label }}
                 </option>
@@ -75,8 +82,25 @@
               </select>
             </div>
 
+            <!-- Selección de País -->
+            <div class="col-md-3 mb-3">
+              <label for="pais" class="form-label">País</label>
+              <select
+                id="pais"
+                class="form-control"
+                [(ngModel)]="paisId"
+                (change)="onPaisChange()"
+                [disabled]="paisesDisponibles.length === 0"
+              >
+                <option value="0" disabled>Seleccione un país</option>
+                <option *ngFor="let p of paisesDisponibles" [value]="p.id">
+                  {{ p.pais }}
+                </option>
+              </select>
+            </div>
+
             <!-- Búsqueda por nombre -->
-            <div class="col-md-6 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="busqueda" class="form-label">Buscar por Nombre del Obrero</label>
               <input
                 type="text"
@@ -89,29 +113,37 @@
             </div>
 
             <!-- Búsqueda por congregación -->
-            <div class="col-md-5 mb-3">
-              <label for="congregacion" class="form-label">Buscar por Congregación</label>
-              <input
-                type="text"
+            <div class="col-md-6 mb-3">
+              <label for="congregacion" class="form-label">Congregación</label>
+              <select
                 id="congregacion"
                 class="form-control"
-                placeholder="Nombre de la congregación..."
-                [(ngModel)]="filtroCongregacion"
-                (input)="aplicarFiltros()"
-              />
+                [(ngModel)]="congregacionSeleccionada"
+                (change)="onCongregacionChange()"
+                [disabled]="congregaciones.length === 0"
+              >
+                <option value="0">Todas las congregaciones</option>
+                <option *ngFor="let c of congregaciones" [value]="c.id">
+                  {{ c.nombre }}
+                </option>
+              </select>
             </div>
 
             <!-- Búsqueda por campo -->
-            <div class="col-md-5 mb-3">
-              <label for="campo" class="form-label">Buscar por Campo</label>
-              <input
-                type="text"
+            <div class="col-md-6 mb-3">
+              <label for="campo" class="form-label">Campo</label>
+              <select
                 id="campo"
                 class="form-control"
-                placeholder="Nombre del campo..."
-                [(ngModel)]="filtroCampo"
-                (input)="aplicarFiltros()"
-              />
+                [(ngModel)]="campoSeleccionado"
+                (change)="aplicarFiltros()"
+                [disabled]="campos.length === 0"
+              >
+                <option value="0">Todos los campos</option>
+                <option *ngFor="let ca of campos" [value]="ca.id">
+                  {{ ca.nombre }}
+                </option>
+              </select>
             </div>
 
             <!-- Botones de acción -->
@@ -125,8 +157,7 @@
           <!-- Información de resultados -->
           <div class="alert alert-info mb-0" *ngIf="!cargando && informes.length > 0">
             <i class="fa fa-info-circle"></i>
-            Mostrando <strong>{{ informesFiltrados.length }}</strong> de
-            <strong>{{ informes.length }}</strong> informes
+            Mostrando <strong>{{ informesFiltrados.length }}</strong> de <strong>{{ informes.length }}</strong> informes
           </div>
         </div>
       </div>
@@ -168,19 +199,13 @@
           </div>
 
           <!-- Sin resultados -->
-          <div
-            *ngIf="!cargando && !errorCarga && informesFiltrados.length === 0"
-            class="alert alert-warning"
-          >
+          <div *ngIf="!cargando && !errorCarga && informesFiltrados.length === 0" class="alert alert-warning">
             <i class="fa fa-search"></i>
             No se encontraron informes con los filtros aplicados.
           </div>
 
           <!-- Tabla -->
-          <div
-            class="table-responsive"
-            *ngIf="!cargando && !errorCarga && informesFiltrados.length > 0"
-          >
+          <div class="table-responsive" *ngIf="!cargando && !errorCarga && informesFiltrados.length > 0">
             <table class="table table-hover tabla-informes">
               <thead class="thead-light">
                 <tr>
@@ -190,7 +215,8 @@
                   <th>Congregación</th>
                   <th>Campo</th>
                   <th class="text-center">Estado</th>
-                  <th class="text-center">Actividades</th>
+                  <th class="text-center">Act. Eclesiásticas</th>
+                  <th class="text-center">Act. Económicas</th>
                   <th class="text-center">Visitas</th>
                   <th class="text-center">Logros</th>
                   <th class="text-center">Metas</th>
@@ -205,36 +231,33 @@
                   </td>
                   <td>{{ informe.usuario.email }}</td>
                   <td>
-                    <span class="badge badge-info">{{
-                      obtenerCongregacion(informe.usuario)
-                    }}</span>
+                    <span class="badge badge-info">{{ obtenerCongregacion(informe.usuario) }}</span>
                   </td>
                   <td>
-                    <span class="badge badge-secondary">{{ obtenerCampo(informe.usuario) }}</span>
+                    <span class="badge badge-warning">{{ obtenerCampo(informe.usuario) }}</span>
                   </td>
                   <td class="text-center">
                     <span
                       class="badge"
                       [ngClass]="{
                         'badge-success': informe.estado === 'Abierto',
-                        'badge-secondary': informe.estado === 'Cerrado'
+                        'badge-secondary': informe.estado === 'Cerrado',
                       }"
                     >
                       {{ informe.estado }}
                     </span>
                   </td>
                   <td class="text-center">
-                    <span class="badge badge-pill badge-primary">{{
-                      getTotalActividades(informe)
-                    }}</span>
+                    <span class="badge badge-pill badge-primary">{{ getTotalActividades(informe) }}</span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-pill badge-danger">{{ getTotalActividadesEconomicas(informe) }}</span>
                   </td>
                   <td class="text-center">
                     <span class="badge badge-pill badge-info">{{ getTotalVisitas(informe) }}</span>
                   </td>
                   <td class="text-center">
-                    <span class="badge badge-pill badge-success">{{
-                      getTotalLogros(informe)
-                    }}</span>
+                    <span class="badge badge-pill badge-success">{{ getTotalLogros(informe) }}</span>
                   </td>
                   <td class="text-center">
                     <span class="badge badge-pill badge-warning">{{ getTotalMetas(informe) }}</span>

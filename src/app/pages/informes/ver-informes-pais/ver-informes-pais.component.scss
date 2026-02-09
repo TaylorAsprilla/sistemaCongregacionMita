@@ -3,8 +3,8 @@ Component: Ver Informes País
 Description: Estilos para la vista de informes del supervisor por país
 */
 
-@use '../../../../../assets/scss/variable' as *;
-@use '../../../../../assets/scss/mixins' as *;
+@use '../../../../assets/scss/variable' as *;
+@use '../../../../assets/scss/mixins' as *;
 
 // ============================================
 // ESTADÍSTICAS
@@ -35,6 +35,31 @@ Description: Estilos para la vista de informes del supervisor por país
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+  }
+
+  // Colores de fondo específicos
+  &.bg-info {
+    background-color: $info !important;
+  }
+
+  &.bg-success {
+    background-color: $success !important;
+  }
+
+  &.bg-warning {
+    background-color: $warning !important;
+  }
+
+  &.bg-primary {
+    background-color: $primary !important;
+  }
+
+  &.bg-purple {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  }
+
+  &.bg-teal {
+    background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%) !important;
   }
 }
 
@@ -157,17 +182,17 @@ Description: Estilos para la vista de informes del supervisor por país
 
   &-info {
     border-left-color: $info;
-    background-color: lighten($info, 45%);
+    background-color: $light-info;
   }
 
   &-warning {
     border-left-color: $warning;
-    background-color: lighten($warning, 40%);
+    background-color: $light-warning;
   }
 
   &-danger {
     border-left-color: $danger;
-    background-color: lighten($danger, 40%);
+    background-color: $light-danger;
   }
 
   i {

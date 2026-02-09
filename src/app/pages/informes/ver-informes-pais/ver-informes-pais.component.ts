@@ -1,13 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import {
-  InformeCompletoPais,
-  EstadisticasPais,
-} from 'src/app/core/interfaces/informe.interface';
+import { PaisService } from 'src/app/services/pais/pais.service';
+import { InformeCompletoPais, EstadisticasPais } from 'src/app/core/interfaces/informe.interface';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
+import { CongregacionModel } from 'src/app/core/models/congregacion.model';
+import { CampoModel } from 'src/app/core/models/campo.model';
 import Swal from 'sweetalert2';
 import { RUTAS } from 'src/app/routes/menu-items';
 
@@ -21,17 +22,29 @@ import { RUTAS } from 'src/app/routes/menu-items';
 export class VerInformesPaisComponent implements OnInit {
   private informeService = inject(InformeService);
   private usuarioService = inject(UsuarioService);
+  private paisService = inject(PaisService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   // Datos de la API
   informes: InformeCompletoPais[] = [];
   informesFiltrados: InformeCompletoPais[] = [];
   estadisticas: EstadisticasPais | null = null;
 
+  // Países
+  paises: CongregacionPaisModel[] = [];
+  paisesDisponibles: CongregacionPaisModel[] = [];
+
+  // Listas de congregaciones y campos desde resolvers
+  todasCongregaciones: CongregacionModel[] = [];
+  todosCampos: CampoModel[] = [];
+  congregaciones: { id: number; nombre: string }[] = [];
+  campos: { id: number; nombre: string }[] = [];
+
   // Filtros
   busqueda: string = '';
-  filtroCongregacion: string = '';
-  filtroCampo: string = '';
+  congregacionSeleccionada: number = 0;
+  campoSeleccionado: number = 0;
 
   // Parámetros de consulta
   trimestre: number = 1;
@@ -55,7 +68,18 @@ export class VerInformesPaisComponent implements OnInit {
 
   ngOnInit(): void {
     this.generarAnios();
-    this.obtenerPaisUsuario();
+    this.cargarDatosResolvers();
+    this.cargarPaises();
+  }
+
+  /**
+   * Carga los datos de los resolvers
+   */
+  cargarDatosResolvers(): void {
+    this.route.data.subscribe((data) => {
+      this.todasCongregaciones = data['congregaciones'] || [];
+      this.todosCampos = data['campos'] || [];
+    });
   }
 
   /**
@@ -69,19 +93,64 @@ export class VerInformesPaisComponent implements OnInit {
   }
 
   /**
-   * Obtiene el país del usuario supervisor
+   * Carga todos los países y filtra por obrero encargado
    */
-  obtenerPaisUsuario(): void {
+  cargarPaises(): void {
     const usuario = this.usuarioService.usuario;
-    if (usuario && usuario.paisId) {
-      this.paisId = usuario.paisId;
-      this.cargarInformes();
-    } else {
+
+    if (!usuario?.id) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'No se pudo obtener el país del supervisor',
+        text: 'No se pudo obtener la información del usuario.',
       });
+      return;
+    }
+
+    this.cargando = true;
+
+    this.paisService.getPaises().subscribe({
+      next: (paises) => {
+        this.paises = paises;
+
+        // Filtrar países donde el usuario es obrero encargado
+        this.paisesDisponibles = paises.filter((pais) => pais.idObreroEncargado === usuario.id && pais.estado);
+
+        if (this.paisesDisponibles.length > 0) {
+          // Seleccionar automáticamente el primer país disponible
+          this.paisId = this.paisesDisponibles[0].id;
+          this.filtrarCongregacionesPorPais();
+          this.cargarInformes();
+        } else {
+          this.cargando = false;
+          Swal.fire({
+            icon: 'warning',
+            title: 'Sin países asignados',
+            text: 'No tienes países asignados como obrero encargado.',
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar países:', error);
+        this.cargando = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudieron cargar los países. Por favor, intente nuevamente.',
+        });
+      },
+    });
+  }
+
+  /**
+   * Cuando cambia el país seleccionado
+   */
+  onPaisChange(): void {
+    if (this.paisId > 0) {
+      this.congregacionSeleccionada = 0;
+      this.campoSeleccionado = 0;
+      this.filtrarCongregacionesPorPais();
+      this.cargarInformes();
     }
   }
 
@@ -123,21 +192,85 @@ export class VerInformesPaisComponent implements OnInit {
   }
 
   /**
+   * Filtra congregaciones por país seleccionado
+   */
+  filtrarCongregacionesPorPais(): void {
+    this.congregaciones = this.todasCongregaciones
+      .filter((congregacion) => congregacion.pais_id === this.paisId && congregacion.estado)
+      .map((congregacion) => ({
+        id: congregacion.id,
+        nombre: congregacion.congregacion,
+      }))
+      .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+    this.actualizarCamposDisponibles();
+  }
+
+  /**
+   * Actualiza la lista de campos según la congregación seleccionada
+   */
+  actualizarCamposDisponibles(): void {
+    if (this.congregacionSeleccionada > 0) {
+      this.campos = this.todosCampos
+        .filter((campo) => {
+          const coincide = campo.congregacion_id === Number(this.congregacionSeleccionada) && campo.estado;
+
+          return coincide;
+        })
+        .map((campo) => ({
+          id: campo.id,
+          nombre: campo.campo,
+        }))
+        .sort((a, b) => a.nombre.localeCompare(b.nombre));
+    } else {
+      // Mostrar todos los campos de las congregaciones del país
+      const congregacionesIds = this.congregaciones.map((c) => c.id);
+
+      this.campos = this.todosCampos
+        .filter((campo) => congregacionesIds.includes(campo.congregacion_id) && campo.estado)
+        .map((campo) => ({
+          id: campo.id,
+          nombre: campo.campo,
+        }))
+        .sort((a, b) => a.nombre.localeCompare(b.nombre));
+    }
+  }
+
+  /**
+   * Cuando cambia la congregación seleccionada
+   */
+  onCongregacionChange(): void {
+    const congSeleccionada = this.congregaciones.find((c) => c.id === this.congregacionSeleccionada);
+
+    this.campoSeleccionado = 0;
+    this.actualizarCamposDisponibles();
+    this.aplicarFiltros();
+  }
+
+  /**
    * Aplica filtros de búsqueda
    */
   aplicarFiltros(): void {
     this.informesFiltrados = this.informes.filter((informe) => {
       const nombreCompleto = this.obtenerNombreCompleto(informe.usuario).toLowerCase();
-      const congregacion = this.obtenerCongregacion(informe.usuario).toLowerCase();
-      const campo = this.obtenerCampo(informe.usuario).toLowerCase();
 
-      const cumpleBusqueda =
-        !this.busqueda || nombreCompleto.includes(this.busqueda.toLowerCase());
+      const cumpleBusqueda = !this.busqueda || nombreCompleto.includes(this.busqueda.toLowerCase());
+
+      // Obtener IDs de congregación y campo del usuario en el informe
+      const congregacionNombre = informe.usuario.congregacion?.nombre || '';
+      const campoNombre = informe.usuario.campo?.nombre || '';
+
+      // Buscar IDs correspondientes en las listas completas
+      const congEncontrada = this.todasCongregaciones.find((c) => c.congregacion === congregacionNombre);
+      const campoEncontrado = this.todosCampos.find((c) => c.campo === campoNombre);
+
+      const congregacionId = congEncontrada?.id || 0;
+      const campoId = campoEncontrado?.id || 0;
 
       const cumpleCongregacion =
-        !this.filtroCongregacion || congregacion.includes(this.filtroCongregacion.toLowerCase());
+        this.congregacionSeleccionada === 0 || congregacionId === this.congregacionSeleccionada;
 
-      const cumpleCampo = !this.filtroCampo || campo.includes(this.filtroCampo.toLowerCase());
+      const cumpleCampo = this.campoSeleccionado === 0 || campoId === this.campoSeleccionado;
 
       return cumpleBusqueda && cumpleCongregacion && cumpleCampo;
     });
@@ -148,8 +281,9 @@ export class VerInformesPaisComponent implements OnInit {
    */
   limpiarFiltros(): void {
     this.busqueda = '';
-    this.filtroCongregacion = '';
-    this.filtroCampo = '';
+    this.congregacionSeleccionada = 0;
+    this.campoSeleccionado = 0;
+    this.actualizarCamposDisponibles();
     this.aplicarFiltros();
   }
 
@@ -182,6 +316,13 @@ export class VerInformesPaisComponent implements OnInit {
   }
 
   /**
+   * Calcula el total de actividades económicas
+   */
+  getTotalActividadesEconomicas(informe: InformeCompletoPais): number {
+    return informe.actividadesEconomicas?.length || 0;
+  }
+
+  /**
    * Calcula el total de visitas
    */
   getTotalVisitas(informe: InformeCompletoPais): number {
@@ -200,6 +341,20 @@ export class VerInformesPaisComponent implements OnInit {
    */
   getTotalMetas(informe: InformeCompletoPais): number {
     return informe.metas?.length || 0;
+  }
+
+  /**
+   * Calcula el total de actividades eclesiásticas de todos los informes
+   */
+  getTotalActividadesEclesiasticas(): number {
+    return this.informes.reduce((total, informe) => total + (informe.actividades?.length || 0), 0);
+  }
+
+  /**
+   * Calcula el total de actividades económicas de todos los informes
+   */
+  getTotalActividadesEconomicasGlobal(): number {
+    return this.informes.reduce((total, informe) => total + (informe.actividadesEconomicas?.length || 0), 0);
   }
 
   /**
