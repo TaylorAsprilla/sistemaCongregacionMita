@@ -1,0 +1,251 @@
+/*
+Component: Ver Informes País
+Description: Estilos para la vista de informes del supervisor por país
+*/
+
+@use '../../../../../assets/scss/variable' as *;
+@use '../../../../../assets/scss/mixins' as *;
+
+// ============================================
+// ESTADÍSTICAS
+// ============================================
+.estadistica-box {
+  @include flex-center;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: $radius;
+  color: $white;
+  text-align: center;
+  @include smooth-transition;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .numero {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .etiqueta {
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ============================================
+// CARD
+// ============================================
+.card {
+  border-radius: $radius;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+
+  .card-title {
+    color: $headingtext;
+    font-weight: 600;
+
+    i {
+      color: $primary;
+    }
+  }
+}
+
+// ============================================
+// FORMULARIOS Y FILTROS
+// ============================================
+.form-label {
+  font-weight: 500;
+  color: $headingtext;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  border-radius: $radius;
+  border: 1px solid $border-color;
+  @include smooth-transition;
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+  }
+}
+
+// ============================================
+// TABLA
+// ============================================
+.tabla-informes {
+  font-size: 0.9rem;
+
+  thead {
+    th {
+      background-color: $light;
+      color: $headingtext;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      border-bottom: 2px solid $border-color;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      @include smooth-transition;
+
+      &:hover {
+        background-color: $extra-light;
+      }
+
+      td {
+        vertical-align: middle;
+        padding: 1rem 0.75rem;
+      }
+    }
+  }
+}
+
+// ============================================
+// BADGES
+// ============================================
+.badge {
+  padding: 0.4rem 0.8rem;
+  font-weight: 500;
+  border-radius: 12px;
+
+  &-pill {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.85rem;
+  }
+}
+
+// ============================================
+// BOTONES
+// ============================================
+.btn {
+  @include smooth-transition;
+  border-radius: $radius;
+  font-weight: 500;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+// ============================================
+// ALERTAS
+// ============================================
+.alert {
+  border-radius: $radius;
+  border-left: 4px solid;
+
+  &-info {
+    border-left-color: $info;
+    background-color: lighten($info, 45%);
+  }
+
+  &-warning {
+    border-left-color: $warning;
+    background-color: lighten($warning, 40%);
+  }
+
+  &-danger {
+    border-left-color: $danger;
+    background-color: lighten($danger, 40%);
+  }
+
+  i {
+    margin-right: 0.5rem;
+  }
+}
+
+// ============================================
+// LOADING
+// ============================================
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3rem;
+}
+
+// ============================================
+// RESPONSIVE
+// ============================================
+@media (max-width: 768px) {
+  .estadistica-box {
+    margin-bottom: 1rem;
+
+    .numero {
+      font-size: 2rem;
+    }
+
+    .etiqueta {
+      font-size: 0.8rem;
+    }
+  }
+
+  .tabla-informes {
+    font-size: 0.8rem;
+
+    thead th {
+      font-size: 0.75rem;
+      padding: 0.5rem;
+    }
+
+    tbody td {
+      padding: 0.5rem;
+    }
+  }
+
+  .btn-sm {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}
+
+// ============================================
+// UTILIDADES
+// ============================================
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-end {
+  align-items: flex-end;
+}

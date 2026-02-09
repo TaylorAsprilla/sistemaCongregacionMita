@@ -3,7 +3,10 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { map } from 'rxjs/operators';
 import { InformeModel } from 'src/app/core/models/informe.model';
-import { VerificarInformeAbiertoResponseInterface } from 'src/app/core/interfaces/informe.interface';
+import {
+  VerificarInformeAbiertoResponseInterface,
+  InformeTrimestrePaisResponse,
+} from 'src/app/core/interfaces/informe.interface';
 
 const base_url = environment.base_url;
 
@@ -92,5 +95,18 @@ export class InformeService {
    */
   limpiarInformeActivo() {
     this.informeActivo = null;
+  }
+
+  /**
+   * Obtiene todos los informes de un trimestre específico para un país
+   * @param trimestre Número del trimestre (1-4)
+   * @param anio Año del informe
+   * @param paisId ID del país
+   */
+  getInformesTrimestrePais(trimestre: number, anio: number, paisId: number) {
+    return this.httpClient.get<InformeTrimestrePaisResponse>(
+      `${base_url}/informe/trimestre-pais?trimestre=${trimestre}&año=${anio}&pais_id=${paisId}`,
+      this.headers,
+    );
   }
 }

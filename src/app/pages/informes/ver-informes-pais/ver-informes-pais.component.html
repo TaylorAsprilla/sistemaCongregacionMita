@@ -1,0 +1,259 @@
+<div class="container-fluid">
+  <!-- Título y estadísticas -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-3">
+            <i class="fa fa-book mr-2"></i>
+            Informes del País
+          </h4>
+
+          <!-- Estadísticas -->
+          <div class="row" *ngIf="estadisticas && !cargando">
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="estadistica-box bg-info">
+                <div class="numero">{{ estadisticas.totalInformes }}</div>
+                <div class="etiqueta">Informes Recibidos</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="estadistica-box bg-success">
+                <div class="numero">{{ estadisticas.totalObreros }}</div>
+                <div class="etiqueta">Obreros</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="estadistica-box bg-warning">
+                <div class="numero">{{ estadisticas.totalCongregaciones }}</div>
+                <div class="etiqueta">Congregaciones</div>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+              <div class="estadistica-box bg-primary">
+                <div class="numero">{{ estadisticas.totalCampos }}</div>
+                <div class="etiqueta">Campos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="fa fa-filter mr-2"></i>
+            Filtros de Búsqueda
+          </h5>
+
+          <div class="row">
+            <!-- Selección de Trimestre -->
+            <div class="col-md-3 mb-3">
+              <label for="trimestre" class="form-label">Trimestre</label>
+              <select
+                id="trimestre"
+                class="form-control"
+                [(ngModel)]="trimestre"
+                (change)="cargarInformes()"
+              >
+                <option *ngFor="let t of trimestres" [value]="t.value">
+                  {{ t.label }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Selección de Año -->
+            <div class="col-md-3 mb-3">
+              <label for="anio" class="form-label">Año</label>
+              <select id="anio" class="form-control" [(ngModel)]="anio" (change)="cargarInformes()">
+                <option *ngFor="let a of anios" [value]="a">{{ a }}</option>
+              </select>
+            </div>
+
+            <!-- Búsqueda por nombre -->
+            <div class="col-md-6 mb-3">
+              <label for="busqueda" class="form-label">Buscar por Nombre del Obrero</label>
+              <input
+                type="text"
+                id="busqueda"
+                class="form-control"
+                placeholder="Nombre del obrero..."
+                [(ngModel)]="busqueda"
+                (input)="aplicarFiltros()"
+              />
+            </div>
+
+            <!-- Búsqueda por congregación -->
+            <div class="col-md-5 mb-3">
+              <label for="congregacion" class="form-label">Buscar por Congregación</label>
+              <input
+                type="text"
+                id="congregacion"
+                class="form-control"
+                placeholder="Nombre de la congregación..."
+                [(ngModel)]="filtroCongregacion"
+                (input)="aplicarFiltros()"
+              />
+            </div>
+
+            <!-- Búsqueda por campo -->
+            <div class="col-md-5 mb-3">
+              <label for="campo" class="form-label">Buscar por Campo</label>
+              <input
+                type="text"
+                id="campo"
+                class="form-control"
+                placeholder="Nombre del campo..."
+                [(ngModel)]="filtroCampo"
+                (input)="aplicarFiltros()"
+              />
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="col-md-2 mb-3 d-flex align-items-end">
+              <button class="btn btn-secondary btn-block" (click)="limpiarFiltros()">
+                <i class="fa fa-eraser"></i> Limpiar
+              </button>
+            </div>
+          </div>
+
+          <!-- Información de resultados -->
+          <div class="alert alert-info mb-0" *ngIf="!cargando && informes.length > 0">
+            <i class="fa fa-info-circle"></i>
+            Mostrando <strong>{{ informesFiltrados.length }}</strong> de
+            <strong>{{ informes.length }}</strong> informes
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de informes -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">
+              <i class="fa fa-list mr-2"></i>
+              Lista de Informes
+            </h5>
+            <div>
+              <button class="btn btn-info btn-sm mr-2" (click)="recargar()" [disabled]="cargando">
+                <i class="fa fa-refresh"></i> Recargar
+              </button>
+              <button class="btn btn-success btn-sm" (click)="exportarExcel()">
+                <i class="fa fa-file-excel-o"></i> Exportar
+              </button>
+            </div>
+          </div>
+
+          <!-- Loading -->
+          <div *ngIf="cargando" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Cargando...</span>
+            </div>
+            <p class="mt-3">Cargando informes...</p>
+          </div>
+
+          <!-- Error -->
+          <div *ngIf="errorCarga && !cargando" class="alert alert-danger">
+            <i class="fa fa-exclamation-triangle"></i>
+            Error al cargar los informes. Por favor, intente nuevamente.
+          </div>
+
+          <!-- Sin resultados -->
+          <div
+            *ngIf="!cargando && !errorCarga && informesFiltrados.length === 0"
+            class="alert alert-warning"
+          >
+            <i class="fa fa-search"></i>
+            No se encontraron informes con los filtros aplicados.
+          </div>
+
+          <!-- Tabla -->
+          <div
+            class="table-responsive"
+            *ngIf="!cargando && !errorCarga && informesFiltrados.length > 0"
+          >
+            <table class="table table-hover tabla-informes">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Obrero</th>
+                  <th>Email</th>
+                  <th>Congregación</th>
+                  <th>Campo</th>
+                  <th class="text-center">Estado</th>
+                  <th class="text-center">Actividades</th>
+                  <th class="text-center">Visitas</th>
+                  <th class="text-center">Logros</th>
+                  <th class="text-center">Metas</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let informe of informesFiltrados; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <strong>{{ obtenerNombreCompleto(informe.usuario) }}</strong>
+                  </td>
+                  <td>{{ informe.usuario.email }}</td>
+                  <td>
+                    <span class="badge badge-info">{{
+                      obtenerCongregacion(informe.usuario)
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-secondary">{{ obtenerCampo(informe.usuario) }}</span>
+                  </td>
+                  <td class="text-center">
+                    <span
+                      class="badge"
+                      [ngClass]="{
+                        'badge-success': informe.estado === 'Abierto',
+                        'badge-secondary': informe.estado === 'Cerrado'
+                      }"
+                    >
+                      {{ informe.estado }}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-pill badge-primary">{{
+                      getTotalActividades(informe)
+                    }}</span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-pill badge-info">{{ getTotalVisitas(informe) }}</span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-pill badge-success">{{
+                      getTotalLogros(informe)
+                    }}</span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-pill badge-warning">{{ getTotalMetas(informe) }}</span>
+                  </td>
+                  <td class="text-center">
+                    <button
+                      class="btn btn-sm btn-primary"
+                      (click)="verDetalleInforme(informe.id)"
+                      title="Ver detalle del informe"
+                    >
+                      <i class="fa fa-eye"></i> Ver Detalle
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

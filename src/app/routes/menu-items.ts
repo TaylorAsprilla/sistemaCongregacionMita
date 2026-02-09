@@ -57,6 +57,7 @@ export enum RUTAS {
   SOLICITUDES_MULTIMEDIA_PENDIENTES = 'solicitudes-multimedia-pendientes',
   TIPO_DE_DOCUMENTO = 'tipo-de-documento',
   VER_INFORME = 'ver-informe',
+  VER_INFORMES_PAIS = 'ver-informes-pais',
   VER_GRUPO_DE_GEMELOS = 'ver-grupo-de-gemelos',
   OPCION_DE_TRANSPORTE = 'opcion-de-transporte',
   GENERO = 'genero',
@@ -401,6 +402,15 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
     submenu: [
+      {
+        path: RUTAS.VER_INFORMES_PAIS,
+        title: 'Ver Informes',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        submenu: [],
+      },
       {
         path: RUTAS.CREAR_TIPO_ACTIVIDAD,
         title: 'Tipo Actividad Eclesiastica',
