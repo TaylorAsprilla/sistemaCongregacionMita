@@ -1,99 +1,39 @@
-// ============================================
-// VARIABLES
-// ============================================
-$color-primary: #007bff;
-$color-primary-dark: #0056b3;
-$color-primary-darker: #004085;
-$color-secondary: #6c757d;
-$color-secondary-dark: #5a6268;
-$color-secondary-darker: #545b62;
+/*
+Template Name: Sistema Congregacion Mita
+Component: Ver Informe
+Description: Estilos para visualización e impresión de informes
+*/
 
-$color-text-primary: #2c3e50;
-$color-text-secondary: #495057;
-$color-text-muted: #6c757d;
-
-$color-bg-light: #f8f9fa;
-$color-bg-lighter: #e9ecef;
-$color-bg-white: #ffffff;
-$color-bg-hover: #f5f5f5;
-
-$color-border: #dee2e6;
-$color-accent: #3498db;
-
-$color-info-bg: #d1ecf1;
-$color-info-border: #bee5eb;
-$color-info-text: #0c5460;
-
-$font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-$font-size-base: 1.1rem;
-$font-size-table: 1.05rem;
-$font-size-table-header: 1.1rem;
-$font-size-title: 1.4rem;
-$font-size-footer: 0.95rem;
-$font-size-mobile: 0.85rem;
-
-$border-radius: 8px;
-$border-radius-sm: 6px;
-$line-height-base: 1.6;
-
-$spacing-xs: 8px;
-$spacing-sm: 10px;
-$spacing-md: 12px;
-$spacing-lg: 15px;
-$spacing-xl: 20px;
-$spacing-xxl: 40px;
-
-$transition-base: all 0.3s ease;
-$box-shadow-hover: 0 4px 8px rgba(0, 123, 255, 0.3);
-$box-shadow-secondary: 0 4px 8px rgba(108, 117, 125, 0.3);
+// Importar variables y mixins globales
+@use '../../../../assets/scss/variable' as *;
+@use '../../../../assets/scss/mixins' as *;
 
 // ============================================
-// MIXINS
-// ============================================
-@mixin button-hover($bg-color, $border-color, $shadow) {
-  &:hover:not(:disabled) {
-    background-color: $bg-color;
-    border-color: $border-color;
-    transform: translateY(-2px);
-    box-shadow: $shadow;
-  }
-}
-
-@mixin responsive-font($desktop, $mobile) {
-  font-size: $desktop;
-
-  @media (max-width: 768px) {
-    font-size: $mobile;
-  }
-}
-
-// ============================================
-// ESTILOS GENERALES
+// ESTILOS GENERALES DEL INFORME
 // ============================================
 .informe-content {
-  background-color: $color-bg-white;
-  border-radius: $border-radius;
-  font-family: $font-family-base;
-  line-height: $line-height-base;
-  font-size: $font-size-base;
-  animation: fadeIn 0.5s ease-in;
+  background-color: $white;
+  border-radius: $radius;
+  font-family: $bodyfont;
+  line-height: 1.6;
+  font-size: $informe-font-size-base;
+  @include fade-in(0.5s);
 }
 
 // ============================================
-// ENCABEZADO
+// ENCABEZADO DEL INFORME
 // ============================================
 .info-box {
-  margin: $spacing-xl auto;
+  margin: $informe-spacing-xl auto;
 
   table {
-    border-collapse: collapse;
-    width: 100%;
+    @include responsive-table;
   }
 
   td {
-    padding: $spacing-md;
-    border: 1px solid $color-border;
-    font-size: $font-size-base;
+    padding: $informe-spacing-md;
+    border: 1px solid $border-color;
+    font-size: $informe-font-size-base;
   }
 }
 
@@ -101,18 +41,18 @@ $box-shadow-secondary: 0 4px 8px rgba(108, 117, 125, 0.3);
 // SECCIONES
 // ============================================
 .seccion {
-  page-break-inside: avoid;
+  @include page-break-avoid;
 }
 
 .seccion-titulo {
-  @include responsive-font($font-size-title, 1.2rem);
+  @include responsive-font($informe-font-size-title, 1.2rem);
 
   & {
     font-weight: 600;
-    color: $color-text-primary;
-    border-bottom: 2px solid $color-accent;
-    padding-bottom: $spacing-xs;
-    margin-bottom: $spacing-xl;
+    color: $informe-text-primary;
+    border-bottom: 2px solid $informe-accent;
+    padding-bottom: $informe-spacing-xs;
+    margin-bottom: $informe-spacing-xl;
   }
 }
 
@@ -120,64 +60,64 @@ $box-shadow-secondary: 0 4px 8px rgba(108, 117, 125, 0.3);
 // TABLAS
 // ============================================
 .table {
-  @include responsive-font($font-size-table, $font-size-mobile);
+  @include responsive-font($informe-font-size-table, $informe-font-size-mobile);
 
   th {
-    background-color: $color-bg-light;
+    background-color: $informe-bg-light;
     font-weight: 600;
-    color: $color-text-secondary;
+    color: $informe-text-secondary;
     text-align: center;
     vertical-align: middle;
-    padding: 14px $spacing-sm;
-    font-size: $font-size-table-header;
+    padding: 14px $informe-spacing-sm;
+    font-size: $informe-font-size-table-header;
   }
 
   td {
-    padding: $spacing-sm $spacing-xs;
+    padding: $informe-spacing-sm $informe-spacing-xs;
     vertical-align: middle;
   }
 
-  &-hover tbody tr:hover {
-    background-color: $color-bg-hover;
+  &-hover tbody tr {
+    @include table-row-hover($informe-bg-hover);
   }
 }
 
 .thead-light th {
-  background-color: $color-bg-lighter !important;
-  border-bottom: 2px solid $color-border;
+  background-color: $informe-bg-lighter !important;
+  border-bottom: 2px solid $border-color;
 }
 
 tfoot tr {
   font-weight: 600;
-  background-color: $color-bg-light;
+  background-color: $informe-bg-light;
 }
 
 // ============================================
 // ALERTAS
 // ============================================
 .alert {
-  border-radius: $border-radius-sm;
-  padding: $spacing-lg;
-  margin: $spacing-xl 0;
+  border-radius: $radius;
+  padding: $informe-spacing-lg;
+  margin: $informe-spacing-xl 0;
 
   &-info {
-    background-color: $color-info-bg;
-    border-color: $color-info-border;
-    color: $color-info-text;
+    background-color: $informe-info-bg;
+    border-color: $informe-info-border;
+    color: $informe-info-text;
   }
 }
 
 // ============================================
-// FOOTER
+// FOOTER DEL INFORME
 // ============================================
 .footer-info {
-  margin-top: $spacing-xxl;
-  padding-top: $spacing-xl;
-  border-top: 1px solid $color-border;
+  margin-top: $informe-spacing-xxl;
+  padding-top: $informe-spacing-xl;
+  border-top: 1px solid $border-color;
 
   p {
-    margin-bottom: $spacing-xs;
-    font-size: $font-size-footer;
+    margin-bottom: $informe-spacing-xs;
+    font-size: $informe-font-size-footer;
   }
 }
 
@@ -185,35 +125,32 @@ tfoot tr {
 // BOTONES
 // ============================================
 .btn {
-  padding: $spacing-sm $spacing-xl;
+  padding: $informe-spacing-sm $informe-spacing-xl;
   font-weight: 500;
-  border-radius: $border-radius-sm;
-  transition: $transition-base;
+  border-radius: $radius;
+  @include smooth-transition(all, 0.3s, ease);
 
   &-primary {
-    background-color: $color-primary;
-    border-color: $color-primary;
-    @include button-hover($color-primary-dark, $color-primary-darker, $box-shadow-hover);
+    background-color: $informe-primary;
+    border-color: $informe-primary;
+    @include button-hover($informe-primary-dark, $informe-primary-darker, $informe-box-shadow-hover);
   }
 
   &-secondary {
-    background-color: $color-secondary;
-    border-color: $color-secondary;
-    color: $color-bg-white;
+    background-color: $secondary;
+    border-color: $secondary;
+    color: $white;
 
     &:hover {
-      background-color: $color-secondary-dark;
-      border-color: $color-secondary-darker;
-      color: $color-bg-white;
+      background-color: $secondary-dark;
+      border-color: $secondary-darker;
+      color: $white;
       transform: translateY(-2px);
-      box-shadow: $box-shadow-secondary;
+      box-shadow: $informe-box-shadow-secondary;
     }
   }
 
-  &:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-  }
+  @include button-disabled;
 }
 
 // ============================================
@@ -229,7 +166,7 @@ tfoot tr {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY($spacing-xl);
+    transform: translateY($informe-spacing-xl);
   }
   to {
     opacity: 1;
@@ -238,12 +175,12 @@ tfoot tr {
 }
 
 // ============================================
-// MEDIA QUERIES
+// ESTILOS PARA IMPRESIÓN
 // ============================================
 @media print {
   .btn,
   .d-flex {
-    display: none !important;
+    @include hide-on-print;
   }
 
   .informe-content {
@@ -252,11 +189,13 @@ tfoot tr {
   }
 
   .seccion {
-    page-break-inside: avoid;
+    @include page-break-avoid;
   }
 }
 
-// Estilos específicos para exportación a PDF
+// ============================================
+// ESTILOS PARA EXPORTACIÓN A PDF
+// ============================================
 .pdf-export {
   h2 {
     font-size: 2rem !important;
@@ -308,8 +247,11 @@ tfoot tr {
   }
 }
 
+// ============================================
+// RESPONSIVE - MOBILE
+// ============================================
 @media (max-width: 768px) {
   .informe-content {
-    padding: $spacing-xl !important;
+    padding: $informe-spacing-xl !important;
   }
 }
