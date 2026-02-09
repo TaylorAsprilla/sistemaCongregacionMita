@@ -1,0 +1,387 @@
+/*
+Template Name: Sistema Congregacion Mita
+File: _informes-utils.scss
+Description: Clases de utilidad compartidas para todos los componentes de informes
+
+CÓMO USAR:
+----------
+1. En componentes de informes, importar al inicio del archivo SCSS:
+   @use '../../../../assets/scss/informes-utils' as *;
+
+2. Usar directamente las clases en el HTML del componente:
+   <div class="informe-container">
+     <h2 class="informe-titulo-principal">Mi Informe</h2>
+     <table class="tabla-informe">...</table>
+   </div>
+
+EJEMPLOS:
+---------
+<!-- Tarjeta de informe -->
+<div class="informe-card">
+  <div class="informe-card-header">Resumen</div>
+  <div class="informe-card-body">Contenido...</div>
+</div>
+
+<!-- Estadística -->
+<div class="estadistica-box">
+  <div class="numero">150</div>
+  <div class="etiqueta">Total Miembros</div>
+</div>
+
+<!-- Alerta -->
+<div class="informe-alerta informe-alerta-info">
+  Información importante
+</div>
+
+<!-- Ocultar en impresión -->
+<button class="ocultar-impresion">Exportar PDF</button>
+*/
+
+// Importar dependencias
+@use './variable' as *;
+@use './mixins' as *;
+
+// ============================================
+// CLASES DE UTILIDAD PARA TÍTULOS
+// ============================================
+
+.informe-titulo-principal {
+  @include responsive-font(2rem, 1.5rem);
+  font-weight: 700;
+  color: $informe-text-primary;
+  margin-bottom: $informe-spacing-xl;
+  text-align: center;
+}
+
+.informe-subtitulo {
+  @include responsive-font($informe-font-size-title, 1.2rem);
+  font-weight: 600;
+  color: $informe-text-secondary;
+  margin-bottom: $informe-spacing-lg;
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA CONTAINERS
+// ============================================
+
+.informe-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $informe-spacing-xl;
+  background-color: $white;
+  border-radius: $radius;
+
+  @media print {
+    padding: 0;
+    box-shadow: none;
+  }
+}
+
+.informe-seccion {
+  @include page-break-avoid;
+  margin-bottom: $informe-spacing-xxl;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA TABLAS
+// ============================================
+
+.tabla-informe {
+  @include responsive-table;
+  margin: $informe-spacing-lg 0;
+
+  thead {
+    background-color: $informe-bg-light;
+
+    th {
+      padding: $informe-spacing-md;
+      font-weight: 600;
+      color: $informe-text-secondary;
+      text-align: center;
+      border: 1px solid $border-color;
+    }
+  }
+
+  tbody {
+    tr {
+      @include table-row-hover($informe-bg-hover);
+
+      td {
+        padding: $informe-spacing-sm;
+        border: 1px solid $border-color;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  tfoot {
+    background-color: $informe-bg-light;
+    font-weight: 600;
+
+    td {
+      padding: $informe-spacing-md;
+      border: 1px solid $border-color;
+    }
+  }
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA TARJETAS
+// ============================================
+
+.informe-card {
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: $radius;
+  padding: $informe-spacing-lg;
+  margin-bottom: $informe-spacing-lg;
+  @include card-shadow;
+
+  &-header {
+    font-weight: 600;
+    font-size: $informe-font-size-title;
+    color: $informe-text-primary;
+    margin-bottom: $informe-spacing-md;
+    padding-bottom: $informe-spacing-sm;
+    border-bottom: 2px solid $informe-accent;
+  }
+
+  &-body {
+    font-size: $informe-font-size-base;
+    color: $bodytext;
+  }
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA ESTADÍSTICAS
+// ============================================
+
+.estadistica-box {
+  @include flex-center;
+  flex-direction: column;
+  padding: $informe-spacing-lg;
+  background: linear-gradient(135deg, $informe-primary, $informe-accent);
+  color: $white;
+  border-radius: $radius;
+  text-align: center;
+  @include smooth-transition;
+
+  &:hover {
+    transform: translateY(-5px);
+    @include hover-shadow($informe-box-shadow-hover);
+  }
+
+  .numero {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: $informe-spacing-xs;
+  }
+
+  .etiqueta {
+    font-size: $informe-font-size-base;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA ALERTAS
+// ============================================
+
+.informe-alerta {
+  padding: $informe-spacing-lg;
+  margin: $informe-spacing-lg 0;
+  border-radius: $radius;
+  border-left: 4px solid;
+
+  &-info {
+    background-color: $informe-info-bg;
+    border-color: $informe-info-border;
+    color: $informe-info-text;
+  }
+
+  &-success {
+    background-color: $light-success;
+    border-color: $success;
+    color: darken($success, 20%);
+  }
+
+  &-warning {
+    background-color: $light-warning;
+    border-color: $warning;
+    color: darken($warning, 20%);
+  }
+
+  &-danger {
+    background-color: $light-danger;
+    border-color: $danger;
+    color: darken($danger, 20%);
+  }
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA IMPRESIÓN
+// ============================================
+
+.solo-impresion {
+  display: none;
+
+  @media print {
+    display: block;
+  }
+}
+
+.ocultar-impresion {
+  @include hide-on-print;
+}
+
+.salto-pagina-antes {
+  @media print {
+    page-break-before: always;
+  }
+}
+
+.salto-pagina-despues {
+  @media print {
+    page-break-after: always;
+  }
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA BADGES
+// ============================================
+
+.badge-informe {
+  display: inline-block;
+  padding: $informe-spacing-xs $informe-spacing-md;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &-primary {
+    background-color: $informe-primary;
+    color: $white;
+  }
+
+  &-success {
+    background-color: $success;
+    color: $white;
+  }
+
+  &-warning {
+    background-color: $warning;
+    color: $white;
+  }
+
+  &-danger {
+    background-color: $danger;
+    color: $white;
+  }
+
+  &-info {
+    background-color: $info;
+    color: $white;
+  }
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA TEXTO
+// ============================================
+
+.texto-centrado {
+  text-align: center;
+}
+
+.texto-derecha {
+  text-align: right;
+}
+
+.texto-izquierda {
+  text-align: left;
+}
+
+.texto-primario {
+  color: $informe-text-primary;
+}
+
+.texto-secundario {
+  color: $informe-text-secondary;
+}
+
+.texto-muted {
+  color: $informe-text-muted;
+}
+
+.texto-bold {
+  font-weight: 600;
+}
+
+.texto-truncar {
+  @include text-truncate;
+}
+
+// ============================================
+// CLASES DE UTILIDAD PARA ESPACIADO
+// ============================================
+
+.mb-xs {
+  margin-bottom: $informe-spacing-xs;
+}
+.mb-sm {
+  margin-bottom: $informe-spacing-sm;
+}
+.mb-md {
+  margin-bottom: $informe-spacing-md;
+}
+.mb-lg {
+  margin-bottom: $informe-spacing-lg;
+}
+.mb-xl {
+  margin-bottom: $informe-spacing-xl;
+}
+.mb-xxl {
+  margin-bottom: $informe-spacing-xxl;
+}
+
+.mt-xs {
+  margin-top: $informe-spacing-xs;
+}
+.mt-sm {
+  margin-top: $informe-spacing-sm;
+}
+.mt-md {
+  margin-top: $informe-spacing-md;
+}
+.mt-lg {
+  margin-top: $informe-spacing-lg;
+}
+.mt-xl {
+  margin-top: $informe-spacing-xl;
+}
+.mt-xxl {
+  margin-top: $informe-spacing-xxl;
+}
+
+.p-xs {
+  padding: $informe-spacing-xs;
+}
+.p-sm {
+  padding: $informe-spacing-sm;
+}
+.p-md {
+  padding: $informe-spacing-md;
+}
+.p-lg {
+  padding: $informe-spacing-lg;
+}
+.p-xl {
+  padding: $informe-spacing-xl;
+}
+.p-xxl {
+  padding: $informe-spacing-xxl;
+}

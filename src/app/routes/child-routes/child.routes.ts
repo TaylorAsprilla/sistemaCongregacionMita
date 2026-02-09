@@ -12,6 +12,7 @@ import { InformeMetasComponent } from 'src/app/pages/informes/informe-metas/info
 import { InformeVisitasComponent } from 'src/app/pages/informes/informe-visitas/informe-visitas.component';
 import { InformeComponent } from 'src/app/pages/informes/informe/informe.component';
 import { VerInformeComponent } from 'src/app/pages/informes/ver-informe/ver-informe.component';
+import { VerInformesPaisComponent } from 'src/app/pages/informes/ver-informes-pais/ver-informes-pais.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 import { ROLES, RUTAS } from '../menu-items';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
@@ -454,6 +455,23 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.VER_INFORME,
     component: VerInformeComponent,
+  },
+  {
+    path: `${RUTAS.VER_INFORME}/:id`,
+    component: VerInformeComponent,
+  },
+  {
+    path: RUTAS.VER_INFORMES_PAIS,
+    component: VerInformesPaisComponent,
+    canActivate: [RolesGuard],
+    resolve: {
+      congregaciones: CongregacionResolver,
+      campos: CampoResolver,
+    },
+    data: {
+      titulo: 'Ver Informes del País',
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+    },
   },
   {
     path: `${RUTAS.SOLICITUD_MULTIMEDIA}/:id`,

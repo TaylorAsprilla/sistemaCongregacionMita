@@ -64,6 +64,7 @@ File: scss
  */
 
 @use 'variable' as *;
+@use 'mixins' as *;
 @use 'app';
 @use 'pages';
 @use 'sidebar';

@@ -1,0 +1,430 @@
+<div class="container-fluid">
+  <!-- Título y estadísticas -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <!-- Estadísticas -->
+          @if (estadisticas && !cargando) {
+            <div class="row">
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-info">
+                  <div class="numero">{{ estadisticas.totalInformes }}</div>
+                  <div class="etiqueta">Informes Recibidos</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-success">
+                  <div class="numero">{{ estadisticas.totalObreros }}</div>
+                  <div class="etiqueta">Obreros</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-warning">
+                  <div class="numero">{{ estadisticas.totalCongregaciones }}</div>
+                  <div class="etiqueta">Congregaciones</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-primary">
+                  <div class="numero">{{ estadisticas.totalCampos }}</div>
+                  <div class="etiqueta">Campos</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-purple">
+                  <div class="numero">{{ getTotalActividadesEclesiasticas() }}</div>
+                  <div class="etiqueta">Act. Eclesiásticas</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-teal">
+                  <div class="numero">{{ getTotalActividadesEconomicasGlobal() }}</div>
+                  <div class="etiqueta">Act. Económicas</div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">
+              <i class="fa fa-filter mr-2"></i>
+              Filtros de Búsqueda
+            </h5>
+            <button
+              class="btn btn-sm btn-outline-primary"
+              (click)="toggleFiltros()"
+              title="{{ mostrarFiltros ? 'Ocultar filtros' : 'Mostrar filtros' }}"
+            >
+              <i class="fa" [ngClass]="mostrarFiltros ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+              {{ mostrarFiltros ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </div>
+
+          @if (mostrarFiltros) {
+            <div class="row">
+              <!-- Selección de Trimestre -->
+              <div class="col-md-3 mb-3">
+                <label for="trimestre" class="form-label">Trimestre</label>
+                <select id="trimestre" class="form-control" [(ngModel)]="trimestre" (change)="cargarInformes()">
+                  @for (t of trimestres; track t.value) {
+                    <option [value]="t.value">
+                      {{ t.label }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Selección de Año -->
+              <div class="col-md-3 mb-3">
+                <label for="anio" class="form-label">Año</label>
+                <select id="anio" class="form-control" [(ngModel)]="anio" (change)="cargarInformes()">
+                  @for (a of anios; track a) {
+                    <option [value]="a">{{ a }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Selección de País -->
+              <div class="col-md-3 mb-3">
+                <label for="pais" class="form-label">País</label>
+                <select
+                  id="pais"
+                  class="form-control"
+                  [(ngModel)]="paisId"
+                  (change)="onPaisChange()"
+                  [disabled]="paisesDisponibles.length === 0"
+                >
+                  <option value="0" disabled>Seleccione un país</option>
+                  @for (p of paisesDisponibles; track p.id) {
+                    <option [value]="p.id">
+                      {{ p.pais }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Búsqueda por nombre -->
+              <div class="col-md-3 mb-3">
+                <label for="busqueda" class="form-label">Buscar por Nombre del Obrero</label>
+                <input
+                  type="text"
+                  id="busqueda"
+                  class="form-control"
+                  placeholder="Nombre del obrero..."
+                  [(ngModel)]="busqueda"
+                  (input)="aplicarFiltros()"
+                />
+              </div>
+
+              <!-- Búsqueda por congregación -->
+              <div class="col-md-6 mb-3">
+                <label for="congregacion" class="form-label">Congregación</label>
+                <select
+                  id="congregacion"
+                  class="form-control"
+                  [(ngModel)]="congregacionSeleccionada"
+                  (change)="onCongregacionChange()"
+                  [disabled]="congregaciones.length === 0"
+                >
+                  <option value="0">Todas las congregaciones</option>
+                  @for (c of congregaciones; track c.id) {
+                    <option [value]="c.id">
+                      {{ c.nombre }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Búsqueda por campo -->
+              <div class="col-md-6 mb-3">
+                <label for="campo" class="form-label">Campo</label>
+                <select
+                  id="campo"
+                  class="form-control"
+                  [(ngModel)]="campoSeleccionado"
+                  (change)="aplicarFiltros()"
+                  [disabled]="campos.length === 0"
+                >
+                  <option value="0">Todos los campos</option>
+                  @for (ca of campos; track ca.id) {
+                    <option [value]="ca.id">
+                      {{ ca.nombre }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Botones de acción -->
+              <div class="col-md-2 mb-3 d-flex align-items-end">
+                <button class="btn btn-secondary btn-block" (click)="limpiarFiltros()">
+                  <i class="fa fa-eraser"></i> Limpiar
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Información de resultados -->
+          @if (!cargando && informes.length > 0) {
+            <div class="alert alert-info mb-0">
+              <i class="fa fa-info-circle"></i>
+              Mostrando <strong>{{ informesFiltrados.length }}</strong> de
+              <strong>{{ informes.length }}</strong> informes
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de informes -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">
+              <i class="fa fa-list mr-2"></i>
+              Lista de Informes
+            </h5>
+            <div>
+              <button class="btn btn-info btn-sm mr-2 text-white" (click)="recargar()" [disabled]="cargando">
+                <i class="fa fa-refresh"></i> Recargar
+              </button>
+            </div>
+          </div>
+
+          <!-- Loading -->
+          @if (cargando) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Cargando...</span>
+              </div>
+              <p class="mt-3">Cargando informes...</p>
+            </div>
+          }
+
+          <!-- Error -->
+          @if (errorCarga && !cargando) {
+            <div class="alert alert-danger">
+              <i class="fa fa-exclamation-triangle"></i>
+              Error al cargar los informes. Por favor, intente nuevamente.
+            </div>
+          }
+
+          <!-- Sin resultados -->
+          @if (!cargando && !errorCarga && informesFiltrados.length === 0) {
+            <div class="alert alert-warning">
+              <i class="fa fa-search"></i>
+              No se encontraron informes con los filtros aplicados.
+            </div>
+          }
+
+          <!-- Tabla -->
+          @if (!cargando && !errorCarga && informesFiltrados.length > 0) {
+            <div class="table-responsive">
+              <table class="table table-hover tabla-informes">
+                <thead class="thead-light">
+                  <tr>
+                    <th>#</th>
+                    <th>Obrero</th>
+                    <th>Celular</th>
+                    <th>Congregación</th>
+                    <th>Campo</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Act. Eclesiásticas</th>
+                    <th class="text-center">Act. Económicas</th>
+                    <th class="text-center">Visitas</th>
+                    <th class="text-center">Logros</th>
+                    <th class="text-center">Metas</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (informe of informesFiltrados; track informe.id; let i = $index) {
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        <strong>{{ obtenerNombreCompleto(informe.usuario) }}</strong>
+                      </td>
+                      <td>
+                        @if (informe.usuario.numeroCelular) {
+                          <div class="phone-number">
+                            <span>{{ informe.usuario.numeroCelular }}</span>
+                            <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIcons(informe)"></i>
+                            <div class="contact-icons" [ngClass]="{ show: selectedContact === informe.id }">
+                              <a
+                                href="https://api.whatsapp.com/send?phone={{
+                                  informe.usuario.numeroCelular | whatsapp
+                                }}"
+                                target="_blank"
+                              >
+                                <i class="fab fa-whatsapp mx-2"></i>
+                              </a>
+                              <a href="https://t.me/{{ informe.usuario.numeroCelular | telegram }}" target="_blank">
+                                <i class="fab fa-telegram mx-2"></i>
+                              </a>
+                              <a href="tel:{{ informe.usuario.numeroCelular | telegram }}" target="_blank">
+                                <i class="fa fa-phone mx-2"></i>
+                              </a>
+                            </div>
+                          </div>
+                        } @else {
+                          <span class="text-muted">N/A</span>
+                        }
+                      </td>
+                      <td>
+                        <span class="badge badge-info">{{ obtenerCongregacion(informe.usuario) }}</span>
+                      </td>
+                      <td>
+                        <span class="badge badge-warning">{{ obtenerCampo(informe.usuario) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span
+                          class="badge"
+                          [ngClass]="{
+                            'badge-success': informe.estado === 'Abierto',
+                            'badge-secondary': informe.estado === 'Cerrado',
+                          }"
+                        >
+                          {{ informe.estado }}
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-primary">{{ getTotalActividades(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-danger">{{ getTotalActividadesEconomicas(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-info">{{ getTotalVisitas(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-success">{{ getTotalLogros(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-warning">{{ getTotalMetas(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                          <button
+                            class="btn btn-info"
+                            (click)="toggleInfoObrero(informe.id)"
+                            title="Ver información del obrero"
+                          >
+                            <i
+                              class="fa"
+                              [ngClass]="informeInfoExpandido === informe.id ? 'fa-minus-circle' : 'fa-info-circle'"
+                            ></i>
+                          </button>
+                          <button
+                            class="btn btn-primary"
+                            (click)="verDetalleInforme(informe.id)"
+                            title="Ver detalle del informe"
+                          >
+                            <i class="fa fa-eye"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- Fila expandible con información del obrero -->
+                    @if (informeInfoExpandido === informe.id) {
+                      <tr class="info-expandida">
+                        <td colspan="12">
+                          <div class="info-obrero-card">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h6 class="info-title"><i class="fa fa-user"></i> Información del Obrero</h6>
+                                <div class="info-item">
+                                  <strong>Nombre Completo:</strong>
+                                  <span>{{ obtenerNombreCompleto(informe.usuario) }}</span>
+                                </div>
+                                <div class="info-item">
+                                  <strong>Email:</strong>
+                                  <span>{{ informe.usuario.email }}</span>
+                                </div>
+                                <div class="info-item">
+                                  <strong>Teléfono:</strong>
+                                  <span>{{ informe.usuario.numeroCelular || 'N/A' }}</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <h6 class="info-title"><i class="fa fa-map-marker"></i> Ubicación</h6>
+                                <div class="info-item">
+                                  <strong>Congregación:</strong>
+                                  <span>{{ obtenerCongregacion(informe.usuario) }}</span>
+                                </div>
+                                <div class="info-item">
+                                  <strong>Campo:</strong>
+                                  <span>{{ obtenerCampo(informe.usuario) }}</span>
+                                </div>
+                                <div class="info-item">
+                                  <strong>Estado del Informe:</strong>
+                                  <span
+                                    class="badge"
+                                    [ngClass]="{
+                                      'badge-success': informe.estado === 'Abierto',
+                                      'badge-secondary': informe.estado === 'Cerrado',
+                                    }"
+                                  >
+                                    {{ informe.estado }}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-3">
+                              <div class="col-12">
+                                <h6 class="info-title"><i class="fa fa-bar-chart"></i> Resumen de Actividades</h6>
+                                <div class="actividades-resumen">
+                                  <div class="actividad-badge">
+                                    <span class="badge badge-primary badge-lg">
+                                      <i class="fa fa-church"></i> {{ getTotalActividades(informe) }} Eclesiásticas
+                                    </span>
+                                  </div>
+                                  <div class="actividad-badge">
+                                    <span class="badge badge-danger badge-lg">
+                                      <i class="fa fa-dollar"></i>
+                                      {{ getTotalActividadesEconomicas(informe) }} Económicas
+                                    </span>
+                                  </div>
+                                  <div class="actividad-badge">
+                                    <span class="badge badge-info badge-lg">
+                                      <i class="fa fa-users"></i> {{ getTotalVisitas(informe) }} Visitas
+                                    </span>
+                                  </div>
+                                  <div class="actividad-badge">
+                                    <span class="badge badge-success badge-lg">
+                                      <i class="fa fa-trophy"></i> {{ getTotalLogros(informe) }} Logros
+                                    </span>
+                                  </div>
+                                  <div class="actividad-badge">
+                                    <span class="badge badge-warning badge-lg">
+                                      <i class="fa fa-target"></i> {{ getTotalMetas(informe) }} Metas
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    }
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
