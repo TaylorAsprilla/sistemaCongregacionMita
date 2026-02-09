@@ -361,17 +361,14 @@ export class VerInformesPaisComponent implements OnInit {
    * Navega al detalle del informe
    */
   verDetalleInforme(informeId: number): void {
-    this.router.navigate(['/sistema', RUTAS.VER_INFORME, informeId]);
-  }
+    // Buscar el informe en el listado actual para pasar sus datos
+    const informe = this.informesFiltrados.find((i) => i.id === informeId);
 
-  /**
-   * Exporta los datos a Excel (funcionalidad básica)
-   */
-  exportarExcel(): void {
-    Swal.fire({
-      icon: 'info',
-      title: 'Función en desarrollo',
-      text: 'La exportación a Excel estará disponible próximamente',
+    this.router.navigate(['/sistema', RUTAS.VER_INFORME, informeId], {
+      state: {
+        informeData: informe,
+        fromListaPais: true,
+      },
     });
   }
 

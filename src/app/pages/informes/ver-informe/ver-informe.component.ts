@@ -1,6 +1,7 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -27,7 +28,6 @@ import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { TipoActividadEconomicaModel } from 'src/app/core/models/tipo-actividad-economica.model';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
 
 @Component({
@@ -52,9 +52,11 @@ export class VerInformeComponent implements OnInit {
   private logroService = inject(LogroService);
   private diezmoService = inject(DiezmoService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   cargando: boolean = false;
   descargandoPDF: boolean = false;
+  informeIdParam: number | null = null;
 
   // Información del usuario
   nombreUsuario: string = '';
@@ -81,6 +83,13 @@ export class VerInformeComponent implements OnInit {
   tiposActividadEconomica: TipoActividadEconomicaModel[] = [];
 
   ngOnInit(): void {
+    // Verificar si viene un ID de informe por parámetro de ruta
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      if (params['id']) {
+        this.informeIdParam = Number(params['id']);
+      }
+    });
+
     this.nombreUsuario = this.usuarioService.usuarioNombre || '';
     this.cargarInformacionCongregacion();
     this.cargarTiposActividad();
@@ -92,8 +101,8 @@ export class VerInformeComponent implements OnInit {
   /**
    * Carga la información de congregación del usuario
    */
-  private cargarInformacionCongregacion(): void {
-    const usuarioId = this.usuarioService.usuarioId;
+  private cargarInformacionCongregacion(usuarioIdParam?: number): void {
+    const usuarioId = usuarioIdParam || this.usuarioService.usuarioId;
 
     // Cargar congregaciones y buscar donde el usuario es obrero encargado
     this.congregacionService
@@ -207,21 +216,192 @@ export class VerInformeComponent implements OnInit {
    * Verifica si hay un informe activo y carga sus datos
    */
   private verificarYCargarInforme(): void {
-    const informeId = this.informeService.informeActivoId;
+    // Si viene un ID por parámetro, usar ese
+    let informeId = this.informeIdParam;
 
+    // Si no viene por parámetro, usar el informe activo del usuario
     if (!informeId) {
-      Swal.fire({
-        title: 'Sin informe activo',
-        text: 'No hay un informe activo. Por favor, genera un informe primero.',
-        icon: 'warning',
-        confirmButtonText: 'Ir a Informes',
-      }).then(() => {
-        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
-      });
+      informeId = this.informeService.informeActivoId;
+    }
+
+    // Si no hay informeId disponible, intentar cargar desde API
+    if (!informeId) {
+      this.intentarCargarInformeActivo();
       return;
     }
 
-    this.cargarDatosInforme(informeId);
+    // Si viene por parámetro, primero cargar info básica del informe para obtener el usuario
+    if (this.informeIdParam) {
+      // Intentar obtener datos del state (si viene desde la lista)
+      const navigation = this.router.getCurrentNavigation();
+      const informeState = navigation?.extras?.state || history.state;
+
+      if (informeState?.informeData && informeState?.fromListaPais) {
+        const informeData = informeState.informeData;
+
+        // Cargar información del usuario del informe
+        this.cargarInformacionUsuarioInforme(informeData.usuario_id);
+        this.cargarDatosInforme(informeId);
+      } else {
+        // Fallback: intentar cargar desde API
+        this.informeService
+          .getInforme(informeId)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (informe: any) => {
+              if (informe && informe[0]) {
+                const informeData = informe[0];
+                // Cargar información del usuario del informe
+                this.cargarInformacionUsuarioInforme(informeData.usuario_id);
+                this.cargarDatosInforme(informeId);
+              } else {
+                console.error('❌ No se encontró el informe');
+                Swal.fire({
+                  title: 'Error',
+                  text: 'No se encontró el informe solicitado.',
+                  icon: 'error',
+                });
+              }
+            },
+            error: (error) => {
+              console.error('❌ Error al cargar informe:', error);
+              Swal.fire({
+                title: 'Error',
+                text: 'No se pudo cargar el informe.',
+                icon: 'error',
+              });
+            },
+          });
+      }
+    } else {
+      this.cargarDatosInforme(informeId);
+    }
+  }
+
+  /**
+   * Intenta cargar el informe activo del usuario desde la API
+   */
+  private intentarCargarInformeActivo(): void {
+    const usuarioId = this.usuarioService.usuario?.id;
+
+    if (!usuarioId) {
+      console.error('❌ No hay usuario autenticado');
+      this.mostrarErrorSinInforme();
+      return;
+    }
+
+    const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
+
+    this.cargando = true;
+    this.informeService
+      .cargarInformeActivo(usuarioId, fechaInicio, fechaFin)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.cargando = false;
+
+          if (response.tieneInformeAbierto && this.informeService.informeActivo) {
+            // Ahora sí cargar los datos del informe
+            this.cargarDatosInforme(this.informeService.informeActivo.id);
+          } else {
+            console.warn('⚠️ No se encontró informe activo');
+            this.mostrarErrorSinInforme();
+          }
+        },
+        error: (error) => {
+          console.error('❌ Error al cargar informe activo:', error);
+          this.cargando = false;
+          this.mostrarErrorSinInforme();
+        },
+      });
+  }
+
+  /**
+   * Muestra el mensaje de error cuando no hay informe activo
+   */
+  private mostrarErrorSinInforme(): void {
+    Swal.fire({
+      title: 'Sin informe activo',
+      text: 'No hay un informe activo. Por favor, genera un informe primero.',
+      icon: 'warning',
+      confirmButtonText: 'Ir a Informes',
+    }).then(() => {
+      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
+    });
+  }
+
+  /**
+   * Obtiene las fechas de inicio y fin del trimestre actual
+   */
+  private obtenerFechasTrimestreActual(): { fechaInicio: string; fechaFin: string } {
+    const año = this.anioTrimestre;
+    let mesInicio: number;
+    let mesFin: number;
+
+    switch (this.numeroTrimestre) {
+      case 1:
+        mesInicio = 0; // Enero
+        mesFin = 2; // Marzo
+        break;
+      case 2:
+        mesInicio = 3; // Abril
+        mesFin = 5; // Junio
+        break;
+      case 3:
+        mesInicio = 6; // Julio
+        mesFin = 8; // Septiembre
+        break;
+      case 4:
+        mesInicio = 9; // Octubre
+        mesFin = 11; // Diciembre
+        break;
+      default:
+        mesInicio = 0;
+        mesFin = 2;
+    }
+
+    const fechaInicio = new Date(año, mesInicio, 1);
+    const fechaFin = new Date(año, mesFin + 1, 0); // Último día del mes final
+
+    return {
+      fechaInicio: fechaInicio.toISOString().split('T')[0],
+      fechaFin: fechaFin.toISOString().split('T')[0],
+    };
+  }
+
+  /**
+   * Carga información del usuario propietario del informe
+   */
+  private cargarInformacionUsuarioInforme(usuarioId: number): void {
+    this.usuarioService
+      .getUsuario(usuarioId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: any) => {
+          if (response.ok && response.usuario) {
+            const usuario = response.usuario;
+            // Actualizar nombre del usuario
+            this.nombreUsuario =
+              `${usuario.primerNombre || ''} ${usuario.segundoNombre || ''} ${usuario.primerApellido || ''} ${usuario.segundoApellido || ''}`.trim();
+
+            // Actualizar información de congregación
+            if (usuario.usuarioCongregacionPais?.[0]) {
+              this.congregacionPais = usuario.usuarioCongregacionPais[0].pais || 'N/A';
+            }
+            if (usuario.usuarioCongregacion?.[0]?.UsuarioCongregacion?.CongregacionModel) {
+              this.congregacionCiudad =
+                usuario.usuarioCongregacion[0].UsuarioCongregacion.CongregacionModel.congregacion || 'N/A';
+            }
+            if (usuario.usuarioCampo?.[0]?.UsuarioCampo?.CampoModel) {
+              this.congregacionCampo = usuario.usuarioCampo[0].UsuarioCampo.CampoModel.campo || 'N/A';
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Error al cargar usuario del informe:', error);
+          // Continuar con valores por defecto
+        },
+      });
   }
 
   /**
@@ -716,7 +896,13 @@ export class VerInformeComponent implements OnInit {
    * Navega de regreso a la página de informe
    */
   volverAlInforme(): void {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
+    // Si viene de ver-informes-pais (tiene informeIdParam), volver ahí
+    if (this.informeIdParam) {
+      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.VER_INFORMES_PAIS}`);
+    } else {
+      // Si es el informe del usuario actual, volver a la página de informe normal
+      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
+    }
   }
 
   /**

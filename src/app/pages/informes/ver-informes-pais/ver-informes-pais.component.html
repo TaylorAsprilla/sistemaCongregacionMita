@@ -10,44 +10,46 @@
           </h4>
 
           <!-- Estadísticas -->
-          <div class="row" *ngIf="estadisticas && !cargando">
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-              <div class="estadistica-box bg-info">
-                <div class="numero">{{ estadisticas.totalInformes }}</div>
-                <div class="etiqueta">Informes Recibidos</div>
+          @if (estadisticas && !cargando) {
+            <div class="row">
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-info">
+                  <div class="numero">{{ estadisticas.totalInformes }}</div>
+                  <div class="etiqueta">Informes Recibidos</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-success">
+                  <div class="numero">{{ estadisticas.totalObreros }}</div>
+                  <div class="etiqueta">Obreros</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-warning">
+                  <div class="numero">{{ estadisticas.totalCongregaciones }}</div>
+                  <div class="etiqueta">Congregaciones</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-primary">
+                  <div class="numero">{{ estadisticas.totalCampos }}</div>
+                  <div class="etiqueta">Campos</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-purple">
+                  <div class="numero">{{ getTotalActividadesEclesiasticas() }}</div>
+                  <div class="etiqueta">Act. Eclesiásticas</div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
+                <div class="estadistica-box bg-teal">
+                  <div class="numero">{{ getTotalActividadesEconomicasGlobal() }}</div>
+                  <div class="etiqueta">Act. Económicas</div>
+                </div>
               </div>
             </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-              <div class="estadistica-box bg-success">
-                <div class="numero">{{ estadisticas.totalObreros }}</div>
-                <div class="etiqueta">Obreros</div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-              <div class="estadistica-box bg-warning">
-                <div class="numero">{{ estadisticas.totalCongregaciones }}</div>
-                <div class="etiqueta">Congregaciones</div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-              <div class="estadistica-box bg-primary">
-                <div class="numero">{{ estadisticas.totalCampos }}</div>
-                <div class="etiqueta">Campos</div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-              <div class="estadistica-box bg-purple">
-                <div class="numero">{{ getTotalActividadesEclesiasticas() }}</div>
-                <div class="etiqueta">Act. Eclesiásticas</div>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-              <div class="estadistica-box bg-teal">
-                <div class="numero">{{ getTotalActividadesEconomicasGlobal() }}</div>
-                <div class="etiqueta">Act. Económicas</div>
-              </div>
-            </div>
-          </div>
+          }
         </div>
       </div>
     </div>
@@ -68,9 +70,11 @@
             <div class="col-md-3 mb-3">
               <label for="trimestre" class="form-label">Trimestre</label>
               <select id="trimestre" class="form-control" [(ngModel)]="trimestre" (change)="cargarInformes()">
-                <option *ngFor="let t of trimestres" [value]="t.value">
-                  {{ t.label }}
-                </option>
+                @for (t of trimestres; track t.value) {
+                  <option [value]="t.value">
+                    {{ t.label }}
+                  </option>
+                }
               </select>
             </div>
 
@@ -78,7 +82,9 @@
             <div class="col-md-3 mb-3">
               <label for="anio" class="form-label">Año</label>
               <select id="anio" class="form-control" [(ngModel)]="anio" (change)="cargarInformes()">
-                <option *ngFor="let a of anios" [value]="a">{{ a }}</option>
+                @for (a of anios; track a) {
+                  <option [value]="a">{{ a }}</option>
+                }
               </select>
             </div>
 
@@ -93,9 +99,11 @@
                 [disabled]="paisesDisponibles.length === 0"
               >
                 <option value="0" disabled>Seleccione un país</option>
-                <option *ngFor="let p of paisesDisponibles" [value]="p.id">
-                  {{ p.pais }}
-                </option>
+                @for (p of paisesDisponibles; track p.id) {
+                  <option [value]="p.id">
+                    {{ p.pais }}
+                  </option>
+                }
               </select>
             </div>
 
@@ -123,9 +131,11 @@
                 [disabled]="congregaciones.length === 0"
               >
                 <option value="0">Todas las congregaciones</option>
-                <option *ngFor="let c of congregaciones" [value]="c.id">
-                  {{ c.nombre }}
-                </option>
+                @for (c of congregaciones; track c.id) {
+                  <option [value]="c.id">
+                    {{ c.nombre }}
+                  </option>
+                }
               </select>
             </div>
 
@@ -140,9 +150,11 @@
                 [disabled]="campos.length === 0"
               >
                 <option value="0">Todos los campos</option>
-                <option *ngFor="let ca of campos" [value]="ca.id">
-                  {{ ca.nombre }}
-                </option>
+                @for (ca of campos; track ca.id) {
+                  <option [value]="ca.id">
+                    {{ ca.nombre }}
+                  </option>
+                }
               </select>
             </div>
 
@@ -155,10 +167,13 @@
           </div>
 
           <!-- Información de resultados -->
-          <div class="alert alert-info mb-0" *ngIf="!cargando && informes.length > 0">
-            <i class="fa fa-info-circle"></i>
-            Mostrando <strong>{{ informesFiltrados.length }}</strong> de <strong>{{ informes.length }}</strong> informes
-          </div>
+          @if (!cargando && informes.length > 0) {
+            <div class="alert alert-info mb-0">
+              <i class="fa fa-info-circle"></i>
+              Mostrando <strong>{{ informesFiltrados.length }}</strong> de
+              <strong>{{ informes.length }}</strong> informes
+            </div>
+          }
         </div>
       </div>
     </div>
@@ -175,106 +190,113 @@
               Lista de Informes
             </h5>
             <div>
-              <button class="btn btn-info btn-sm mr-2" (click)="recargar()" [disabled]="cargando">
+              <button class="btn btn-info btn-sm mr-2 text-white" (click)="recargar()" [disabled]="cargando">
                 <i class="fa fa-refresh"></i> Recargar
-              </button>
-              <button class="btn btn-success btn-sm" (click)="exportarExcel()">
-                <i class="fa fa-file-excel-o"></i> Exportar
               </button>
             </div>
           </div>
 
           <!-- Loading -->
-          <div *ngIf="cargando" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="sr-only">Cargando...</span>
+          @if (cargando) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Cargando...</span>
+              </div>
+              <p class="mt-3">Cargando informes...</p>
             </div>
-            <p class="mt-3">Cargando informes...</p>
-          </div>
+          }
 
           <!-- Error -->
-          <div *ngIf="errorCarga && !cargando" class="alert alert-danger">
-            <i class="fa fa-exclamation-triangle"></i>
-            Error al cargar los informes. Por favor, intente nuevamente.
-          </div>
+          @if (errorCarga && !cargando) {
+            <div class="alert alert-danger">
+              <i class="fa fa-exclamation-triangle"></i>
+              Error al cargar los informes. Por favor, intente nuevamente.
+            </div>
+          }
 
           <!-- Sin resultados -->
-          <div *ngIf="!cargando && !errorCarga && informesFiltrados.length === 0" class="alert alert-warning">
-            <i class="fa fa-search"></i>
-            No se encontraron informes con los filtros aplicados.
-          </div>
+          @if (!cargando && !errorCarga && informesFiltrados.length === 0) {
+            <div class="alert alert-warning">
+              <i class="fa fa-search"></i>
+              No se encontraron informes con los filtros aplicados.
+            </div>
+          }
 
           <!-- Tabla -->
-          <div class="table-responsive" *ngIf="!cargando && !errorCarga && informesFiltrados.length > 0">
-            <table class="table table-hover tabla-informes">
-              <thead class="thead-light">
-                <tr>
-                  <th>#</th>
-                  <th>Obrero</th>
-                  <th>Email</th>
-                  <th>Congregación</th>
-                  <th>Campo</th>
-                  <th class="text-center">Estado</th>
-                  <th class="text-center">Act. Eclesiásticas</th>
-                  <th class="text-center">Act. Económicas</th>
-                  <th class="text-center">Visitas</th>
-                  <th class="text-center">Logros</th>
-                  <th class="text-center">Metas</th>
-                  <th class="text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let informe of informesFiltrados; let i = index">
-                  <td>{{ i + 1 }}</td>
-                  <td>
-                    <strong>{{ obtenerNombreCompleto(informe.usuario) }}</strong>
-                  </td>
-                  <td>{{ informe.usuario.email }}</td>
-                  <td>
-                    <span class="badge badge-info">{{ obtenerCongregacion(informe.usuario) }}</span>
-                  </td>
-                  <td>
-                    <span class="badge badge-warning">{{ obtenerCampo(informe.usuario) }}</span>
-                  </td>
-                  <td class="text-center">
-                    <span
-                      class="badge"
-                      [ngClass]="{
-                        'badge-success': informe.estado === 'Abierto',
-                        'badge-secondary': informe.estado === 'Cerrado',
-                      }"
-                    >
-                      {{ informe.estado }}
-                    </span>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-pill badge-primary">{{ getTotalActividades(informe) }}</span>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-pill badge-danger">{{ getTotalActividadesEconomicas(informe) }}</span>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-pill badge-info">{{ getTotalVisitas(informe) }}</span>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-pill badge-success">{{ getTotalLogros(informe) }}</span>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-pill badge-warning">{{ getTotalMetas(informe) }}</span>
-                  </td>
-                  <td class="text-center">
-                    <button
-                      class="btn btn-sm btn-primary"
-                      (click)="verDetalleInforme(informe.id)"
-                      title="Ver detalle del informe"
-                    >
-                      <i class="fa fa-eye"></i> Ver Detalle
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          @if (!cargando && !errorCarga && informesFiltrados.length > 0) {
+            <div class="table-responsive">
+              <table class="table table-hover tabla-informes">
+                <thead class="thead-light">
+                  <tr>
+                    <th>#</th>
+                    <th>Obrero</th>
+                    <th>Email</th>
+                    <th>Congregación</th>
+                    <th>Campo</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Act. Eclesiásticas</th>
+                    <th class="text-center">Act. Económicas</th>
+                    <th class="text-center">Visitas</th>
+                    <th class="text-center">Logros</th>
+                    <th class="text-center">Metas</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (informe of informesFiltrados; track informe.id; let i = $index) {
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        <strong>{{ obtenerNombreCompleto(informe.usuario) }}</strong>
+                      </td>
+                      <td>{{ informe.usuario.email }}</td>
+                      <td>
+                        <span class="badge badge-info">{{ obtenerCongregacion(informe.usuario) }}</span>
+                      </td>
+                      <td>
+                        <span class="badge badge-warning">{{ obtenerCampo(informe.usuario) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span
+                          class="badge"
+                          [ngClass]="{
+                            'badge-success': informe.estado === 'Abierto',
+                            'badge-secondary': informe.estado === 'Cerrado',
+                          }"
+                        >
+                          {{ informe.estado }}
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-primary">{{ getTotalActividades(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-danger">{{ getTotalActividadesEconomicas(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-info">{{ getTotalVisitas(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-success">{{ getTotalLogros(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge badge-pill badge-warning">{{ getTotalMetas(informe) }}</span>
+                      </td>
+                      <td class="text-center">
+                        <button
+                          class="btn btn-sm btn-primary"
+                          (click)="verDetalleInforme(informe.id)"
+                          title="Ver detalle del informe"
+                        >
+                          <i class="fa fa-eye"></i> Ver Detalle
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
         </div>
       </div>
     </div>
