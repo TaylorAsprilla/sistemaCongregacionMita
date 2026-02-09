@@ -106,11 +106,14 @@ $box-shadow-secondary: 0 4px 8px rgba(108, 117, 125, 0.3);
 
 .seccion-titulo {
   @include responsive-font($font-size-title, 1.2rem);
-  font-weight: 600;
-  color: $color-text-primary;
-  border-bottom: 2px solid $color-accent;
-  padding-bottom: $spacing-xs;
-  margin-bottom: $spacing-xl;
+
+  & {
+    font-weight: 600;
+    color: $color-text-primary;
+    border-bottom: 2px solid $color-accent;
+    padding-bottom: $spacing-xs;
+    margin-bottom: $spacing-xl;
+  }
 }
 
 // ============================================

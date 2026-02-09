@@ -41,7 +41,8 @@
               "@swimlane/ngx-charts",
               "@mattlewis92/dom-autoscroller",
               "google-libphonenumber",
-              "sweetalert2"
+              "sweetalert2",
+              "pdfmake"
             ],
             "outputPath": "dist/sistemacmi",
             "index": "src/index.html",
