@@ -845,7 +845,7 @@ export class VerInformeComponent implements OnInit {
             { text: new Date(sit.fecha).toLocaleDateString(), style: 'tableCell' },
             { text: sit.nombreFeligres || '-', style: 'tableCell' },
             { text: sit.situacion || '-', style: 'tableCell' },
-            { text: sit.intervension || '-', style: 'tableCell' },
+            { text: sit.intervencion || '-', style: 'tableCell' },
             { text: sit.seguimiento || '-', style: 'tableCell' },
             { text: sit.observaciones || '-', style: 'tableCell' },
           ]),
