@@ -105,8 +105,6 @@ export class ActividadEconomicaComponent implements OnInit, OnDestroy {
 
     const actividadEconomicaNueva = this.actividadEconomicaForm.value;
 
-    console.log(actividadEconomicaNueva, this.actividadEconomicaForm);
-
     this.actividadEconomicaService.crearActividadEconomica(actividadEconomicaNueva).subscribe(
       (actividadCreada: any) => {
         Swal.fire('Actividad económica creada', 'La actividad ha sido registrada exitosamente', 'success');

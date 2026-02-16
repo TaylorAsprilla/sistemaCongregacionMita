@@ -296,7 +296,14 @@ export const childRoutes: Routes = [
     canActivate: [RolesGuard],
     data: {
       titulo: 'Tipos de Actividad Económica',
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.ASISTENTE_OOTS,
+      ],
     },
   },
   {
@@ -305,7 +312,14 @@ export const childRoutes: Routes = [
     canActivate: [RolesGuard],
     data: {
       titulo: 'Actividades Económicas',
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+        ROLES.PRUEBA_INFORMES,
+      ],
     },
   },
 

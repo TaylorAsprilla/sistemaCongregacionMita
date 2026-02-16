@@ -5,7 +5,7 @@ export class SituacionVisitaModel {
     public nombreFeligres: string,
     public informe_id: number,
     public situacion?: string,
-    public intervension?: string,
+    public intervencion?: string,
     public seguimiento?: string,
     public observaciones?: string,
     public estado?: boolean,
