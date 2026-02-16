@@ -303,6 +303,7 @@ export const childRoutes: Routes = [
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
         ROLES.ASISTENTE_OOTS,
+        ROLES.PRUEBA_INFORMES,
       ],
     },
   },
