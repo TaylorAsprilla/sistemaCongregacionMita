@@ -1,0 +1,610 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <button mat-raised-button color="primary" (click)="recargar()" [disabled]="cargando()">
+      <mat-icon>refresh</mat-icon>
+      Recargar
+    </button>
+  </div>
+
+  <!-- Estado de carga -->
+  @if (cargando()) {
+    <div class="loading-container">
+      <mat-spinner diameter="60"></mat-spinner>
+      <p>Cargando datos del dashboard...</p>
+    </div>
+  }
+
+  <!-- Estado de error -->
+  @if (error() && !cargando()) {
+    <mat-card class="error-card">
+      <mat-card-header>
+        <mat-icon color="warn">error</mat-icon>
+        <mat-card-title>Error</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ error() }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="recargar()">Reintentar</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+
+  <!-- Dashboard Content -->
+  @if (!cargando() && !error() && estadisticas()) {
+    <!-- Filtros Consolidados -->
+    <section class="filters-section">
+      <mat-card class="filters-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>filter_list</mat-icon>
+            Filtros
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="filtrosForm" class="filters-form-grid">
+            <div class="filters-grid">
+              <!-- Búsqueda por texto -->
+              <mat-form-field appearance="outline">
+                <mat-label>Buscar</mat-label>
+                <input matInput formControlName="textoBusqueda" placeholder="Nombre, email, documento..." />
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+
+              <!-- Congregación -->
+              <mat-form-field appearance="outline">
+                <mat-label>Congregación</mat-label>
+                <mat-select formControlName="congregacion_id">
+                  <mat-option [value]="null">Todas</mat-option>
+                  @for (cong of congregacionesDisponibles(); track cong.id) {
+                    <mat-option [value]="cong.id">{{ cong.nombre }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Género -->
+              <mat-form-field appearance="outline">
+                <mat-label>Género</mat-label>
+                <mat-select formControlName="genero_id">
+                  <mat-option [value]="null">Todos</mat-option>
+                  @for (genero of generosDisponibles(); track genero.id) {
+                    <mat-option [value]="genero.id">{{ genero.nombre }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Estado Civil -->
+              <mat-form-field appearance="outline">
+                <mat-label>Estado Civil</mat-label>
+                <mat-select formControlName="estadoCivil_id">
+                  <mat-option [value]="null">Todos</mat-option>
+                  @for (estado of estadosCivilesDisponibles(); track estado.id) {
+                    <mat-option [value]="estado.id">{{ estado.nombre }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Nacionalidad -->
+              <mat-form-field appearance="outline">
+                <mat-label>Nacionalidad</mat-label>
+                <mat-select formControlName="nacionalidad_id">
+                  <mat-option [value]="null">Todas</mat-option>
+                  @for (nac of nacionalidadesDisponibles(); track nac.id) {
+                    <mat-option [value]="nac.id">{{ nac.nombre }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Ministerio Específico -->
+              <mat-form-field appearance="outline">
+                <mat-label>Grupo Ministerial</mat-label>
+                <mat-select formControlName="ministerio_id">
+                  <mat-option [value]="null">Todos</mat-option>
+                  @for (ministerio of ministeriosDisponibles(); track ministerio.id) {
+                    <mat-option [value]="ministerio.id">{{ ministerio.nombre }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Voluntariado Específico -->
+              <mat-form-field appearance="outline">
+                <mat-label>Voluntariado</mat-label>
+                <mat-select formControlName="voluntariado_id">
+                  <mat-option [value]="null">Todos</mat-option>
+                  @for (voluntariado of voluntariadosDisponibles(); track voluntariado.id) {
+                    <mat-option [value]="voluntariado.id">{{ voluntariado.nombre }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Joven -->
+              <mat-form-field appearance="outline">
+                <mat-label>Joven</mat-label>
+                <mat-select formControlName="esJoven">
+                  <mat-option [value]="null">Todos</mat-option>
+                  <mat-option [value]="true">Sí</mat-option>
+                  <mat-option [value]="false">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Estado (activo/inactivo) -->
+              <mat-form-field appearance="outline">
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="estado">
+                  <mat-option [value]="null">Todos</mat-option>
+                  <mat-option [value]="true">Activo</mat-option>
+                  <mat-option [value]="false">Inactivo</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Edad Mínima -->
+              <mat-form-field appearance="outline">
+                <mat-label>Edad Mínima</mat-label>
+                <input matInput type="number" formControlName="edadMin" placeholder="0" min="0" max="120" />
+                <mat-icon matSuffix>calendar_today</mat-icon>
+              </mat-form-field>
+
+              <!-- Edad Máxima -->
+              <mat-form-field appearance="outline">
+                <mat-label>Edad Máxima</mat-label>
+                <input matInput type="number" formControlName="edadMax" placeholder="120" min="0" max="120" />
+                <mat-icon matSuffix>calendar_today</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="filters-actions">
+              <span class="filter-info">
+                <mat-icon>info</mat-icon>
+                {{ totalUsuarios }} registros encontrados
+              </span>
+              <button mat-raised-button type="button" (click)="limpiarFiltros()" color="accent" class="clear-button">
+                <mat-icon>clear</mat-icon>
+                Limpiar Filtros
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </section>
+
+    <!-- KPIs Section -->
+    <section class="kpis-section">
+      <div class="kpis-grid">
+        <!-- Feligreses -->
+        <mat-card class="kpi-card-main">
+          <mat-card-header>
+            <mat-card-title>Feligreses</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="kpi-value">{{ totalUsuariosFiltrados().toLocaleString() }}</div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Congregaciones -->
+        <mat-card class="kpi-card-main">
+          <mat-card-header>
+            <mat-card-title>Congregaciones</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="kpi-value">{{ totalCongregaciones() }}</div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Campos -->
+        <mat-card class="kpi-card-main">
+          <mat-card-header>
+            <mat-card-title>Campos</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="kpi-value">{{ totalCampos() }}</div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Edad Mediana -->
+        <mat-card class="kpi-card-main">
+          <mat-card-header>
+            <mat-card-title>Edad Mediana</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="kpi-value">{{ edadMediana() }}</div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Jóvenes -->
+        <mat-card class="kpi-card-main">
+          <mat-card-header>
+            <mat-card-title>Jóvenes</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="kpi-value">{{ totalJovenes() }}</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </section>
+
+    <!-- Gráficas Section -->
+    <section class="charts-section">
+      <!-- Loading Overlay para gráficas -->
+      @if (cargandoGraficas()) {
+        <div class="charts-loading-overlay">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Actualizando gráficas...</p>
+        </div>
+      }
+
+      <mat-card class="chart-card main-chart">
+        <mat-card-header>
+          <mat-card-title>
+            <span>Congregaciones</span>
+            <button
+              mat-icon-button
+              (click)="abrirGraficaFullscreen('Congregaciones', chartCongregaciones, 'bar-vertical')"
+              matTooltip="Ver en pantalla completa"
+            >
+              <mat-icon>fullscreen</mat-icon>
+            </button>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (hasValidChartData(chartCongregaciones)) {
+            <ngx-charts-bar-vertical
+              [results]="chartCongregaciones"
+              [xAxis]="showXAxis"
+              [yAxis]="showYAxis"
+              [legend]="false"
+              [showXAxisLabel]="false"
+              [showYAxisLabel]="false"
+              [gradient]="gradient"
+              [scheme]="colorScheme"
+              [animations]="animations"
+              [view]="viewCongregacionesChart()"
+              [showDataLabel]="true"
+            >
+            </ngx-charts-bar-vertical>
+          } @else {
+            <p class="no-data">Sin datos disponibles</p>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Tipo de Miembro -->
+      <mat-card class="chart-card main-chart">
+        <mat-card-header>
+          <mat-card-title>
+            <span>Tipo de Miembro</span>
+            <button
+              mat-icon-button
+              (click)="abrirGraficaFullscreen('Tipo de Miembro', chartTipoMiembro, 'bar-vertical')"
+              matTooltip="Ver en pantalla completa"
+            >
+              <mat-icon>fullscreen</mat-icon>
+            </button>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (hasValidChartData(chartTipoMiembro)) {
+            <ngx-charts-bar-vertical
+              [results]="chartTipoMiembro"
+              [xAxis]="showXAxis"
+              [yAxis]="showYAxis"
+              [legend]="false"
+              [showXAxisLabel]="false"
+              [showYAxisLabel]="false"
+              [gradient]="gradient"
+              [scheme]="colorScheme"
+              [animations]="animations"
+              [view]="viewMainChart"
+              [showDataLabel]="true"
+            >
+            </ngx-charts-bar-vertical>
+          } @else {
+            <p class="no-data">Sin datos disponibles</p>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Gráficos Secundarios Grid -->
+      <div class="secondary-charts-grid">
+        <!-- Feligreses por Ministerio -->
+        <mat-card class="chart-card">
+          <mat-card-header>
+            <mat-card-title class="chart-title-pink">
+              <span>Feligreses por Ministerio</span>
+              <button
+                mat-icon-button
+                (click)="abrirGraficaFullscreen('Feligreses por Ministerio', chartMinisterios, 'bar-horizontal')"
+                matTooltip="Ver en pantalla completa"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (hasValidChartData(chartMinisterios)) {
+              <ngx-charts-bar-horizontal
+                [results]="chartMinisterios"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="false"
+                [gradient]="gradient"
+                [scheme]="colorScheme"
+                [animations]="animations"
+                [showDataLabel]="true"
+              >
+              </ngx-charts-bar-horizontal>
+            } @else {
+              <p class="no-data">Sin datos</p>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Feligreses por Voluntariado -->
+        <mat-card class="chart-card">
+          <mat-card-header>
+            <mat-card-title class="chart-title-pink">
+              <span>Feligreses por Voluntariado</span>
+              <button
+                mat-icon-button
+                (click)="abrirGraficaFullscreen('Feligreses por Voluntariado', chartVoluntariados, 'bar-horizontal')"
+                matTooltip="Ver en pantalla completa"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (hasValidChartData(chartVoluntariados)) {
+              <ngx-charts-bar-horizontal
+                [results]="chartVoluntariados"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="false"
+                [gradient]="gradient"
+                [scheme]="colorScheme"
+                [animations]="animations"
+                [showDataLabel]="true"
+              >
+              </ngx-charts-bar-horizontal>
+            } @else {
+              <p class="no-data">Sin datos</p>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Estado Civil -->
+        <mat-card class="chart-card">
+          <mat-card-header>
+            <mat-card-title class="chart-title-pink">
+              <span>Estado Civil</span>
+              <button
+                mat-icon-button
+                (click)="abrirGraficaFullscreen('Estado Civil', chartEstadoCivil, 'bar-horizontal')"
+                matTooltip="Ver en pantalla completa"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (hasValidChartData(chartEstadoCivil)) {
+              <ngx-charts-bar-horizontal
+                [results]="chartEstadoCivil"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="false"
+                [gradient]="gradient"
+                [scheme]="colorScheme"
+                [animations]="animations"
+                [showDataLabel]="true"
+              >
+              </ngx-charts-bar-horizontal>
+            } @else {
+              <p class="no-data">Sin datos</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </section>
+
+    <!-- Sección de Grado Académico y Género -->
+    <section class="charts-section">
+      <!-- Loading Overlay para gráficas -->
+      @if (cargandoGraficas()) {
+        <div class="charts-loading-overlay">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Actualizando gráficas...</p>
+        </div>
+      }
+
+      <div class="secondary-charts-grid">
+        <!-- Grado Académico -->
+        <mat-card class="chart-card">
+          <mat-card-header>
+            <mat-card-title class="chart-title-pink">
+              <span>Grado Académico</span>
+              <button
+                mat-icon-button
+                (click)="abrirGraficaFullscreen('Grado Académico', chartGradoAcademico, 'pie')"
+                matTooltip="Ver en pantalla completa"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (hasValidChartData(chartGradoAcademico)) {
+              <ngx-charts-pie-chart
+                [results]="chartGradoAcademico"
+                [legend]="false"
+                [labels]="true"
+                [doughnut]="false"
+                [gradient]="gradient"
+                [scheme]="colorScheme"
+                [animations]="animations"
+                [trimLabels]="false"
+              >
+              </ngx-charts-pie-chart>
+            } @else {
+              <p class="no-data">Sin datos</p>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Género -->
+        <mat-card class="chart-card">
+          <mat-card-header>
+            <mat-card-title class="chart-title-pink">
+              <span>Género</span>
+              <button
+                mat-icon-button
+                (click)="abrirGraficaFullscreen('Género', chartGenero, 'pie')"
+                matTooltip="Ver en pantalla completa"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (hasValidChartData(chartGenero)) {
+              <ngx-charts-pie-chart
+                [results]="chartGenero"
+                [legend]="false"
+                [labels]="true"
+                [doughnut]="false"
+                [gradient]="gradient"
+                [scheme]="colorScheme"
+                [animations]="animations"
+                [trimLabels]="false"
+              >
+              </ngx-charts-pie-chart>
+            } @else {
+              <p class="no-data">Sin datos</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </section>
+
+    <mat-divider></mat-divider>
+
+    <!-- Tabla Section (Colapsada por defecto o accesible con botón) -->
+    <section class="table-section">
+      <div class="table-header">
+        <h2>Listado de Usuarios</h2>
+        <div class="table-actions">
+          <button mat-raised-button color="accent" (click)="exportarTablaCSV()">
+            <mat-icon>download</mat-icon>
+            Exportar CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros Adicionales -->
+
+      <!-- Tabla -->
+      <mat-card class="table-card">
+        <mat-card-content>
+          <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort class="usuarios-table">
+              <!-- Columna Nombre -->
+              <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+                <td mat-cell *matCellDef="let usuario">{{ obtenerNombreCompleto(usuario) }}</td>
+              </ng-container>
+
+              <!-- Columna Email -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+                <td mat-cell *matCellDef="let usuario">{{ usuario.email || 'N/A' }}</td>
+              </ng-container>
+
+              <!-- Columna Celular -->
+              <ng-container matColumnDef="celular">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Celular</th>
+                <td mat-cell *matCellDef="let usuario">{{ usuario.numeroCelular || 'N/A' }}</td>
+              </ng-container>
+
+              <!-- Columna Género -->
+              <ng-container matColumnDef="genero">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Género</th>
+                <td mat-cell *matCellDef="let usuario">{{ usuario.genero?.genero || 'N/A' }}</td>
+              </ng-container>
+
+              <!-- Columna Edad -->
+              <ng-container matColumnDef="edad">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Edad</th>
+                <td mat-cell *matCellDef="let usuario">
+                  @if (calcularEdad(usuario.fechaNacimiento) !== null) {
+                    {{ calcularEdad(usuario.fechaNacimiento) }} años
+                    @if (usuario.esJoven) {
+                      <mat-chip class="joven-chip">Joven</mat-chip>
+                    }
+                  } @else {
+                    N/A
+                  }
+                </td>
+              </ng-container>
+
+              <!-- Columna Congregación -->
+              <ng-container matColumnDef="congregacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Congregación</th>
+                <td mat-cell *matCellDef="let usuario">{{ obtenerCongregacion(usuario) }}</td>
+              </ng-container>
+
+              <!-- Columna Estado -->
+              <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                <td mat-cell *matCellDef="let usuario">
+                  <mat-chip [class.active-chip]="usuario.estado" [class.inactive-chip]="!usuario.estado">
+                    {{ usuario.estado ? 'Activo' : 'Inactivo' }}
+                  </mat-chip>
+                </td>
+              </ng-container>
+
+              <!-- Columna Acciones -->
+              <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                <td mat-cell *matCellDef="let usuario">
+                  <button mat-icon-button color="primary" (click)="verDetalle(usuario)" matTooltip="Ver detalle">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+
+          <!-- Paginador -->
+          <mat-paginator
+            [length]="totalUsuarios"
+            [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 25, 50, 100]"
+            showFirstLastButtons
+          >
+          </mat-paginator>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  }
+
+  <!-- Empty State -->
+  @if (!cargando() && !error() && usuarios().length === 0) {
+    <mat-card class="empty-state">
+      <mat-card-content>
+        <mat-icon>inbox</mat-icon>
+        <h2>No hay usuarios registrados</h2>
+        <p>No se encontraron usuarios asignados a este obrero.</p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

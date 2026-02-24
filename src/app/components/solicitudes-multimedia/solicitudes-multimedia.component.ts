@@ -90,6 +90,10 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
 
   mostrarFiltros: boolean = false;
 
+  // Propiedades para el ordenamiento
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   estadoColors: { [key in ESTADO_SOLICITUD_MULTIMEDIA_ENUM]: string } = {
     [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.DENEGADA]: 'badge-danger', // Color rojo
     [ESTADO_SOLICITUD_MULTIMEDIA_ENUM.APROBADA]: 'badge-success', // Color verde
@@ -148,8 +152,8 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
           item.login,
           item.solicitudes,
           item.tipoMiembro,
-          item.usuarioCongregacion
-        )
+          item.usuarioCongregacion,
+        ),
     );
   }
 
@@ -204,7 +208,7 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
         nombreCompleto.includes(palabra) ||
         email.includes(palabra) ||
         numeroCelular.includes(palabra) ||
-        numeroMita.includes(palabra)
+        numeroMita.includes(palabra),
     );
   }
 
@@ -372,5 +376,86 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
       Estado: solicitud.estadoUltimaSolicitud,
     }));
     this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo);
+  }
+
+  /**
+   * Ordena la tabla por la columna especificada
+   * @param column - Nombre de la columna a ordenar
+   */
+  sortTable(column: string): void {
+    // Si ya está ordenando por esta columna, cambiar dirección
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Nueva columna, empezar con orden ascendente
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    // Realizar el ordenamiento
+    this.filteredSolicitudes.sort((a, b) => {
+      let valueA: any;
+      let valueB: any;
+
+      switch (column) {
+        case 'id':
+          valueA = a.id || 0;
+          valueB = b.id || 0;
+          break;
+        case 'nombre':
+          valueA = a.nombreCompleto?.toLowerCase() || '';
+          valueB = b.nombreCompleto?.toLowerCase() || '';
+          break;
+        case 'email':
+          valueA = a.email?.toLowerCase() || '';
+          valueB = b.email?.toLowerCase() || '';
+          break;
+        case 'celular':
+          valueA = a.numeroCelular || '';
+          valueB = b.numeroCelular || '';
+          break;
+        case 'pais':
+          valueA = a.pais?.toLowerCase() || '';
+          valueB = b.pais?.toLowerCase() || '';
+          break;
+        case 'congregacion':
+          valueA = a.congregacion?.toLowerCase() || '';
+          valueB = b.congregacion?.toLowerCase() || '';
+          break;
+        case 'campo':
+          valueA = a.campo?.toLowerCase() || '';
+          valueB = b.campo?.toLowerCase() || '';
+          break;
+        case 'estado':
+          valueA = a.estadoUltimaSolicitud?.toLowerCase() || '';
+          valueB = b.estadoUltimaSolicitud?.toLowerCase() || '';
+          break;
+        default:
+          return 0;
+      }
+
+      // Comparar valores
+      let comparison = 0;
+      if (valueA > valueB) {
+        comparison = 1;
+      } else if (valueA < valueB) {
+        comparison = -1;
+      }
+
+      // Aplicar dirección de ordenamiento
+      return this.sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }
+
+  /**
+   * Devuelve el icono apropiado para el encabezado de la columna
+   * @param column - Nombre de la columna
+   * @returns Clase del icono a mostrar
+   */
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) {
+      return 'fas fa-sort'; // Icono neutral cuando no está ordenado
+    }
+    return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
   }
 }
