@@ -16,7 +16,6 @@ import { VerInformesPaisComponent } from 'src/app/pages/informes/ver-informes-pa
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 import { ROLES, RUTAS } from '../menu-items';
 import { InformeSituacionVisitaComponent } from 'src/app/pages/informes/informe-situacion-visita/informe-situacion-visita.component';
-import { InformesResolver } from 'src/app/resolvers/informes/informes.resolver';
 import { CrearCongregacionComponent } from 'src/app/pages/administracion/congregacion/crear-congregacion/crear-congregacion.component';
 import { PaisesComponent } from 'src/app/pages/administracion/pais/paises/paises.component';
 import { CrearPaisComponent } from 'src/app/pages/administracion/pais/crear-pais/crear-pais.component';
@@ -91,7 +90,9 @@ export const childRoutes: Routes = [
         ROLES.ADMINISTRADOR,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
         ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
         ROLES.ADMINISTRADOR_MULTIMEDIA,
         ROLES.COMITE_RECTOR,
         ROLES.ASISTENTE_OOTS,
@@ -107,6 +108,7 @@ export const childRoutes: Routes = [
         ROLES.ADMINISTRADOR,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
         ROLES.ASISTENTE_OOTS,
@@ -144,7 +146,14 @@ export const childRoutes: Routes = [
     canActivate: [RolesGuard],
     data: {
       titulo: 'Censo',
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+      ],
     },
   },
   {
@@ -162,7 +171,7 @@ export const childRoutes: Routes = [
     loadComponent: () => import('src/app/pages/obreros/censo-supervisor/censo-supervisor.component'),
     canActivate: [RolesGuard],
     data: {
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
     },
   },
 
@@ -223,6 +232,7 @@ export const childRoutes: Routes = [
         ROLES.ADMINISTRADOR,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
         ROLES.ASISTENTE_OOTS,
@@ -240,6 +250,7 @@ export const childRoutes: Routes = [
         ROLES.ADMINISTRADOR,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
         ROLES.ASISTENTE_OOTS,
@@ -257,6 +268,7 @@ export const childRoutes: Routes = [
         ROLES.ADMINISTRADOR,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
         ROLES.ASISTENTE_OOTS,
@@ -273,6 +285,7 @@ export const childRoutes: Routes = [
         ROLES.ADMINISTRADOR,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
         ROLES.ASISTENTE_OOTS,
@@ -300,6 +313,7 @@ export const childRoutes: Routes = [
         ROLES.ADMINISTRADOR,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
         ROLES.ASISTENTE_OOTS,
@@ -317,6 +331,7 @@ export const childRoutes: Routes = [
         ROLES.ADMINISTRADOR,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
         ROLES.PRUEBA_INFORMES,
@@ -485,7 +500,7 @@ export const childRoutes: Routes = [
     },
     data: {
       titulo: 'Ver Informes del País',
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
     },
   },
   {
@@ -535,7 +550,31 @@ export const childRoutes: Routes = [
     component: EventosEnVivoComponent,
     canActivate: [RolesGuard],
     data: {
-      role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+      ],
+    },
+  },
+  {
+    path: RUTAS.DASHBOARD_OBRERO,
+    loadComponent: () =>
+      import('src/app/pages/dashboard-obrero/dashboard-obrero.component').then((m) => m.DashboardObreroComponent),
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Dashboard de Obrero',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.OBRERO_PAIS,
+        ROLES.OBRERO_CIUDAD,
+        ROLES.OBRERO_CAMPO,
+      ],
     },
   },
 ];
