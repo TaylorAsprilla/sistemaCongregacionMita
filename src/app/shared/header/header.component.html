@@ -36,9 +36,10 @@
             Roles.ADMINISTRADOR,
             Roles.SUPERVISOR,
             Roles.SUPERVISOR_LOCAL,
+            Roles.OBRERO_PAIS,
             Roles.OBRERO_CIUDAD,
             Roles.ADMINISTRADOR_MULTIMEDIA,
-            Roles.COMITE_RECTOR
+            Roles.COMITE_RECTOR,
           ]"
         >
           <a class="nav-link itemMenu" [href]="Rutas.AYUDA" target="_blank">
@@ -82,42 +83,44 @@
                       <p class="text-muted">{{ email }}</p></a
                     >
                     @if (usuario) {
-                    <div>
-                      <a class="informacion" href="tel:{{ numeroCelular }}">
-                        <p class="text-muted">{{ numeroCelular }}</p></a
-                      >
-                      <a class="informacion">
-                        <p class="text-muted"><b>Número Mita: </b>{{ usuario?.id }}</p></a
-                      >
-                    </div>
+                      <div>
+                        <a class="informacion" href="tel:{{ numeroCelular }}">
+                          <p class="text-muted">{{ numeroCelular }}</p></a
+                        >
+                        <a class="informacion">
+                          <p class="text-muted"><b>Número Mita: </b>{{ usuario?.id }}</p></a
+                        >
+                      </div>
                     }
                   </div>
                 </div>
               </li>
               @if (usuario) {
-              <div>
+                <div>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                    <a [routerLink]="[Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
+                  </li>
+                </div>
+              }
+              @if (!isQrLogin) {
                 <li role="separator" class="divider"></li>
                 <li>
-                  <a [routerLink]="[Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
-                </li>
-              </div>
-              } @if(!isQrLogin){
-              <li role="separator" class="divider"></li>
-              <li>
-                <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
-              </li>
-              <li role="separator" class="divider"></li>
-              } @if (usuario) {
-              <div>
-                <li>
-                  <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
+                  <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
                 </li>
                 <li role="separator" class="divider"></li>
-                <li>
-                  <a href="#"> <i class="ti-settings"></i> Configuración</a>
-                </li>
-                <li role="separator" class="divider"></li>
-              </div>
+              }
+              @if (usuario) {
+                <div>
+                  <li>
+                    <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
+                  </li>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                    <a href="#"> <i class="ti-settings"></i> Configuración</a>
+                  </li>
+                  <li role="separator" class="divider"></li>
+                </div>
               }
               <li>
                 <a (click)="logout()" class="pointer"> <i class="fa fa-power-off"></i> Cerrar Sesión</a>

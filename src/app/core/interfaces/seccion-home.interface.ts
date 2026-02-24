@@ -20,6 +20,7 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
       ROLES.ADMINISTRADOR,
       ROLES.SUPERVISOR,
       ROLES.SUPERVISOR_LOCAL,
+      ROLES.OBRERO_PAIS,
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
       ROLES.ADMINISTRADOR_MULTIMEDIA,
@@ -37,6 +38,7 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
       ROLES.ADMINISTRADOR,
       ROLES.SUPERVISOR,
       ROLES.SUPERVISOR_LOCAL,
+      ROLES.OBRERO_PAIS,
       ROLES.OBRERO_CIUDAD,
       ROLES.OBRERO_CAMPO,
       ROLES.ASISTENTE_OOTS,
@@ -56,7 +58,7 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-informes.png',
     ruta: `../${RUTAS.INFORME}`,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
   },
   {
     nombreSeccion: 'Países',
@@ -72,7 +74,7 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-congregacion.png',
     ruta: `../${RUTAS.CONGREGACIONES}`,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS, ROLES.OBRERO_PAIS],
   },
   {
     nombreSeccion: 'Campos',
