@@ -300,7 +300,7 @@ export const ROUTES: RouteInfo[] = [
         icon: 'fa fa-book',
         class: 'has-arrow',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+        role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
         submenu: [
           {
             path: RUTAS.CREAR_TIPO_ACTIVIDAD,
@@ -308,7 +308,7 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
-            role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+            role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
             submenu: [],
           },
           {
@@ -317,7 +317,7 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
-            role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+            role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
             submenu: [],
           },
           {
@@ -326,7 +326,13 @@ export const ROUTES: RouteInfo[] = [
             icon: '',
             class: '',
             extralink: false,
-            role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
+            role: [
+              ROLES.ADMINISTRADOR,
+              ROLES.SUPERVISOR,
+              ROLES.SUPERVISOR_LOCAL,
+              ROLES.ASISTENTE_OOTS,
+              ROLES.OBRERO_PAIS,
+            ],
             submenu: [],
           },
         ],
@@ -494,7 +500,7 @@ export const ROUTES: RouteInfo[] = [
     title: 'Supervisor',
     icon: '',
     class: 'nav-small-cap',
-    role: [ROLES.SUPERVISOR, ROLES.ADMINISTRADOR],
+    role: [ROLES.SUPERVISOR, ROLES.ADMINISTRADOR, ROLES.OBRERO_PAIS],
     extralink: true,
     submenu: [],
   },
@@ -513,7 +519,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-book',
     class: '',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
     submenu: [],
   },
   {
@@ -522,7 +528,7 @@ export const ROUTES: RouteInfo[] = [
     icon: '',
     class: 'nav-small-cap',
     extralink: true,
-    role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES],
+    role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS],
     submenu: [],
   },
   {
@@ -531,7 +537,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-book',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES],
+    role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS],
     submenu: [
       {
         path: RUTAS.INFORME,
@@ -539,7 +545,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES],
+        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS],
         submenu: [],
       },
       {
@@ -548,7 +554,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES],
+        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS],
         submenu: [],
       },
     ],
