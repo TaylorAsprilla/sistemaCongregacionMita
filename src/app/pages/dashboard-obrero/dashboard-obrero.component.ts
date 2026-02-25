@@ -188,6 +188,7 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
 
   // Gráficos
   chartCongregaciones: any[] = [];
+  chartCampos: any[] = [];
   chartMinisterios: any[] = [];
   chartEstadoCivil: any[] = [];
   chartGradoAcademico: any[] = [];
@@ -227,6 +228,19 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     return [anchoCalculado, 400] as [number, number];
   });
 
+  // Computed para el ancho dinámico de la gráfica de campos
+  viewCamposChart = computed<[number, number] | undefined>(() => {
+    const cantidadCampos = this.chartCampos.length;
+    if (cantidadCampos === 0) {
+      return undefined;
+    }
+    // Calcular ancho: mínimo 100px por campo, con un mínimo total de 900px
+    const anchoPorCampo = 100;
+    const anchoMinimo = 900;
+    const anchoCalculado = Math.max(anchoMinimo, cantidadCampos * anchoPorCampo);
+    return [anchoCalculado, 400] as [number, number];
+  });
+
   // Computed para métricas adicionales
   edadMediana = computed(() => {
     const usuarios = this.usuariosFiltrados();
@@ -239,6 +253,11 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
 
     const mid = Math.floor(edades.length / 2);
     return edades.length % 2 !== 0 ? edades[mid] : Math.floor((edades[mid - 1] + edades[mid]) / 2);
+  });
+
+  // Computed para verificar si hay más de una congregación
+  tieneMasDeUnaCongregacion = computed(() => {
+    return this.chartCongregaciones.length > 1;
   });
 
   totalCongregaciones = computed(() => {
@@ -431,6 +450,7 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     } else {
       // Limpiar gráficos si no hay datos
       this.chartCongregaciones = [];
+      this.chartCampos = [];
       this.chartMinisterios = [];
       this.chartEstadoCivil = [];
       this.chartGradoAcademico = [];
@@ -540,6 +560,18 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
       }
     });
     this.chartCongregaciones = formatChartData(congregacionesMap, true, 15);
+
+    // Gráfico de Campos
+    const camposMap = new Map<string, number>();
+    usuarios.forEach((u) => {
+      if (u.usuarioCongregacionCampo && u.usuarioCongregacionCampo.length > 0) {
+        const campo = u.usuarioCongregacionCampo[0]?.campo;
+        if (campo && campo.trim() !== '') {
+          camposMap.set(campo, (camposMap.get(campo) || 0) + 1);
+        }
+      }
+    });
+    this.chartCampos = formatChartData(camposMap, true, 15);
 
     // Gráfico de Ministerios (incluye todos los ministerios, no solo ejerceMinisterio)
     const ministeriosMap = new Map<string, number>();
