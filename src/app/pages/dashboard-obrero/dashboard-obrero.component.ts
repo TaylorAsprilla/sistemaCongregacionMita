@@ -8,6 +8,7 @@ import {
   signal,
   computed,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -94,6 +95,7 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
 
   // Signals
   cargando = signal<boolean>(true);
@@ -111,7 +113,7 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
 
   // Tabla
   dataSource = new MatTableDataSource<UsuarioCompleto>([]);
-  displayedColumns: string[] = ['nombre', 'email', 'celular', 'genero', 'edad', 'congregacion', 'estado', 'acciones'];
+  displayedColumns: string[] = ['idMita', 'nombre', 'email', 'celular', 'genero', 'edad', 'congregacion', 'estado'];
   totalUsuarios = 0;
 
   // Computed para filtros dinámicos
@@ -348,9 +350,15 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
+    // Forzar detección de cambios para que el paginador funcione correctamente
+    // Esto es necesario cuando los datos se cargan antes de ngAfterViewInit
+    this.cdr.detectChanges();
+
     // Configurar el sortingDataAccessor para ordenamiento personalizado
     this.dataSource.sortingDataAccessor = (item: UsuarioCompleto, property: string) => {
       switch (property) {
+        case 'idMita':
+          return item.id || 0;
         case 'nombre':
           return obtenerNombreCompleto(item).toLowerCase();
         case 'email':
@@ -443,6 +451,16 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     // Configurar tabla
     this.dataSource.data = usuarios;
     this.totalUsuarios = usuarios.length;
+
+    // Re-conectar el paginador después de asignar datos
+    // Usar setTimeout para asegurar que Angular complete el ciclo de detección
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.paginator.firstPage();
+      }
+    }, 0);
 
     // Generar datos para gráficos solo si hay usuarios
     if (usuarios.length > 0) {
@@ -764,6 +782,16 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     // Actualizar tabla
     this.dataSource.data = usuariosFiltrados;
     this.totalUsuarios = usuariosFiltrados.length;
+
+    // Re-conectar y resetear paginador cuando cambian los datos
+    // Usar setTimeout para asegurar que Angular complete el ciclo de detección
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.paginator.firstPage();
+      }
+    }, 0);
 
     // Regenerar gráficos con los datos filtrados usando requestAnimationFrame
     // para diferir la operación pesada y mantener la UI responsiva
