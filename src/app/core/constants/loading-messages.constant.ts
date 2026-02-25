@@ -366,7 +366,7 @@ export const LOADING_MESSAGES: LoadingMessageConfig[] = [
   {
     pattern: /./,
     method: 'POST',
-    message: 'Guardando información...',
+    message: 'Loading...',
     priority: 1,
   },
   {
