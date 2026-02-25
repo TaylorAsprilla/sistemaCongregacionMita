@@ -57,7 +57,7 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
     nombreResponsable: '',
     email: '',
     logo: 'assets/images/vista-principal/logo-informes.png',
-    ruta: `../${RUTAS.INFORME}`,
+    ruta: `../${RUTAS.VER_INFORMES_PAIS}`,
     role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
   },
   {
@@ -74,7 +74,7 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
     email: '',
     logo: 'assets/images/vista-principal/logo-congregacion.png',
     ruta: `../${RUTAS.CONGREGACIONES}`,
-    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS, ROLES.OBRERO_PAIS],
+    role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.ASISTENTE_OOTS],
   },
   {
     nombreSeccion: 'Campos',
@@ -91,5 +91,13 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
     logo: 'assets/images/vista-principal/generar-qr.png',
     ruta: `../${RUTAS.GENERAR_QR}`,
     role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS, ROLES.COMITE_RECTOR],
+  },
+  {
+    nombreSeccion: 'Dashboard',
+    nombreResponsable: '',
+    email: '',
+    logo: 'assets/images/vista-principal/dashboard.png',
+    ruta: `../${RUTAS.DASHBOARD_OBRERO}`,
+    role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
   },
 ];

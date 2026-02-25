@@ -234,13 +234,52 @@
         </div>
       }
 
+      <!-- Fila 1: Congregaciones (solo si hay más de una) -->
+      @if (tieneMasDeUnaCongregacion()) {
+        <mat-card class="chart-card main-chart">
+          <mat-card-header>
+            <mat-card-title>
+              <span>Congregaciones</span>
+              <button
+                mat-icon-button
+                (click)="abrirGraficaFullscreen('Congregaciones', chartCongregaciones, 'bar-vertical')"
+                matTooltip="Ver en pantalla completa"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (hasValidChartData(chartCongregaciones)) {
+              <ngx-charts-bar-vertical
+                [results]="chartCongregaciones"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="false"
+                [gradient]="gradient"
+                [scheme]="colorScheme"
+                [animations]="animations"
+                [view]="viewCongregacionesChart()"
+                [showDataLabel]="true"
+              >
+              </ngx-charts-bar-vertical>
+            } @else {
+              <p class="no-data">Sin datos disponibles</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <!-- Fila 2: Campos -->
       <mat-card class="chart-card main-chart">
         <mat-card-header>
           <mat-card-title>
-            <span>Congregaciones</span>
+            <span>Campos</span>
             <button
               mat-icon-button
-              (click)="abrirGraficaFullscreen('Congregaciones', chartCongregaciones, 'bar-vertical')"
+              (click)="abrirGraficaFullscreen('Campos', chartCampos, 'bar-vertical')"
               matTooltip="Ver en pantalla completa"
             >
               <mat-icon>fullscreen</mat-icon>
@@ -248,9 +287,9 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          @if (hasValidChartData(chartCongregaciones)) {
+          @if (hasValidChartData(chartCampos)) {
             <ngx-charts-bar-vertical
-              [results]="chartCongregaciones"
+              [results]="chartCampos"
               [xAxis]="showXAxis"
               [yAxis]="showYAxis"
               [legend]="false"
@@ -259,7 +298,7 @@
               [gradient]="gradient"
               [scheme]="colorScheme"
               [animations]="animations"
-              [view]="viewCongregacionesChart()"
+              [view]="viewCamposChart()"
               [showDataLabel]="true"
             >
             </ngx-charts-bar-vertical>
@@ -269,44 +308,43 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Tipo de Miembro -->
-      <mat-card class="chart-card main-chart">
-        <mat-card-header>
-          <mat-card-title>
-            <span>Tipo de Miembro</span>
-            <button
-              mat-icon-button
-              (click)="abrirGraficaFullscreen('Tipo de Miembro', chartTipoMiembro, 'bar-vertical')"
-              matTooltip="Ver en pantalla completa"
-            >
-              <mat-icon>fullscreen</mat-icon>
-            </button>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          @if (hasValidChartData(chartTipoMiembro)) {
-            <ngx-charts-bar-vertical
-              [results]="chartTipoMiembro"
-              [xAxis]="showXAxis"
-              [yAxis]="showYAxis"
-              [legend]="false"
-              [showXAxisLabel]="false"
-              [showYAxisLabel]="false"
-              [gradient]="gradient"
-              [scheme]="colorScheme"
-              [animations]="animations"
-              [view]="viewMainChart"
-              [showDataLabel]="true"
-            >
-            </ngx-charts-bar-vertical>
-          } @else {
-            <p class="no-data">Sin datos disponibles</p>
-          }
-        </mat-card-content>
-      </mat-card>
-
-      <!-- Gráficos Secundarios Grid -->
+      <!-- Fila 3: Tipo Miembro - Feligreses por Ministerio - Feligreses por Voluntariado -->
       <div class="secondary-charts-grid">
+        <!-- Tipo de Miembro -->
+        <mat-card class="chart-card">
+          <mat-card-header>
+            <mat-card-title class="chart-title-pink">
+              <span>Tipo de Miembro</span>
+              <button
+                mat-icon-button
+                (click)="abrirGraficaFullscreen('Tipo de Miembro', chartTipoMiembro, 'bar-horizontal')"
+                matTooltip="Ver en pantalla completa"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (hasValidChartData(chartTipoMiembro)) {
+              <ngx-charts-bar-horizontal
+                [results]="chartTipoMiembro"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="false"
+                [gradient]="gradient"
+                [scheme]="colorScheme"
+                [animations]="animations"
+                [showDataLabel]="true"
+              >
+              </ngx-charts-bar-horizontal>
+            } @else {
+              <p class="no-data">Sin datos</p>
+            }
+          </mat-card-content>
+        </mat-card>
+
         <!-- Feligreses por Ministerio -->
         <mat-card class="chart-card">
           <mat-card-header>
@@ -376,7 +414,10 @@
             }
           </mat-card-content>
         </mat-card>
+      </div>
 
+      <!-- Fila 3: Estado Civil - Grado Académico - Género -->
+      <div class="secondary-charts-grid">
         <!-- Estado Civil -->
         <mat-card class="chart-card">
           <mat-card-header>
@@ -411,20 +452,7 @@
             }
           </mat-card-content>
         </mat-card>
-      </div>
-    </section>
 
-    <!-- Sección de Grado Académico y Género -->
-    <section class="charts-section">
-      <!-- Loading Overlay para gráficas -->
-      @if (cargandoGraficas()) {
-        <div class="charts-loading-overlay">
-          <mat-spinner diameter="40"></mat-spinner>
-          <p>Actualizando gráficas...</p>
-        </div>
-      }
-
-      <div class="secondary-charts-grid">
         <!-- Grado Académico -->
         <mat-card class="chart-card">
           <mat-card-header>

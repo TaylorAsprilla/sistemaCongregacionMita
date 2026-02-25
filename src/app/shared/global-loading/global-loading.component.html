@@ -1,0 +1,29 @@
+<!--
+  Loading Overlay Global
+  Se muestra automáticamente cuando hay requests HTTP activos
+-->
+@if (isLoading()) {
+  <div class="loading-overlay" role="status" aria-live="polite" aria-busy="true">
+    <div class="loading-container">
+      <!-- Spinner animado -->
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+
+      <!-- Mensaje de carga -->
+      <div class="loading-message" aria-label="Estado de carga">
+        <p class="loading-text">{{ message() }}</p>
+
+        <!-- Indicador de múltiples operaciones -->
+        @if (hasMultipleOperations()) {
+          <p class="loading-count">
+            {{ activeCount() }} {{ activeCount() === 1 ? 'operación' : 'operaciones' }} en progreso
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+}

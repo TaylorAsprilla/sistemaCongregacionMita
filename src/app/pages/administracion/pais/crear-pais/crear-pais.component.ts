@@ -75,7 +75,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
     this.paisForm = this.formBuilder.group({
       pais: ['', [Validators.required, Validators.minLength(3)]],
       idDivisa: [null, [Validators.required]],
-      idObreroEncargado: ['', [Validators.required]],
+      idObreroEncargado: [null],
     });
   }
 
@@ -88,15 +88,16 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   crearPais() {
     const paisNuevo = this.paisForm.value;
 
-    if (paisNuevo.idObreroEncargado === 'null') {
-      delete paisNuevo.idObreroEncargado;
-    }
-
     if (this.paisSeleccionado) {
       const data = {
         ...this.paisForm.value,
         id: this.paisSeleccionado.id,
       };
+
+      // Si idObreroEncargado es null, lo dejamos como null para que se actualice correctamente
+      if (data.idObreroEncargado === null) {
+        data.idObreroEncargado = null;
+      }
 
       this.paisService.actualizarPais(data).subscribe((pais: any) => {
         Swal.fire({
@@ -127,7 +128,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
             icon: 'error',
             html: `${listaErrores.join('')}`,
           });
-        }
+        },
       );
     }
   }
@@ -158,7 +159,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
           }).then(() => {
             this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.PAISES}`);
           });
-        }
+        },
       );
   }
 

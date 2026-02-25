@@ -32,6 +32,8 @@ import { WhatsappPipe } from '../../pipes/whatsapp/whatsapp.pipe';
 import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
 import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
 import { configuracion } from 'src/environments/config/configuration';
+import { obtenerBanderaPais, obtenerCodigoIsoPais } from 'src/app/core/utils/banderas-paises.utils';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-ver-censo',
@@ -106,6 +108,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   isMobile: Observable<BreakpointState>;
   isFiltrosVisibles: boolean = false;
 
+  // URL de las banderas desde environment
+  banderasUrl: string = environment.banderas_url;
+
   get filterText() {
     return this.filtrarTexto;
   }
@@ -118,11 +123,31 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filtrarCongreTexto,
       this.filtrarCampoTexto,
       this.edadMaxima,
-      this.edadMinima
+      this.edadMinima,
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
   }
+
+  get paisesEnCenso(): string[] {
+    const paisesUnicos = new Set<string>();
+    this.usuariosFiltrados.forEach((usuario) => {
+      const pais = usuario.usuarioCongregacionPais?.[0]?.pais;
+      if (pais) {
+        paisesUnicos.add(pais);
+      }
+    });
+    return Array.from(paisesUnicos).sort();
+  }
+
+  obtenerColorPais(index: number): string {
+    const colores = ['bg-primary', 'bg-success', 'bg-info', 'bg-warning', 'bg-danger', 'bg-secondary', 'bg-dark'];
+    return colores[index % colores.length];
+  }
+
+  // Exponer las funciones de utils para uso en el template
+  obtenerBanderaPais = obtenerBanderaPais;
+  obtenerCodigoIsoPais = obtenerCodigoIsoPais;
 
   ngOnInit(): void {
     this.isMobile = this.breakpointService.observe(Breakpoints.Handset);
@@ -228,7 +253,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     congregacion: string,
     campo: string,
     edadMaxima?: number,
-    edadMinima?: number
+    edadMinima?: number,
   ): UsuariosPorCongregacionInterface[] {
     const lowerFilterTerm = filterTerm.toLocaleLowerCase();
     const lowerPais = pais.toLocaleLowerCase();
@@ -245,7 +270,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
         // Concatenar el nombre completo del usuario
         const nombreCompleto = `${getSafeString(usuario.primerNombre)} ${getSafeString(
-          usuario.segundoNombre
+          usuario.segundoNombre,
         )} ${getSafeString(usuario.primerApellido)} ${getSafeString(usuario.segundoApellido)}`.trim();
 
         // Dividir el término de búsqueda en palabras individuales
@@ -290,7 +315,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   filtrarCongregacionesPorPais(pais: string) {
     this.congregacionesFiltradas = this.congregaciones?.filter(
-      (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais)
+      (congregacionBuscar) => congregacionBuscar.pais_id === parseInt(pais),
     );
   }
 
@@ -304,7 +329,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.congregacionesFiltradasId.push(this.congregacionesFiltradas[i].id);
     }
     this.camposFiltrados = this.campos?.filter((campoBuscar) =>
-      this.congregacionesFiltradasId.includes(campoBuscar.congregacion_id)
+      this.congregacionesFiltradasId.includes(campoBuscar.congregacion_id),
     );
   }
 
@@ -327,7 +352,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filtrarCongreTexto,
       this.filtrarCampoTexto,
       this.edadMaxima,
-      this.edadMinima
+      this.edadMinima,
     );
 
     this.totalUsuarios = this.usuariosFiltrados.length;
@@ -350,7 +375,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filtrarCongreTexto,
       this.filtrarCampoTexto,
       this.edadMaxima,
-      this.edadMinima
+      this.edadMinima,
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -364,7 +389,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       this.filtrarCongreTexto,
       this.filtrarCampoTexto,
       this.edadMaxima,
-      this.edadMinima
+      this.edadMinima,
     );
     this.totalUsuarios = this.usuariosFiltrados.length;
     this.pagina = 1;
@@ -406,7 +431,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         this.filtrarCongreTexto,
         this.filtrarCampoTexto,
         this.edadMaxima,
-        this.edadMinima
+        this.edadMinima,
       );
 
       // Actualizar total y reiniciar la página
