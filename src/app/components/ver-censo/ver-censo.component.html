@@ -8,13 +8,40 @@
           <div>{{ titulo }}</div>
         </div>
       } @else {
-        <span><b> País:</b> {{ nombrePais }} </span>
-        @if (!!mostrarNombreCongregacion) {
-          <span><b> - Congregación:</b> {{ nombreCongregacion }}</span>
-        }
-        @if (!!mostrarNombreCampo) {
-          <span><b> - Campo:</b> {{ nombreCampo }}</span>
-        }
+        <div class="info-section pl-4 pr-4">
+          <div class="mb-2">
+            @if (paisesEnCenso.length > 0) {
+              <div class="d-inline-flex flex-wrap gap-2 mt-1">
+                @for (pais of paisesEnCenso; track pais; let i = $index) {
+                  @if (obtenerCodigoIsoPais(pais)) {
+                    <img
+                      [src]="banderasUrl + obtenerCodigoIsoPais(pais).toLowerCase() + '.png'"
+                      [alt]="'Bandera de ' + pais"
+                      class="bandera-img"
+                      loading="lazy"
+                    />
+                  } @else {
+                    <i class="fas fa-globe"></i>
+                  }
+                }
+              </div>
+            } @else {
+              <span class="text-muted ms-2">No hay países registrados</span>
+            }
+          </div>
+          @if (!!mostrarNombreCongregacion) {
+            <div class="mb-1">
+              <strong>Congregación:</strong>
+              <span class="badge bg-danger px-3 py-1">{{ nombreCongregacion }}</span>
+            </div>
+          }
+          @if (!!mostrarNombreCampo) {
+            <div class="mb-1">
+              <strong>Campo:</strong>
+              <span class="badge bg-success px-3 py-1">{{ nombreCampo }}</span>
+            </div>
+          }
+        </div>
       }
     </div>
 
@@ -53,10 +80,6 @@
     </div>
   </div>
 
-
-
-
-
   @if (isFiltrosVisibles) {
     <div>
       @if (usuarios.length > 0) {
@@ -70,7 +93,7 @@
                   class="form-select form-control"
                   (ngModelChange)="filtrarPais($event)"
                   [(ngModel)]="originalPais"
-                  >
+                >
                   <option value="">Seleccione País</option>
                   @for (pais of paises; track pais) {
                     <option [ngValue]="pais">{{ pais.pais }}</option>
@@ -86,7 +109,7 @@
                   class="form-select form-control"
                   (ngModelChange)="filtrarCongregacion($event)"
                   [(ngModel)]="originalCongre"
-                  >
+                >
                   <option value="">Seleccione Congregación</option>
                   <option value="">Sin Congregación</option>
                   @for (congregacion of congregacionesFiltradas; track congregacion) {
@@ -105,7 +128,7 @@
                   class="form-select form-control"
                   (ngModelChange)="filtrarCampo($event)"
                   [(ngModel)]="filtrarCampoTexto"
-                  >
+                >
                   <option value="">Seleccione Campo</option>
                   <option value="">Sin Campo</option>
                   @for (campo of camposFiltrados; track campo) {
@@ -145,7 +168,13 @@
             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
               <div class="form-group">
                 <label>Buscar</label>
-                <input type="search" class="form-control" [(ngModel)]="filterText" placeholder="Buscar..." name="filtro" />
+                <input
+                  type="search"
+                  class="form-control"
+                  [(ngModel)]="filterText"
+                  placeholder="Buscar..."
+                  name="filtro"
+                />
               </div>
             </div>
 
@@ -155,7 +184,6 @@
               </div>
             </div>
           </div>
-
         </div>
       } @else {
         <div class="card">
@@ -182,15 +210,16 @@
       <tbody>
         @for (
           usuario of usuariosFiltrados
-          | paginate
-          : {
-          itemsPerPage: tableSize,
-          currentPage: pagina,
-          totalItems: totalUsuarios
-          }; track
-          usuario; let i = $index) {
-          <tr
-            >
+            | paginate
+              : {
+                  itemsPerPage: tableSize,
+                  currentPage: pagina,
+                  totalItems: totalUsuarios,
+                };
+          track usuario;
+          let i = $index
+        ) {
+          <tr>
             <td class="pointer text-center" (click)="masInformacion(usuario.id)">
               {{ usuario.id }}
             </td>
@@ -219,7 +248,7 @@
                       <a
                         href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
                         target="_blank"
-                        >
+                      >
                         <i class="fab fa-whatsapp mx-2"></i>
                       </a>
                       <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank">
@@ -244,115 +273,114 @@
               @if (!!usuario.usuarioCongregacionCongregacion?.[0]?.congregacion) {
                 <span class="badge badge-danger">
                   {{ usuario.usuarioCongregacionCongregacion?.[0]?.congregacion }}</span
-                  >
+                >
+              }
+              <p>
+                @if (!!usuario.usuarioCongregacionCampo?.[0]?.campo) {
+                  <span class="badge badge-success">
+                    {{ usuario.usuarioCongregacionCampo?.[0]?.campo }}
+                  </span>
                 }
-                <p>
-                  @if (!!usuario.usuarioCongregacionCampo?.[0]?.campo) {
-                    <span class="badge badge-success">
-                      {{ usuario.usuarioCongregacionCampo?.[0]?.campo}}
-                    </span>
-                  }
-                </p>
-              </td>
-              <td>
-                @if (!!usuario.estado) {
-                  <a
-                    data-toggle="tooltip"
-                    data-original-title="Información"
-                    title="Más Información"
-                    class="btn btn-sm bg-info me-1 mb-1"
-                    (click)="masInformacion(usuario.id)"
-                    >
-                    <i class="fa-solid fa-circle-info ml-1"></i>
-                  </a>
-                }
-                @if (!!usuario.estado) {
-                  <a
-                    data-toggle="tooltip"
-                    data-original-title="Editar"
-                    title="Editar Feligrés"
-                    class="btn btn-sm bg-primary me-1 mb-1"
-                    (click)="actualizarUsuarioHandler(usuario.id)"
-                    >
-                    <i class="fas fa-pencil-alt ml-1"></i>
-                  </a>
-                }
-                @if (!!usuario.estado) {
-                  <a
-                    data-toggle="tooltip"
-                    data-original-title="Enviar Email"
-                    title="Enviar Email"
-                    class="btn btn-sm bg-info me-1 mb-1"
-                    (click)="enviarEmailHandler(usuario.id)"
-                    >
-                    <i class="fa-solid fa-envelope"></i>
-                  </a>
-                }
-                @if (!usuario.estado) {
-                  <a
-                    data-toggle="tooltip"
-                    data-original-title="Activar"
-                    title="Activar Feligrés"
-                    class="btn btn-sm bg-secondary me-1 mb-1"
-                    (click)="activarUsuarioHandler(usuario.id)"
-                    >
-                    <i class="fas fa-check-square"></i>
-                  </a>
-                }
+              </p>
+            </td>
+            <td>
+              @if (!!usuario.estado) {
                 <a
                   data-toggle="tooltip"
-                  data-original-title="traslado"
-                  class="btn btn-sm bg-success me-1 mb-1"
-                  title="Transladar Feligrés"
-                  (click)="transferirUsuarioHandler(usuario.id)"
-                  >
-                  <i class="fa fa-right-left"></i>
+                  data-original-title="Información"
+                  title="Más Información"
+                  class="btn btn-sm bg-info me-1 mb-1"
+                  (click)="masInformacion(usuario.id)"
+                >
+                  <i class="fa-solid fa-circle-info ml-1"></i>
                 </a>
+              }
+              @if (!!usuario.estado) {
                 <a
                   data-toggle="tooltip"
-                  data-original-title="trascendió"
-                  class="btn btn-sm bg-warning me-1 mb-1"
-                  title="Trascendió"
-                  (click)="transcenderUsuarioHandler(usuario.id)"
-                  >
-                  <i class="fa fa-cloud"></i>
+                  data-original-title="Editar"
+                  title="Editar Feligrés"
+                  class="btn btn-sm bg-primary me-1 mb-1"
+                  (click)="actualizarUsuarioHandler(usuario.id)"
+                >
+                  <i class="fas fa-pencil-alt ml-1"></i>
                 </a>
-                @if (!!usuario.estado) {
-                  <a
-                    data-toggle="tooltip"
-                    data-original-title="Borrar"
-                    title="Eliminar Feligrés"
-                    class="btn btn-sm bg-danger me-1 mb-1"
-                    (click)="borrarUsuarioHandler(usuario)"
-                    >
-                    <i class="fas fa-trash-alt"></i>
-                  </a>
-                }
-              </td>
-            </tr>
-          }
-        </tbody>
-        <tfoot>
-          <th scope="col"># Mita</th>
-          <th class="text-center">Nombre</th>
-          <th class="text-center">Correo</th>
-          <th class="text-center">Edad</th>
-          <th class="text-center">Celular</th>
-          <th class="text-center">Congregación</th>
-          <th class="text-center">Acciones</th>
-        </tfoot>
-      </table>
-    </div>
+              }
+              @if (!!usuario.estado) {
+                <a
+                  data-toggle="tooltip"
+                  data-original-title="Enviar Email"
+                  title="Enviar Email"
+                  class="btn btn-sm bg-info me-1 mb-1"
+                  (click)="enviarEmailHandler(usuario.id)"
+                >
+                  <i class="fa-solid fa-envelope"></i>
+                </a>
+              }
+              @if (!usuario.estado) {
+                <a
+                  data-toggle="tooltip"
+                  data-original-title="Activar"
+                  title="Activar Feligrés"
+                  class="btn btn-sm bg-secondary me-1 mb-1"
+                  (click)="activarUsuarioHandler(usuario.id)"
+                >
+                  <i class="fas fa-check-square"></i>
+                </a>
+              }
+              <a
+                data-toggle="tooltip"
+                data-original-title="traslado"
+                class="btn btn-sm bg-success me-1 mb-1"
+                title="Transladar Feligrés"
+                (click)="transferirUsuarioHandler(usuario.id)"
+              >
+                <i class="fa fa-right-left"></i>
+              </a>
+              <a
+                data-toggle="tooltip"
+                data-original-title="trascendió"
+                class="btn btn-sm bg-warning me-1 mb-1"
+                title="Trascendió"
+                (click)="transcenderUsuarioHandler(usuario.id)"
+              >
+                <i class="fa fa-cloud"></i>
+              </a>
+              @if (!!usuario.estado) {
+                <a
+                  data-toggle="tooltip"
+                  data-original-title="Borrar"
+                  title="Eliminar Feligrés"
+                  class="btn btn-sm bg-danger me-1 mb-1"
+                  (click)="borrarUsuarioHandler(usuario)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+      <tfoot>
+        <th scope="col"># Mita</th>
+        <th class="text-center">Nombre</th>
+        <th class="text-center">Correo</th>
+        <th class="text-center">Edad</th>
+        <th class="text-center">Celular</th>
+        <th class="text-center">Congregación</th>
+        <th class="text-center">Acciones</th>
+      </tfoot>
+    </table>
+  </div>
 
-    <div class="d-flex justify-content-center mt-2 mb-2">
-      <pagination-controls
+  <div class="d-flex justify-content-center mt-2 mb-2">
+    <pagination-controls
       (pageChange)="onTableDataChange($event)"
       previousLabel="Anterior"
       nextLabel="Próximo"
       [autoHide]="true"
       [responsive]="true"
-      >
+    >
     </pagination-controls>
   </div>
 </div>
-
