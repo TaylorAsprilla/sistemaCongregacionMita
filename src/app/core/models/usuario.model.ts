@@ -7,6 +7,7 @@ import { PermisoModel } from './permisos.model';
 import { RolCasaModel } from './rol-casa.model';
 import { UsuarioCongregacionModel } from './usuarioCongregacion.model';
 import { VoluntariadoModel } from './voluntariado.model';
+import { CategoriaProfesionModel } from './categoria-profesion.model';
 import {
   usuarioCongregacionCampoInterface,
   usuarioCongregacionCongregacionInterface,
@@ -59,6 +60,7 @@ export class UsuarioModel {
     public anoConocimiento?: string,
     public ocupacion?: string,
     public especializacionEmpleo?: string,
+    public categoriaProfesion?: CategoriaProfesionModel,
     public estadoCivil?: EstadoCivilModel,
     public gradoAcademico?: GradoAcademicoModel,
     public tipoDocumento?: TipoDocumentoModel,

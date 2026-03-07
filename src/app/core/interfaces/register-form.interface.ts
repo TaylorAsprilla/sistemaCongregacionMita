@@ -25,6 +25,7 @@ export interface RegisterFormInterface {
   gradoAcademico_id: number;
   ocupacion: string;
   especializacionEmpleo: string;
+  categoriaProfesion_id: number;
   tipoMiembro_id: number;
   esJoven: boolean;
   ministerios: number[];

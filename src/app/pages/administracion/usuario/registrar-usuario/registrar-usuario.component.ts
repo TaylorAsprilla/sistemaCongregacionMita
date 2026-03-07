@@ -18,6 +18,8 @@ import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RegisterFormInterface } from 'src/app/core/interfaces/register-form.interface';
 import { TipoDocumentoModel } from 'src/app/core/models/tipo-documento.model';
 import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { CategoriaProfesionModel } from 'src/app/core/models/categoria-profesion.model';
+import { CategoriaProfesionService } from 'src/app/services/categoria-profesion/categoria-profesion.service';
 import { InformacionUsuarioComponent } from '../../../../components/informacion-usuario/informacion-usuario.component';
 
 @Component({
@@ -31,6 +33,7 @@ export default class RegistrarUsuarioComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
+  private categoriaProfesionService = inject(CategoriaProfesionService);
 
   usuario: UsuarioModel;
   generos: GeneroModel[] = [];
@@ -46,6 +49,7 @@ export default class RegistrarUsuarioComponent implements OnInit {
   ministerios: MinisterioModel[] = [];
   voluntariados: VoluntariadoModel[] = [];
   tiposDeDocumentos: TipoDocumentoModel[] = [];
+  categoriasProfesion: CategoriaProfesionModel[] = [];
   idUsuarioQueRegistra: number;
 
   get OPERACION() {
@@ -53,6 +57,17 @@ export default class RegistrarUsuarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Cargar categorías de profesión desde el servicio
+    this.categoriaProfesionService.getCategoriasProfesion().subscribe(
+      (categorias) => {
+        this.categoriasProfesion = categorias.filter((categoria) => categoria.estado === true);
+      },
+      (error) => {
+        console.error('Error al cargar categorías de profesión:', error);
+        this.categoriasProfesion = [];
+      }
+    );
+
     this.activatedRoute.data.subscribe(
       (data: {
         nacionalidad: NacionalidadModel[];

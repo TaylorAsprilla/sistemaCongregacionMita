@@ -26,6 +26,7 @@ import { TipoDocumentoModel, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
+import { CategoriaProfesionModel } from 'src/app/core/models/categoria-profesion.model';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -66,6 +67,7 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() dosis: DosisModel[] = [];
   @Input() nacionalidades: NacionalidadModel[] = [];
   @Input() gradosAcademicos: GradoAcademicoModel[] = [];
+  @Input() categoriasProfesion: CategoriaProfesionModel[] = [];
   @Input() tipoMiembros: TipoMiembroModel[] = [];
   @Input() ministerios: MinisterioModel[] = [];
   @Input() voluntariados: VoluntariadoModel[] = [];
@@ -136,6 +138,7 @@ export class InformacionUsuarioComponent implements OnInit {
   gradoAcademico: number;
   ocupacion: string;
   especializacionEmpleo: string;
+  categoriaProfesion_id: number;
   tipoMiembro: number;
   esjoven: number;
   ejerMinisterio: boolean;
@@ -207,6 +210,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.gradoAcademico = this.usuario?.gradoAcademico.id ? this.usuario.gradoAcademico.id : null;
     this.ocupacion = this.usuario?.ocupacion ? this.usuario?.ocupacion : '';
     this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
+    this.categoriaProfesion_id = this.usuario?.categoriaProfesion?.id ? this.usuario.categoriaProfesion.id : null;
     this.tipoMiembro = this.usuario?.tipoMiembro.id ? this.usuario.tipoMiembro.id : null;
     this.esjoven = this.usuario?.esJoven ? 1 : 0;
     this.ejerMinisterio = !!this.usuario?.usuarioMinisterio?.length;
@@ -267,6 +271,7 @@ export class InformacionUsuarioComponent implements OnInit {
       gradoAcademico_id: [this.gradoAcademico, [Validators.required]],
       ocupacion: [this.ocupacion, [Validators.minLength(3), Validators.required]],
       especializacionEmpleo: [this.especializacionEmpleo, [Validators.minLength(3)]],
+      categoriaProfesion_id: [this.categoriaProfesion_id, [Validators.required]],
     });
 
     this.registroCuatroForm = this.formBuilder.group({
@@ -391,6 +396,7 @@ export class InformacionUsuarioComponent implements OnInit {
         gradoAcademico_id: informacionFormulario.gradoAcademico_id,
         ocupacion: informacionFormulario.ocupacion,
         especializacionEmpleo: informacionFormulario.especializacionEmpleo,
+        categoriaProfesion_id: informacionFormulario.categoriaProfesion_id,
         tipoMiembro_id: informacionFormulario?.tipoMiembro_id,
         esJoven: informacionFormulario.esJoven,
         ministerios: this.ministeriosSeleccionados(),

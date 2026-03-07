@@ -676,6 +676,27 @@
                                 </small>
                               }
                             </div>
+                            <div class="form-group col-sm-12 col-md-6 col-lg-4">
+                              <label class="input-group obligatorio">Categoría de profesión </label>
+                              <select
+                                formControlName="categoriaProfesion_id"
+                                class="form-control">
+                                <option [value]="null" disabled>Seleccione una categoría</option>
+                                @for (categoria of categoriasProfesion; track categoria.id) {
+                                  <option [value]="categoria.id">{{ categoria.nombre }}</option>
+                                }
+                              </select>
+                              @if (
+                                registroTresForm.get('categoriaProfesion_id').hasError('required') &&
+                                registroTresForm.get('categoriaProfesion_id').touched
+                                ) {
+                                <small
+                                  class="form-text text-danger"
+                                  >
+                                  Seleccione una categoría de profesión.
+                                </small>
+                              }
+                            </div>
                           </div>
                           <div class="float-end">
                             <button (click)="previous()" type="button" name="previous" class="next btn btn-primary mx-2">Anterior</button>

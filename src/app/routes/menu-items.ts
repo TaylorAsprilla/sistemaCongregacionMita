@@ -65,6 +65,7 @@ export enum RUTAS {
   ESTADO_CIVIL = 'estado_civil',
   GRADO_ALCANZADO = 'grado_alcanzado',
   ROL_EN_CASA = 'rol_en_casa',
+  CATEGORIA_PROFESION = 'categoria-profesion',
   VOLUNTARIO = 'voluntario',
   TIPO_DE_ESTUDIO = 'tipo-de-estudio',
   RAZON_DE_SOLICITUD = 'razon-de-solicitud',
@@ -270,6 +271,15 @@ export const ROUTES: RouteInfo[] = [
       {
         path: RUTAS.ROL_EN_CASA,
         title: 'Rol en Casa',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+        submenu: [],
+      },
+      {
+        path: RUTAS.CATEGORIA_PROFESION,
+        title: 'Categoría de Profesión',
         icon: '',
         class: '',
         extralink: false,
