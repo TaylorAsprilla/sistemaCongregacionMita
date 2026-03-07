@@ -70,7 +70,7 @@ export class UsuarioModel {
     public usuarioPermiso?: PermisoModel[],
     public usuarioCongregacionPais?: UsuarioCongregacionPaisInterface,
     public usuarioCongregacionCongregacion?: usuarioCongregacionCongregacionInterface,
-    public usuarioCongregacionCampo?: usuarioCongregacionCampoInterface
+    public usuarioCongregacionCampo?: usuarioCongregacionCampoInterface,
   ) {}
 
   get fotoUrl() {

@@ -82,7 +82,7 @@ export class CategoriaProfesionComponent implements OnInit, OnDestroy {
             icon: 'error',
             html: `${errores?.msg}`,
           });
-        }
+        },
       );
     }
   }
@@ -156,7 +156,7 @@ export class CategoriaProfesionComponent implements OnInit, OnDestroy {
             icon: 'error',
             html: `${error.error?.msg}`,
           });
-        }
+        },
       );
     }
   }

@@ -365,7 +365,7 @@ export class InformacionUsuarioComponent implements OnInit {
         this.registroUnoForm.value,
         this.registroDosForm.value,
         this.registroTresForm.value,
-        this.registroCuatroForm.value
+        this.registroCuatroForm.value,
       );
 
       if (!informacionFormulario.ejerceMinisterio) {
@@ -508,20 +508,20 @@ export class InformacionUsuarioComponent implements OnInit {
     this.camposFiltrados = null;
 
     this.congregacionesFiltradas = this.congregaciones?.filter(
-      (congregacionBuscar) => congregacionBuscar.pais_id === Number(idPais)
+      (congregacionBuscar) => congregacionBuscar.pais_id === Number(idPais),
     );
   }
 
   filtrarCamposPorCongregacion(idCongregacion: number | string) {
     this.camposFiltrados = this.campos.filter(
-      (campoABuscar) => campoABuscar.congregacion_id === Number(idCongregacion)
+      (campoABuscar) => campoABuscar.congregacion_id === Number(idCongregacion),
     );
   }
 
   buscarNacionalidad(formControlName: string) {
     this.letrasFiltrarNacionalidad = this.registroDosForm.get(formControlName.toString()).valueChanges.pipe(
       startWith(''),
-      map((valor) => this.filtrar(valor || ''))
+      map((valor) => this.filtrar(valor || '')),
     );
   }
 
@@ -529,13 +529,13 @@ export class InformacionUsuarioComponent implements OnInit {
     const filtrarValores = valor.toLowerCase();
 
     return this.nacionalidades.filter((nacionalidad: NacionalidadModel) =>
-      nacionalidad.nombre.toLowerCase().includes(filtrarValores)
+      nacionalidad.nombre.toLowerCase().includes(filtrarValores),
     );
   }
 
   buscarIDNacionalidad(nacionalidad: string): number {
     const nacionalidadEncontrada = this.nacionalidades.find(
-      (nacionalidades) => nacionalidades.nombre.toLowerCase() === nacionalidad.toLowerCase()
+      (nacionalidades) => nacionalidades.nombre.toLowerCase() === nacionalidad.toLowerCase(),
     );
 
     if (nacionalidadEncontrada) {
@@ -566,7 +566,7 @@ export class InformacionUsuarioComponent implements OnInit {
   async tieneTipoDocumento(idPais: string | number = this.usuario?.usuarioCongregacionPais[0]?.id) {
     this.tipoDeDocumentosFiltrados = [];
     this.tipoDeDocumentosFiltrados = this.tiposDeDocumentos.filter(
-      (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais)
+      (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais),
     );
 
     if (this.tipoDeDocumentosFiltrados.length > 0) {

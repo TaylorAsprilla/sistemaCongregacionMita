@@ -65,7 +65,7 @@ export default class RegistrarUsuarioComponent implements OnInit {
       (error) => {
         console.error('Error al cargar categorías de profesión:', error);
         this.categoriasProfesion = [];
-      }
+      },
     );
 
     this.activatedRoute.data.subscribe(
@@ -98,7 +98,7 @@ export default class RegistrarUsuarioComponent implements OnInit {
         this.campos = data.campo.filter((campo) => campo.estado === true);
         this.tiposDeDocumentos = data.tipoDocumento.filter((tipoDocumento) => tipoDocumento.estado === true);
         this.usuario = data.usuario?.usuario;
-      }
+      },
     );
     this.idUsuarioQueRegistra = this.usuarioService.usuarioId ?? 0;
   }
@@ -142,7 +142,7 @@ export default class RegistrarUsuarioComponent implements OnInit {
           icon: 'error',
           html: listaErrores.length ? listaErrores.join('') : error.error.msg,
         });
-      }
+      },
     );
   }
 
@@ -175,7 +175,7 @@ export default class RegistrarUsuarioComponent implements OnInit {
               icon: 'error',
               html: `Error al actualizar el perfil <p> ${listaErrores.join('')}`,
             });
-          }
+          },
         );
       }
     });

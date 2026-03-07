@@ -3,6 +3,6 @@ export class CategoriaProfesionModel {
     public id: number,
     public nombre: string,
     public descripcion: string,
-    public estado: boolean
+    public estado: boolean,
   ) {}
 }

@@ -26,17 +26,13 @@ export class CategoriaProfesionService {
   getCategoriasProfesion() {
     return this.httpClient
       .get(`${base_url}/categorias-profesion`, this.headers)
-      .pipe(
-        map((response: { ok: boolean; categorias: CategoriaProfesionModel[] }) => response.categorias)
-      );
+      .pipe(map((response: { ok: boolean; categorias: CategoriaProfesionModel[] }) => response.categorias));
   }
 
   getUnaCategoriaProfesion(id: number) {
     return this.httpClient
       .get(`${base_url}/categorias-profesion/${id}`, this.headers)
-      .pipe(
-        map((response: { ok: boolean; categoria: CategoriaProfesionModel }) => response.categoria)
-      );
+      .pipe(map((response: { ok: boolean; categoria: CategoriaProfesionModel }) => response.categoria));
   }
 
   crearCategoriaProfesion(data: { nombre: string; descripcion: string }) {

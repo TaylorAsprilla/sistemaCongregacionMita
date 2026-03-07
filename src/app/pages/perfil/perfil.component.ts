@@ -67,7 +67,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
       (error) => {
         console.error('Error al cargar categorías de profesión:', error);
         this.categoriasProfesion = [];
-      }
+      },
     );
 
     this.activatedRoute.data.subscribe(
@@ -93,17 +93,17 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.gradosAcademicos = data.gradoAcademico;
         this.tipoMiembros = data.tipoMiembro;
         this.congregaciones = data.congregacion.filter(
-          (congregacion: CongregacionModel) => congregacion.estado === true
+          (congregacion: CongregacionModel) => congregacion.estado === true,
         );
         this.ministerios = data.ministerio.filter((ministerio: MinisterioModel) => ministerio.estado === true);
         this.voluntariados = data.voluntariado;
         this.paises = data.pais.filter((pais: CongregacionPaisModel) => pais.estado === true);
         this.campos = data.campo.filter((campo: CampoModel) => campo.estado === true);
         this.tiposDeDocumentos = data.tipoDocumento.filter(
-          (tipoDocumento: TipoDocumentoModel) => tipoDocumento.estado === true
+          (tipoDocumento: TipoDocumentoModel) => tipoDocumento.estado === true,
         );
         this.usuario = data.usuario.usuario;
-      }
+      },
     );
   }
 
@@ -148,7 +148,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
               icon: 'error',
               html: `Error al actualizar el perfil <p> ${listaErrores.join('')}`,
             });
-          }
+          },
         );
       }
     });
