@@ -45,6 +45,9 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
   formSubmitted: boolean = false;
   asignarPermisos: boolean = false;
 
+  mostrarPasswordUno: boolean = false;
+  mostrarPasswordDos: boolean = false;
+
   permisoSubscription: Subscription;
 
   @ViewChild('verPermisos') verPermisos: ElementRef;
@@ -81,7 +84,7 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
       },
       {
         validators: this.passwordsIguales('passwordNuevoUno', 'passwordNuevoDos'),
-      } as AbstractControlOptions
+      } as AbstractControlOptions,
     );
   }
 
@@ -150,7 +153,7 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
               ? `Error al crear una nueva contraseña:<br> ${listaErrores.join('')}`
               : 'Ocurrió un error al intentar crear la nueva contraseña.',
           });
-        }
+        },
       );
     }
   }
@@ -225,7 +228,7 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
           icon: 'error',
           html: `Error al actualizar el perfil <p> ${listaErrores.join('')}`,
         });
-      }
+      },
     );
   }
 
@@ -302,7 +305,7 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
                 icon: 'error',
                 html: listaErrores.join('') ? `${listaErrores.join('')}` : error.error.msg,
               });
-            }
+            },
           );
         }
       } else if (result.isDenied) {
@@ -328,5 +331,13 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
         permissionsElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
       }
     }, 200);
+  }
+
+  togglePasswordUno() {
+    this.mostrarPasswordUno = !this.mostrarPasswordUno;
+  }
+
+  togglePasswordDos() {
+    this.mostrarPasswordDos = !this.mostrarPasswordDos;
   }
 }
