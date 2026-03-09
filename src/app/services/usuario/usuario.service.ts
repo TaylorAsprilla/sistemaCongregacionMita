@@ -179,7 +179,7 @@ export class UsuarioService {
               congregacion,
               email,
               pais_id,
-              idObreroEncargado
+              idObreroEncargado,
             );
 
             localStorage.setItem('token', respuesta.token);
@@ -195,7 +195,7 @@ export class UsuarioService {
               congregacion,
               email,
               pais_id,
-              idObreroEncargado
+              idObreroEncargado,
             );
 
             localStorage.setItem('token', localStorage.getItem('token'));
@@ -235,6 +235,7 @@ export class UsuarioService {
               anoConocimiento,
               ocupacion,
               especializacionEmpleo,
+              categoriaProfesion,
               estadoCivil,
               gradoAcademico,
               tipoDocumento,
@@ -281,6 +282,7 @@ export class UsuarioService {
               anoConocimiento,
               ocupacion,
               especializacionEmpleo,
+              categoriaProfesion,
               estadoCivil,
               gradoAcademico,
               tipoDocumento,
@@ -290,7 +292,7 @@ export class UsuarioService {
               usuarioPermiso,
               usuarioCongregacionPais,
               usuarioCongregacionCongregacion,
-              usuarioCongregacionCampo
+              usuarioCongregacionCampo,
             );
 
             localStorage.setItem('token', respuesta.token);
@@ -301,7 +303,7 @@ export class UsuarioService {
 
         catchError((error) => {
           return of(false);
-        })
+        }),
       );
   }
 
@@ -309,7 +311,7 @@ export class UsuarioService {
     return this.httpClient.post(`${base_url}/usuarios`, formData, this.headers).pipe(
       tap((resp: any) => {
         resp;
-      })
+      }),
     );
   }
 
@@ -329,7 +331,7 @@ export class UsuarioService {
           localStorage.setItem('token', resp.token);
           this.idUsuario = resp.usuario.id;
         }
-      })
+      }),
     );
   }
 
@@ -342,7 +344,7 @@ export class UsuarioService {
         sessionStorage.setItem('congregacion', resp.congregacion.congregacion);
         this.idUsuario = resp.congregacion.id;
         this.nombreQR = resp.nombre;
-      })
+      }),
     );
   }
 
@@ -358,7 +360,7 @@ export class UsuarioService {
         headers: {
           'x-reset': token,
         },
-      }
+      },
     );
   }
 
@@ -366,7 +368,7 @@ export class UsuarioService {
     return this.httpClient.put(
       `${base_url}/login/cambiarpasswordusuario`,
       { passwordAntiguo, passwordNuevo, login },
-      this.headers
+      this.headers,
     );
   }
 
@@ -374,7 +376,7 @@ export class UsuarioService {
     return this.httpClient.put(
       `${base_url}/login/resetpassword`,
       { login: login, passwordNuevo: password },
-      this.headers
+      this.headers,
     );
   }
 
@@ -388,7 +390,7 @@ export class UsuarioService {
       .pipe(
         map((usuariosRespuesta) => {
           return { totalUsuarios: usuariosRespuesta.totalUsuarios, usuarios: usuariosRespuesta.usuarios };
-        })
+        }),
       );
   }
 
@@ -400,7 +402,7 @@ export class UsuarioService {
     return this.httpClient.get<UsuarioInterface>(`${base_url}/usuarios/${id}`, this.headers).pipe(
       map((usuario) => {
         return usuario;
-      })
+      }),
     );
   }
 
@@ -416,7 +418,7 @@ export class UsuarioService {
   buscarPorNumeroMita(numeroMita: number): Observable<NumeroMitaResponse> {
     return this.httpClient.get<NumeroMitaResponse>(
       `${base_url}/usuarios/buscarnumeromita?numeroMita=${numeroMita}`,
-      this.headers
+      this.headers,
     );
   }
 

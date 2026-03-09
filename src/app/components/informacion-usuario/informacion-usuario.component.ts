@@ -26,6 +26,7 @@ import { TipoDocumentoModel, TIPO_DOCUMENTO_ID } from 'src/app/core/models/tipo-
 import { TipoMiembroModel } from 'src/app/core/models/tipo.miembro.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
+import { CategoriaProfesionModel } from 'src/app/core/models/categoria-profesion.model';
 import { BuscarCorreoService } from 'src/app/services/buscar-correo/buscar-correo.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -66,6 +67,7 @@ export class InformacionUsuarioComponent implements OnInit {
   @Input() dosis: DosisModel[] = [];
   @Input() nacionalidades: NacionalidadModel[] = [];
   @Input() gradosAcademicos: GradoAcademicoModel[] = [];
+  @Input() categoriasProfesion: CategoriaProfesionModel[] = [];
   @Input() tipoMiembros: TipoMiembroModel[] = [];
   @Input() ministerios: MinisterioModel[] = [];
   @Input() voluntariados: VoluntariadoModel[] = [];
@@ -136,6 +138,7 @@ export class InformacionUsuarioComponent implements OnInit {
   gradoAcademico: number;
   ocupacion: string;
   especializacionEmpleo: string;
+  categoriaProfesion_id: number;
   tipoMiembro: number;
   esjoven: number;
   ejerMinisterio: boolean;
@@ -207,6 +210,7 @@ export class InformacionUsuarioComponent implements OnInit {
     this.gradoAcademico = this.usuario?.gradoAcademico.id ? this.usuario.gradoAcademico.id : null;
     this.ocupacion = this.usuario?.ocupacion ? this.usuario?.ocupacion : '';
     this.especializacionEmpleo = this.usuario?.especializacionEmpleo ? this.usuario.especializacionEmpleo : '';
+    this.categoriaProfesion_id = this.usuario?.categoriaProfesion?.id ? this.usuario.categoriaProfesion.id : null;
     this.tipoMiembro = this.usuario?.tipoMiembro.id ? this.usuario.tipoMiembro.id : null;
     this.esjoven = this.usuario?.esJoven ? 1 : 0;
     this.ejerMinisterio = !!this.usuario?.usuarioMinisterio?.length;
@@ -267,6 +271,7 @@ export class InformacionUsuarioComponent implements OnInit {
       gradoAcademico_id: [this.gradoAcademico, [Validators.required]],
       ocupacion: [this.ocupacion, [Validators.minLength(3), Validators.required]],
       especializacionEmpleo: [this.especializacionEmpleo, [Validators.minLength(3)]],
+      categoriaProfesion_id: [this.categoriaProfesion_id, [Validators.required]],
     });
 
     this.registroCuatroForm = this.formBuilder.group({
@@ -360,7 +365,7 @@ export class InformacionUsuarioComponent implements OnInit {
         this.registroUnoForm.value,
         this.registroDosForm.value,
         this.registroTresForm.value,
-        this.registroCuatroForm.value
+        this.registroCuatroForm.value,
       );
 
       if (!informacionFormulario.ejerceMinisterio) {
@@ -391,6 +396,7 @@ export class InformacionUsuarioComponent implements OnInit {
         gradoAcademico_id: informacionFormulario.gradoAcademico_id,
         ocupacion: informacionFormulario.ocupacion,
         especializacionEmpleo: informacionFormulario.especializacionEmpleo,
+        categoriaProfesion_id: informacionFormulario.categoriaProfesion_id,
         tipoMiembro_id: informacionFormulario?.tipoMiembro_id,
         esJoven: informacionFormulario.esJoven,
         ministerios: this.ministeriosSeleccionados(),
@@ -502,20 +508,20 @@ export class InformacionUsuarioComponent implements OnInit {
     this.camposFiltrados = null;
 
     this.congregacionesFiltradas = this.congregaciones?.filter(
-      (congregacionBuscar) => congregacionBuscar.pais_id === Number(idPais)
+      (congregacionBuscar) => congregacionBuscar.pais_id === Number(idPais),
     );
   }
 
   filtrarCamposPorCongregacion(idCongregacion: number | string) {
     this.camposFiltrados = this.campos.filter(
-      (campoABuscar) => campoABuscar.congregacion_id === Number(idCongregacion)
+      (campoABuscar) => campoABuscar.congregacion_id === Number(idCongregacion),
     );
   }
 
   buscarNacionalidad(formControlName: string) {
     this.letrasFiltrarNacionalidad = this.registroDosForm.get(formControlName.toString()).valueChanges.pipe(
       startWith(''),
-      map((valor) => this.filtrar(valor || ''))
+      map((valor) => this.filtrar(valor || '')),
     );
   }
 
@@ -523,13 +529,13 @@ export class InformacionUsuarioComponent implements OnInit {
     const filtrarValores = valor.toLowerCase();
 
     return this.nacionalidades.filter((nacionalidad: NacionalidadModel) =>
-      nacionalidad.nombre.toLowerCase().includes(filtrarValores)
+      nacionalidad.nombre.toLowerCase().includes(filtrarValores),
     );
   }
 
   buscarIDNacionalidad(nacionalidad: string): number {
     const nacionalidadEncontrada = this.nacionalidades.find(
-      (nacionalidades) => nacionalidades.nombre.toLowerCase() === nacionalidad.toLowerCase()
+      (nacionalidades) => nacionalidades.nombre.toLowerCase() === nacionalidad.toLowerCase(),
     );
 
     if (nacionalidadEncontrada) {
@@ -560,7 +566,7 @@ export class InformacionUsuarioComponent implements OnInit {
   async tieneTipoDocumento(idPais: string | number = this.usuario?.usuarioCongregacionPais[0]?.id) {
     this.tipoDeDocumentosFiltrados = [];
     this.tipoDeDocumentosFiltrados = this.tiposDeDocumentos.filter(
-      (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais)
+      (tipoDocumento: TipoDocumentoModel) => tipoDocumento.pais_id === Number(idPais),
     );
 
     if (this.tipoDeDocumentosFiltrados.length > 0) {

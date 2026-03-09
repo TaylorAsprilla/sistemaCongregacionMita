@@ -57,6 +57,7 @@ import { CrearMinisterioComponent } from 'src/app/pages/administracion/ministeri
 import { EstadoCivilComponent } from 'src/app/pages/configuracion/estado-civil/estado-civil.component';
 import { GradoAlcanzadoComponent } from 'src/app/pages/configuracion/grado-alcanzado/grado-alcanzado.component';
 import { RolEnCasaComponent } from 'src/app/pages/configuracion/rol-en-casa/rol-en-casa.component';
+import { CategoriaProfesionComponent } from 'src/app/pages/configuracion/categoria-profesion/categoria-profesion.component';
 import { VoluntarioComponent } from 'src/app/pages/configuracion/voluntario/voluntario.component';
 import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitud-multimedia/solicitud-multimedia.component';
 import { EventosEnVivoComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
@@ -359,6 +360,10 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.ROL_EN_CASA,
     component: RolEnCasaComponent,
+  },
+  {
+    path: RUTAS.CATEGORIA_PROFESION,
+    component: CategoriaProfesionComponent,
   },
   {
     path: RUTAS.VOLUNTARIO,

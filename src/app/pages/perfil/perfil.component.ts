@@ -19,6 +19,8 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
+import { CategoriaProfesionModel } from 'src/app/core/models/categoria-profesion.model';
+import { CategoriaProfesionService } from 'src/app/services/categoria-profesion/categoria-profesion.service';
 import { InformacionUsuarioComponent } from '../../components/informacion-usuario/informacion-usuario.component';
 
 @Component({
@@ -32,6 +34,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private usuarioService = inject(UsuarioService);
+  private categoriaProfesionService = inject(CategoriaProfesionService);
 
   public usuario: UsuarioModel;
   public generos: GeneroModel[] = [];
@@ -46,6 +49,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
   public ministerios: MinisterioModel[] = [];
   public voluntariados: VoluntariadoModel[] = [];
   public tiposDeDocumentos: TipoDocumentoModel[] = [];
+  public categoriasProfesion: CategoriaProfesionModel[] = [];
 
   //Subscription
   public usuarioSubscription: Subscription;
@@ -55,6 +59,17 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Cargar categorías de profesión desde el servicio
+    this.categoriaProfesionService.getCategoriasProfesion().subscribe(
+      (categorias) => {
+        this.categoriasProfesion = categorias.filter((categoria: CategoriaProfesionModel) => categoria.estado === true);
+      },
+      (error) => {
+        console.error('Error al cargar categorías de profesión:', error);
+        this.categoriasProfesion = [];
+      },
+    );
+
     this.activatedRoute.data.subscribe(
       (data: {
         nacionalidad: NacionalidadModel[];
@@ -78,17 +93,17 @@ export class PerfilComponent implements OnInit, OnDestroy {
         this.gradosAcademicos = data.gradoAcademico;
         this.tipoMiembros = data.tipoMiembro;
         this.congregaciones = data.congregacion.filter(
-          (congregacion: CongregacionModel) => congregacion.estado === true
+          (congregacion: CongregacionModel) => congregacion.estado === true,
         );
         this.ministerios = data.ministerio.filter((ministerio: MinisterioModel) => ministerio.estado === true);
         this.voluntariados = data.voluntariado;
         this.paises = data.pais.filter((pais: CongregacionPaisModel) => pais.estado === true);
         this.campos = data.campo.filter((campo: CampoModel) => campo.estado === true);
         this.tiposDeDocumentos = data.tipoDocumento.filter(
-          (tipoDocumento: TipoDocumentoModel) => tipoDocumento.estado === true
+          (tipoDocumento: TipoDocumentoModel) => tipoDocumento.estado === true,
         );
         this.usuario = data.usuario.usuario;
-      }
+      },
     );
   }
 
@@ -133,7 +148,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
               icon: 'error',
               html: `Error al actualizar el perfil <p> ${listaErrores.join('')}`,
             });
-          }
+          },
         );
       }
     });
