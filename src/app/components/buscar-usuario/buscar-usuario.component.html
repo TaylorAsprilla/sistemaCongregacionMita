@@ -12,11 +12,12 @@
           placeholder="Ingrese el número Mita"
         />
         @if (numeroMitaForm.get('numeroMita').hasError('required') && numeroMitaForm.get('numeroMita').touched) {
-        <small class="form-text text-danger"> El número Mita del feligrés es requerido. </small>
-        } @if (numeroMitaForm.get('numeroMita').hasError('minlength') && numeroMitaForm.get('numeroMita').touched) {
-        <small class="form-text text-danger">
-          El número Mita del feligrés no tiene la longitud mínima permitida.
-        </small>
+          <small class="form-text text-danger"> El número Mita del feligrés es requerido. </small>
+        }
+        @if (numeroMitaForm.get('numeroMita').hasError('minlength') && numeroMitaForm.get('numeroMita').touched) {
+          <small class="form-text text-danger">
+            El número Mita del feligrés no tiene la longitud mínima permitida.
+          </small>
         }
       </div>
       <div class="form-group col-sm-12 col-md-4 col-lg-2">
@@ -31,109 +32,133 @@
     </div>
   </form>
   @if (!!usuario) {
-  <div class="card">
-    <div class="card-body">
-      <div class="d-flex justify-content-end mt-3">
-        <a
-          data-toggle="tooltip"
-          data-original-title="Editar"
-          title="Editar Feligres"
-          class="btn bg-info me-1"
-          (click)="emitirActualizarUsuario()"
-        >
-          <i class="fas fa-pencil-alt ml-1"></i>
-        </a>
-        @if (crearAccesoBoton) {
-        <a
-          data-toggle="tooltip"
-          data-original-title="Editar"
-          title="Crear Acceso"
-          class="btn bg-info me-1"
-          (click)="emitirCrearAcceso()"
-        >
-          <i class="fa-solid fa-check-to-slot ml-1"></i>
-        </a>
-        } @if (!!usuario.login && !!usuario.password) {
-        <a
-          data-toggle="tooltip"
-          data-original-title="Editar"
-          title="Reestablecer contraseña"
-          class="btn bg-info me-1"
-          (click)="emitirScrollToSection()"
-        >
-          <i class="fa-solid fa-lock ml-1"></i>
-        </a>
-        }
-      </div>
-      <div class="d-flex justify-content-center align-items-center mb-3">
-        <div class="me-3">
-          <i class="fa fa-user-circle fa-5x"></i>
-        </div>
-        <div class="text-center">
-          <h4 class="card-title">
-            {{ usuario.primerNombre }} {{ usuario.segundoNombre }}
-            {{ usuario.primerApellido }}
-            {{ usuario.segundoApellido }}
-          </h4>
-          <h6 class="card-subtitle mb-2">{{ usuario.email }}</h6>
-          <h6 class="card-subtitle mb-2"><b>Género:</b> {{ usuario.genero.genero }}</h6>
-          @if (usuario.apodo) {
-          <h6 class="card-subtitle mb-2"><b>Apodo:</b> {{ usuario.apodo }}</h6>
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-end mt-3">
+          <a
+            data-toggle="tooltip"
+            data-original-title="Editar"
+            title="Editar Feligres"
+            class="btn bg-info me-1"
+            (click)="emitirActualizarUsuario()"
+          >
+            <i class="fas fa-pencil-alt ml-1"></i>
+          </a>
+          @if (crearAccesoBoton) {
+            <a
+              data-toggle="tooltip"
+              data-original-title="Editar"
+              title="Crear Acceso"
+              class="btn bg-info me-1"
+              (click)="emitirCrearAcceso()"
+            >
+              <i class="fa-solid fa-check-to-slot ml-1"></i>
+            </a>
           }
-          <h6 class="card-subtitle mb-2"><b>Edad:</b> {{ usuario.fechaNacimiento | calcularEdad }} años</h6>
+          @if (!!usuario.login && !!usuario.password) {
+            <a
+              data-toggle="tooltip"
+              data-original-title="Editar"
+              title="Reestablecer contraseña"
+              class="btn bg-info me-1"
+              (click)="emitirScrollToSection()"
+            >
+              <i class="fa-solid fa-lock ml-1"></i>
+            </a>
+          }
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Congregación</h4>
-              <p class="card-text text-start">
-                <b><i class="fa fa-globe-americas"></i> País:</b>
-                {{ usuario.usuarioCongregacionPais[0].pais }}
-              </p>
-              <p class="card-text text-start">
-                <b><i class="fa fa-city"></i> Ciudad:</b>
-                {{ usuario.usuarioCongregacionCongregacion[0].congregacion }}
-              </p>
-              <p class="card-text text-start">
-                <b><i class="fa fa-map-marker"></i> Campo:</b>
-                {{ usuario.usuarioCongregacionCampo[0].campo }}
-              </p>
-              <p class="card-text text-start">
-                <b
-                  ><img src="./assets/images/icon/escudo.png" class="img-fluid" alt="Congregación Mita" /> Miembro de la
-                  Iglesia:</b
-                >
-                {{ usuario.tipoMiembro.miembro }}
-              </p>
-            </div>
+        <div class="d-flex justify-content-center align-items-center mb-3">
+          <div class="me-3">
+            <i class="fa fa-user-circle fa-5x"></i>
+          </div>
+          <div class="text-center">
+            <h4 class="card-title">
+              {{ usuario.primerNombre }} {{ usuario.segundoNombre }}
+              {{ usuario.primerApellido }}
+              {{ usuario.segundoApellido }}
+            </h4>
+            <h6 class="card-subtitle mb-2">{{ usuario.email }}</h6>
+            <h6 class="card-subtitle mb-2"><b>Género:</b> {{ usuario.genero.genero }}</h6>
+            @if (usuario.apodo) {
+              <h6 class="card-subtitle mb-2"><b>Apodo:</b> {{ usuario.apodo }}</h6>
+            }
+            <h6 class="card-subtitle mb-2"><b>Edad:</b> {{ usuario.fechaNacimiento | calcularEdad }} años</h6>
           </div>
         </div>
-        <div class="col-md-6 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Contacto</h4>
-              <p class="card-text text-start">
-                <b><i class="fa fa-mobile-alt"></i> Celular: </b>{{ usuario.numeroCelular }}
-              </p>
-              <p class="card-text text-start">
-                <b><i class="fa fa-phone"></i> Teléfono de Casa:</b> {{ usuario.telefonoCasa }}
-              </p>
-              <p class="card-text text-start">
-                <b><i class="fa fa-map-marker"></i> Dirección de Residencia:</b>
-                {{ usuario.direccion }}, {{ usuario.ciudadDireccion }},
-                {{ usuario.paisDireccion }}
-              </p>
-              <p class="card-text text-start">
-                <b><i class="fa fa-envelopes-bulk"></i> Código Postal:</b>
-                {{ usuario.codigoPostalDireccion }}
-              </p>
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Congregación</h4>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-globe-americas"></i> País:</b>
+                  {{ usuario.usuarioCongregacionPais[0].pais }}
+                </p>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-city"></i> Ciudad:</b>
+                  {{ usuario.usuarioCongregacionCongregacion[0].congregacion }}
+                </p>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-map-marker"></i> Campo:</b>
+                  {{ usuario.usuarioCongregacionCampo[0].campo }}
+                </p>
+                <p class="card-text text-start">
+                  <b
+                    ><img src="./assets/images/icon/escudo.png" class="img-fluid" alt="Congregación Mita" /> Miembro de
+                    la Iglesia:</b
+                  >
+                  {{ usuario.tipoMiembro.miembro }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Contacto</h4>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-mobile-alt"></i> Celular: </b>
+                  @if (!!usuario.numeroCelular) {
+                    <span>
+                      {{ usuario.numeroCelular }}
+                      <i class="fas fa-chevron-circle-down toggle-icons" (click)="toggleIconosContacto()"></i>
+                    </span>
+                    <div class="contact-icons" [ngClass]="{ show: mostrarIconosContacto }">
+                      <a
+                        href="https://api.whatsapp.com/send?phone={{ usuario.numeroCelular | whatsapp }}"
+                        target="_blank"
+                        title="WhatsApp"
+                      >
+                        <i class="fab fa-whatsapp mx-2"></i>
+                      </a>
+                      <a href="https://t.me/{{ usuario.numeroCelular | telegram }}" target="_blank" title="Telegram">
+                        <i class="fab fa-telegram mx-2"></i>
+                      </a>
+                      <a href="tel:{{ usuario.numeroCelular | telegram }}" target="_blank" title="Llamar">
+                        <i class="fa fa-phone mx-2"></i>
+                      </a>
+                    </div>
+                  } @else {
+                    <span>Sin número de celular</span>
+                  }
+                </p>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-phone"></i> Teléfono de Casa:</b> {{ usuario.telefonoCasa }}
+                </p>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-map-marker"></i> Dirección de Residencia:</b>
+                  {{ usuario.direccion }}, {{ usuario.ciudadDireccion }},
+                  {{ usuario.paisDireccion }}
+                </p>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-envelopes-bulk"></i> Código Postal:</b>
+                  {{ usuario.codigoPostalDireccion }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   }
 </div>
