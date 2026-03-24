@@ -188,6 +188,7 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
         (filtroGeneral ? this.coincideFiltroGeneral(solicitud, filtroGeneral) : true)
       );
     });
+    this.pagina = 1;
   }
 
   coincideFiltroGeneral(solicitud: any, filtro: string): boolean {
