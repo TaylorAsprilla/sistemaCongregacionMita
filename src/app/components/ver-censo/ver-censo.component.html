@@ -31,14 +31,30 @@
           </div>
           @if (!!mostrarNombreCongregacion) {
             <div class="mb-1">
-              <strong>Congregación:</strong>
-              <span class="badge bg-danger px-3 py-1">{{ nombreCongregacion }}</span>
+              <strong>{{ congregacionesEnCenso.length === 1 ? 'Congregación:' : 'Congregaciones:' }}</strong>
+              @if (congregacionesEnCenso.length > 0) {
+                <div class="d-inline-flex flex-wrap gap-2 mt-1 ms-2">
+                  @for (congregacion of congregacionesEnCenso; track congregacion; let i = $index) {
+                    <span class="badge bg-primary px-3 py-1">{{ congregacion }}</span>
+                  }
+                </div>
+              } @else {
+                <span class="text-muted ms-2">No hay congregaciones registradas</span>
+              }
             </div>
           }
           @if (!!mostrarNombreCampo) {
             <div class="mb-1">
-              <strong>Campo:</strong>
-              <span class="badge bg-success px-3 py-1">{{ nombreCampo }}</span>
+              <strong>{{ camposEnCenso.length === 1 ? 'Campo:' : 'Campos:' }}</strong>
+              @if (camposEnCenso.length > 0) {
+                <div class="d-inline-flex flex-wrap gap-2 mt-1 ms-2">
+                  @for (campo of camposEnCenso; track campo; let i = $index) {
+                    <span class="badge bg-success px-3 py-1">{{ campo }}</span>
+                  }
+                </div>
+              } @else {
+                <span class="text-muted ms-2">No hay campos registrados</span>
+              }
             </div>
           }
         </div>
@@ -198,12 +214,54 @@
     <table class="table table-bordered table-striped" id="excel-table">
       <thead>
         <tr>
-          <th scope="col text-center"># Mita</th>
-          <th class="w200 text-center">Nombre</th>
-          <th class="w200 text-center">Correo</th>
-          <th class="col-auto text-center">Edad</th>
-          <th class="col-auto text-center">Celular</th>
-          <th class="col-auto text-center">Congregación</th>
+          <th scope="col text-center" class="sortable" (click)="ordenarPorColumna('id')">
+            # Mita
+            @if (columnaOrdenada === 'id') {
+              <i [class]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+            } @else {
+              <i class="fas fa-sort"></i>
+            }
+          </th>
+          <th class="w200 text-center sortable" (click)="ordenarPorColumna('nombre')">
+            Nombre
+            @if (columnaOrdenada === 'nombre') {
+              <i [class]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+            } @else {
+              <i class="fas fa-sort"></i>
+            }
+          </th>
+          <th class="w200 text-center sortable" (click)="ordenarPorColumna('email')">
+            Correo
+            @if (columnaOrdenada === 'email') {
+              <i [class]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+            } @else {
+              <i class="fas fa-sort"></i>
+            }
+          </th>
+          <th class="col-auto text-center sortable" (click)="ordenarPorColumna('edad')">
+            Edad
+            @if (columnaOrdenada === 'edad') {
+              <i [class]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+            } @else {
+              <i class="fas fa-sort"></i>
+            }
+          </th>
+          <th class="col-auto text-center sortable" (click)="ordenarPorColumna('celular')">
+            Celular
+            @if (columnaOrdenada === 'celular') {
+              <i [class]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+            } @else {
+              <i class="fas fa-sort"></i>
+            }
+          </th>
+          <th class="col-auto text-center sortable" (click)="ordenarPorColumna('congregacion')">
+            Congregación
+            @if (columnaOrdenada === 'congregacion') {
+              <i [class]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+            } @else {
+              <i class="fas fa-sort"></i>
+            }
+          </th>
           <th class="col-auto text-center">Acciones</th>
         </tr>
       </thead>

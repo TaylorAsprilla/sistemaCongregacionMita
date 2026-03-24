@@ -111,6 +111,10 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   // URL de las banderas desde environment
   banderasUrl: string = environment.banderas_url;
 
+  // Propiedades para ordenamiento
+  columnaOrdenada: string = '';
+  ordenAscendente: boolean = true;
+
   get filterText() {
     return this.filtrarTexto;
   }
@@ -138,6 +142,28 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
     return Array.from(paisesUnicos).sort();
+  }
+
+  get congregacionesEnCenso(): string[] {
+    const congregacionesUnicas = new Set<string>();
+    this.usuariosFiltrados.forEach((usuario) => {
+      const congregacion = usuario.usuarioCongregacionCongregacion?.[0]?.congregacion;
+      if (congregacion) {
+        congregacionesUnicas.add(congregacion);
+      }
+    });
+    return Array.from(congregacionesUnicas).sort();
+  }
+
+  get camposEnCenso(): string[] {
+    const camposUnicos = new Set<string>();
+    this.usuariosFiltrados.forEach((usuario) => {
+      const campo = usuario.usuarioCongregacionCampo?.[0]?.campo;
+      if (campo) {
+        camposUnicos.add(campo);
+      }
+    });
+    return Array.from(camposUnicos).sort();
   }
 
   obtenerColorPais(index: number): string {
@@ -465,6 +491,62 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
 
   esconderFiltros() {
     this.isFiltrosVisibles = !this.isFiltrosVisibles;
+  }
+
+  ordenarPorColumna(columna: string) {
+    // Si se hace clic en la misma columna, cambia el orden
+    if (this.columnaOrdenada === columna) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.columnaOrdenada = columna;
+      this.ordenAscendente = true;
+    }
+
+    this.usuariosFiltrados = [...this.usuariosFiltrados].sort((a, b) => {
+      let valorA: any;
+      let valorB: any;
+
+      switch (columna) {
+        case 'id':
+          valorA = a.id;
+          valorB = b.id;
+          break;
+        case 'nombre':
+          valorA = `${a.primerNombre} ${a.primerApellido}`.toLowerCase();
+          valorB = `${b.primerNombre} ${b.primerApellido}`.toLowerCase();
+          break;
+        case 'email':
+          valorA = (a.email || '').toLowerCase();
+          valorB = (b.email || '').toLowerCase();
+          break;
+        case 'edad':
+          valorA = this.calcularEdad(a.fechaNacimiento);
+          valorB = this.calcularEdad(b.fechaNacimiento);
+          break;
+        case 'celular':
+          valorA = a.numeroCelular || '';
+          valorB = b.numeroCelular || '';
+          break;
+        case 'congregacion':
+          valorA = (a.usuarioCongregacionCongregacion?.[0]?.congregacion || '').toLowerCase();
+          valorB = (b.usuarioCongregacionCongregacion?.[0]?.congregacion || '').toLowerCase();
+          break;
+        default:
+          return 0;
+      }
+
+      // Comparar valores
+      if (valorA < valorB) {
+        return this.ordenAscendente ? -1 : 1;
+      }
+      if (valorA > valorB) {
+        return this.ordenAscendente ? 1 : -1;
+      }
+      return 0;
+    });
+
+    // Reiniciar a la primera página después de ordenar
+    this.pagina = 1;
   }
 
   obtenerNombresMinisterios(ministerios: MinisterioModel[]): string {
