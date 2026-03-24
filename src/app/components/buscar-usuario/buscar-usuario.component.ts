@@ -16,13 +16,16 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
+import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
+import { WhatsappPipe } from '../../pipes/whatsapp/whatsapp.pipe';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-buscar-usuario',
   templateUrl: './buscar-usuario.component.html',
   styleUrls: ['./buscar-usuario.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CalcularEdadPipe],
+  imports: [FormsModule, ReactiveFormsModule, CalcularEdadPipe, TelegramPipe, WhatsappPipe, NgClass],
 })
 export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
   private formBuilder = inject(FormBuilder);
@@ -39,6 +42,7 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
   numeroMitaForm: FormGroup;
   usuario: UsuarioModel;
   asignarPermisos: boolean = false;
+  mostrarIconosContacto: boolean = false;
 
   usuarioSubscription: Subscription;
 
@@ -112,5 +116,9 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
 
   emitirScrollToSection() {
     this.scrollToSection.emit();
+  }
+
+  toggleIconosContacto() {
+    this.mostrarIconosContacto = !this.mostrarIconosContacto;
   }
 }
