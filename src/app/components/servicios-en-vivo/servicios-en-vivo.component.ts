@@ -35,6 +35,7 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
   videoUrl: SafeResourceUrl | undefined;
   servicioPlataforma: string = '';
   titulo: string = '';
+  multimediaStreamUrl: SafeResourceUrl | undefined;
 
   readonly PLATAFORMA = PLATAFORMA;
   readonly TIPOEVENTO_ID = TIPOEVENTO_ID;
@@ -44,6 +45,17 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
 
     tag.src = 'https://www.youtube.com/iframe_api';
     document.body.appendChild(tag);
+
+    // Inicializar URL de multimedia de forma ofuscada
+    const parts = [
+      'https://multimediastream2.net:5443',
+      '/WebRTCAppEE',
+      '/play.html?id=multimedia',
+      '&autoplay=true',
+      '&mute=false',
+    ];
+    const streamUrl = parts.join('');
+    this.multimediaStreamUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(streamUrl);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -66,7 +78,7 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
         const videoId = this.extractYouTubeVideoId(videos.link);
 
         this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(
-          `https://www.youtube.com/embed/${videoId}?autoplay=1`
+          `https://www.youtube.com/embed/${videoId}?autoplay=1`,
         );
       } else {
         this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(videos.link);
@@ -98,4 +110,10 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
     this.videoHeight = this.videoWidth * 0.6;
     this.changeDetectorRef.detectChanges();
   };
+
+  // Método para prevenir click derecho en el iframe
+  onContextMenu(event: MouseEvent): boolean {
+    event.preventDefault();
+    return false;
+  }
 }
