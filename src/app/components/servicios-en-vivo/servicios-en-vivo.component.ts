@@ -49,8 +49,9 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
     // Inicializar URL de multimedia de forma ofuscada
     const parts = [
       'https://multimediastream2.net:5443',
-      '/WebRTCAppEE',
+      '/live',
       '/play.html?id=multimedia',
+      '&playOrder=hls',
       '&autoplay=true',
       '&mute=false',
     ];

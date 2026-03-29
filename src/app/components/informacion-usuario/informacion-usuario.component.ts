@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, OnChanges, SimpleChanges } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -41,7 +41,7 @@ import { NgClass } from '@angular/common';
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, NgClass, NgxIntlTelInputModule],
 })
-export class InformacionUsuarioComponent implements OnInit {
+export class InformacionUsuarioComponent implements OnInit, OnChanges {
   private formBuilder = inject(FormBuilder);
   private buscarCorreoService = inject(BuscarCorreoService);
   private router = inject(Router);
@@ -181,6 +181,31 @@ export class InformacionUsuarioComponent implements OnInit {
     this.filtrarCongregacionesPorPais(this.usuario?.usuarioCongregacionPais[0]?.id);
     this.filtrarCamposPorCongregacion(this.usuario?.usuarioCongregacionCongregacion[0]?.id);
     this.onPaisChange();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Detectar cuando cambien los ministerios o voluntariados
+    if ((changes['ministerios'] || changes['voluntariados']) && this.registroCuatroForm) {
+      // Actualizar los FormArrays cuando cambien los datos
+      if (changes['ministerios'] && changes['ministerios'].currentValue) {
+        this.actualizarMinisteriosFormArray();
+      }
+      if (changes['voluntariados'] && changes['voluntariados'].currentValue) {
+        this.actualizarVoluntariadosFormArray();
+      }
+    }
+  }
+
+  actualizarMinisteriosFormArray() {
+    const controlMinisterios = this.ministerios.map(() => this.formBuilder.control(false));
+    this.registroCuatroForm.setControl('ministerio', this.formBuilder.array(controlMinisterios));
+    this.patchValueMinisterios();
+  }
+
+  actualizarVoluntariadosFormArray() {
+    const controlVoluntariados = this.voluntariados.map(() => this.formBuilder.control(false));
+    this.registroCuatroForm.setControl('voluntariado', this.formBuilder.array(controlVoluntariados));
+    this.patchValueVoluntariados();
   }
 
   informacionDelUsuario() {
