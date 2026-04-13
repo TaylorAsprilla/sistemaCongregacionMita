@@ -178,13 +178,6 @@ export function getSessionErrorMessage(
         icon: 'error',
       };
 
-    case SessionErrorCode.NO_TOKEN:
-      return {
-        title: '🔐 Autenticación requerida',
-        message: 'No has iniciado sesión. Por favor inicia sesión para continuar.',
-        icon: 'info',
-      };
-
     default:
       return {
         title: '🔒 Sesión terminada',
