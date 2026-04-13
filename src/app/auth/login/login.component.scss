@@ -42,3 +42,13 @@ a:hover {
   color: #0b65c2;
   font-weight: 600;
 }
+
+// Estilos para el modal de confirmación de sesión
+::ng-deep .swal-wide {
+  width: 600px !important;
+  max-width: 90vw;
+
+  .swal2-html-container {
+    text-align: left !important;
+  }
+}

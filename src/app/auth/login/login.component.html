@@ -2,146 +2,221 @@
   <div class="container-fluid h-custom">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-md-9 col-lg-6 col-xl-5 d-none d-sm-none d-md-none d-lg-block">
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid"
-          alt="Sample image" />
+        <img
+          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+          class="img-fluid"
+          alt="Sample image"
+        />
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <div class="text-center">
-          <img src="assets/images/escudo-congregacion-mita.png" width="30%" alt="Congregación Mita INC"
-            class="img-fluid" />
+          <img
+            src="assets/images/escudo-congregacion-mita.png"
+            width="30%"
+            alt="Congregación Mita INC"
+            class="img-fluid"
+          />
         </div>
+
+        <!-- Banner de sesión cerrada -->
+        @if (showSessionClosedBanner) {
+          <div
+            class="session-banner"
+            role="alert"
+            [ngClass]="{
+              'session-replaced': sessionClosedType === 'replaced',
+              'session-expired': sessionClosedType === 'expired',
+              'session-invalid': sessionClosedType === 'invalid',
+            }"
+          >
+            <i
+              [ngClass]="{
+                'fas fa-exclamation-triangle': sessionClosedType === 'replaced',
+                'fas fa-clock': sessionClosedType === 'expired',
+                'fas fa-times-circle': sessionClosedType === 'invalid',
+              }"
+            ></i>
+            <div class="flex-grow-1">
+              <strong>
+                @if (sessionClosedType === 'replaced') {
+                  Sesión cerrada
+                } @else if (sessionClosedType === 'expired') {
+                  Sesión expirada
+                } @else {
+                  Sesión inválida
+                }
+              </strong>
+              <p class="mb-0 mt-1">{{ sessionClosedMessage }}</p>
+            </div>
+            <button type="button" class="btn-close" (click)="closeSessionBanner()" aria-label="Close"></button>
+          </div>
+        }
 
         @if (ticketQr && qrLoginForm) {
-        <div class="alert alert-primary mt-4" role="alert">
-          <div class="text-center"><b>Has escaneado un código QR.</b></div>
-          <p>
-            Para continuar, por favor ingresa tu número Mita, selecciona el tipo de puesto y da clic en el botón
-            <strong>“Iniciar sesión con QR”</strong>.
-          </p>
-        </div>
+          <div class="alert alert-primary mt-4" role="alert">
+            <div class="text-center"><b>Has escaneado un código QR.</b></div>
+            <p>
+              Para continuar, por favor ingresa tu número Mita, selecciona el tipo de puesto y da clic en el botón
+              <strong>“Iniciar sesión con QR”</strong>.
+            </p>
+          </div>
 
-        <form [formGroup]="qrLoginForm" (ngSubmit)="loginConQr()" autocomplete="off">
-          <div class="form-outline mb-4">
-            <div class="input-group">
-              <input type="number" formControlName="numeroMita" class="form-control form-control-lg"
-                placeholder="Ingresa tu número Mita" [ngClass]="{
+          <form [formGroup]="qrLoginForm" (ngSubmit)="loginConQr()" autocomplete="off">
+            <div class="form-outline mb-4">
+              <div class="input-group">
+                <input
+                  type="number"
+                  formControlName="numeroMita"
+                  class="form-control form-control-lg"
+                  placeholder="Ingresa tu número Mita"
+                  [ngClass]="{
+                    'is-invalid':
+                      (qrLoginForm.get('numeroMita')?.invalid && qrLoginForm.get('numeroMita')?.touched) ||
+                      (submitted && qrLoginForm.get('numeroMita')?.invalid),
+                  }"
+                  (blur)="usuarioPorNumeroMita()"
+                  (keydown.enter)="usuarioPorNumeroMita()"
+                />
+                <button type="button" class="btn btn-outline-secondary" (click)="usuarioPorNumeroMita()" tabindex="-1">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+
+              @if (
+                (qrLoginForm.get('numeroMita')?.invalid && qrLoginForm.get('numeroMita')?.touched) ||
+                (submitted && qrLoginForm.get('numeroMita')?.invalid)
+              ) {
+                <div class="invalid-feedback d-block mt-1">
+                  @if (qrLoginForm.get('numeroMita')?.errors?.['required']) {
+                    <small>El número Mita es obligatorio.</small>
+                  }
+                  @if (qrLoginForm.get('numeroMita')?.errors?.['minlength']) {
+                    <small>Debe tener al menos 2 caracteres.</small>
+                  }
+                  @if (qrLoginForm.get('numeroMita')?.errors?.['maxlength']) {
+                    <small>Debe tener menos de 50 caracteres.</small>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                formControlName="nombre"
+                class="form-control form-control-lg"
+                placeholder="Tu nombre completo"
+                [ngClass]="{
                   'is-invalid':
-                    (qrLoginForm.get('numeroMita')?.invalid && qrLoginForm.get('numeroMita')?.touched) ||
-                    (submitted && qrLoginForm.get('numeroMita')?.invalid)
-                }" (blur)="usuarioPorNumeroMita()" (keydown.enter)="usuarioPorNumeroMita()" />
-              <button type="button" class="btn btn-outline-secondary" (click)="usuarioPorNumeroMita()" tabindex="-1">
-                <i class="fa fa-search"></i>
+                    (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) ||
+                    (submitted && qrLoginForm.get('nombre')?.invalid),
+                }"
+              />
+
+              @if (
+                (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) ||
+                (submitted && qrLoginForm.get('nombre')?.invalid)
+              ) {
+                <div class="invalid-feedback d-block mt-1">
+                  @if (qrLoginForm.get('nombre')?.errors?.['required']) {
+                    <small>El nombre es obligatorio.</small>
+                  }
+                  @if (qrLoginForm.get('nombre')?.errors?.['minlength']) {
+                    <small>Debe tener al menos 2 caracteres.</small>
+                  }
+                  @if (qrLoginForm.get('nombre')?.errors?.['maxlength']) {
+                    <small>Debe tener menos de 50 caracteres.</small>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-outline mb-4">
+              <select class="form-select form-control-lg" formControlName="tipoPuesto">
+                <option value="" disabled selected>Seleccione el tipo de acceso</option>
+                <option value="guarda">Guarda de Mita</option>
+                <option value="casita">Miembro de la Casita</option>
+                <!-- <option value="Acceso Retiro Juventud">Acceso Retiro Juventud</option> -->
+              </select>
+              @if (qrLoginForm.get('tipoPuesto')?.invalid && (qrLoginForm.get('tipoPuesto')?.touched || submitted)) {
+                <div class="invalid-feedback d-block mt-1">
+                  <small>Seleccione el tipo de acceso</small>
+                </div>
+              }
+            </div>
+
+            <div class="text-lg-start mt-4 pt-2 d-flex gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg flex-fill d-flex justify-content-center align-items-center"
+                [disabled]="qrLoginForm.invalid"
+              >
+                Iniciar sesión con QR
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary btn-lg flex-fill d-flex justify-content-center align-items-center"
+                (click)="qrLoginForm.reset()"
+              >
+                Limpiar
               </button>
             </div>
+          </form>
+        } @else {
+          <form [formGroup]="loginForm" autocomplete="off" class="form-signin">
+            <h2 class="mb-3 text-center">Iniciar Sesión</h2>
 
-            @if ( (qrLoginForm.get('numeroMita')?.invalid && qrLoginForm.get('numeroMita')?.touched) || (submitted &&
-            qrLoginForm.get('numeroMita')?.invalid) ) {
-            <div class="invalid-feedback d-block mt-1">
-              @if (qrLoginForm.get('numeroMita')?.errors?.['required']) {
-              <small>El número Mita es obligatorio.</small>
-              } @if (qrLoginForm.get('numeroMita')?.errors?.['minlength']) {
-              <small>Debe tener al menos 2 caracteres.</small>
-              } @if (qrLoginForm.get('numeroMita')?.errors?.['maxlength']) {
-              <small>Debe tener menos de 50 caracteres.</small>
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                formControlName="login"
+                class="form-control form-control-lg"
+                placeholder="Correo electrónico"
+                [ngClass]="{
+                  'is-invalid': isLoginFormSubmitted && loginForm.get('login')?.errors,
+                }"
+              />
+
+              @if (isLoginFormSubmitted && loginForm.get('login')?.errors) {
+                <small class="form-text text-danger" class="invalid-feedback">
+                  El correo electrónico es requerido.
+                </small>
               }
             </div>
-            }
-          </div>
 
-          <div class="form-outline mb-4">
-            <input type="text" formControlName="nombre" class="form-control form-control-lg"
-              placeholder="Tu nombre completo" [ngClass]="{
-                'is-invalid':
-                  (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) ||
-                  (submitted && qrLoginForm.get('nombre')?.invalid)
-              }" />
+            <div>
+              <div class="input-group form-outline mb-3">
+                <input
+                  type="{{ showPassword ? 'text' : 'password' }}"
+                  formControlName="password"
+                  class="form-control form-control-lg"
+                  placeholder="Contraseña"
+                  [ngClass]="{
+                    'is-invalid': isLoginFormSubmitted && loginForm.get('password')?.errors,
+                  }"
+                />
+                <span class="input-group-text" (click)="togglePasswordVisibility()">
+                  <i class="feather" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+                </span>
+              </div>
 
-            @if ( (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) || (submitted &&
-            qrLoginForm.get('nombre')?.invalid) ) {
-            <div class="invalid-feedback d-block mt-1">
-              @if (qrLoginForm.get('nombre')?.errors?.['required']) {
-              <small>El nombre es obligatorio.</small>
-              } @if (qrLoginForm.get('nombre')?.errors?.['minlength']) {
-              <small>Debe tener al menos 2 caracteres.</small>
-              } @if (qrLoginForm.get('nombre')?.errors?.['maxlength']) {
-              <small>Debe tener menos de 50 caracteres.</small>
+              @if (isLoginFormSubmitted && loginForm.get('password')?.hasError('required')) {
+                <small class="form-text text-danger"> La contraseña es requerida. </small>
               }
             </div>
-            }
-          </div>
 
-          <div class="form-outline mb-4">
-            <select class="form-select form-control-lg" formControlName="tipoPuesto">
-              <option value="" disabled selected>Seleccione el tipo de acceso</option>
-              <option value="guarda">Guarda de Mita</option>
-              <option value="casita">Miembro de la Casita</option>
-              <!-- <option value="Acceso Retiro Juventud">Acceso Retiro Juventud</option> -->
-            </select>
-            @if (qrLoginForm.get('tipoPuesto')?.invalid && (qrLoginForm.get('tipoPuesto')?.touched || submitted)) {
-            <div class="invalid-feedback d-block mt-1">
-              <small>Seleccione el tipo de acceso</small>
-            </div>
-            }
-          </div>
-
-          <div class="text-lg-start mt-4 pt-2 d-flex gap-2">
-            <button type="submit"
-              class="btn btn-primary btn-lg flex-fill d-flex justify-content-center align-items-center"
-              [disabled]="qrLoginForm.invalid">
-              Iniciar sesión con QR
-            </button>
-            <button type="button"
-              class="btn btn-secondary btn-lg flex-fill d-flex justify-content-center align-items-center"
-              (click)="qrLoginForm.reset()">
-              Limpiar
-            </button>
-          </div>
-        </form>
-
-        } @else{
-
-        <form [formGroup]="loginForm" autocomplete="off" class="form-signin">
-          <h2 class="mb-3 text-center">Iniciar Sesión</h2>
-
-          <div class="form-outline mb-4">
-            <input type="text" formControlName="login" class="form-control form-control-lg"
-              placeholder="Correo electrónico" [ngClass]="{
-                'is-invalid': isLoginFormSubmitted && loginForm.get('login')?.errors
-              }" />
-
-            @if (isLoginFormSubmitted && loginForm.get('login')?.errors) {
-            <small class="form-text text-danger" class="invalid-feedback"> El correo electrónico es requerido. </small>
-            }
-          </div>
-
-          <div>
-            <div class="input-group form-outline mb-3">
-              <input type="{{ showPassword ? 'text' : 'password' }}" formControlName="password"
-                class="form-control form-control-lg" placeholder="Contraseña" [ngClass]="{
-                  'is-invalid': isLoginFormSubmitted && loginForm.get('password')?.errors
-                }" />
-              <span class="input-group-text" (click)="togglePasswordVisibility()">
-                <i class="feather" [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
-              </span>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="form-check mb-0">
+                <input class="form-check-input me-2" type="checkbox" formControlName="remember" id="recordar" />
+                <label class="form-check-label mt-3" for="recordar"> Recordar </label>
+              </div>
+              <a [routerLink]="[Rutas.RECUPERAR_CUENTA]" class="text-body">¿Has olvidado tu contraseña?</a>
             </div>
 
-            @if (isLoginFormSubmitted && loginForm.get('password')?.hasError('required')) {
-            <small class="form-text text-danger"> La contraseña es requerida. </small>
-            }
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="form-check mb-0">
-              <input class="form-check-input me-2" type="checkbox" formControlName="remember" id="recordar" />
-              <label class="form-check-label mt-3" for="recordar"> Recordar </label>
+            <div class="text-lg-start mt-4 pt-2">
+              <button type="submit" class="btn btn-primary btn-lg" (click)="login()">Iniciar Sesión</button>
             </div>
-            <a [routerLink]="[Rutas.RECUPERAR_CUENTA]" class="text-body">¿Has olvidado tu contraseña?</a>
-          </div>
-
-          <div class="text-lg-start mt-4 pt-2">
-            <button type="submit" class="btn btn-primary btn-lg" (click)="login()">Iniciar Sesión</button>
-          </div>
-        </form>
+          </form>
         }
       </div>
     </div>
