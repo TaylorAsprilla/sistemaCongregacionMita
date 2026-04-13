@@ -60,6 +60,18 @@ export const sessionInterceptor: HttpInterceptorFn = (req, next) => {
  * Maneja el error de sesión: muestra mensaje, limpia storage y redirige
  */
 function handleSessionError(code: SessionErrorCode, router: Router, errorResponse?: SessionErrorResponse): void {
+  // Para SESSION_NOT_FOUND y NO_TOKEN, redirigir directamente sin mostrar modal
+  if (code === SessionErrorCode.SESSION_NOT_FOUND || code === SessionErrorCode.NO_TOKEN) {
+    clearSessionAndRedirect(router, code);
+    return;
+  }
+
+  // Para SESSION_REPLACED sin información de nueva sesión, redirigir directamente
+  if (code === SessionErrorCode.SESSION_REPLACED && !errorResponse?.newSessionInfo) {
+    clearSessionAndRedirect(router, code);
+    return;
+  }
+
   const { title, message, icon } = getSessionErrorMessage(code, errorResponse);
 
   // Mostrar mensaje al usuario con auto-cierre a los 10 segundos
