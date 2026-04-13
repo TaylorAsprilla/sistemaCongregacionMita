@@ -269,6 +269,4 @@ export default class LoginComponent implements OnInit, OnDestroy {
       },
     });
   }
-
-
 }
