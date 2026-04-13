@@ -172,16 +172,12 @@ export function getSessionErrorMessage(
       };
 
     case SessionErrorCode.SESSION_NOT_FOUND:
-      return {
-        title: '❌ Sesión inválida',
-        message: 'Tu sesión no es válida. Por favor inicia sesión nuevamente.',
-        icon: 'error',
-      };
-
+    case SessionErrorCode.NO_TOKEN:
     default:
+      // Estos casos no muestran modal, redirigen directamente
       return {
-        title: '🔒 Sesión terminada',
-        message: 'Tu sesión ha finalizado. Por favor inicia sesión nuevamente.',
+        title: '',
+        message: '',
         icon: 'info',
       };
   }
