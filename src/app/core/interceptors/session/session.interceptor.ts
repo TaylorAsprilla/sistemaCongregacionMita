@@ -66,6 +66,12 @@ function handleSessionError(code: SessionErrorCode, router: Router, errorRespons
     return;
   }
 
+  // Para SESSION_REPLACED sin información de nueva sesión, redirigir directamente
+  if (code === SessionErrorCode.SESSION_REPLACED && !errorResponse?.newSessionInfo) {
+    clearSessionAndRedirect(router, code);
+    return;
+  }
+
   const { title, message, icon } = getSessionErrorMessage(code, errorResponse);
 
   // Mostrar mensaje al usuario con auto-cierre a los 10 segundos
