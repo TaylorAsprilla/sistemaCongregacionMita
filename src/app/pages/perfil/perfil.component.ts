@@ -18,10 +18,9 @@ import { VoluntariadoModel } from 'src/app/core/models/voluntariado.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
-import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { CategoriaProfesionModel } from 'src/app/core/models/categoria-profesion.model';
-import { CategoriaProfesionService } from 'src/app/services/categoria-profesion/categoria-profesion.service';
 import { InformacionUsuarioComponent } from '../../components/informacion-usuario/informacion-usuario.component';
+import { PerfilData } from 'src/app/resolvers/perfil-optimizado/perfil-optimizado.resolver';
 
 @Component({
   selector: 'app-perfil',
@@ -34,7 +33,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private usuarioService = inject(UsuarioService);
-  private categoriaProfesionService = inject(CategoriaProfesionService);
 
   public usuario: UsuarioModel;
   public generos: GeneroModel[] = [];
@@ -59,52 +57,38 @@ export class PerfilComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Cargar categorías de profesión desde el servicio
-    this.categoriaProfesionService.getCategoriasProfesion().subscribe(
-      (categorias) => {
-        this.categoriasProfesion = categorias.filter((categoria: CategoriaProfesionModel) => categoria.estado === true);
-      },
-      (error) => {
-        console.error('Error al cargar categorías de profesión:', error);
-        this.categoriasProfesion = [];
-      },
-    );
+    // Usar datos del resolver optimizado que usa caché
+    this.activatedRoute.data.subscribe((data: { perfilData: PerfilData }) => {
+      if (data.perfilData) {
+        const { catalogos, usuario } = data.perfilData;
 
-    this.activatedRoute.data.subscribe(
-      (data: {
-        nacionalidad: NacionalidadModel[];
-        estadoCivil: EstadoCivilModel[];
-        rolCasa: RolCasaModel[];
-        genero: GeneroModel[];
-        gradoAcademico: GradoAcademicoModel[];
-        congregacion: CongregacionModel[];
-        tipoMiembro: TipoMiembroModel[];
-        tipoDocumento: TipoDocumentoModel[];
-        ministerio: MinisterioModel[];
-        voluntariado: VoluntariadoModel[];
-        pais: CongregacionPaisModel[];
-        campo: CampoModel[];
-        usuario: UsuarioInterface;
-      }) => {
-        this.nacionalidades = data.nacionalidad;
-        this.estadoCivil = data.estadoCivil;
-        this.rolCasa = data.rolCasa;
-        this.generos = data.genero;
-        this.gradosAcademicos = data.gradoAcademico;
-        this.tipoMiembros = data.tipoMiembro;
-        this.congregaciones = data.congregacion.filter(
+        // Asignar catálogos con filtros aplicados
+        this.nacionalidades = catalogos.nacionalidades;
+        this.estadoCivil = catalogos.estadoCivil;
+        this.rolCasa = catalogos.rolCasa;
+        this.generos = catalogos.generos;
+        this.gradosAcademicos = catalogos.gradosAcademicos;
+        this.tipoMiembros = catalogos.tipoMiembros;
+        this.congregaciones = catalogos.congregaciones.filter(
           (congregacion: CongregacionModel) => congregacion.estado === true,
         );
-        this.ministerios = data.ministerio.filter((ministerio: MinisterioModel) => ministerio.estado === true);
-        this.voluntariados = data.voluntariado;
-        this.paises = data.pais.filter((pais: CongregacionPaisModel) => pais.estado === true);
-        this.campos = data.campo.filter((campo: CampoModel) => campo.estado === true);
-        this.tiposDeDocumentos = data.tipoDocumento.filter(
+        this.ministerios = catalogos.ministerios.filter((ministerio: MinisterioModel) => ministerio.estado === true);
+        this.voluntariados = catalogos.voluntariados;
+        this.paises = catalogos.paises.filter((pais: CongregacionPaisModel) => pais.estado === true);
+        this.campos = catalogos.campos.filter((campo: CampoModel) => campo.estado === true);
+        this.tiposDeDocumentos = catalogos.tiposDeDocumentos.filter(
           (tipoDocumento: TipoDocumentoModel) => tipoDocumento.estado === true,
         );
-        this.usuario = data.usuario.usuario;
-      },
-    );
+        this.categoriasProfesion = catalogos.categoriasProfesion.filter(
+          (categoria: CategoriaProfesionModel) => categoria.estado === true,
+        );
+
+        // Asignar usuario
+        if (usuario) {
+          this.usuario = usuario.usuario;
+        }
+      }
+    });
   }
 
   ngOnDestroy(): void {

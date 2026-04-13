@@ -63,6 +63,7 @@ import { SolicitudMultimediaComponent } from 'src/app/pages/multimedia/solicitud
 import { EventosEnVivoComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos-en-vivo/eventos-en-vivo.component';
 import InicioComponent from 'src/app/pages/inicio/inicio.component';
 import { SolicitudesPendienteComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitudes-pendiente/solicitudes-pendiente.component';
+import { PerfilOptimizadoResolver } from 'src/app/resolvers/perfil-optimizado/perfil-optimizado.resolver';
 
 export const childRoutes: Routes = [
   {
@@ -419,24 +420,12 @@ export const childRoutes: Routes = [
     },
   },
 
-  // Perfil
+  // Perfil - OPTIMIZADO: Usa un único resolver con caché en lugar de 13 resolvers individuales
   {
     path: `${RUTAS.PERFIL}/:id`,
     component: PerfilComponent,
     resolve: {
-      nacionalidad: NacionalidadResolver,
-      estadoCivil: EstadoCivilResolver,
-      genero: GeneroResolver,
-      rolCasa: RolCasaResolver,
-      gradoAcademico: GradoAcademicoResolver,
-      congregacion: CongregacionResolver,
-      tipoMiembro: TipoMiembroResolver,
-      ministerio: MinisterioResolver,
-      voluntariado: VoluntariadoResolver,
-      pais: PaisResolver,
-      campo: CampoResolver,
-      tipoDocumento: DocumentoResolver,
-      usuario: UsuarioResolver,
+      perfilData: PerfilOptimizadoResolver,
     },
   },
   // Informes
