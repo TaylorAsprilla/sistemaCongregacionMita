@@ -39,11 +39,6 @@ export default class LoginComponent implements OnInit, OnDestroy {
 
   showPassword: boolean = false;
 
-  // Control de mensajes de sesión cerrada
-  showSessionClosedBanner: boolean = false;
-  sessionClosedMessage: string = '';
-  sessionClosedType: 'replaced' | 'expired' | 'invalid' | null = null;
-
   get Rutas() {
     return RUTAS;
   }
@@ -53,14 +48,6 @@ export default class LoginComponent implements OnInit, OnDestroy {
       const ticket = params['ticket'];
       if (ticket) {
         this.ticketQr = ticket;
-      }
-
-      // Detectar si la sesión fue cerrada
-      const sessionClosed = params['sessionClosed'];
-      if (sessionClosed) {
-        this.showSessionClosedBanner = true;
-        this.sessionClosedType = sessionClosed;
-        this.setSessionClosedMessage(sessionClosed);
       }
     });
 
@@ -96,54 +83,46 @@ export default class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Mostrar modal de confirmación antes de cerrar otras sesiones
-    this.mostrarConfirmacionCerrarSesiones().then((confirmado) => {
-      if (!confirmado) {
-        this.isLoginFormSubmitted = false;
-        return;
-      }
+    // Proceder con el login
+    this.usuarioService.login(this.loginForm.value).subscribe(
+      (login: any) => {
+        const usuario = login.usuario;
+        let mensajeBienvenida = '';
 
-      // Proceder con el login
-      this.usuarioService.login(this.loginForm.value).subscribe(
-        (login: any) => {
-          const usuario = login.usuario;
-          let mensajeBienvenida = '';
+        if (login.entidadTipo === CONFIGURACION.USUARIO) {
+          const usuario: UsuarioModel = login.usuario;
 
-          if (login.entidadTipo === CONFIGURACION.USUARIO) {
-            const usuario: UsuarioModel = login.usuario;
+          const primerNombre: string = usuario.primerNombre ? usuario.primerNombre : login.usuario.nombre;
+          const segundoNombre: string = usuario.segundoNombre ? usuario.segundoNombre : '';
+          const primerApellido: string = usuario.primerApellido ? usuario.primerApellido : '';
+          const segundoApellido: string = usuario.segundoApellido ? usuario.segundoApellido : '';
+          mensajeBienvenida = `Bienvenido ${primerNombre} ${segundoNombre} ${primerApellido} ${segundoApellido}`;
+        } else if (login.entidadTipo === CONFIGURACION.CONGREGACION) {
+          mensajeBienvenida = `Bienvenido ${usuario.congregacion}`;
+        }
 
-            const primerNombre: string = usuario.primerNombre ? usuario.primerNombre : login.usuario.nombre;
-            const segundoNombre: string = usuario.segundoNombre ? usuario.segundoNombre : '';
-            const primerApellido: string = usuario.primerApellido ? usuario.primerApellido : '';
-            const segundoApellido: string = usuario.segundoApellido ? usuario.segundoApellido : '';
-            mensajeBienvenida = `Bienvenido ${primerNombre} ${segundoNombre} ${primerApellido} ${segundoApellido}`;
-          } else if (login.entidadTipo === CONFIGURACION.CONGREGACION) {
-            mensajeBienvenida = `Bienvenido ${usuario.congregacion}`;
+        if (mensajeBienvenida) {
+          if (this.loginForm.get('remember')?.value) {
+            localStorage.setItem('login', this.loginForm.get('login')?.value);
+            localStorage.setItem('remember', this.loginForm.get('remember')?.value);
+          } else {
+            localStorage.removeItem('login');
           }
 
-          if (mensajeBienvenida) {
-            if (this.loginForm.get('remember')?.value) {
-              localStorage.setItem('login', this.loginForm.get('login')?.value);
-              localStorage.setItem('remember', this.loginForm.get('remember')?.value);
-            } else {
-              localStorage.removeItem('login');
-            }
+          // Mostrar mensaje de bienvenida con ubicación (opcional)
+          this.mostrarBienvenidaConUbicacion(mensajeBienvenida);
 
-            // Mostrar mensaje de bienvenida con ubicación (opcional)
-            this.mostrarBienvenidaConUbicacion(mensajeBienvenida);
-
-            // Navegar al Dashboard
-            this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
-          }
           // Navegar al Dashboard
           this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
-        },
-        (err) => {
-          Swal.fire({ icon: 'error', html: `${err.error.msg}` });
-          this.isLoginFormSubmitted = false;
-        },
-      );
-    });
+        }
+        // Navegar al Dashboard
+        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`);
+      },
+      (err) => {
+        Swal.fire({ icon: 'error', html: `${err.error.msg}` });
+        this.isLoginFormSubmitted = false;
+      },
+    );
   }
 
   loginConQr() {
@@ -163,47 +142,38 @@ export default class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Mostrar modal de confirmación antes de cerrar otras sesiones
-    this.mostrarConfirmacionCerrarSesiones().then((confirmado) => {
-      if (!confirmado) {
-        this.submitted = false;
-        this.loading = false;
-        return;
-      }
+    const datos: DatosQrLogin = {
+      qrCode: this.ticketQr!,
+      numeroMita: this.qrLoginForm.value.numeroMita,
+      nombre: this.qrLoginForm.value.nombre,
+      tipoPuesto: this.qrLoginForm.value.tipoPuesto,
+    };
 
-      const datos: DatosQrLogin = {
-        qrCode: this.ticketQr!,
-        numeroMita: this.qrLoginForm.value.numeroMita,
-        nombre: this.qrLoginForm.value.nombre,
-        tipoPuesto: this.qrLoginForm.value.tipoPuesto,
-      };
+    this.nombreUsuarioQr = datos.nombre;
 
-      this.nombreUsuarioQr = datos.nombre;
-
-      this.usuarioService.loginPorQr(datos).subscribe({
-        next: (resp: any) => {
-          Swal.fire({
-            position: 'bottom-end',
-            html: `Bienvenido ${this.nombreUsuarioQr}`,
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            this.qrLoginForm.reset();
-            this.submitted = false;
-            this.loading = false;
-            this.ngZone.run(() => {
-              this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`).catch((err) => {
-                console.error('Error en el redireccionamiento:', err);
-              });
+    this.usuarioService.loginPorQr(datos).subscribe({
+      next: (resp: any) => {
+        Swal.fire({
+          position: 'bottom-end',
+          html: `Bienvenido ${this.nombreUsuarioQr}`,
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          this.qrLoginForm.reset();
+          this.submitted = false;
+          this.loading = false;
+          this.ngZone.run(() => {
+            this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`).catch((err) => {
+              console.error('Error en el redireccionamiento:', err);
             });
           });
-        },
-        error: (err) => {
-          this.loading = false;
-          this.submitted = false;
-          Swal.fire({ icon: 'error', html: `${err?.error?.msg || 'Error al iniciar sesión con QR.'}` });
-        },
-      });
+        });
+      },
+      error: (err) => {
+        this.loading = false;
+        this.submitted = false;
+        Swal.fire({ icon: 'error', html: `${err?.error?.msg || 'Error al iniciar sesión con QR.'}` });
+      },
     });
   }
 
@@ -239,46 +209,6 @@ export default class LoginComponent implements OnInit, OnDestroy {
           html: `No se encuentra el feligres con el número Mita ${numeroMita}`,
         });
       },
-    });
-  }
-
-  /**
-   * Muestra modal de confirmación antes de iniciar sesión.
-   * Advierte al usuario que se cerrarán otras sesiones activas.
-   *
-   * @returns Promise<boolean> - true si el usuario confirma, false si cancela
-   */
-  private mostrarConfirmacionCerrarSesiones(): Promise<boolean> {
-    return Swal.fire({
-      title: '⚠️ Sesión única activa',
-      html: `
-        <div class="text-start">
-          <p class="mb-3">
-            Por tu seguridad, <strong>solo puedes tener una sesión activa a la vez</strong>.
-          </p>
-          <p class="mb-3">
-            Si continúas, <strong>se cerrarán automáticamente</strong> todas tus sesiones
-            abiertas en otros dispositivos o navegadores.
-          </p>
-          <p class="mb-0 text-muted small">
-            <i class="fas fa-info-circle me-1"></i>
-            Los otros dispositivos deberán iniciar sesión nuevamente.
-          </p>
-        </div>
-      `,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: '<i class="fas fa-check me-2"></i>Sí, cerrar otras sesiones',
-      cancelButtonText: '<i class="fas fa-times me-2"></i>Cancelar',
-      reverseButtons: true,
-      allowOutsideClick: false,
-      customClass: {
-        popup: 'session-confirm-modal',
-        confirmButton: 'swal2-confirm',
-        cancelButton: 'swal2-cancel',
-      },
-    }).then((result) => {
-      return result.isConfirmed;
     });
   }
 
@@ -340,34 +270,5 @@ export default class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Establece el mensaje apropiado según el tipo de cierre de sesión
-   */
-  private setSessionClosedMessage(type: string): void {
-    switch (type) {
-      case 'replaced':
-        this.sessionClosedMessage =
-          '🔒 Tu sesión anterior fue cerrada porque iniciaste sesión desde otro dispositivo o navegador. Por tu seguridad, solo puedes tener una sesión activa a la vez.';
-        break;
-      case 'expired':
-        this.sessionClosedMessage =
-          '⏱️ Tu sesión expiró por inactividad. Por favor inicia sesión nuevamente para continuar.';
-        break;
-      case 'invalid':
-        this.sessionClosedMessage = '❌ Tu sesión no es válida. Por favor inicia sesión nuevamente.';
-        break;
-      case 'no-token':
-        this.sessionClosedMessage = '🔐 No has iniciado sesión. Por favor inicia sesión para continuar.';
-        break;
-      default:
-        this.sessionClosedMessage = 'ℹ️ Tu sesión ha finalizado. Por favor inicia sesión nuevamente.';
-    }
-  }
 
-  /**
-   * Cierra el banner de sesión cerrada
-   */
-  closeSessionBanner(): void {
-    this.showSessionClosedBanner = false;
-  }
 }

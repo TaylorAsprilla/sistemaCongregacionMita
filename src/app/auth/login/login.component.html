@@ -18,40 +18,6 @@
           />
         </div>
 
-        <!-- Banner de sesión cerrada -->
-        @if (showSessionClosedBanner) {
-          <div
-            class="session-banner"
-            role="alert"
-            [ngClass]="{
-              'session-replaced': sessionClosedType === 'replaced',
-              'session-expired': sessionClosedType === 'expired',
-              'session-invalid': sessionClosedType === 'invalid',
-            }"
-          >
-            <i
-              [ngClass]="{
-                'fas fa-exclamation-triangle': sessionClosedType === 'replaced',
-                'fas fa-clock': sessionClosedType === 'expired',
-                'fas fa-times-circle': sessionClosedType === 'invalid',
-              }"
-            ></i>
-            <div class="flex-grow-1">
-              <strong>
-                @if (sessionClosedType === 'replaced') {
-                  Sesión cerrada
-                } @else if (sessionClosedType === 'expired') {
-                  Sesión expirada
-                } @else {
-                  Sesión inválida
-                }
-              </strong>
-              <p class="mb-0 mt-1">{{ sessionClosedMessage }}</p>
-            </div>
-            <button type="button" class="btn-close" (click)="closeSessionBanner()" aria-label="Close"></button>
-          </div>
-        }
-
         @if (ticketQr && qrLoginForm) {
           <div class="alert alert-primary mt-4" role="alert">
             <div class="text-center"><b>Has escaneado un código QR.</b></div>
