@@ -1,11 +1,12 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { interval, Subscription } from 'rxjs';
+import { interval, Observable, Subscription } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from 'environment';
 import { RUTAS } from 'src/app/routes/menu-items';
 import Swal from 'sweetalert2';
+import { ActiveSessionsResponse } from 'src/app/core/interfaces/active-sessions.interface';
 
 const base_url = environment.base_url;
 
@@ -25,7 +26,7 @@ const base_url = environment.base_url;
 @Injectable({
   providedIn: 'root',
 })
-export class SessionMonitorService {
+export class SessionMonitorService implements OnDestroy {
   private httpClient = inject(HttpClient);
   private router = inject(Router);
 
@@ -127,6 +128,16 @@ export class SessionMonitorService {
    */
   isActive(): boolean {
     return this.isMonitoring;
+  }
+
+  /**
+   * Obtiene todas las sesiones activas en el sistema.
+   *
+   * @returns Observable con la respuesta que contiene las sesiones activas
+   */
+  getActiveSessions(): Observable<ActiveSessionsResponse> {
+    const url = `${base_url}/login/active-sessions`;
+    return this.httpClient.get<ActiveSessionsResponse>(url, this.headers);
   }
 
   /**

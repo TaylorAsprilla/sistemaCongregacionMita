@@ -64,12 +64,22 @@ import { EventosEnVivoComponent } from 'src/app/pages/multimedia/eventos-multime
 import InicioComponent from 'src/app/pages/inicio/inicio.component';
 import { SolicitudesPendienteComponent } from 'src/app/pages/multimedia/solicitudes-multimedia/solicitudes-pendiente/solicitudes-pendiente.component';
 import { PerfilOptimizadoResolver } from 'src/app/resolvers/perfil-optimizado/perfil-optimizado.resolver';
+import { SesionesActivasComponent } from 'src/app/pages/sesiones-activas/sesiones-activas.component';
 
 export const childRoutes: Routes = [
   {
     path: 'inicio',
     component: InicioComponent,
     data: { titulo: 'Censo' },
+  },
+  {
+    path: RUTAS.SESIONES_ACTIVAS,
+    component: SesionesActivasComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Sesiones Activas',
+      role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA],
+    },
   },
 
   // Administración
