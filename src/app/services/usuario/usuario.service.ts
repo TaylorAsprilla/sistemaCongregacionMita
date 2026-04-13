@@ -18,6 +18,7 @@ import { environment } from 'environment';
 import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimedia.model';
 import { configuracion } from 'src/environments/config/configuration';
 import { CongregacionTransferirFeligresInterface } from 'src/app/core/interfaces/congregacion.interface';
+import { SessionMonitorService } from 'src/app/core/services/session-monitor.service';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -26,6 +27,7 @@ const base_url = environment.base_url;
 export class UsuarioService {
   private httpClient = inject(HttpClient);
   private router = inject(Router);
+  private sessionMonitor = inject(SessionMonitorService);
 
   public usuario: UsuarioModel;
   public idUsuario: number;
@@ -155,10 +157,73 @@ export class UsuarioService {
   }
 
   logout() {
+    // Detener el monitoreo de sesión antes de cerrar
+    this.sessionMonitor.stopMonitoring();
+
+    // Intentar cerrar sesión en el servidor si hay token
+    if (this.token) {
+      this.httpClient
+        .post(`${base_url}/login/logout`, {}, this.headers)
+        .pipe(
+          catchError((error) => {
+            // Si falla la petición al servidor, igual continuar con logout local
+            console.warn('⚠️ Error al cerrar sesión en servidor:', error);
+            return of(null);
+          }),
+        )
+        .subscribe({
+          next: () => {
+            console.log('✅ Sesión cerrada en servidor');
+            this.performLocalLogout();
+          },
+          error: () => {
+            // Por si el catchError no captura todo
+            this.performLocalLogout();
+          },
+        });
+    } else {
+      this.performLocalLogout();
+    }
+  }
+
+  /**
+   * Realiza el logout local limpiando localStorage, sessionStorage y redirigiendo
+   */
+  private performLocalLogout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('menu');
+    localStorage.removeItem('permissions');
     sessionStorage.removeItem('isQRLogin');
-    this.router.navigateByUrl('/login');
     sessionStorage.clear();
+    this.router.navigateByUrl('/login');
+  }
+
+  /**
+   * Verifica si la sesión actual sigue siendo válida en el servidor.
+   * Útil para detectar si la sesión fue invalidada por inicio en otro dispositivo.
+   *
+   * @returns Observable<boolean> - true si la sesión es válida, false si no
+   */
+  checkSession(): Observable<boolean> {
+    if (!this.token) {
+      return of(false);
+    }
+
+    return this.httpClient.get(`${base_url}/login/check-session`, this.headers).pipe(
+      map((response: any) => {
+        return response?.ok === true || response?.success === true;
+      }),
+      catchError((error) => {
+        // Si hay error 401, la sesión no es válida
+        if (error.status === 401) {
+          return of(false);
+        }
+        // Para otros errores, asumir que la sesión es válida
+        // (puede ser un problema de red temporal)
+        return of(true);
+      }),
+    );
   }
 
   validarToken(): Observable<boolean> {
@@ -301,6 +366,13 @@ export class UsuarioService {
           }
         }),
 
+        tap((isValid) => {
+          // Si el token es válido, iniciar el monitoreo de sesión
+          if (isValid) {
+            this.sessionMonitor.startMonitoring();
+          }
+        }),
+
         catchError((error) => {
           return of(false);
         }),
@@ -331,6 +403,9 @@ export class UsuarioService {
           localStorage.setItem('token', resp.token);
           this.idUsuario = resp.usuario.id;
         }
+
+        // Iniciar monitoreo automático de sesión
+        this.sessionMonitor.startMonitoring();
       }),
     );
   }
@@ -344,6 +419,9 @@ export class UsuarioService {
         sessionStorage.setItem('congregacion', resp.congregacion.congregacion);
         this.idUsuario = resp.congregacion.id;
         this.nombreQR = resp.nombre;
+
+        // Iniciar monitoreo automático de sesión
+        this.sessionMonitor.startMonitoring();
       }),
     );
   }

@@ -1,0 +1,173 @@
+<div class="active-sessions-container">
+  <!-- Header con contador -->
+  <div class="sessions-header">
+    <div class="header-content">
+      <div class="title-section">
+        <i class="fas fa-users-cog"></i>
+        <h3 class="title">Sesiones Activas</h3>
+      </div>
+      <div class="counter-badge" [ngClass]="totalSessions > 0 ? 'active' : 'inactive'">
+        <i class="fas fa-circle pulse-dot"></i>
+        <span class="count">{{ totalSessions }}</span>
+        <span class="label">{{ totalSessions === 1 ? 'Usuario' : 'Usuarios' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Cargando...</span>
+    </div>
+    <p class="loading-text">Cargando sesiones activas...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="hasError && !isLoading" class="error-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>No se pudieron cargar las sesiones activas</p>
+  </div>
+
+  <!-- Statistics & Charts -->
+  <div *ngIf="!isLoading && !hasError">
+    <app-sessions-statistics [sessions]="activeSessions"></app-sessions-statistics>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !hasError && totalSessions === 0" class="empty-state">
+    <i class="fas fa-user-slash"></i>
+    <p>No hay sesiones activas en este momento</p>
+  </div>
+
+  <!-- Sessions Grid -->
+  <div *ngIf="!isLoading && !hasError && totalSessions > 0" class="sessions-table-section">
+    <div class="section-title">
+      <i class="fas fa-list"></i>
+      <h4>Detalle de Sesiones</h4>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th class="sortable-header" (click)="sortTable('usuario')">
+              Usuario <i [class]="getSortIcon('usuario')"></i>
+            </th>
+            <th class="sortable-header" (click)="sortTable('congregacion')">
+              Congregación <i [class]="getSortIcon('congregacion')"></i>
+            </th>
+            <th class="sortable-header" (click)="sortTable('ubicacion')">
+              Ubicación Actual <i [class]="getSortIcon('ubicacion')"></i>
+            </th>
+            <th class="sortable-header" (click)="sortTable('dispositivo')">
+              Dispositivo <i [class]="getSortIcon('dispositivo')"></i>
+            </th>
+            <th class="sortable-header" (click)="sortTable('actividad')">
+              Última Actividad <i [class]="getSortIcon('actividad')"></i>
+            </th>
+            <th class="text-center">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let session of sortedSessions">
+            <!-- Usuario -->
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar-small">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info-compact">
+                  <strong class="d-block">{{ session.user.nombreCompleto }}</strong>
+                  <small class="text-muted"> <i class="fas fa-envelope"></i> {{ session.user.email }} </small>
+                </div>
+              </div>
+            </td>
+
+            <!-- Congregación -->
+            <td>
+              <div class="congregacion-cell">
+                <img src="assets/images/escudo-CMI.png" alt="Escudo" class="congregacion-logo-small" />
+                <div class="congregacion-info">
+                  <div *ngIf="session.congregacion.pais !== 'N/A'" class="info-row">
+                    <i class="fas fa-flag"></i> {{ session.congregacion.pais }}
+                  </div>
+                  <div *ngIf="session.congregacion.ciudad !== 'N/A'" class="info-row">
+                    <i class="fas fa-city"></i> {{ session.congregacion.ciudad }}
+                  </div>
+                  <div *ngIf="session.congregacion.campo !== 'N/A'" class="info-row">
+                    <i class="fas fa-map-marker-alt"></i> {{ session.congregacion.campo }}
+                  </div>
+                  <div
+                    *ngIf="
+                      session.congregacion.pais === 'N/A' &&
+                      session.congregacion.ciudad === 'N/A' &&
+                      session.congregacion.campo === 'N/A'
+                    "
+                    class="info-row text-muted"
+                  >
+                    <i class="fas fa-minus-circle"></i> Sin información
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- Ubicación Actual -->
+            <td>
+              <div class="location-cell">
+                <div class="info-row">
+                  <i class="fas fa-globe text-primary"></i>
+                  <strong>{{ session.sessionLocation.ciudad }}, {{ session.sessionLocation.pais }}</strong>
+                </div>
+                <div class="info-row text-muted" *ngIf="session.network.isp">
+                  <i class="fas fa-wifi"></i> {{ session.network.isp }}
+                </div>
+              </div>
+            </td>
+
+            <!-- Dispositivo -->
+            <td>
+              <div class="device-cell">
+                <div class="device-icon" [ngClass]="'device-' + session.device.tipoDispositivo">
+                  <i class="fas" [ngClass]="getDeviceIcon(session.device.tipoDispositivo)"></i>
+                </div>
+                <div class="device-info">
+                  <strong class="d-block">{{ session.device.navegador }}</strong>
+                  <small class="text-muted">{{ session.device.so }}</small>
+                  <span class="badge badge-sm mt-1" [ngClass]="'badge-' + session.device.tipoDispositivo">
+                    {{ session.device.tipoDispositivo | titlecase }}
+                  </span>
+                </div>
+              </div>
+            </td>
+
+            <!-- Última Actividad -->
+            <td>
+              <div class="activity-cell">
+                <span class="time-badge" [ngClass]="getActivityBadgeClass(session.timestamps.lastActivityAt)">
+                  <i class="fas fa-clock"></i>
+                  {{ getTimeAgo(session.timestamps.lastActivityAt) }}
+                </span>
+                <small class="d-block text-muted mt-1">
+                  Inicio: {{ session.timestamps.createdAt | date: 'short' }}
+                </small>
+              </div>
+            </td>
+
+            <!-- Estado -->
+            <td class="text-center">
+              <span class="status-indicator" [ngClass]="getStatusClass(session.timestamps.lastActivityAt)">
+                <i class="fas fa-circle"></i>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Auto-update indicator -->
+  <div class="update-indicator" *ngIf="!isLoading && !hasError">
+    <i class="fas fa-sync-alt rotating"></i>
+    <span>Actualización automática cada 30 segundos</span>
+  </div>
+</div>

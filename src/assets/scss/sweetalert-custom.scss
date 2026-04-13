@@ -1,0 +1,372 @@
+/**
+ * Estilos personalizados para SweetAlert2
+ * Adaptados al tema de la aplicación (Admin Press)
+ */
+
+// Importar variables del tema
+@import 'variable';
+
+// ==========================================
+// ESTILOS GENERALES DE MODALES
+// ==========================================
+
+.swal2-popup {
+  font-family: $bodyfont !important;
+  border-radius: 8px !important;
+  box-shadow:
+    0 14px 26px -12px rgba(0, 0, 0, 0.42),
+    0 4px 23px 0 rgba(0, 0, 0, 0.12),
+    0 8px 10px -5px rgba(0, 0, 0, 0.2) !important;
+  padding: 2rem !important;
+}
+
+.swal2-title {
+  font-family: $headingfont !important;
+  color: $headingtext !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  padding: 0 0 1rem 0 !important;
+}
+
+.swal2-html-container {
+  font-family: $bodyfont !important;
+  color: $bodytext !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  margin: 1rem 0 !important;
+}
+
+.swal2-icon {
+  margin: 1.5rem auto 1rem !important;
+}
+
+// ==========================================
+// ICONOS CON COLORES DEL TEMA
+// ==========================================
+
+.swal2-icon.swal2-warning {
+  border-color: $warning !important;
+  color: $warning !important;
+
+  .swal2-icon-content {
+    color: $warning !important;
+  }
+}
+
+.swal2-icon.swal2-error {
+  border-color: $danger !important;
+
+  .swal2-x-mark {
+    .swal2-x-mark-line-left,
+    .swal2-x-mark-line-right {
+      background-color: $danger !important;
+    }
+  }
+}
+
+.swal2-icon.swal2-success {
+  border-color: $success !important;
+
+  .swal2-success-ring {
+    border-color: rgba($success, 0.3) !important;
+  }
+
+  .swal2-success-line-tip,
+  .swal2-success-line-long {
+    background-color: $success !important;
+  }
+}
+
+.swal2-icon.swal2-info {
+  border-color: $info !important;
+  color: $info !important;
+
+  .swal2-icon-content {
+    color: $info !important;
+  }
+}
+
+// ==========================================
+// BOTONES CON ESTILOS DEL TEMA
+// ==========================================
+
+.swal2-confirm,
+.swal2-cancel,
+.swal2-deny {
+  font-family: $bodyfont !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  padding: 0.6rem 1.5rem !important;
+  border-radius: 4px !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: $default-shadow !important;
+
+  i,
+  .fas,
+  .far,
+  .fab {
+    margin-right: 0.5rem;
+  }
+}
+
+// Botón de confirmación (primario)
+.swal2-confirm {
+  background-color: $primary !important;
+  color: #fff !important;
+
+  &:hover {
+    background-color: $primary-dark !important;
+    box-shadow: $primary-shadow-hover !important;
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba($primary, 0.3) !important;
+  }
+}
+
+// Botón de cancelar
+.swal2-cancel {
+  background-color: $secondary !important;
+  color: #fff !important;
+
+  &:hover {
+    background-color: $secondary-dark !important;
+    box-shadow: $default-shadow-hover !important;
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba($secondary, 0.3) !important;
+  }
+}
+
+// Botón de denegar
+.swal2-deny {
+  background-color: $danger !important;
+  color: #fff !important;
+
+  &:hover {
+    background-color: $danger-dark !important;
+    box-shadow: $danger-shadow-hover !important;
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba($danger, 0.3) !important;
+  }
+}
+
+// ==========================================
+// BARRA DE PROGRESO (TIMER)
+// ==========================================
+
+.swal2-timer-progress-bar {
+  background: rgba($primary, 0.8) !important;
+  height: 4px !important;
+}
+
+.swal2-timer-progress-bar-container {
+  background: rgba($primary, 0.2) !important;
+  height: 4px !important;
+}
+
+// ==========================================
+// CLASES PERSONALIZADAS PARA SESIONES
+// ==========================================
+
+// Modal de sesión cerrada
+.session-error-modal {
+  .swal2-html-container {
+    padding: 0 !important;
+    margin: 0 !important;
+
+    .text-start {
+      text-align: left !important;
+    }
+
+    // Caja de información de ubicación
+    .location-info-box {
+      background-color: #f8f9fa !important;
+      border-radius: 8px !important;
+      border-left: 4px solid $info !important;
+      padding: 1rem !important;
+      margin: 1rem 0 !important;
+
+      p {
+        margin-bottom: 0.5rem !important;
+        color: $bodytext !important;
+
+        &:last-child {
+          margin-bottom: 0 !important;
+        }
+      }
+
+      strong {
+        color: $headingtext !important;
+        display: flex;
+        align-items: center;
+
+        i {
+          color: $info !important;
+          margin-right: 0.5rem !important;
+        }
+      }
+
+      .location-details {
+        font-size: 0.9rem !important;
+        color: $dark-text !important;
+
+        strong {
+          color: $headingtext !important;
+        }
+      }
+    }
+
+    // Alerta de seguridad
+    .security-alert {
+      background-color: $light-warning !important;
+      border: 1px solid rgba($warning, 0.3) !important;
+      border-radius: 6px !important;
+      padding: 1rem !important;
+      margin-top: 1rem !important;
+      font-size: 0.9rem !important;
+
+      i {
+        color: $warning-dark !important;
+        margin-right: 0.5rem !important;
+      }
+
+      strong {
+        color: $warning-dark !important;
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+
+      p {
+        margin: 0 !important;
+        color: $bodytext !important;
+      }
+    }
+  }
+}
+
+// Modal de confirmación de sesión única
+.session-confirm-modal {
+  .swal2-html-container {
+    .text-start {
+      text-align: left !important;
+    }
+
+    p {
+      margin-bottom: 1rem !important;
+
+      strong {
+        color: $headingtext !important;
+        font-weight: 600 !important;
+      }
+    }
+
+    .text-muted {
+      color: $bodytext !important;
+
+      &.small {
+        font-size: 0.85rem !important;
+      }
+    }
+  }
+
+  .swal2-actions {
+    margin-top: 2rem !important;
+    gap: 0.75rem !important;
+  }
+}
+
+// ==========================================
+// BANNER DE SESIÓN CERRADA (en login)
+// ==========================================
+
+.session-banner {
+  font-family: $bodyfont !important;
+  border-radius: 6px !important;
+  padding: 1rem 1.25rem !important;
+  margin-bottom: 1.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  animation: slideDown 0.3s ease-out !important;
+
+  i {
+    margin-right: 0.75rem !important;
+    font-size: 1.2rem !important;
+  }
+
+  &.session-replaced {
+    background-color: $light-warning !important;
+    color: $warning-dark !important;
+    border-left: 4px solid $warning !important;
+  }
+
+  &.session-expired {
+    background-color: $light-info !important;
+    color: $info-dark !important;
+    border-left: 4px solid $info !important;
+  }
+
+  &.session-invalid {
+    background-color: $light-danger !important;
+    color: $danger-dark !important;
+    border-left: 4px solid $danger !important;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==========================================
+// RESPONSIVE
+// ==========================================
+
+@media (max-width: 768px) {
+  .swal2-popup {
+    width: 90% !important;
+    padding: 1.5rem !important;
+  }
+
+  .swal2-title {
+    font-size: 1.25rem !important;
+  }
+
+  .swal2-html-container {
+    font-size: 0.9rem !important;
+  }
+
+  .swal2-confirm,
+  .swal2-cancel,
+  .swal2-deny {
+    font-size: 0.85rem !important;
+    padding: 0.5rem 1.2rem !important;
+  }
+}
+
+// ==========================================
+// ANCHO PERSONALIZADO PARA MODALES GRANDES
+// ==========================================
+
+.swal-wide {
+  width: 600px !important;
+  max-width: 90% !important;
+}
+
+.swal-extra-wide {
+  width: 800px !important;
+  max-width: 95% !important;
+}
