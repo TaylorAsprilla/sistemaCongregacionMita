@@ -123,23 +123,6 @@ function clearSessionAndRedirect(router: Router, code: SessionErrorCode): void {
   // Limpiar sessionStorage
   sessionStorage.clear();
 
-  // Determinar el parámetro de query según el tipo de error
-  const queryParams: any = {};
-
-  if (code === SessionErrorCode.SESSION_REPLACED) {
-    // Para sesión reemplazada, mostrar mensaje específico
-    queryParams.sessionClosed = 'replaced';
-  } else if (code === SessionErrorCode.SESSION_EXPIRED || code === SessionErrorCode.TOKEN_EXPIRED) {
-    // Para sesiones expiradas
-    queryParams.sessionClosed = 'expired';
-  } else if (code === SessionErrorCode.NO_TOKEN) {
-    // Para casos sin token
-    queryParams.sessionClosed = 'no-token';
-  } else {
-    // Para otros casos
-    queryParams.sessionClosed = 'invalid';
-  }
-
-  // Redirigir al login con parámetros
-  router.navigate([RUTAS.LOGIN], { queryParams });
+  // Redirigir al login sin parámetros
+  router.navigate([RUTAS.LOGIN]);
 }
