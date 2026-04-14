@@ -33,6 +33,7 @@ export class SessionsStatisticsComponent implements OnChanges {
   deviceChartData: ChartData[] = [];
   countryChartData: ChartData[] = [];
   browserChartData: ChartData[] = [];
+  entityChartData: ChartData[] = []; // Nuevo: Usuario vs Congregación
 
   // Estadísticas
   statsCards: StatCard[] = [];
@@ -62,12 +63,12 @@ export class SessionsStatisticsComponent implements OnChanges {
   private calculateStatistics(): void {
     const total = this.sessions.length;
 
-    // Contar dispositivos activos en los últimos 5 minutos
-    const now = new Date().getTime();
-    const activeInLast5Min = this.sessions.filter((s) => {
-      const lastActivity = new Date(s.timestamps.lastActivityAt).getTime();
-      return now - lastActivity < 5 * 60 * 1000;
-    }).length;
+    // Contar sesiones actualmente activas usando el campo del backend
+    const activeNow = this.sessions.filter((s) => s.isCurrentlyActive).length;
+
+    // Contar por tipo de entidad
+    const usuariosCount = this.sessions.filter((s) => s.entidad.tipo === 'usuario').length;
+    const congregacionesCount = this.sessions.filter((s) => s.entidad.tipo === 'congregacion').length;
 
     // Contar por tipo de dispositivo
     const desktopCount = this.sessions.filter((s) => s.device.tipoDispositivo === 'desktop').length;
@@ -86,10 +87,22 @@ export class SessionsStatisticsComponent implements OnChanges {
       },
       {
         title: 'Activos Ahora',
-        value: activeInLast5Min,
+        value: activeNow,
         icon: 'fa-circle',
         color: '#4ade80',
-        percentage: total > 0 ? Math.round((activeInLast5Min / total) * 100) : 0,
+        percentage: total > 0 ? Math.round((activeNow / total) * 100) : 0,
+      },
+      {
+        title: 'Usuarios',
+        value: usuariosCount,
+        icon: 'fa-user',
+        color: '#667eea',
+      },
+      {
+        title: 'Congregaciones',
+        value: congregacionesCount,
+        icon: 'fa-home',
+        color: '#06b6d4',
       },
       {
         title: 'Desktop',
@@ -122,6 +135,21 @@ export class SessionsStatisticsComponent implements OnChanges {
    * Genera datos para los gráficos
    */
   private generateChartData(): void {
+    // Gráfico por tipo de entidad (Usuario vs Congregación)
+    const entityCounts = this.sessions.reduce(
+      (acc, session) => {
+        const type = session.entidad.tipo === 'usuario' ? 'Usuarios' : 'Congregaciones';
+        acc[type] = (acc[type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    this.entityChartData = Object.entries(entityCounts).map(([name, value]) => ({
+      name,
+      value,
+    }));
+
     // Gráfico por tipo de dispositivo
     const deviceCounts = this.sessions.reduce(
       (acc, session) => {

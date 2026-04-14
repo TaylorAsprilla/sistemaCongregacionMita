@@ -3,7 +3,9 @@
  */
 export interface ActiveSessionsResponse {
   ok: boolean;
-  totalActiveSessions: number;
+  totalSessions: number;
+  currentlyActiveSessions: number;
+  inactiveSessions: number;
   sessions: ActiveSession[];
 }
 
@@ -12,6 +14,10 @@ export interface ActiveSessionsResponse {
  */
 export interface ActiveSession {
   sessionId: string;
+  isActive: boolean;
+  isCurrentlyActive: boolean;
+  isExpired: boolean;
+  invalidationReason: string | null;
   entidad: ActiveSessionEntidad;
   sessionLocation: ActiveSessionLocation;
   device: ActiveSessionDevice;
@@ -90,4 +96,5 @@ export interface ActiveSessionTimestamps {
   createdAt: string;
   lastActivityAt: string;
   expiresAt: string;
+  invalidatedAt: string | null;
 }

@@ -15,6 +15,28 @@
 
   <!-- Charts Section -->
   <div class="charts-section" *ngIf="sessions.length > 0">
+    <!-- Entity Distribution (Usuario vs Congregación) -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h4 class="chart-title">
+          <i class="fas fa-users"></i>
+          Usuarios vs Congregaciones
+        </h4>
+      </div>
+      <div class="chart-container">
+        <ngx-charts-pie-chart
+          [results]="entityChartData"
+          [view]="view"
+          [legend]="showLegend"
+          [legendPosition]="legendPosition"
+          [labels]="showLabels"
+          [doughnut]="isDoughnut"
+          (select)="onSelect($event)"
+        >
+        </ngx-charts-pie-chart>
+      </div>
+    </div>
+
     <!-- Device Distribution -->
     <div class="chart-card">
       <div class="chart-header">

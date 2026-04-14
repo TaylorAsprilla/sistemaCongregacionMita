@@ -96,7 +96,7 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
     if (response.ok && response.sessions) {
       this.activeSessions = response.sessions;
       this.sortedSessions = [...response.sessions];
-      this.totalSessions = response.totalActiveSessions;
+      this.totalSessions = response.totalSessions;
       this.isLoading = false;
       this.hasError = false;
 
@@ -303,7 +303,7 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
    */
   getEntidadIcon(session: ActiveSession): string {
     if (!session?.entidad) return 'fa-question';
-    return this.isUsuario(session) ? 'fa-user' : 'fa-church';
+    return this.isUsuario(session) ? 'fa-user' : 'fa-home';
   }
 
   /**

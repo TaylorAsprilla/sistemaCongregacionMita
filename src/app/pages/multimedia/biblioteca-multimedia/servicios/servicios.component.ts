@@ -20,6 +20,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
   private linkEventosService = inject(LinkEventosService);
   private sanitizer = inject(DomSanitizer);
   private changeDetectorRef = inject(ChangeDetectorRef);
+  private sessionMonitorService = inject(SessionMonitorService);
 
   videos: LinkEventoModel[] = [];
   visibleVideos: LinkEventoModel[] = [];
@@ -44,6 +45,7 @@ export class ServiciosComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cargarEventos();
+    this.cargarSesionesActivas();
   }
 
   cargarEventos(): void {
@@ -86,6 +88,23 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     const newVideos = this.videos.slice(startIndex, endIndex);
     this.visibleVideos = this.visibleVideos.concat(newVideos);
     this.currentPage++;
+  }
+
+  cargarSesionesActivas(): void {
+    // Ejecutar inmediatamente y luego cada 30 segundos
+    this.sesionesSubscription = timer(0, 30000)
+      .pipe(switchMap(() => this.sessionMonitorService.getActiveSessions()))
+      .subscribe({
+        next: (response) => {
+          // Usar el campo currentlyActiveSessions del backend
+          this.sesionesActivas = response.currentlyActiveSessions || 0;
+          this.changeDetectorRef.markForCheck();
+        },
+        error: () => {
+          this.sesionesActivas = 0;
+          this.changeDetectorRef.markForCheck();
+        },
+      });
   }
 
   // Verificar si hay más videos para cargar

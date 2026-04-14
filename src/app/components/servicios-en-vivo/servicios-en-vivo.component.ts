@@ -75,7 +75,8 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
       .pipe(switchMap(() => this.sessionMonitorService.getActiveSessions()))
       .subscribe({
         next: (response) => {
-          this.sesionesActivas = response.sessions?.length || 0;
+          // Usar el campo currentlyActiveSessions del backend
+          this.sesionesActivas = response.currentlyActiveSessions || 0;
           this.changeDetectorRef.detectChanges();
         },
         error: () => {
