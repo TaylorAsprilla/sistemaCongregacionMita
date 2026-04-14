@@ -1,7 +1,7 @@
 <div class="row">
   <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">Biblioteca de Servicios y Vigilias</h3>
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h3 class="card-title mb-0">Biblioteca de Servicios y Vigilias</h3>
     </div>
 
     <div class="servicios-container">
@@ -16,36 +16,36 @@
 
       <!-- Mensaje de carga -->
       @if (loading) {
-      <div class="loading-message">Cargando videos...</div>
+        <div class="loading-message">Cargando videos...</div>
       }
 
       <!-- Lista de videos -->
       @if (!loading) {
-      <div class="video-library">
-        @for (video of visibleVideos; track video.id) {
-        <div class="video-item">
-          <h3>{{ video.titulo }}</h3>
-          <p>{{ video.fecha | date }}</p>
-          <div class="video-container">
-            @if (getSafeEmbedUrl(video.link); as safeUrl) {
-            <iframe
-              [src]="safeUrl"
-              width="640"
-              height="360"
-              frameborder="0"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-            }
-          </div>
+        <div class="video-library">
+          @for (video of visibleVideos; track video.id) {
+            <div class="video-item">
+              <h3>{{ video.titulo }}</h3>
+              <p>{{ video.fecha | date }}</p>
+              <div class="video-container">
+                @if (getSafeEmbedUrl(video.link); as safeUrl) {
+                  <iframe
+                    [src]="safeUrl"
+                    width="640"
+                    height="360"
+                    frameborder="0"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                }
+              </div>
+            </div>
+          }
         </div>
-        }
-      </div>
       }
 
       <!-- Botón para cargar más videos -->
       @if (hasMoreVideos && !loading) {
-      <button (click)="loadMore()" class="load-more-button">Cargar más videos</button>
+        <button (click)="loadMore()" class="load-more-button">Cargar más videos</button>
       }
     </div>
   </div>

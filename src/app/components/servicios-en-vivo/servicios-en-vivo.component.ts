@@ -13,16 +13,21 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
+import { SessionMonitorService } from 'src/app/core/services/session-monitor.service';
+import { Subscription, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-servicios-en-vivo',
   templateUrl: './servicios-en-vivo.component.html',
   styleUrls: ['./servicios-en-vivo.component.scss'],
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
 })
 export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   private changeDetectorRef = inject(ChangeDetectorRef);
+  private sessionMonitorService = inject(SessionMonitorService);
   domSanitizer = inject(DomSanitizer);
 
   @Input() servicios: LinkEventoModel = null;
@@ -36,6 +41,8 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
   servicioPlataforma: string = '';
   titulo: string = '';
   multimediaStreamUrl: SafeResourceUrl | undefined;
+  sesionesActivas: number = 0;
+  sesionesSubscription: Subscription | null = null;
 
   readonly PLATAFORMA = PLATAFORMA;
   readonly TIPOEVENTO_ID = TIPOEVENTO_ID;
@@ -57,6 +64,25 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
     ];
     const streamUrl = parts.join('');
     this.multimediaStreamUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(streamUrl);
+
+    // Cargar sesiones activas
+    this.cargarSesionesActivas();
+  }
+
+  cargarSesionesActivas(): void {
+    // Ejecutar inmediatamente y luego cada 30 segundos
+    this.sesionesSubscription = timer(0, 30000) // 0ms inicial, luego cada 30 segundos
+      .pipe(switchMap(() => this.sessionMonitorService.getActiveSessions()))
+      .subscribe({
+        next: (response) => {
+          this.sesionesActivas = response.sessions?.length || 0;
+          this.changeDetectorRef.detectChanges();
+        },
+        error: () => {
+          this.sesionesActivas = 0;
+          this.changeDetectorRef.detectChanges();
+        },
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -91,6 +117,7 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
 
   ngOnDestroy(): void {
     window.removeEventListener('resize', this.onResize);
+    this.sesionesSubscription?.unsubscribe();
   }
 
   ngAfterViewInit(): void {

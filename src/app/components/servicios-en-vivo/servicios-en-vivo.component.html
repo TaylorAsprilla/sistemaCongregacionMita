@@ -54,3 +54,20 @@
     </div>
   } -->
 </div>
+
+<!-- Indicador de sesiones activas - Fondo blanco con punto verde -->
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999">
+  <div
+    class="rounded-circle bg-white shadow-lg d-flex align-items-center justify-content-center position-relative"
+    style="width: 60px; height: 60px; cursor: pointer; border: 2px solid #e0e0e0"
+    title="{{ sesionesActivas }} sesiones activas"
+  >
+    <span class="text-dark fw-bold fs-5">{{ sesionesActivas }}</span>
+    <!-- Punto verde indicador -->
+    <span
+      class="position-absolute rounded-circle bg-success"
+      style="width: 14px; height: 14px; top: 5px; right: 5px; animation: pulse 2s infinite; border: 2px solid white"
+    >
+    </span>
+  </div>
+</div>
