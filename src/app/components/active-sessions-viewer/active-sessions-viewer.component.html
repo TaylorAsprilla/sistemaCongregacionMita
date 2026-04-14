@@ -70,43 +70,48 @@
         </thead>
         <tbody>
           <tr *ngFor="let session of sortedSessions">
-            <!-- Usuario -->
+            <!-- Usuario o Congregación -->
             <td>
               <div class="user-cell">
-                <div class="user-avatar-small">
-                  <i class="fas fa-user"></i>
+                <div
+                  class="user-avatar-small"
+                  [ngClass]="isUsuario(session) ? 'avatar-usuario' : 'avatar-congregacion'"
+                >
+                  <i class="fas" [ngClass]="getEntidadIcon(session)"></i>
                 </div>
                 <div class="user-info-compact">
-                  <strong class="d-block">{{ session.user.nombreCompleto }}</strong>
-                  <small class="text-muted"> <i class="fas fa-envelope"></i> {{ session.user.email }} </small>
+                  <strong class="d-block">{{ getNombreEntidad(session) }}</strong>
+                  <small class="text-muted"> <i class="fas fa-envelope"></i> {{ getEmailEntidad(session) }} </small>
+                  <span class="badge badge-sm mt-1" [ngClass]="isUsuario(session) ? 'badge-primary' : 'badge-info'">
+                    {{ isUsuario(session) ? 'Usuario' : 'Congregación' }}
+                  </span>
                 </div>
               </div>
             </td>
 
-            <!-- Congregación -->
+            <!-- Congregación (solo para usuarios) -->
             <td>
               <div class="congregacion-cell">
                 <img src="assets/images/escudo-CMI.png" alt="Escudo" class="congregacion-logo-small" />
                 <div class="congregacion-info">
-                  <div *ngIf="session.congregacion.pais !== 'N/A'" class="info-row">
-                    <i class="fas fa-flag"></i> {{ session.congregacion.pais }}
-                  </div>
-                  <div *ngIf="session.congregacion.ciudad !== 'N/A'" class="info-row">
-                    <i class="fas fa-city"></i> {{ session.congregacion.ciudad }}
-                  </div>
-                  <div *ngIf="session.congregacion.campo !== 'N/A'" class="info-row">
-                    <i class="fas fa-map-marker-alt"></i> {{ session.congregacion.campo }}
-                  </div>
-                  <div
-                    *ngIf="
-                      session.congregacion.pais === 'N/A' &&
-                      session.congregacion.ciudad === 'N/A' &&
-                      session.congregacion.campo === 'N/A'
-                    "
-                    class="info-row text-muted"
-                  >
-                    <i class="fas fa-minus-circle"></i> Sin información
-                  </div>
+                  <!-- Usuario: mostrar congregacion donde pertenece -->
+                  <ng-container *ngIf="isUsuario(session) && getCongregacionUsuario(session) as cong">
+                    <div *ngIf="cong.pais !== 'N/A'" class="info-row"><i class="fas fa-flag"></i> {{ cong.pais }}</div>
+                    <div *ngIf="cong.nombre !== 'N/A'" class="info-row">
+                      <i class="fas fa-church"></i> {{ cong.nombre }}
+                    </div>
+                    <div *ngIf="cong.campo !== 'N/A'" class="info-row">
+                      <i class="fas fa-map-marker-alt"></i> {{ cong.campo }}
+                    </div>
+                  </ng-container>
+
+                  <!-- Congregación: mostrar país -->
+                  <ng-container *ngIf="isCongregacion(session)">
+                    <div class="info-row"><i class="fas fa-flag"></i> {{ getPaisCongregacion(session) }}</div>
+                    <div class="info-row text-muted">
+                      <i class="fas fa-church"></i> Inicio de sesión como congregación
+                    </div>
+                  </ng-container>
                 </div>
               </div>
             </td>
@@ -116,9 +121,12 @@
               <div class="location-cell">
                 <div class="info-row">
                   <i class="fas fa-globe text-primary"></i>
-                  <strong>{{ session.sessionLocation.ciudad }}, {{ session.sessionLocation.pais }}</strong>
+                  <strong
+                    >{{ session.sessionLocation?.ciudad || 'Desconocida' }},
+                    {{ session.sessionLocation?.pais || 'Desconocido' }}</strong
+                  >
                 </div>
-                <div class="info-row text-muted" *ngIf="session.network.isp">
+                <div class="info-row text-muted" *ngIf="session.network?.isp">
                   <i class="fas fa-wifi"></i> {{ session.network.isp }}
                 </div>
               </div>
@@ -127,14 +135,17 @@
             <!-- Dispositivo -->
             <td>
               <div class="device-cell">
-                <div class="device-icon" [ngClass]="'device-' + session.device.tipoDispositivo">
-                  <i class="fas" [ngClass]="getDeviceIcon(session.device.tipoDispositivo)"></i>
+                <div class="device-icon" [ngClass]="'device-' + (session.device?.tipoDispositivo || 'desktop')">
+                  <i class="fas" [ngClass]="getDeviceIcon(session.device?.tipoDispositivo || 'desktop')"></i>
                 </div>
                 <div class="device-info">
-                  <strong class="d-block">{{ session.device.navegador }}</strong>
-                  <small class="text-muted">{{ session.device.so }}</small>
-                  <span class="badge badge-sm mt-1" [ngClass]="'badge-' + session.device.tipoDispositivo">
-                    {{ session.device.tipoDispositivo | titlecase }}
+                  <strong class="d-block">{{ session.device?.navegador || 'Desconocido' }}</strong>
+                  <small class="text-muted">{{ session.device?.so || 'Desconocido' }}</small>
+                  <span
+                    class="badge badge-sm mt-1"
+                    [ngClass]="'badge-' + (session.device?.tipoDispositivo || 'desktop')"
+                  >
+                    {{ session.device?.tipoDispositivo || 'desktop' | titlecase }}
                   </span>
                 </div>
               </div>
@@ -143,19 +154,19 @@
             <!-- Última Actividad -->
             <td>
               <div class="activity-cell">
-                <span class="time-badge" [ngClass]="getActivityBadgeClass(session.timestamps.lastActivityAt)">
+                <span class="time-badge" [ngClass]="getActivityBadgeClass(session.timestamps?.lastActivityAt || '')">
                   <i class="fas fa-clock"></i>
-                  {{ getTimeAgo(session.timestamps.lastActivityAt) }}
+                  {{ getTimeAgo(session.timestamps?.lastActivityAt || '') }}
                 </span>
                 <small class="d-block text-muted mt-1">
-                  Inicio: {{ session.timestamps.createdAt | date: 'short' }}
+                  Inicio: {{ session.timestamps?.createdAt || '' | date: 'short' }}
                 </small>
               </div>
             </td>
 
             <!-- Estado -->
             <td class="text-center">
-              <span class="status-indicator" [ngClass]="getStatusClass(session.timestamps.lastActivityAt)">
+              <span class="status-indicator" [ngClass]="getStatusClass(session.timestamps?.lastActivityAt || '')">
                 <i class="fas fa-circle"></i>
               </span>
             </td>
