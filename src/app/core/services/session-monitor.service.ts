@@ -1,5 +1,5 @@
 import { Injectable, inject, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { interval, Observable, Subscription } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { environment } from 'environment';
 import { RUTAS } from 'src/app/routes/menu-items';
 import Swal from 'sweetalert2';
 import { ActiveSessionsResponse } from 'src/app/core/interfaces/active-sessions.interface';
+import { SKIP_LOADING } from '../interceptors/loading/loading.interceptor';
 
 const base_url = environment.base_url;
 
@@ -55,6 +56,18 @@ export class SessionMonitorService implements OnDestroy {
       headers: {
         'x-token': this.token,
       },
+    };
+  }
+
+  /**
+   * Opciones HTTP incluyendo headers y contexto para omitir loading
+   */
+  get httpOptions() {
+    return {
+      headers: {
+        'x-token': this.token,
+      },
+      context: new HttpContext().set(SKIP_LOADING, true),
     };
   }
 
@@ -215,7 +228,7 @@ export class SessionMonitorService implements OnDestroy {
    * @returns Observable con la respuesta del servidor
    */
   checkSession() {
-    return this.httpClient.get(this.CHECK_SESSION_ENDPOINT, this.headers);
+    return this.httpClient.get(this.CHECK_SESSION_ENDPOINT, this.httpOptions);
   }
 
   /**
@@ -232,7 +245,7 @@ export class SessionMonitorService implements OnDestroy {
    */
   getActiveSessions(): Observable<ActiveSessionsResponse> {
     const url = `${base_url}/login/active-sessions`;
-    return this.httpClient.get<ActiveSessionsResponse>(url, this.headers);
+    return this.httpClient.get<ActiveSessionsResponse>(url, this.httpOptions);
   }
 
   /**
@@ -243,7 +256,7 @@ export class SessionMonitorService implements OnDestroy {
    */
   closeOtherSessions(): Observable<any> {
     const url = `${base_url}/login/close-other-sessions`;
-    return this.httpClient.post(url, {}, this.headers);
+    return this.httpClient.post(url, {}, this.httpOptions);
   }
 
   /**

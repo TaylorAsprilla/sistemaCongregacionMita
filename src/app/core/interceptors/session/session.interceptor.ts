@@ -34,8 +34,18 @@ import { RUTAS } from 'src/app/routes/menu-items';
 export const sessionInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
 
+  // Excluir endpoints de monitoreo de sesión que manejan sus propios errores 401
+  const excludedEndpoints = ['/login/active-sessions', '/login/check-session', '/login/check-sessions-before-login'];
+
+  const isExcluded = excludedEndpoints.some((endpoint) => req.url.includes(endpoint));
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      // No procesar errores de endpoints excluidos
+      if (isExcluded) {
+        return throwError(() => error);
+      }
+
       // Solo procesar errores 401 (Unauthorized)
       if (error.status === 401) {
         const errorResponse = error.error as SessionErrorResponse;

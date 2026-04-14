@@ -1,7 +1,7 @@
 <div class="card">
   <!-- start -->
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <div>
+  <div class="card-header d-flex justify-content-between align-items-start flex-wrap gap-3">
+    <div class="flex-grow-1">
       <h3 class="card-title pt-4 pl-4">Total de Feligreses registrados: {{ totalUsuarios | number }}</h3>
       @if (titulo) {
         <div>
@@ -9,9 +9,9 @@
         </div>
       } @else {
         <div class="info-section pl-4 pr-4">
-          <div class="mb-2">
+          <div class="mb-2 d-flex align-items-center flex-wrap gap-2">
             @if (paisesEnCenso.length > 0) {
-              <div class="d-inline-flex flex-wrap gap-2 mt-1">
+              <div class="d-inline-flex flex-wrap gap-2">
                 @for (pais of paisesEnCenso; track pais; let i = $index) {
                   @if (obtenerCodigoIsoPais(pais)) {
                     <img
@@ -26,55 +26,24 @@
                 }
               </div>
             } @else {
-              <span class="text-muted ms-2">No hay países registrados</span>
+              <span class="text-muted">No hay países registrados</span>
             }
           </div>
-          @if (!!mostrarNombreCongregacion) {
-            <div class="mb-1">
-              <strong>{{ congregacionesEnCenso.length === 1 ? 'Congregación:' : 'Congregaciones:' }}</strong>
-              @if (congregacionesEnCenso.length > 0) {
-                <div class="d-inline-flex flex-wrap gap-2 mt-1 ms-2">
-                  @for (congregacion of congregacionesEnCenso; track congregacion; let i = $index) {
-                    <span class="badge bg-primary px-3 py-1">{{ congregacion }}</span>
-                  }
-                </div>
-              } @else {
-                <span class="text-muted ms-2">No hay congregaciones registradas</span>
-              }
-            </div>
-          }
-          @if (!!mostrarNombreCampo) {
-            <div class="mb-1">
-              <strong>{{ camposEnCenso.length === 1 ? 'Campo:' : 'Campos:' }}</strong>
-              @if (camposEnCenso.length > 0) {
-                <div class="d-inline-flex flex-wrap gap-2 mt-1 ms-2">
-                  @for (campo of camposEnCenso; track campo; let i = $index) {
-                    <span class="badge bg-success px-3 py-1">{{ campo }}</span>
-                  }
-                </div>
-              } @else {
-                <span class="text-muted ms-2">No hay campos registrados</span>
-              }
-            </div>
-          }
         </div>
       }
     </div>
 
-    <div class="d-flex align-items-center">
+    <!-- Botones de acción (derecha) -->
+    <div class="d-flex align-items-start gap-2 flex-wrap pt-4">
       <!-- Botón Crear Feligrés -->
-      <button
-        class="btn btn-primary mx-1 d-flex align-items-center"
-        (click)="crearUsuarioHandler()"
-        [ngClass]="{ 'd-md-inline-block': true, 'd-sm-none': true }"
-      >
+      <button class="btn btn-primary d-flex align-items-center" (click)="crearUsuarioHandler()">
         <i class="fas fa-user"></i>
         <span class="d-none d-md-inline-block ms-2">Feligrés Nuevo</span>
       </button>
 
       <!-- Botón Mostrar/Ocultar Filtros -->
       <button
-        class="btn mx-1 d-flex align-items-center"
+        class="btn d-flex align-items-center"
         [ngClass]="{ 'btn-secondary': isFiltrosVisibles, 'btn-outline-secondary': !isFiltrosVisibles }"
         (click)="esconderFiltros()"
       >
@@ -86,7 +55,7 @@
 
       <!-- Botón Exportar a Excel -->
       <button
-        class="btn btn-outline-primary mx-1 d-flex align-items-center"
+        class="btn btn-outline-primary d-flex align-items-center"
         (click)="exportarDatosFiltrados()"
         title="Exportar a Excel"
       >
@@ -99,6 +68,67 @@
   @if (isFiltrosVisibles) {
     <div>
       @if (usuarios.length > 0) {
+        <!-- Listado de Congregaciones y Campos (solo si NO es Censo General) -->
+        @if (titulo) {
+          <div class="card-body border-bottom">
+            @if (!!mostrarNombreCongregacion) {
+              <div class="mb-3">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <strong>{{ congregacionesEnCenso.length === 1 ? 'Congregación:' : 'Congregaciones:' }}</strong>
+                  @if (congregacionesEnCenso.length > 1) {
+                    <span class="badge bg-secondary">{{ congregacionesEnCenso.length }}</span>
+                  }
+                </div>
+                @if (congregacionesEnCenso.length > 0) {
+                  <div
+                    class="congregaciones-container p-2 rounded bg-light"
+                    style="max-height: 200px; overflow-y: auto; column-count: 5; column-gap: 1rem"
+                  >
+                    @for (congregacion of congregacionesEnCenso.sort(); track congregacion; let i = $index) {
+                      <div class="mb-2" style="break-inside: avoid">
+                        <span class="badge bg-primary px-3 py-2 d-inline-flex align-items-center gap-2 w-100">
+                          <i class="fas fa-home"></i>
+                          <span>{{ congregacion }}</span>
+                        </span>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <span class="text-muted">No hay congregaciones registradas</span>
+                }
+              </div>
+            }
+            @if (!!mostrarNombreCampo) {
+              <div class="mb-3">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <strong>{{ camposEnCenso.length === 1 ? 'Campo:' : 'Campos:' }}</strong>
+                  @if (camposEnCenso.length > 1) {
+                    <span class="badge bg-secondary">{{ camposEnCenso.length }}</span>
+                  }
+                </div>
+                @if (camposEnCenso.length > 0) {
+                  <div
+                    class="campos-container p-2 rounded bg-light"
+                    style="max-height: 200px; overflow-y: auto; column-count: 5; column-gap: 1rem"
+                  >
+                    @for (campo of camposEnCenso.sort(); track campo; let i = $index) {
+                      <div class="mb-2" style="break-inside: avoid">
+                        <span class="badge bg-success px-3 py-2 d-inline-flex align-items-center gap-2 w-100">
+                          <i class="fas fa-map-marker-alt"></i>
+                          <span>{{ campo }}</span>
+                        </span>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <span class="text-muted">No hay campos registrados</span>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Filtros -->
         <div class="card-body">
           <div class="row">
             <div class="col-md-4">

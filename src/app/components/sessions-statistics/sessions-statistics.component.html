@@ -15,12 +15,34 @@
 
   <!-- Charts Section -->
   <div class="charts-section" *ngIf="sessions.length > 0">
+    <!-- Entity Distribution (Usuario vs Congregación) -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h4 class="chart-title">
+          <i class="fas fa-users"></i>
+          Usuarios Activos vs Congregaciones Activas
+        </h4>
+      </div>
+      <div class="chart-container">
+        <ngx-charts-pie-chart
+          [results]="entityChartData"
+          [view]="view"
+          [legend]="showLegend"
+          [legendPosition]="legendPosition"
+          [labels]="showLabels"
+          [doughnut]="isDoughnut"
+          (select)="onSelect($event)"
+        >
+        </ngx-charts-pie-chart>
+      </div>
+    </div>
+
     <!-- Device Distribution -->
     <div class="chart-card">
       <div class="chart-header">
         <h4 class="chart-title">
           <i class="fas fa-chart-pie"></i>
-          Distribución por Dispositivo
+          Distribución por Dispositivo - Activos
         </h4>
       </div>
       <div class="chart-container">
@@ -42,7 +64,7 @@
       <div class="chart-header">
         <h4 class="chart-title">
           <i class="fas fa-chart-bar"></i>
-          Top 5 Países
+          Top 5 Países - Sesiones Activas
         </h4>
       </div>
       <div class="chart-container">
@@ -65,7 +87,7 @@
       <div class="chart-header">
         <h4 class="chart-title">
           <i class="fas fa-globe"></i>
-          Navegadores Más Usados
+          Navegadores Más Usados - Activos
         </h4>
       </div>
       <div class="chart-container">

@@ -6,10 +6,10 @@
         <i class="fas fa-users-cog"></i>
         <h3 class="title">Sesiones Activas</h3>
       </div>
-      <div class="counter-badge" [ngClass]="totalSessions > 0 ? 'active' : 'inactive'">
+      <div class="counter-badge" [ngClass]="activeNowCount > 0 ? 'active' : 'inactive'">
         <i class="fas fa-circle pulse-dot"></i>
-        <span class="count">{{ totalSessions }}</span>
-        <span class="label">{{ totalSessions === 1 ? 'Usuario' : 'Usuarios' }}</span>
+        <span class="count">{{ activeNowCount }}</span>
+        <span class="label">{{ activeNowCount === 1 ? 'Activo' : 'Activos' }}</span>
       </div>
     </div>
   </div>
@@ -46,7 +46,126 @@
       <h4>Detalle de Sesiones</h4>
     </div>
 
-    <div class="table-responsive">
+    <!-- Vista de Cards para móviles y tablets -->
+    <div class="sessions-cards d-lg-none">
+      <div class="session-card" *ngFor="let session of sortedSessions">
+        <!-- Header de la card -->
+        <div class="card-header">
+          <div class="user-section">
+            <div class="user-avatar" [ngClass]="isUsuario(session) ? 'avatar-usuario' : 'avatar-congregacion'">
+              <i class="fas" [ngClass]="getEntidadIcon(session)"></i>
+            </div>
+            <div class="user-details">
+              <h5>{{ getNombreEntidad(session) }}</h5>
+              <p class="email"><i class="fas fa-envelope"></i> {{ getEmailEntidad(session) }}</p>
+              <span class="badge" [ngClass]="isUsuario(session) ? 'badge-primary' : 'badge-info'">
+                {{ isUsuario(session) ? 'Usuario' : 'Congregación' }}
+              </span>
+            </div>
+          </div>
+          <span class="status-indicator" [ngClass]="getStatusClass(session.timestamps?.lastActivityAt || '')">
+            <i class="fas fa-circle"></i>
+          </span>
+        </div>
+
+        <!-- Body de la card -->
+        <div class="card-body">
+          <!-- Congregación -->
+          <div class="card-section" *ngIf="isUsuario(session) && getCongregacionUsuario(session) as cong">
+            <div class="section-title">
+              <i class="fas fa-home"></i>
+              <span>Congregación</span>
+            </div>
+            <div class="section-content">
+              <div *ngIf="cong.pais !== 'N/A'" class="info-item"><i class="fas fa-flag"></i> {{ cong.pais }}</div>
+              <div *ngIf="cong.nombre !== 'N/A'" class="info-item"><i class="fas fa-home"></i> {{ cong.nombre }}</div>
+              <div *ngIf="cong.campo !== 'N/A'" class="info-item">
+                <i class="fas fa-map-marker-alt"></i> {{ cong.campo }}
+              </div>
+            </div>
+          </div>
+
+          <div class="card-section" *ngIf="isCongregacion(session)">
+            <div class="section-title">
+              <i class="fas fa-home"></i>
+              <span>Congregación</span>
+            </div>
+            <div class="section-content">
+              <div class="info-item"><i class="fas fa-flag"></i> {{ getPaisCongregacion(session) }}</div>
+              <div class="info-item text-muted"><i class="fas fa-home"></i> Inicio de sesión como congregación</div>
+            </div>
+          </div>
+
+          <!-- Ubicación -->
+          <div class="card-section">
+            <div class="section-title">
+              <i class="fas fa-globe"></i>
+              <span>Ubicación Actual</span>
+            </div>
+            <div class="section-content">
+              <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <strong
+                  >{{ session.sessionLocation?.ciudad || 'Desconocida' }},
+                  {{ session.sessionLocation?.pais || 'Desconocido' }}</strong
+                >
+              </div>
+              <div class="info-item" *ngIf="session.network?.ip">
+                <i class="fas fa-network-wired"></i> {{ session.network.ip }}
+              </div>
+              <div class="info-item" *ngIf="session.network?.isp">
+                <i class="fas fa-wifi"></i> {{ session.network.isp }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Dispositivo -->
+          <div class="card-section">
+            <div class="section-title">
+              <i class="fas fa-mobile-alt"></i>
+              <span>Dispositivo</span>
+            </div>
+            <div class="section-content">
+              <div class="device-info-card">
+                <div class="device-icon" [ngClass]="'device-' + (session.device?.tipoDispositivo || 'desktop')">
+                  <i class="fas" [ngClass]="getDeviceIcon(session.device?.tipoDispositivo || 'desktop')"></i>
+                </div>
+                <div class="device-details">
+                  <strong>{{ session.device?.navegador || 'Desconocido' }}</strong>
+                  <small>{{ session.device?.so || 'Desconocido' }}</small>
+                  <span class="badge badge-sm" [ngClass]="'badge-' + (session.device?.tipoDispositivo || 'desktop')">
+                    {{ session.device?.tipoDispositivo || 'desktop' | titlecase }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actividad -->
+          <div class="card-section">
+            <div class="section-title">
+              <i class="fas fa-clock"></i>
+              <span>Actividad</span>
+            </div>
+            <div class="section-content">
+              <div class="info-item">
+                <span class="time-badge" [ngClass]="getActivityBadgeClass(session.timestamps?.lastActivityAt || '')">
+                  <i class="fas fa-clock"></i>
+                  {{ getTimeAgo(session.timestamps?.lastActivityAt || '') }}
+                </span>
+              </div>
+              <div class="info-item text-muted">
+                <i class="fas fa-calendar"></i>
+                Inicio: {{ session.timestamps?.createdAt || '' | date: 'short' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista de tabla para desktop -->
+    <div class="table-responsive d-none d-lg-block">
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
@@ -92,13 +211,12 @@
             <!-- Congregación (solo para usuarios) -->
             <td>
               <div class="congregacion-cell">
-                <img src="assets/images/escudo-CMI.png" alt="Escudo" class="congregacion-logo-small" />
                 <div class="congregacion-info">
                   <!-- Usuario: mostrar congregacion donde pertenece -->
                   <ng-container *ngIf="isUsuario(session) && getCongregacionUsuario(session) as cong">
                     <div *ngIf="cong.pais !== 'N/A'" class="info-row"><i class="fas fa-flag"></i> {{ cong.pais }}</div>
                     <div *ngIf="cong.nombre !== 'N/A'" class="info-row">
-                      <i class="fas fa-church"></i> {{ cong.nombre }}
+                      <i class="fas fa-home"></i> {{ cong.nombre }}
                     </div>
                     <div *ngIf="cong.campo !== 'N/A'" class="info-row">
                       <i class="fas fa-map-marker-alt"></i> {{ cong.campo }}
@@ -109,7 +227,7 @@
                   <ng-container *ngIf="isCongregacion(session)">
                     <div class="info-row"><i class="fas fa-flag"></i> {{ getPaisCongregacion(session) }}</div>
                     <div class="info-row text-muted">
-                      <i class="fas fa-church"></i> Inicio de sesión como congregación
+                      <i class="fas fa-home"></i> Inicio de sesión como congregación
                     </div>
                   </ng-container>
                 </div>
@@ -125,6 +243,9 @@
                     >{{ session.sessionLocation?.ciudad || 'Desconocida' }},
                     {{ session.sessionLocation?.pais || 'Desconocido' }}</strong
                   >
+                </div>
+                <div class="info-row text-muted" *ngIf="session.network?.ip">
+                  <i class="fas fa-network-wired"></i> {{ session.network.ip }}
                 </div>
                 <div class="info-row text-muted" *ngIf="session.network?.isp">
                   <i class="fas fa-wifi"></i> {{ session.network.isp }}
