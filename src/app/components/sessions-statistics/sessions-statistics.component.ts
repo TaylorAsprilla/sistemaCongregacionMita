@@ -66,9 +66,14 @@ export class SessionsStatisticsComponent implements OnChanges {
     // Contar sesiones actualmente activas usando el campo del backend
     const activeNow = this.sessions.filter((s) => s.isCurrentlyActive).length;
 
-    // Contar por tipo de entidad
-    const usuariosCount = this.sessions.filter((s) => s.entidad.tipo === 'usuario').length;
-    const congregacionesCount = this.sessions.filter((s) => s.entidad.tipo === 'congregacion').length;
+    // Contar usuarios únicos (por ID único)
+    const uniqueUsuarios = new Set(this.sessions.filter((s) => s.entidad.tipo === 'usuario').map((s) => s.entidad.id))
+      .size;
+
+    // Contar congregaciones únicas (por ID único)
+    const uniqueCongregaciones = new Set(
+      this.sessions.filter((s) => s.entidad.tipo === 'congregacion').map((s) => s.entidad.id),
+    ).size;
 
     // Contar por tipo de dispositivo
     const desktopCount = this.sessions.filter((s) => s.device.tipoDispositivo === 'desktop').length;
@@ -94,13 +99,13 @@ export class SessionsStatisticsComponent implements OnChanges {
       },
       {
         title: 'Usuarios',
-        value: usuariosCount,
+        value: uniqueUsuarios,
         icon: 'fa-user',
         color: '#667eea',
       },
       {
         title: 'Congregaciones',
-        value: congregacionesCount,
+        value: uniqueCongregaciones,
         icon: 'fa-home',
         color: '#06b6d4',
       },
@@ -135,20 +140,21 @@ export class SessionsStatisticsComponent implements OnChanges {
    * Genera datos para los gráficos
    */
   private generateChartData(): void {
-    // Gráfico por tipo de entidad (Usuario vs Congregación)
-    const entityCounts = this.sessions.reduce(
-      (acc, session) => {
-        const type = session.entidad.tipo === 'usuario' ? 'Usuarios' : 'Congregaciones';
-        acc[type] = (acc[type] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
+    // Gráfico por tipo de entidad (Usuario vs Congregación) - Conteo único por ID
+    const uniqueUsuarios = new Set(this.sessions.filter((s) => s.entidad.tipo === 'usuario').map((s) => s.entidad.id))
+      .size;
 
-    this.entityChartData = Object.entries(entityCounts).map(([name, value]) => ({
-      name,
-      value,
-    }));
+    const uniqueCongregaciones = new Set(
+      this.sessions.filter((s) => s.entidad.tipo === 'congregacion').map((s) => s.entidad.id),
+    ).size;
+
+    this.entityChartData = [];
+    if (uniqueUsuarios > 0) {
+      this.entityChartData.push({ name: 'Usuarios', value: uniqueUsuarios });
+    }
+    if (uniqueCongregaciones > 0) {
+      this.entityChartData.push({ name: 'Congregaciones', value: uniqueCongregaciones });
+    }
 
     // Gráfico por tipo de dispositivo
     const deviceCounts = this.sessions.reduce(
