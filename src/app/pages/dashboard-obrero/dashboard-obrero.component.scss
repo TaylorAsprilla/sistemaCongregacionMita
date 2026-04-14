@@ -180,8 +180,20 @@
 
     .kpis-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
+
+      @media (max-width: 1400px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (max-width: 992px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (max-width: 576px) {
+        grid-template-columns: 1fr;
+      }
     }
   }
 
@@ -225,6 +237,82 @@
         font-weight: 700;
         color: #2f5597;
         line-height: 1;
+      }
+    }
+
+    // Estilos específicos para cards de estado
+    &.active-card {
+      mat-card-header {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        border-bottom: 2px solid rgba(46, 125, 50, 0.3);
+
+        mat-card-title {
+          color: #2e7d32;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+
+      mat-card-content .kpi-value {
+        color: #2e7d32;
+      }
+    }
+
+    &.inactive-card {
+      mat-card-header {
+        background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+        border-bottom: 2px solid rgba(198, 40, 40, 0.3);
+
+        mat-card-title {
+          color: #c62828;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+
+      mat-card-content .kpi-value {
+        color: #c62828;
+      }
+    }
+
+    &.transcended-card {
+      mat-card-header {
+        background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        border-bottom: 2px solid rgba(123, 31, 162, 0.3);
+
+        mat-card-title {
+          color: #7b1fa2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+
+      mat-card-content .kpi-value {
+        color: #7b1fa2;
       }
     }
   }
@@ -792,12 +880,45 @@
               background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
               color: #2e7d32;
               border: 1px solid #81c784;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+
+              mat-icon {
+                font-size: 14px;
+                width: 14px;
+                height: 14px;
+              }
             }
 
             &.inactive-chip {
               background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
               color: #c62828;
               border: 1px solid #ef9a9a;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+
+              mat-icon {
+                font-size: 14px;
+                width: 14px;
+                height: 14px;
+              }
+            }
+
+            &.transcended-chip {
+              background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+              color: #7b1fa2;
+              border: 1px solid #ce93d8;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+
+              mat-icon {
+                font-size: 14px;
+                width: 14px;
+                height: 14px;
+              }
             }
           }
         }

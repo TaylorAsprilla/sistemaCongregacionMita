@@ -295,6 +295,21 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     return this.usuariosFiltrados().length;
   });
 
+  totalActivos = computed(() => {
+    const usuarios = this.usuariosFiltrados();
+    return usuarios.filter((u) => u.estado === 'ACTIVO').length;
+  });
+
+  totalEliminados = computed(() => {
+    const usuarios = this.usuariosFiltrados();
+    return usuarios.filter((u) => u.estado === 'ELIMINADO').length;
+  });
+
+  totalTranscendidos = computed(() => {
+    const usuarios = this.usuariosFiltrados();
+    return usuarios.filter((u) => u.estado === 'TRANSCENDIO').length;
+  });
+
   constructor() {
     // Inicializar formulario de filtros
     this.filtrosForm = this.fb.group({
@@ -372,7 +387,8 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
         case 'congregacion':
           return (item.usuarioCongregacionCongregacion?.[0]?.congregacion || '').toLowerCase();
         case 'estado':
-          return item.estado ? 1 : 0;
+          const estadoOrder: Record<string, number> = { ACTIVO: 0, ELIMINADO: 1, TRANSCENDIO: 2 };
+          return estadoOrder[item.estado] ?? 999;
         default:
           return '';
       }

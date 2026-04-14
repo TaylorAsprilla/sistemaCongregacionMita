@@ -22,7 +22,7 @@ export interface UsuarioCompleto {
   telefonoCasa?: string;
   fechaNacimiento?: string;
   esJoven: boolean;
-  estado: boolean;
+  estado: string; // "ACTIVO" | "ELIMINADO" | "TRANSCENDIO"
   direccion?: string;
   ciudadDireccion?: string;
   paisDireccion?: string;
@@ -216,7 +216,7 @@ export interface FiltrosUsuarios {
   ministerio_id?: number | null;
   congregacion_id?: number | null;
   ciudad?: string;
-  estado?: boolean | null;
+  estado?: string | null; // "ACTIVO" | "ELIMINADO" | "TRANSCENDIO"
   edadMin?: number | null;
   edadMax?: number | null;
 }

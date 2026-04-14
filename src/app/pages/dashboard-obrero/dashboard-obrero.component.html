@@ -129,13 +129,14 @@
                 </mat-select>
               </mat-form-field>
 
-              <!-- Estado (activo/inactivo) -->
+              <!-- Estado del Feligrés -->
               <mat-form-field appearance="outline">
-                <mat-label>Estado</mat-label>
+                <mat-label>Estado del Feligrés</mat-label>
                 <mat-select formControlName="estado">
                   <mat-option [value]="null">Todos</mat-option>
-                  <mat-option [value]="true">Activo</mat-option>
-                  <mat-option [value]="false">Inactivo</mat-option>
+                  <mat-option value="ACTIVO">Activos</mat-option>
+                  <mat-option value="ELIMINADO">Dados de Baja</mat-option>
+                  <mat-option value="TRANSCENDIO">Trascendidos</mat-option>
                 </mat-select>
               </mat-form-field>
 
@@ -219,6 +220,45 @@
           </mat-card-header>
           <mat-card-content>
             <div class="kpi-value">{{ totalJovenes() }}</div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Miembros Activos -->
+        <mat-card class="kpi-card-main active-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>check_circle</mat-icon>
+              Miembros Activos
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="kpi-value">{{ totalActivos().toLocaleString() }}</div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Dados de Baja -->
+        <mat-card class="kpi-card-main inactive-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>cancel</mat-icon>
+              Dados de Baja
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="kpi-value">{{ totalEliminados().toLocaleString() }}</div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- En el Señor -->
+        <mat-card class="kpi-card-main transcended-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>cloud</mat-icon>
+              Transcendidos
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="kpi-value">{{ totalTranscendidos().toLocaleString() }}</div>
           </mat-card-content>
         </mat-card>
       </div>
@@ -597,9 +637,24 @@
               <ng-container matColumnDef="estado">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
                 <td mat-cell *matCellDef="let usuario">
-                  <mat-chip [class.active-chip]="usuario.estado" [class.inactive-chip]="!usuario.estado">
-                    {{ usuario.estado ? 'Activo' : 'Inactivo' }}
-                  </mat-chip>
+                  @if (usuario.estado === 'ACTIVO') {
+                    <mat-chip class="active-chip">
+                      <mat-icon>check_circle</mat-icon>
+                      Activo
+                    </mat-chip>
+                  } @else if (usuario.estado === 'ELIMINADO') {
+                    <mat-chip class="inactive-chip">
+                      <mat-icon>cancel</mat-icon>
+                      Dado de Baja
+                    </mat-chip>
+                  } @else if (usuario.estado === 'TRANSCENDIO') {
+                    <mat-chip class="transcended-chip">
+                      <mat-icon>cloud</mat-icon>
+                      En el Señor
+                    </mat-chip>
+                  } @else {
+                    <mat-chip>{{ usuario.estado || 'N/A' }}</mat-chip>
+                  }
                 </td>
               </ng-container>
 
