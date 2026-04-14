@@ -32,6 +32,7 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
   activeSessions: ActiveSession[] = [];
   sortedSessions: ActiveSession[] = [];
   totalSessions: number = 0;
+  activeNowCount: number = 0; // Sesiones activas ahora
   isLoading: boolean = true;
   hasError: boolean = false;
 
@@ -97,6 +98,7 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
       this.activeSessions = response.sessions;
       this.sortedSessions = [...response.sessions];
       this.totalSessions = response.totalSessions;
+      this.activeNowCount = response.currentlyActiveSessions; // Sesiones activas ahora
       this.isLoading = false;
       this.hasError = false;
 

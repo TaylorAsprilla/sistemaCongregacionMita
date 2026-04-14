@@ -63,8 +63,18 @@ export class SessionsStatisticsComponent implements OnChanges {
   private calculateStatistics(): void {
     const total = this.sessions.length;
 
-    // Contar sesiones actualmente activas usando el campo del backend
-    const activeNow = this.sessions.filter((s) => s.isCurrentlyActive).length;
+    // Contar usuarios únicos activos (isCurrentlyActive = true)
+    const activeUsuarios = new Set(
+      this.sessions.filter((s) => s.isCurrentlyActive && s.entidad.tipo === 'usuario').map((s) => s.entidad.id),
+    ).size;
+
+    // Contar congregaciones únicas activas (isCurrentlyActive = true)
+    const activeCongregaciones = new Set(
+      this.sessions.filter((s) => s.isCurrentlyActive && s.entidad.tipo === 'congregacion').map((s) => s.entidad.id),
+    ).size;
+
+    // Total de entidades únicas activas (usuarios + congregaciones)
+    const totalActiveEntities = activeUsuarios + activeCongregaciones;
 
     // Contar usuarios únicos (por ID único)
     const uniqueUsuarios = new Set(this.sessions.filter((s) => s.entidad.tipo === 'usuario').map((s) => s.entidad.id))
@@ -75,13 +85,20 @@ export class SessionsStatisticsComponent implements OnChanges {
       this.sessions.filter((s) => s.entidad.tipo === 'congregacion').map((s) => s.entidad.id),
     ).size;
 
-    // Contar por tipo de dispositivo
-    const desktopCount = this.sessions.filter((s) => s.device.tipoDispositivo === 'desktop').length;
-    const mobileCount = this.sessions.filter((s) => s.device.tipoDispositivo === 'mobile').length;
-    const tabletCount = this.sessions.filter((s) => s.device.tipoDispositivo === 'tablet').length;
+    // Contar por tipo de dispositivo (solo sesiones activas)
+    const desktopCount = this.sessions.filter(
+      (s) => s.isCurrentlyActive && s.device.tipoDispositivo === 'desktop',
+    ).length;
+    const mobileCount = this.sessions.filter(
+      (s) => s.isCurrentlyActive && s.device.tipoDispositivo === 'mobile',
+    ).length;
+    const tabletCount = this.sessions.filter(
+      (s) => s.isCurrentlyActive && s.device.tipoDispositivo === 'tablet',
+    ).length;
 
-    // Contar países únicos
-    const uniqueCountries = new Set(this.sessions.map((s) => s.sessionLocation.pais)).size;
+    // Contar países únicos (solo sesiones activas)
+    const uniqueCountries = new Set(this.sessions.filter((s) => s.isCurrentlyActive).map((s) => s.sessionLocation.pais))
+      .size;
 
     this.statsCards = [
       {
@@ -92,43 +109,46 @@ export class SessionsStatisticsComponent implements OnChanges {
       },
       {
         title: 'Activos Ahora',
-        value: activeNow,
+        value: totalActiveEntities,
         icon: 'fa-circle',
         color: '#4ade80',
-        percentage: total > 0 ? Math.round((activeNow / total) * 100) : 0,
+        percentage:
+          uniqueUsuarios + uniqueCongregaciones > 0
+            ? Math.round((totalActiveEntities / (uniqueUsuarios + uniqueCongregaciones)) * 100)
+            : 0,
       },
       {
-        title: 'Usuarios',
-        value: uniqueUsuarios,
+        title: 'Usuarios Activos',
+        value: activeUsuarios,
         icon: 'fa-user',
         color: '#667eea',
       },
       {
-        title: 'Congregaciones',
-        value: uniqueCongregaciones,
+        title: 'Congregaciones Activas',
+        value: activeCongregaciones,
         icon: 'fa-home',
         color: '#06b6d4',
       },
       {
-        title: 'Desktop',
+        title: 'Desktop Activos',
         value: desktopCount,
         icon: 'fa-desktop',
         color: '#3b82f6',
       },
       {
-        title: 'Móviles',
+        title: 'Móviles Activos',
         value: mobileCount,
         icon: 'fa-mobile-alt',
         color: '#8b5cf6',
       },
       {
-        title: 'Tablets',
+        title: 'Tablets Activos',
         value: tabletCount,
         icon: 'fa-tablet-alt',
         color: '#ec4899',
       },
       {
-        title: 'Países',
+        title: 'Países Activos',
         value: uniqueCountries,
         icon: 'fa-globe',
         color: '#f59e0b',
@@ -140,65 +160,72 @@ export class SessionsStatisticsComponent implements OnChanges {
    * Genera datos para los gráficos
    */
   private generateChartData(): void {
-    // Gráfico por tipo de entidad (Usuario vs Congregación) - Conteo único por ID
-    const uniqueUsuarios = new Set(this.sessions.filter((s) => s.entidad.tipo === 'usuario').map((s) => s.entidad.id))
-      .size;
+    // Gráfico por tipo de entidad (Usuario vs Congregación) - Conteo único de activos por ID
+    const activeUsuarios = new Set(
+      this.sessions.filter((s) => s.isCurrentlyActive && s.entidad.tipo === 'usuario').map((s) => s.entidad.id),
+    ).size;
 
-    const uniqueCongregaciones = new Set(
-      this.sessions.filter((s) => s.entidad.tipo === 'congregacion').map((s) => s.entidad.id),
+    const activeCongregaciones = new Set(
+      this.sessions.filter((s) => s.isCurrentlyActive && s.entidad.tipo === 'congregacion').map((s) => s.entidad.id),
     ).size;
 
     this.entityChartData = [];
-    if (uniqueUsuarios > 0) {
-      this.entityChartData.push({ name: 'Usuarios', value: uniqueUsuarios });
+    if (activeUsuarios > 0) {
+      this.entityChartData.push({ name: 'Usuarios Activos', value: activeUsuarios });
     }
-    if (uniqueCongregaciones > 0) {
-      this.entityChartData.push({ name: 'Congregaciones', value: uniqueCongregaciones });
+    if (activeCongregaciones > 0) {
+      this.entityChartData.push({ name: 'Congregaciones Activas', value: activeCongregaciones });
     }
 
-    // Gráfico por tipo de dispositivo
-    const deviceCounts = this.sessions.reduce(
-      (acc, session) => {
-        const type = this.getDeviceTypeLabel(session.device.tipoDispositivo);
-        acc[type] = (acc[type] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
+    // Gráfico por tipo de dispositivo (solo sesiones activas)
+    const deviceCounts = this.sessions
+      .filter((s) => s.isCurrentlyActive)
+      .reduce(
+        (acc, session) => {
+          const type = this.getDeviceTypeLabel(session.device.tipoDispositivo);
+          acc[type] = (acc[type] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
     this.deviceChartData = Object.entries(deviceCounts).map(([name, value]) => ({
       name,
       value,
     }));
 
-    // Gráfico por país (top 5)
-    const countryCounts = this.sessions.reduce(
-      (acc, session) => {
-        const country = session.sessionLocation.pais;
-        if (country && country !== 'N/A') {
-          acc[country] = (acc[country] || 0) + 1;
-        }
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
+    // Gráfico por país (top 5 - solo sesiones activas)
+    const countryCounts = this.sessions
+      .filter((s) => s.isCurrentlyActive)
+      .reduce(
+        (acc, session) => {
+          const country = session.sessionLocation.pais;
+          if (country && country !== 'N/A') {
+            acc[country] = (acc[country] || 0) + 1;
+          }
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
     this.countryChartData = Object.entries(countryCounts)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
       .map(([name, value]) => ({ name, value }));
 
-    // Gráfico por navegador (top 5)
-    const browserCounts = this.sessions.reduce(
-      (acc, session) => {
-        const browser = session.device.navegador;
-        if (browser) {
-          acc[browser] = (acc[browser] || 0) + 1;
-        }
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
+    // Gráfico por navegador (top 5 - solo sesiones activas)
+    const browserCounts = this.sessions
+      .filter((s) => s.isCurrentlyActive)
+      .reduce(
+        (acc, session) => {
+          const browser = session.device.navegador;
+          if (browser) {
+            acc[browser] = (acc[browser] || 0) + 1;
+          }
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
     this.browserChartData = Object.entries(browserCounts)
       .sort(([, a], [, b]) => b - a)
