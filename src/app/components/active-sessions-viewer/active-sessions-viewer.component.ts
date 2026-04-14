@@ -93,8 +93,6 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
    * Actualiza los datos de sesiones
    */
   private updateSessionsData(response: ActiveSessionsResponse): void {
-    console.log('📊 Sesiones activas recibidas:', response);
-
     if (response.ok && response.sessions) {
       this.activeSessions = response.sessions;
       this.sortedSessions = [...response.sessions];
