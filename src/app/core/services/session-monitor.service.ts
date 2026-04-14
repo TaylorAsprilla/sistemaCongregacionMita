@@ -67,17 +67,14 @@ export class SessionMonitorService implements OnDestroy {
   startMonitoring(intervalMs: number = this.CHECK_INTERVAL_MS): void {
     // Si ya está monitoreando, no iniciar otro
     if (this.isMonitoring) {
-      console.log('⚠️ SessionMonitor: Ya hay un monitoreo activo');
       return;
     }
 
     // Solo monitorear si hay token
     if (!this.token) {
-      console.log('⚠️ SessionMonitor: No hay token, no se inicia monitoreo');
       return;
     }
 
-    console.log(`✅ SessionMonitor: Iniciando monitoreo cada ${intervalMs / 1000}s`);
     this.isMonitoring = true;
     this.sessionWasActive = true;
 
@@ -96,7 +93,6 @@ export class SessionMonitorService implements OnDestroy {
       .subscribe({
         next: (response: any) => {
           if (response?.ok || response?.success) {
-            console.log('✅ SessionMonitor: Sesión activa');
             this.sessionWasActive = true;
           } else if (response?.sessionClosed) {
             // El backend indica que la sesión fue cerrada remotamente
@@ -119,15 +115,11 @@ export class SessionMonitorService implements OnDestroy {
     this.sessionWasActive = false;
     this.stopMonitoring();
 
-    console.log('🔒 Sesión cerrada remotamente. Data recibida:', data);
-
     // Extraer información del nuevo inicio de sesión
     // El data puede venir directamente o dentro de error.error
     const newSessionInfo = data?.newSessionInfo || data?.error?.newSessionInfo || {};
     const location = newSessionInfo.location || {};
     const device = newSessionInfo.device || {};
-
-    console.log('📊 newSessionInfo extraído:', newSessionInfo);
 
     // Ubicación
     const ciudad = location.ciudad || 'Ubicación desconocida';
@@ -211,7 +203,6 @@ export class SessionMonitorService implements OnDestroy {
    */
   stopMonitoring(): void {
     if (this.monitoringSubscription) {
-      console.log('🛑 SessionMonitor: Deteniendo monitoreo');
       this.monitoringSubscription.unsubscribe();
       this.monitoringSubscription = null;
       this.isMonitoring = false;
