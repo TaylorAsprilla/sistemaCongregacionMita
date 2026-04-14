@@ -173,7 +173,6 @@ export class UsuarioService {
         )
         .subscribe({
           next: () => {
-            console.log('✅ Sesión cerrada en servidor');
             this.performLocalLogout();
           },
           error: () => {

@@ -7,6 +7,7 @@ import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UserSessionService } from 'src/app/services/user-session/user-session.service';
+import { SessionMonitorService } from 'src/app/core/services/session-monitor.service';
 import Swal from 'sweetalert2';
 import { NgClass } from '@angular/common';
 import { NumeroMitaResponse, DatosQrLogin } from 'src/app/core/interfaces/usuario.interface';
@@ -23,6 +24,7 @@ export default class LoginComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);
   private usuarioService = inject(UsuarioService);
   private userSessionService = inject(UserSessionService);
+  private sessionMonitorService = inject(SessionMonitorService);
   private ngZone = inject(NgZone);
   private activatedRoute = inject(ActivatedRoute);
 
@@ -83,6 +85,78 @@ export default class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // PASO 1: Verificar si hay sesiones activas antes de hacer login
+    this.sessionMonitorService.checkActiveSessionsBeforeLogin(this.loginForm.value).subscribe({
+      next: (response: any) => {
+        if (response.ok && response.hasActiveSessions) {
+          // Hay sesiones activas, mostrar modal de confirmación
+          this.mostrarModalCerrarSesionesActivas(response.activeSessions, response.newLocation);
+        } else {
+          // No hay sesiones activas, proceder con login normal
+          this.procederConLogin();
+        }
+      },
+      error: (err) => {
+        // Si falla la verificación, proceder con login normal
+        console.warn('⚠️ No se pudo verificar sesiones activas, procediendo con login', err);
+        this.procederConLogin();
+      },
+    });
+  }
+
+  /**
+   * Muestra modal de confirmación para cerrar sesiones activas
+   */
+  private mostrarModalCerrarSesionesActivas(sesiones: any[], nuevaUbicacion: any): void {
+    const sesionesHTML = sesiones
+      .map((sesion: any) => {
+        const dispositivo = sesion.device?.tipoDispositivo || 'desconocido';
+        const ubicacion = `${sesion.sessionLocation?.ciudad || 'Desconocida'}, ${sesion.sessionLocation?.pais || 'Desconocido'}`;
+        const icono = dispositivo === 'mobile' ? '📱' : dispositivo === 'tablet' ? '📲' : '💻';
+        return `
+          <div style="text-align: left; padding: 8px; margin: 4px 0; background: #f8f9fa; border-left: 3px solid #667eea; border-radius: 4px;">
+            ${icono} <strong>${sesion.device?.navegador || 'Navegador'}</strong> - ${sesion.device?.so || 'SO desconocido'}<br>
+            <small style="color: #6c757d;">📍 ${ubicacion}</small>
+          </div>
+        `;
+      })
+      .join('');
+
+    Swal.fire({
+      title: '⚠️ Sesiones Activas Detectadas',
+      html: `
+        <div style="text-align: left;">
+          <p><strong>Tienes ${sesiones.length} sesión(es) activa(s) en:</strong></p>
+          ${sesionesHTML}
+          <br>
+          <p style="color: #dc3545;"><strong>¿Deseas cerrar estas sesiones y continuar?</strong></p>
+          <p style="font-size: 0.9em; color: #6c757d;">
+            Al confirmar, todas las sesiones activas se cerrarán y solo permanecerá esta nueva sesión.
+          </p>
+        </div>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#667eea',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, cerrar sesiones',
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Usuario confirmó, proceder con login (esto cerrará las otras sesiones en el backend)
+        this.procederConLogin(true, nuevaUbicacion);
+      } else {
+        // Usuario canceló
+        this.isLoginFormSubmitted = false;
+      }
+    });
+  }
+
+  /**
+   * Procede con el login normal
+   */
+  private procederConLogin(cerrarOtrasSesiones: boolean = false, nuevaUbicacion?: any): void {
     // Proceder con el login
     this.usuarioService.login(this.loginForm.value).subscribe(
       (login: any) => {

@@ -12,8 +12,7 @@ export interface ActiveSessionsResponse {
  */
 export interface ActiveSession {
   sessionId: string;
-  user: ActiveSessionUser;
-  congregacion: ActiveSessionCongregacion;
+  entidad: ActiveSessionEntidad;
   sessionLocation: ActiveSessionLocation;
   device: ActiveSessionDevice;
   network: ActiveSessionNetwork;
@@ -21,9 +20,15 @@ export interface ActiveSession {
 }
 
 /**
+ * Tipo de entidad que puede iniciar sesión (Usuario o Congregación)
+ */
+export type ActiveSessionEntidad = ActiveSessionUsuario | ActiveSessionCongregacion;
+
+/**
  * Información del usuario en la sesión activa
  */
-export interface ActiveSessionUser {
+export interface ActiveSessionUsuario {
+  tipo: 'usuario';
   id: number;
   primerNombre: string;
   segundoNombre: string;
@@ -32,15 +37,23 @@ export interface ActiveSessionUser {
   nombreCompleto: string;
   login: string;
   email: string;
+  congregacion: {
+    pais: string;
+    nombre: string;
+    campo: string;
+  };
 }
 
 /**
- * Información de congregación del usuario
+ * Información de congregación como entidad de sesión
  */
 export interface ActiveSessionCongregacion {
+  tipo: 'congregacion';
+  id: number;
+  nombre: string;
+  login: string;
+  email: string;
   pais: string;
-  ciudad: string;
-  campo: string;
 }
 
 /**

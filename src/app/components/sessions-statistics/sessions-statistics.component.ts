@@ -188,6 +188,6 @@ export class SessionsStatisticsComponent implements OnChanges {
    * Manejador de selección en gráficos
    */
   onSelect(event: any): void {
-    console.log('Item clicked', event);
+    // Manejar selección si es necesario
   }
 }

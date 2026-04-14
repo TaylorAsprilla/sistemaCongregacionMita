@@ -226,6 +226,22 @@
           font-size: 1rem;
           color: #667eea;
         }
+
+        &.avatar-usuario {
+          background: linear-gradient(135deg, #e0e7ff 0%, #ddd6fe 100%);
+
+          i {
+            color: #667eea;
+          }
+        }
+
+        &.avatar-congregacion {
+          background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+
+          i {
+            color: #3b82f6;
+          }
+        }
       }
 
       .user-info-compact {

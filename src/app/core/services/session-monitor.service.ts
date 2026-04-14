@@ -32,6 +32,7 @@ export class SessionMonitorService implements OnDestroy {
 
   private monitoringSubscription: Subscription | null = null;
   private isMonitoring: boolean = false;
+  private sessionWasActive: boolean = true;
 
   /**
    * Intervalo de verificación en milisegundos (default: 45 segundos)
@@ -66,40 +67,135 @@ export class SessionMonitorService implements OnDestroy {
   startMonitoring(intervalMs: number = this.CHECK_INTERVAL_MS): void {
     // Si ya está monitoreando, no iniciar otro
     if (this.isMonitoring) {
-      console.log('⚠️ SessionMonitor: Ya hay un monitoreo activo');
       return;
     }
 
     // Solo monitorear si hay token
     if (!this.token) {
-      console.log('⚠️ SessionMonitor: No hay token, no se inicia monitoreo');
       return;
     }
 
-    console.log(`✅ SessionMonitor: Iniciando monitoreo cada ${intervalMs / 1000}s`);
     this.isMonitoring = true;
+    this.sessionWasActive = true;
 
     // Crear subscription que verifica periódicamente
     this.monitoringSubscription = interval(intervalMs)
       .pipe(
         switchMap(() => this.checkSession()),
         catchError((error) => {
-          // Si hay un error, el interceptor de sesión lo manejará
-          console.error('❌ SessionMonitor: Error verificando sesión', error);
+          // Si la sesión fue cerrada remotamente (401)
+          if (error.status === 401 && this.sessionWasActive) {
+            this.handleRemoteSessionClosure(error);
+          }
           return [];
         }),
       )
       .subscribe({
         next: (response: any) => {
           if (response?.ok || response?.success) {
-            console.log('✅ SessionMonitor: Sesión activa');
+            this.sessionWasActive = true;
+          } else if (response?.sessionClosed) {
+            // El backend indica que la sesión fue cerrada remotamente
+            this.handleRemoteSessionClosure(response);
           }
         },
         error: (error) => {
-          // Este caso no debería ocurrir gracias al catchError
-          console.error('❌ SessionMonitor: Error inesperado', error);
+          // Verificar si es un cierre remoto de sesión
+          if (error.status === 401 && this.sessionWasActive) {
+            this.handleRemoteSessionClosure(error);
+          }
         },
       });
+  }
+
+  /**
+   * Maneja el caso cuando la sesión fue cerrada remotamente
+   */
+  private handleRemoteSessionClosure(data: any): void {
+    this.sessionWasActive = false;
+    this.stopMonitoring();
+
+    // Extraer información del nuevo inicio de sesión
+    // El data puede venir directamente o dentro de error.error
+    const newSessionInfo = data?.newSessionInfo || data?.error?.newSessionInfo || {};
+    const location = newSessionInfo.location || {};
+    const device = newSessionInfo.device || {};
+
+    // Ubicación
+    const ciudad = location.ciudad || 'Ubicación desconocida';
+    const region = location.region || '';
+    const pais = location.pais || '';
+    let ubicacionCompleta = ciudad;
+    if (region) ubicacionCompleta += `, ${region}`;
+    if (pais) ubicacionCompleta += `, ${pais}`;
+
+    // Dispositivo
+    const navegador = device.navegador || 'Navegador desconocido';
+    const sistemaOperativo = device.so || 'SO desconocido';
+    const tipoDispositivo = device.tipoDispositivo || 'desktop';
+
+    // Icono según tipo de dispositivo
+    const iconoDispositivo = tipoDispositivo === 'mobile' ? '📱' : tipoDispositivo === 'tablet' ? '📲' : '💻';
+
+    // Información adicional (opcional)
+    const ip = newSessionInfo.ip || '';
+    const isp = newSessionInfo.isp || '';
+
+    // Mensaje personalizado del backend (si existe)
+    const mensaje =
+      data?.message || data?.error?.message || 'Tu sesión ha sido cerrada porque iniciaste sesión en otro dispositivo.';
+
+    Swal.fire({
+      title: '🔒 Sesión Cerrada',
+      html: `
+        <div style="text-align: left;">
+          <p><strong>${mensaje}</strong></p>
+          <br>
+
+          <!-- Ubicación -->
+          <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #667eea; margin-bottom: 12px;">
+            <p style="margin: 0;"><strong>📍 Nueva ubicación:</strong></p>
+            <p style="margin: 4px 0; color: #495057;">${ubicacionCompleta}</p>
+          </div>
+
+          <!-- Dispositivo -->
+          <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 4px solid #764ba2; margin-bottom: 12px;">
+            <p style="margin: 0;"><strong>${iconoDispositivo} Dispositivo:</strong></p>
+            <p style="margin: 4px 0; color: #495057;">${navegador} en ${sistemaOperativo}</p>
+          </div>
+
+          ${
+            ip
+              ? `
+          <!-- Información adicional -->
+          <div style="background: #fff3cd; padding: 10px; border-radius: 6px; margin-bottom: 12px;">
+            <p style="margin: 0; font-size: 0.85em; color: #856404;">
+              <strong>IP:</strong> ${ip}${isp ? ` (${isp})` : ''}
+            </p>
+          </div>
+          `
+              : ''
+          }
+
+          <p style="font-size: 0.85em; color: #6c757d; margin-top: 12px;">
+            <em>Nota: La ubicación mostrada es aproximada y se basa en la dirección IP.</em>
+          </p>
+        </div>
+      `,
+      icon: 'warning',
+      confirmButtonColor: '#667eea',
+      confirmButtonText: 'Cerrar',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => {
+      // Limpiar y redirigir al login
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('menu');
+      localStorage.removeItem('permissions');
+      sessionStorage.clear();
+      this.router.navigateByUrl('/login');
+    });
   }
 
   /**
@@ -107,7 +203,6 @@ export class SessionMonitorService implements OnDestroy {
    */
   stopMonitoring(): void {
     if (this.monitoringSubscription) {
-      console.log('🛑 SessionMonitor: Deteniendo monitoreo');
       this.monitoringSubscription.unsubscribe();
       this.monitoringSubscription = null;
       this.isMonitoring = false;
@@ -138,6 +233,29 @@ export class SessionMonitorService implements OnDestroy {
   getActiveSessions(): Observable<ActiveSessionsResponse> {
     const url = `${base_url}/login/active-sessions`;
     return this.httpClient.get<ActiveSessionsResponse>(url, this.headers);
+  }
+
+  /**
+   * Cierra todas las sesiones activas del usuario actual excepto la actual.
+   * Útil para cuando el usuario quiere iniciar sesión en un nuevo dispositivo.
+   *
+   * @returns Observable con la respuesta del servidor
+   */
+  closeOtherSessions(): Observable<any> {
+    const url = `${base_url}/login/close-other-sessions`;
+    return this.httpClient.post(url, {}, this.headers);
+  }
+
+  /**
+   * Verifica si hay sesiones activas para continuar con el login.
+   * Si hay sesiones, retorna la información para mostrar al usuario.
+   *
+   * @param credentials - Credenciales de login (sin hacer login aún)
+   * @returns Observable con información de sesiones activas
+   */
+  checkActiveSessionsBeforeLogin(credentials: { login: string; password: string }): Observable<any> {
+    const url = `${base_url}/login/check-sessions-before-login`;
+    return this.httpClient.post(url, credentials);
   }
 
   /**
