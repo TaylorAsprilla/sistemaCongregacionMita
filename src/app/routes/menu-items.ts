@@ -76,6 +76,7 @@ export enum RUTAS {
 
 export enum ROLES {
   ADMINISTRADOR = 'ADMINISTRADOR',
+  ADMINISTRADOR_PAIS = 'ADMINISTRADOR PAIS',
   SUPERVISOR = 'SUPERVISOR',
   SUPERVISOR_LOCAL = 'SUPERVISOR LOCAL',
   OBRERO_PAIS = 'OBRERO PAÍS',
@@ -402,7 +403,14 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-users',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS, ROLES.OBRERO_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    role: [
+      ROLES.ADMINISTRADOR,
+      ROLES.ADMINISTRADOR_PAIS,
+      ROLES.ASISTENTE_OOTS,
+      ROLES.OBRERO_PAIS,
+      ROLES.OBRERO_CIUDAD,
+      ROLES.OBRERO_CAMPO,
+    ],
     submenu: [],
   },
   {
@@ -411,7 +419,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-chart-bar',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO, ROLES.OBRERO_PAIS],
+    role: [ROLES.ADMINISTRADOR_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO, ROLES.OBRERO_PAIS],
     submenu: [],
   },
   {
@@ -624,6 +632,7 @@ export const ROUTES: RouteInfo[] = [
     extralink: true,
     role: [
       ROLES.ADMINISTRADOR,
+      ROLES.ADMINISTRADOR_PAIS,
       ROLES.SUPERVISOR,
       ROLES.SUPERVISOR_LOCAL,
       ROLES.ASISTENTE_OOTS,
@@ -643,6 +652,7 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     role: [
       ROLES.ADMINISTRADOR,
+      ROLES.ADMINISTRADOR_PAIS,
       ROLES.SUPERVISOR,
       ROLES.SUPERVISOR_LOCAL,
       ROLES.ASISTENTE_OOTS,
@@ -661,6 +671,7 @@ export const ROUTES: RouteInfo[] = [
         extralink: false,
         role: [
           ROLES.ADMINISTRADOR,
+          ROLES.ADMINISTRADOR_PAIS,
           ROLES.SUPERVISOR,
           ROLES.SUPERVISOR_LOCAL,
           ROLES.ASISTENTE_OOTS,

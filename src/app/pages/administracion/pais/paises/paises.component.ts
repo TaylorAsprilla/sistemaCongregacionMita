@@ -5,8 +5,10 @@ import { delay } from 'rxjs/operators';
 import { DivisaModel } from 'src/app/core/models/divisa.model';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { ListarUsuario } from 'src/app/core/interfaces/usuario.interface';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { PaisService } from 'src/app/services/pais/pais.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
@@ -27,6 +29,7 @@ import { FormsModule } from '@angular/forms';
 export class PaisesComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private paisService = inject(PaisService);
+  private usuarioService = inject(UsuarioService);
   private activatedRoute = inject(ActivatedRoute);
   private exportarExcelService = inject(ExportarExcelService);
 
@@ -34,6 +37,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
   paises: CongregacionPaisModel[] = [];
   divisas: DivisaModel[] = [];
   obreros: UsuarioModel[] = [];
+  usuarios: UsuarioModel[] = [];
 
   filtroNombre: string = '';
 
@@ -53,6 +57,11 @@ export class PaisesComponent implements OnInit, OnDestroy {
     this.activatedRoute.data.subscribe((data: { divisas: DivisaModel[]; obrero: UsuarioModel[] }) => {
       this.divisas = data.divisas;
       this.obreros = data.obrero;
+    });
+
+    // Cargar todos los usuarios para buscar administradores
+    this.usuarioService.listarTodosLosUsuarios().subscribe((response: ListarUsuario) => {
+      this.usuarios = response.usuarios;
     });
 
     this.cargarPaises();
@@ -151,6 +160,26 @@ export class PaisesComponent implements OnInit, OnDestroy {
     return nombreObrero;
   }
 
+  buscarAdministrador(idAdministrador: number | undefined): string {
+    if (!idAdministrador) {
+      return 'Sin administrador asignado';
+    }
+
+    let administrador = this.usuarios.find((usuario) => usuario.id === idAdministrador);
+
+    const nombreAdministrador = administrador
+      ? administrador?.primerNombre +
+        ' ' +
+        administrador?.segundoNombre +
+        ' ' +
+        administrador?.primerApellido +
+        ' ' +
+        administrador?.segundoApellido
+      : 'Sin administrador asignado';
+
+    return nombreAdministrador;
+  }
+
   obtenerFiltroNombre(nombre: string) {
     this.filtroNombre = nombre;
   }
@@ -160,6 +189,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
       ID: pais.id,
       Nombre: pais.pais,
       Obrero: this.buscarObrero(pais.idObreroEncargado) || 'N/A',
+      Administrador: this.buscarAdministrador(pais.idAdministrador) || 'N/A',
       Divisa: this.buscarDivisa(pais.idDivisa),
     }));
     this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo);
@@ -197,9 +227,12 @@ export class PaisesComponent implements OnInit, OnDestroy {
 
         const pais = this.normalizeString(getSafeString(country.pais));
         const obrero = this.normalizeString(getSafeString(this.buscarObrero(country.idObreroEncargado)));
+        const administrador = this.normalizeString(getSafeString(this.buscarAdministrador(country.idAdministrador)));
 
         // Filtrar el usuario si alguna de las propiedades contiene el término de búsqueda
-        return pais.includes(lowerFilterTerm) || obrero.includes(lowerFilterTerm);
+        return (
+          pais.includes(lowerFilterTerm) || obrero.includes(lowerFilterTerm) || administrador.includes(lowerFilterTerm)
+        );
       });
     }
   }

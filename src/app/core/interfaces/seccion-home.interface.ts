@@ -18,6 +18,7 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
     logo: 'assets/images/vista-principal/logo-multimedia.png',
     role: [
       ROLES.ADMINISTRADOR,
+      ROLES.ADMINISTRADOR_PAIS,
       ROLES.SUPERVISOR,
       ROLES.SUPERVISOR_LOCAL,
       ROLES.OBRERO_PAIS,
@@ -36,6 +37,7 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
     ruta: `../${RUTAS.CENSO}`,
     role: [
       ROLES.ADMINISTRADOR,
+      ROLES.ADMINISTRADOR_PAIS,
       ROLES.SUPERVISOR,
       ROLES.SUPERVISOR_LOCAL,
       ROLES.OBRERO_PAIS,
@@ -98,6 +100,6 @@ export const generarSeccionHome: SeccionHomeInterface[] = [
     email: '',
     logo: 'assets/images/vista-principal/dashboard.png',
     ruta: `../${RUTAS.DASHBOARD_OBRERO}`,
-    role: [ROLES.ADMINISTRADOR, ROLES.OBRERO_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_PAIS, ROLES.OBRERO_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
   },
 ];

@@ -4,6 +4,7 @@ export class CongregacionPaisModel {
     public pais: string,
     public estado: boolean,
     public idDivisa?: number,
-    public idObreroEncargado?: number
+    public idObreroEncargado?: number,
+    public idAdministrador?: number,
   ) {}
 }

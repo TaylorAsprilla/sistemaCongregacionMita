@@ -160,6 +160,7 @@ export const childRoutes: Routes = [
       titulo: 'Censo',
       role: [
         ROLES.ADMINISTRADOR,
+        ROLES.ADMINISTRADOR_PAIS,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
         ROLES.OBRERO_PAIS,
@@ -556,6 +557,7 @@ export const childRoutes: Routes = [
     data: {
       role: [
         ROLES.ADMINISTRADOR,
+        ROLES.ADMINISTRADOR_PAIS,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
         ROLES.OBRERO_PAIS,
@@ -573,6 +575,7 @@ export const childRoutes: Routes = [
       titulo: 'Dashboard de Obrero',
       role: [
         ROLES.ADMINISTRADOR,
+        ROLES.ADMINISTRADOR_PAIS,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
         ROLES.OBRERO_PAIS,

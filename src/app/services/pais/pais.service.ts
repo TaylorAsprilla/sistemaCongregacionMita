@@ -50,4 +50,15 @@ export class PaisService {
   activarPais(pais: CongregacionPaisModel) {
     return this.httpClient.put(`${base_url}/pais/activar/${pais.id}`, pais, this.headers);
   }
+
+  /**
+   * Obtiene el país donde el usuario es administrador
+   * @param idUsuario ID del usuario
+   * @returns Observable con el país donde el usuario es administrador
+   */
+  getPaisPorAdministrador(idUsuario: number) {
+    return this.httpClient
+      .get(`${base_url}/pais/administrador/${idUsuario}`, this.headers)
+      .pipe(map((respuesta: { ok: boolean; pais: CongregacionPaisModel }) => respuesta.pais));
+  }
 }

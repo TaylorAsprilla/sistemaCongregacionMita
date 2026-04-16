@@ -8,6 +8,8 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
 import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
+import { PaisService } from 'src/app/services/pais/pais.service';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.component';
@@ -24,6 +26,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
   private usuarioService = inject(UsuarioService);
   private usuariosPorCongregacionService = inject(UsuariosPorCongregacionService);
   private enviarCorreoService = inject(EnviarCorreoService);
+  private paisService = inject(PaisService);
 
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
@@ -52,13 +55,43 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
 
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioSubscription = this.usuariosPorCongregacionService
-      .listarUsuariosPorCongregacion(this.idUsuario)
-      .subscribe(({ totalUsuarios, usuarios }) => {
-        this.totalUsuarios = totalUsuarios;
-        this.usuarios = usuarios;
-        this.cargando = false;
+
+    // Si el usuario es ADMINISTRADOR_PAIS, filtrar por su país asignado
+    if (this.usuarioService.isAdministradorPais) {
+      // Primero obtener el país donde es administrador
+      this.paisService.getPaisPorAdministrador(this.idUsuario).subscribe({
+        next: (pais: CongregacionPaisModel) => {
+          if (pais) {
+            // Cargar usuarios del país
+            this.usuarioSubscription = this.usuariosPorCongregacionService
+              .listarUsuariosPorPais(this.idUsuario)
+              .subscribe(({ totalUsuarios, usuarios }) => {
+                this.totalUsuarios = totalUsuarios;
+                this.usuarios = usuarios;
+                this.congregacion = pais.pais; // Actualizar nombre de congregación a nombre del país
+                this.cargando = false;
+              });
+          } else {
+            Swal.fire('Error', 'No se encontró un país asignado como administrador', 'error');
+            this.cargando = false;
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener país del administrador:', error);
+          Swal.fire('Error', 'No se pudo cargar el país asignado', 'error');
+          this.cargando = false;
+        },
       });
+    } else {
+      // Comportamiento normal: filtrar por congregación
+      this.usuarioSubscription = this.usuariosPorCongregacionService
+        .listarUsuariosPorCongregacion(this.idUsuario)
+        .subscribe(({ totalUsuarios, usuarios }) => {
+          this.totalUsuarios = totalUsuarios;
+          this.usuarios = usuarios;
+          this.cargando = false;
+        });
+    }
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
@@ -80,7 +113,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
           Swal.fire(
             '¡Deshabilitado!',
             `${usuario.primerNombre} ${usuario.primerApellido} fue deshabilitado correctamente`,
-            'success'
+            'success',
           );
 
           this.cargarUsuarios();
@@ -109,7 +142,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
           Swal.fire(
             '¡Activado!',
             `El usuario ${usuarioEncontrado.primerNombre} ${usuarioEncontrado.segundoNombre} ${usuarioEncontrado.primerApellido} fue activado correctamente`,
-            'success'
+            'success',
           );
           this.cargarUsuarios();
         });
@@ -125,7 +158,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
           congregacion_id: data.congregacion,
           campo_id: data.campo,
         },
-        data.id
+        data.id,
       )
       .subscribe({
         next: () => {

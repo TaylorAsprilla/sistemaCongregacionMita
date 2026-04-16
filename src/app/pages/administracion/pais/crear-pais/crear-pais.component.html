@@ -35,6 +35,43 @@
             </select>
           </div>
 
+          <div class="form-group">
+            <label class="col-form-label">Administrador (Número Mita)</label>
+            <input
+              type="number"
+              formControlName="idAdministrador"
+              class="form-control"
+              placeholder="Ingrese el número Mita del administrador"
+              min="1"
+              (blur)="buscarAdministrador()"
+              (keyup.enter)="buscarAdministrador()"
+            />
+            <small class="form-text text-muted"> Deje vacío si no desea asignar un administrador </small>
+
+            <!-- Mensaje de cargando -->
+            @if (buscandoAdministrador) {
+              <div class="alert alert-info mt-2 mb-0" role="alert">
+                <i class="fa fa-spinner fa-spin"></i> Buscando administrador...
+              </div>
+            }
+
+            <!-- Mostrar nombre del administrador encontrado -->
+            @if (administradorEncontrado && !buscandoAdministrador) {
+              <div class="alert alert-success mt-2 mb-0" role="alert">
+                <i class="fa fa-check-circle"></i>
+                <strong>{{ getNombreAdministrador() }}</strong>
+              </div>
+            }
+
+            <!-- Error si no se encuentra el administrador -->
+            @if (errorBusquedaAdministrador && !buscandoAdministrador) {
+              <div class="alert alert-danger mt-2 mb-0" role="alert">
+                <i class="fa fa-exclamation-triangle"></i>
+                No se encontró un usuario con el número Mita ingresado
+              </div>
+            }
+          </div>
+
           <div class="card">
             <button type="submit" class="submit btn btn-primary" (click)="crearPais()">
               <i class="fa fa-save"></i> Guardar

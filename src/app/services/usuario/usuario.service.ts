@@ -83,6 +83,14 @@ export class UsuarioService {
     });
   }
 
+  /**
+   * Verifica si el usuario tiene el rol ADMINISTRADOR_PAIS
+   * @returns true si el usuario tiene el rol ADMINISTRADOR_PAIS, false en caso contrario
+   */
+  get isAdministradorPais(): boolean {
+    return this.role.includes('ADMINISTRADOR PAIS');
+  }
+
   get isQRLogin() {
     return sessionStorage.getItem('isQRLogin') === 'isQRLogin';
   }
