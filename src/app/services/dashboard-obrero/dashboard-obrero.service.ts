@@ -27,11 +27,11 @@ export class DashboardObreroService {
 
   /**
    * Obtiene los usuarios completos para el dashboard de obrero
-   * @param obreroId ID del obrero
+   * @param idUsuario ID del usuario (obrero o administrador)
    * @returns Observable con la respuesta del endpoint
    */
-  getUsuariosCompleto(obreroId: number): Observable<DashboardObreroResponse> {
-    const url = `${base_url}/usuarios/completo?obreroId=${obreroId}`;
+  getUsuariosCompleto(idUsuario: number): Observable<DashboardObreroResponse> {
+    const url = `${base_url}/usuarios/completo?idUsuario=${idUsuario}`;
 
     return this.httpClient.get<DashboardObreroResponse>(url, this.headers).pipe(
       map((response) => {

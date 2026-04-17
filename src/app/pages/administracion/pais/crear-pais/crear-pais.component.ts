@@ -28,7 +28,7 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private paisService = inject(PaisService);
   private divisaService = inject(DivisaService);
-  private usuarioService = inject(UsuarioService);
+  public usuarioService = inject(UsuarioService);
   private activatedRoute = inject(ActivatedRoute);
 
   public paisForm: FormGroup;
@@ -78,9 +78,25 @@ export class CrearPaisComponent implements OnInit, OnDestroy {
   }
 
   cargarPaises() {
-    this.paisSubscription = this.paisService.getPaises().subscribe((pais: CongregacionPaisModel[]) => {
-      this.paises = pais.filter((pais) => pais.estado === true);
-    });
+    // Si es ADMINISTRADOR_PAIS, solo cargar su país asignado
+    if (this.usuarioService.isAdministradorPais) {
+      const idUsuario = this.usuarioService.usuario.id;
+      this.paisSubscription = this.paisService.getPaisPorAdministrador(idUsuario).subscribe(
+        (pais: CongregacionPaisModel) => {
+          // Convertir el país único en un array
+          this.paises = pais && pais.estado ? [pais] : [];
+        },
+        (error) => {
+          console.error('Error al cargar país del administrador:', error);
+          this.paises = [];
+        },
+      );
+    } else {
+      // Para otros roles, cargar todos los países activos
+      this.paisSubscription = this.paisService.getPaises().subscribe((pais: CongregacionPaisModel[]) => {
+        this.paises = pais.filter((pais) => pais.estado === true);
+      });
+    }
   }
 
   crearPais() {

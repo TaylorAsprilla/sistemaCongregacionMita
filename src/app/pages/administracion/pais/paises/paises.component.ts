@@ -29,7 +29,7 @@ import { FormsModule } from '@angular/forms';
 export class PaisesComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private paisService = inject(PaisService);
-  private usuarioService = inject(UsuarioService);
+  public usuarioService = inject(UsuarioService);
   private activatedRoute = inject(ActivatedRoute);
   private exportarExcelService = inject(ExportarExcelService);
 
@@ -73,14 +73,38 @@ export class PaisesComponent implements OnInit, OnDestroy {
 
   cargarPaises() {
     this.cargando = true;
-    this.paisSubscription = this.paisService
-      .getPaises()
-      .pipe(delay(100))
-      .subscribe((pais: CongregacionPaisModel[]) => {
-        this.paises = pais;
-        this.paisesFiltrados = pais;
-        this.cargando = false;
-      });
+
+    // Si es ADMINISTRADOR_PAIS, solo cargar su país asignado
+    if (this.usuarioService.isAdministradorPais) {
+      const idUsuario = this.usuarioService.usuario.id;
+      this.paisSubscription = this.paisService
+        .getPaisPorAdministrador(idUsuario)
+        .pipe(delay(100))
+        .subscribe(
+          (pais: CongregacionPaisModel) => {
+            // Convertir el país único en un array
+            this.paises = pais ? [pais] : [];
+            this.paisesFiltrados = this.paises;
+            this.cargando = false;
+          },
+          (error) => {
+            console.error('Error al cargar país del administrador:', error);
+            this.paises = [];
+            this.paisesFiltrados = [];
+            this.cargando = false;
+          },
+        );
+    } else {
+      // Para otros roles, cargar todos los países
+      this.paisSubscription = this.paisService
+        .getPaises()
+        .pipe(delay(100))
+        .subscribe((pais: CongregacionPaisModel[]) => {
+          this.paises = pais;
+          this.paisesFiltrados = pais;
+          this.cargando = false;
+        });
+    }
   }
 
   borrarPais(pais: CongregacionPaisModel) {

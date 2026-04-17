@@ -2,13 +2,19 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Nuevo País</h3>
+        <h3 class="card-title">{{ paisSeleccionado ? 'Editar País' : 'Nuevo País' }}</h3>
       </div>
       <div class="card-body">
         <form class="form-signin" autocomplete="off" [formGroup]="paisForm">
           <div class="form-group">
             <label>País:</label>
-            <input type="text" formControlName="pais" class="form-control" placeholder="Digite un país nuevo" />
+            <input
+              type="text"
+              formControlName="pais"
+              class="form-control"
+              placeholder="Digite un país nuevo"
+              [readonly]="usuarioService.isAdministradorPais"
+            />
           </div>
 
           <!-- <div class="form-group">
@@ -23,7 +29,11 @@
 
           <div class="form-group">
             <label class="col-form-label">Obrero Encargado</label>
-            <select class="form-control" formControlName="idObreroEncargado">
+            <select
+              class="form-control"
+              formControlName="idObreroEncargado"
+              [disabled]="usuarioService.isAdministradorPais"
+            >
               <option value="" disabled>Seleccione el obrero encargado</option>
               <option [ngValue]="null">Sin obrero Asignado</option>
               @for (obrero of obreros; track obrero) {

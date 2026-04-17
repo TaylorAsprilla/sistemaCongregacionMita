@@ -438,59 +438,22 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     this.cargando.set(true);
     this.error.set(null);
 
-    // Si el usuario es ADMINISTRADOR_PAIS, primero obtener su país asignado
-    if (this.usuarioService.isAdministradorPais) {
-      this.paisService.getPaisPorAdministrador(obreroId).subscribe({
-        next: (pais: CongregacionPaisModel) => {
-          if (pais) {
-            // Cargar datos filtrando por el país
-            this.dashboardService.getUsuariosCompleto(obreroId).subscribe({
-              next: (response) => {
-                // Filtrar usuarios del país asignado
-                const usuariosFiltradosPorPais = (response.data || []).filter((usuario) => {
-                  return usuario.usuarioCongregacionPais?.some((p) => p.id === pais.id);
-                });
-                this.usuarios.set(usuariosFiltradosPorPais);
-                this.procesarDatos();
-                this.cargando.set(false);
-              },
-              error: (error) => {
-                console.error('Dashboard Obrero - Error al cargar datos:', error);
-                this.error.set(`Error al cargar los datos: ${error.message || 'Error desconocido'}`);
-                this.cargando.set(false);
-                this.mostrarError('Error al cargar los datos del dashboard');
-              },
-            });
-          } else {
-            this.error.set('No se encontró un país asignado como administrador');
-            this.cargando.set(false);
-            this.mostrarError('No se encontró un país asignado');
-          }
-        },
-        error: (error) => {
-          console.error('Error al obtener país del administrador:', error);
-          this.error.set('No se pudo cargar el país asignado');
-          this.cargando.set(false);
-          this.mostrarError('Error al cargar el país asignado');
-        },
-      });
-    } else {
-      // Comportamiento normal para otros roles
-      this.dashboardService.getUsuariosCompleto(obreroId).subscribe({
-        next: (response) => {
-          this.usuarios.set(response.data || []);
-          this.procesarDatos();
-          this.cargando.set(false);
-        },
-        error: (error) => {
-          console.error('Dashboard Obrero - Error al cargar datos:', error);
-          console.error('Dashboard Obrero - Error completo:', error);
-          this.error.set(`Error al cargar los datos: ${error.message || 'Error desconocido'}`);
-          this.cargando.set(false);
-          this.mostrarError('Error al cargar los datos del dashboard');
-        },
-      });
-    }
+    // El backend determina automáticamente si es administrador de país o no
+    // basándose en el idUsuario y sus permisos
+    this.dashboardService.getUsuariosCompleto(obreroId).subscribe({
+      next: (response) => {
+        this.usuarios.set(response.data || []);
+        this.procesarDatos();
+        this.cargando.set(false);
+      },
+      error: (error) => {
+        console.error('Dashboard Obrero - Error al cargar datos:', error);
+        console.error('Dashboard Obrero - Error completo:', error);
+        this.error.set(`Error al cargar los datos: ${error.message || 'Error desconocido'}`);
+        this.cargando.set(false);
+        this.mostrarError('Error al cargar los datos del dashboard');
+      },
+    });
   }
 
   /**

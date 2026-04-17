@@ -56,42 +56,25 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
   cargarUsuarios() {
     this.cargando = true;
 
-    // Si el usuario es ADMINISTRADOR_PAIS, filtrar por su país asignado
-    if (this.usuarioService.isAdministradorPais) {
-      // Primero obtener el país donde es administrador
-      this.paisService.getPaisPorAdministrador(this.idUsuario).subscribe({
-        next: (pais: CongregacionPaisModel) => {
-          if (pais) {
-            // Cargar usuarios del país
-            this.usuarioSubscription = this.usuariosPorCongregacionService
-              .listarUsuariosPorPais(this.idUsuario)
-              .subscribe(({ totalUsuarios, usuarios }) => {
-                this.totalUsuarios = totalUsuarios;
-                this.usuarios = usuarios;
-                this.congregacion = pais.pais; // Actualizar nombre de congregación a nombre del país
-                this.cargando = false;
-              });
-          } else {
-            Swal.fire('Error', 'No se encontró un país asignado como administrador', 'error');
-            this.cargando = false;
-          }
-        },
-        error: (error) => {
-          console.error('Error al obtener país del administrador:', error);
-          Swal.fire('Error', 'No se pudo cargar el país asignado', 'error');
-          this.cargando = false;
-        },
-      });
-    } else {
-      // Comportamiento normal: filtrar por congregación
-      this.usuarioSubscription = this.usuariosPorCongregacionService
-        .listarUsuariosPorCongregacion(this.idUsuario)
-        .subscribe(({ totalUsuarios, usuarios }) => {
-          this.totalUsuarios = totalUsuarios;
-          this.usuarios = usuarios;
-          this.cargando = false;
-        });
-    }
+    // Si el usuario es ADMINISTRADOR_PAIS, cargar usuarios del país
+    // De lo contrario, cargar usuarios de la congregación
+    // El backend determina automáticamente según el idUsuario y sus permisos
+    const metodoLlamada = this.usuarioService.isAdministradorPais
+      ? this.usuariosPorCongregacionService.listarUsuariosPorPais(this.idUsuario)
+      : this.usuariosPorCongregacionService.listarUsuariosPorCongregacion(this.idUsuario);
+
+    this.usuarioSubscription = metodoLlamada.subscribe({
+      next: ({ totalUsuarios, usuarios }) => {
+        this.totalUsuarios = totalUsuarios;
+        this.usuarios = usuarios;
+        this.cargando = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar usuarios:', error);
+        Swal.fire('Error', 'No se pudo cargar el censo', 'error');
+        this.cargando = false;
+      },
+    });
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {

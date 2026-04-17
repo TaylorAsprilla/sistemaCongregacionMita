@@ -12,11 +12,13 @@
         </div>
         <!-- empiezan botones -->
         <div class="d-flex flex-wrap align-items-center gap-2">
-          <!-- Botón Crear País -->
-          <a class="btn btn-primary d-flex align-items-center" (click)="crearPais()">
-            <i class="fas fa-plus"></i>
-            <span class="d-none d-md-inline-block ms-2">Crear Congregación</span>
-          </a>
+          <!-- Botón Crear País - Solo visible para roles que no sean ADMINISTRADOR_PAIS -->
+          @if (!usuarioService.isAdministradorPais) {
+            <a class="btn btn-primary d-flex align-items-center" (click)="crearPais()">
+              <i class="fas fa-plus"></i>
+              <span class="d-none d-md-inline-block ms-2">Crear Congregación</span>
+            </a>
+          }
 
           <!-- Botón Filtros -->
           <button
@@ -126,7 +128,8 @@
                         ><i class="fas fa-pencil-alt ml-1"></i
                       ></a>
                     }
-                    @if (!!pais.estado) {
+                    <!-- Botones de Borrar y Activar solo para roles que no sean ADMINISTRADOR_PAIS -->
+                    @if (!!pais.estado && !usuarioService.isAdministradorPais) {
                       <a
                         data-toggle="tooltip"
                         data-original-title="Borrar"
@@ -135,7 +138,7 @@
                         ><i class="fas fa-trash-alt"></i
                       ></a>
                     }
-                    @if (!pais.estado) {
+                    @if (!pais.estado && !usuarioService.isAdministradorPais) {
                       <a
                         data-toggle="tooltip"
                         data-original-title="Activar"

@@ -226,14 +226,34 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.PAISES,
     component: PaisesComponent,
-    data: { titulo: 'Paises' },
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Paises',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.ADMINISTRADOR_PAIS,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver },
   },
   {
     path: `${RUTAS.PAISES}/:id`,
     component: CrearPaisComponent,
+    canActivate: [RolesGuard],
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver },
-    data: { titulo: 'Crear Pais' },
+    data: {
+      titulo: 'Crear Pais',
+      role: [
+        ROLES.ADMINISTRADOR,
+        ROLES.ADMINISTRADOR_PAIS,
+        ROLES.SUPERVISOR,
+        ROLES.SUPERVISOR_LOCAL,
+        ROLES.ASISTENTE_OOTS,
+      ],
+    },
   },
   {
     path: RUTAS.CONGREGACIONES,
