@@ -8,6 +8,8 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuariosPorCongregacionService } from 'src/app/services/usuarios-por-congregacion/usuarios-por-congregacion.service';
 import { EnviarCorreoService } from 'src/app/services/enviar-correo/enviar-correo.service';
+import { PaisService } from 'src/app/services/pais/pais.service';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 import { VerCensoComponent } from '../../../components/ver-censo/ver-censo.component';
@@ -24,6 +26,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
   private usuarioService = inject(UsuarioService);
   private usuariosPorCongregacionService = inject(UsuariosPorCongregacionService);
   private enviarCorreoService = inject(EnviarCorreoService);
+  private paisService = inject(PaisService);
 
   totalUsuarios: number = 0;
   usuarios: UsuariosPorCongregacionInterface[] = [];
@@ -52,13 +55,26 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
 
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioSubscription = this.usuariosPorCongregacionService
-      .listarUsuariosPorCongregacion(this.idUsuario)
-      .subscribe(({ totalUsuarios, usuarios }) => {
+
+    // Si el usuario es ADMINISTRADOR_PAIS, cargar usuarios del país
+    // De lo contrario, cargar usuarios de la congregación
+    // El backend determina automáticamente según el idUsuario y sus permisos
+    const metodoLlamada = this.usuarioService.isAdministradorPais
+      ? this.usuariosPorCongregacionService.listarUsuariosPorPais(this.idUsuario)
+      : this.usuariosPorCongregacionService.listarUsuariosPorCongregacion(this.idUsuario);
+
+    this.usuarioSubscription = metodoLlamada.subscribe({
+      next: ({ totalUsuarios, usuarios }) => {
         this.totalUsuarios = totalUsuarios;
         this.usuarios = usuarios;
         this.cargando = false;
-      });
+      },
+      error: (error) => {
+        console.error('Error al cargar usuarios del censo');
+        Swal.fire('Error', 'No se pudo cargar el censo', 'error');
+        this.cargando = false;
+      },
+    });
   }
 
   borrarUsuario(usuario: UsuariosPorCongregacionInterface) {
@@ -80,7 +96,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
           Swal.fire(
             '¡Deshabilitado!',
             `${usuario.primerNombre} ${usuario.primerApellido} fue deshabilitado correctamente`,
-            'success'
+            'success',
           );
 
           this.cargarUsuarios();
@@ -109,7 +125,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
           Swal.fire(
             '¡Activado!',
             `El usuario ${usuarioEncontrado.primerNombre} ${usuarioEncontrado.segundoNombre} ${usuarioEncontrado.primerApellido} fue activado correctamente`,
-            'success'
+            'success',
           );
           this.cargarUsuarios();
         });
@@ -125,7 +141,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
           congregacion_id: data.congregacion,
           campo_id: data.campo,
         },
-        data.id
+        data.id,
       )
       .subscribe({
         next: () => {

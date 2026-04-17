@@ -39,6 +39,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 // Services & Utils
 import { DashboardObreroService } from 'src/app/services/dashboard-obrero/dashboard-obrero.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { PaisService } from 'src/app/services/pais/pais.service';
+import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import {
   UsuarioCompleto,
   EstadisticasDashboard,
@@ -91,6 +93,7 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
   // Injects
   private dashboardService = inject(DashboardObreroService);
   private usuarioService = inject(UsuarioService);
+  private paisService = inject(PaisService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private dialog = inject(MatDialog);
@@ -435,6 +438,8 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     this.cargando.set(true);
     this.error.set(null);
 
+    // El backend determina automáticamente si es administrador de país o no
+    // basándose en el idUsuario y sus permisos
     this.dashboardService.getUsuariosCompleto(obreroId).subscribe({
       next: (response) => {
         this.usuarios.set(response.data || []);
@@ -442,9 +447,8 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
         this.cargando.set(false);
       },
       error: (error) => {
-        console.error('Dashboard Obrero - Error al cargar datos:', error);
-        console.error('Dashboard Obrero - Error completo:', error);
-        this.error.set(`Error al cargar los datos: ${error.message || 'Error desconocido'}`);
+        console.error('Dashboard Obrero - Error al cargar datos');
+        this.error.set('Error al cargar los datos del dashboard');
         this.cargando.set(false);
         this.mostrarError('Error al cargar los datos del dashboard');
       },
@@ -861,7 +865,7 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
       'Primer Apellido': u.primerApellido || '',
       'Segundo Apellido': u.segundoApellido || '',
       Apodo: u.apodo || '',
-      'Nombre Completo': obtenerNombreCompleto(u),
+      'Nombre Completo': this.getNombreCompleto(u),
 
       // Contacto
       Email: u.email || '',
@@ -871,7 +875,7 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
 
       // Información demográfica
       'Fecha Nacimiento': u.fechaNacimiento || '',
-      Edad: calcularEdad(u.fechaNacimiento) || '',
+      Edad: this.getEdad(u.fechaNacimiento) || '',
       'Es Joven': u.esJoven ? 'Sí' : 'No',
       Género: u.genero?.genero || '',
       'Estado Civil': u.estadoCivil?.estadoCivil || '',
@@ -943,7 +947,7 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
    */
   verDetalle(usuario: UsuarioCompleto): void {
     // Aquí puedes abrir un modal o navegar a una ruta de detalle
-    this.mostrarInformacion(`Detalle de ${obtenerNombreCompleto(usuario)}`);
+    this.mostrarInformacion(`Detalle de ${this.getNombreCompleto(usuario)}`);
 
     // Ejemplo: navegación a ruta de detalle
     // this.router.navigate(['/dashboard/obrero/usuarios', usuario.id]);
@@ -959,10 +963,23 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
     }
   }
 
-  // Helpers para el template
-  obtenerNombreCompleto = obtenerNombreCompleto;
-  calcularEdad = calcularEdad;
+  /**
+   * Obtiene el nombre completo de un usuario (wrapper para el template)
+   */
+  getNombreCompleto(usuario: UsuarioCompleto): string {
+    return obtenerNombreCompleto(usuario);
+  }
 
+  /**
+   * Calcula la edad de un usuario (wrapper para el template)
+   */
+  getEdad(fechaNacimiento: string): number | null {
+    return calcularEdad(fechaNacimiento);
+  }
+
+  /**
+   * Obtiene la congregación de un usuario
+   */
   obtenerCongregacion(usuario: UsuarioCompleto): string {
     return usuario.usuarioCongregacionCongregacion?.[0]?.congregacion || 'Sin congregación';
   }

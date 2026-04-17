@@ -2,13 +2,19 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Nuevo País</h3>
+        <h3 class="card-title">{{ paisSeleccionado ? 'Editar País' : 'Nuevo País' }}</h3>
       </div>
       <div class="card-body">
         <form class="form-signin" autocomplete="off" [formGroup]="paisForm">
           <div class="form-group">
             <label>País:</label>
-            <input type="text" formControlName="pais" class="form-control" placeholder="Digite un país nuevo" />
+            <input
+              type="text"
+              formControlName="pais"
+              class="form-control"
+              placeholder="Digite un país nuevo"
+              [readonly]="usuarioService.isAdministradorPais"
+            />
           </div>
 
           <!-- <div class="form-group">
@@ -23,7 +29,11 @@
 
           <div class="form-group">
             <label class="col-form-label">Obrero Encargado</label>
-            <select class="form-control" formControlName="idObreroEncargado">
+            <select
+              class="form-control"
+              formControlName="idObreroEncargado"
+              [disabled]="usuarioService.isAdministradorPais"
+            >
               <option value="" disabled>Seleccione el obrero encargado</option>
               <option [ngValue]="null">Sin obrero Asignado</option>
               @for (obrero of obreros; track obrero) {
@@ -33,6 +43,43 @@
                 </option>
               }
             </select>
+          </div>
+
+          <div class="form-group">
+            <label class="col-form-label">Administrador (Número Mita)</label>
+            <input
+              type="number"
+              formControlName="idAdministrador"
+              class="form-control"
+              placeholder="Ingrese el número Mita del administrador"
+              min="1"
+              (blur)="buscarAdministrador()"
+              (keyup.enter)="buscarAdministrador()"
+            />
+            <small class="form-text text-muted"> Deje vacío si no desea asignar un administrador </small>
+
+            <!-- Mensaje de cargando -->
+            @if (buscandoAdministrador) {
+              <div class="alert alert-info mt-2 mb-0" role="alert">
+                <i class="fa fa-spinner fa-spin"></i> Buscando administrador...
+              </div>
+            }
+
+            <!-- Mostrar nombre del administrador encontrado -->
+            @if (administradorEncontrado && !buscandoAdministrador) {
+              <div class="alert alert-success mt-2 mb-0" role="alert">
+                <i class="fa fa-check-circle"></i>
+                <strong>{{ getNombreAdministrador() }}</strong>
+              </div>
+            }
+
+            <!-- Error si no se encuentra el administrador -->
+            @if (errorBusquedaAdministrador && !buscandoAdministrador) {
+              <div class="alert alert-danger mt-2 mb-0" role="alert">
+                <i class="fa fa-exclamation-triangle"></i>
+                No se encontró un usuario con el número Mita ingresado
+              </div>
+            }
           </div>
 
           <div class="card">
