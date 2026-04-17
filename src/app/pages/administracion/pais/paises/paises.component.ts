@@ -88,7 +88,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
             this.cargando = false;
           },
           (error) => {
-            console.error('Error al cargar país del administrador:', error);
+            console.error('Error al cargar país del administrador');
             this.paises = [];
             this.paisesFiltrados = [];
             this.cargando = false;

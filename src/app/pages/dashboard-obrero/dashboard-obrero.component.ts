@@ -447,9 +447,8 @@ export class DashboardObreroComponent implements OnInit, AfterViewInit, OnDestro
         this.cargando.set(false);
       },
       error: (error) => {
-        console.error('Dashboard Obrero - Error al cargar datos:', error);
-        console.error('Dashboard Obrero - Error completo:', error);
-        this.error.set(`Error al cargar los datos: ${error.message || 'Error desconocido'}`);
+        console.error('Dashboard Obrero - Error al cargar datos');
+        this.error.set('Error al cargar los datos del dashboard');
         this.cargando.set(false);
         this.mostrarError('Error al cargar los datos del dashboard');
       },

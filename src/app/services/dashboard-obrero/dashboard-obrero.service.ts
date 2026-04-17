@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from 'environment';
 import { DashboardObreroResponse } from 'src/app/core/interfaces/dashboard-obrero.interface';
+import { safeConsoleError } from 'src/app/core/utils/error-sanitizer.utils';
 
 const base_url = environment.base_url;
 
@@ -38,10 +39,7 @@ export class DashboardObreroService {
         return response;
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Dashboard Service - Error HTTP:', error);
-        console.error('Dashboard Service - Status:', error.status);
-        console.error('Dashboard Service - Message:', error.message);
-        console.error('Dashboard Service - Error completo:', error.error);
+        safeConsoleError('Dashboard Service - Error HTTP', error);
         return throwError(() => error);
       }),
     );

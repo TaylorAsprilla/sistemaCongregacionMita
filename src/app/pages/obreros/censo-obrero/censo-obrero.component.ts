@@ -70,7 +70,7 @@ export default class CensoObreroComponent implements OnInit, OnDestroy {
         this.cargando = false;
       },
       error: (error) => {
-        console.error('Error al cargar usuarios:', error);
+        console.error('Error al cargar usuarios del censo');
         Swal.fire('Error', 'No se pudo cargar el censo', 'error');
         this.cargando = false;
       },

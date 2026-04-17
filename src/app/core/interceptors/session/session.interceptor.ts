@@ -41,9 +41,17 @@ export const sessionInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // No procesar errores de endpoints excluidos
+      // Para endpoints excluidos, sanitizar el mensaje de error
       if (isExcluded) {
-        return throwError(() => error);
+        // Crear un error sanitizado sin la URL completa
+        const sanitizedError = new HttpErrorResponse({
+          error: error.error,
+          headers: error.headers,
+          status: error.status,
+          statusText: error.statusText,
+          url: undefined, // Eliminar URL del mensaje de error
+        });
+        return throwError(() => sanitizedError);
       }
 
       // Solo procesar errores 401 (Unauthorized)
