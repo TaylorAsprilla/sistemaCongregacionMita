@@ -118,6 +118,7 @@ export const childRoutes: Routes = [
     data: {
       role: [
         ROLES.ADMINISTRADOR,
+        ROLES.ADMINISTRADOR_PAIS,
         ROLES.SUPERVISOR,
         ROLES.SUPERVISOR_LOCAL,
         ROLES.OBRERO_PAIS,
