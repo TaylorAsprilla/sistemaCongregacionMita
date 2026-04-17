@@ -1,5 +1,5 @@
 @if (!!cargando) {
-<app-cargando-informacion></app-cargando-informacion>
+  <app-cargando-informacion></app-cargando-informacion>
 }
 
 <app-ver-censo
@@ -7,7 +7,7 @@
   [totalUsuarios]="totalUsuarios"
   [titulo]="titulo"
   [nombreArchivo]="nombreArchivo"
-  [mostrarNombreCampo]="true"
+  [mostrarNombreCampo]="false"
   (crearUsuario)="crearUsuario()"
   (activarUsuario)="activarUsuario($event)"
   (actualizaUsuario)="actualizarUsuario($event)"
