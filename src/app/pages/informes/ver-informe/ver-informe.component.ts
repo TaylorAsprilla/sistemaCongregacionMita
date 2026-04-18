@@ -458,9 +458,7 @@ export class VerInformeComponent implements OnInit {
           this.diezmos = (datos.diezmos || []).filter(
             (d: any) => Number(d.informe_id) === Number(informeId) && d.estado !== false,
           );
-          this.aspectosEspirituales = (datos.aspectosEspirituales || []).filter(
-            (a: any) => a.estado !== false,
-          );
+          this.aspectosEspirituales = (datos.aspectosEspirituales || []).filter((a: any) => a.estado !== false);
           this.asuntosPendientes = (datos.asuntosPendientes || []).filter(
             (a: any) => Number(a.informe_id) === Number(informeId) && a.estado !== false,
           );

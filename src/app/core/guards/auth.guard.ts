@@ -11,13 +11,13 @@ export class AuthGuard {
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
 
-  canLoad(route: Route, segments: UrlSegment[]): boolean | Observable<boolean> | Promise<boolean> {
+  canMatch(route: Route, segments: UrlSegment[]): boolean | Observable<boolean> | Promise<boolean> {
     return this.usuarioService.validarToken().pipe(
       tap((estaAutenticado) => {
         if (!estaAutenticado) {
           this.router.navigateByUrl('/login');
         }
-      })
+      }),
     );
   }
 
@@ -27,7 +27,7 @@ export class AuthGuard {
         if (!estaAutenticado) {
           this.router.navigateByUrl('/login');
         }
-      })
+      }),
     );
   }
 }
