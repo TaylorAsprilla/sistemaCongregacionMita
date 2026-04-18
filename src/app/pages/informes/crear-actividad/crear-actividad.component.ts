@@ -99,12 +99,20 @@ export class CrearActividadComponent implements OnInit, OnDestroy {
 
     this.tipoActividadService.actualizarTipoActividad(actividadActualizada).subscribe(
       (response: any) => {
-        Swal.fire('Tipo de actividad actualizada', response.actividadActualizada.nombre, 'success');
+        const nombreActividad =
+          response?.tipoActividadActualizada?.nombre ||
+          response?.actividadActualizada?.nombre ||
+          actividadActualizada.nombre;
+        Swal.fire('Tipo de actividad actualizada', nombreActividad, 'success');
         this.cancelarEdicion();
         this.cargarTipoActividades();
       },
       (error) => {
-        Swal.fire('Error', 'No se pudo actualizar el tipo de actividad', 'error');
+        Swal.fire({
+          title: 'Error al actualizar el tipo de Actividad',
+          icon: 'error',
+          text: error.error?.msg || 'No se pudo actualizar el tipo de actividad',
+        });
       },
     );
   }
