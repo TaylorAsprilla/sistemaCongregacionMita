@@ -1,6 +1,7 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -13,6 +14,8 @@ import { VisitaService } from 'src/app/services/visita/visita.service';
 import { SituacionVisitaService } from 'src/app/services/situacion-visita/situacion-visita.service';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import { DiezmoService } from 'src/app/services/diezmo/diezmo.service';
+import { AspectoEspiritualService } from 'src/app/services/aspecto-espiritual/aspecto-espiritual.service';
+import { AsuntoPendienteService } from 'src/app/services/asunto-pendiente/asunto-pendiente.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
@@ -24,6 +27,8 @@ import { MetaModel } from 'src/app/core/models/meta.model';
 import { ActividadModel } from 'src/app/core/models/actividad.model';
 import { ActividadEconomicaModel } from 'src/app/core/models/actividad-economica.model';
 import { DiezmoModel } from 'src/app/core/models/diezmo.model';
+import { AspectoEspiritualModel } from 'src/app/core/models/aspecto-espiritual.model';
+import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { TipoActividadEconomicaModel } from 'src/app/core/models/tipo-actividad-economica.model';
@@ -35,7 +40,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
   templateUrl: './ver-informe.component.html',
   styleUrls: ['./ver-informe.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LocalDatePipe],
 })
 export class VerInformeComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
@@ -51,6 +56,8 @@ export class VerInformeComponent implements OnInit {
   private situacionVisitaService = inject(SituacionVisitaService);
   private logroService = inject(LogroService);
   private diezmoService = inject(DiezmoService);
+  private aspectoEspiritualService = inject(AspectoEspiritualService);
+  private asuntoPendienteService = inject(AsuntoPendienteService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -79,6 +86,8 @@ export class VerInformeComponent implements OnInit {
   situacionVisitas: SituacionVisitaModel[] = [];
   logros: LogroModel[] = [];
   diezmos: DiezmoModel[] = [];
+  aspectosEspirituales: AspectoEspiritualModel[] = [];
+  asuntosPendientes: AsuntoPendienteModel[] = [];
   tiposActividad: TipoActividadModel[] = [];
   tiposActividadEconomica: TipoActividadEconomicaModel[] = [];
 
@@ -418,6 +427,8 @@ export class VerInformeComponent implements OnInit {
       situacionVisitas: this.situacionVisitaService.getSituacionVisitas(),
       logros: this.logroService.getLogros(),
       diezmos: this.diezmoService.getDiezmos(),
+      aspectosEspirituales: this.aspectoEspiritualService.getAspectosEspiritualesByInforme(informeId),
+      asuntosPendientes: this.asuntoPendienteService.getAsuntosPendientes(),
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -446,6 +457,12 @@ export class VerInformeComponent implements OnInit {
           );
           this.diezmos = (datos.diezmos || []).filter(
             (d: any) => Number(d.informe_id) === Number(informeId) && d.estado !== false,
+          );
+          this.aspectosEspirituales = (datos.aspectosEspirituales || []).filter(
+            (a: any) => a.estado !== false,
+          );
+          this.asuntosPendientes = (datos.asuntosPendientes || []).filter(
+            (a: any) => Number(a.informe_id) === Number(informeId) && a.estado !== false,
           );
 
           this.cargando = false;
@@ -566,38 +583,54 @@ export class VerInformeComponent implements OnInit {
             ? this.crearTablaActividades()
             : { text: 'No hay actividades eclesiásticas registradas.', style: 'noData' },
 
-          // B. ACTIVIDADES ECONÓMICAS
-          { text: 'B. ACTIVIDADES ECONÓMICAS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
-          this.actividadesEconomicas.length > 0
-            ? this.crearTablaActividadesEconomicas()
-            : { text: 'No hay actividades económicas registradas.', style: 'noData' },
-
-          // C. RESUMEN DE VISITAS REALIZADAS
-          { text: 'C. RESUMEN DE VISITAS REALIZADAS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          // B. RESUMEN DE VISITAS REALIZADAS
+          { text: 'B. RESUMEN DE VISITAS REALIZADAS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
           this.visitas.length > 0 ? this.crearTablaVisitas() : { text: 'No hay visitas registradas.', style: 'noData' },
 
-          // D. RESUMEN DE DIEZMOS
-          { text: 'D. RESUMEN DE DIEZMOS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
-          this.diezmos.length > 0 ? this.crearTablaDiezmos() : { text: 'No hay diezmos registrados.', style: 'noData' },
-
-          // E. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS
+          // C. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS
           {
-            text: 'E. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS',
+            text: 'C. SITUACIONES ENCONTRADAS DURANTE LAS VISITAS',
             style: 'sectionTitle',
             margin: [0, 20, 0, 10],
-            pageBreak: 'before',
           },
           this.situacionVisitas.length > 0
             ? this.crearTablaSituaciones()
             : { text: 'No hay situaciones registradas.', style: 'noData' },
 
-          // F. LOGROS OBTENIDOS
-          { text: 'F. LOGROS OBTENIDOS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          // D. ASPECTO ESPIRITUAL Y PERSONAL
+          {
+            text: 'D. ACTIVIDADES RELACIONADAS AL ASPECTO ESPIRITUAL Y PERSONAL',
+            style: 'sectionTitle',
+            margin: [0, 20, 0, 10],
+            pageBreak: 'before',
+          },
+          this.aspectosEspirituales.length > 0
+            ? this.crearTablaAspectosEspirituales()
+            : { text: 'No hay actividades espirituales registradas.', style: 'noData' },
+
+          // E. ACTIVIDADES ECONÓMICAS
+          { text: 'E. ACTIVIDADES ECONÓMICAS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          this.actividadesEconomicas.length > 0
+            ? this.crearTablaActividadesEconomicas()
+            : { text: 'No hay actividades económicas registradas.', style: 'noData' },
+
+          // F. RESUMEN DE DIEZMOS
+          { text: 'F. RESUMEN DE DIEZMOS', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          this.diezmos.length > 0 ? this.crearTablaDiezmos() : { text: 'No hay diezmos registrados.', style: 'noData' },
+
+          // G. LOGROS OBTENIDOS
+          { text: 'G. LOGROS OBTENIDOS', style: 'sectionTitle', margin: [0, 20, 0, 10], pageBreak: 'before' },
           this.logros.length > 0 ? this.crearTablaLogros() : { text: 'No hay logros registrados.', style: 'noData' },
 
-          // G. METAS PARA EL PRÓXIMO TRIMESTRE
-          { text: 'G. METAS PARA EL PRÓXIMO TRIMESTRE', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          // H. METAS PARA EL PRÓXIMO TRIMESTRE
+          { text: 'H. METAS PARA EL PRÓXIMO TRIMESTRE', style: 'sectionTitle', margin: [0, 20, 0, 10] },
           this.metas.length > 0 ? this.crearTablaMetas() : { text: 'No hay metas registradas.', style: 'noData' },
+
+          // I. ASUNTOS PENDIENTES
+          { text: 'I. ASUNTOS PENDIENTES', style: 'sectionTitle', margin: [0, 20, 0, 10] },
+          this.asuntosPendientes.length > 0
+            ? this.crearTablaAsuntosPendientes()
+            : { text: 'No hay asuntos pendientes registrados.', style: 'noData' },
         ],
         styles: {
           header: {
@@ -751,13 +784,14 @@ export class VerInformeComponent implements OnInit {
     return {
       table: {
         headerRows: 1,
-        widths: ['auto', 'auto', 'auto', 'auto', '*'],
+        widths: ['auto', 'auto', 'auto', 'auto', 'auto', '*'],
         body: [
           [
             { text: 'Mes', style: 'tableHeader' },
             { text: 'Visitas Hogares', style: 'tableHeader' },
             { text: 'Referidas OOTS', style: 'tableHeader' },
             { text: 'Visitas Hospital', style: 'tableHeader' },
+            { text: 'Casos Vía Remota', style: 'tableHeader' },
             { text: 'Observaciones', style: 'tableHeader' },
           ],
           ...this.visitas.map((visita) => [
@@ -765,6 +799,7 @@ export class VerInformeComponent implements OnInit {
             { text: (visita.visitasHogares || 0).toString(), style: 'tableCell', alignment: 'center' },
             { text: (visita.referidasOots || 0).toString(), style: 'tableCell', alignment: 'center' },
             { text: (visita.visitaHospital || 0).toString(), style: 'tableCell', alignment: 'center' },
+            { text: (visita.visitaRemota ?? 0).toString(), style: 'tableCell', alignment: 'center' },
             { text: visita.observaciones || '-', style: 'tableCell' },
           ]),
         ],
@@ -885,6 +920,62 @@ export class VerInformeComponent implements OnInit {
         body: [
           [{ text: 'Meta', style: 'tableHeader' }],
           ...this.metas.map((meta) => [{ text: meta.meta || '-', style: 'tableCell' }]),
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
+  }
+
+  /**
+   * Crea la tabla de aspectos espirituales para el PDF
+   */
+  private crearTablaAspectosEspirituales(): any {
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['auto', '*', '*', 'auto'],
+        body: [
+          [
+            { text: 'Fecha', style: 'tableHeader' },
+            { text: 'Categoría', style: 'tableHeader' },
+            { text: 'Observaciones', style: 'tableHeader' },
+            { text: 'Responsable', style: 'tableHeader' },
+          ],
+          ...this.aspectosEspirituales.map((asp) => [
+            { text: asp.fecha ? new Date(asp.fecha).toLocaleDateString() : '-', style: 'tableCell' },
+            { text: asp.categoria?.nombre || `Categoría #${asp.categoria_id}`, style: 'tableCell' },
+            { text: asp.observaciones || '-', style: 'tableCell' },
+            { text: asp.responsable || '-', style: 'tableCell' },
+          ]),
+        ],
+      },
+      layout: 'lightHorizontalLines',
+      margin: [0, 0, 0, 10],
+    };
+  }
+
+  /**
+   * Crea la tabla de asuntos pendientes para el PDF
+   */
+  private crearTablaAsuntosPendientes(): any {
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['auto', '*', 'auto', '*'],
+        body: [
+          [
+            { text: 'Tipo', style: 'tableHeader' },
+            { text: 'Asunto', style: 'tableHeader' },
+            { text: 'Responsable', style: 'tableHeader' },
+            { text: 'Observaciones', style: 'tableHeader' },
+          ],
+          ...this.asuntosPendientes.map((asunto) => [
+            { text: asunto.tipo || '-', style: 'tableCell' },
+            { text: asunto.asunto || '-', style: 'tableCell' },
+            { text: asunto.responsable || '-', style: 'tableCell' },
+            { text: asunto.observaciones || '-', style: 'tableCell' },
+          ]),
         ],
       },
       layout: 'lightHorizontalLines',

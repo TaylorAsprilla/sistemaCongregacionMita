@@ -2,7 +2,7 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
 import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { SituacionVisitaService } from 'src/app/services/situacion-visita/situacion-visita.service';
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   templateUrl: './informe-situacion-visita.component.html',
   styleUrls: ['./informe-situacion-visita.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, DatePipe],
+  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe],
 })
 export class InformeSituacionVisitaComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);

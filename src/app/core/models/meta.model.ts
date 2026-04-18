@@ -8,5 +8,7 @@ export class MetaModel {
     public tipoStatus_id: number,
     public comentarios?: string,
     public estado?: boolean,
+    public usuario_id?: number,
+    public meta_id_original?: number,
   ) {}
 }

@@ -107,7 +107,7 @@
               <tbody>
                 @for (logro of logros; track logro.id) {
                   <tr>
-                    <td>{{ logro.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ logro.fecha | localDate }}</td>
                     <td>{{ logro.logro }}</td>
                     <td>{{ logro.responsable }}</td>
                     <td>

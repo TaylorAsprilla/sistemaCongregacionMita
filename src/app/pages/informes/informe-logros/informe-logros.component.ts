@@ -7,7 +7,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 import { LogroService } from 'src/app/services/logro/logro.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import { DatePipe } from '@angular/common';
+import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
   templateUrl: './informe-logros.component.html',
   styleUrls: ['./informe-logros.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, DatePipe],
+  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe],
 })
 export class InformeLogrosComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);

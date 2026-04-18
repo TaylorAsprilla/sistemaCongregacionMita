@@ -73,6 +73,17 @@
           </div>
 
           <div class="form-group">
+            <label for="inputVisitaRemota">Casos atendidos vía remota (Teléfono, Zoom, WhatsApp)</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="visitaRemota"
+              id="inputVisitaRemota"
+              placeholder="Número de casos atendidos vía remota"
+            />
+          </div>
+
+          <div class="form-group">
             <label for="inputObservaciones">Observaciones</label>
             <textarea
               class="form-control"
@@ -115,6 +126,7 @@
                   <th>Hogares</th>
                   <th>OOTS</th>
                   <th>Hospitales</th>
+                  <th>Remotas</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -125,6 +137,7 @@
                     <td>{{ visita.visitasHogares }}</td>
                     <td>{{ visita.referidasOots }}</td>
                     <td>{{ visita.visitaHospital }}</td>
+                    <td>{{ visita.visitaRemota ?? 0 }}</td>
                     <td>
                       <button class="btn btn-sm btn-warning mr-1" (click)="editarVisita(visita)" title="Editar">
                         <i class="fa fa-edit"></i>

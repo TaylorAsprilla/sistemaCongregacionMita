@@ -10,6 +10,8 @@ import { InformeDiezmosComponent } from 'src/app/pages/informes/informe-diezmos/
 import { InformeLogrosComponent } from 'src/app/pages/informes/informe-logros/informe-logros.component';
 import { InformeMetasComponent } from 'src/app/pages/informes/informe-metas/informe-metas.component';
 import { InformeVisitasComponent } from 'src/app/pages/informes/informe-visitas/informe-visitas.component';
+import { InformeAspectoEspiritualComponent } from 'src/app/pages/informes/informe-aspecto-espiritual/informe-aspecto-espiritual.component';
+import { InformeAsuntoPendienteComponent } from 'src/app/pages/informes/informe-asunto-pendiente/informe-asunto-pendiente.component';
 import { InformeComponent } from 'src/app/pages/informes/informe/informe.component';
 import { VerInformeComponent } from 'src/app/pages/informes/ver-informe/ver-informe.component';
 import { VerInformesPaisComponent } from 'src/app/pages/informes/ver-informes-pais/ver-informes-pais.component';
@@ -502,6 +504,14 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.SITUACION_VISITA,
     component: InformeSituacionVisitaComponent,
+  },
+  {
+    path: RUTAS.INFORME_ASPECTO_ESPIRITUAL,
+    component: InformeAspectoEspiritualComponent,
+  },
+  {
+    path: RUTAS.ASUNTO_PENDIENTE,
+    component: InformeAsuntoPendienteComponent,
   },
   // informes pagina principal
   {

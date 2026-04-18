@@ -9,15 +9,15 @@ import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
-import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
+import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
 
 @Component({
   selector: 'app-informes-actividades',
   templateUrl: './informe-actividades.component.html',
   styleUrls: ['./informe-actividades.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, DatePipe],
+  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe],
 })
 export class InformeActividadesComponent implements OnInit, OnDestroy {
   private formBuilder = inject(UntypedFormBuilder);
@@ -226,6 +226,19 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
       min: fechaMin.toISOString().split('T')[0],
       max: fechaMax.toISOString().split('T')[0],
     };
+  }
+
+  getDiaSemana(fecha: Date | string): string {
+    const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const dateStr = typeof fecha === 'string' ? fecha : fecha.toISOString().split('T')[0];
+    const [anio, mes, dia] = dateStr.split('-').map(Number);
+    const date = new Date(anio, mes - 1, dia);
+    return diasSemana[date.getDay()];
+  }
+
+  mostrarDiaSemana(tipoActividadId: number): boolean {
+    const nombre = this.tipoActividades.find((t) => t.id === tipoActividadId)?.nombre?.toLowerCase() ?? '';
+    return nombre === 'servicio' || nombre === 'vigilia';
   }
 
   navegarAlInforme() {

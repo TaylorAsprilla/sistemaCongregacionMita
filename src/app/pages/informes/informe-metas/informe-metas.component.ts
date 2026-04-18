@@ -1,14 +1,15 @@
+import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { delay } from 'rxjs/operators';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
 import { MetaModel } from 'src/app/core/models/meta.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { EstatusService } from 'src/app/services/estatus/estatus.service';
 import { MetaService } from 'src/app/services/meta/meta.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,7 +17,7 @@ import Swal from 'sweetalert2';
   templateUrl: './informe-metas.component.html',
   styleUrls: ['./informe-metas.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, DatePipe],
 })
 export class InformeMetasComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);
@@ -25,12 +26,15 @@ export class InformeMetasComponent implements OnInit {
   private estatusService = inject(EstatusService);
   private metaService = inject(MetaService);
   private informeService = inject(InformeService);
+  private usuarioService = inject(UsuarioService);
 
   public metaForm: UntypedFormGroup;
 
   public estatus: EstatusModel[] = [];
 
   public metas: MetaModel[] = [];
+  public metasPendientes: MetaModel[] = [];
+  public cargandoPendientes: boolean = false;
 
   public editando: boolean = false;
   public metaSeleccionada: MetaModel | null = null;
@@ -63,6 +67,26 @@ export class InformeMetasComponent implements OnInit {
 
     this.cargarEstatus();
     this.cargarMetas();
+    this.cargarMetasPendientes();
+  }
+
+  private cargarMetasPendientes(): void {
+    const usuarioId = this.usuarioService.usuarioId;
+    if (!usuarioId) return;
+
+    this.cargandoPendientes = true;
+    this.metaService
+      .getMetasPendientesByUsuario(usuarioId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (metas) => {
+          this.metasPendientes = metas;
+          this.cargandoPendientes = false;
+        },
+        error: () => {
+          this.cargandoPendientes = false;
+        },
+      });
   }
 
   private cargarEstatus(): void {
@@ -84,6 +108,82 @@ export class InformeMetasComponent implements OnInit {
       .subscribe((metas) => {
         this.metas = metas.filter((meta: MetaModel) => meta.informe_id === informeId && meta.estado !== false);
       });
+  }
+
+  getEstatusNombre(tipoStatus_id: number): string {
+    return this.estatus.find((e) => e.id === tipoStatus_id)?.status ?? `Estado #${tipoStatus_id}`;
+  }
+
+  cumplirMeta(meta: MetaModel): void {
+    Swal.fire({
+      title: 'Marcar como Cumplida',
+      text: `Meta: "${meta.meta}"`,
+      input: 'textarea',
+      inputLabel: 'Comentarios',
+      inputPlaceholder: 'Objetivo alcanzado en este trimestre...',
+      inputAttributes: { 'aria-label': 'Comentarios' },
+      showCancelButton: true,
+      confirmButtonText: 'Marcar Cumplida',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#28a745',
+      inputValidator: (value) => {
+        if (!value) return 'Debe ingresar un comentario';
+        return undefined;
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.metaService
+          .cumplirMeta(meta.id, result.value)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              Swal.fire('¡Meta Cumplida!', 'La meta fue marcada como cumplida', 'success');
+              this.metasPendientes = this.metasPendientes.filter((m) => m.id !== meta.id);
+              this.cargarMetas();
+            },
+            error: (error) => this.mostrarErrores('Error', error, 'No se pudo actualizar la meta'),
+          });
+      }
+    });
+  }
+
+  copiarMetaAlInforme(meta: MetaModel): void {
+    const informeId = this.informeService.informeActivoId;
+    if (!informeId) return;
+
+    Swal.fire({
+      title: 'Copiar Meta al Informe Actual',
+      html: `<p class="text-left"><strong>Meta:</strong> ${meta.meta}</p>`,
+      input: 'textarea',
+      inputLabel: 'Actualización del avance',
+      inputPlaceholder: 'Continuamos. Avance: 70%. Esperamos cumplirla en el próximo trimestre.',
+      inputAttributes: { 'aria-label': 'Actualización' },
+      showCancelButton: true,
+      confirmButtonText: 'Copiar al Informe',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#007bff',
+      inputValidator: (value) => {
+        if (!value) return 'Debe ingresar una actualización del avance';
+        return undefined;
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.metaService
+          .copiarMeta({
+            meta_id_original: meta.id,
+            nuevo_informe_id: informeId,
+            actualizacion: result.value,
+          })
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              Swal.fire('Meta Copiada', 'La meta fue copiada al informe actual', 'success');
+              this.cargarMetas();
+            },
+            error: (error) => this.mostrarErrores('Error', error, 'No se pudo copiar la meta'),
+          });
+      }
+    });
   }
 
   editarMeta(meta: MetaModel): void {

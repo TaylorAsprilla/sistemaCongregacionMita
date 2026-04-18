@@ -47,4 +47,18 @@ export class MetaService {
   eliminarMeta(id: number) {
     return this.httpClient.delete(`${base_url}/meta/${id}`, this.headers);
   }
+
+  getMetasPendientesByUsuario(usuarioId: number) {
+    return this.httpClient
+      .get(`${base_url}/meta/pendientes/usuario/${usuarioId}`, this.headers)
+      .pipe(map((res: { ok: boolean; metas: MetaModel[] }) => res.metas));
+  }
+
+  cumplirMeta(id: number, comentarios: string) {
+    return this.httpClient.put(`${base_url}/meta/${id}/cumplir`, { comentarios }, this.headers);
+  }
+
+  copiarMeta(payload: { meta_id_original: number; nuevo_informe_id: number; actualizacion: string }) {
+    return this.httpClient.post(`${base_url}/meta/copiar`, payload, this.headers);
+  }
 }

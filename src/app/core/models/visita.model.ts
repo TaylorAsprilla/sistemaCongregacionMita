@@ -6,6 +6,7 @@ export class VisitaModel {
     public referidasOots: number,
     public visitaHospital: number,
     public informe_id: number,
+    public visitaRemota?: number,
     public observaciones?: string,
     public estado?: boolean,
   ) {}

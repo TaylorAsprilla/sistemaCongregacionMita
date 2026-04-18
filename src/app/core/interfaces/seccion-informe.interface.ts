@@ -12,12 +12,14 @@ export enum ColorEstatus {
 
 export enum NombreSeccion {
   ACTIVIDADES_ECLESIASTICAS = 'Actividades Eclesiasticas',
+  VISITAS = 'Visitas Realizadas',
+  SITUACION_VISITAS = 'Situación en las visitas',
+  ASPECTO_ESPIRITUAL = 'Actividades Relacionadas al Aspecto Espiritual y Personal',
   ACTIVIDADES_ECONOMICAS = 'Actividades Económicas',
   ASPECTOS_CONTABLES = 'Diezmos',
-  METAS = 'Metas',
-  VISITAS = 'Atenciones y seguimiento a los hermanos',
-  SITUACION_VISITAS = 'Situación en las visitas',
   LOGROS_OBTENIDOS = 'Logros obtenidos',
+  METAS = 'Metas',
+  ASUNTOS_PENDIENTES = 'Asuntos Pendientes',
 }
 
 export interface Seccion {
@@ -38,30 +40,7 @@ export const generarSeccioninforme: Seccion[] = [
     estatus: EstatusSeccion.COMPLETADO,
     color: ColorEstatus.COMPLETADO,
   },
-  {
-    nombre: NombreSeccion.ACTIVIDADES_ECONOMICAS,
-    ruta: `../${RUTAS.INFORME_ACTIVIDAD_ECONOMICA}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
-    descripcion: 'Actividades económicas realizadas, ventas, etc',
-    estatus: EstatusSeccion.COMPLETADO,
-    color: ColorEstatus.COMPLETADO,
-  },
-  {
-    nombre: NombreSeccion.ASPECTOS_CONTABLES,
-    ruta: `../${RUTAS.INFORME_DIEZMOS}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
-    descripcion: 'Diezmos, transferencias, etc',
-    estatus: EstatusSeccion.PENDIENTE,
-    color: ColorEstatus.PENDIENTE,
-  },
-  {
-    nombre: NombreSeccion.METAS,
-    ruta: `../${RUTAS.METAS}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
-    descripcion: 'Metas para el próximo trimestre',
-    estatus: EstatusSeccion.PENDIENTE,
-    color: ColorEstatus.PENDIENTE,
-  },
+  // B
   {
     nombre: NombreSeccion.VISITAS,
     ruta: `../${RUTAS.INFORME_VISITAS}`,
@@ -71,6 +50,7 @@ export const generarSeccioninforme: Seccion[] = [
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
   },
+  // C
   {
     nombre: NombreSeccion.SITUACION_VISITAS,
     ruta: `../${RUTAS.SITUACION_VISITA}`,
@@ -79,6 +59,34 @@ export const generarSeccioninforme: Seccion[] = [
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
   },
+  // D
+  {
+    nombre: NombreSeccion.ASPECTO_ESPIRITUAL,
+    ruta: `../${RUTAS.INFORME_ASPECTO_ESPIRITUAL}`,
+    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    descripcion: 'Actividades relacionadas al aspecto espiritual y personal',
+    estatus: EstatusSeccion.PENDIENTE,
+    color: ColorEstatus.PENDIENTE,
+  },
+  // E
+  {
+    nombre: NombreSeccion.ACTIVIDADES_ECONOMICAS,
+    ruta: `../${RUTAS.INFORME_ACTIVIDAD_ECONOMICA}`,
+    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    descripcion: 'Actividades económicas realizadas, ventas, etc',
+    estatus: EstatusSeccion.COMPLETADO,
+    color: ColorEstatus.COMPLETADO,
+  },
+  // F
+  {
+    nombre: NombreSeccion.ASPECTOS_CONTABLES,
+    ruta: `../${RUTAS.INFORME_DIEZMOS}`,
+    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    descripcion: 'Diezmos, transferencias, etc',
+    estatus: EstatusSeccion.PENDIENTE,
+    color: ColorEstatus.PENDIENTE,
+  },
+  // G
   {
     nombre: NombreSeccion.LOGROS_OBTENIDOS,
     ruta: `../${RUTAS.INFORME_LOGROS}`,
@@ -87,5 +95,22 @@ export const generarSeccioninforme: Seccion[] = [
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
   },
-  // asuntos pendientes eliminado
+  // H
+  {
+    nombre: NombreSeccion.METAS,
+    ruta: `../${RUTAS.METAS}`,
+    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    descripcion: 'Metas para el próximo trimestre',
+    estatus: EstatusSeccion.PENDIENTE,
+    color: ColorEstatus.PENDIENTE,
+  },
+  // I
+  {
+    nombre: NombreSeccion.ASUNTOS_PENDIENTES,
+    ruta: `../${RUTAS.ASUNTO_PENDIENTE}`,
+    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    descripcion: 'Asuntos pendientes administrativos, eclesiásticos o de actividades',
+    estatus: EstatusSeccion.PENDIENTE,
+    color: ColorEstatus.PENDIENTE,
+  },
 ];

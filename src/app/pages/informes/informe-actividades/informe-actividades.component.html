@@ -128,8 +128,13 @@
               <tbody>
                 @for (actividad of actividades; track actividad.id) {
                   <tr>
-                    <td>{{ actividad.fecha | date: 'dd/MM/yyyy' }}</td>
-                    <td>{{ getNombreTipoActividad(actividad.tipoActividad_id) }}</td>
+                    <td>{{ actividad.fecha | localDate }}</td>
+                    <td>
+                      {{ getNombreTipoActividad(actividad.tipoActividad_id) }}
+                      @if (mostrarDiaSemana(actividad.tipoActividad_id)) {
+                        <br /><small class="text-muted">{{ getDiaSemana(actividad.fecha) }}</small>
+                      }
+                    </td>
                     <td>{{ actividad.asistencia }}</td>
                     <td>
                       <button class="btn btn-sm btn-warning mr-1" (click)="editarActividad(actividad)" title="Editar">
