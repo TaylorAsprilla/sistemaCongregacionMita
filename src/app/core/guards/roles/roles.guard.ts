@@ -18,9 +18,7 @@ export class RolesGuard {
   checkUserLogin(route: ActivatedRouteSnapshot): boolean {
     let tienePermiso = false;
     const permisos = this.usuarioService.role;
-    console.log('Permisos del usuario:', permisos);
     for (let [index, permiso] of route.data['role'].entries()) {
-      console.log(`Verificando permiso requerido: ${permiso} contra permisos del usuario...`);
       const permisosUsuario = permisos.find((permisoAEncontrar: string) => permiso.toUpperCase() === permisoAEncontrar);
 
       if (permisosUsuario) {

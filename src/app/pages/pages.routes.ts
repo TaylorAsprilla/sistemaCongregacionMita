@@ -10,7 +10,7 @@ const routes: Routes = [
     component: PagesComponent,
     title: CONFIGURACION.TITLE,
     canActivate: [AuthGuard],
-    canLoad: [AuthGuard],
+    canMatch: [AuthGuard],
     resolve: { permisos: PermisosResolver },
     loadChildren: () => import('../routes/child-routes/child.routes'),
   },

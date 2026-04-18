@@ -30,6 +30,7 @@ export enum RUTAS {
   INFORME = 'informe',
   INFORME_ACTIVIDADES_ECLESIASTICAS = 'informe-actividades-eclesiasticas',
   INFORME_ACTIVIDAD_ECONOMICA = 'informe-actividad-economica',
+  INFORME_ASPECTO_ESPIRITUAL = 'informe-aspecto-espiritual',
   INFORME_DIEZMOS = 'informe-diezmos',
   INFORME_LOGROS = 'informe-logros',
   INFORME_VISITAS = 'informe-visitas',

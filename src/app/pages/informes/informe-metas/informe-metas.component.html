@@ -117,7 +117,7 @@
               <tbody>
                 @for (meta of metas; track meta.id) {
                   <tr>
-                    <td>{{ meta.fecha }}</td>
+                    <td>{{ meta.fecha | date: 'dd/MM/yyyy' }}</td>
                     <td>{{ meta.meta }}</td>
                     <td>
                       @for (estatusItem of estatus; track estatusItem.id) {
@@ -132,6 +132,66 @@
                       </button>
                       <button class="btn btn-sm btn-danger" (click)="eliminarMeta(meta.id)" title="Eliminar">
                         <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sección: Metas Pendientes de Informes Anteriores -->
+<div class="row mt-4">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header bg-secondary text-white">
+        <h3 class="card-title"><i class="fa fa-clock-o mr-2"></i> Metas Pendientes de Informes Anteriores</h3>
+      </div>
+      <div class="card-body">
+        @if (cargandoPendientes) {
+          <p class="text-center text-muted"><i class="fa fa-spinner fa-spin mr-1"></i> Cargando...</p>
+        } @else if (metasPendientes.length === 0) {
+          <p class="text-center text-muted">No hay metas pendientes de informes anteriores</p>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>Meta</th>
+                  <th>Fecha</th>
+                  <th>Estatus</th>
+                  <th>Comentarios</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (meta of metasPendientes; track meta.id) {
+                  <tr>
+                    <td>{{ meta.meta }}</td>
+                    <td>{{ meta.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>
+                      <span class="badge badge-warning">{{ getEstatusNombre(meta.tipoStatus_id) }}</span>
+                    </td>
+                    <td>{{ meta.comentarios }}</td>
+                    <td>
+                      <button
+                        class="btn btn-sm btn-success mr-1"
+                        (click)="cumplirMeta(meta)"
+                        title="Marcar como Cumplida"
+                      >
+                        <i class="fa fa-check"></i>
+                      </button>
+                      <button
+                        class="btn btn-sm btn-primary"
+                        (click)="copiarMetaAlInforme(meta)"
+                        title="Copiar al Informe Actual"
+                      >
+                        <i class="fa fa-copy"></i>
                       </button>
                     </td>
                   </tr>

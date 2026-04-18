@@ -1,5 +1,5 @@
 <div class="row">
-  <h2 class="text-center">{{ servicios?.titulo }}</h2>
+  <h2 class="text-center">Servicio en Vivo</h2>
 
   <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
     <div class="mb-5">
@@ -12,6 +12,12 @@
     </div>
   </div>
 
+  <!-- TODO
+  Video en vivo - Se debe mostrar el video en vivo dependiendo de la plataforma seleccionada (YouTube o Vimeo) y
+  el tipo de evento (Servicio o Vigilia). Se debe mostrar un indicador de sesiones activas en la parte inferior derecha
+  de la pantalla, con un fondo blanco y un punto verde que indique que el servicio está activo. El número de sesiones
+  activas se debe mostrar dentro del indicador. El indicador debe ser visible en todo momento mientras el servicio esté
+  activo. -->
   <!-- @if (servicioPlataforma === PLATAFORMA.VIMEO) {
     <div class="card-body col-sm-12 col-md-12 col-lg-6 text-center">
       @if (tipoDeEvento === TIPOEVENTO_ID.SERVICIO) {
@@ -58,16 +64,11 @@
 <!-- Indicador de sesiones activas - Fondo blanco con punto verde -->
 <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999">
   <div
-    class="rounded-circle bg-white shadow-lg d-flex align-items-center justify-content-center position-relative"
-    style="width: 60px; height: 60px; cursor: pointer; border: 2px solid #e0e0e0"
+    class="rounded-circle bg-white shadow-lg d-flex align-items-center justify-content-center position-relative sesion-activa"
     title="{{ sesionesActivas }} sesiones activas"
   >
     <span class="text-dark fw-bold fs-5">{{ sesionesActivas }}</span>
     <!-- Punto verde indicador -->
-    <span
-      class="position-absolute rounded-circle bg-success"
-      style="width: 14px; height: 14px; top: 5px; right: 5px; animation: pulse 2s infinite; border: 2px solid white"
-    >
-    </span>
+    <span class="position-absolute rounded-circle bg-success punto-sesion-activa"> </span>
   </div>
 </div>

@@ -155,7 +155,7 @@
                 <tbody>
                   @for (actividad of actividadesEconomicas; track actividad.id) {
                     <tr>
-                      <td>{{ actividad.fecha | date: 'dd/MM/yyyy' }}</td>
+                      <td>{{ actividad.fecha | localDate }}</td>
                       <td>{{ getNombreTipoActividad(actividad.tipoActividadEconomica_id) }}</td>
                       <td>{{ actividad.cantidadRecaudada | currency }}</td>
                       <td>{{ actividad.asistencia }}</td>

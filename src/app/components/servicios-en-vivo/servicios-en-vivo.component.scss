@@ -43,3 +43,20 @@
     box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
   }
 }
+
+.sesion-activa {
+  width: 15px;
+  height: 15px;
+  background-color: #198754; /* Verde */
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.punto-sesion-activa {
+  width: 14px;
+  height: 14px;
+  top: 5px;
+  right: 5px;
+  animation: pulse 2s infinite;
+  border: 2px solid white;
+}

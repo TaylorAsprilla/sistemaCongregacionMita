@@ -133,7 +133,7 @@
               <tbody>
                 @for (situacion of situacionVisitas; track situacion.id) {
                   <tr>
-                    <td>{{ situacion.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ situacion.fecha | localDate }}</td>
                     <td>{{ situacion.nombreFeligres }}</td>
                     <td>{{ situacion.situacion || '-' }}</td>
                     <td>

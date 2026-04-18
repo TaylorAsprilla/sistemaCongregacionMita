@@ -58,6 +58,7 @@ export class InformeVisitasComponent implements OnInit {
       visitasHogares: ['', [Validators.required]],
       referidasOots: ['', [Validators.required]],
       visitaHospital: ['', [Validators.required]],
+      visitaRemota: ['', []],
       observaciones: ['', []],
       informe_id: [informeId, [Validators.required]],
     });
@@ -87,6 +88,7 @@ export class InformeVisitasComponent implements OnInit {
       visitasHogares: visita.visitasHogares,
       referidasOots: visita.referidasOots,
       visitaHospital: visita.visitaHospital,
+      visitaRemota: visita.visitaRemota,
       observaciones: visita.observaciones,
       informe_id: visita.informe_id,
     });
