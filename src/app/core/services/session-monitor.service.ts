@@ -156,7 +156,9 @@ export class SessionMonitorService implements OnDestroy {
 
     // Mensaje personalizado del backend (si existe)
     const mensaje =
-      data?.message || data?.error?.message || 'Tu sesión ha sido cerrada porque iniciaste sesión en otro dispositivo.';
+      data?.message ||
+      data?.error?.message ||
+      'Tu sesión ha sido cerrada porque se inició sesión en una nueva ubicación o dispositivo.';
 
     Swal.fire({
       title: '🔒 Sesión Cerrada',
