@@ -156,6 +156,7 @@ export class InformacionUsuarioComponent implements OnInit, OnChanges {
   direccionResidenciaValues: any;
 
   mostrarPoliticaDatos: boolean = false;
+  puedeSerJoven: boolean = true;
 
   // Subscription
   usuarioSubscription: Subscription;
@@ -176,6 +177,7 @@ export class InformacionUsuarioComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.informacionDelUsuario();
     this.crearFormularios();
+    this.configurarValidacionEstadoCivilJoven();
 
     this.tieneTipoDocumento();
     this.filtrarCongregacionesPorPais(this.usuario?.usuarioCongregacionPais[0]?.id);
@@ -340,6 +342,55 @@ export class InformacionUsuarioComponent implements OnInit, OnChanges {
         this.voluntariadosArr.at(i)?.patchValue(true);
       }
     });
+  }
+
+  configurarValidacionEstadoCivilJoven() {
+    // Validar estado inicial
+    this.validarSiPuedeSerJoven(this.registroUnoForm.get('estadoCivil_id').value);
+
+    // Escuchar cambios en el estado civil
+    this.registroUnoForm.get('estadoCivil_id').valueChanges.subscribe((estadoCivilId) => {
+      this.validarSiPuedeSerJoven(estadoCivilId);
+    });
+
+    // Escuchar cambios en esJoven para prevenir que se seleccione "Sí" cuando no es soltero
+    this.registroCuatroForm.get('esJoven').valueChanges.subscribe((valor) => {
+      if (!this.puedeSerJoven && valor === 1) {
+        // Forzar a "No" si intenta seleccionar "Sí" cuando no es soltero
+        this.registroCuatroForm.patchValue(
+          {
+            esJoven: 0,
+          },
+          { emitEvent: false },
+        );
+      }
+    });
+  }
+
+  validarSiPuedeSerJoven(estadoCivilId: number) {
+    if (!estadoCivilId) {
+      this.puedeSerJoven = true;
+      return;
+    }
+
+    // Buscar el estado civil seleccionado
+    const estadoCivilSeleccionado = this.estadoCivil.find((ec) => ec.id === Number(estadoCivilId));
+
+    // Verificar si es "Soltero" (normalizar el texto para comparación)
+    if (estadoCivilSeleccionado) {
+      const esSoltero = estadoCivilSeleccionado.estadoCivil.toLowerCase().trim() === 'soltero';
+      this.puedeSerJoven = esSoltero;
+
+      // Si no puede ser joven, forzar a "No" (0) y mantener bloqueado
+      if (!esSoltero && this.registroCuatroForm) {
+        this.registroCuatroForm.patchValue(
+          {
+            esJoven: 0,
+          },
+          { emitEvent: false },
+        );
+      }
+    }
   }
 
   onCheckboxMinisteriosChange(event: any) {

@@ -29,6 +29,9 @@ import { SessionsStatisticsComponent } from '../sessions-statistics/sessions-sta
 export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
   private sessionMonitor = inject(SessionMonitorService);
 
+  // Exponer Math para el template
+  Math = Math;
+
   activeSessions: ActiveSession[] = [];
   sortedSessions: ActiveSession[] = [];
   totalSessions: number = 0;
@@ -40,6 +43,12 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
   sortColumn: string = '';
   sortAscending: boolean = true;
 
+  // Pagination
+  limit: number = 50;
+  offset: number = 0;
+  currentPage: number = 1;
+  totalPages: number = 1;
+
   private updateSubscription: Subscription | null = null;
   private readonly UPDATE_INTERVAL_MS = 30 * 1000; // 30 segundos
 
@@ -50,7 +59,7 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
     // Actualizar cada 30 segundos
     this.updateSubscription = interval(this.UPDATE_INTERVAL_MS)
       .pipe(
-        switchMap(() => this.sessionMonitor.getActiveSessions()),
+        switchMap(() => this.sessionMonitor.getActiveSessions(this.limit, this.offset)),
         catchError((error) => {
           console.error('Error al cargar sesiones activas:', error);
           this.hasError = true;
@@ -78,7 +87,7 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.hasError = false;
 
-    this.sessionMonitor.getActiveSessions().subscribe({
+    this.sessionMonitor.getActiveSessions(this.limit, this.offset).subscribe({
       next: (response: ActiveSessionsResponse) => {
         this.updateSessionsData(response);
       },
@@ -99,6 +108,7 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
       this.sortedSessions = [...response.sessions];
       this.totalSessions = response.totalSessions;
       this.activeNowCount = response.currentlyActiveSessions; // Sesiones activas ahora
+      this.totalPages = Math.ceil(this.totalSessions / this.limit);
       this.isLoading = false;
       this.hasError = false;
 
@@ -328,5 +338,69 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
       return session.entidad.pais || 'N/A';
     }
     return 'N/A';
+  }
+
+  /**
+   * Navega a la página anterior
+   */
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.offset = (this.currentPage - 1) * this.limit;
+      this.loadActiveSessions();
+    }
+  }
+
+  /**
+   * Navega a la página siguiente
+   */
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.offset = (this.currentPage - 1) * this.limit;
+      this.loadActiveSessions();
+    }
+  }
+
+  /**
+   * Navega a una página específica
+   */
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      this.currentPage = page;
+      this.offset = (this.currentPage - 1) * this.limit;
+      this.loadActiveSessions();
+    }
+  }
+
+  /**
+   * Cambia el límite de elementos por página
+   */
+  changeLimit(newLimit: number): void {
+    this.limit = newLimit;
+    this.currentPage = 1;
+    this.offset = 0;
+    this.loadActiveSessions();
+  }
+
+  /**
+   * Genera un array de números de página para mostrar
+   */
+  getPageNumbers(): number[] {
+    const maxPages = 5;
+    const pages: number[] = [];
+
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPages / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxPages - 1);
+
+    if (endPage - startPage < maxPages - 1) {
+      startPage = Math.max(1, endPage - maxPages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
   }
 }

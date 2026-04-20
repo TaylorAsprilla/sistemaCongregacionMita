@@ -241,10 +241,12 @@ export class SessionMonitorService implements OnDestroy {
   /**
    * Obtiene todas las sesiones activas en el sistema.
    *
+   * @param limit - Número máximo de sesiones a retornar (default: 50)
+   * @param offset - Número de sesiones a saltar para paginación (default: 0)
    * @returns Observable con la respuesta que contiene las sesiones activas
    */
-  getActiveSessions(): Observable<ActiveSessionsResponse> {
-    const url = `${base_url}/login/active-sessions`;
+  getActiveSessions(limit: number = 50, offset: number = 0): Observable<ActiveSessionsResponse> {
+    const url = `${base_url}/login/active-sessions?limit=${limit}&offset=${offset}`;
     return this.httpClient.get<ActiveSessionsResponse>(url, this.httpOptions);
   }
 
