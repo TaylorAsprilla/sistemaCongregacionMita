@@ -9,13 +9,13 @@ import Swal from 'sweetalert2';
 import { CargandoInformacionComponent } from '../../../../components/cargando-informacion/cargando-informacion.component';
 
 @Component({
-  selector: 'app-eventos',
+  selector: 'app-eventos-biblioteca',
   templateUrl: './eventos.component.html',
   styleUrls: ['./eventos.component.scss'],
   standalone: true,
   imports: [CargandoInformacionComponent],
 })
-export class EventosComponent implements OnInit, OnDestroy {
+export class EventosBibliotecaComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private linkEventosService = inject(LinkEventosService);
 
@@ -109,7 +109,7 @@ export class EventosComponent implements OnInit, OnDestroy {
           Swal.fire(
             'Biblioteca',
             `El evento ${evento.linkEvento.titulo} se agregó a la biblioteca satisfactoriamente`,
-            'success'
+            'success',
           );
           this.cargarEventos();
         });
@@ -133,7 +133,7 @@ export class EventosComponent implements OnInit, OnDestroy {
           Swal.fire(
             'Biblioteca',
             `El evento ${evento.linkEvento.titulo} se eliminó de la biblioteca satisfactoriamente`,
-            'success'
+            'success',
           );
           this.cargarEventos();
         });

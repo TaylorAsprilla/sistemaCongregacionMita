@@ -17,17 +17,21 @@ import { SessionMonitorService } from 'src/app/core/services/session-monitor.ser
 import { Subscription, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { EventoEnVivoService } from 'src/app/services/evento-en-vivo/evento-en-vivo.service';
+import { EventoEnVivo } from 'src/app/core/interfaces/evento-en-vivo.interface';
+import { CargandoInformacionComponent } from '../cargando-informacion/cargando-informacion.component';
 
 @Component({
   selector: 'app-servicios-en-vivo',
   templateUrl: './servicios-en-vivo.component.html',
   styleUrls: ['./servicios-en-vivo.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CargandoInformacionComponent],
 })
 export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   private changeDetectorRef = inject(ChangeDetectorRef);
   private sessionMonitorService = inject(SessionMonitorService);
+  private eventoEnVivoService = inject(EventoEnVivoService);
   domSanitizer = inject(DomSanitizer);
 
   @Input() servicios: LinkEventoModel = null;
@@ -36,6 +40,11 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
   @ViewChild('templateYouTubePlayer') templateYouTubePlayer: ElementRef<HTMLDivElement>;
   videoWidth: number | undefined;
   videoHeight: number | undefined;
+
+  // Nuevo sistema de eventos en vivo
+  eventoActual: EventoEnVivo | null = null;
+  cargandoEvento: boolean = false;
+  errorEvento: string | null = null;
 
   videoUrl: SafeResourceUrl | undefined;
   servicioPlataforma: string = '';
@@ -65,8 +74,66 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
     const streamUrl = parts.join('');
     this.multimediaStreamUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(streamUrl);
 
+    // Cargar último evento en vivo
+    this.cargarUltimoEvento();
+
     // Cargar sesiones activas
     this.cargarSesionesActivas();
+  }
+
+  cargarUltimoEvento(): void {
+    this.cargandoEvento = true;
+    this.errorEvento = null;
+
+    this.eventoEnVivoService.obtenerUltimoEvento().subscribe({
+      next: (response) => {
+        this.eventoActual = response.ultimoEvento;
+        if (this.eventoActual) {
+          this.procesarEvento(this.eventoActual);
+        }
+        this.cargandoEvento = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar evento:', error);
+        this.errorEvento = error.error?.msg || 'No hay eventos configurados';
+        this.cargandoEvento = false;
+      },
+    });
+  }
+
+  procesarEvento(evento: EventoEnVivo): void {
+    this.servicioPlataforma = evento.plataforma;
+    this.titulo = evento.titulo;
+
+    if (evento.plataforma === 'youtube') {
+      const videoId = this.extractYouTubeVideoId(evento.linkTransmision);
+      this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(
+        `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0`,
+      );
+    } else if (evento.plataforma === 'vimeo') {
+      let embedUrl = evento.linkTransmision;
+
+      // Convertir URL de Vimeo Event a formato embed
+      // https://vimeo.com/event/5572935 -> https://vimeo.com/event/5572935/embed
+      if (embedUrl.includes('vimeo.com/event/') && !embedUrl.includes('/embed')) {
+        embedUrl = embedUrl + '/embed';
+      }
+      // Convertir URL regular de Vimeo a formato embed
+      // https://vimeo.com/123456789 -> https://player.vimeo.com/video/123456789
+      else if (embedUrl.match(/vimeo\.com\/(\d+)$/)) {
+        const videoId = embedUrl.match(/vimeo\.com\/(\d+)$/)?.[1];
+        embedUrl = `https://player.vimeo.com/video/${videoId}`;
+      }
+
+      // Agregar parámetros de reproducción
+      const separator = embedUrl.includes('?') ? '&' : '?';
+      embedUrl += `${separator}autoplay=1&title=0&byline=0&portrait=0`;
+
+      this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    } else if (evento.plataforma === 'antmedia') {
+      // AntMedia usa directamente el URL proporcionado
+      this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(evento.linkTransmision);
+    }
   }
 
   cargarSesionesActivas(): void {

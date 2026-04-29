@@ -13,6 +13,7 @@ export enum TIPOEVENTO {
 export enum PLATAFORMA {
   YOUTUBE = 'youtube',
   VIMEO = 'vimeo',
+  ANTMEDIA = 'antmedia',
 }
 
 export class LinkEventoModel {
@@ -24,6 +25,6 @@ export class LinkEventoModel {
     public tipoEvento_id: number,
     public plataforma: string,
     public estado: boolean,
-    public eventoEnBiblioteca: boolean
+    public eventoEnBiblioteca: boolean,
   ) {}
 }

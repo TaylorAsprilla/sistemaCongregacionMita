@@ -431,15 +431,24 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-tv',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
+    role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA],
     submenu: [
       {
-        path: RUTAS.EVENTOS,
-        title: 'Eventos',
+        path: RUTAS.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
+        title: 'Eventos en Vivo',
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
+        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA],
+        submenu: [],
+      },
+      {
+        path: RUTAS.EVENTOS,
+        title: 'Biblioteca de eventos',
+        icon: '',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA],
         submenu: [],
       },
       {
@@ -448,7 +457,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
+        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA],
         submenu: [],
       },
       {
@@ -457,7 +466,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
+        role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA],
         submenu: [],
       },
       {
