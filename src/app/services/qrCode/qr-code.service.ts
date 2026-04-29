@@ -32,7 +32,10 @@ export class QrCodeService {
     return this.httpClient.get<any>(`${base_url}/accesoqr/ultimoQr`, this.headers);
   }
 
-  obtenerListadoAccesos(): Observable<any> {
-    return this.httpClient.get<AccesosQrResponseInterface>(`${base_url}/accesoqr/listadoAccesos`, this.headers);
+  obtenerListadoAccesos(page: number = 1, limit: number = 10): Observable<AccesosQrResponseInterface> {
+    return this.httpClient.get<AccesosQrResponseInterface>(
+      `${base_url}/accesoqr/listadoAccesos?page=${page}&limit=${limit}`,
+      this.headers,
+    );
   }
 }
