@@ -1,6 +1,10 @@
 import Swal from 'sweetalert2';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { AccesoQrInterface, AccesosQrResponseInterface } from 'src/app/core/interfaces/acceso-qr.interface';
+import {
+  AccesoQrInterface,
+  AccesosQrResponseInterface,
+  PaginationMetadata,
+} from 'src/app/core/interfaces/acceso-qr.interface';
 import { QrCodeService } from 'src/app/services/qrCode/qr-code.service';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 import { Subscription } from 'rxjs';
@@ -22,38 +26,18 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
 
   @Output() crearAcceso = new EventEmitter<void>();
 
-  paises: string[] = [];
-  ciudades: string[] = [];
+  // Exponer Math para el template
+  Math = Math;
+
   accesosQr: AccesoQrInterface[] = [];
-  accesosQrFiltrados: AccesoQrInterface[] = [];
-
-  isFiltrosVisibles: boolean = false;
-  filtrarTexto: string = '';
-
-  fechaInicio: string = '';
-  fechaFin: string = '';
-
   cargando = false;
-  filtrarPaisTexto: string = '';
-  filtrarCiudadTexto: string = '';
 
-  originalPais: string;
-  originalCiudad: string;
-
-  totalAccesosQr: number;
+  // Propiedades de paginación
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  pagination: PaginationMetadata | null = null;
 
   private accesosQrSubscription: Subscription | null = null;
-
-  get filterText() {
-    return this.filtrarTexto;
-  }
-
-  set filterText(value: string) {
-    this.filtrarTexto = value;
-    this.accesosQrFiltrados = this.filterAccesos(this.filterText, this.filtrarPaisTexto, this.filtrarCiudadTexto);
-
-    this.totalAccesosQr = this.accesosQrFiltrados.length;
-  }
 
   ngOnInit(): void {
     this.obtenerAccesosQr();
@@ -69,83 +53,67 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
 
   obtenerAccesosQr(): void {
     this.cargando = true;
-    this.accesosQrSubscription = this.qrCodeService.obtenerListadoAccesos().subscribe({
-      next: (response: AccesosQrResponseInterface) => {
-        this.cargando = false;
 
-        if (response.ok) {
-          this.accesosQr = response.data;
-          this.accesosQrFiltrados = response.data;
+    this.accesosQrSubscription = this.qrCodeService
+      .obtenerListadoAccesos(this.currentPage, this.itemsPerPage)
+      .subscribe({
+        next: (response: AccesosQrResponseInterface) => {
+          this.cargando = false;
 
-          this.paises = Array.from(new Set(this.accesosQr.map((acceso) => acceso.pais)));
-          this.ciudades = Array.from(new Set(this.accesosQr.map((acceso) => acceso.ciudad)));
-        } else {
-          this.mostrarError('No se pudo cargar la información de accesos.');
-        }
-      },
-      error: (err) => {
-        this.cargando = false;
-        this.mostrarError('Ocurrió un error al obtener los accesos.');
-        console.error(err);
-      },
-    });
+          if (response.ok) {
+            this.accesosQr = response.data;
+            this.pagination = response.pagination || null;
+          } else {
+            this.mostrarError('No se pudo cargar la información de accesos.');
+          }
+        },
+        error: (err) => {
+          this.cargando = false;
+          this.mostrarError('Ocurrió un error al obtener los accesos.');
+          console.error(err);
+        },
+      });
   }
 
-  filtrarPais(pais: string): void {
-    this.filtrarPaisTexto = pais;
-    this.filtrarCiudadTexto = '';
-    this.originalCiudad = '';
-
-    this.accesosQrFiltrados = this.filterAccesos(this.filterText, this.filtrarPaisTexto, this.filtrarCiudadTexto);
-
-    this.totalAccesosQr = this.accesosQrFiltrados.length;
-  }
-
-  filtrarCiudad(ciudad: string): void {
-    this.filtrarCiudadTexto = ciudad;
-    this.filtrarPaisTexto = '';
-    this.originalPais = '';
-
-    this.accesosQrFiltrados = this.filterAccesos(this.filterText, this.filtrarPaisTexto, this.filtrarCiudadTexto);
-
-    this.totalAccesosQr = this.accesosQrFiltrados.length;
-  }
-
-  filtrarPorRangoFechas() {
-    const inicio = this.fechaInicio ? new Date(this.fechaInicio) : null;
-    const fin = this.fechaFin ? new Date(this.fechaFin) : null;
-
-    this.accesosQrFiltrados = this.accesosQr.filter((acceso) => {
-      const fechaAcceso = new Date(acceso.createdAt);
-      if (inicio && fechaAcceso < inicio) return false;
-      if (fin && fechaAcceso > fin) return false;
-      return true;
-    });
-  }
-
-  esconderFiltros() {
-    this.isFiltrosVisibles = !this.isFiltrosVisibles;
-  }
-
-  resetFiltros() {
-    if (!this.accesosQr || this.accesosQr.length === 0) {
-      return; // Si no hay usuarios, no realiza ninguna operación
+  // Métodos de paginación
+  goToPage(page: number): void {
+    if (page < 1 || (this.pagination && page > this.pagination.totalPages)) {
+      return;
     }
+    this.currentPage = page;
+    this.obtenerAccesosQr();
+  }
 
-    // Reinicia los filtros a sus valores iniciales
+  nextPage(): void {
+    if (this.pagination?.hasNextPage) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
 
-    this.filtrarPaisTexto = '';
-    this.filtrarCiudadTexto = '';
+  prevPage(): void {
+    if (this.pagination?.hasPrevPage) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
 
-    this.filterText = '';
-    this.fechaInicio = '';
-    this.fechaFin = '';
+  changeItemsPerPage(limit: number): void {
+    this.itemsPerPage = limit;
+    this.currentPage = 1;
+    this.obtenerAccesosQr();
+  }
 
-    // Restaura la lista completa sin cálculos adicionales
-    this.accesosQrFiltrados = [...this.accesosQr];
+  get pageNumbers(): number[] {
+    if (!this.pagination) return [];
+    const total = this.pagination.totalPages;
+    const current = this.currentPage;
+    const pages: number[] = [];
 
-    // Actualiza los contadores
-    this.totalAccesosQr = this.accesosQrFiltrados.length;
+    // Mostrar un rango de páginas alrededor de la página actual
+    const range = 2;
+    for (let i = Math.max(1, current - range); i <= Math.min(total, current + range); i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   mostrarError(mensaje: string): void {
@@ -155,29 +123,5 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
       text: mensaje,
       confirmButtonColor: '#2563eb',
     });
-  }
-
-  filterAccesos(filterTerm: string, pais: string, ciudad: string): AccesoQrInterface[] {
-    const lowerFilterTerm = filterTerm.toLocaleLowerCase() || '';
-    const lowerPais = pais.toLocaleLowerCase() || '';
-    const lowerCiudad = ciudad.toLocaleLowerCase() || '';
-
-    if (this.accesosQr.length === 0 && lowerFilterTerm === '' && lowerPais === '' && lowerCiudad === '') {
-      return this.accesosQr;
-    } else {
-      return this.accesosQr.filter((acceso: AccesoQrInterface) => {
-        const getSafeString = (value: string | undefined | null): string => (value ? value.toLocaleLowerCase() : '');
-
-        const nombreCompleto = getSafeString(acceso.qrAcceso?.nombre);
-        const searchTerms = lowerFilterTerm.split(' ');
-        const nombreCompletoMatches = searchTerms.every((term) => nombreCompleto.includes(term));
-
-        // Cambia includes por igualdad exacta o vacío (sin filtro)
-        const paisMatch = lowerPais === '' || getSafeString(acceso.pais) === lowerPais;
-        const ciudadMatch = lowerCiudad === '' || getSafeString(acceso.ciudad).includes(lowerCiudad);
-
-        return nombreCompletoMatches && paisMatch && ciudadMatch;
-      });
-    }
   }
 }

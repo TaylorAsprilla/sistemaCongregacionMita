@@ -2,163 +2,280 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
+import { CommonModule } from '@angular/common';
 import { RUTAS } from 'src/app/routes/menu-items';
-import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
+import { EventoEnVivoService } from 'src/app/services/evento-en-vivo/evento-en-vivo.service';
+import {
+  EventoEnVivo,
+  EventoEnVivoResponse,
+  EventosEnVivoResponse,
+} from 'src/app/core/interfaces/evento-en-vivo.interface';
+import { CargandoInformacionComponent } from 'src/app/components/cargando-informacion/cargando-informacion.component';
 import Swal from 'sweetalert2';
-import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 
-import { BibliotecaMultimediaComponent } from '../../../../components/biblioteca-multimedia/biblioteca-multimedia.component';
-
+/**
+ * Componente para configurar EVENTOS EN VIVO (Sistema Nuevo)
+ * API: /api/evento-en-vivo
+ * Plataformas: YouTube, Vimeo, AntMedia
+ */
 @Component({
   selector: 'app-configurar-eventos',
   templateUrl: './configurar-eventos.component.html',
   styleUrls: ['./configurar-eventos.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgxIntlTelInputModule, BibliotecaMultimediaComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CargandoInformacionComponent],
 })
 export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  private linkEventosService = inject(LinkEventosService);
+  private eventoEnVivoService = inject(EventoEnVivoService);
 
-  eventosForm: FormGroup;
+  readonly PLATAFORMA = PLATAFORMA;
+  readonly TIPOEVENTO_ID = TIPOEVENTO_ID;
 
-  linkEventos: LinkEventoModel[] = [];
-  linkEventoSeleccionado: LinkEventoModel[] = [];
+  eventosForm!: FormGroup;
+  eventosEnVivo: EventoEnVivo[] = [];
+  eventoSeleccionado: EventoEnVivo | null = null;
+  cargandoEventos = false;
 
-  linkEventosSubscription: Subscription;
-
-  get PLATAFORMA() {
-    return PLATAFORMA;
-  }
-
-  get TIPOEVENTO() {
-    return TIPOEVENTO_ID;
-  }
+  private eventosSubscription?: Subscription;
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(({ id }) => {
-      this.buscarLinkEvento(id);
-    });
-
-    this.cargarEventos();
     this.crearFormulario();
+    this.cargarEventos();
+
+    // Verificar si estamos editando un evento
+    this.activatedRoute.params.subscribe(({ id }) => {
+      if (id && id !== 'nuevo') {
+        this.cargarEventoPorId(Number(id));
+      }
+    });
   }
 
   ngOnDestroy(): void {
-    this.linkEventosSubscription?.unsubscribe();
+    this.eventosSubscription?.unsubscribe();
   }
 
-  crearFormulario() {
+  crearFormulario(): void {
     this.eventosForm = this.formBuilder.group({
       titulo: ['', [Validators.required, Validators.minLength(3)]],
-      link: ['', [Validators.required, Validators.minLength(3)]],
-      fecha: ['', [Validators.required, Validators.minLength(3)]],
-      tipoEvento_id: ['', [Validators.required]],
-      plataforma: ['', [Validators.required, Validators.minLength(3)]],
+      descripcion: ['', [Validators.minLength(10)]],
+      linkTransmision: ['', [Validators.required, Validators.minLength(10)]],
+      plataforma: [null, [Validators.required]],
+      tipoEvento_id: [null, [Validators.required]],
     });
   }
 
-  cargarEventos() {
-    this.linkEventosSubscription = this.linkEventosService.getEventos().subscribe((linkEvento: LinkEventoModel[]) => {
-      this.linkEventos = linkEvento.filter((linkEvento) => linkEvento.estado === true);
-    });
-  }
-
-  guardarEvento() {
-    const servicio = this.eventosForm.value;
-
-    if (!!this.linkEventoSeleccionado.length) {
-      this.actualizarEvento();
-    } else {
-      this.linkEventosService.crearEvento(servicio).subscribe(
-        (respuesta: any) => {
-          Swal.fire('Evento', 'Se cargó el evento correctamente', 'success');
-          this.resetFormulario();
-          this.cargarEventos();
-        },
-        (error) => {
-          const errores = error.error.errors as { [key: string]: { msg: string } };
-          const listaErrores: string[] = [];
-
-          Object.entries(errores).forEach(([key, value]) => {
-            listaErrores.push('° ' + value['msg'] + '<br>');
-          });
-
-          Swal.fire({
-            title: 'Eventos',
-            icon: 'error',
-            html: `Error al guardar el servicio <p> ${listaErrores.join('')}`,
-          });
-        }
-      );
-    }
-  }
-
-  actualizarEvento() {
-    const idEvento = this.linkEventoSeleccionado[0].id;
-    const data = { ...this.eventosForm.value, id: idEvento };
-
-    this.linkEventosService.actualizarEvento(data).subscribe({
-      next: (eventoActualizado: any) => {
-        Swal.fire({
-          title: 'Evento Actualizado',
-          icon: 'success',
-          html: `El evento ${eventoActualizado.eventoactualizado.titulo} se actualizó correctamente`,
-        });
-        this.resetFormulario();
-        this.redirigirAEventos();
+  cargarEventos(): void {
+    this.cargandoEventos = true;
+    this.eventosSubscription = this.eventoEnVivoService.obtenerEventos().subscribe({
+      next: (response: EventosEnVivoResponse) => {
+        this.eventosEnVivo = response.eventosEnVivo || [];
+        this.cargandoEventos = false;
       },
       error: (error) => {
+        console.error('Error al cargar eventos:', error);
+        this.cargandoEventos = false;
         Swal.fire({
           title: 'Error',
+          text: 'No se pudieron cargar los eventos en vivo',
           icon: 'error',
-          text: 'Hubo un error al actualizar el evento.',
         });
-        console.error('Error al actualizar el evento:', error);
       },
     });
   }
 
-  redirigirAEventos() {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.EVENTOS}`);
+  cargarEventoPorId(id: number): void {
+    this.eventoEnVivoService.obtenerEventoPorId(id).subscribe({
+      next: (response) => {
+        this.eventoSeleccionado = response.eventoEnVivo;
+        const { titulo, descripcion, linkTransmision, plataforma, tipoEvento_id } = response.eventoEnVivo;
+        this.eventosForm.patchValue({
+          titulo,
+          descripcion,
+          linkTransmision,
+          plataforma,
+          tipoEvento_id,
+        });
+      },
+      error: (error) => {
+        console.error('Error al cargar evento:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo cargar el evento seleccionado',
+          icon: 'error',
+        });
+        this.router.navigate([`/${RUTAS.SISTEMA}/${RUTAS.CONFIGURAR_SERVICIOS_Y_VIGILIAS}`]);
+      },
+    });
   }
 
-  buscarLinkEvento(id: string) {
-    if (id !== 'nuevo') {
-      this.linkEventosService
-        .getUnLinkEvento(Number(id))
-        .pipe(delay(100))
-        .subscribe(
-          (linkEvento: LinkEventoModel) => {
-            const { titulo, link, fecha, tipoEvento_id, plataforma } = linkEvento;
-            this.linkEventoSeleccionado[0] = linkEvento;
-            this.eventosForm.setValue({ titulo, link, fecha, tipoEvento_id, plataforma });
-          },
-          (error) => {
-            let errores = error.error.errors;
-            let listaErrores: string[] = [];
+  guardarEvento(): void {
+    if (this.eventosForm.invalid) {
+      Swal.fire({
+        title: 'Formulario Incompleto',
+        text: 'Por favor complete todos los campos requeridos',
+        icon: 'warning',
+      });
+      return;
+    }
 
-            Object.entries(errores).forEach(([key, value]) => {
-              listaErrores.push('° ' + value['msg'] + '<br>');
-            });
-
-            Swal.fire({
-              title: 'Eventos',
-              icon: 'error',
-              html: `${listaErrores.join('')}`,
-            });
-
-            return this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.CAMPOS}`);
-          }
-        );
+    if (this.eventoSeleccionado?.id) {
+      this.actualizarEvento();
+    } else {
+      this.crearEvento();
     }
   }
 
-  resetFormulario() {
-    this.eventosForm.reset();
+  crearEvento(): void {
+    const nuevoEvento: EventoEnVivo = {
+      ...this.eventosForm.value,
+      estado: true,
+    };
+
+    this.eventoEnVivoService.crearEvento(nuevoEvento).subscribe({
+      next: (response) => {
+        console.log('Respuesta del backend (crear):', response.eventoEnVivo.titulo);
+        const titulo = response.eventoEnVivo.titulo;
+
+        Swal.fire({
+          title: '¡Éxito!',
+          text: `Evento "${titulo}" creado correctamente`,
+          icon: 'success',
+        });
+        this.resetFormulario();
+        this.cargarEventos();
+      },
+      error: (error) => {
+        console.error('Error al crear evento:', error);
+        const mensajeError = error.error?.mensaje || 'Error al crear el evento';
+        Swal.fire({
+          title: 'Error',
+          text: mensajeError,
+          icon: 'error',
+        });
+      },
+    });
+  }
+
+  actualizarEvento(): void {
+    if (!this.eventoSeleccionado?.id) return;
+
+    const eventoActualizado = this.eventosForm.value;
+
+    this.eventoEnVivoService.actualizarEvento(this.eventoSeleccionado.id, eventoActualizado).subscribe({
+      next: (response) => {
+        console.log('Respuesta del backend (actualizar):', response);
+        const eventoModificado = (response.eventoEnVivo || response) as EventoEnVivo;
+        const titulo = eventoModificado.titulo || 'el evento';
+
+        Swal.fire({
+          title: '¡Actualizado!',
+          text: `Evento "${titulo}" actualizado correctamente`,
+          icon: 'success',
+        });
+        this.resetFormulario();
+        this.router.navigate([`/${RUTAS.SISTEMA}/${RUTAS.CONFIGURAR_SERVICIOS_Y_VIGILIAS}`]);
+      },
+      error: (error) => {
+        console.error('Error al actualizar evento:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo actualizar el evento',
+          icon: 'error',
+        });
+      },
+    });
+  }
+
+  seleccionarEvento(evento: EventoEnVivo): void {
+    this.eventoSeleccionado = evento;
+    const { titulo, descripcion, linkTransmision, plataforma, tipoEvento_id } = evento;
+    this.eventosForm.patchValue({
+      titulo,
+      descripcion,
+      linkTransmision,
+      plataforma,
+      tipoEvento_id,
+    });
+  }
+
+  eliminarEvento(evento: EventoEnVivo): void {
+    if (!evento.id) return;
+
+    Swal.fire({
+      title: '¿Eliminar Evento?',
+      text: `¿Está seguro de eliminar "${evento.titulo}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed && evento.id) {
+        this.eventoEnVivoService.eliminarEvento(evento.id).subscribe({
+          next: () => {
+            Swal.fire('¡Eliminado!', 'El evento ha sido eliminado', 'success');
+            this.cargarEventos();
+            if (this.eventoSeleccionado?.id === evento.id) {
+              this.resetFormulario();
+            }
+          },
+          error: (error) => {
+            console.error('Error al eliminar evento:', error);
+            Swal.fire('Error', 'No se pudo eliminar el evento', 'error');
+          },
+        });
+      }
+    });
+  }
+
+  cambiarEstado(evento: EventoEnVivo): void {
+    if (!evento.id) return;
+
+    const nuevoEstado = !evento.estado;
+    this.eventoEnVivoService.cambiarEstadoEvento(evento.id, nuevoEstado).subscribe({
+      next: () => {
+        evento.estado = nuevoEstado;
+        const estado = nuevoEstado ? 'activado' : 'desactivado';
+        Swal.fire('¡Listo!', `Evento ${estado} correctamente`, 'success');
+      },
+      error: (error) => {
+        console.error('Error al cambiar estado:', error);
+        Swal.fire('Error', 'No se pudo cambiar el estado del evento', 'error');
+      },
+    });
+  }
+
+  resetFormulario(): void {
+    this.eventosForm.reset({
+      titulo: '',
+      descripcion: '',
+      linkTransmision: '',
+      plataforma: null,
+      tipoEvento_id: null,
+    });
+    this.eventoSeleccionado = null;
+  }
+
+  obtenerIconoPlataforma(plataforma: string): string {
+    const iconos: Record<string, string> = {
+      youtube: 'fa-youtube text-danger',
+      vimeo: 'fa-vimeo text-info',
+      antmedia: 'fa-broadcast-tower text-success',
+    };
+    return iconos[plataforma] || 'fa-video';
+  }
+
+  obtenerNombreTipoEvento(tipoId: number): string {
+    const nombres: Record<number, string> = {
+      1: 'Servicio',
+      2: 'Vigilia',
+      3: 'Evento Especial',
+    };
+    return nombres[tipoId] || 'Desconocido';
   }
 }

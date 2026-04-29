@@ -47,7 +47,7 @@ import { TipoEstudioResolver } from 'src/app/resolvers/tipo-estudio/tipo-estudio
 import { OpcionTransporteResolver } from 'src/app/resolvers/opcion-transporte/opcion-transporte.resolver';
 import { ParentescoResolver } from 'src/app/resolvers/parentesco/parentesco.resolver';
 import { ConfigurarEventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/configurar-eventos/configurar-eventos.component';
-import { EventosComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos/eventos.component';
+import { EventosBibliotecaComponent } from 'src/app/pages/multimedia/eventos-multimedia/eventos/eventos.component';
 import { RolesGuard } from 'src/app/core/guards/roles/roles.guard';
 import { OpcionDeTransporteComponent } from 'src/app/pages/configuracion/opcion-de-transporte/opcion-de-transporte.component';
 import { GeneroComponent } from 'src/app/pages/configuracion/genero/genero.component';
@@ -574,7 +574,23 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.EVENTOS,
-    component: EventosComponent,
+    component: EventosBibliotecaComponent,
+  },
+  {
+    path: `${RUTAS.CONFIGURAR_SERVICIOS_Y_VIGILIAS}/:id`,
+    component: ConfigurarEventosComponent,
+    canActivate: [RolesGuard],
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
+    },
+  },
+  {
+    path: RUTAS.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
+    component: ConfigurarEventosComponent,
+    canActivate: [RolesGuard],
+    data: {
+      role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
+    },
   },
   {
     path: RUTAS.BIBLIOTECA_SERVICIOS,
