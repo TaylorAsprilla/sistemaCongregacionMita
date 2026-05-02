@@ -54,7 +54,6 @@
 
           <!-- Botones -->
           <div class="card">
-            {{ eventosForm.invalid }}
             <button type="submit" class="btn btn-primary" [disabled]="eventosForm.invalid">
               <i class="fa fa-save"></i>
               {{ eventoSeleccionado ? 'Actualizar' : 'Guardar' }} Evento

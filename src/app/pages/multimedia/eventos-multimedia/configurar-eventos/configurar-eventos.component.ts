@@ -137,7 +137,6 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
 
     this.eventoEnVivoService.crearEvento(nuevoEvento).subscribe({
       next: (response) => {
-        console.log('Respuesta del backend (crear):', response.eventoEnVivo.titulo);
         const titulo = response.eventoEnVivo.titulo;
 
         Swal.fire({
@@ -167,7 +166,6 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
 
     this.eventoEnVivoService.actualizarEvento(this.eventoSeleccionado.id, eventoActualizado).subscribe({
       next: (response) => {
-        console.log('Respuesta del backend (actualizar):', response);
         const eventoModificado = (response.eventoEnVivo || response) as EventoEnVivo;
         const titulo = eventoModificado.titulo || 'el evento';
 
