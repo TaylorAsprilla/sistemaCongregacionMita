@@ -1,6 +1,6 @@
-import { LinkEventoModel, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { LinkEventoModel } from 'src/app/core/models/link-evento.model';
+import { Component, OnInit } from '@angular/core';
+
 import { Subscription } from 'rxjs';
 import { generarSeccionHome, SeccionHomeInterface } from 'src/app/core/interfaces/seccion-home.interface';
 import { CampoModel } from 'src/app/core/models/campo.model';
@@ -8,7 +8,6 @@ import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { CongregacionPaisModel } from 'src/app/core/models/congregacion-pais.model';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES } from 'src/app/routes/menu-items';
-import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
 
 import { PermisosDirective } from '../../directive/permisos/permisos.directive';
 import { SeccionHomeComponent } from '../../components/seccion-home/seccion-home.component';
@@ -21,10 +20,7 @@ import { ServiciosEnVivoComponent } from '../../components/servicios-en-vivo/ser
   standalone: true,
   imports: [PermisosDirective, SeccionHomeComponent, ServiciosEnVivoComponent],
 })
-export default class InicioComponent implements OnInit, OnDestroy {
-  private activatedRoute = inject(ActivatedRoute);
-  private linkEventosService = inject(LinkEventosService);
-
+export default class InicioComponent implements OnInit {
   usuarios: UsuarioModel[] = [];
   totalUsuarios: number;
 
@@ -38,21 +34,12 @@ export default class InicioComponent implements OnInit, OnDestroy {
   public generarSeccionHome: SeccionHomeInterface[] = [];
 
   usuariosSubscription: Subscription;
-  linEventosSubscription: Subscription;
 
   get ROLES() {
     return ROLES;
   }
 
-  get TIPOEVENTO_ID() {
-    return TIPOEVENTO_ID;
-  }
-
   ngOnInit(): void {
-    this.linEventosSubscription = this.linkEventosService.getLinkServicio().subscribe((evento: LinkEventoModel) => {
-      this.servicio = evento;
-    });
-
     this.generarSeccionHome = generarSeccionHome.filter((seccionInforme) => seccionInforme);
 
     this.roles = [
@@ -63,9 +50,5 @@ export default class InicioComponent implements OnInit, OnDestroy {
       ROLES.OBRERO_CAMPO,
       ROLES.ASISTENTE_OOTS,
     ];
-  }
-
-  ngOnDestroy(): void {
-    this.linEventosSubscription?.unsubscribe();
   }
 }
