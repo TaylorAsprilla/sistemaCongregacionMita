@@ -34,9 +34,6 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
   private eventoEnVivoService = inject(EventoEnVivoService);
   domSanitizer = inject(DomSanitizer);
 
-  @Input() servicios: LinkEventoModel = null;
-  @Input() tipoDeEvento: TIPOEVENTO_ID | string;
-
   @ViewChild('templateYouTubePlayer') templateYouTubePlayer: ElementRef<HTMLDivElement>;
   videoWidth: number | undefined;
   videoHeight: number | undefined;
