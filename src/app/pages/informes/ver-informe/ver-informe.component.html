@@ -347,16 +347,14 @@
                   <th>Tipo</th>
                   <th>Asunto</th>
                   <th>Responsable</th>
-                  <th>Observaciones</th>
                 </tr>
               </thead>
               <tbody>
                 @for (asunto of asuntosPendientes; track asunto.id) {
                   <tr>
-                    <td>{{ asunto.tipo }}</td>
+                    <td>{{ obtenerEtiquetaTipoAsunto(asunto.tipo) }}</td>
                     <td>{{ asunto.asunto }}</td>
                     <td>{{ asunto.responsable }}</td>
-                    <td>{{ asunto.observaciones || '-' }}</td>
                   </tr>
                 }
               </tbody>
