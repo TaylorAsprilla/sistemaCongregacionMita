@@ -20,7 +20,7 @@
             <select class="form-control" formControlName="tipo" id="inputTipo">
               <option value="" disabled>-- Seleccione un tipo --</option>
               @for (tipo of tiposAsunto; track tipo) {
-                <option [value]="tipo">{{ tipo }}</option>
+                <option [value]="tipo.value">{{ tipo.label }}</option>
               }
             </select>
             @if (asuntoForm.get('tipo')?.invalid && asuntoForm.get('tipo')?.touched) {
@@ -107,10 +107,10 @@
                     <td>
                       <span
                         class="badge"
-                        [class.badge-primary]="asunto.tipo === 'Administrativo'"
-                        [class.badge-success]="asunto.tipo === 'Eclesiastico'"
-                        [class.badge-warning]="asunto.tipo === 'Actividades'"
-                        >{{ asunto.tipo }}</span
+                        [class.badge-primary]="esTipoAsunto(asunto.tipo, 'ADMINISTRATIVO')"
+                        [class.badge-success]="esTipoAsunto(asunto.tipo, 'ECLESIASTICO')"
+                        [class.badge-warning]="esTipoAsunto(asunto.tipo, 'ACTIVIDADES')"
+                        >{{ obtenerEtiquetaTipoAsunto(asunto.tipo) }}</span
                       >
                     </td>
                     <td>{{ asunto.asunto }}</td>

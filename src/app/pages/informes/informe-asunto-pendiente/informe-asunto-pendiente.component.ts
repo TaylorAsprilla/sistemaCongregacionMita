@@ -2,7 +2,12 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AsuntoPendienteModel, TipoAsunto } from 'src/app/core/models/asunto-pendiente.model';
+import {
+  AsuntoPendienteModel,
+  TIPOS_ASUNTO_OPTIONS,
+  normalizarTipoAsunto,
+  obtenerEtiquetaTipoAsunto,
+} from 'src/app/core/models/asunto-pendiente.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { AsuntoPendienteService } from 'src/app/services/asunto-pendiente/asunto-pendiente.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
@@ -30,7 +35,7 @@ export class InformeAsuntoPendienteComponent implements OnInit {
   public editando: boolean = false;
   public asuntoSeleccionado: AsuntoPendienteModel | null = null;
 
-  public readonly tiposAsunto: TipoAsunto[] = ['Administrativo', 'Eclesiastico', 'Actividades'];
+  public readonly tiposAsunto = TIPOS_ASUNTO_OPTIONS;
 
   constructor() {
     const informeId = this.informeService.informeActivoId;
@@ -82,7 +87,17 @@ export class InformeAsuntoPendienteComponent implements OnInit {
       return;
     }
 
-    const datos = this.asuntoForm.value;
+    const tipo = normalizarTipoAsunto(this.asuntoForm.get('tipo')?.value);
+    const datos = { ...this.asuntoForm.value, tipo: tipo || undefined };
+
+    if (!tipo) {
+      Swal.fire({
+        title: 'Tipo de asunto invalido',
+        text: 'Seleccione un tipo de asunto valido antes de guardar',
+        icon: 'warning',
+      });
+      return;
+    }
 
     if (this.editando && this.asuntoSeleccionado) {
       const actualizado = { ...datos, id: this.asuntoSeleccionado.id };
@@ -121,7 +136,7 @@ export class InformeAsuntoPendienteComponent implements OnInit {
     this.editando = true;
     this.asuntoSeleccionado = asunto;
     this.asuntoForm.patchValue({
-      tipo: asunto.tipo,
+      tipo: normalizarTipoAsunto(asunto.tipo),
       asunto: asunto.asunto,
       responsable: asunto.responsable,
       observaciones: asunto.observaciones,
@@ -167,6 +182,14 @@ export class InformeAsuntoPendienteComponent implements OnInit {
 
   navegarAlInforme(): void {
     this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
+  }
+
+  obtenerEtiquetaTipoAsunto(tipo?: string | null): string {
+    return obtenerEtiquetaTipoAsunto(tipo);
+  }
+
+  esTipoAsunto(tipo: string | null | undefined, esperado: 'ADMINISTRATIVO' | 'ECLESIASTICO' | 'ACTIVIDADES'): boolean {
+    return normalizarTipoAsunto(tipo) === esperado;
   }
 
   private mostrarErrores(titulo: string, error: any, mensajeExtra: string = ''): void {

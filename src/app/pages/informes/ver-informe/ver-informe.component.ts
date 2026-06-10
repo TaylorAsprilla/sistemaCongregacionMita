@@ -28,7 +28,7 @@ import { ActividadModel } from 'src/app/core/models/actividad.model';
 import { ActividadEconomicaModel } from 'src/app/core/models/actividad-economica.model';
 import { DiezmoModel } from 'src/app/core/models/diezmo.model';
 import { AspectoEspiritualModel } from 'src/app/core/models/aspecto-espiritual.model';
-import { AsuntoPendienteModel } from 'src/app/core/models/asunto-pendiente.model';
+import { AsuntoPendienteModel, obtenerEtiquetaTipoAsunto } from 'src/app/core/models/asunto-pendiente.model';
 import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { TipoActividadEconomicaModel } from 'src/app/core/models/tipo-actividad-economica.model';
@@ -969,7 +969,7 @@ export class VerInformeComponent implements OnInit {
             { text: 'Observaciones', style: 'tableHeader' },
           ],
           ...this.asuntosPendientes.map((asunto) => [
-            { text: asunto.tipo || '-', style: 'tableCell' },
+            { text: this.obtenerEtiquetaTipoAsunto(asunto.tipo), style: 'tableCell' },
             { text: asunto.asunto || '-', style: 'tableCell' },
             { text: asunto.responsable || '-', style: 'tableCell' },
             { text: asunto.observaciones || '-', style: 'tableCell' },
@@ -1000,6 +1000,10 @@ export class VerInformeComponent implements OnInit {
   buscarNombreTipoActividadEconomica(id: number): string {
     const tipo = this.tiposActividadEconomica.find((t) => t.id === id);
     return tipo?.nombre || 'N/A';
+  }
+
+  obtenerEtiquetaTipoAsunto(tipo?: string | null): string {
+    return obtenerEtiquetaTipoAsunto(tipo);
   }
 
   /**
