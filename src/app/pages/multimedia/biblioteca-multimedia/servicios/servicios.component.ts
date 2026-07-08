@@ -5,7 +5,6 @@ import { LinkEventoModel } from 'src/app/core/models/link-evento.model';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SessionMonitorService } from 'src/app/core/services/session-monitor.service';
 
 @Component({
@@ -18,7 +17,6 @@ import { SessionMonitorService } from 'src/app/core/services/session-monitor.ser
 })
 export class ServiciosComponent implements OnInit, OnDestroy {
   private linkEventosService = inject(LinkEventosService);
-  private sanitizer = inject(DomSanitizer);
   private changeDetectorRef = inject(ChangeDetectorRef);
   private sessionMonitorService = inject(SessionMonitorService);
 
@@ -28,7 +26,6 @@ export class ServiciosComponent implements OnInit, OnDestroy {
   searchService: string = '';
   searchDate: string = '';
   loading: boolean = true;
-  selectedVideoLink: SafeResourceUrl | null = null;
   sesionesActivas: number = 0;
 
   videosSubscription: Subscription | null = null;
@@ -45,7 +42,6 @@ export class ServiciosComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cargarEventos();
-    this.cargarSesionesActivas();
   }
 
   cargarEventos(): void {
@@ -90,59 +86,8 @@ export class ServiciosComponent implements OnInit, OnDestroy {
     this.currentPage++;
   }
 
-  cargarSesionesActivas(): void {
-    // Ejecutar inmediatamente y luego cada 30 segundos
-    this.sesionesSubscription = timer(0, 30000)
-      .pipe(switchMap(() => this.sessionMonitorService.getActiveSessions()))
-      .subscribe({
-        next: (response) => {
-          // Usar el campo currentlyActiveSessions del backend
-          this.sesionesActivas = response.currentlyActiveSessions || 0;
-          this.changeDetectorRef.markForCheck();
-        },
-        error: () => {
-          this.sesionesActivas = 0;
-          this.changeDetectorRef.markForCheck();
-        },
-      });
-  }
-
   // Verificar si hay más videos para cargar
   get hasMoreVideos(): boolean {
     return this.visibleVideos.length < this.videos.length;
-  }
-
-  // Extraer el ID de YouTube
-  getYouTubeId(url: string): string | null {
-    const regex = /(?:youtube\.com\/(?:live\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const match = url.match(regex);
-    return match && match[1] ? match[1] : null;
-  }
-
-  // Extraer el ID de Vimeo
-  getVimeoId(url: string): string | null {
-    const regex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/;
-    const match = url.match(regex);
-    return match && match[1] ? match[1] : null;
-  }
-
-  // Obtener la URL de embed segura
-  getSafeEmbedUrl(url: string): SafeResourceUrl | null {
-    let embedUrl: string | null = null;
-
-    // Verificar si es YouTube
-    const youtubeId = this.getYouTubeId(url);
-    if (youtubeId) {
-      embedUrl = `https://www.youtube.com/embed/${youtubeId}`;
-    }
-
-    // Verificar si es Vimeo
-    const vimeoId = this.getVimeoId(url);
-    if (vimeoId) {
-      embedUrl = `https://player.vimeo.com/video/${vimeoId}`;
-    }
-
-    // Marcar la URL como segura
-    return embedUrl ? this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl) : null;
   }
 }

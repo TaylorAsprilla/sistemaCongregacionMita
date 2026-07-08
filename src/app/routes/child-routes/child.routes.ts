@@ -37,6 +37,7 @@ import { PaisResolver } from 'src/app/resolvers/pais/pais.resolver';
 import { CampoResolver } from 'src/app/resolvers/campo/campo.resolver';
 import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-solicitud.resolver';
 import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
+import { AgregarBibliotecaComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/agregar-biblioteca/agregar-biblioteca.component';
 import { ObreroResolver } from 'src/app/resolvers/obrero/obrero.resolver';
 import { TiposDeDocumentosComponent } from 'src/app/pages/administracion/tipo-de-documento/tipos-de-documentos/tipos-de-documentos.component';
 import { CrearTipoDocumentoComponent } from 'src/app/pages/administracion/tipo-de-documento/crear-tipo-documento/crear-tipo-documento.component';
@@ -595,6 +596,15 @@ export const childRoutes: Routes = [
   {
     path: RUTAS.BIBLIOTECA_SERVICIOS,
     component: ServiciosComponent,
+  },
+  {
+    path: RUTAS.AGREGAR_BIBLIOTECA,
+    component: AgregarBibliotecaComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Agregar a Biblioteca',
+      role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA, ROLES.ASISTENTE_OOTS],
+    },
   },
 
   {

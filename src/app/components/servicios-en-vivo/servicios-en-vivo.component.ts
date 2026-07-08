@@ -12,7 +12,7 @@ import {
   inject,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
+import { LinkEventoModel, PLATAFORMAENUM, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 import { SessionMonitorService } from 'src/app/core/services/session-monitor.service';
 import { Subscription, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -50,7 +50,7 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
   sesionesActivas: number = 0;
   sesionesSubscription: Subscription | null = null;
 
-  readonly PLATAFORMA = PLATAFORMA;
+  readonly PLATAFORMA = PLATAFORMAENUM;
   readonly TIPOEVENTO_ID = TIPOEVENTO_ID;
 
   ngOnInit(): void {
@@ -153,7 +153,7 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['servicios'] && changes['servicios'].currentValue) {
       const videos = changes['servicios'].currentValue as LinkEventoModel;
-      if (videos.plataforma === PLATAFORMA.VIMEO) {
+      if (videos.plataforma === PLATAFORMAENUM.VIMEO) {
         // Asegurarse de que sea el link embed
         let embedUrl = videos.link;
 
@@ -166,7 +166,7 @@ export class ServiciosEnVivoComponent implements OnInit, OnChanges, OnDestroy, A
         embedUrl += '?autoplay=1&title=0&byline=0&portrait=0';
 
         this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(embedUrl);
-      } else if (videos.plataforma === PLATAFORMA.YOUTUBE) {
+      } else if (videos.plataforma === PLATAFORMAENUM.YOUTUBE) {
         const videoId = this.extractYouTubeVideoId(videos.link);
 
         this.videoUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(

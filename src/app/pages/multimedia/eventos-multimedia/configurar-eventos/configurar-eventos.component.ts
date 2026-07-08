@@ -12,7 +12,7 @@ import {
 } from 'src/app/core/interfaces/evento-en-vivo.interface';
 import { CargandoInformacionComponent } from 'src/app/components/cargando-informacion/cargando-informacion.component';
 import Swal from 'sweetalert2';
-import { PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
+import { PLATAFORMAENUM, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 
 /**
  * Componente para configurar EVENTOS EN VIVO (Sistema Nuevo)
@@ -32,7 +32,7 @@ export class ConfigurarEventosComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private eventoEnVivoService = inject(EventoEnVivoService);
 
-  readonly PLATAFORMA = PLATAFORMA;
+  readonly PLATAFORMA = PLATAFORMAENUM;
   readonly TIPOEVENTO_ID = TIPOEVENTO_ID;
 
   eventosForm!: FormGroup;

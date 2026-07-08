@@ -6,6 +6,7 @@ export enum RUTAS {
   BIBLIOTECA_MULTIMEDIA = 'biblioteca-multimedia',
   BIBLIOTECA_SERVICIOS = 'biblioteca-servicios',
   BIBLIOTECA_VIGILIAS = 'biblioteca-vigilias',
+  AGREGAR_BIBLIOTECA = 'agregar-biblioteca',
   CAMPOS = 'campos',
   CONFIGURAR_SERVICIOS_Y_VIGILIAS = 'configurar-servicios-y-vigilias',
   CONFIRMAR_REGISTRO = 'confirmar-registro',

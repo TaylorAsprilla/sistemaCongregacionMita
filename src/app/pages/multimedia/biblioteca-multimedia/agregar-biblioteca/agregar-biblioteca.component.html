@@ -1,0 +1,66 @@
+<div class="row">
+  <!-- Formulario -->
+  <div class="col-md-10">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">{{ eventoSeleccionado ? 'Editar' : 'Agregar' }} Evento a la Biblioteca</h3>
+      </div>
+      <div class="card-body">
+        <form autocomplete="off" [formGroup]="eventoForm" (ngSubmit)="guardarEvento()">
+          <!-- Tipo de Evento -->
+          <div class="form-group">
+            <label>Tipo de Evento</label>
+            <select class="form-control" formControlName="tipoEvento_id">
+              <option [value]="null" disabled selected>Seleccione el tipo de evento</option>
+              <option [value]="TIPOEVENTO_ID.SERVICIO">Servicio</option>
+              <option [value]="TIPOEVENTO_ID.VIGILIA">Vigilia</option>
+              <option [value]="TIPOEVENTO_ID.EVENTO_ESPECIAL">Evento Especial</option>
+            </select>
+          </div>
+
+          <!-- Título -->
+          <div class="form-group">
+            <label>Título</label>
+            <input
+              type="text"
+              formControlName="titulo"
+              class="form-control"
+              placeholder="Ej: Servicio Dominical 6 de julio 2026"
+            />
+          </div>
+
+          <!-- Fecha -->
+          <div class="form-group">
+            <label>Fecha del Evento</label>
+            <input type="date" formControlName="fecha" class="form-control" />
+          </div>
+
+          <!-- Link Swarmify -->
+          <div class="form-group">
+            <label>Link de Swarmify</label>
+            <input
+              type="text"
+              formControlName="link"
+              class="form-control"
+              placeholder="swarmify://3fcfbf1aa42f10541fdc..."
+            />
+          </div>
+
+          <!-- Botones -->
+          <div class="card">
+            <button type="submit" class="btn btn-primary" [disabled]="eventoForm.invalid">
+              <i class="fa fa-save"></i>
+              {{ eventoSeleccionado ? 'Actualizar' : 'Guardar' }} Evento
+            </button>
+            @if (eventoSeleccionado) {
+              <button type="button" class="btn btn-secondary mt-2" (click)="resetFormulario()">
+                <i class="fa fa-times"></i>
+                Cancelar
+              </button>
+            }
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

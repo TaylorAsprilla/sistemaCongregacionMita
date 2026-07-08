@@ -10,17 +10,18 @@ import {
   inject,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { LinkEventoModel, PLATAFORMA, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
+import { LinkEventoModel, PLATAFORMAENUM, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 
 import { YouTubePlayer } from '@angular/youtube-player';
 import { YoutubePipe } from '../../pipes/youtube/youtube.pipe';
+import { ServiciosComponent } from 'src/app/pages/multimedia/biblioteca-multimedia/servicios/servicios.component';
 
 @Component({
   selector: 'app-biblioteca-multimedia',
   templateUrl: './biblioteca-multimedia.component.html',
   styleUrls: ['./biblioteca-multimedia.component.scss'],
   standalone: true,
-  imports: [YouTubePlayer, YoutubePipe],
+  imports: [YouTubePlayer, YoutubePipe, ServiciosComponent],
 })
 export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnDestroy {
   private changeDetectorRef = inject(ChangeDetectorRef);
@@ -37,7 +38,7 @@ export class BibliotecaMultimediaComponent implements OnInit, AfterViewInit, OnD
   linkEventos: LinkEventoModel[] = [];
 
   get PLATAFORMA() {
-    return PLATAFORMA;
+    return PLATAFORMAENUM;
   }
 
   get TIPOEVENTO() {

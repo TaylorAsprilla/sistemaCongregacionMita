@@ -1,7 +1,11 @@
 <div class="row">
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <h3 class="card-title mb-0">Biblioteca de Servicios y Vigilias</h3>
+      <h3 class="card-title mb-0">Biblioteca de Servicios y Vigilias Nuev</h3>
+      <div class="d-flex align-items-center gap-2" title="{{ sesionesActivas }} sesiones activas">
+        <span class="rounded-circle bg-success" style="width: 10px; height: 10px"></span>
+        <span class="fw-semibold">{{ sesionesActivas }}</span>
+      </div>
     </div>
 
     <div class="servicios-container">
@@ -26,18 +30,15 @@
             <div class="video-item">
               <h3>{{ video.titulo }}</h3>
               <p>{{ video.fecha | date }}</p>
-              <div class="video-container">
-                @if (getSafeEmbedUrl(video.link); as safeUrl) {
-                  <iframe
-                    [src]="safeUrl"
-                    width="640"
-                    height="360"
-                    frameborder="0"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowfullscreen
-                  ></iframe>
-                }
-              </div>
+
+              <div
+                class="smartvideo swarm-fluid"
+                controls
+                playsinline
+                width="500"
+                height="281"
+                [attr.src]="video.link"
+              ></div>
             </div>
           }
         </div>
