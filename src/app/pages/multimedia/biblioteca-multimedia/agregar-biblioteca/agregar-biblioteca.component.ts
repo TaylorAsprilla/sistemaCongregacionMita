@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
   templateUrl: './agregar-biblioteca.component.html',
   styleUrls: ['./agregar-biblioteca.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, CargandoInformacionComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class AgregarBibliotecaComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);
