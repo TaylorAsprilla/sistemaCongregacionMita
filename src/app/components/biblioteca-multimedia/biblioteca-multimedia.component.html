@@ -7,16 +7,13 @@
           <h3>{{ item.titulo }}</h3>
           <div>
             @if (item.plataforma === PLATAFORMA.YOUTUBE) {
-              <div
-                class="card card-body col-sm-12 col-md-12 col-lg-12 text-center mx-auto"
-                #templateYouTubePlayer
-                >
+              <div class="card card-body col-sm-12 col-md-12 col-lg-12 text-center mx-auto" #templateYouTubePlayer>
                 <youtube-player
                   [videoId]="item.link | youtube"
                   suggestedQuality="default"
                   [width]="videoWidth"
                   [height]="videoHeight"
-                  >
+                >
                 </youtube-player>
               </div>
             }
@@ -46,16 +43,13 @@
           <h3>{{ item.titulo }}</h3>
           <div>
             @if (item.plataforma === PLATAFORMA.YOUTUBE) {
-              <div
-                class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3"
-                #templateYouTubePlayer
-                >
+              <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3" #templateYouTubePlayer>
                 <youtube-player
                   [videoId]="item.link | youtube"
                   suggestedQuality="default"
                   [width]="videoWidth"
                   [height]="videoHeight"
-                  >
+                >
                 </youtube-player>
               </div>
             }
@@ -85,16 +79,13 @@
           <h3>{{ item.titulo }}</h3>
           <div>
             @if (item.plataforma === PLATAFORMA.YOUTUBE) {
-              <div
-                class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3"
-                #templateYouTubePlayer
-                >
+              <div class="card card-body col-sm-12 col-md-8 col-lg-6 mx-auto p-3" #templateYouTubePlayer>
                 <youtube-player
                   [videoId]="item.link | youtube"
                   suggestedQuality="default"
                   [width]="videoWidth"
                   [height]="videoHeight"
-                  >
+                >
                 </youtube-player>
               </div>
             }

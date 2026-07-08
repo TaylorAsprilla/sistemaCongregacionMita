@@ -10,10 +10,11 @@ export enum TIPOEVENTO {
   EVENTO_ESPECIAL = 'Evento Especial',
 }
 
-export enum PLATAFORMA {
+export enum PLATAFORMAENUM {
   YOUTUBE = 'youtube',
   VIMEO = 'vimeo',
   ANTMEDIA = 'antmedia',
+  SWARMIFY = 'swarmify',
 }
 
 export class LinkEventoModel {
@@ -23,8 +24,8 @@ export class LinkEventoModel {
     public link: string,
     public fecha: Date,
     public tipoEvento_id: number,
-    public plataforma: string,
-    public estado: boolean,
-    public eventoEnBiblioteca: boolean,
+    public plataforma?: string,
+    public estado?: boolean,
+    public eventoEnBiblioteca?: boolean,
   ) {}
 }

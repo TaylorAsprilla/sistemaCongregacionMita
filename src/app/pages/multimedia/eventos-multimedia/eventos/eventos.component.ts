@@ -142,11 +142,11 @@ export class EventosBibliotecaComponent implements OnInit, OnDestroy {
   }
 
   actualizarEvento(id: number) {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.EVENTOS}/${id}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.AGREGAR_BIBLIOTECA}/${id}`);
   }
 
   crearEvento() {
     const nuevo = 'nuevo';
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.EVENTOS}/${nuevo}`);
+    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.AGREGAR_BIBLIOTECA}`);
   }
 }
