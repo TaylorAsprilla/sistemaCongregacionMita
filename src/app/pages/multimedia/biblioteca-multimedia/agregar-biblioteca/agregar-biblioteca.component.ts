@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { LinkEventoModel, TIPOEVENTO_ID } from 'src/app/core/models/link-evento.model';
 import { LinkEventosService } from 'src/app/services/link-eventos/link-eventos.service';
-import { CargandoInformacionComponent } from 'src/app/components/cargando-informacion/cargando-informacion.component';
 import Swal from 'sweetalert2';
 
 @Component({
