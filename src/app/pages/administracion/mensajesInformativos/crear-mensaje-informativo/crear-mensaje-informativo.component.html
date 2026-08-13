@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          {{ mensajeSeleccionado ? 'Editar Mensaje Informativo' : 'Nuevo Mensaje Informativo' }}
+        </h3>
+      </div>
+      <div class="card-body">
+        <form autocomplete="off" [formGroup]="mensajeForm" (submit)="guardarMensaje()">
+          <div class="form-group">
+            <label>Título:</label>
+            <input type="text" formControlName="titulo" class="form-control" placeholder="Aviso importante" />
+            @if (mensajeForm.get('titulo')?.invalid && mensajeForm.get('titulo')?.touched) {
+              <small class="text-danger">El título es requerido (mínimo 3 caracteres)</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label>Mensaje:</label>
+            <textarea
+              formControlName="mensaje"
+              class="form-control"
+              rows="4"
+              placeholder="El día de hoy no hay servicio por situaciones ajenas a nuestra voluntad."
+            ></textarea>
+            @if (mensajeForm.get('mensaje')?.invalid && mensajeForm.get('mensaje')?.touched) {
+              <small class="text-danger">El mensaje es requerido (mínimo 3 caracteres)</small>
+            }
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="col-form-label">Tipo</label>
+                <select class="form-control" formControlName="tipo">
+                  @for (tipo of tipos; track tipo.valor) {
+                    <option [value]="tipo.valor">{{ tipo.etiqueta }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="col-form-label">Prioridad</label>
+                <input type="number" formControlName="prioridad" class="form-control" min="0" />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Publicar Desde:</label>
+                <input type="datetime-local" formControlName="publicar_desde" class="form-control" />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Publicar Hasta:</label>
+                <input type="datetime-local" formControlName="publicar_hasta" class="form-control" />
+                @if (mensajeForm.get('publicar_hasta')?.invalid && mensajeForm.get('publicar_hasta')?.touched) {
+                  <small class="text-danger">La fecha de vigencia es requerida</small>
+                }
+              </div>
+            </div>
+          </div>
+
+          @if (mensajeForm.errors?.['vigenciaInvalida'] && mensajeForm.get('publicar_hasta')?.touched) {
+            <div class="alert alert-danger">
+              La fecha "Publicar Hasta" no puede ser menor que la fecha "Publicar Desde"
+            </div>
+          }
+
+          <div class="form-group form-check">
+            <input type="checkbox" formControlName="activo" class="form-check-input" id="activoCheck" />
+            <label class="form-check-label" for="activoCheck">Mensaje activo</label>
+          </div>
+
+          <div class="card">
+            <button type="submit" class="submit btn btn-primary" [disabled]="mensajeForm.invalid || guardando">
+              <i class="fa fa-save"></i> Guardar
+            </button>
+            <button type="button" class="btn btn-outline-secondary mt-2" (click)="cancelar()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
