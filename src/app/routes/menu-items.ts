@@ -38,6 +38,7 @@ export enum RUTAS {
   LISTAR_ACCESOS_QR = 'listar-accesos-qr',
   LOGIN = '/login',
   METAS = 'metas',
+  MENSAJES_INFORMATIVOS = 'mensajes-informativos',
   MINISTERIOS = 'ministerios',
   PAISES = 'paises',
   PERFIL = 'perfil',
@@ -434,6 +435,15 @@ export const ROUTES: RouteInfo[] = [
     extralink: false,
     role: [ROLES.ADMINISTRADOR, ROLES.ADMINISTRADOR_MULTIMEDIA],
     submenu: [
+      {
+        path: RUTAS.MENSAJES_INFORMATIVOS,
+        title: 'Mensajes Informativos',
+        icon: 'fa fa-bullhorn',
+        class: '',
+        extralink: false,
+        role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+        submenu: [],
+      },
       {
         path: RUTAS.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
         title: 'Eventos en Vivo',

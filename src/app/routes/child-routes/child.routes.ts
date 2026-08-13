@@ -4,6 +4,8 @@ import { CongregacionesComponent } from 'src/app/pages/administracion/congregaci
 import { MinisteriosComponent } from 'src/app/pages/administracion/ministerios/ministerios/ministerios.component';
 import { CrearActividadComponent } from 'src/app/pages/informes/crear-actividad/crear-actividad.component';
 import { CrearCampoComponent } from 'src/app/pages/administracion/campo/crear-campo/crear-campo.component';
+import { MensajesInformativosComponent } from 'src/app/pages/administracion/mensajesInformativos/mensajes-informativos/mensajes-informativos.component';
+import { CrearMensajeInformativoComponent } from 'src/app/pages/administracion/mensajesInformativos/crear-mensaje-informativo/crear-mensaje-informativo.component';
 import { CrearStatusComponent } from 'src/app/pages/informes/crear-status/crear-status.component';
 import { InformeActividadesComponent } from 'src/app/pages/informes/informe-actividades/informe-actividades.component';
 import { InformeDiezmosComponent } from 'src/app/pages/informes/informe-diezmos/informe-diezmos.component';
@@ -329,6 +331,24 @@ export const childRoutes: Routes = [
       ],
     },
     resolve: { obrero: ObreroResolver, congregacion: CongregacionResolver, pais: PaisResolver },
+  },
+  {
+    path: RUTAS.MENSAJES_INFORMATIVOS,
+    component: MensajesInformativosComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Mensajes Informativos',
+      role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+    },
+  },
+  {
+    path: `${RUTAS.MENSAJES_INFORMATIVOS}/:id`,
+    component: CrearMensajeInformativoComponent,
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Mensajes Informativos',
+      role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
+    },
   },
   {
     path: RUTAS.TIPO_DE_DOCUMENTO,

@@ -1,0 +1,99 @@
+<section class="content">
+  @if (cargando) {
+    <app-cargando-informacion></app-cargando-informacion>
+  }
+  @if (!cargando) {
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="col-8 px-4 pt-4">
+          <h3 class="card-title">Mensajes Informativos ({{ mensajes.length }})</h3>
+          <p>Avisos que se muestran en el Home encima del streaming</p>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-2 ms-auto">
+          <a class="btn btn-primary d-flex align-items-center" (click)="crearMensaje()">
+            <i class="fas fa-plus"></i>
+            <span class="d-none d-md-inline-block ms-2">Crear Mensaje</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped mx-auto">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th class="col-auto text-center">Título</th>
+                <th class="col-auto text-center">Mensaje</th>
+                <th class="col-auto text-center">Tipo</th>
+                <th class="col-auto text-center">Publicar Desde</th>
+                <th class="col-auto text-center">Publicar Hasta</th>
+                <th class="col-auto text-center">Prioridad</th>
+                <th class="col-auto text-center">Estado</th>
+                <th class="col-auto text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (mensaje of mensajes; track mensaje.id; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ mensaje.titulo }}</td>
+                  <td>{{ resumen(mensaje.mensaje) }}</td>
+                  <td class="text-center">
+                    <span class="badge text-bg-secondary">{{ mensaje.tipo || 'info' }}</span>
+                  </td>
+                  <td class="text-center">{{ mensaje.publicar_desde | date: 'short' }}</td>
+                  <td class="text-center">{{ mensaje.publicar_hasta | date: 'short' }}</td>
+                  <td class="text-center">{{ mensaje.prioridad ?? 0 }}</td>
+                  <td class="text-center">
+                    <span class="badge" [ngClass]="claseEstado(estadoDe(mensaje))">{{ estadoDe(mensaje) }}</span>
+                  </td>
+                  <td class="text-center">
+                    <a
+                      data-toggle="tooltip"
+                      data-original-title="Editar"
+                      class="btn bg-info"
+                      (click)="editarMensaje(mensaje.id!)"
+                      ><i class="fas fa-pencil-alt ml-1"></i
+                    ></a>
+                    @if (mensaje.activo) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Desactivar"
+                        class="btn bg-secondary ml-1"
+                        (click)="cambiarEstado(mensaje)"
+                        ><i class="fas fa-toggle-off"></i
+                      ></a>
+                    }
+                    @if (!mensaje.activo) {
+                      <a
+                        data-toggle="tooltip"
+                        data-original-title="Activar"
+                        class="btn bg-secondary ml-1"
+                        (click)="cambiarEstado(mensaje)"
+                        ><i class="fas fa-toggle-on"></i
+                      ></a>
+                    }
+                    <a
+                      data-toggle="tooltip"
+                      data-original-title="Eliminar"
+                      class="btn bg-danger ml-1"
+                      (click)="eliminarMensaje(mensaje)"
+                      ><i class="fas fa-trash-alt"></i
+                    ></a>
+                  </td>
+                </tr>
+              }
+              @if (!mensajes.length) {
+                <tr>
+                  <td colspan="9" class="text-center">No hay mensajes informativos registrados</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+</section>

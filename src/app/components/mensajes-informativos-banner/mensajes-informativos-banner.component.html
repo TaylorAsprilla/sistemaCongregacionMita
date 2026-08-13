@@ -1,0 +1,10 @@
+@if (mensajes && mensajes.length) {
+  <div class="mensajes-informativos-banner-wrapper">
+    @for (mensaje of mensajes; track mensaje.id) {
+      <div class="mensaje-informativo-banner" [ngClass]="mensaje.tipo || 'info'">
+        <strong>{{ mensaje.titulo }}</strong>
+        <p>{{ mensaje.mensaje }}</p>
+      </div>
+    }
+  </div>
+}
