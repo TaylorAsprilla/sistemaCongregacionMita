@@ -588,7 +588,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'fa fa-book',
     class: 'has-arrow',
     extralink: false,
-    role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS],
+    role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
     submenu: [
       {
         path: RUTAS.INFORME,
@@ -596,7 +596,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS],
+        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
         submenu: [],
       },
       {
@@ -605,7 +605,7 @@ export const ROUTES: RouteInfo[] = [
         icon: '',
         class: '',
         extralink: false,
-        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS],
+        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
         submenu: [],
       },
     ],
