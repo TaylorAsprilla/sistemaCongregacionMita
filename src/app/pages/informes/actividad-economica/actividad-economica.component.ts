@@ -91,8 +91,11 @@ export class ActividadEconomicaComponent implements OnInit, OnDestroy {
   }
 
   cargarActividadesEconomicas() {
+    const informeId = this.informeService.informeActivoId;
+    if (!informeId) return;
+
     this.actividadEconomicaSubscription = this.actividadEconomicaService
-      .getActividadEconomica()
+      .getActividadEconomicaByInforme(informeId)
       .subscribe((actividadesEconomicas: ActividadEconomicaModel[]) => {
         this.actividadesEconomicas = actividadesEconomicas;
       });

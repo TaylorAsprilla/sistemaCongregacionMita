@@ -71,12 +71,10 @@ export class InformeVisitasComponent implements OnInit {
     if (!informeId) return;
 
     this.visitaService
-      .getVisita()
+      .getVisitasByInforme(informeId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((visitas) => {
-        this.visitas = visitas.filter(
-          (visita: VisitaModel) => visita.informe_id === informeId && visita.estado !== false,
-        );
+        this.visitas = visitas.filter((visita: VisitaModel) => visita.estado !== false);
       });
   }
 

@@ -103,10 +103,10 @@ export class InformeMetasComponent implements OnInit {
     if (!informeId) return;
 
     this.metaService
-      .getMetas()
+      .getMetasByInforme(informeId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((metas) => {
-        this.metas = metas.filter((meta: MetaModel) => meta.informe_id === informeId && meta.estado !== false);
+        this.metas = metas.filter((meta: MetaModel) => meta.estado !== false);
       });
   }
 

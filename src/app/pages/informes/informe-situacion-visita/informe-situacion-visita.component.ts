@@ -96,12 +96,10 @@ export class InformeSituacionVisitaComponent implements OnInit {
     if (!informeId) return;
 
     this.situacionVisitaService
-      .getSituacionVisitas()
+      .getSituacionVisitasByInforme(informeId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((situaciones) => {
-        this.situacionVisitas = situaciones.filter(
-          (s: SituacionVisitaModel) => s.informe_id === informeId && s.estado !== false,
-        );
+        this.situacionVisitas = situaciones.filter((s: SituacionVisitaModel) => s.estado !== false);
       });
   }
 
