@@ -6,12 +6,36 @@
   </h4>
   <hr />
 
+  @if (enPeriodoGraciaTrimestreAnterior) {
+    <div class="cierre-informe-banner cierre-informe-banner--danger mb-3">
+      <i class="fa fa-exclamation-triangle cierre-informe-banner__icono"></i>
+      <div class="cierre-informe-banner__contenido">
+        <strong class="cierre-informe-banner__titulo">El informe del trimestre anterior sigue abierto</strong>
+        <p class="cierre-informe-banner__texto mb-0">
+          Aún puedes completarlo, pero se cerrará automáticamente el
+          <strong>{{ fechaCierreInformeAnterior | date: "d 'de' MMMM 'de' y, h:mm a" }}</strong
+          >. Después de esa fecha no podrás editarlo.
+        </p>
+      </div>
+    </div>
+  }
+
   @if (hayInformeAbierto) {
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4 class="alert alert-secondary mb-0">Quedan {{ calcularDiasFinTrimestre() }} días para terminar el informe</h4>
+    <div class="d-flex justify-content-end align-items-center mb-3">
       <button class="btn btn-primary" (click)="verInformeCompleto()">
         <i class="fa fa-file-alt"></i> Ver Informe Completo
       </button>
+    </div>
+    <div class="cierre-informe-banner cierre-informe-banner--info mb-3">
+      <i class="fa fa-info-circle cierre-informe-banner__icono"></i>
+      <div class="cierre-informe-banner__contenido">
+        <p class="cierre-informe-banner__texto mb-0">
+          El trimestre finaliza el <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
+          >. El informe se cerrará automáticamente el
+          <strong>{{ fechaCierreInforme | date: "d 'de' MMMM 'de' y, h:mm a" }}</strong
+          >, por lo que tendrás hasta esa fecha para completarlo.
+        </p>
+      </div>
     </div>
   }
 </div>
@@ -46,6 +70,13 @@
       <i class="fa fa-exclamation-triangle fa-3x mb-3"></i>
       <h4 class="mb-3">No hay informe abierto</h4>
       <p class="mb-4">Por favor, genera un informe para comenzar a trabajar.</p>
+      <p class="mb-4">
+        El trimestre actual va del <strong>{{ fechaInicioTrimestre | date: "d 'de' MMMM" }}</strong> al
+        <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
+        >. Una vez generado, tendrás hasta el
+        <strong>{{ fechaCierreInforme | date: "d 'de' MMMM 'de' y, h:mm a" }}</strong>
+        para completarlo antes de que se cierre automáticamente.
+      </p>
       <button class="btn btn-primary btn-lg" (click)="generarInforme()">
         <i class="fa fa-plus"></i> Generar Informe
       </button>
