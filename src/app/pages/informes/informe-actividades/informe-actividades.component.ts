@@ -88,8 +88,8 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
     const informeId = this.informeService.informeActivoId;
     if (!informeId) return;
 
-    this.actividadSubscription = this.actividadService.getActividad().subscribe((actividades) => {
-      this.actividades = actividades.filter((act: ActividadModel) => act.informe_id === informeId);
+    this.actividadSubscription = this.actividadService.getActividadesByInforme(informeId).subscribe((actividades) => {
+      this.actividades = actividades;
     });
   }
 

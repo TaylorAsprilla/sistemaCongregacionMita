@@ -77,8 +77,8 @@ export class InformeDiezmosComponent implements OnInit, OnDestroy {
     const informeId = this.informeService.informeActivoId;
     if (!informeId) return;
 
-    this.diezmoSubscription = this.diezmoService.getDiezmos().subscribe((diezmos) => {
-      this.diezmos = diezmos.filter((d: DiezmoModel) => d.informe_id === informeId && d.estado !== false);
+    this.diezmoSubscription = this.diezmoService.getDiezmosByInforme(informeId).subscribe((diezmos) => {
+      this.diezmos = diezmos.filter((d: DiezmoModel) => d.estado !== false);
     });
   }
 

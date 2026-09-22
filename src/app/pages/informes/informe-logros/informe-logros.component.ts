@@ -97,10 +97,10 @@ export class InformeLogrosComponent implements OnInit {
     if (!informeId) return;
 
     this.logroService
-      .getLogros()
+      .getLogrosByInforme(informeId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((logros) => {
-        this.logros = logros.filter((logro: LogroModel) => logro.informe_id === informeId && logro.estado !== false);
+        this.logros = logros.filter((logro: LogroModel) => logro.estado !== false);
       });
   }
 

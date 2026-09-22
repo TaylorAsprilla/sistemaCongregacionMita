@@ -69,10 +69,10 @@ export class InformeAsuntoPendienteComponent implements OnInit {
     if (!informeId) return;
 
     this.asuntoPendienteService
-      .getAsuntosPendientes()
+      .getAsuntosPendientesByInforme(informeId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((asuntos) => {
-        this.asuntos = asuntos.filter((a: AsuntoPendienteModel) => a.informe_id === informeId && a.estado !== false);
+        this.asuntos = asuntos.filter((a: AsuntoPendienteModel) => a.estado !== false);
       });
   }
 
