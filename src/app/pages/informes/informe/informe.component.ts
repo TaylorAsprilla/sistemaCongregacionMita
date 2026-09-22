@@ -127,6 +127,7 @@ export class InformeComponent implements OnInit {
       [NombreSeccion.LOGROS_OBTENIDOS]: secciones.logros,
       [NombreSeccion.ASPECTO_ESPIRITUAL]: secciones.aspectoEspiritual,
       [NombreSeccion.ACTIVIDADES_ECONOMICAS]: secciones.actividadesEconomicas,
+      [NombreSeccion.ASUNTOS_PENDIENTES]: secciones.asuntosPendientes,
     };
 
     this.generarSeccioninforme = generarSeccioninforme.map((seccion) => {

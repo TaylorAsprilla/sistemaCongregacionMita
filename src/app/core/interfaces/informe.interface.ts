@@ -18,6 +18,7 @@ export interface EstatusSeccionesInforme {
   logros: boolean;
   aspectoEspiritual: boolean;
   actividadesEconomicas: boolean;
+  asuntosPendientes: boolean;
 }
 
 export interface ResumenInformeResponseInterface {
