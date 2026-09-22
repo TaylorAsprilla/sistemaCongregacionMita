@@ -87,8 +87,12 @@ export class InformeComponent implements OnInit {
     const trimestreActual = this.getTrimestresActual();
     const finTrimestreMs = this.trimestres[trimestreActual - 1];
 
-    this.fechaFinTrimestre = new Date(finTrimestreMs);
-    this.fechaInicioTrimestre = new Date(this.obtenerFechasTrimestreActual().fechaInicio + 'T00:00:00');
+    // El último día real del trimestre (para mostrar al usuario) es el mismo que se envía al backend
+    // en obtenerFechasTrimestreActual(); finTrimestreMs es el instante de inicio del SIGUIENTE trimestre
+    // y solo debe usarse para calcular la fecha exacta de cierre automático, no para mostrarla.
+    const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
+    this.fechaInicioTrimestre = new Date(fechaInicio + 'T00:00:00');
+    this.fechaFinTrimestre = new Date(fechaFin + 'T23:59:59');
     this.fechaCierreInforme = this.calcularFechaCierre(finTrimestreMs);
 
     const finTrimestreAnteriorMs =
