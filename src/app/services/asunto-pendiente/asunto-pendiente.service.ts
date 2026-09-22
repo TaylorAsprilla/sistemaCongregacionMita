@@ -33,6 +33,16 @@ export class AsuntoPendienteService {
     );
   }
 
+  getAsuntosPendientesByInforme(informeId: number) {
+    const url = `${base_url}/asunto-pendiente/informe/asuntos-pendientes?informeId=${informeId}`;
+    return this.httpClient.get(url, this.headers).pipe(
+      map((response: any) => {
+        const asuntos = response.asuntos || response.asuntosPendientes || [];
+        return asuntos.map((asunto: any) => this.mapearDesdeApi(asunto)) as AsuntoPendienteModel[];
+      }),
+    );
+  }
+
   crearAsuntoPendiente(asunto: AsuntoPendienteModel) {
     return this.httpClient.post(`${base_url}/asunto-pendiente`, this.mapearHaciaApi(asunto), this.headers);
   }

@@ -30,6 +30,12 @@ export class DiezmoService {
       .pipe(map((response: { ok: boolean; diezmos: DiezmoModel[] }) => response.diezmos || []));
   }
 
+  getDiezmosByInforme(informeId: number) {
+    return this.httpClient
+      .get(`${base_url}/diezmos/informe/diezmos?informeId=${informeId}`, this.headers)
+      .pipe(map((response: { ok: boolean; diezmos: DiezmoModel[] }) => response.diezmos || []));
+  }
+
   getDiezmoById(id: number) {
     return this.httpClient
       .get(`${base_url}/diezmos/${id}`, this.headers)

@@ -30,6 +30,12 @@ export class MetaService {
       .pipe(map((meta: { ok: boolean; metas: MetaModel[] }) => meta.metas));
   }
 
+  getMetasByInforme(informeId: number) {
+    return this.httpClient
+      .get(`${base_url}/meta/informe/metas?informeId=${informeId}`, this.headers)
+      .pipe(map((meta: { ok: boolean; metas: MetaModel[] }) => meta.metas || []));
+  }
+
   getMeta(id: number) {
     return this.httpClient
       .get(`${base_url}/meta/${id}`, this.headers)

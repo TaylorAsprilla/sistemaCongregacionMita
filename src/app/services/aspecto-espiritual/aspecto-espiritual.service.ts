@@ -26,7 +26,7 @@ export class AspectoEspiritualService {
 
   getAspectosEspiritualesByInforme(informeId: number) {
     return this.httpClient
-      .get(`${base_url}/actividadespiritual/informe/${informeId}`, this.headers)
+      .get(`${base_url}/actividadespiritual/informe/actividades-espirituales?informeId=${informeId}`, this.headers)
       .pipe(map((response: any) => (response.actividades || []) as AspectoEspiritualModel[]));
   }
 

@@ -6,6 +6,7 @@ import { InformeModel } from 'src/app/core/models/informe.model';
 import {
   VerificarInformeAbiertoResponseInterface,
   InformeTrimestrePaisResponse,
+  ResumenInformeResponseInterface,
 } from 'src/app/core/interfaces/informe.interface';
 
 const base_url = environment.base_url;
@@ -85,6 +86,29 @@ export class InformeService {
         } else {
           this.informeActivo = null;
         }
+        return respuesta;
+      }),
+    );
+  }
+
+  /**
+   * Obtiene en una sola llamada si hay informe abierto y el estatus (completado/pendiente)
+   * de cada sección, evitando las 7 llamadas individuales por sección
+   */
+  obtenerResumenInforme(usuarioId: number, fechaInicio: string, fechaFin: string) {
+    return this.httpClient.get<ResumenInformeResponseInterface>(
+      `${base_url}/informe/resumen?usuarioId=${usuarioId}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`,
+      this.headers,
+    );
+  }
+
+  /**
+   * Igual que obtenerResumenInforme, pero además guarda el informe activo en el servicio
+   */
+  cargarResumenInforme(usuarioId: number, fechaInicio: string, fechaFin: string) {
+    return this.obtenerResumenInforme(usuarioId, fechaInicio, fechaFin).pipe(
+      map((respuesta) => {
+        this.informeActivo = respuesta.tieneInformeAbierto && respuesta.informe ? respuesta.informe : null;
         return respuesta;
       }),
     );
