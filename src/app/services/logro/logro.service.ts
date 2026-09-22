@@ -30,6 +30,12 @@ export class LogroService {
       .pipe(map((logros: { ok: boolean; logros: LogroModel[] }) => logros.logros));
   }
 
+  getLogrosByInforme(informeId: number) {
+    return this.httpClient
+      .get(`${base_url}/logro/informe/logros?informeId=${informeId}`, this.headers)
+      .pipe(map((logros: { ok: boolean; logros: LogroModel[] }) => logros.logros || []));
+  }
+
   getLogroById(id: number) {
     return this.httpClient
       .get(`${base_url}/logro/${id}`, this.headers)

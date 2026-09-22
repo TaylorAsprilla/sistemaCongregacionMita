@@ -30,6 +30,12 @@ export class VisitaService {
       .pipe(map((visita: { ok: boolean; visitas: VisitaModel[] }) => visita.visitas));
   }
 
+  getVisitasByInforme(informeId: number) {
+    return this.httpClient
+      .get(`${base_url}/visita/informe/visitas?informeId=${informeId}`, this.headers)
+      .pipe(map((visita: { ok: boolean; visitas: VisitaModel[] }) => visita.visitas || []));
+  }
+
   getVisitaById(id: number) {
     return this.httpClient
       .get(`${base_url}/visita/${id}`, this.headers)

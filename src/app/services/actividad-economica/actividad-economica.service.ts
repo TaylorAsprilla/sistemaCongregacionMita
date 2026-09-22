@@ -35,6 +35,17 @@ export class ActividadEconomicaService {
       );
   }
 
+  getActividadEconomicaByInforme(informeId: number) {
+    return this.httpClient
+      .get(`${base_url}/actividadeconomica/informe/actividades-economicas?informeId=${informeId}`, this.headers)
+      .pipe(
+        map(
+          (actividadEconomica: { ok: boolean; actividadEconomica: ActividadEconomicaModel[] }) =>
+            actividadEconomica.actividadEconomica || [],
+        ),
+      );
+  }
+
   getActividadEconomicaPorId(id: number) {
     return this.httpClient
       .get(`${base_url}/actividadeconomica/${id}`, this.headers)

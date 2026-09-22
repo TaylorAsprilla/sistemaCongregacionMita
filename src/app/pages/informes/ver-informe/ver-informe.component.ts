@@ -414,54 +414,38 @@ export class VerInformeComponent implements OnInit {
   }
 
   /**
-   * Carga todos los datos del informe en paralelo
+   * Carga todos los datos del informe en paralelo, ya filtrados por el backend según informeId
    */
   private cargarDatosInforme(informeId: number): void {
     this.cargando = true;
 
     forkJoin({
-      actividades: this.actividadService.getActividad(),
-      actividadesEconomicas: this.actividadEconomicaService.getActividadEconomica(),
-      metas: this.metaService.getMetas(),
-      visitas: this.visitaService.getVisita(),
-      situacionVisitas: this.situacionVisitaService.getSituacionVisitas(),
-      logros: this.logroService.getLogros(),
-      diezmos: this.diezmoService.getDiezmos(),
+      actividades: this.actividadService.getActividadesByInforme(informeId),
+      actividadesEconomicas: this.actividadEconomicaService.getActividadEconomicaByInforme(informeId),
+      metas: this.metaService.getMetasByInforme(informeId),
+      visitas: this.visitaService.getVisitasByInforme(informeId),
+      situacionVisitas: this.situacionVisitaService.getSituacionVisitasByInforme(informeId),
+      logros: this.logroService.getLogrosByInforme(informeId),
+      diezmos: this.diezmoService.getDiezmosByInforme(informeId),
       aspectosEspirituales: this.aspectoEspiritualService.getAspectosEspiritualesByInforme(informeId),
-      asuntosPendientes: this.asuntoPendienteService.getAsuntosPendientes(),
+      asuntosPendientes: this.asuntoPendienteService.getAsuntosPendientesByInforme(informeId),
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (datos) => {
-          // Filtrar datos por informe_id y estado activo
-          this.actividades = (datos.actividades || []).filter(
-            (a: any) => Number(a.informe_id) === Number(informeId) && a.estado !== false,
-          );
+          // Solo se filtra el estado activo; el informe_id ya lo filtró el backend
+          this.actividades = (datos.actividades || []).filter((a: any) => a.estado !== false);
           this.actividadesEclesiasticas = this.actividades;
 
-          this.actividadesEconomicas = (datos.actividadesEconomicas || []).filter(
-            (a: any) => Number(a.informe_id) === Number(informeId) && a.estado !== false,
-          );
+          this.actividadesEconomicas = (datos.actividadesEconomicas || []).filter((a: any) => a.estado !== false);
 
-          this.metas = (datos.metas || []).filter(
-            (m: any) => Number(m.informe_id) === Number(informeId) && m.estado !== false,
-          );
-          this.visitas = (datos.visitas || []).filter(
-            (v: any) => Number(v.informe_id) === Number(informeId) && v.estado !== false,
-          );
-          this.situacionVisitas = (datos.situacionVisitas || []).filter(
-            (s: any) => Number(s.informe_id) === Number(informeId) && s.estado !== false,
-          );
-          this.logros = (datos.logros || []).filter(
-            (l: any) => Number(l.informe_id) === Number(informeId) && l.estado !== false,
-          );
-          this.diezmos = (datos.diezmos || []).filter(
-            (d: any) => Number(d.informe_id) === Number(informeId) && d.estado !== false,
-          );
+          this.metas = (datos.metas || []).filter((m: any) => m.estado !== false);
+          this.visitas = (datos.visitas || []).filter((v: any) => v.estado !== false);
+          this.situacionVisitas = (datos.situacionVisitas || []).filter((s: any) => s.estado !== false);
+          this.logros = (datos.logros || []).filter((l: any) => l.estado !== false);
+          this.diezmos = (datos.diezmos || []).filter((d: any) => d.estado !== false);
           this.aspectosEspirituales = (datos.aspectosEspirituales || []).filter((a: any) => a.estado !== false);
-          this.asuntosPendientes = (datos.asuntosPendientes || []).filter(
-            (a: any) => Number(a.informe_id) === Number(informeId) && a.estado !== false,
-          );
+          this.asuntosPendientes = (datos.asuntosPendientes || []).filter((a: any) => a.estado !== false);
 
           this.cargando = false;
         },

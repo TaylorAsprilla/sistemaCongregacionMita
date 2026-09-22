@@ -34,6 +34,15 @@ export class SituacionVisitaService {
     );
   }
 
+  getSituacionVisitasByInforme(informeId: number): Observable<SituacionVisitaModel[]> {
+    const url = `${base_url}/situacionvisita/informe/situaciones-visita?informeId=${informeId}`;
+    return this.http.get<any>(url, this.headers).pipe(
+      map((resp) => {
+        return resp.situacionVisitas || [];
+      }),
+    );
+  }
+
   getSituacionVisita(id: number): Observable<SituacionVisitaModel> {
     const url = `${base_url}/situacionvisita/${id}`;
     return this.http.get<any>(url, this.headers).pipe(

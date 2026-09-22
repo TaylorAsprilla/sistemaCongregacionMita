@@ -10,6 +10,30 @@ export interface VerificarInformeAbiertoResponseInterface {
   msg: string;
 }
 
+export interface EstatusSeccionesInforme {
+  actividades: boolean;
+  metas: boolean;
+  visitas: boolean;
+  situacionVisitas: boolean;
+  logros: boolean;
+  aspectoEspiritual: boolean;
+  actividadesEconomicas: boolean;
+}
+
+export interface ResumenInformeResponseInterface {
+  ok: boolean;
+  tieneInformeAbierto: boolean;
+  informe: {
+    id: number;
+    usuario_id: number;
+    estado: string;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+  secciones: EstatusSeccionesInforme | null;
+  msg?: string;
+}
+
 // Interfaces para informes del trimestre por país
 export interface InformeTrimestrePaisResponse {
   ok: boolean;

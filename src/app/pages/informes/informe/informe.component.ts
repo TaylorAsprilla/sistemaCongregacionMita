@@ -1,7 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
   generarSeccioninforme,
@@ -10,15 +8,11 @@ import {
   ColorEstatus,
   NombreSeccion,
 } from 'src/app/core/interfaces/seccion-informe.interface';
+import { EstatusSeccionesInforme } from 'src/app/core/interfaces/informe.interface';
 import { InformeModel } from 'src/app/core/models/informe.model';
 import { RUTAS } from 'src/app/routes/menu-items';
-import { ActividadService } from 'src/app/services/actividad/actividad.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
-import { LogroService } from 'src/app/services/logro/logro.service';
-import { MetaService } from 'src/app/services/meta/meta.service';
-import { SituacionVisitaService } from 'src/app/services/situacion-visita/situacion-visita.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import { VisitaService } from 'src/app/services/visita/visita.service';
 import Swal from 'sweetalert2';
 
 import { SeccionInformeComponent } from '../../../components/seccion-informe/seccion-informe.component';
@@ -34,15 +28,9 @@ const DIAS_GRACIA_CIERRE_INFORME = 8;
   imports: [CommonModule, SeccionInformeComponent],
 })
 export class InformeComponent implements OnInit {
-  private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   private informeService = inject(InformeService);
   private usuarioService = inject(UsuarioService);
-  private actividadService = inject(ActividadService);
-  private metaService = inject(MetaService);
-  private visitaService = inject(VisitaService);
-  private situacionVisitaService = inject(SituacionVisitaService);
-  private logroService = inject(LogroService);
 
   informes: InformeModel[] = [];
   generarSeccioninforme: Seccion[] = [];
@@ -79,13 +67,6 @@ export class InformeComponent implements OnInit {
     this.diasFinTrimestre = this.calcularDiasFinTrimestre();
     this.calcularFechasClave();
     this.verificarInformeAbierto();
-
-    // Escuchar cambios de navegación para recargar secciones
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-      if (event.url.includes('/informe') && !event.url.includes('/informe-')) {
-        this.cargarSeccionesConEstatus();
-      }
-    });
   }
 
   /**
@@ -131,79 +112,32 @@ export class InformeComponent implements OnInit {
   }
 
   /**
-   * Carga las secciones del informe y actualiza su estatus dinámicamente
+   * Aplica el estatus (completado/pendiente) de cada sección recibido del backend en una sola llamada
    */
-  cargarSeccionesConEstatus(): void {
-    const informeId = this.informeService.informeActivoId;
+  private aplicarEstatusSecciones(secciones: EstatusSeccionesInforme): void {
+    const seccionCompletada: Record<string, boolean> = {
+      [NombreSeccion.ACTIVIDADES_ECLESIASTICAS]: secciones.actividades,
+      [NombreSeccion.METAS]: secciones.metas,
+      [NombreSeccion.VISITAS]: secciones.visitas,
+      [NombreSeccion.SITUACION_VISITAS]: secciones.situacionVisitas,
+      [NombreSeccion.LOGROS_OBTENIDOS]: secciones.logros,
+      [NombreSeccion.ASPECTO_ESPIRITUAL]: secciones.aspectoEspiritual,
+      [NombreSeccion.ACTIVIDADES_ECONOMICAS]: secciones.actividadesEconomicas,
+    };
 
-    if (!informeId) {
-      // Si no hay informe activo, usar secciones estáticas
-      this.generarSeccioninforme = [...generarSeccioninforme];
-      return;
-    }
-
-    this.cargando = true;
-
-    // Cargar datos de todas las secciones en paralelo
-    forkJoin({
-      actividades: this.actividadService.getActividad(),
-      metas: this.metaService.getMetas(),
-      visitas: this.visitaService.getVisita(),
-      situacionVisitas: this.situacionVisitaService.getSituacionVisitas(),
-      logros: this.logroService.getLogros(),
-    }).subscribe({
-      next: (datos) => {
-        // Filtrar por informe_id actual (con validación de datos)
-        const actividadesFiltradas = (datos.actividades || []).filter(
-          (a: any) => Number(a.informe_id) === Number(informeId),
-        );
-        const metasFiltradas = (datos.metas || []).filter((m: any) => Number(m.informe_id) === Number(informeId));
-        const visitasFiltradas = (datos.visitas || []).filter((v: any) => Number(v.informe_id) === Number(informeId));
-        const situacionVisitasFiltradas = (datos.situacionVisitas || []).filter(
-          (s: any) => Number(s.informe_id) === Number(informeId),
-        );
-        const logrosFiltrados = (datos.logros || []).filter((l: any) => Number(l.informe_id) === Number(informeId));
-
-        // Actualizar el estatus de cada sección
-        this.generarSeccioninforme = generarSeccioninforme.map((seccion) => {
-          let estatus = EstatusSeccion.PENDIENTE;
-          let color = ColorEstatus.PENDIENTE;
-
-          // Determinar estatus basado en la sección
-          if (seccion.nombre === NombreSeccion.ACTIVIDADES_ECLESIASTICAS && actividadesFiltradas.length > 0) {
-            estatus = EstatusSeccion.COMPLETADO;
-            color = ColorEstatus.COMPLETADO;
-          } else if (seccion.nombre === NombreSeccion.METAS && metasFiltradas.length > 0) {
-            estatus = EstatusSeccion.COMPLETADO;
-            color = ColorEstatus.COMPLETADO;
-          } else if (seccion.nombre === NombreSeccion.VISITAS && visitasFiltradas.length > 0) {
-            estatus = EstatusSeccion.COMPLETADO;
-            color = ColorEstatus.COMPLETADO;
-          } else if (seccion.nombre === NombreSeccion.SITUACION_VISITAS && situacionVisitasFiltradas.length > 0) {
-            estatus = EstatusSeccion.COMPLETADO;
-            color = ColorEstatus.COMPLETADO;
-          } else if (seccion.nombre === NombreSeccion.LOGROS_OBTENIDOS && logrosFiltrados.length > 0) {
-            estatus = EstatusSeccion.COMPLETADO;
-            color = ColorEstatus.COMPLETADO;
-          }
-
-          return {
-            ...seccion,
-            estatus,
-            color,
-          };
-        });
-        this.cargando = false;
-      },
-      error: () => {
-        this.generarSeccioninforme = [...generarSeccioninforme];
-        this.cargando = false;
-      },
+    this.generarSeccioninforme = generarSeccioninforme.map((seccion) => {
+      const completado = seccionCompletada[seccion.nombre] ?? false;
+      return {
+        ...seccion,
+        estatus: completado ? EstatusSeccion.COMPLETADO : EstatusSeccion.PENDIENTE,
+        color: completado ? ColorEstatus.COMPLETADO : ColorEstatus.PENDIENTE,
+      };
     });
   }
 
   /**
-   * Verifica si existe un informe abierto para el trimestre actual
+   * Verifica si existe un informe abierto para el trimestre actual y, de una sola vez,
+   * obtiene el estatus de todas las secciones (endpoint consolidado /informe/resumen)
    */
   verificarInformeAbierto(): void {
     const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
@@ -211,19 +145,16 @@ export class InformeComponent implements OnInit {
 
     this.cargando = true;
 
-    // Usar cargarInformeActivo para guardar el informe en el servicio
-    this.informeService.cargarInformeActivo(usuarioId, fechaInicio, fechaFin).subscribe(
+    this.informeService.cargarResumenInforme(usuarioId, fechaInicio, fechaFin).subscribe(
       (respuesta) => {
         this.hayInformeAbierto = respuesta.tieneInformeAbierto;
 
-        if (respuesta.tieneInformeAbierto) {
-          // Si hay informe abierto, cargar las secciones con su estatus
-          this.cargarSeccionesConEstatus();
+        if (respuesta.tieneInformeAbierto && respuesta.secciones) {
+          this.aplicarEstatusSecciones(respuesta.secciones);
         } else {
-          // Si no hay informe abierto, mostrar secciones estáticas y detener carga
           this.generarSeccioninforme = [...generarSeccioninforme];
-          this.cargando = false;
         }
+        this.cargando = false;
       },
       (error) => {
         this.hayInformeAbierto = false;
@@ -355,10 +286,8 @@ export class InformeComponent implements OnInit {
           text: 'El informe se ha generado correctamente.',
           icon: 'success',
         });
-        // Volver a verificar si el informe está abierto y actualizar la vista
+        // Volver a verificar si el informe está abierto y actualizar la vista (ya recarga las secciones internamente)
         this.verificarInformeAbierto();
-        // Recargar secciones con nuevo estatus
-        this.cargarSeccionesConEstatus();
       },
       (error) => {
         Swal.fire({

@@ -30,6 +30,12 @@ export class ActividadService {
       .pipe(map((response: { ok: boolean; atividad: ActividadModel[] }) => response.atividad || []));
   }
 
+  getActividadesByInforme(informeId: number) {
+    return this.httpClient
+      .get(`${base_url}/actividad/informe/actividades?informeId=${informeId}`, this.headers)
+      .pipe(map((response: { ok: boolean; atividad: ActividadModel[] }) => response.atividad || []));
+  }
+
   getActividadById(id: number) {
     return this.httpClient
       .get(`${base_url}/actividad/${id}`, this.headers)
