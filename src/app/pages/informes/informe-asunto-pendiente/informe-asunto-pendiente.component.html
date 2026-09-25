@@ -14,7 +14,9 @@
         <h3 class="card-title">{{ editando ? 'Editar' : 'Nuevo' }} Asunto Pendiente</h3>
       </div>
       <div class="card-body">
-        <p class="text-muted small mb-2">Los campos marcados con <span class="text-danger" aria-hidden="true">*</span> son obligatorios.</p>
+        <p class="text-muted small mb-2">
+          Los campos marcados con <span class="text-danger" aria-hidden="true">*</span> son obligatorios.
+        </p>
         <form autocomplete="off" [formGroup]="asuntoForm">
           <div class="form-group">
             <label for="inputTipo">Tipo de Asunto <span class="text-danger" aria-hidden="true">*</span></label>

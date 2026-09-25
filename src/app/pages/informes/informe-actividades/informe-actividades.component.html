@@ -14,7 +14,9 @@
         <h3 class="card-title">{{ editando ? 'Editar' : 'Nueva' }} Actividad Eclesiástica</h3>
       </div>
       <div class="card-body">
-        <p class="text-muted small mb-2">Los campos marcados con <span class="text-danger" aria-hidden="true">*</span> son obligatorios.</p>
+        <p class="text-muted small mb-2">
+          Los campos marcados con <span class="text-danger" aria-hidden="true">*</span> son obligatorios.
+        </p>
         <form autocomplete="off" [formGroup]="actividadForm">
           <div class="form-group">
             <label for="inputFecha">Fecha <span class="text-danger" aria-hidden="true">*</span></label>
@@ -33,7 +35,9 @@
           </div>
 
           <div class="form-group">
-            <label for="inputTipoActividad">Tipo de Actividad <span class="text-danger" aria-hidden="true">*</span></label>
+            <label for="inputTipoActividad"
+              >Tipo de Actividad <span class="text-danger" aria-hidden="true">*</span></label
+            >
             <select class="form-control" formControlName="tipoActividad_id" id="inputTipoActividad">
               <option value="" disabled>Seleccione la actividad</option>
               @for (actividad of tipoActividades; track actividad) {
