@@ -97,8 +97,15 @@ export class ActividadEconomicaComponent implements OnInit, OnDestroy {
     this.actividadEconomicaSubscription = this.actividadEconomicaService
       .getActividadEconomicaByInforme(informeId)
       .subscribe((actividadesEconomicas: ActividadEconomicaModel[]) => {
-        this.actividadesEconomicas = actividadesEconomicas;
+        this.actividadesEconomicas = actividadesEconomicas.map((actividad) => ({
+          ...actividad,
+          fecha: this.normalizarFechaCalendario(actividad.fecha),
+        }));
       });
+  }
+
+  private normalizarFechaCalendario(fecha: string): string {
+    return fecha.slice(0, 10);
   }
 
   crearActividadEconomica() {
@@ -138,7 +145,7 @@ export class ActividadEconomicaComponent implements OnInit, OnDestroy {
     this.editando = true;
     this.actividadSeleccionada = actividad;
     this.actividadEconomicaForm.patchValue({
-      fecha: actividad.fecha,
+      fecha: this.normalizarFechaCalendario(actividad.fecha),
       cantidadRecaudada: actividad.cantidadRecaudada,
       responsable: actividad.responsable,
       asistencia: actividad.asistencia,

@@ -14,9 +14,10 @@
         <h3 class="card-title">{{ editando ? 'Editar' : 'Registrar' }} Diezmo</h3>
       </div>
       <div class="card-body">
+        <p class="text-muted small mb-2">Los campos marcados con <span class="text-danger" aria-hidden="true">*</span> son obligatorios.</p>
         <form autocomplete="off" [formGroup]="diezmoForm">
           <div class="form-group">
-            <label for="inputMes">Mes</label>
+            <label for="inputMes">Mes <span class="text-danger" aria-hidden="true">*</span></label>
             <select class="form-control" formControlName="mes" id="inputMes">
               <option value="" disabled>Seleccione el mes</option>
               @for (mes of meses; track mes.valor) {
@@ -31,7 +32,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputSobresRestrictos">Sobres Restrictos</label>
+            <label for="inputSobresRestrictos">Sobres Restrictos <span class="text-danger" aria-hidden="true">*</span></label>
             <input
               type="number"
               formControlName="sobresRestrictos"
@@ -45,7 +46,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputSobresNoRestrictos">Sobres No Restrictos</label>
+            <label for="inputSobresNoRestrictos">Sobres No Restrictos <span class="text-danger" aria-hidden="true">*</span></label>
             <input
               type="number"
               formControlName="sobresNoRestrictos"
@@ -59,7 +60,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputRestrictos">Monto Restrictos</label>
+            <label for="inputRestrictos">Monto Restrictos <span class="text-danger" aria-hidden="true">*</span></label>
             <input
               type="number"
               formControlName="restrictos"
@@ -74,7 +75,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputNoRestrictos">Monto No Restrictos</label>
+            <label for="inputNoRestrictos">Monto No Restrictos <span class="text-danger" aria-hidden="true">*</span></label>
             <input
               type="number"
               formControlName="noRestrictos"
