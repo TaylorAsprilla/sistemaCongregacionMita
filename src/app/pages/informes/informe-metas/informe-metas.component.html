@@ -14,9 +14,12 @@
         <h3 class="card-title">{{ editando ? 'Editar' : 'Nueva' }} Meta</h3>
       </div>
       <div class="card-body">
+        <p class="text-muted small mb-2">
+          Los campos marcados con <span class="text-danger" aria-hidden="true">*</span> son obligatorios.
+        </p>
         <form autocomplete="off" [formGroup]="metaForm">
           <div class="form-group">
-            <label for="inputMeta">Meta</label>
+            <label for="inputMeta">Meta <span class="text-danger" aria-hidden="true">*</span></label>
             <input
               type="text"
               formControlName="meta"
@@ -30,7 +33,9 @@
           </div>
 
           <div class="form-group">
-            <label for="inputFecha">Fecha a completarse o completado</label>
+            <label for="inputFecha"
+              >Fecha a completarse o completado <span class="text-danger" aria-hidden="true">*</span></label
+            >
             <input
               type="date"
               formControlName="fecha"
@@ -55,7 +60,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputEstatus">Estatus</label>
+            <label for="inputEstatus">Estatus <span class="text-danger" aria-hidden="true">*</span></label>
             <select class="form-control" formControlName="tipoStatus_id" id="inputEstatus">
               <option value="" disabled>Seleccione el estatus</option>
               @for (estatusItem of estatus; track estatusItem.id) {

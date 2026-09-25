@@ -14,9 +14,14 @@
         <h3 class="card-title">{{ editando ? 'Editar' : 'Nueva' }} Actividad Espiritual y Personal</h3>
       </div>
       <div class="card-body">
+        <p class="text-muted small mb-2">
+          Los campos marcados con <span class="text-danger" aria-hidden="true">*</span> son obligatorios.
+        </p>
         <form autocomplete="off" [formGroup]="aspectoForm">
           <div class="form-group">
-            <label for="inputCategoria">Categoría de Actividad</label>
+            <label for="inputCategoria"
+              >Categoría de Actividad <span class="text-danger" aria-hidden="true">*</span></label
+            >
             <select class="form-control" formControlName="categoria_id" id="inputCategoria">
               <option value="" disabled>Seleccione la categoría</option>
               @for (cat of categorias; track cat.id) {
@@ -29,7 +34,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputFecha">Fecha</label>
+            <label for="inputFecha">Fecha <span class="text-danger" aria-hidden="true">*</span></label>
             <input type="date" class="form-control" formControlName="fecha" id="inputFecha" />
             @if (aspectoForm.get('fecha')?.invalid && aspectoForm.get('fecha')?.touched) {
               <small class="text-danger">La fecha es requerida</small>
@@ -37,7 +42,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputObservaciones">Observaciones</label>
+            <label for="inputObservaciones">Observaciones <span class="text-danger" aria-hidden="true">*</span></label>
             <textarea
               class="form-control"
               formControlName="observaciones"
@@ -51,7 +56,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputResponsable">Responsable</label>
+            <label for="inputResponsable">Responsable <span class="text-danger" aria-hidden="true">*</span></label>
             <input
               type="text"
               class="form-control"

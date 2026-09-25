@@ -19,6 +19,7 @@ export interface EstatusSeccionesInforme {
   aspectoEspiritual: boolean;
   actividadesEconomicas: boolean;
   asuntosPendientes: boolean;
+  aspectoContable: boolean;
 }
 
 export interface ResumenInformeResponseInterface {

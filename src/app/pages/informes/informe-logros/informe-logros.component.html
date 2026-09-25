@@ -14,9 +14,12 @@
         <h3 class="card-title">{{ editando ? 'Editar' : 'Nuevo' }} Logro</h3>
       </div>
       <div class="card-body">
+        <p class="text-muted small mb-2">
+          Los campos marcados con <span class="text-danger" aria-hidden="true">*</span> son obligatorios.
+        </p>
         <form autocomplete="off" [formGroup]="logroForm">
           <div class="form-group">
-            <label for="inputFecha">Fecha</label>
+            <label for="inputFecha">Fecha <span class="text-danger" aria-hidden="true">*</span></label>
             <input
               type="date"
               class="form-control"
@@ -32,7 +35,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputLogro">Logro</label>
+            <label for="inputLogro">Logro <span class="text-danger" aria-hidden="true">*</span></label>
             <textarea
               class="form-control"
               formControlName="logro"
@@ -46,7 +49,7 @@
           </div>
 
           <div class="form-group">
-            <label for="inputResponsable">Responsable</label>
+            <label for="inputResponsable">Responsable <span class="text-danger" aria-hidden="true">*</span></label>
             <input
               type="text"
               class="form-control"
