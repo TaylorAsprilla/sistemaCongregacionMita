@@ -9,7 +9,7 @@ import { ActividadEconomicaService } from 'src/app/services/actividad-economica/
 import { TipoActividadEconomicaService } from 'src/app/services/tipo-actividad-economica/tipo-actividad-economica.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
-import { CurrencyPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
 import Swal from 'sweetalert2';
 
@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
   templateUrl: './actividad-economica.component.html',
   styleUrls: ['./actividad-economica.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe, CurrencyPipe],
+  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe, DecimalPipe],
 })
 export class ActividadEconomicaComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);

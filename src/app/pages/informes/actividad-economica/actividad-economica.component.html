@@ -164,7 +164,7 @@
                     <tr>
                       <td>{{ actividad.fecha | localDate }}</td>
                       <td>{{ getNombreTipoActividad(actividad.tipoActividadEconomica_id) }}</td>
-                      <td>{{ actividad.cantidadRecaudada | currency }}</td>
+                      <td>{{ actividad.cantidadRecaudada | number: '1.0-2' }}</td>
                       <td>{{ actividad.asistencia }}</td>
                       <td>
                         <button class="btn btn-sm btn-warning mr-1" (click)="editarActividad(actividad)" title="Editar">

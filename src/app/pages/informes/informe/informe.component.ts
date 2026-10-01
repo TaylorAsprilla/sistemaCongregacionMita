@@ -39,17 +39,6 @@ export class InformeComponent implements OnInit {
   hayInformeAbierto: boolean = false;
   cargando: boolean = false;
 
-  currYear = new Date().getFullYear();
-
-  trimestreActual = new Date('january 1, ' + (this.currYear + 1) + ' 00:00:00').getTime();
-
-  finPrimerTrimestre = new Date('april 1, ' + this.currYear + ' 00:00:00').getTime();
-  finSegundoTrimestre = new Date('july 1, ' + this.currYear + ' 00:00:00').getTime();
-  finTercerTrimestre = new Date('october 1, ' + this.currYear + ' 00:00:00').getTime();
-  finCuartoTrimestre = new Date('january 1, ' + (this.currYear + 1) + ' 00:00:00').getTime();
-
-  trimestres = [this.finPrimerTrimestre, this.finSegundoTrimestre, this.finTercerTrimestre, this.finCuartoTrimestre];
-
   // Fechas clave del trimestre actual y del cierre automático del informe (calculadas en ngOnInit)
   fechaFinTrimestre: Date;
   fechaCierreInforme: Date;
@@ -70,12 +59,30 @@ export class InformeComponent implements OnInit {
   }
 
   /**
-   * Retorna el número del trimestre actual (1, 2, 3 o 4)
-   * basándose en el mes actual
+   * Mantiene activo el trimestre anterior durante la gracia de cierre del backend.
    */
   getTrimestresActual(): number {
-    const mesActual = new Date().getMonth(); // 0-11 (0=Enero, 11=Diciembre)
-    return Math.floor(mesActual / 3) + 1;
+    return this.getPeriodoTrimestreActual().trimestre;
+  }
+
+  private getPeriodoTrimestreActual(): { trimestre: number; anio: number } {
+    const ahora = new Date();
+    let trimestre = Math.floor(ahora.getMonth() / 3) + 1;
+    let anio = ahora.getFullYear();
+    const inicioTrimestre = new Date(anio, (trimestre - 1) * 3, 1);
+    const fechaCierreBackend = new Date(inicioTrimestre);
+    fechaCierreBackend.setDate(fechaCierreBackend.getDate() + DIAS_GRACIA_CIERRE_INFORME);
+    fechaCierreBackend.setHours(0, 5, 0, 0);
+
+    if (ahora < fechaCierreBackend) {
+      trimestre -= 1;
+      if (trimestre === 0) {
+        trimestre = 4;
+        anio -= 1;
+      }
+    }
+
+    return { trimestre, anio };
   }
 
   /**
@@ -84,8 +91,8 @@ export class InformeComponent implements OnInit {
    * verifica si el informe del trimestre anterior sigue en su periodo de gracia.
    */
   private calcularFechasClave(): void {
-    const trimestreActual = this.getTrimestresActual();
-    const finTrimestreMs = this.trimestres[trimestreActual - 1];
+    const { trimestre, anio } = this.getPeriodoTrimestreActual();
+    const finTrimestreMs = new Date(anio, trimestre * 3, 1).getTime();
 
     // El último día real del trimestre (para mostrar al usuario) es el mismo que se envía al backend
     // en obtenerFechasTrimestreActual(); finTrimestreMs es el instante de inicio del SIGUIENTE trimestre
@@ -95,23 +102,19 @@ export class InformeComponent implements OnInit {
     this.fechaFinTrimestre = new Date(fechaFin + 'T23:59:59');
     this.fechaCierreInforme = this.calcularFechaCierre(finTrimestreMs);
 
-    const finTrimestreAnteriorMs =
-      trimestreActual === 1
-        ? new Date('january 1, ' + this.currYear + ' 00:00:00').getTime()
-        : this.trimestres[trimestreActual - 2];
+    const finTrimestreAnteriorMs = new Date(anio, (trimestre - 1) * 3, 1).getTime();
 
     this.fechaCierreInformeAnterior = this.calcularFechaCierre(finTrimestreAnteriorMs);
     this.enPeriodoGraciaTrimestreAnterior = new Date().getTime() < this.fechaCierreInformeAnterior.getTime();
   }
 
   /**
-   * Dada la fecha (ms) de fin de un trimestre, retorna la fecha/hora en que
-   * el informe correspondiente se cerrará automáticamente (regla del backend: 00:00:05)
+  * Devuelve la siguiente ejecución del cron tras vencer la gracia del trimestre.
    */
   private calcularFechaCierre(finTrimestreMs: number): Date {
     const fechaCierre = new Date(finTrimestreMs);
     fechaCierre.setDate(fechaCierre.getDate() + DIAS_GRACIA_CIERRE_INFORME);
-    fechaCierre.setHours(0, 0, 5, 0);
+    fechaCierre.setHours(0, 5, 0, 0);
     return fechaCierre;
   }
 
@@ -175,10 +178,8 @@ export class InformeComponent implements OnInit {
    */
   calcularDiasFinTrimestre(): number {
     const ahora = new Date().getTime();
-    const trimestreActual = this.getTrimestresActual();
-
-    // Obtener la fecha de fin del trimestre actual
-    const fechaFinTrimestre = this.trimestres[trimestreActual - 1];
+    const { trimestre, anio } = this.getPeriodoTrimestreActual();
+    const fechaFinTrimestre = new Date(anio, trimestre * 3, 1).getTime();
 
     // Calcular la diferencia en milisegundos
     const diferencia = fechaFinTrimestre - ahora;
@@ -193,37 +194,21 @@ export class InformeComponent implements OnInit {
    * Obtiene las fechas de inicio y fin del trimestre actual
    */
   obtenerFechasTrimestreActual(): { fechaInicio: string; fechaFin: string } {
-    const hoy = new Date();
-    const mes = hoy.getMonth(); // 0-11
-    const anio = hoy.getFullYear();
-    const trimestre = Math.floor(mes / 3) + 1;
-
-    let fechaInicio: Date;
-    let fechaFin: Date;
-
-    switch (trimestre) {
-      case 1: // Enero - Marzo
-        fechaInicio = new Date(anio, 0, 1);
-        fechaFin = new Date(anio, 2, 31);
-        break;
-      case 2: // Abril - Junio
-        fechaInicio = new Date(anio, 3, 1);
-        fechaFin = new Date(anio, 5, 30);
-        break;
-      case 3: // Julio - Septiembre
-        fechaInicio = new Date(anio, 6, 1);
-        fechaFin = new Date(anio, 8, 30);
-        break;
-      case 4: // Octubre - Diciembre
-        fechaInicio = new Date(anio, 9, 1);
-        fechaFin = new Date(anio, 11, 31);
-        break;
-    }
+    const { trimestre, anio } = this.getPeriodoTrimestreActual();
+    const fechaInicio = new Date(anio, (trimestre - 1) * 3, 1);
+    const fechaFin = new Date(anio, trimestre * 3, 0);
 
     return {
-      fechaInicio: fechaInicio.toISOString().split('T')[0],
-      fechaFin: fechaFin.toISOString().split('T')[0],
+      fechaInicio: this.formatearFechaLocal(fechaInicio),
+      fechaFin: this.formatearFechaLocal(fechaFin),
     };
+  }
+
+  private formatearFechaLocal(fecha: Date): string {
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    return `${anio}-${mes}-${dia}`;
   }
 
   /**
