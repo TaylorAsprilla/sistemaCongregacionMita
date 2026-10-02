@@ -7,6 +7,7 @@ import { SituacionVisitaModel } from 'src/app/core/models/situacion-visita.model
 import { RUTAS } from 'src/app/routes/menu-items';
 import { SituacionVisitaService } from 'src/app/services/situacion-visita/situacion-visita.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
+import { obtenerFechaInicialPeriodoInforme, obtenerFechasPeriodoInforme } from 'src/app/core/utils/periodo-informe';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -32,11 +33,11 @@ export class InformeSituacionVisitaComponent implements OnInit {
   public fechaMaxima: string;
 
   constructor() {
-    const fechaActual = new Date().toISOString().split('T')[0];
+    const fechaActual = obtenerFechaInicialPeriodoInforme();
     const informeId = this.informeService.informeActivoId;
 
     // Calcular fechas del trimestre actual
-    const fechasTrimestre = this.obtenerFechasTrimestreActual();
+    const fechasTrimestre = obtenerFechasPeriodoInforme();
     this.fechaMinima = fechasTrimestre.min;
     this.fechaMaxima = fechasTrimestre.max;
 
@@ -66,29 +67,6 @@ export class InformeSituacionVisitaComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarSituacionVisitas();
-  }
-
-  private obtenerFechasTrimestreActual(): { min: string; max: string } {
-    const hoy = new Date();
-    const mes = hoy.getMonth();
-    const anio = hoy.getFullYear();
-
-    // Determinar el trimestre (0=Q1, 1=Q2, 2=Q3, 3=Q4)
-    const trimestre = Math.floor(mes / 3);
-
-    // Primer mes del trimestre (0, 3, 6, 9)
-    const primerMesTrimestre = trimestre * 3;
-
-    // Fecha mínima: primer día del primer mes del trimestre
-    const fechaMinima = new Date(anio, primerMesTrimestre, 1);
-
-    // Fecha máxima: último día del último mes del trimestre
-    const fechaMaxima = new Date(anio, primerMesTrimestre + 3, 0);
-
-    return {
-      min: fechaMinima.toISOString().split('T')[0],
-      max: fechaMaxima.toISOString().split('T')[0],
-    };
   }
 
   private cargarSituacionVisitas(): void {
@@ -154,7 +132,7 @@ export class InformeSituacionVisitaComponent implements OnInit {
     this.situacionSeleccionada = null;
     this.situacionVisitaForm.reset();
     const informeId = this.informeService.informeActivoId;
-    const fechaActual = new Date().toISOString().split('T')[0];
+    const fechaActual = obtenerFechaInicialPeriodoInforme();
     this.situacionVisitaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
   }
 
@@ -197,7 +175,7 @@ export class InformeSituacionVisitaComponent implements OnInit {
             this.cargarSituacionVisitas();
             this.situacionVisitaForm.reset();
             const informeId = this.informeService.informeActivoId;
-            const fechaActual = new Date().toISOString().split('T')[0];
+            const fechaActual = obtenerFechaInicialPeriodoInforme();
             this.situacionVisitaForm.patchValue({ fecha: fechaActual, informe_id: informeId });
           },
           error: (error) => {

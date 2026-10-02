@@ -1,3 +1,5 @@
+import { obtenerPeriodoInforme } from 'src/app/core/utils/periodo-informe';
+
 export interface MesItem {
   valor: number;
   nombre: string;
@@ -33,8 +35,7 @@ export function getNombreMes(mes: number): string {
  * @returns Array de meses del trimestre actual
  */
 export function obtenerMesesTrimestreActual(): MesItem[] {
-  const mesActual = new Date().getMonth() + 1; // getMonth() devuelve 0-11
-  const trimestre = Math.ceil(mesActual / 3);
+  const { trimestre } = obtenerPeriodoInforme();
   const primerMesTrimestre = (trimestre - 1) * 3 + 1;
   const ultimoMesTrimestre = trimestre * 3;
 

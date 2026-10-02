@@ -1,41 +1,44 @@
 <div class="titulo">
   <h1>Informe:</h1>
-  <h4>
-    {{ getTrimestresActual()
-    }}{{ getTrimestresActual() === 1 ? 'er' : getTrimestresActual() === 3 ? 'er' : 'do' }} Trimestre del año
-  </h4>
+  <h4>{{ formatearTrimestre(getTrimestresActual()) }} Trimestre del año</h4>
   <hr />
 
-  @if (enPeriodoGraciaTrimestreAnterior) {
-    <div class="cierre-informe-banner cierre-informe-banner--danger mb-3">
-      <i class="fa fa-exclamation-triangle cierre-informe-banner__icono"></i>
-      <div class="cierre-informe-banner__contenido">
-        <strong class="cierre-informe-banner__titulo">El informe del trimestre anterior sigue abierto</strong>
-        <p class="cierre-informe-banner__texto mb-0">
-          Aún puedes completarlo, pero se cerrará automáticamente el
-          <strong>{{ fechaCierreInformeAnterior | date: "d 'de' MMMM 'de' y, h:mm a" }}</strong
-          >. Después de esa fecha no podrás editarlo.
-        </p>
-      </div>
-    </div>
-  }
-
-  @if (hayInformeAbierto) {
-    <div class="d-flex justify-content-between align-items-center mb-3 gap-3">
-      <div class="cierre-informe-banner cierre-informe-banner--info flex-grow-1 mb-0">
-        <i class="fa fa-info-circle cierre-informe-banner__icono"></i>
-        <div class="cierre-informe-banner__contenido">
-          <p class="cierre-informe-banner__texto mb-0">
-            El trimestre finaliza el <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
-            >. El informe se cerrará automáticamente el
-            <strong>{{ fechaCierreInforme | date: "d 'de' MMMM 'de' y, h:mm a" }}</strong
-            >, por lo que tendrás hasta esa fecha para completarlo.
-          </p>
+  @if (informeProximoACerrar || hayInformeAbierto) {
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
+      @if (informeProximoACerrar) {
+        <div class="cierre-informe-banner cierre-informe-banner--danger flex-grow-1" role="alert">
+          <i class="fa fa-exclamation-triangle cierre-informe-banner__icono"></i>
+          <div class="cierre-informe-banner__contenido">
+            <strong class="cierre-informe-banner__titulo">
+              El informe actual corresponde al {{ formatearTrimestre(getTrimestresActual()) }} trimestre de
+              {{ getAnioInforme() }}
+            </strong>
+            <p class="cierre-informe-banner__texto mb-0">
+              No llenes todavía el informe del {{ formatearTrimestre((getTrimestresActual() % 4) + 1) }} trimestre.
+              Completa el informe del {{ formatearTrimestre(getTrimestresActual()) }} trimestre antes de que cierre el
+              <strong>{{ fechaCierreInforme | date: "d 'de' MMMM 'de' y, h:mm a" }}</strong
+              >.
+            </p>
+          </div>
         </div>
-      </div>
-      <button class="btn btn-primary flex-shrink-0" (click)="verInformeCompleto()">
-        <i class="fa fa-file-alt"></i> Ver Informe Completo
-      </button>
+      } @else if (hayInformeAbierto) {
+        <div class="cierre-informe-banner cierre-informe-banner--info flex-grow-1 mb-0">
+          <i class="fa fa-info-circle cierre-informe-banner__icono"></i>
+          <div class="cierre-informe-banner__contenido">
+            <p class="cierre-informe-banner__texto mb-0">
+              El trimestre finaliza el <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
+              >. El informe se cerrará automáticamente el
+              <strong>{{ fechaCierreInforme | date: "d 'de' MMMM 'de' y, h:mm a" }}</strong
+              >, por lo que tendrás hasta esa fecha para completarlo.
+            </p>
+          </div>
+        </div>
+      }
+      @if (hayInformeAbierto) {
+        <button class="btn btn-primary flex-shrink-0 ms-auto" (click)="verInformeCompleto()">
+          <i class="fa fa-file-alt"></i> Ver Informe Completo
+        </button>
+      }
     </div>
   }
 </div>

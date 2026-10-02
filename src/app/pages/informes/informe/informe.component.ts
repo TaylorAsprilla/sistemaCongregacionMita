@@ -16,9 +16,11 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
 
 import { SeccionInformeComponent } from '../../../components/seccion-informe/seccion-informe.component';
-
-// Días de gracia que otorga el backend después de finalizar el trimestre antes de cerrar el informe automáticamente
-const DIAS_GRACIA_CIERRE_INFORME = 8;
+import {
+  DIAS_GRACIA_CIERRE_INFORME,
+  obtenerFechasPeriodoInforme,
+  obtenerPeriodoInforme,
+} from 'src/app/core/utils/periodo-informe';
 
 @Component({
   selector: 'app-informe',
@@ -44,9 +46,7 @@ export class InformeComponent implements OnInit {
   fechaCierreInforme: Date;
   fechaInicioTrimestre: Date;
 
-  // Fecha en que se cerrará automáticamente el informe del trimestre que acaba de terminar (periodo de gracia)
-  fechaCierreInformeAnterior: Date;
-  enPeriodoGraciaTrimestreAnterior: boolean = false;
+  informeProximoACerrar: boolean = false;
 
   get Rutas() {
     return RUTAS;
@@ -65,24 +65,16 @@ export class InformeComponent implements OnInit {
     return this.getPeriodoTrimestreActual().trimestre;
   }
 
+  getAnioInforme(): number {
+    return this.getPeriodoTrimestreActual().anio;
+  }
+
+  formatearTrimestre(trimestre: number): string {
+    return ['1er', '2do', '3er', '4to'][trimestre - 1];
+  }
+
   private getPeriodoTrimestreActual(): { trimestre: number; anio: number } {
-    const ahora = new Date();
-    let trimestre = Math.floor(ahora.getMonth() / 3) + 1;
-    let anio = ahora.getFullYear();
-    const inicioTrimestre = new Date(anio, (trimestre - 1) * 3, 1);
-    const fechaCierreBackend = new Date(inicioTrimestre);
-    fechaCierreBackend.setDate(fechaCierreBackend.getDate() + DIAS_GRACIA_CIERRE_INFORME);
-    fechaCierreBackend.setHours(0, 5, 0, 0);
-
-    if (ahora < fechaCierreBackend) {
-      trimestre -= 1;
-      if (trimestre === 0) {
-        trimestre = 4;
-        anio -= 1;
-      }
-    }
-
-    return { trimestre, anio };
+    return obtenerPeriodoInforme();
   }
 
   /**
@@ -101,15 +93,12 @@ export class InformeComponent implements OnInit {
     this.fechaInicioTrimestre = new Date(fechaInicio + 'T00:00:00');
     this.fechaFinTrimestre = new Date(fechaFin + 'T23:59:59');
     this.fechaCierreInforme = this.calcularFechaCierre(finTrimestreMs);
-
-    const finTrimestreAnteriorMs = new Date(anio, (trimestre - 1) * 3, 1).getTime();
-
-    this.fechaCierreInformeAnterior = this.calcularFechaCierre(finTrimestreAnteriorMs);
-    this.enPeriodoGraciaTrimestreAnterior = new Date().getTime() < this.fechaCierreInformeAnterior.getTime();
+    const ahora = new Date();
+    this.informeProximoACerrar = ahora.getTime() >= finTrimestreMs && ahora < this.fechaCierreInforme;
   }
 
   /**
-  * Devuelve la siguiente ejecución del cron tras vencer la gracia del trimestre.
+   * Devuelve la siguiente ejecución del cron tras vencer la gracia del trimestre.
    */
   private calcularFechaCierre(finTrimestreMs: number): Date {
     const fechaCierre = new Date(finTrimestreMs);
@@ -194,21 +183,8 @@ export class InformeComponent implements OnInit {
    * Obtiene las fechas de inicio y fin del trimestre actual
    */
   obtenerFechasTrimestreActual(): { fechaInicio: string; fechaFin: string } {
-    const { trimestre, anio } = this.getPeriodoTrimestreActual();
-    const fechaInicio = new Date(anio, (trimestre - 1) * 3, 1);
-    const fechaFin = new Date(anio, trimestre * 3, 0);
-
-    return {
-      fechaInicio: this.formatearFechaLocal(fechaInicio),
-      fechaFin: this.formatearFechaLocal(fechaFin),
-    };
-  }
-
-  private formatearFechaLocal(fecha: Date): string {
-    const anio = fecha.getFullYear();
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-    const dia = String(fecha.getDate()).padStart(2, '0');
-    return `${anio}-${mes}-${dia}`;
+    const { min, max } = obtenerFechasPeriodoInforme();
+    return { fechaInicio: min, fechaFin: max };
   }
 
   /**

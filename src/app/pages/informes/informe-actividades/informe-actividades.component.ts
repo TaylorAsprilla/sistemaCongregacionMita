@@ -11,6 +11,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import Swal from 'sweetalert2';
 import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
+import { obtenerFechaInicialPeriodoInforme, obtenerFechasPeriodoInforme } from 'src/app/core/utils/periodo-informe';
 
 @Component({
   selector: 'app-informes-actividades',
@@ -41,12 +42,12 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
   public actividadSubscription: Subscription;
 
   ngOnInit(): void {
-    const fechaActual = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    const fechaActual = obtenerFechaInicialPeriodoInforme();
     const nombreUsuario = this.usuarioService.usuarioNombre;
     const informeId = this.informeService.informeActivoId;
 
     // Calcular fechas del trimestre actual
-    const fechasTrimestre = this.obtenerFechasTrimestreActual();
+    const fechasTrimestre = obtenerFechasPeriodoInforme();
     this.fechaMinima = fechasTrimestre.min;
     this.fechaMaxima = fechasTrimestre.max;
 
@@ -118,7 +119,7 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
           Swal.fire('Actividad creada', 'Se registró la actividad correctamente', 'success');
           this.cargarActividades();
           this.actividadForm.reset({
-            fecha: new Date().toISOString().split('T')[0],
+            fecha: obtenerFechaInicialPeriodoInforme(),
             responsable: this.usuarioService.usuarioNombre,
             informe_id: this.informeService.informeActivoId,
             tipoActividad_id: '',
@@ -151,7 +152,7 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
     this.editando = false;
     this.actividadSeleccionada = null;
     this.actividadForm.reset({
-      fecha: new Date().toISOString().split('T')[0],
+      fecha: obtenerFechaInicialPeriodoInforme(),
       responsable: this.usuarioService.usuarioNombre,
       informe_id: this.informeService.informeActivoId,
       tipoActividad_id: '',
@@ -204,28 +205,6 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
       icon: 'error',
       html: listaErrores.length > 0 ? listaErrores.join('') : 'Ocurrió un error al procesar la solicitud',
     });
-  }
-
-  obtenerFechasTrimestreActual(): { min: string; max: string } {
-    const hoy = new Date();
-    const mesActual = hoy.getMonth(); // 0-11
-    const anioActual = hoy.getFullYear();
-
-    // Calcular el trimestre (0-3)
-    const trimestre = Math.floor(mesActual / 3);
-    const primerMesTrimestre = trimestre * 3; // 0, 3, 6, 9
-    const ultimoMesTrimestre = primerMesTrimestre + 2; // 2, 5, 8, 11
-
-    // Fecha mínima: primer día del primer mes del trimestre
-    const fechaMin = new Date(anioActual, primerMesTrimestre, 1);
-
-    // Fecha máxima: último día del último mes del trimestre
-    const fechaMax = new Date(anioActual, ultimoMesTrimestre + 1, 0);
-
-    return {
-      min: fechaMin.toISOString().split('T')[0],
-      max: fechaMax.toISOString().split('T')[0],
-    };
   }
 
   getDiaSemana(fecha: Date | string): string {
