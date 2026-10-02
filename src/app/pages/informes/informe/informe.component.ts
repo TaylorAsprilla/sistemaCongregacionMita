@@ -46,9 +46,7 @@ export class InformeComponent implements OnInit {
   fechaCierreInforme: Date;
   fechaInicioTrimestre: Date;
 
-  // Fecha en que se cerrará automáticamente el informe del trimestre que acaba de terminar (periodo de gracia)
-  fechaCierreInformeAnterior: Date;
-  enPeriodoGraciaTrimestreAnterior: boolean = false;
+  informeProximoACerrar: boolean = false;
 
   get Rutas() {
     return RUTAS;
@@ -65,6 +63,14 @@ export class InformeComponent implements OnInit {
    */
   getTrimestresActual(): number {
     return this.getPeriodoTrimestreActual().trimestre;
+  }
+
+  getAnioInforme(): number {
+    return this.getPeriodoTrimestreActual().anio;
+  }
+
+  formatearTrimestre(trimestre: number): string {
+    return ['1er', '2do', '3er', '4to'][trimestre - 1];
   }
 
   private getPeriodoTrimestreActual(): { trimestre: number; anio: number } {
@@ -87,11 +93,8 @@ export class InformeComponent implements OnInit {
     this.fechaInicioTrimestre = new Date(fechaInicio + 'T00:00:00');
     this.fechaFinTrimestre = new Date(fechaFin + 'T23:59:59');
     this.fechaCierreInforme = this.calcularFechaCierre(finTrimestreMs);
-
-    const finTrimestreAnteriorMs = new Date(anio, (trimestre - 1) * 3, 1).getTime();
-
-    this.fechaCierreInformeAnterior = this.calcularFechaCierre(finTrimestreAnteriorMs);
-    this.enPeriodoGraciaTrimestreAnterior = new Date().getTime() < this.fechaCierreInformeAnterior.getTime();
+    const ahora = new Date();
+    this.informeProximoACerrar = ahora.getTime() >= finTrimestreMs && ahora < this.fechaCierreInforme;
   }
 
   /**
