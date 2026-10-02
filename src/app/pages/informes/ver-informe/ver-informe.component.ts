@@ -34,6 +34,7 @@ import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { TipoActividadEconomicaModel } from 'src/app/core/models/tipo-actividad-economica.model';
 import Swal from 'sweetalert2';
 import { RUTAS } from 'src/app/routes/menu-items';
+import { obtenerPeriodoInformeDesdeFecha } from 'src/app/core/utils/periodo-informe';
 
 @Component({
   selector: 'app-ver-informe',
@@ -204,7 +205,11 @@ export class VerInformeComponent implements OnInit {
   private calcularTrimestre(): void {
     const mesActual = new Date().getMonth(); // 0-11
     this.numeroTrimestre = Math.floor(mesActual / 3) + 1;
+    this.anioTrimestre = new Date().getFullYear();
+    this.actualizarNombreTrimestre();
+  }
 
+  private actualizarNombreTrimestre(): void {
     switch (this.numeroTrimestre) {
       case 1:
         this.trimestre = 'Enero, Febrero y Marzo';
@@ -248,6 +253,7 @@ export class VerInformeComponent implements OnInit {
       if (informeState?.informeData && informeState?.fromListaPais) {
         const informeData = informeState.informeData;
 
+        this.actualizarPeriodoDesdeInforme(informeData);
         // Cargar información del usuario del informe
         this.cargarInformacionUsuarioInforme(informeData.usuario_id);
         this.cargarDatosInforme(informeId);
@@ -258,8 +264,9 @@ export class VerInformeComponent implements OnInit {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: (informe: any) => {
-              if (informe && informe[0]) {
-                const informeData = informe[0];
+              const informeData = informe?.informacioninforme || informe?.[0];
+              if (informeData) {
+                this.actualizarPeriodoDesdeInforme(informeData);
                 // Cargar información del usuario del informe
                 this.cargarInformacionUsuarioInforme(informeData.usuario_id);
                 this.cargarDatosInforme(informeId);
@@ -283,8 +290,25 @@ export class VerInformeComponent implements OnInit {
           });
       }
     } else {
+      this.actualizarPeriodoDesdeInforme(this.informeService.informeActivo);
       this.cargarDatosInforme(informeId);
     }
+  }
+
+  private actualizarPeriodoDesdeInforme(informe: { createdAt?: string } | null): void {
+    if (!informe?.createdAt) {
+      return;
+    }
+
+    const periodo = obtenerPeriodoInformeDesdeFecha(informe.createdAt);
+    if (!periodo) {
+      console.error('No se pudo determinar el trimestre del informe:', informe.createdAt);
+      return;
+    }
+
+    this.numeroTrimestre = periodo.trimestre;
+    this.anioTrimestre = periodo.anio;
+    this.actualizarNombreTrimestre();
   }
 
   /**
@@ -311,6 +335,7 @@ export class VerInformeComponent implements OnInit {
 
           if (response.tieneInformeAbierto && this.informeService.informeActivo) {
             // Ahora sí cargar los datos del informe
+            this.actualizarPeriodoDesdeInforme(this.informeService.informeActivo);
             this.cargarDatosInforme(this.informeService.informeActivo.id);
           } else {
             console.warn('⚠️ No se encontró informe activo');

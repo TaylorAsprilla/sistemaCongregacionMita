@@ -20,6 +20,21 @@ export function obtenerPeriodoInforme(fecha: Date = new Date()): { trimestre: nu
   return { trimestre, anio };
 }
 
+export function obtenerPeriodoInformeDesdeFecha(fechaInforme: string): { trimestre: number; anio: number } | null {
+  const coincidencia = fechaInforme.match(/^(\d{4})-(\d{2})-/);
+  if (!coincidencia) {
+    return null;
+  }
+
+  const anio = Number(coincidencia[1]);
+  const mes = Number(coincidencia[2]);
+  if (mes < 1 || mes > 12) {
+    return null;
+  }
+
+  return { trimestre: Math.floor((mes - 1) / 3) + 1, anio };
+}
+
 export function obtenerFechasPeriodoInforme(fecha: Date = new Date()): { min: string; max: string } {
   const { trimestre, anio } = obtenerPeriodoInforme(fecha);
   const primerMes = (trimestre - 1) * 3;
