@@ -2,6 +2,7 @@ import {
   obtenerFechaInicialPeriodoInforme,
   obtenerFechasPeriodoInforme,
   obtenerPeriodoInforme,
+  obtenerPeriodoInformeDesdeFecha,
 } from './periodo-informe';
 
 describe('período de informe', () => {
@@ -26,5 +27,11 @@ describe('período de informe', () => {
 
     expect(obtenerPeriodoInforme(fecha)).toEqual({ trimestre: 4, anio: 2026 });
     expect(obtenerFechasPeriodoInforme(fecha)).toEqual({ min: '2026-10-01', max: '2026-12-31' });
+  });
+
+  it('obtiene el trimestre y año de la fecha del informe', () => {
+    expect(obtenerPeriodoInformeDesdeFecha('2026-07-15T00:00:00.000Z')).toEqual({ trimestre: 3, anio: 2026 });
+    expect(obtenerPeriodoInformeDesdeFecha('2025-12-31')).toEqual({ trimestre: 4, anio: 2025 });
+    expect(obtenerPeriodoInformeDesdeFecha('fecha-invalida')).toBeNull();
   });
 });
