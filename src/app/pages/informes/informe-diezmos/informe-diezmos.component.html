@@ -138,7 +138,7 @@
                     <td>{{ getNombreMes(diezmo.mes) }}</td>
                     <td>{{ diezmo.sobresRestrictos }}</td>
                     <td>{{ diezmo.sobresNoRestrictos }}</td>
-                    <td>{{ diezmo.restrictos + diezmo.noRestrictos | currency }}</td>
+                    <td>{{ diezmo.restrictos + diezmo.noRestrictos | currency: 'USD' : '' }}</td>
                     <td>
                       <button class="btn btn-sm btn-warning mr-1" (click)="editarDiezmo(diezmo)" title="Editar">
                         <i class="fa fa-edit"></i>
