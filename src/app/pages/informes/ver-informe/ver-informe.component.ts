@@ -34,7 +34,11 @@ import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { TipoActividadEconomicaModel } from 'src/app/core/models/tipo-actividad-economica.model';
 import Swal from 'sweetalert2';
 import { RUTAS } from 'src/app/routes/menu-items';
-import { obtenerPeriodoInformeDesdeFecha } from 'src/app/core/utils/periodo-informe';
+import {
+  obtenerFechasPeriodoInforme,
+  obtenerPeriodoInforme,
+  obtenerPeriodoInformeDesdeFecha,
+} from 'src/app/core/utils/periodo-informe';
 
 @Component({
   selector: 'app-ver-informe',
@@ -203,9 +207,9 @@ export class VerInformeComponent implements OnInit {
    * Calcula el trimestre actual y sus meses
    */
   private calcularTrimestre(): void {
-    const mesActual = new Date().getMonth(); // 0-11
-    this.numeroTrimestre = Math.floor(mesActual / 3) + 1;
-    this.anioTrimestre = new Date().getFullYear();
+    const periodo = obtenerPeriodoInforme();
+    this.numeroTrimestre = periodo.trimestre;
+    this.anioTrimestre = periodo.anio;
     this.actualizarNombreTrimestre();
   }
 
@@ -368,38 +372,11 @@ export class VerInformeComponent implements OnInit {
    * Obtiene las fechas de inicio y fin del trimestre actual
    */
   private obtenerFechasTrimestreActual(): { fechaInicio: string; fechaFin: string } {
-    const año = this.anioTrimestre;
-    let mesInicio: number;
-    let mesFin: number;
-
-    switch (this.numeroTrimestre) {
-      case 1:
-        mesInicio = 0; // Enero
-        mesFin = 2; // Marzo
-        break;
-      case 2:
-        mesInicio = 3; // Abril
-        mesFin = 5; // Junio
-        break;
-      case 3:
-        mesInicio = 6; // Julio
-        mesFin = 8; // Septiembre
-        break;
-      case 4:
-        mesInicio = 9; // Octubre
-        mesFin = 11; // Diciembre
-        break;
-      default:
-        mesInicio = 0;
-        mesFin = 2;
-    }
-
-    const fechaInicio = new Date(año, mesInicio, 1);
-    const fechaFin = new Date(año, mesFin + 1, 0); // Último día del mes final
+    const periodo = obtenerFechasPeriodoInforme();
 
     return {
-      fechaInicio: fechaInicio.toISOString().split('T')[0],
-      fechaFin: fechaFin.toISOString().split('T')[0],
+      fechaInicio: periodo.min,
+      fechaFin: periodo.max,
     };
   }
 

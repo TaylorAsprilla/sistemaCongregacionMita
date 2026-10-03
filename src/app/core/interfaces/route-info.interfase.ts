@@ -7,6 +7,7 @@ export interface RouteInfo {
   icon?: string;
   class?: string;
   extralink?: boolean;
+  requiresActiveReport?: boolean;
   role?: ROLES[];
   submenu?: RouteInfo[];
 }

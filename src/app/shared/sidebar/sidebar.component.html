@@ -54,7 +54,7 @@
                   <!-- Número -->
                   @if (sidebarnavItem.submenu.length > 0) {
                     <span class="label label-rouded label-themecolor">
-                      {{ sidebarnavItem.submenu.length }}
+                      {{ contarSubmenuVisible(sidebarnavItem.submenu) }}
                     </span>
                   }
                 </span>
@@ -67,50 +67,52 @@
                 [ngClass]="{ in: showMenu === sidebarnavItem.title }"
                 >
                 @for (sidebarnavSubItem of sidebarnavItem.submenu; track sidebarnavSubItem) {
-                  <li
-                    class=""
-                    [class.active]="showSubMenu === sidebarnavSubItem.title"
-                    [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'active'"
-                    >
-                    <ng-container *appPermisos="sidebarnavSubItem.role">
-                      @if (!sidebarnavSubItem.extralink) {
-                        <a
-                          [routerLink]="sidebarnavSubItem.submenu.length > 0 ? null : [sidebarnavSubItem.path]"
-                          [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'router-link-active'"
-                          [ngClass]="[sidebarnavSubItem.class]"
-                          class="pointer"
-                          (click)="addActiveClass(sidebarnavSubItem.title)"
-                          >
-                          <i [ngClass]="[sidebarnavSubItem.icon]"></i>
-                          {{ sidebarnavSubItem.title }}
-                        </a>
-                      }
-                    </ng-container>
-                    <!-- Third level menu -->
-                    @if (sidebarnavSubItem.submenu.length > 0) {
-                      <ul
-                        class="collapse"
-                        [ngClass]="{ in: showSubMenu === sidebarnavSubItem.title }"
-                        >
-                        @for (sidebarnavSubsubItem of sidebarnavSubItem.submenu; track sidebarnavSubsubItem) {
-                          <li
-                            routerLinkActive="active"
-                            [ngClass]="[sidebarnavSubsubItem.class]"
+                  @if (!sidebarnavSubItem.requiresActiveReport || tieneInformeActivo) {
+                    <li
+                      class=""
+                      [class.active]="showSubMenu === sidebarnavSubItem.title"
+                      [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'active'"
+                      >
+                      <ng-container *appPermisos="sidebarnavSubItem.role">
+                        @if (!sidebarnavSubItem.extralink) {
+                          <a
+                            [routerLink]="sidebarnavSubItem.submenu.length > 0 ? null : [sidebarnavSubItem.path]"
+                            [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'router-link-active'"
+                            [ngClass]="[sidebarnavSubItem.class]"
+                            class="pointer"
+                            (click)="addActiveClass(sidebarnavSubItem.title)"
                             >
-                            @if (!sidebarnavSubsubItem.extralink) {
-                              <a
-                                [routerLink]="[sidebarnavSubsubItem.path]"
-                                [routerLinkActive]="sidebarnavSubsubItem.submenu.length > 0 ? '' : 'router-link-active'"
-                                >
-                                <i [ngClass]="[sidebarnavSubsubItem.icon]"></i>
-                                {{ sidebarnavSubsubItem.title }}
-                              </a>
-                            }
-                          </li>
+                            <i [ngClass]="[sidebarnavSubItem.icon]"></i>
+                            {{ sidebarnavSubItem.title }}
+                          </a>
                         }
-                      </ul>
-                    }
-                  </li>
+                      </ng-container>
+                      <!-- Third level menu -->
+                      @if (sidebarnavSubItem.submenu.length > 0) {
+                        <ul
+                          class="collapse"
+                          [ngClass]="{ in: showSubMenu === sidebarnavSubItem.title }"
+                          >
+                          @for (sidebarnavSubsubItem of sidebarnavSubItem.submenu; track sidebarnavSubsubItem) {
+                            <li
+                              routerLinkActive="active"
+                              [ngClass]="[sidebarnavSubsubItem.class]"
+                              >
+                              @if (!sidebarnavSubsubItem.extralink) {
+                                <a
+                                  [routerLink]="[sidebarnavSubsubItem.path]"
+                                  [routerLinkActive]="sidebarnavSubsubItem.submenu.length > 0 ? '' : 'router-link-active'"
+                                  >
+                                  <i [ngClass]="[sidebarnavSubsubItem.icon]"></i>
+                                  {{ sidebarnavSubsubItem.title }}
+                                </a>
+                              }
+                            </li>
+                          }
+                        </ul>
+                      }
+                    </li>
+                  }
                 }
               </ul>
             }
