@@ -5,6 +5,8 @@ export enum ESTADO_INFORME_ENUM {
 }
 
 export class InformeModel {
+  public periodo?: string;
+
   constructor(
     public id?: number,
     public usuario_id?: number,

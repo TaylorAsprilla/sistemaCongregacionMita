@@ -244,6 +244,7 @@ export class InformeComponent implements OnInit {
   private crearNuevoInforme(fechaInicio: string, fechaFin: string) {
     const nuevoInforme = {
       usuario_id: this.usuarioService.usuarioId,
+      periodo: fechaInicio,
     };
 
     this.informeService.crearInforme(nuevoInforme).subscribe(

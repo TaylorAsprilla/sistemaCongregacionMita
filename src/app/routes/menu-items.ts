@@ -600,6 +600,16 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
+        path: RUTAS.INFORME,
+        title: 'Continuar con el informe',
+        icon: '',
+        class: '',
+        extralink: false,
+        requiresActiveReport: true,
+        role: [ROLES.ADMINISTRADOR, ROLES.PRUEBA_INFORMES, ROLES.OBRERO_PAIS, ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+        submenu: [],
+      },
+      {
         path: RUTAS.VER_INFORME,
         title: 'Ver Informe',
         icon: '',
