@@ -4,6 +4,7 @@ export interface VerificarInformeAbiertoResponseInterface {
     id: number;
     usuario_id: number;
     estado: string;
+    periodo?: string | null;
     createdAt: string;
     updatedAt: string;
   };
@@ -29,6 +30,7 @@ export interface ResumenInformeResponseInterface {
     id: number;
     usuario_id: number;
     estado: string;
+    periodo?: string | null;
     createdAt: string;
     updatedAt: string;
   } | null;
@@ -48,6 +50,7 @@ export interface InformeCompletoPais {
   id: number;
   usuario_id: number;
   estado: string;
+  periodo?: string | null;
   createdAt: string;
   updatedAt: string;
   usuario: UsuarioInforme;

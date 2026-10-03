@@ -299,14 +299,15 @@ export class VerInformeComponent implements OnInit {
     }
   }
 
-  private actualizarPeriodoDesdeInforme(informe: { createdAt?: string } | null): void {
-    if (!informe?.createdAt) {
+  private actualizarPeriodoDesdeInforme(informe: { periodo?: string | null; createdAt?: string } | null): void {
+    const fechaPeriodo = informe?.periodo || informe?.createdAt;
+    if (!fechaPeriodo) {
       return;
     }
 
-    const periodo = obtenerPeriodoInformeDesdeFecha(informe.createdAt);
+    const periodo = obtenerPeriodoInformeDesdeFecha(fechaPeriodo);
     if (!periodo) {
-      console.error('No se pudo determinar el trimestre del informe:', informe.createdAt);
+      console.error('No se pudo determinar el trimestre del informe:', fechaPeriodo);
       return;
     }
 
