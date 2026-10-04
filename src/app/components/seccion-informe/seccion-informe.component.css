@@ -169,3 +169,67 @@
   height: auto;
   width: 100%;
 }
+
+/* Tablets */
+@media (max-width: 1199.98px) {
+  .around .fa {
+    font-size: 4em;
+  }
+
+  .nombre {
+    font-size: 22px;
+    padding-right: 40px;
+  }
+
+  .descripcion {
+    font-size: 18px;
+  }
+}
+
+/* Celulares: icono y título apilados y centrados */
+@media (max-width: 767.98px) {
+  .buffer {
+    padding-top: 0;
+  }
+
+  .parte {
+    height: auto;
+  }
+
+  .around,
+  .nombre {
+    width: 100%;
+    text-align: center;
+  }
+
+  .around {
+    padding-left: 0;
+  }
+
+  .around .fa {
+    font-size: 3.5em;
+  }
+
+  .nombre {
+    font-size: 20px;
+    padding: 0 15px;
+    margin-top: 0.5rem !important;
+  }
+
+  .descripcion {
+    font-size: 16px;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .ribbon-wrapper.ribbon-lg {
+    height: 100px;
+    width: 100px;
+  }
+
+  .ribbon-wrapper.ribbon-lg .ribbon {
+    top: 20px;
+    width: 140px;
+    font-size: 0.7rem;
+  }
+}
