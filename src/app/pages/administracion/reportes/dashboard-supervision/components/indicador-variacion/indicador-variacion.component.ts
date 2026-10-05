@@ -44,6 +44,12 @@ import { Variacion } from 'src/app/core/interfaces/dashboard-supervision.interfa
       .var-estable { background: #eef1f4; color: #4b5563; }
       .var-baja { background: #fdf0e3; color: #a14d00; }
       .var-baja-fuerte { background: #fbe0e0; color: #a12020; }
+      .variacion i { font-size: 0.95em; }
+      .var-sube-fuerte i, .var-sube i { color: #16a34a !important; }
+      .var-baja i { color: #ea580c !important; }
+      .var-baja-fuerte i { color: #dc2626 !important; }
+      .var-estable i { color: #1976d2 !important; }
+      .var-sin-dato i { color: #1976d2 !important; }
       .var-sin-dato { background: transparent; color: #6b7280; font-weight: 400; font-style: italic; white-space: normal; padding-left: 0; }
       .detalle { font-size: 0.75rem; margin-top: 0.15rem; }
     `,
