@@ -41,20 +41,19 @@ export class TablaUnidadesComponent {
   readonly etiquetasTipo = ETIQUETAS_TIPO_UNIDAD;
   readonly servicios = SERVICIOS_VARIACION;
   readonly filtrosVariacion = FILTROS_VARIACION;
-  readonly tipos = Object.keys(ETIQUETAS_TIPO_UNIDAD) as TipoUnidad[];
   readonly ubicacion = ubicacionUnidad;
   readonly estados = Object.keys(ETIQUETAS_ESTADO_ENTREGA) as EstadoEntrega[];
   readonly ordenes: { valor: OrdenUnidades; etiqueta: string }[] = [
     { valor: 'NOMBRE', etiqueta: 'Nombre (A-Z)' },
-    { valor: 'PAIS', etiqueta: 'Congregación País' },
-    { valor: 'CONGREGACION', etiqueta: 'Congregación Ciudad' },
+    { valor: 'PAIS', etiqueta: 'País' },
     { valor: 'MAYOR_INCREMENTO', etiqueta: 'Mayor incremento de asistencia' },
     { valor: 'MAYOR_DISMINUCION', etiqueta: 'Mayor disminución de asistencia' },
     { valor: 'MAS_ALERTAS', etiqueta: 'Más alertas' },
   ];
 
+  /** La tabla solo muestra Congregaciones Ciudad. */
+  private readonly tipo: TipoUnidad = 'CONGREGACION';
   busqueda = signal('');
-  tipo = signal<TipoUnidad | ''>('');
   estado = signal<EstadoEntrega | ''>('');
   orden = signal<OrdenUnidades>('NOMBRE');
   servicioVariacion = signal<ClaveServicio | ''>('');
@@ -101,7 +100,7 @@ export class TablaUnidadesComponent {
       filtrosPrevios = filtros;
       const consulta = {
         busqueda: this.busqueda().trim(),
-        tipo: this.tipo(),
+        tipo: this.tipo,
         estado: this.estado(),
         orden: this.orden(),
         servicio: this.servicioVariacion(),

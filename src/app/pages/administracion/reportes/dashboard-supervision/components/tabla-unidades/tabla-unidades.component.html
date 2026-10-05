@@ -1,20 +1,11 @@
 <div class="row g-2 mb-3 align-items-end">
-  <div class="col-12 col-lg-4">
+  <div class="col-12 col-lg-6">
     <label class="form-label small fw-semibold mb-1" for="buscarUnidad">Buscar</label>
     <div class="input-group input-group-sm">
       <span class="input-group-text"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></span>
       <input id="buscarUnidad" type="search" class="form-control" placeholder="Congregación, país, ciudad u obrero"
         (input)="buscar($any($event.target).value)" />
     </div>
-  </div>
-  <div class="col-6 col-md-4 col-lg-2">
-    <label class="form-label small fw-semibold mb-1" for="tipoUnidad">Tipo</label>
-    <select id="tipoUnidad" class="form-select form-select-sm" [ngModel]="tipo()" (ngModelChange)="cambiar(tipo, $event)">
-      <option value="">Todos</option>
-      @for (t of tipos; track t) {
-        <option [value]="t">{{ etiquetasTipo[t] }}</option>
-      }
-    </select>
   </div>
   <div class="col-6 col-md-4 col-lg-3">
     <label class="form-label small fw-semibold mb-1" for="estadoUnidad">Estado del informe</label>
@@ -88,7 +79,7 @@
         @for (f of datos()?.unidades ?? []; track f.unidad.tipo + f.unidad.id) {
           <tr>
             <td>
-              <div class="fw-semibold">{{ f.unidad.nombre }}</div>
+              <div class="nombre-unidad">{{ f.unidad.nombre }}</div>
               <small class="text-muted">
                 {{ etiquetasTipo[f.unidad.tipo] }}@if (ubicacion(f.unidad)) { · {{ ubicacion(f.unidad) }} }
               </small>
@@ -139,7 +130,7 @@
       <div class="tarjeta-unidad">
         <div class="d-flex justify-content-between gap-2">
           <div class="min-w-0">
-            <div class="fw-semibold">{{ f.unidad.nombre }}</div>
+            <div class="nombre-unidad">{{ f.unidad.nombre }}</div>
             <small class="text-muted d-block">
               {{ etiquetasTipo[f.unidad.tipo] }}@if (ubicacion(f.unidad)) { · {{ ubicacion(f.unidad) }} }
             </small>
