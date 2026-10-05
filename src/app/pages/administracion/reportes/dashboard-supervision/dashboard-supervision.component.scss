@@ -70,6 +70,10 @@ $azul: #1e66b8;
   border-left: 4px solid $azul;
   border-radius: 0.4rem;
   padding: 0.6rem 0.9rem;
+
+  .fas {
+    color: $azul;
+  }
 }
 
 /* Tarjetas de cobertura */
