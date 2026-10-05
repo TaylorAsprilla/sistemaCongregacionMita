@@ -4,7 +4,7 @@
     <div>
       <h1 class="h4 mb-1 titulo">Dashboard de Supervisión</h1>
       @if (resumen(); as r) {
-        <p class="subtitulo mb-0 small">
+        <p class="subtitulo-periodo mb-0 small">
           <strong>{{ r.contexto.periodo.etiqueta }}</strong> · Comparado con el
           {{ r.contexto.descripcionComparacion }} · {{ alcance() }}
         </p>

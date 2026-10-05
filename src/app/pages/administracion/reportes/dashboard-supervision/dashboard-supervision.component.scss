@@ -34,8 +34,10 @@ $azul: #1976d2;
   color: $azul;
   margin-bottom: 0.9rem;
 
-  .fa {
+  .fa,
+  .fas {
     margin-right: 0.35rem;
+    color: $azul !important;
   }
 }
 
@@ -89,8 +91,7 @@ $azul: #1976d2;
   }
 }
 
-.subtitulo {
-  color: #263238;
+.subtitulo-periodo {
   font-size: 0.9rem;
 
   strong {
