@@ -89,6 +89,15 @@ $azul: #1976d2;
   }
 }
 
+.subtitulo {
+  color: #263238;
+  font-size: 0.9rem;
+
+  strong {
+    color: #102a43;
+  }
+}
+
 .nota-calculo {
   summary {
     cursor: pointer;

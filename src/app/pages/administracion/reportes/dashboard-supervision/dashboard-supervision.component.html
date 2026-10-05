@@ -7,7 +7,7 @@
         Dashboard de Supervisión Congregacional
       </h1>
       @if (resumen(); as r) {
-        <p class="text-muted mb-0 small">
+        <p class="subtitulo mb-0 small">
           <strong>{{ r.contexto.periodo.etiqueta }}</strong> · Comparado con el {{ r.contexto.descripcionComparacion }} · {{ alcance() }}
         </p>
       }
