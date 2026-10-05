@@ -218,6 +218,18 @@ export const childRoutes: Routes = [
       role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
     },
   },
+
+  {
+    loadComponent: () =>
+      import('src/app/pages/administracion/reportes/dashboard-supervision/dashboard-supervision.component').then(
+        (m) => m.DashboardSupervisionComponent,
+      ),
+    canActivate: [RolesGuard],
+    path: RUTAS.DASHBOARD_SUPERVISION,
+    data: {
+      role: [ROLES.ADMINISTRADOR],
+    },
+  },
   {
     path: RUTAS.MINISTERIOS,
     component: MinisteriosComponent,

@@ -1,0 +1,188 @@
+$azul: #1e66b8;
+
+.supervision {
+  max-width: 1600px;
+}
+
+.titulo {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.tarjeta {
+  border: 0;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.seccion-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $azul;
+  margin-bottom: 0.9rem;
+
+  .fa {
+    margin-right: 0.35rem;
+  }
+}
+
+.subtitulo {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.table {
+  font-size: 0.88rem;
+
+  th {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+}
+
+.atenuado {
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.cargando-flotante {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  background: #fff;
+  border-radius: 50%;
+  padding: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nota-neutral {
+  font-size: 0.85rem;
+  color: #374151;
+  background: #f1f5fb;
+  border-left: 4px solid $azul;
+  border-radius: 0.4rem;
+  padding: 0.6rem 0.9rem;
+}
+
+/* Tarjetas de cobertura */
+.tarjeta-cobertura {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  height: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-top: 4px solid #cbd5e1;
+
+  .icono {
+    font-size: 1.9rem;
+    width: 2.5rem;
+    text-align: center;
+  }
+
+  .valor {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .etiqueta {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #374151;
+  }
+
+  .ayuda {
+    color: #6b7280;
+    font-size: 0.75rem;
+  }
+
+  &.primario { border-top-color: $azul; .icono { color: $azul; } }
+  &.exito { border-top-color: #1b7a47; .icono { color: #1b7a47; } }
+  &.info { border-top-color: #0aa2c0; .icono { color: #0aa2c0; } }
+  &.aviso { border-top-color: #e08e0b; .icono { color: #e08e0b; } }
+  &.neutro { border-top-color: #6b7280; .icono { color: #6b7280; } }
+  &.progreso {
+    border-top-color: $azul;
+
+    .progress {
+      height: 0.5rem;
+    }
+
+    .progress-bar {
+      background: $azul;
+    }
+  }
+}
+
+/* Tarjetas de indicadores */
+.tarjeta-indicador {
+  height: 100%;
+  padding: 1rem 1.1rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  text-align: center;
+
+  .icono-indicador {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f0fb;
+    color: $azul;
+    flex-shrink: 0;
+  }
+
+  .etiqueta {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    text-align: left;
+  }
+
+  .valor {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.2;
+    margin-bottom: 0.35rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .supervision {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .tarjeta-cobertura {
+    padding: 0.75rem;
+    gap: 0.6rem;
+
+    .icono {
+      font-size: 1.4rem;
+      width: 1.8rem;
+    }
+
+    .valor {
+      font-size: 1.3rem;
+    }
+  }
+
+  .tarjeta-indicador .valor {
+    font-size: 1.6rem;
+  }
+}

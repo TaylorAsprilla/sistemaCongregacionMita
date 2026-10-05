@@ -1,0 +1,272 @@
+<div class="supervision container-fluid py-3">
+  <!-- Encabezado -->
+  <header class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+    <div>
+      <h1 class="h4 mb-1 titulo">
+        <i class="fas fa-gauge-high text-primary" aria-hidden="true"></i>
+        Dashboard de Supervisión Congregacional
+      </h1>
+      @if (resumen(); as r) {
+        <p class="text-muted mb-0 small">
+          <strong>{{ r.contexto.periodo.etiqueta }}</strong> · Comparado con el {{ r.contexto.descripcionComparacion }} · {{ alcance() }}
+        </p>
+      }
+    </div>
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-outline-success btn-sm" [disabled]="!resumen() || !!exportando()"
+        (click)="exportar('excel')">
+        <i class="fas" [class.fa-file-excel]="exportando() !== 'excel'" [class.fa-spinner]="exportando() === 'excel'"
+          [class.fa-spin]="exportando() === 'excel'" aria-hidden="true"></i>
+        Excel
+      </button>
+      <button type="button" class="btn btn-outline-danger btn-sm" [disabled]="!resumen() || !!exportando()"
+        (click)="exportar('pdf')">
+        <i class="fas" [class.fa-file-pdf]="exportando() !== 'pdf'" [class.fa-spinner]="exportando() === 'pdf'"
+          [class.fa-spin]="exportando() === 'pdf'" aria-hidden="true"></i>
+        PDF
+      </button>
+    </div>
+  </header>
+
+  @if (cargandoInicial()) {
+    <div class="text-center text-muted py-5">
+      <i class="fas fa-spinner fa-spin fa-3x text-primary" aria-hidden="true"></i>
+      <p class="mt-3">Cargando dashboard…</p>
+    </div>
+  } @else if (disponibles() && filtros()) {
+    <app-filtros-supervision class="d-block mb-3" [disponibles]="disponibles()!" [filtros]="filtros()!"
+      [cargando]="cargando()" (aplicar)="aplicarFiltros($event)" />
+
+    @if (error()) {
+      <div class="alert alert-warning d-flex align-items-center gap-2" role="alert">
+        <i class="fas fa-triangle-exclamation" aria-hidden="true"></i> {{ error() }}
+      </div>
+    }
+
+    <div class="position-relative" [class.atenuado]="cargando()">
+      @if (cargando()) {
+        <div class="cargando-flotante" aria-live="polite">
+          <i class="fas fa-spinner fa-spin fa-2x text-primary" aria-hidden="true"></i>
+        </div>
+      }
+
+      @if (resumen(); as r) {
+        <!-- Cobertura -->
+        <section class="mb-3" aria-labelledby="tituloCobertura">
+          <h2 id="tituloCobertura" class="visually-hidden">Cobertura de informes</h2>
+          <div class="row g-3">
+            @for (t of coberturaTarjetas(); track t.etiqueta) {
+              <div class="col-6 col-md-4 col-xl">
+                <div class="tarjeta-cobertura {{ t.clase }}">
+                  <i class="fas {{ t.icono }} icono" aria-hidden="true"></i>
+                  <div>
+                    <div class="valor">{{ t.valor | number }}</div>
+                    <div class="etiqueta">{{ t.etiqueta }}</div>
+                    <small class="ayuda">{{ t.ayuda }}</small>
+                  </div>
+                </div>
+              </div>
+            }
+            <div class="col-6 col-md-4 col-xl">
+              <div class="tarjeta-cobertura progreso">
+                <div class="w-100">
+                  <div class="d-flex justify-content-between align-items-baseline">
+                    <span class="etiqueta">Con informe</span>
+                    <span class="valor">
+                      {{ r.cobertura.porcentajeConInforme === null ? '—' : (r.cobertura.porcentajeConInforme | number: '1.0-1') + ' %' }}
+                    </span>
+                  </div>
+                  <div class="progress mt-2" role="progressbar" aria-label="Porcentaje de unidades con informe"
+                    [attr.aria-valuenow]="r.cobertura.porcentajeConInforme ?? 0" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" [style.width.%]="r.cobertura.porcentajeConInforme ?? 0"></div>
+                  </div>
+                  <small class="ayuda d-block mt-1">{{ r.cobertura.informesPeriodo }} informe(s) en el periodo</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="nota-neutral mb-3">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          Las variaciones comparan únicamente las <strong>{{ r.cobertura.unidadesComparadas }}</strong> unidad(es) con informe
+          en ambos periodos. Los indicadores describen la información registrada; su interpretación corresponde al
+          administrador.
+        </div>
+
+        <!-- Indicadores clave -->
+        <section class="mb-3" aria-labelledby="tituloIndicadores">
+          <h2 id="tituloIndicadores" class="seccion-titulo"><i class="fas fa-chart-column" aria-hidden="true"></i> Indicadores principales</h2>
+          <div class="row g-3">
+            @for (i of indicadoresClave(); track i.clave) {
+              <div class="col-12 col-sm-6 col-lg-4 col-xxl">
+                <div class="tarjeta-indicador">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="icono-indicador"><i class="fas {{ icono(i.clave) }}" aria-hidden="true"></i></span>
+                    <span class="etiqueta">{{ i.etiqueta }}</span>
+                  </div>
+                  <div class="valor">
+                    {{ i.valorPeriodo === null ? '—' : (i.valorPeriodo | number: (i.formato === 'DECIMAL' ? '1.0-1' : '1.0-0')) }}
+                  </div>
+                  <app-indicador-variacion [variacion]="i.variacion" [mostrarDetalle]="true" />
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- Asistencia por servicio + tendencias -->
+        <div class="row g-3 mb-3">
+          <section class="col-12 col-xl-5" aria-labelledby="tituloServicios">
+            <div class="card tarjeta h-100">
+              <div class="card-body">
+                <h2 id="tituloServicios" class="seccion-titulo"><i class="fas fa-calendar" aria-hidden="true"></i> Asistencia por servicio</h2>
+                @if (r.asistenciaPorServicio.length) {
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">Servicio</th>
+                          <th scope="col" class="text-end">Servicios</th>
+                          <th scope="col" class="text-end">Promedio</th>
+                          <th scope="col" class="text-end">Variación</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (s of r.asistenciaPorServicio; track s.categoria) {
+                          <tr>
+                            <td>{{ s.etiqueta }}</td>
+                            <td class="text-end">{{ s.cantidad ?? '—' }}</td>
+                            <td class="text-end">{{ s.promedio === null ? '—' : (s.promedio | number: '1.0-1') }}</td>
+                            <td class="text-end"><app-indicador-variacion [variacion]="s.variacionPromedio" /></td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                } @else {
+                  <p class="text-muted text-center my-4">Sin servicios registrados en el periodo.</p>
+                }
+              </div>
+            </div>
+          </section>
+
+          <section class="col-12 col-xl-7" aria-labelledby="tituloTendencias">
+            <div class="card tarjeta h-100">
+              <div class="card-body">
+                <h2 id="tituloTendencias" class="seccion-titulo"><i class="fas fa-chart-line" aria-hidden="true"></i> Tendencias</h2>
+                @if (tendencias(); as t) {
+                  <app-grafica-tendencias [series]="t.series" [informesPorPeriodo]="t.informesPorPeriodo" />
+                }
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Vida espiritual + trabajo pastoral -->
+        <div class="row g-3 mb-3">
+          <section class="col-12 col-lg-6" aria-labelledby="tituloEspiritual">
+            <div class="card tarjeta h-100">
+              <div class="card-body">
+                <h2 id="tituloEspiritual" class="seccion-titulo"><i class="fas fa-heart" aria-hidden="true"></i> Vida espiritual</h2>
+                <ng-container *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresEspirituales() }" />
+                @if (r.actividadesEspiritualesPorCategoria.length) {
+                  <h3 class="subtitulo mt-3">Actividades por categoría</h3>
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                      <tbody>
+                        @for (c of r.actividadesEspiritualesPorCategoria; track c.id) {
+                          <tr>
+                            <td>{{ c.nombre }}</td>
+                            <td class="text-end">{{ c.valorPeriodo ?? '—' }}</td>
+                            <td class="text-end"><app-indicador-variacion [variacion]="c.variacion" /></td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              </div>
+            </div>
+          </section>
+
+          <section class="col-12 col-lg-6" aria-labelledby="tituloPastoral">
+            <div class="card tarjeta h-100">
+              <div class="card-body">
+                <h2 id="tituloPastoral" class="seccion-titulo"><i class="fas fa-handshake" aria-hidden="true"></i> Trabajo pastoral</h2>
+                <ng-container *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresPastorales() }" />
+                <h3 class="subtitulo mt-3">Administración</h3>
+                <ng-container *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresAdministracion() }" />
+                <div class="small mt-2 text-muted">
+                  <i class="fas fa-money-bill" aria-hidden="true"></i>
+                  @if (r.actividadEconomica.disponible) {
+                    Monto recaudado en actividades económicas:
+                    <strong class="text-body">{{ r.actividadEconomica.montoRecaudado | number: '1.0-2' }}</strong>
+                  } @else {
+                    {{ r.actividadEconomica.mensaje }}
+                  }
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      }
+
+      <!-- Alertas -->
+      <section class="card tarjeta mb-3" aria-labelledby="tituloAlertas">
+        <div class="card-body">
+          <h2 id="tituloAlertas" class="seccion-titulo">
+            <i class="fas fa-bell" aria-hidden="true"></i> Alertas
+            @if (resumen()?.alertas?.total) {
+              <span class="badge bg-warning text-dark ms-1">{{ resumen()?.alertas?.total }}</span>
+            }
+          </h2>
+          <app-alertas-supervision [filtros]="filtros()!" (verUnidad)="unidadSeleccionada.set($event)" />
+        </div>
+      </section>
+
+      <!-- Tabla analítica -->
+      <section class="card tarjeta mb-3" aria-labelledby="tituloUnidades">
+        <div class="card-body">
+          <h2 id="tituloUnidades" class="seccion-titulo"><i class="fas fa-table" aria-hidden="true"></i> Congregaciones y campos</h2>
+          <app-tabla-unidades [filtros]="filtros()!" (verUnidad)="unidadSeleccionada.set($event)" />
+        </div>
+      </section>
+    </div>
+  } @else if (error()) {
+    <div class="alert alert-danger" role="alert">{{ error() }}</div>
+  }
+</div>
+
+@if (unidadSeleccionada() && filtros()) {
+  <app-detalle-unidad [unidad]="unidadSeleccionada()!" [filtros]="filtros()!" (cerrar)="unidadSeleccionada.set(null)" />
+}
+
+<ng-template #tablaIndicadores let-indicadores>
+  @if (indicadores.length) {
+    <div class="table-responsive">
+      <table class="table table-sm align-middle mb-0">
+        <thead>
+          <tr>
+            <th scope="col">Indicador</th>
+            <th scope="col" class="text-end">Actual</th>
+            <th scope="col" class="text-end">Variación</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (i of indicadores; track i.clave) {
+            <tr>
+              <td>{{ i.etiqueta }}</td>
+              <td class="text-end fw-semibold">
+                {{ i.valorPeriodo === null ? '—' : (i.valorPeriodo | number: (i.formato === 'DECIMAL' ? '1.0-1' : '1.0-0')) }}
+              </td>
+              <td class="text-end"><app-indicador-variacion [variacion]="i.variacion" /></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="text-muted small mb-0">Sin información registrada.</p>
+  }
+</ng-template>

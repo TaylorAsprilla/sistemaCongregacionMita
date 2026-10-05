@@ -1,0 +1,68 @@
+<div class="d-flex flex-wrap gap-2 mb-3 chips" role="group" aria-label="Filtrar alertas por tipo">
+  <button type="button" class="btn btn-sm" [class.btn-primary]="tipo() === ''" [class.btn-outline-primary]="tipo() !== ''"
+    (click)="seleccionarTipo('')">
+    Todas <span class="badge bg-light text-dark ms-1">{{ totalGeneral() }}</span>
+  </button>
+  @for (t of tipos; track t) {
+    @if (respuesta()?.porTipo?.[t]) {
+      <button type="button" class="btn btn-sm" [class.btn-primary]="tipo() === t" [class.btn-outline-primary]="tipo() !== t"
+        [attr.aria-pressed]="tipo() === t" (click)="seleccionarTipo(t)">
+        <i class="fas {{ iconos[t] }}" aria-hidden="true"></i>
+        {{ etiquetas[t] }}
+        <span class="badge bg-light text-dark ms-1">{{ respuesta()?.porTipo?.[t] }}</span>
+      </button>
+    }
+  }
+  <select class="form-select form-select-sm w-auto ms-auto" aria-label="Filtrar por nivel" [ngModel]="nivel()"
+    (ngModelChange)="nivel.set($event)">
+    <option value="">Todos los niveles</option>
+    <option value="ATENCION">Requiere atención</option>
+    <option value="INFORMATIVA">Informativa</option>
+  </select>
+</div>
+
+@if (cargando()) {
+  <div class="text-center text-muted py-4">
+    <i class="fas fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
+    <p class="mt-2 mb-0">Cargando alertas…</p>
+  </div>
+} @else if (error()) {
+  <div class="alert alert-warning mb-0">{{ error() }}</div>
+} @else if (!alertas().length) {
+  <p class="text-muted text-center py-4 mb-0">
+    <i class="fas fa-circle-check fa-2x d-block mb-2" aria-hidden="true"></i>
+    No hay alertas para los filtros seleccionados.
+  </p>
+} @else {
+  <ul class="list-unstyled lista mb-0">
+    @for (a of alertas(); track a.id) {
+      <li class="alerta" [class.atencion]="a.nivel === 'ATENCION'" [class.informativa]="a.nivel === 'INFORMATIVA'">
+        <div class="icono" aria-hidden="true"><i class="fas {{ iconos[a.tipo] }}"></i></div>
+        <div class="flex-grow-1 min-w-0">
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <strong class="text-truncate">{{ a.unidad.nombre }}</strong>
+            <span class="badge" [class.bg-warning]="a.nivel === 'ATENCION'" [class.text-dark]="a.nivel === 'ATENCION'"
+              [class.bg-info]="a.nivel === 'INFORMATIVA'">
+              {{ a.nivel === 'ATENCION' ? 'Requiere atención' : 'Informativa' }}
+            </span>
+            <span class="badge bg-light text-dark border">{{ a.unidad.tipo === 'CAMPO' ? 'Campo' : 'Congregación' }}</span>
+          </div>
+          <small class="text-muted d-block">{{ ubicacion(a.unidad) }}</small>
+          <p class="mb-0 mensaje">{{ a.mensaje }}</p>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-primary align-self-center" (click)="verUnidad.emit(a.unidad)"
+          [attr.aria-label]="'Ver detalle de ' + a.unidad.nombre">
+          <i class="fas fa-eye" aria-hidden="true"></i>
+          <span class="d-none d-md-inline ms-1">Ver</span>
+        </button>
+      </li>
+    }
+  </ul>
+  @if (hayMas()) {
+    <div class="text-center mt-3">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="verMas()">
+        Ver más ({{ (respuesta()?.alertas?.length ?? 0) - alertas().length }} restantes)
+      </button>
+    </div>
+  }
+}
