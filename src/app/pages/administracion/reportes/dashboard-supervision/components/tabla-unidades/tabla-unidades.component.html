@@ -185,20 +185,16 @@
         <option [ngValue]="25">25</option>
         <option [ngValue]="50">50</option>
       </select>
-      <nav aria-label="Paginación de congregaciones">
-        <ul class="pagination pagination-sm mb-0">
-          <li class="page-item" [class.disabled]="d.pagina <= 1">
-            <button type="button" class="page-link" (click)="irAPagina(d.pagina - 1)" aria-label="Anterior">
-              <i class="fas fa-chevron-left" aria-hidden="true"></i>
-            </button>
-          </li>
-          <li class="page-item active"><span class="page-link">{{ d.pagina }}</span></li>
-          <li class="page-item" [class.disabled]="d.pagina >= d.totalPaginas">
-            <button type="button" class="page-link" (click)="irAPagina(d.pagina + 1)" aria-label="Siguiente">
-              <i class="fas fa-chevron-right" aria-hidden="true"></i>
-            </button>
-          </li>
-        </ul>
+      <nav class="btn-group btn-group-sm" aria-label="Paginación de congregaciones">
+        <button type="button" class="btn btn-secondary" [disabled]="d.pagina <= 1" (click)="irAPagina(d.pagina - 1)"
+          aria-label="Anterior">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <span class="btn btn-primary disabled opacity-100" aria-current="page">{{ d.pagina }}</span>
+        <button type="button" class="btn btn-secondary" [disabled]="d.pagina >= d.totalPaginas"
+          (click)="irAPagina(d.pagina + 1)" aria-label="Siguiente">
+          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </button>
       </nav>
     </div>
   </div>

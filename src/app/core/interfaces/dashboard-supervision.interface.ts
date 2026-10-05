@@ -270,13 +270,13 @@ export interface VariacionServicio {
   conteo: Record<GrupoVariacion, number>;
 }
 
-export const GRUPOS_VARIACION: { valor: GrupoVariacion; etiqueta: string; clase: string }[] = [
-  { valor: 'DISMINUCION_SIGNIFICATIVA', etiqueta: 'Disminución significativa', clase: 'btn-danger' },
-  { valor: 'DISMINUCION_MODERADA', etiqueta: 'Disminución moderada', clase: 'btn-warning' },
-  { valor: 'ESTABLE', etiqueta: 'Sin variación significativa', clase: 'btn-secondary' },
-  { valor: 'INCREMENTO_MODERADO', etiqueta: 'Incremento moderado', clase: 'btn-info' },
-  { valor: 'INCREMENTO_SIGNIFICATIVO', etiqueta: 'Incremento significativo', clase: 'btn-success' },
-  { valor: 'SIN_COMPARACION', etiqueta: 'Sin comparación', clase: 'btn-light border' },
+export const GRUPOS_VARIACION: { valor: GrupoVariacion; etiqueta: string; clase: string; icono: string }[] = [
+  { valor: 'DISMINUCION_SIGNIFICATIVA', etiqueta: 'Disminución significativa', clase: 'btn-danger', icono: 'fa-angles-down' },
+  { valor: 'DISMINUCION_MODERADA', etiqueta: 'Disminución moderada', clase: 'btn-warning', icono: 'fa-angle-down' },
+  { valor: 'ESTABLE', etiqueta: 'Sin variación significativa', clase: 'btn-secondary', icono: 'fa-equals' },
+  { valor: 'INCREMENTO_MODERADO', etiqueta: 'Incremento moderado', clase: 'btn-info', icono: 'fa-angle-up' },
+  { valor: 'INCREMENTO_SIGNIFICATIVO', etiqueta: 'Incremento significativo', clase: 'btn-success', icono: 'fa-angles-up' },
+  { valor: 'SIN_COMPARACION', etiqueta: 'Sin comparación', clase: 'btn-light border', icono: 'fa-minus' },
 ];
 
 export const FILTROS_VARIACION: { valor: FiltroVariacion; etiqueta: string }[] = [

@@ -1,6 +1,7 @@
 <div class="d-flex flex-wrap gap-2 mb-3 chips" role="group" aria-label="Filtrar alertas por tipo">
   <button type="button" class="btn btn-sm" [class.btn-primary]="tipo() === ''" [class.btn-secondary]="tipo() !== ''"
     (click)="seleccionarTipo('')">
+    <i class="fas fa-list" aria-hidden="true"></i>
     Todas <span class="badge bg-light text-dark ms-1">{{ totalGeneral() }}</span>
   </button>
   @for (t of tipos; track t) {
@@ -61,6 +62,7 @@
   @if (hayMas()) {
     <div class="text-center mt-3">
       <button type="button" class="btn btn-sm btn-secondary" (click)="verMas()">
+        <i class="fas fa-angles-down" aria-hidden="true"></i>
         Ver más ({{ (respuesta()?.alertas?.length ?? 0) - alertas().length }} restantes)
       </button>
     </div>

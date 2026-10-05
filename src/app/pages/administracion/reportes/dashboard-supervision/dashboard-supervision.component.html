@@ -194,7 +194,7 @@
                               <button type="button" class="btn btn-sm {{ g.clase }} conteo"
                                 (click)="verVariacion(s.clave, g.valor)"
                                 [attr.aria-label]="'Ver ' + s.conteo[g.valor] + ' congregación(es) con ' + g.etiqueta.toLowerCase() + ' en ' + s.etiqueta.toLowerCase()">
-                                {{ s.conteo[g.valor] }}
+                                <i class="fas {{ g.icono }} me-1" aria-hidden="true"></i>{{ s.conteo[g.valor] }}
                               </button>
                             } @else {
                               <span class="text-muted">0</span>
