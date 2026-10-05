@@ -133,202 +133,6 @@
           </section>
         }
 
-        <div class="nota-neutral mb-3">
-          <i class="fas fa-circle-info" aria-hidden="true"></i>
-          Las variaciones comparan únicamente las <strong>{{ r.cobertura.unidadesComparadas }}</strong> congregación(es)
-          con informe en ambos periodos. Los indicadores describen la información registrada; su interpretación
-          corresponde al administrador.
-        </div>
-
-        <!-- Indicadores clave -->
-        <section class="mb-3" aria-labelledby="tituloIndicadores">
-          <h2 id="tituloIndicadores" class="seccion-titulo">
-            <i class="fas fa-chart-column" aria-hidden="true"></i> Indicadores principales
-          </h2>
-          <div class="row g-3">
-            @for (i of indicadoresClave(); track i.clave) {
-              <div class="col-12 col-sm-6 col-lg-4 col-xxl">
-                <div class="tarjeta-indicador">
-                  <div class="d-flex align-items-center gap-2 mb-2">
-                    <span class="icono-indicador"><i class="fas {{ icono(i.clave) }}" aria-hidden="true"></i></span>
-                    <span class="etiqueta">{{ i.etiqueta }}</span>
-                  </div>
-                  <div class="valor">
-                    {{
-                      i.valorPeriodo === null
-                        ? '—'
-                        : (i.valorPeriodo | number: (i.formato === 'DECIMAL' ? '1.0-1' : '1.0-0'))
-                    }}
-                  </div>
-                  <app-indicador-variacion [variacion]="i.variacion" [mostrarDetalle]="true" />
-                </div>
-              </div>
-            }
-          </div>
-        </section>
-
-        <!-- Asistencia por servicio + tendencias -->
-        <div class="row g-3 mb-3">
-          <section class="col-12 col-xl-5" aria-labelledby="tituloServicios">
-            <div class="card tarjeta h-100">
-              <div class="card-body">
-                <h2 id="tituloServicios" class="seccion-titulo">
-                  <i class="fas fa-calendar" aria-hidden="true"></i> Asistencia por servicio
-                </h2>
-                @if (r.asistenciaPorServicio.length) {
-                  <div class="table-responsive">
-                    <table class="table table-sm align-middle mb-0">
-                      <thead>
-                        <tr>
-                          <th scope="col">Servicio</th>
-                          <th scope="col" class="text-end">Servicios</th>
-                          <th scope="col" class="text-end">Promedio</th>
-                          <th scope="col" class="text-end">Variación</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (s of r.asistenciaPorServicio; track s.categoria) {
-                          <tr>
-                            <td>{{ s.etiqueta }}</td>
-                            <td class="text-end">{{ s.cantidad ?? '—' }}</td>
-                            <td class="text-end">{{ s.promedio === null ? '—' : (s.promedio | number: '1.0-1') }}</td>
-                            <td class="text-end"><app-indicador-variacion [variacion]="s.variacionPromedio" /></td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </div>
-                } @else {
-                  <p class="text-muted text-center my-4">Sin servicios registrados en el periodo.</p>
-                }
-              </div>
-            </div>
-          </section>
-
-          <section class="col-12 col-xl-7" aria-labelledby="tituloTendencias">
-            <div class="card tarjeta h-100">
-              <div class="card-body">
-                <h2 id="tituloTendencias" class="seccion-titulo">
-                  <i class="fas fa-chart-line" aria-hidden="true"></i> Tendencias
-                </h2>
-                @if (tendencias(); as t) {
-                  <app-grafica-tendencias [series]="t.series" [informesPorPeriodo]="t.informesPorPeriodo" />
-                }
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <!-- Variación de asistencia por servicio (conteo de congregaciones) -->
-        @if (r.variacionPorServicio?.length) {
-          <section class="card tarjeta mb-3" aria-labelledby="tituloVariacionServicio">
-            <div class="card-body">
-              <h2 id="tituloVariacionServicio" class="seccion-titulo">
-                <i class="fas fa-people-group" aria-hidden="true"></i> Variación de asistencia por servicio
-              </h2>
-              <p class="small text-muted mb-2">
-                Cantidad de congregaciones según cómo varió el promedio de asistencia de cada servicio (comparado con el
-                {{ r.contexto.descripcionComparacion }}). Haga clic en un número para ver esas congregaciones.
-              </p>
-              <div class="table-responsive">
-                <table class="table table-sm table-bordered align-middle mb-0 text-center tabla-variacion">
-                  <thead class="table-light">
-                    <tr>
-                      <th scope="col" class="text-start">Servicio</th>
-                      @for (g of gruposVariacion; track g.valor) {
-                        <th scope="col">{{ g.etiqueta }}</th>
-                      }
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (s of r.variacionPorServicio; track s.clave) {
-                      <tr>
-                        <th scope="row" class="text-start fw-semibold">{{ s.etiqueta }}</th>
-                        @for (g of gruposVariacion; track g.valor) {
-                          <td>
-                            @if (s.conteo[g.valor]) {
-                              <button
-                                type="button"
-                                class="btn btn-sm {{ g.clase }} conteo"
-                                (click)="verVariacion(s.clave, g.valor)"
-                                [attr.aria-label]="
-                                  'Ver ' +
-                                  s.conteo[g.valor] +
-                                  ' congregación(es) con ' +
-                                  g.etiqueta.toLowerCase() +
-                                  ' en ' +
-                                  s.etiqueta.toLowerCase()
-                                "
-                              >
-                                <i class="fas {{ g.icono }} me-1" aria-hidden="true"></i>{{ s.conteo[g.valor] }}
-                              </button>
-                            } @else {
-                              <span class="text-muted">0</span>
-                            }
-                          </td>
-                        }
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-        }
-
-        <!-- Vida espiritual + trabajo pastoral -->
-        <div class="row g-3 mb-3">
-          <section class="col-12 col-lg-6" aria-labelledby="tituloEspiritual">
-            <div class="card tarjeta h-100">
-              <div class="card-body">
-                <h2 id="tituloEspiritual" class="seccion-titulo">
-                  <i class="fas fa-heart" aria-hidden="true"></i> Vida espiritual
-                </h2>
-                <ng-container *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresEspirituales() }" />
-                @if (r.actividadesEspiritualesPorCategoria.length) {
-                  <h3 class="subtitulo mt-3">Actividades por categoría</h3>
-                  <div class="table-responsive">
-                    <table class="table table-sm align-middle mb-0">
-                      <tbody>
-                        @for (c of r.actividadesEspiritualesPorCategoria; track c.id) {
-                          <tr>
-                            <td>{{ c.nombre }}</td>
-                            <td class="text-end">{{ c.valorPeriodo ?? '—' }}</td>
-                            <td class="text-end"><app-indicador-variacion [variacion]="c.variacion" /></td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </div>
-                }
-              </div>
-            </div>
-          </section>
-
-          <section class="col-12 col-lg-6" aria-labelledby="tituloPastoral">
-            <div class="card tarjeta h-100">
-              <div class="card-body">
-                <h2 id="tituloPastoral" class="seccion-titulo">
-                  <i class="fas fa-handshake" aria-hidden="true"></i> Trabajo pastoral
-                </h2>
-                <ng-container *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresPastorales() }" />
-                <h3 class="subtitulo mt-3">Administración</h3>
-                <ng-container
-                  *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresAdministracion() }"
-                />
-                <div class="small mt-2 text-muted">
-                  <i class="fas fa-money-bill" aria-hidden="true"></i>
-                  @if (r.actividadEconomica.disponible) {
-                    Monto recaudado en actividades económicas:
-                    <strong class="text-body">{{ r.actividadEconomica.montoRecaudado | number: '1.0-2' }}</strong>
-                  } @else {
-                    {{ r.actividadEconomica.mensaje }}
-                  }
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
       }
 
       <!-- Alertas -->
@@ -387,6 +191,209 @@
           <app-alertas-supervision [filtros]="filtros()!" (verUnidad)="unidadSeleccionada.set($event)" />
         </div>
       </section>
+
+      @if (resumen(); as r) {
+        <div class="nota-neutral mb-3">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          Las variaciones comparan únicamente las <strong>{{ r.cobertura.unidadesComparadas }}</strong> congregación(es)
+          con informe en ambos periodos. Los indicadores describen la información registrada; su interpretación
+          corresponde al administrador.
+        </div>
+
+        <!-- Indicadores clave -->
+        <section class="mb-3" aria-labelledby="tituloIndicadores">
+          <h2 id="tituloIndicadores" class="seccion-titulo">
+            <i class="fas fa-chart-column" aria-hidden="true"></i> Indicadores principales
+          </h2>
+          <div class="row g-3">
+            @for (i of indicadoresClave(); track i.clave) {
+              <div class="col-12 col-sm-6 col-lg-4 col-xxl">
+                <div class="tarjeta-indicador">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="icono-indicador"><i class="fas {{ icono(i.clave) }}" aria-hidden="true"></i></span>
+                    <span class="etiqueta">{{ i.etiqueta }}</span>
+                  </div>
+                  <div class="valor">
+                    {{
+                      i.valorPeriodo === null
+                        ? '—'
+                        : (i.valorPeriodo | number: (i.formato === 'DECIMAL' ? '1.0-1' : '1.0-0'))
+                    }}
+                  </div>
+                  <app-indicador-variacion [variacion]="i.variacion" [mostrarDetalle]="true" />
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- Asistencia por servicio + variación por servicio -->
+        <div class="row g-3 mb-3">
+          <section class="col-12" [class.col-xl-5]="r.variacionPorServicio?.length" aria-labelledby="tituloServicios">
+            <div class="card tarjeta h-100">
+              <div class="card-body">
+                <h2 id="tituloServicios" class="seccion-titulo">
+                  <i class="fas fa-calendar" aria-hidden="true"></i> Asistencia por servicio
+                </h2>
+                @if (r.asistenciaPorServicio.length) {
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">Servicio</th>
+                          <th scope="col" class="text-end">Servicios</th>
+                          <th scope="col" class="text-end">Promedio</th>
+                          <th scope="col" class="text-end">Variación</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (s of r.asistenciaPorServicio; track s.categoria) {
+                          <tr>
+                            <td>{{ s.etiqueta }}</td>
+                            <td class="text-end">{{ s.cantidad ?? '—' }}</td>
+                            <td class="text-end">{{ s.promedio === null ? '—' : (s.promedio | number: '1.0-1') }}</td>
+                            <td class="text-end"><app-indicador-variacion [variacion]="s.variacionPromedio" /></td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                } @else {
+                  <p class="text-muted text-center my-4">Sin servicios registrados en el periodo.</p>
+                }
+              </div>
+            </div>
+          </section>
+
+        @if (r.variacionPorServicio?.length) {
+          <section class="col-12 col-xl-7" aria-labelledby="tituloVariacionServicio">
+            <div class="card tarjeta h-100">
+            <div class="card-body">
+              <h2 id="tituloVariacionServicio" class="seccion-titulo">
+                <i class="fas fa-people-group" aria-hidden="true"></i> Variación de asistencia por servicio
+              </h2>
+              <p class="small text-muted mb-2">
+                Cantidad de congregaciones según cómo varió el promedio de asistencia de cada servicio (comparado con el
+                {{ r.contexto.descripcionComparacion }}). Haga clic en un número para ver esas congregaciones.
+              </p>
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle mb-0 text-center tabla-variacion">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col" class="text-start">Servicio</th>
+                      @for (g of gruposVariacion; track g.valor) {
+                        <th scope="col">{{ g.etiqueta }}</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (s of r.variacionPorServicio; track s.clave) {
+                      <tr>
+                        <th scope="row" class="text-start fw-semibold">{{ s.etiqueta }}</th>
+                        @for (g of gruposVariacion; track g.valor) {
+                          <td>
+                            @if (s.conteo[g.valor]) {
+                              <button
+                                type="button"
+                                class="btn btn-sm {{ g.clase }} conteo"
+                                (click)="verVariacion(s.clave, g.valor)"
+                                [attr.aria-label]="
+                                  'Ver ' +
+                                  s.conteo[g.valor] +
+                                  ' congregación(es) con ' +
+                                  g.etiqueta.toLowerCase() +
+                                  ' en ' +
+                                  s.etiqueta.toLowerCase()
+                                "
+                              >
+                                <i class="fas {{ g.icono }} me-1" aria-hidden="true"></i>{{ s.conteo[g.valor] }}
+                              </button>
+                            } @else {
+                              <span class="text-muted">0</span>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </div>
+          </section>
+        }
+        </div>
+
+        <!-- Tendencias -->
+        <div class="row g-3 mb-3">
+          <section class="col-12" aria-labelledby="tituloTendencias">
+            <div class="card tarjeta h-100">
+              <div class="card-body">
+                <h2 id="tituloTendencias" class="seccion-titulo">
+                  <i class="fas fa-chart-line" aria-hidden="true"></i> Tendencias
+                </h2>
+                @if (tendencias(); as t) {
+                  <app-grafica-tendencias [series]="t.series" [informesPorPeriodo]="t.informesPorPeriodo" />
+                }
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Vida espiritual + trabajo pastoral -->
+        <div class="row g-3 mb-3">
+          <section class="col-12 col-lg-6" aria-labelledby="tituloEspiritual">
+            <div class="card tarjeta h-100">
+              <div class="card-body">
+                <h2 id="tituloEspiritual" class="seccion-titulo">
+                  <i class="fas fa-heart" aria-hidden="true"></i> Vida espiritual
+                </h2>
+                <ng-container *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresEspirituales() }" />
+                @if (r.actividadesEspiritualesPorCategoria.length) {
+                  <h3 class="subtitulo mt-3">Actividades por categoría</h3>
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                      <tbody>
+                        @for (c of r.actividadesEspiritualesPorCategoria; track c.id) {
+                          <tr>
+                            <td>{{ c.nombre }}</td>
+                            <td class="text-end">{{ c.valorPeriodo ?? '—' }}</td>
+                            <td class="text-end"><app-indicador-variacion [variacion]="c.variacion" /></td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              </div>
+            </div>
+          </section>
+
+          <section class="col-12 col-lg-6" aria-labelledby="tituloPastoral">
+            <div class="card tarjeta h-100">
+              <div class="card-body">
+                <h2 id="tituloPastoral" class="seccion-titulo">
+                  <i class="fas fa-handshake" aria-hidden="true"></i> Trabajo pastoral
+                </h2>
+                <ng-container *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresPastorales() }" />
+                <h3 class="subtitulo mt-3">Administración</h3>
+                <ng-container
+                  *ngTemplateOutlet="tablaIndicadores; context: { $implicit: indicadoresAdministracion() }"
+                />
+                <div class="small mt-2 text-muted">
+                  <i class="fas fa-money-bill" aria-hidden="true"></i>
+                  @if (r.actividadEconomica.disponible) {
+                    Monto recaudado en actividades económicas:
+                    <strong class="text-body">{{ r.actividadEconomica.montoRecaudado | number: '1.0-2' }}</strong>
+                  } @else {
+                    {{ r.actividadEconomica.mensaje }}
+                  }
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      }
 
       <!-- Tabla analítica -->
       <section class="card tarjeta mb-3" aria-labelledby="tituloUnidades">
