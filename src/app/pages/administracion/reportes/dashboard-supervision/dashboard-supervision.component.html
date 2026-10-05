@@ -268,6 +268,45 @@
               <span class="badge bg-warning text-dark ms-1">{{ resumen()?.alertas?.total }}</span>
             }
           </h2>
+          @if (reglas(); as rg) {
+            <details class="nota-neutral nota-calculo mb-3">
+              <summary>
+                <i class="fas fa-circle-info" aria-hidden="true"></i>
+                ¿Cómo se calcula si una congregación <strong>requiere atención</strong>?
+              </summary>
+              <p class="mt-2 mb-2">
+                Una congregación aparece como <strong>Requiere atención</strong> cuando cumple al menos una de estas condiciones:
+              </p>
+              <ul class="mb-2">
+                <li>
+                  <strong>Informe pendiente:</strong> tiene obrero asignado y no ha registrado el informe del trimestre consultado.
+                </li>
+                <li>
+                  <strong>Disminución significativa:</strong> un indicador bajó <strong>{{ rg.significativo }} % o más</strong>
+                  frente al periodo de comparación. Variación = (actual − anterior) ÷ anterior × 100. Solo se calcula si la
+                  congregación tiene informe en ambos periodos y el valor anterior es mayor que 0.
+                </li>
+                <li>
+                  <strong>Tendencia de disminución:</strong> un indicador bajó en <strong>{{ rg.trimestresTendencia }} trimestres
+                  consecutivos</strong> (dentro de los últimos {{ rg.trimestresHistorico }}). Un trimestre sin informe interrumpe la secuencia.
+                </li>
+                <li>
+                  <strong>Asunto recurrente:</strong> el mismo asunto pendiente se reportó en
+                  <strong>{{ rg.trimestresAsuntoRecurrente }} trimestres consecutivos</strong> o más.
+                </li>
+              </ul>
+              <p class="mb-2">
+                Indicadores evaluados: asistencia general a servicios, promedio de asistencia por servicio (general, martes,
+                jueves y domingo), asistencia a consejeros, participación en vigilias, actividades espirituales, visitas a
+                hogares y visitas pastorales totales.
+              </p>
+              <p class="mb-0">
+                Los incrementos de {{ rg.significativo }} % o más y las tendencias de crecimiento se muestran como
+                <strong>Informativa</strong>. Entre {{ rg.moderado }} % y {{ rg.significativo }} % la variación se considera moderada y
+                no genera alerta. Las alertas describen la información registrada; no califican a la congregación.
+              </p>
+            </details>
+          }
           <app-alertas-supervision [filtros]="filtros()!" (verUnidad)="unidadSeleccionada.set($event)" />
         </div>
       </section>

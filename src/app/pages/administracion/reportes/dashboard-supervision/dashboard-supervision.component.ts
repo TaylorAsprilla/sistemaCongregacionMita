@@ -68,6 +68,18 @@ export class DashboardSupervisionComponent {
 
   readonly gruposVariacion = GRUPOS_VARIACION;
 
+  /** Reglas de alertas mostradas en la nota explicativa (con valores por defecto si el backend no las envía). */
+  readonly reglas = computed(() => {
+    const d = this.disponibles();
+    return {
+      significativo: d?.umbrales?.significativo ?? 10,
+      moderado: d?.umbrales?.moderado ?? 3,
+      trimestresTendencia: d?.reglasAlertas?.trimestresTendencia ?? 3,
+      trimestresAsuntoRecurrente: d?.reglasAlertas?.trimestresAsuntoRecurrente ?? 3,
+      trimestresHistorico: d?.reglasAlertas?.trimestresHistorico ?? 8,
+    };
+  });
+
   /** Aplica en la tabla de congregaciones el servicio y la variación elegidos en el resumen. */
   verVariacion(servicio: ClaveServicio, variacion: FiltroVariacion): void {
     this.solicitudVariacion.set({ servicio, variacion });

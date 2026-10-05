@@ -246,6 +246,7 @@ export interface FiltrosDisponibles {
   congregaciones: OpcionFiltro[];
   campos: OpcionFiltro[];
   umbrales: { significativo: number; moderado: number };
+  reglasAlertas?: { trimestresTendencia: number; trimestresAsuntoRecurrente: number; trimestresHistorico: number };
 }
 
 export interface ConsultaUnidades {

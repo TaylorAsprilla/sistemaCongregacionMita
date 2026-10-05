@@ -81,7 +81,7 @@ export class GraficaTendenciasComponent {
     name: 'supervision',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#1e66b8'],
+    domain: ['#1976d2'],
   };
 
   private puntos = computed<PuntoSerie[]>(() => {
