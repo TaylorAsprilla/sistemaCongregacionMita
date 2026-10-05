@@ -19,6 +19,7 @@ import { DashboardSupervisionExportService } from 'src/app/services/dashboard-su
 import { DashboardSupervisionService } from 'src/app/services/dashboard-supervision/dashboard-supervision.service';
 import { AlertasSupervisionComponent } from './components/alertas-supervision/alertas-supervision.component';
 import { DetalleUnidadComponent } from './components/detalle-unidad/detalle-unidad.component';
+import { EntregaPaisesComponent } from './components/entrega-paises/entrega-paises.component';
 import { FiltrosSupervisionComponent } from './components/filtros-supervision/filtros-supervision.component';
 import { GraficaTendenciasComponent } from './components/grafica-tendencias/grafica-tendencias.component';
 import { IndicadorVariacionComponent } from './components/indicador-variacion/indicador-variacion.component';
@@ -44,6 +45,7 @@ const ICONOS_INDICADOR: Record<string, string> = {
     AlertasSupervisionComponent,
     TablaUnidadesComponent,
     DetalleUnidadComponent,
+    EntregaPaisesComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard-supervision.component.html',

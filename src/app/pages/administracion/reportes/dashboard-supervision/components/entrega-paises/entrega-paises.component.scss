@@ -1,0 +1,83 @@
+.seg-entregado {
+  background-color: #2e7d32;
+  color: #fff;
+}
+
+.seg-elaboracion {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.seg-pendiente {
+  background-color: #f9a825;
+  color: #263238;
+}
+
+.seg-sin-obrero {
+  background-color: #b0bec5;
+  color: #263238;
+}
+
+.leyenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #263238;
+}
+
+.muestra {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 0.2rem;
+}
+
+.lista {
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.fila + .fila {
+  margin-top: 0.85rem;
+}
+
+.pais {
+  font-weight: 500;
+  color: #263238;
+}
+
+.resumen {
+  font-size: 0.85rem;
+  white-space: nowrap;
+
+  strong {
+    color: #102a43;
+  }
+}
+
+.barra {
+  height: 1.35rem;
+  border-radius: 0.4rem;
+  background-color: #eef1f4;
+
+  .progress-bar {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+.total {
+  border-top: 1px solid #e5e7eb;
+
+  .pais {
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 576px) {
+  .resumen {
+    white-space: normal;
+    text-align: right;
+  }
+}

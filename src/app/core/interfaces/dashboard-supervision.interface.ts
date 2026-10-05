@@ -141,12 +141,24 @@ export interface CategoriaEspiritual {
   variacion: Variacion;
 }
 
+export interface EntregaPais {
+  pais_id: number | null;
+  pais: string;
+  total: number;
+  entregados: number;
+  enElaboracion: number;
+  pendientes: number;
+  sinObrero: number;
+  porcentajeConInforme: number | null;
+}
+
 export interface ResumenDashboard {
   contexto: ContextoDashboard;
   cobertura: Cobertura;
   indicadores: Indicador[];
   asistenciaPorServicio: AsistenciaServicio[];
   variacionPorServicio: VariacionServicio[];
+  entregaPorPais?: EntregaPais[];
   actividadesEspiritualesPorCategoria: CategoriaEspiritual[];
   actividadEconomica: { disponible: boolean; montoRecaudado: number | null; mensaje: string };
   alertas: { total: number; porTipo: Record<string, number> };
