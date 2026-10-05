@@ -4,8 +4,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription, forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
 import {
+  ClaveServicio,
+  FiltroVariacion,
   FiltrosDashboard,
   FiltrosDisponibles,
+  GRUPOS_VARIACION,
   GrupoIndicador,
   Indicador,
   ResumenDashboard,
@@ -61,6 +64,17 @@ export class DashboardSupervisionComponent {
   exportando = signal<'excel' | 'pdf' | null>(null);
   error = signal<string | null>(null);
   unidadSeleccionada = signal<UnidadRef | null>(null);
+  solicitudVariacion = signal<{ servicio: ClaveServicio; variacion: FiltroVariacion } | null>(null);
+
+  readonly gruposVariacion = GRUPOS_VARIACION;
+
+  /** Aplica en la tabla de congregaciones el servicio y la variación elegidos en el resumen. */
+  verVariacion(servicio: ClaveServicio, variacion: FiltroVariacion): void {
+    this.solicitudVariacion.set({ servicio, variacion });
+    setTimeout(() =>
+      document.getElementById('seccionCongregaciones')?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    );
+  }
 
   private suscripcion?: Subscription;
 

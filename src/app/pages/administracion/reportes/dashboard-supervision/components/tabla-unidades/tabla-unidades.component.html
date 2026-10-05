@@ -33,6 +33,27 @@
       }
     </select>
   </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <label class="form-label small fw-semibold mb-1" for="servicioVariacion">Servicio</label>
+    <select id="servicioVariacion" class="form-select form-select-sm" [ngModel]="servicioVariacion()"
+      (ngModelChange)="cambiarServicio($event)">
+      <option value="">Todos</option>
+      @for (s of servicios; track s.valor) {
+        <option [value]="s.valor">{{ s.etiqueta }}</option>
+      }
+    </select>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <label class="form-label small fw-semibold mb-1" for="variacionAsistencia">Variación de asistencia</label>
+    <select id="variacionAsistencia" class="form-select form-select-sm" [ngModel]="variacion()"
+      (ngModelChange)="cambiar(variacion, $event)" [disabled]="!servicioVariacion()"
+      [title]="servicioVariacion() ? '' : 'Seleccione primero un servicio'">
+      <option value="">Cualquiera</option>
+      @for (v of filtrosVariacion; track v.valor) {
+        <option [value]="v.valor">{{ v.etiqueta }}</option>
+      }
+    </select>
+  </div>
 </div>
 
 @if (error()) {
@@ -56,7 +77,7 @@
           <th scope="col">Obrero(s)</th>
           <th scope="col" class="text-center">Informe</th>
           <th scope="col" class="text-center">Asistencia general</th>
-          <th scope="col" class="text-center">Prom. por servicio</th>
+          <th scope="col" class="text-center">{{ servicioVariacion() ? 'Prom. ' + servicioColumna().etiqueta.toLowerCase() : 'Prom. por servicio' }}</th>
           <th scope="col" class="text-center">Visitas</th>
           <th scope="col" class="text-center">Act. espirituales</th>
           <th scope="col" class="text-center">Alertas</th>
@@ -86,7 +107,7 @@
               </span>
             </td>
             <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['asistenciaGeneral']" [mostrarDetalle]="true" /></td>
-            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['promedioAsistenciaServicio']" [mostrarDetalle]="true" /></td>
+            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores[servicioColumna().indicador]" [mostrarDetalle]="true" /></td>
             <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['visitasTotales']" [mostrarDetalle]="true" /></td>
             <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['actividadesEspirituales']" [mostrarDetalle]="true" /></td>
             <td class="text-center">
@@ -138,8 +159,8 @@
         <dl class="row small mb-0">
           <dt class="col-6 fw-normal text-muted">Asistencia general</dt>
           <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores['asistenciaGeneral']" /></dd>
-          <dt class="col-6 fw-normal text-muted">Prom. por servicio</dt>
-          <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores['promedioAsistenciaServicio']" /></dd>
+          <dt class="col-6 fw-normal text-muted">{{ servicioVariacion() ? 'Prom. ' + servicioColumna().etiqueta.toLowerCase() : 'Prom. por servicio' }}</dt>
+          <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores[servicioColumna().indicador]" /></dd>
           <dt class="col-6 fw-normal text-muted">Visitas</dt>
           <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores['visitasTotales']" /></dd>
           <dt class="col-6 fw-normal text-muted">Act. espirituales</dt>

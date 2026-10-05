@@ -186,3 +186,15 @@ $azul: #1e66b8;
     font-size: 1.6rem;
   }
 }
+
+.tabla-variacion {
+  th {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .conteo {
+    min-width: 2.75rem;
+    font-weight: 600;
+  }
+}

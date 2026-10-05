@@ -146,6 +146,7 @@ export interface ResumenDashboard {
   cobertura: Cobertura;
   indicadores: Indicador[];
   asistenciaPorServicio: AsistenciaServicio[];
+  variacionPorServicio: VariacionServicio[];
   actividadesEspiritualesPorCategoria: CategoriaEspiritual[];
   actividadEconomica: { disponible: boolean; montoRecaudado: number | null; mensaje: string };
   alertas: { total: number; porTipo: Record<string, number> };
@@ -254,7 +255,43 @@ export interface ConsultaUnidades {
   orden?: OrdenUnidades;
   pagina?: number;
   porPagina?: number;
+  servicio?: ClaveServicio | '';
+  variacion?: FiltroVariacion | '';
 }
+
+export type ClaveServicio = 'general' | 'martes' | 'jueves' | 'domingo' | 'otros';
+export type GrupoVariacion = TendenciaVariacion | 'SIN_COMPARACION';
+export type FiltroVariacion = GrupoVariacion | 'DISMINUYO' | 'AUMENTO';
+
+export interface VariacionServicio {
+  clave: ClaveServicio;
+  etiqueta: string;
+  indicador: string;
+  conteo: Record<GrupoVariacion, number>;
+}
+
+export const GRUPOS_VARIACION: { valor: GrupoVariacion; etiqueta: string; clase: string }[] = [
+  { valor: 'DISMINUCION_SIGNIFICATIVA', etiqueta: 'Disminución significativa', clase: 'btn-danger' },
+  { valor: 'DISMINUCION_MODERADA', etiqueta: 'Disminución moderada', clase: 'btn-warning' },
+  { valor: 'ESTABLE', etiqueta: 'Sin variación significativa', clase: 'btn-secondary' },
+  { valor: 'INCREMENTO_MODERADO', etiqueta: 'Incremento moderado', clase: 'btn-info' },
+  { valor: 'INCREMENTO_SIGNIFICATIVO', etiqueta: 'Incremento significativo', clase: 'btn-success' },
+  { valor: 'SIN_COMPARACION', etiqueta: 'Sin comparación', clase: 'btn-light border' },
+];
+
+export const FILTROS_VARIACION: { valor: FiltroVariacion; etiqueta: string }[] = [
+  { valor: 'DISMINUYO', etiqueta: 'Disminuyó (cualquier nivel)' },
+  { valor: 'AUMENTO', etiqueta: 'Aumentó (cualquier nivel)' },
+  ...GRUPOS_VARIACION.map((g) => ({ valor: g.valor as FiltroVariacion, etiqueta: g.etiqueta })),
+];
+
+export const SERVICIOS_VARIACION: { valor: ClaveServicio; etiqueta: string; indicador: string }[] = [
+  { valor: 'general', etiqueta: 'Todos los servicios', indicador: 'promedioAsistenciaServicio' },
+  { valor: 'martes', etiqueta: 'Servicio martes', indicador: 'promedioServicioMartes' },
+  { valor: 'jueves', etiqueta: 'Servicio jueves', indicador: 'promedioServicioJueves' },
+  { valor: 'domingo', etiqueta: 'Servicio domingo', indicador: 'promedioServicioDomingo' },
+  { valor: 'otros', etiqueta: 'Servicios otros días', indicador: 'promedioServicioOtrosDias' },
+];
 
 export const ETIQUETAS_ESTADO_ENTREGA: Record<EstadoEntrega, string> = {
   ENTREGADO: 'Entregado',

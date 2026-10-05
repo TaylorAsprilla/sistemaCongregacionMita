@@ -1,13 +1,17 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, output, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, input, output, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Subject, Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
 import {
+  ClaveServicio,
   ETIQUETAS_ESTADO_ENTREGA,
   ETIQUETAS_TIPO_UNIDAD,
   EstadoEntrega,
+  FILTROS_VARIACION,
+  FiltroVariacion,
   FiltrosDashboard,
   OrdenUnidades,
+  SERVICIOS_VARIACION,
   TipoUnidad,
   UnidadRef,
   UnidadesDashboard,
@@ -29,10 +33,14 @@ export class TablaUnidadesComponent {
   private destroyRef = inject(DestroyRef);
 
   filtros = input.required<FiltrosDashboard>();
+  /** Filtro de variación solicitado desde el resumen (clic en un conteo). */
+  solicitudVariacion = input<{ servicio: ClaveServicio; variacion: FiltroVariacion } | null>(null);
   verUnidad = output<UnidadRef>();
 
   readonly etiquetasEstado = ETIQUETAS_ESTADO_ENTREGA;
   readonly etiquetasTipo = ETIQUETAS_TIPO_UNIDAD;
+  readonly servicios = SERVICIOS_VARIACION;
+  readonly filtrosVariacion = FILTROS_VARIACION;
   readonly tipos = Object.keys(ETIQUETAS_TIPO_UNIDAD) as TipoUnidad[];
   readonly ubicacion = ubicacionUnidad;
   readonly estados = Object.keys(ETIQUETAS_ESTADO_ENTREGA) as EstadoEntrega[];
@@ -49,8 +57,15 @@ export class TablaUnidadesComponent {
   tipo = signal<TipoUnidad | ''>('');
   estado = signal<EstadoEntrega | ''>('');
   orden = signal<OrdenUnidades>('NOMBRE');
+  servicioVariacion = signal<ClaveServicio | ''>('');
+  variacion = signal<FiltroVariacion | ''>('');
   pagina = signal(1);
   porPagina = signal(10);
+
+  /** Servicio cuya variación se muestra en la columna de promedio (por defecto, todos). */
+  servicioColumna = computed(
+    () => this.servicios.find((s) => s.valor === this.servicioVariacion()) ?? this.servicios[0],
+  );
 
   cargando = signal(false);
   error = signal<string | null>(null);
@@ -60,6 +75,16 @@ export class TablaUnidadesComponent {
   private suscripcion?: Subscription;
 
   constructor() {
+    effect(() => {
+      const solicitud = this.solicitudVariacion();
+      if (!solicitud) return;
+      untracked(() => {
+        this.pagina.set(1);
+        this.servicioVariacion.set(solicitud.servicio);
+        this.variacion.set(solicitud.variacion);
+      });
+    });
+
     this.busquedaEntrada
       .pipe(debounceTime(350), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe((texto) => {
@@ -79,6 +104,8 @@ export class TablaUnidadesComponent {
         tipo: this.tipo(),
         estado: this.estado(),
         orden: this.orden(),
+        servicio: this.servicioVariacion(),
+        variacion: this.servicioVariacion() ? this.variacion() : '',
         pagina: this.pagina(),
         porPagina: this.porPagina(),
       };
@@ -112,6 +139,12 @@ export class TablaUnidadesComponent {
   cambiar<T>(objetivo: { set: (v: T) => void }, valor: T): void {
     this.pagina.set(1);
     objetivo.set(valor);
+  }
+
+  cambiarServicio(valor: ClaveServicio | ''): void {
+    this.pagina.set(1);
+    this.servicioVariacion.set(valor);
+    if (!valor) this.variacion.set('');
   }
 
   irAPagina(pagina: number): void {

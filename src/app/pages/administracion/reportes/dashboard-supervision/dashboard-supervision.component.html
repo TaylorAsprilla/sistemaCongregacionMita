@@ -163,6 +163,53 @@
           </section>
         </div>
 
+        <!-- Variación de asistencia por servicio (conteo de congregaciones) -->
+        @if (r.variacionPorServicio?.length) {
+          <section class="card tarjeta mb-3" aria-labelledby="tituloVariacionServicio">
+            <div class="card-body">
+              <h2 id="tituloVariacionServicio" class="seccion-titulo">
+                <i class="fas fa-people-group" aria-hidden="true"></i> Variación de asistencia por servicio
+              </h2>
+              <p class="small text-muted mb-2">
+                Cantidad de congregaciones según cómo varió el promedio de asistencia de cada servicio
+                (comparado con el {{ r.contexto.descripcionComparacion }}). Haga clic en un número para ver esas congregaciones.
+              </p>
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle mb-0 text-center tabla-variacion">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col" class="text-start">Servicio</th>
+                      @for (g of gruposVariacion; track g.valor) {
+                        <th scope="col">{{ g.etiqueta }}</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (s of r.variacionPorServicio; track s.clave) {
+                      <tr>
+                        <th scope="row" class="text-start fw-semibold">{{ s.etiqueta }}</th>
+                        @for (g of gruposVariacion; track g.valor) {
+                          <td>
+                            @if (s.conteo[g.valor]) {
+                              <button type="button" class="btn btn-sm {{ g.clase }} conteo"
+                                (click)="verVariacion(s.clave, g.valor)"
+                                [attr.aria-label]="'Ver ' + s.conteo[g.valor] + ' congregación(es) con ' + g.etiqueta.toLowerCase() + ' en ' + s.etiqueta.toLowerCase()">
+                                {{ s.conteo[g.valor] }}
+                              </button>
+                            } @else {
+                              <span class="text-muted">0</span>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        }
+
         <!-- Vida espiritual + trabajo pastoral -->
         <div class="row g-3 mb-3">
           <section class="col-12 col-lg-6" aria-labelledby="tituloEspiritual">
@@ -227,9 +274,9 @@
 
       <!-- Tabla analítica -->
       <section class="card tarjeta mb-3" aria-labelledby="tituloUnidades">
-        <div class="card-body">
+        <div class="card-body" id="seccionCongregaciones">
           <h2 id="tituloUnidades" class="seccion-titulo"><i class="fas fa-table" aria-hidden="true"></i> Congregaciones</h2>
-          <app-tabla-unidades [filtros]="filtros()!" (verUnidad)="unidadSeleccionada.set($event)" />
+          <app-tabla-unidades [filtros]="filtros()!" [solicitudVariacion]="solicitudVariacion()" (verUnidad)="unidadSeleccionada.set($event)" />
         </div>
       </section>
     </div>

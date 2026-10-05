@@ -10,6 +10,7 @@ import {
   ETIQUETAS_TIPO_ALERTA,
   ETIQUETAS_TIPO_UNIDAD,
   FiltrosDashboard,
+  GRUPOS_VARIACION,
   ResumenDashboard,
   UnidadFila,
   Variacion,
@@ -146,6 +147,17 @@ export class DashboardSupervisionExportService {
         variacion: this.textoVariacion(s.variacionPromedio),
       });
     }
+
+    if (r.variacionPorServicio?.length) {
+      hoja.addRow([]);
+      hoja.addRow(['Variación de asistencia por servicio (cantidad de congregaciones)']).font = { bold: true };
+      const titulo = hoja.addRow(['Servicio', ...GRUPOS_VARIACION.map((g) => g.etiqueta)]);
+      titulo.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      titulo.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E66B8' } };
+      for (const s of r.variacionPorServicio) {
+        hoja.addRow([s.etiqueta, ...GRUPOS_VARIACION.map((g) => s.conteo[g.valor])]);
+      }
+    }
   }
 
   private hojaUnidades(hoja: Worksheet, unidades: UnidadFila[]): void {
@@ -158,6 +170,10 @@ export class DashboardSupervisionExportService {
       { header: 'Estado del informe', key: 'estado', width: 20 },
       { header: 'Asistencia general', key: 'asistencia', width: 26 },
       { header: 'Prom. por servicio', key: 'promedio', width: 26 },
+      { header: 'Prom. martes', key: 'martes', width: 22 },
+      { header: 'Prom. jueves', key: 'jueves', width: 22 },
+      { header: 'Prom. domingo', key: 'domingo', width: 22 },
+      { header: 'Prom. otros días', key: 'otros', width: 22 },
       { header: 'Visitas', key: 'visitas', width: 26 },
       { header: 'Act. espirituales', key: 'espirituales', width: 26 },
       { header: 'Alertas', key: 'alertas', width: 10 },
@@ -172,12 +188,16 @@ export class DashboardSupervisionExportService {
         estado: ETIQUETAS_ESTADO_ENTREGA[f.estadoEntrega],
         asistencia: this.textoVariacion(f.indicadores['asistenciaGeneral']),
         promedio: this.textoVariacion(f.indicadores['promedioAsistenciaServicio']),
+        martes: this.textoVariacion(f.indicadores['promedioServicioMartes']),
+        jueves: this.textoVariacion(f.indicadores['promedioServicioJueves']),
+        domingo: this.textoVariacion(f.indicadores['promedioServicioDomingo']),
+        otros: this.textoVariacion(f.indicadores['promedioServicioOtrosDias']),
         visitas: this.textoVariacion(f.indicadores['visitasTotales']),
         espirituales: this.textoVariacion(f.indicadores['actividadesEspirituales']),
         alertas: f.alertas,
       });
     }
-    hoja.autoFilter = { from: 'A1', to: 'K1' };
+    hoja.autoFilter = { from: 'A1', to: 'O1' };
   }
 
   private hojaAlertas(hoja: Worksheet, alertas: AlertaDashboard[]): void {
@@ -276,6 +296,27 @@ export class DashboardSupervisionExportService {
                 { text: numero(s.asistencia), alignment: 'right' },
                 { text: numero(s.promedio), alignment: 'right' },
                 { text: this.textoVariacion(s.variacionPromedio), alignment: 'right' },
+              ]),
+            ],
+          },
+          layout: 'lightHorizontalLines',
+          margin: [0, 0, 0, 10],
+        },
+      );
+    }
+
+    if (r.variacionPorServicio?.length) {
+      contenido.push(
+        { text: 'Variación de asistencia por servicio (cantidad de congregaciones)', style: 'subtitulo' },
+        {
+          table: {
+            headerRows: 1,
+            widths: ['*', ...GRUPOS_VARIACION.map(() => 55)],
+            body: [
+              encabezadoTabla(['Servicio', ...GRUPOS_VARIACION.map((g) => g.etiqueta)]),
+              ...r.variacionPorServicio.map((s) => [
+                s.etiqueta,
+                ...GRUPOS_VARIACION.map((g) => ({ text: String(s.conteo[g.valor]), alignment: 'center' })),
               ]),
             ],
           },
