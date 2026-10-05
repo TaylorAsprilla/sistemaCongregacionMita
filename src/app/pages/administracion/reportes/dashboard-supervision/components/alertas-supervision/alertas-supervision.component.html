@@ -46,7 +46,6 @@
               [class.bg-info]="a.nivel === 'INFORMATIVA'">
               {{ a.nivel === 'ATENCION' ? 'Requiere atención' : 'Informativa' }}
             </span>
-            <span class="badge bg-light text-dark border">{{ etiquetasTipo[a.unidad.tipo] }}</span>
           </div>
           <small class="text-muted d-block">{{ ubicacion(a.unidad) }}</small>
           <p class="mb-0 mensaje">{{ a.mensaje }}</p>

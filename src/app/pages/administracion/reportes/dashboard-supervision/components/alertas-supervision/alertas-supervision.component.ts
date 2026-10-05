@@ -6,7 +6,6 @@ import {
   AlertaDashboard,
   AlertasDashboard,
   ETIQUETAS_TIPO_ALERTA,
-  ETIQUETAS_TIPO_UNIDAD,
   ubicacionUnidad,
   FiltrosDashboard,
   NivelAlerta,
@@ -40,7 +39,6 @@ export class AlertasSupervisionComponent {
   verUnidad = output<UnidadRef>();
 
   readonly etiquetas = ETIQUETAS_TIPO_ALERTA;
-  readonly etiquetasTipo = ETIQUETAS_TIPO_UNIDAD;
   readonly tipos = Object.keys(ETIQUETAS_TIPO_ALERTA) as TipoAlerta[];
   readonly iconos = ICONOS_ALERTA;
   private readonly tamanoBloque = 15;
