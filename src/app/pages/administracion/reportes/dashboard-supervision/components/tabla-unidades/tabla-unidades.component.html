@@ -3,7 +3,7 @@
     <label class="form-label small fw-semibold mb-1" for="buscarUnidad">Buscar</label>
     <div class="input-group input-group-sm">
       <span class="input-group-text"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></span>
-      <input id="buscarUnidad" type="search" class="form-control" placeholder="Unidad, país, congregación u obrero"
+      <input id="buscarUnidad" type="search" class="form-control" placeholder="Congregación, país, ciudad u obrero"
         (input)="buscar($any($event.target).value)" />
     </div>
   </div>
@@ -11,8 +11,9 @@
     <label class="form-label small fw-semibold mb-1" for="tipoUnidad">Tipo</label>
     <select id="tipoUnidad" class="form-select form-select-sm" [ngModel]="tipo()" (ngModelChange)="cambiar(tipo, $event)">
       <option value="">Todos</option>
-      <option value="CONGREGACION">Congregación</option>
-      <option value="CAMPO">Campo</option>
+      @for (t of tipos; track t) {
+        <option [value]="t">{{ etiquetasTipo[t] }}</option>
+      }
     </select>
   </div>
   <div class="col-6 col-md-4 col-lg-3">
@@ -51,7 +52,7 @@
     <table class="table table-hover align-middle mb-0 tabla">
       <thead class="table-light">
         <tr>
-          <th scope="col">Unidad</th>
+          <th scope="col">Congregación</th>
           <th scope="col">Obrero(s)</th>
           <th scope="col" class="text-center">Informe</th>
           <th scope="col" class="text-center">Asistencia general</th>
@@ -68,8 +69,7 @@
             <td>
               <div class="fw-semibold">{{ f.unidad.nombre }}</div>
               <small class="text-muted">
-                {{ f.unidad.tipo === 'CAMPO' ? 'Campo · ' + (f.unidad.congregacion ?? '') : 'Congregación' }}
-                @if (f.unidad.pais) { · {{ f.unidad.pais }} }
+                {{ etiquetasTipo[f.unidad.tipo] }}@if (ubicacion(f.unidad)) { · {{ ubicacion(f.unidad) }} }
               </small>
             </td>
             <td class="obreros">
@@ -97,7 +97,7 @@
               }
             </td>
             <td class="text-end">
-              <button type="button" class="btn btn-sm btn-outline-primary" (click)="verUnidad.emit(f.unidad)"
+              <button type="button" class="btn btn-sm btn-primary" (click)="verUnidad.emit(f.unidad)"
                 [attr.aria-label]="'Ver detalle de ' + f.unidad.nombre">
                 <i class="fas fa-eye" aria-hidden="true"></i>
               </button>
@@ -105,7 +105,7 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="9" class="text-center text-muted py-4">No se encontraron unidades con los criterios seleccionados.</td>
+            <td colspan="9" class="text-center text-muted py-4">No se encontraron congregaciones con los criterios seleccionados.</td>
           </tr>
         }
       </tbody>
@@ -120,12 +120,11 @@
           <div class="min-w-0">
             <div class="fw-semibold">{{ f.unidad.nombre }}</div>
             <small class="text-muted d-block">
-              {{ f.unidad.tipo === 'CAMPO' ? 'Campo · ' + (f.unidad.congregacion ?? '') : 'Congregación' }}
-              @if (f.unidad.pais) { · {{ f.unidad.pais }} }
+              {{ etiquetasTipo[f.unidad.tipo] }}@if (ubicacion(f.unidad)) { · {{ ubicacion(f.unidad) }} }
             </small>
             <small class="d-block">{{ f.obreros.join(', ') || 'Sin obrero asignado' }}</small>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-primary align-self-start" (click)="verUnidad.emit(f.unidad)"
+          <button type="button" class="btn btn-sm btn-primary align-self-start" (click)="verUnidad.emit(f.unidad)"
             [attr.aria-label]="'Ver detalle de ' + f.unidad.nombre">
             <i class="fas fa-eye" aria-hidden="true"></i>
           </button>
@@ -148,7 +147,7 @@
         </dl>
       </div>
     } @empty {
-      <p class="text-center text-muted py-4">No se encontraron unidades con los criterios seleccionados.</p>
+      <p class="text-center text-muted py-4">No se encontraron congregaciones con los criterios seleccionados.</p>
     }
   </div>
 </div>
@@ -156,16 +155,16 @@
 @if (datos(); as d) {
   <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
     <small class="text-muted">
-      {{ d.total }} unidad(es) · Página {{ d.pagina }} de {{ d.totalPaginas }}
+      {{ d.total }} congregación(es) · Página {{ d.pagina }} de {{ d.totalPaginas }}
     </small>
     <div class="d-flex align-items-center gap-2">
-      <select class="form-select form-select-sm w-auto" aria-label="Unidades por página" [ngModel]="porPagina()"
+      <select class="form-select form-select-sm w-auto" aria-label="Congregaciones por página" [ngModel]="porPagina()"
         (ngModelChange)="cambiar(porPagina, +$event)">
         <option [ngValue]="10">10</option>
         <option [ngValue]="25">25</option>
         <option [ngValue]="50">50</option>
       </select>
-      <nav aria-label="Paginación de unidades">
+      <nav aria-label="Paginación de congregaciones">
         <ul class="pagination pagination-sm mb-0">
           <li class="page-item" [class.disabled]="d.pagina <= 1">
             <button type="button" class="page-link" (click)="irAPagina(d.pagina - 1)" aria-label="Anterior">

@@ -8,6 +8,7 @@ import {
   AlertaDashboard,
   ETIQUETAS_ESTADO_ENTREGA,
   ETIQUETAS_TIPO_ALERTA,
+  ETIQUETAS_TIPO_UNIDAD,
   FiltrosDashboard,
   ResumenDashboard,
   UnidadFila,
@@ -16,7 +17,7 @@ import {
 import { DashboardSupervisionService } from './dashboard-supervision.service';
 
 const NOTA_COMPARACION =
-  'Las variaciones se calculan únicamente con las unidades que tienen informe en ambos periodos. ' +
+  'Las variaciones se calculan únicamente con las congregaciones que tienen informe en ambos periodos. ' +
   'Los indicadores describen la información registrada; la interpretación corresponde al administrador.';
 
 /** Exporta el estado actual del dashboard (mismos filtros) a Excel y PDF. */
@@ -68,7 +69,7 @@ export class DashboardSupervisionExportService {
 
     this.hojaResumen(libro.addWorksheet('Resumen'), resumen, alcance);
     this.hojaAsistencia(libro.addWorksheet('Asistencia por servicio'), resumen);
-    this.hojaUnidades(libro.addWorksheet('Unidades'), unidades);
+    this.hojaUnidades(libro.addWorksheet('Congregaciones'), unidades);
     this.hojaAlertas(libro.addWorksheet('Alertas'), alertas);
 
     const buffer = await libro.xlsx.writeBuffer();
@@ -103,14 +104,17 @@ export class DashboardSupervisionExportService {
 
     hoja.addRow(['Cobertura']).font = { bold: true };
     const c = r.cobertura;
-    hoja.addRow(['Unidades', c.unidades]);
-    hoja.addRow(['Unidades con obrero asignado', c.conObrero]);
+    hoja.addRow(['Congregaciones', c.unidades]);
+    hoja.addRow(['  Congregación País', c.porTipo.PAIS]);
+    hoja.addRow(['  Congregación Ciudad', c.porTipo.CONGREGACION]);
+    hoja.addRow(['  Congregación Campo', c.porTipo.CAMPO]);
+    hoja.addRow(['Congregaciones con obrero asignado', c.conObrero]);
     hoja.addRow(['Informes entregados (cerrados)', c.entregados]);
     hoja.addRow(['Informes en elaboración', c.enElaboracion]);
     hoja.addRow(['Informes pendientes', c.pendientes]);
-    hoja.addRow(['Unidades sin obrero', c.sinObrero]);
-    hoja.addRow(['% de unidades con informe', c.porcentajeConInforme === null ? '' : c.porcentajeConInforme / 100]).getCell(2).numFmt = '0.0%';
-    hoja.addRow(['Unidades comparadas (con informe en ambos periodos)', c.unidadesComparadas]);
+    hoja.addRow(['Congregaciones sin obrero', c.sinObrero]);
+    hoja.addRow(['% de congregaciones con informe', c.porcentajeConInforme === null ? '' : c.porcentajeConInforme / 100]).getCell(2).numFmt = '0.0%';
+    hoja.addRow(['Congregaciones comparadas (con informe en ambos periodos)', c.unidadesComparadas]);
     hoja.addRow([]);
 
     const titulo = hoja.addRow(['Indicador', 'Periodo anterior', 'Periodo actual', 'Variación']);
@@ -146,10 +150,10 @@ export class DashboardSupervisionExportService {
 
   private hojaUnidades(hoja: Worksheet, unidades: UnidadFila[]): void {
     this.encabezado(hoja, [
-      { header: 'Tipo', key: 'tipo', width: 14 },
-      { header: 'Unidad', key: 'unidad', width: 32 },
-      { header: 'Congregación', key: 'congregacion', width: 28 },
-      { header: 'País', key: 'pais', width: 18 },
+      { header: 'Tipo', key: 'tipo', width: 22 },
+      { header: 'Congregación', key: 'unidad', width: 32 },
+      { header: 'Congregación Ciudad', key: 'congregacion', width: 28 },
+      { header: 'Congregación País', key: 'pais', width: 20 },
       { header: 'Obrero(s)', key: 'obreros', width: 36 },
       { header: 'Estado del informe', key: 'estado', width: 20 },
       { header: 'Asistencia general', key: 'asistencia', width: 26 },
@@ -160,7 +164,7 @@ export class DashboardSupervisionExportService {
     ]);
     for (const f of unidades) {
       hoja.addRow({
-        tipo: f.unidad.tipo === 'CAMPO' ? 'Campo' : 'Congregación',
+        tipo: ETIQUETAS_TIPO_UNIDAD[f.unidad.tipo],
         unidad: f.unidad.nombre,
         congregacion: f.unidad.congregacion ?? '',
         pais: f.unidad.pais ?? '',
@@ -180,22 +184,24 @@ export class DashboardSupervisionExportService {
     this.encabezado(hoja, [
       { header: 'Nivel', key: 'nivel', width: 18 },
       { header: 'Tipo', key: 'tipo', width: 26 },
-      { header: 'Unidad', key: 'unidad', width: 30 },
-      { header: 'Congregación', key: 'congregacion', width: 26 },
-      { header: 'País', key: 'pais', width: 18 },
+      { header: 'Tipo de congregación', key: 'tipoUnidad', width: 22 },
+      { header: 'Congregación', key: 'unidad', width: 30 },
+      { header: 'Congregación Ciudad', key: 'congregacion', width: 26 },
+      { header: 'Congregación País', key: 'pais', width: 20 },
       { header: 'Mensaje', key: 'mensaje', width: 80 },
     ]);
     for (const a of alertas) {
       hoja.addRow({
         nivel: a.nivel === 'ATENCION' ? 'Requiere atención' : 'Informativa',
         tipo: ETIQUETAS_TIPO_ALERTA[a.tipo],
+        tipoUnidad: ETIQUETAS_TIPO_UNIDAD[a.unidad.tipo],
         unidad: a.unidad.nombre,
         congregacion: a.unidad.congregacion ?? '',
         pais: a.unidad.pais ?? '',
         mensaje: a.mensaje,
       });
     }
-    hoja.autoFilter = { from: 'A1', to: 'F1' };
+    hoja.autoFilter = { from: 'A1', to: 'G1' };
   }
 
   // ---------------------------------------------------------------- PDF
@@ -221,12 +227,18 @@ export class DashboardSupervisionExportService {
         table: {
           widths: ['*', '*', '*', '*', '*', '*'],
           body: [
-            encabezadoTabla(['Unidades', 'Con obrero', 'Entregados', 'En elaboración', 'Pendientes', '% con informe']),
+            encabezadoTabla(['Congregaciones', 'Con obrero', 'Entregados', 'En elaboración', 'Pendientes', '% con informe']),
             [c.unidades, c.conObrero, c.entregados, c.enElaboracion, c.pendientes,
               c.porcentajeConInforme === null ? '—' : `${numero(c.porcentajeConInforme)} %`].map((t) => ({ text: String(t), alignment: 'center' })),
           ],
         },
         layout: 'lightHorizontalLines',
+        margin: [0, 0, 0, 4],
+      },
+      {
+        text: `Congregación País: ${c.porTipo.PAIS} · Congregación Ciudad: ${c.porTipo.CONGREGACION} · Congregación Campo: ${c.porTipo.CAMPO}`,
+        fontSize: 8,
+        color: '#6b7280',
         margin: [0, 0, 0, 10],
       },
       { text: 'Indicadores', style: 'subtitulo' },

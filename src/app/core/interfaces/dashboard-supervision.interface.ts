@@ -4,7 +4,23 @@
  */
 
 export type ModoComparacion = 'TRIMESTRE_ANTERIOR' | 'MISMO_TRIMESTRE_ANIO_ANTERIOR';
-export type TipoUnidad = 'CONGREGACION' | 'CAMPO';
+export type TipoUnidad = 'PAIS' | 'CONGREGACION' | 'CAMPO';
+
+export const ETIQUETAS_TIPO_UNIDAD: Record<TipoUnidad, string> = {
+  PAIS: 'Congregación País',
+  CONGREGACION: 'Congregación Ciudad',
+  CAMPO: 'Congregación Campo',
+};
+
+/** Texto de ubicación de una congregación: la ciudad (si es campo) y el país (si no es la congregación país). */
+export const ubicacionUnidad = (u: {
+  tipo: TipoUnidad;
+  pais: string | null;
+  congregacion: string | null;
+}): string =>
+  [u.tipo === 'CAMPO' ? u.congregacion : null, u.tipo !== 'PAIS' ? u.pais : null]
+    .filter(Boolean)
+    .join(' · ');
 export type EstadoEntrega = 'ENTREGADO' | 'EN_ELABORACION' | 'PENDIENTE' | 'SIN_OBRERO';
 export type OrdenUnidades =
   | 'NOMBRE'
@@ -98,6 +114,7 @@ export interface Indicador {
 
 export interface Cobertura {
   unidades: number;
+  porTipo: Record<TipoUnidad, number>;
   conObrero: number;
   entregados: number;
   enElaboracion: number;

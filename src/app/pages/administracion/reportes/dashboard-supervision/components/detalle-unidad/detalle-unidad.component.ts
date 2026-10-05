@@ -16,6 +16,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   DetalleUnidad,
   ETIQUETAS_ESTADO_ENTREGA,
+  ETIQUETAS_TIPO_UNIDAD,
+  ubicacionUnidad,
   FiltrosDashboard,
   GrupoIndicador,
   UnidadRef,
@@ -41,6 +43,7 @@ export class DetalleUnidadComponent {
   cerrar = output<void>();
 
   readonly etiquetasEstado = ETIQUETAS_ESTADO_ENTREGA;
+  readonly etiquetasTipo = ETIQUETAS_TIPO_UNIDAD;
   readonly grupos: { clave: GrupoIndicador; titulo: string; icono: string }[] = [
     { clave: 'ASISTENCIA', titulo: 'Asistencia', icono: 'fa-users' },
     { clave: 'VIDA_ESPIRITUAL', titulo: 'Vida espiritual', icono: 'fa-heart' },
@@ -54,7 +57,7 @@ export class DetalleUnidadComponent {
 
   ubicacion = computed(() => {
     const u = this.unidad();
-    return [u.tipo === 'CAMPO' ? u.congregacion : null, u.pais].filter(Boolean).join(' · ');
+    return ubicacionUnidad(u);
   });
 
   indicadoresPorGrupo = computed(() => {
@@ -89,7 +92,7 @@ export class DetalleUnidadComponent {
           this.cargando.set(false);
         },
         error: (e) => {
-          this.error.set(e?.error?.msg ?? 'No fue posible cargar el detalle de la unidad.');
+          this.error.set(e?.error?.msg ?? 'No fue posible cargar el detalle de la congregación.');
           this.cargando.set(false);
         },
       });

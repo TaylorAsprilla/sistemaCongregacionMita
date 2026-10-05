@@ -1,11 +1,11 @@
 <div class="d-flex flex-wrap gap-2 mb-3 chips" role="group" aria-label="Filtrar alertas por tipo">
-  <button type="button" class="btn btn-sm" [class.btn-primary]="tipo() === ''" [class.btn-outline-primary]="tipo() !== ''"
+  <button type="button" class="btn btn-sm" [class.btn-primary]="tipo() === ''" [class.btn-secondary]="tipo() !== ''"
     (click)="seleccionarTipo('')">
     Todas <span class="badge bg-light text-dark ms-1">{{ totalGeneral() }}</span>
   </button>
   @for (t of tipos; track t) {
     @if (respuesta()?.porTipo?.[t]) {
-      <button type="button" class="btn btn-sm" [class.btn-primary]="tipo() === t" [class.btn-outline-primary]="tipo() !== t"
+      <button type="button" class="btn btn-sm" [class.btn-primary]="tipo() === t" [class.btn-secondary]="tipo() !== t"
         [attr.aria-pressed]="tipo() === t" (click)="seleccionarTipo(t)">
         <i class="fas {{ iconos[t] }}" aria-hidden="true"></i>
         {{ etiquetas[t] }}
@@ -45,12 +45,12 @@
               [class.bg-info]="a.nivel === 'INFORMATIVA'">
               {{ a.nivel === 'ATENCION' ? 'Requiere atención' : 'Informativa' }}
             </span>
-            <span class="badge bg-light text-dark border">{{ a.unidad.tipo === 'CAMPO' ? 'Campo' : 'Congregación' }}</span>
+            <span class="badge bg-light text-dark border">{{ etiquetasTipo[a.unidad.tipo] }}</span>
           </div>
           <small class="text-muted d-block">{{ ubicacion(a.unidad) }}</small>
           <p class="mb-0 mensaje">{{ a.mensaje }}</p>
         </div>
-        <button type="button" class="btn btn-sm btn-outline-primary align-self-center" (click)="verUnidad.emit(a.unidad)"
+        <button type="button" class="btn btn-sm btn-primary align-self-center" (click)="verUnidad.emit(a.unidad)"
           [attr.aria-label]="'Ver detalle de ' + a.unidad.nombre">
           <i class="fas fa-eye" aria-hidden="true"></i>
           <span class="d-none d-md-inline ms-1">Ver</span>
@@ -60,7 +60,7 @@
   </ul>
   @if (hayMas()) {
     <div class="text-center mt-3">
-      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="verMas()">
+      <button type="button" class="btn btn-sm btn-secondary" (click)="verMas()">
         Ver más ({{ (respuesta()?.alertas?.length ?? 0) - alertas().length }} restantes)
       </button>
     </div>

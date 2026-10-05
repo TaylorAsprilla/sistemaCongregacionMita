@@ -3,14 +3,14 @@
   <header class="panel-encabezado">
     <div class="min-w-0">
       <small class="text-uppercase text-white-50 fw-semibold">
-        {{ unidad().tipo === 'CAMPO' ? 'Campo' : 'Congregación' }}
+        {{ etiquetasTipo[unidad().tipo] }}
       </small>
       <h2 id="tituloDetalleUnidad" class="h5 mb-0 text-truncate">{{ unidad().nombre }}</h2>
       <small class="text-white-50">
         {{ ubicacion() }}
       </small>
     </div>
-    <button type="button" class="btn btn-sm btn-light" (click)="cerrar.emit()" aria-label="Cerrar detalle">
+    <button type="button" class="btn btn-sm btn-secondary" (click)="cerrar.emit()" aria-label="Cerrar detalle">
       <i class="fas fa-xmark" aria-hidden="true"></i>
     </button>
   </header>

@@ -68,11 +68,11 @@ export class DashboardSupervisionComponent {
     const c = this.resumen()?.cobertura;
     if (!c) return [];
     return [
-      { etiqueta: 'Unidades', valor: c.unidades, icono: 'fa-sitemap', clase: 'primario', ayuda: `${c.conObrero} con obrero asignado` },
+      { etiqueta: 'Congregaciones', valor: c.unidades, icono: 'fa-sitemap', clase: 'primario', ayuda: `País ${c.porTipo.PAIS} · Ciudad ${c.porTipo.CONGREGACION} · Campo ${c.porTipo.CAMPO}` },
       { etiqueta: 'Entregados', valor: c.entregados, icono: 'fa-circle-check', clase: 'exito', ayuda: 'Informes cerrados' },
       { etiqueta: 'En elaboración', valor: c.enElaboracion, icono: 'fa-pen-to-square', clase: 'info', ayuda: 'Informes abiertos' },
       { etiqueta: 'Pendientes', valor: c.pendientes, icono: 'fa-clock', clase: 'aviso', ayuda: 'Sin informe del periodo' },
-      { etiqueta: 'Sin obrero', valor: c.sinObrero, icono: 'fa-user-xmark', clase: 'neutro', ayuda: 'Unidades sin asignación' },
+      { etiqueta: 'Sin obrero', valor: c.sinObrero, icono: 'fa-user-xmark', clase: 'neutro', ayuda: 'Congregaciones sin obrero asignado' },
     ];
   });
 
@@ -92,10 +92,10 @@ export class DashboardSupervisionComponent {
     if (!f || !d) return '';
     const nombre = (lista: { id: number; nombre: string }[], id: number | null) =>
       lista.find((x) => x.id === id)?.nombre ?? String(id);
-    if (f.campo_id) return `Campo: ${nombre(d.campos, f.campo_id)}`;
-    if (f.congregacion_id) return `Congregación: ${nombre(d.congregaciones, f.congregacion_id)}`;
-    if (f.pais_id) return `País: ${nombre(d.paises, f.pais_id)}`;
-    return 'Todas las unidades';
+    if (f.campo_id) return `Congregación Campo: ${nombre(d.campos, f.campo_id)}`;
+    if (f.congregacion_id) return `Congregación Ciudad: ${nombre(d.congregaciones, f.congregacion_id)}`;
+    if (f.pais_id) return `Congregación País: ${nombre(d.paises, f.pais_id)}`;
+    return 'Todas las congregaciones';
   });
 
   constructor() {

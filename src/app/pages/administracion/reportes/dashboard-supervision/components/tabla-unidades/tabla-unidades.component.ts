@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { Subject, Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
 import {
   ETIQUETAS_ESTADO_ENTREGA,
+  ETIQUETAS_TIPO_UNIDAD,
   EstadoEntrega,
   FiltrosDashboard,
   OrdenUnidades,
   TipoUnidad,
   UnidadRef,
   UnidadesDashboard,
+  ubicacionUnidad,
 } from 'src/app/core/interfaces/dashboard-supervision.interface';
 import { DashboardSupervisionService } from 'src/app/services/dashboard-supervision/dashboard-supervision.service';
 import { IndicadorVariacionComponent } from '../indicador-variacion/indicador-variacion.component';
@@ -30,11 +32,14 @@ export class TablaUnidadesComponent {
   verUnidad = output<UnidadRef>();
 
   readonly etiquetasEstado = ETIQUETAS_ESTADO_ENTREGA;
+  readonly etiquetasTipo = ETIQUETAS_TIPO_UNIDAD;
+  readonly tipos = Object.keys(ETIQUETAS_TIPO_UNIDAD) as TipoUnidad[];
+  readonly ubicacion = ubicacionUnidad;
   readonly estados = Object.keys(ETIQUETAS_ESTADO_ENTREGA) as EstadoEntrega[];
   readonly ordenes: { valor: OrdenUnidades; etiqueta: string }[] = [
     { valor: 'NOMBRE', etiqueta: 'Nombre (A-Z)' },
-    { valor: 'PAIS', etiqueta: 'País' },
-    { valor: 'CONGREGACION', etiqueta: 'Congregación' },
+    { valor: 'PAIS', etiqueta: 'Congregación País' },
+    { valor: 'CONGREGACION', etiqueta: 'Congregación Ciudad' },
     { valor: 'MAYOR_INCREMENTO', etiqueta: 'Mayor incremento de asistencia' },
     { valor: 'MAYOR_DISMINUCION', etiqueta: 'Mayor disminución de asistencia' },
     { valor: 'MAS_ALERTAS', etiqueta: 'Más alertas' },
@@ -94,7 +99,7 @@ export class TablaUnidadesComponent {
           this.cargando.set(false);
         },
         error: (e) => {
-          this.error.set(e?.error?.msg ?? 'No fue posible cargar las unidades.');
+          this.error.set(e?.error?.msg ?? 'No fue posible cargar las congregaciones.');
           this.cargando.set(false);
         },
       });
