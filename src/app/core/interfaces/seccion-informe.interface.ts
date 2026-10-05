@@ -26,7 +26,7 @@ export interface Seccion {
   nombre: string;
   descripcion: string;
   ruta: string;
-  imagen: string;
+  icono: string;
   estatus: string;
   color: string;
 }
@@ -35,7 +35,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.ACTIVIDADES_ECLESIASTICAS,
     ruta: `../${RUTAS.INFORME_ACTIVIDADES_ECLESIASTICAS}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-calendar-check-o',
     descripcion: 'Servicios, vigilias, oraciones, reuniones, actividades',
     estatus: EstatusSeccion.COMPLETADO,
     color: ColorEstatus.COMPLETADO,
@@ -44,7 +44,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.VISITAS,
     ruta: `../${RUTAS.INFORME_VISITAS}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-handshake-o',
     descripcion:
       'Atenciones y seguimiento a los hermanos mediante visitas presenciales, virtuales (Zoom, WhatsApp), llamadas y consultas',
     estatus: EstatusSeccion.PENDIENTE,
@@ -54,7 +54,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.SITUACION_VISITAS,
     ruta: `../${RUTAS.SITUACION_VISITA}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-exclamation-triangle',
     descripcion: 'Situaciones encontradas durante las visitas',
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
@@ -63,7 +63,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.ASPECTO_ESPIRITUAL,
     ruta: `../${RUTAS.INFORME_ASPECTO_ESPIRITUAL}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-heart-o',
     descripcion: 'Actividades relacionadas al aspecto espiritual y personal',
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
@@ -72,7 +72,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.ACTIVIDADES_ECONOMICAS,
     ruta: `../${RUTAS.INFORME_ACTIVIDAD_ECONOMICA}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-line-chart',
     descripcion: 'Actividades económicas realizadas, ventas, etc',
     estatus: EstatusSeccion.COMPLETADO,
     color: ColorEstatus.COMPLETADO,
@@ -81,7 +81,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.ASPECTOS_CONTABLES,
     ruta: `../${RUTAS.INFORME_DIEZMOS}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-calculator',
     descripcion: 'Diezmos, transferencias, etc',
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
@@ -90,7 +90,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.LOGROS_OBTENIDOS,
     ruta: `../${RUTAS.INFORME_LOGROS}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-trophy',
     descripcion: 'Logros obtenidos durante el trimestre',
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
@@ -99,7 +99,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.METAS,
     ruta: `../${RUTAS.METAS}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-bullseye',
     descripcion: 'Metas para el próximo trimestre',
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,
@@ -108,7 +108,7 @@ export const generarSeccioninforme: Seccion[] = [
   {
     nombre: NombreSeccion.ASUNTOS_PENDIENTES,
     ruta: `../${RUTAS.ASUNTO_PENDIENTE}`,
-    imagen: 'assets/images/iconSeccionInforme.jpeg',
+    icono: 'fa-clipboard',
     descripcion: 'Asuntos pendientes administrativos, eclesiásticos o de actividades',
     estatus: EstatusSeccion.PENDIENTE,
     color: ColorEstatus.PENDIENTE,

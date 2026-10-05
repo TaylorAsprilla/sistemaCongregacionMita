@@ -5,7 +5,13 @@
         <div class="container parte">
           <div class="row">
             <div class="around col-md-2">
-              <img class="img-fluid" src="{{ imagen }}" alt="oops" />
+              <i
+                class="fa fa-5x"
+                [ngClass]="icono"
+                [class.text-primary]="estatus === 'Completado'"
+                [class.text-danger]="estatus === 'Pendiente'"
+                aria-hidden="true"
+              ></i>
             </div>
             <div class="nombre col-md-9 mt-3">{{ nombre }}</div>
 

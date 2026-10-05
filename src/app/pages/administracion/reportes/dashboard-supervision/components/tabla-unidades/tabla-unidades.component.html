@@ -1,0 +1,192 @@
+<div class="row g-2 mb-3 align-items-end">
+  <div class="col-12 col-lg-6">
+    <label class="form-label small fw-semibold mb-1" for="buscarUnidad">Buscar</label>
+    <div class="input-group input-group-sm">
+      <span class="input-group-text"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></span>
+      <input id="buscarUnidad" type="search" class="form-control" placeholder="Congregación, país, ciudad u obrero"
+        (input)="buscar($any($event.target).value)" />
+    </div>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <label class="form-label small fw-semibold mb-1" for="estadoUnidad">Estado del informe</label>
+    <select id="estadoUnidad" class="form-select form-select-sm" [ngModel]="estado()" (ngModelChange)="cambiar(estado, $event)">
+      <option value="">Todos</option>
+      @for (e of estados; track e) {
+        <option [value]="e">{{ etiquetasEstado[e] }}</option>
+      }
+    </select>
+  </div>
+  <div class="col-12 col-md-4 col-lg-3">
+    <label class="form-label small fw-semibold mb-1" for="ordenUnidad">Ordenar por</label>
+    <select id="ordenUnidad" class="form-select form-select-sm" [ngModel]="orden()" (ngModelChange)="cambiar(orden, $event)">
+      @for (o of ordenes; track o.valor) {
+        <option [value]="o.valor">{{ o.etiqueta }}</option>
+      }
+    </select>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <label class="form-label small fw-semibold mb-1" for="servicioVariacion">Servicio</label>
+    <select id="servicioVariacion" class="form-select form-select-sm" [ngModel]="servicioVariacion()"
+      (ngModelChange)="cambiarServicio($event)">
+      <option value="">Todos</option>
+      @for (s of servicios; track s.valor) {
+        <option [value]="s.valor">{{ s.etiqueta }}</option>
+      }
+    </select>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <label class="form-label small fw-semibold mb-1" for="variacionAsistencia">Variación de asistencia</label>
+    <select id="variacionAsistencia" class="form-select form-select-sm" [ngModel]="variacion()"
+      (ngModelChange)="cambiar(variacion, $event)" [disabled]="!servicioVariacion()"
+      [title]="servicioVariacion() ? '' : 'Seleccione primero un servicio'">
+      <option value="">Cualquiera</option>
+      @for (v of filtrosVariacion; track v.valor) {
+        <option [value]="v.valor">{{ v.etiqueta }}</option>
+      }
+    </select>
+  </div>
+</div>
+
+@if (error()) {
+  <div class="alert alert-warning">{{ error() }}</div>
+}
+
+<div class="position-relative">
+  @if (cargando()) {
+    <div class="cargando" aria-live="polite">
+      <i class="fas fa-spinner fa-spin fa-2x text-primary" aria-hidden="true"></i>
+      <span class="visually-hidden">Cargando…</span>
+    </div>
+  }
+
+  <!-- Vista de tabla (pantallas medianas y grandes) -->
+  <div class="table-responsive d-none d-md-block">
+    <table class="table table-hover align-middle mb-0 tabla">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Congregación</th>
+          <th scope="col">Obrero(s)</th>
+          <th scope="col" class="text-center">Informe</th>
+          <th scope="col" class="text-center">Asistencia general</th>
+          <th scope="col" class="text-center">{{ servicioVariacion() ? 'Prom. ' + servicioColumna().etiqueta.toLowerCase() : 'Prom. por servicio' }}</th>
+          <th scope="col" class="text-center">Visitas</th>
+          <th scope="col" class="text-center">Act. espirituales</th>
+          <th scope="col" class="text-center">Alertas</th>
+          <th scope="col"><span class="visually-hidden">Acciones</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of datos()?.unidades ?? []; track f.unidad.tipo + f.unidad.id) {
+          <tr>
+            <td>
+              <div class="nombre-unidad">{{ f.unidad.nombre }}</div>
+              <small class="text-muted">
+                {{ etiquetasTipo[f.unidad.tipo] }}@if (ubicacion(f.unidad)) { · {{ ubicacion(f.unidad) }} }
+              </small>
+            </td>
+            <td class="obreros">
+              @if (f.obreros.length) {
+                @for (o of f.obreros; track o) { <div>{{ o }}</div> }
+              } @else {
+                <span class="text-muted fst-italic">Sin asignar</span>
+              }
+            </td>
+            <td class="text-center">
+              <span class="badge {{ claseEstado(f.estadoEntrega) }}">
+                <i class="fas {{ iconoEstado(f.estadoEntrega) }}" aria-hidden="true"></i>
+                {{ etiquetasEstado[f.estadoEntrega] }}
+              </span>
+            </td>
+            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['asistenciaGeneral']" [mostrarDetalle]="true" /></td>
+            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores[servicioColumna().indicador]" [mostrarDetalle]="true" /></td>
+            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['visitasTotales']" [mostrarDetalle]="true" /></td>
+            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['actividadesEspirituales']" [mostrarDetalle]="true" /></td>
+            <td class="text-center">
+              @if (f.alertas) {
+                <span class="badge rounded-pill bg-warning text-dark">{{ f.alertas }}</span>
+              } @else {
+                <span class="text-muted">0</span>
+              }
+            </td>
+            <td class="text-end">
+              <button type="button" class="btn btn-sm btn-primary" (click)="verUnidad.emit(f.unidad)"
+                [attr.aria-label]="'Ver detalle de ' + f.unidad.nombre">
+                <i class="fas fa-eye" aria-hidden="true"></i>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="9" class="text-center text-muted py-4">No se encontraron congregaciones con los criterios seleccionados.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Vista de tarjetas (móvil) -->
+  <div class="d-md-none">
+    @for (f of datos()?.unidades ?? []; track f.unidad.tipo + f.unidad.id) {
+      <div class="tarjeta-unidad">
+        <div class="d-flex justify-content-between gap-2">
+          <div class="min-w-0">
+            <div class="nombre-unidad">{{ f.unidad.nombre }}</div>
+            <small class="text-muted d-block">
+              {{ etiquetasTipo[f.unidad.tipo] }}@if (ubicacion(f.unidad)) { · {{ ubicacion(f.unidad) }} }
+            </small>
+            <small class="d-block">{{ f.obreros.join(', ') || 'Sin obrero asignado' }}</small>
+          </div>
+          <button type="button" class="btn btn-sm btn-primary align-self-start" (click)="verUnidad.emit(f.unidad)"
+            [attr.aria-label]="'Ver detalle de ' + f.unidad.nombre">
+            <i class="fas fa-eye" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="d-flex flex-wrap gap-2 my-2">
+          <span class="badge {{ claseEstado(f.estadoEntrega) }}">{{ etiquetasEstado[f.estadoEntrega] }}</span>
+          @if (f.alertas) {
+            <span class="badge bg-warning text-dark">{{ f.alertas }} alerta(s)</span>
+          }
+        </div>
+        <dl class="row small mb-0">
+          <dt class="col-6 fw-normal text-muted">Asistencia general</dt>
+          <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores['asistenciaGeneral']" /></dd>
+          <dt class="col-6 fw-normal text-muted">{{ servicioVariacion() ? 'Prom. ' + servicioColumna().etiqueta.toLowerCase() : 'Prom. por servicio' }}</dt>
+          <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores[servicioColumna().indicador]" /></dd>
+          <dt class="col-6 fw-normal text-muted">Visitas</dt>
+          <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores['visitasTotales']" /></dd>
+          <dt class="col-6 fw-normal text-muted">Act. espirituales</dt>
+          <dd class="col-6 text-end mb-0"><app-indicador-variacion [variacion]="f.indicadores['actividadesEspirituales']" /></dd>
+        </dl>
+      </div>
+    } @empty {
+      <p class="text-center text-muted py-4">No se encontraron congregaciones con los criterios seleccionados.</p>
+    }
+  </div>
+</div>
+
+@if (datos(); as d) {
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+    <small class="text-muted">
+      {{ d.total }} congregación(es) · Página {{ d.pagina }} de {{ d.totalPaginas }}
+    </small>
+    <div class="d-flex align-items-center gap-2">
+      <select class="form-select form-select-sm w-auto" aria-label="Congregaciones por página" [ngModel]="porPagina()"
+        (ngModelChange)="cambiar(porPagina, +$event)">
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="25">25</option>
+        <option [ngValue]="50">50</option>
+      </select>
+      <nav class="btn-group btn-group-sm" aria-label="Paginación de congregaciones">
+        <button type="button" class="btn btn-secondary" [disabled]="d.pagina <= 1" (click)="irAPagina(d.pagina - 1)"
+          aria-label="Anterior">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <span class="btn btn-primary disabled opacity-100" aria-current="page">{{ d.pagina }}</span>
+        <button type="button" class="btn btn-secondary" [disabled]="d.pagina >= d.totalPaginas"
+          (click)="irAPagina(d.pagina + 1)" aria-label="Siguiente">
+          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </nav>
+    </div>
+  </div>
+}

@@ -1,0 +1,176 @@
+<div class="fondo" (click)="cerrar.emit()" aria-hidden="true"></div>
+<aside class="panel shadow-lg" role="dialog" aria-modal="true" aria-labelledby="tituloDetalleUnidad">
+  <header class="panel-encabezado">
+    <div class="min-w-0">
+      <small class="text-uppercase text-white-50 fw-semibold">
+        {{ etiquetasTipo[unidad().tipo] }}
+      </small>
+      <h2 id="tituloDetalleUnidad" class="h5 mb-0 text-truncate">{{ unidad().nombre }}</h2>
+      <small class="text-white-50">
+        {{ ubicacion() }}
+      </small>
+    </div>
+    <button type="button" class="btn btn-sm btn-secondary" (click)="cerrar.emit()" aria-label="Cerrar detalle">
+      <i class="fas fa-xmark" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="panel-cuerpo">
+    @if (cargando()) {
+      <div class="text-center text-muted py-5">
+        <i class="fas fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
+        <p class="mt-2">Cargando detalle…</p>
+      </div>
+    } @else if (error()) {
+      <div class="alert alert-warning">{{ error() }}</div>
+    } @else if (detalle(); as d) {
+      <p class="small text-muted mb-3">
+        {{ d.contexto.periodo.etiqueta }} · Comparado con el {{ d.contexto.descripcionComparacion }}
+      </p>
+
+      <section class="mb-4">
+        <h3 class="seccion-titulo"><i class="fas fa-id-card" aria-hidden="true"></i> Información general</h3>
+        <dl class="row small mb-0">
+          <dt class="col-5 text-muted fw-normal">Obrero(s)</dt>
+          <dd class="col-7">
+            @for (o of d.obreros; track o.id) {
+              <div>{{ o.nombre }} @if (o.email) { <small class="text-muted d-block">{{ o.email }}</small> }</div>
+            } @empty {
+              <span class="fst-italic text-muted">Sin obrero asignado</span>
+            }
+          </dd>
+          <dt class="col-5 text-muted fw-normal">Estado del informe</dt>
+          <dd class="col-7">{{ etiquetasEstado[d.estadoEntrega] }}</dd>
+          <dt class="col-5 text-muted fw-normal">Informes del periodo</dt>
+          <dd class="col-7 mb-0">
+            @for (i of d.informes; track i.id) {
+              <div>#{{ i.id }} · {{ i.estado }} · {{ i.obrero }}</div>
+            } @empty {
+              <span class="text-muted">Ninguno</span>
+            }
+          </dd>
+        </dl>
+      </section>
+
+      @for (g of indicadoresPorGrupo(); track g.clave) {
+        <section class="mb-4">
+          <h3 class="seccion-titulo"><i class="fas {{ g.icono }}" aria-hidden="true"></i> {{ g.titulo }}</h3>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Indicador</th>
+                  <th scope="col" class="text-end">Anterior</th>
+                  <th scope="col" class="text-end">Actual</th>
+                  <th scope="col" class="text-end">Variación</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (i of g.indicadores; track i.clave) {
+                  <tr>
+                    <td>{{ i.etiqueta }}</td>
+                    <td class="text-end">{{ i.variacion.anterior === null ? '—' : (i.variacion.anterior | number: '1.0-1') }}</td>
+                    <td class="text-end">{{ i.valorPeriodo === null ? '—' : (i.valorPeriodo | number: '1.0-1') }}</td>
+                    <td class="text-end"><app-indicador-variacion [variacion]="i.variacion" /></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
+
+      @if (d.asistenciaPorServicio.length) {
+        <section class="mb-4">
+          <h3 class="seccion-titulo"><i class="fas fa-calendar" aria-hidden="true"></i> Asistencia por servicio</h3>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Servicio</th>
+                  <th scope="col" class="text-end">Cantidad</th>
+                  <th scope="col" class="text-end">Promedio</th>
+                  <th scope="col" class="text-end">Variación</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (s of d.asistenciaPorServicio; track s.categoria) {
+                  <tr>
+                    <td>{{ s.etiqueta }}</td>
+                    <td class="text-end">{{ s.cantidad ?? '—' }}</td>
+                    <td class="text-end">{{ s.promedio === null ? '—' : (s.promedio | number: '1.0-1') }}</td>
+                    <td class="text-end"><app-indicador-variacion [variacion]="s.variacionPromedio" /></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
+
+      @if (d.historico.series.length) {
+        <section class="mb-4">
+          <h3 class="seccion-titulo"><i class="fas fa-chart-line" aria-hidden="true"></i> Histórico</h3>
+          <app-grafica-tendencias [series]="d.historico.series" />
+        </section>
+      }
+
+      @if (d.alertas.length) {
+        <section class="mb-4">
+          <h3 class="seccion-titulo"><i class="fas fa-bell" aria-hidden="true"></i> Alertas</h3>
+          <ul class="list-unstyled mb-0">
+            @for (a of d.alertas; track a.id) {
+              <li class="item-lista" [class.atencion]="a.nivel === 'ATENCION'">{{ a.mensaje }}</li>
+            }
+          </ul>
+        </section>
+      }
+
+      <section class="mb-4">
+        <h3 class="seccion-titulo"><i class="fas fa-circle-exclamation" aria-hidden="true"></i> Asuntos pendientes</h3>
+        @for (a of d.asuntosPendientes; track $index) {
+          <div class="item-lista">
+            <div>{{ a.asunto }}</div>
+            <small class="text-muted">
+              {{ a.tipoAsunto ?? '' }}@if (a.responsable) { · {{ a.responsable }} }
+            </small>
+            @if (a.recurrente) {
+              <span class="badge bg-warning text-dark ms-1">Recurrente</span>
+            }
+          </div>
+        } @empty {
+          <p class="text-muted small mb-0">Sin asuntos pendientes registrados.</p>
+        }
+      </section>
+
+      <section class="mb-4">
+        <h3 class="seccion-titulo"><i class="fas fa-trophy" aria-hidden="true"></i> Logros</h3>
+        @for (l of d.logros; track $index) {
+          <div class="item-lista">
+            <div>{{ l.logro }}</div>
+            @if (l.responsable || l.fecha) {
+              <small class="text-muted">{{ l.responsable ?? '' }} {{ l.fecha ? '· ' + (l.fecha | date: 'mediumDate') : '' }}</small>
+            }
+          </div>
+        } @empty {
+          <p class="text-muted small mb-0">Sin logros registrados en el periodo.</p>
+        }
+      </section>
+
+      <section>
+        <h3 class="seccion-titulo"><i class="fas fa-flag-checkered" aria-hidden="true"></i> Metas</h3>
+        @for (m of d.metas; track $index) {
+          <div class="item-lista">
+            <div>{{ m.meta }}</div>
+            @if (m.accion) { <small class="d-block">{{ m.accion }}</small> }
+            @if (m.fechaCumplimiento) {
+              <small class="text-muted">Cumplimiento: {{ m.fechaCumplimiento | date: 'mediumDate' }}</small>
+            }
+          </div>
+        } @empty {
+          <p class="text-muted small mb-0">Sin metas registradas en el periodo.</p>
+        }
+      </section>
+    }
+  </div>
+</aside>

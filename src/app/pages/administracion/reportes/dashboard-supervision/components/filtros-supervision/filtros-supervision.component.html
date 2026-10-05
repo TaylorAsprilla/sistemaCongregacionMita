@@ -1,0 +1,77 @@
+<form class="filtros card shadow-sm" (ngSubmit)="enviar()" aria-label="Filtros del dashboard">
+  <div class="card-body">
+    <div class="row g-3 align-items-end">
+      <div class="col-6 col-md-4 col-xl-1">
+        <label class="form-label" for="filtroAnio">Año</label>
+        <select id="filtroAnio" class="form-select" name="anio" [ngModel]="anio()" (ngModelChange)="anio.set($event)">
+          @for (a of disponibles().anios; track a) {
+            <option [ngValue]="a">{{ a }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-6 col-md-4 col-xl-2">
+        <label class="form-label" for="filtroTrimestre">Trimestre</label>
+        <select id="filtroTrimestre" class="form-select" name="trimestre" [ngModel]="trimestre()"
+          (ngModelChange)="trimestre.set($event)">
+          @for (t of disponibles().trimestres; track t.valor) {
+            <option [ngValue]="t.valor">{{ t.etiqueta }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-12 col-md-4 col-xl-2">
+        <label class="form-label" for="filtroComparacion">Comparar con</label>
+        <select id="filtroComparacion" class="form-select" name="comparacion" [ngModel]="comparacion()"
+          (ngModelChange)="comparacion.set($event)">
+          @for (c of disponibles().comparaciones; track c.valor) {
+            <option [ngValue]="c.valor">{{ c.etiqueta }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-12 col-md-4 col-xl-2">
+        <label class="form-label" for="filtroPais">Congregación País</label>
+        <select id="filtroPais" class="form-select" name="pais" [ngModel]="paisId()" (ngModelChange)="cambiarPais($event)">
+          <option [ngValue]="null">Todos</option>
+          @for (p of disponibles().paises; track p.id) {
+            <option [ngValue]="p.id">{{ p.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-12 col-md-4 col-xl-2">
+        <label class="form-label" for="filtroCongregacion">Congregación Ciudad</label>
+        <select id="filtroCongregacion" class="form-select" name="congregacion" [ngModel]="congregacionId()"
+          (ngModelChange)="cambiarCongregacion($event)">
+          <option [ngValue]="null">Todas</option>
+          @for (c of congregaciones(); track c.id) {
+            <option [ngValue]="c.id">{{ c.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-12 col-md-4 col-xl-2">
+        <label class="form-label" for="filtroCampo">Congregación Campo</label>
+        <select id="filtroCampo" class="form-select" name="campo" [ngModel]="campoId()" (ngModelChange)="campoId.set($event)">
+          <option [ngValue]="null">Todos</option>
+          @for (c of campos(); track c.id) {
+            <option [ngValue]="c.id">{{ c.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-12 col-xl-1 d-flex gap-2 acciones">
+        <button type="submit" class="btn btn-primary flex-fill" [disabled]="cargando()" title="Aplicar filtros">
+          <i class="fas fa-filter" aria-hidden="true"></i>
+          <span class="d-xl-none ms-1">Aplicar</span>
+        </button>
+        <button type="button" class="btn btn-secondary text-dark flex-fill" [disabled]="cargando()" (click)="limpiar()"
+          title="Volver al periodo activo">
+          <i class="fas fa-rotate-left text-dark" aria-hidden="true"></i>
+          <span class="d-xl-none ms-1">Limpiar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

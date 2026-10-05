@@ -13,7 +13,7 @@ export class SeccionInformeComponent {
   @Input() nombre: string = '';
   @Input() descripcion: string = '';
   @Input() ruta: string = '';
-  @Input() imagen: string = '';
+  @Input() icono: string = '';
   @Input() estatus: string = '';
   @Input() color: string = '';
 }
