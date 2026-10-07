@@ -234,16 +234,9 @@ export class VerInformeComponent implements OnInit {
    * Verifica si hay un informe activo y carga sus datos
    */
   private verificarYCargarInforme(): void {
-    // Si viene un ID por parámetro, usar ese
-    let informeId = this.informeIdParam;
-
-    // Si no viene por parámetro, usar el informe activo del usuario
+    const informeId = this.informeIdParam;
     if (!informeId) {
-      informeId = this.informeService.informeActivoId;
-    }
-
-    // Si no hay informeId disponible, intentar cargar desde API
-    if (!informeId) {
+      this.informeService.limpiarInformeActivo();
       this.intentarCargarInformeActivo();
       return;
     }
@@ -293,9 +286,6 @@ export class VerInformeComponent implements OnInit {
             },
           });
       }
-    } else {
-      this.actualizarPeriodoDesdeInforme(this.informeService.informeActivo);
-      this.cargarDatosInforme(informeId);
     }
   }
 
