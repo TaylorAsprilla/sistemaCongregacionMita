@@ -1,5 +1,5 @@
 import { DecimalPipe, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, signal, untracked, OnDestroy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
@@ -53,7 +53,7 @@ const ICONOS_INDICADOR: Record<string, string> = {
   templateUrl: './dashboard-supervision.component.html',
   styleUrls: ['./dashboard-supervision.component.scss'],
 })
-export class DashboardSupervisionComponent {
+export class DashboardSupervisionComponent implements OnDestroy {
   private servicio = inject(DashboardSupervisionService);
   private exportador = inject(DashboardSupervisionExportService);
   private destroyRef = inject(DestroyRef);
