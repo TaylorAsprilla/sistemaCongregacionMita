@@ -6,62 +6,202 @@ Description: Estilos para la vista de informes del supervisor por país
 @use '../../../../assets/scss/variable' as *;
 @use '../../../../assets/scss/mixins' as *;
 
-// ============================================
-// ESTADÍSTICAS
-// ============================================
-.estadistica-box {
-  @include flex-center;
-  flex-direction: column;
-  padding: 1.5rem;
-  border-radius: $radius;
-  color: $white;
-  text-align: center;
-  @include smooth-transition;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+:host {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
+.busqueda-informes {
+  max-width: 36rem;
 
-  .numero {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-
-  .etiqueta {
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  // Colores de fondo específicos
-  &.bg-info {
-    background-color: $info !important;
-  }
-
-  &.bg-success {
-    background-color: $success !important;
-  }
-
-  &.bg-warning {
-    background-color: $warning !important;
-  }
-
-  &.bg-primary {
-    background-color: $primary !important;
-  }
-
-  &.bg-purple {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  }
-
-  &.bg-teal {
-    background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%) !important;
+  .input-group-text {
+    background: #fff;
+    color: #64748b;
+    border-color: $border-color;
   }
 }
+
+.resultados-informes {
+  padding: 0.75rem 0;
+  color: #526170;
+  font-size: 0.85rem;
+  border-top: 1px solid #edf1f5;
+}
+
+.listas-informes {
+  gap: 0.5rem;
+
+  .nav-link {
+    border: 1px solid #dbe3ed;
+    border-radius: 0.4rem;
+    color: #2458a6;
+    font-weight: 500;
+
+    &.active {
+      border-color: #0d6efd;
+      background: #0d6efd;
+      color: #fff;
+    }
+  }
+}
+
+.responsable-pendiente {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+
+  .fa-whatsapp {
+    color: #fff;
+  }
+}
+
+.encabezado-pendientes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  color: #526170;
+  font-size: 0.875rem;
+}
+
+.periodo-pendientes {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.4rem;
+  background: #f1f5f9;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.tabla-pendientes {
+  min-width: 560px;
+
+  th:nth-child(1) { width: 35%; }
+  th:nth-child(2) { width: 45%; }
+  th:nth-child(3) { width: 20%; }
+
+  th:last-child,
+  .contacto-pendiente {
+    text-align: center;
+  }
+
+  td[rowspan] {
+    background-color: #f8fafc;
+    border-right: 1px solid #e5eaf0;
+  }
+
+  .contacto-pendiente {
+    .btn {
+      white-space: nowrap;
+    }
+
+    .fa-whatsapp {
+      color: #fff;
+    }
+  }
+
+  .datos-responsable {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-weight: 400;
+
+    > span:first-child {
+      color: #1e293b;
+      font-weight: 600;
+    }
+  }
+
+  .celular-responsable {
+    color: #475569;
+    font-size: 1rem;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.resumen-informes {
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.6rem;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.resumen-periodo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.resumen-periodo-titulo {
+  margin: 0 0 0.3rem;
+  color: #1e293b;
+  font-family: inherit;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.resumen-periodo-descripcion {
+  margin: 0;
+  color: #475569;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.resumen-periodo-icono {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 2.25rem;
+  place-items: center;
+  border-radius: 0.4rem;
+  background: #0d6efd;
+  color: #fff;
+
+  i {
+    color: #fff;
+  }
+}
+
+.dato-resumen {
+  display: flex;
+  min-height: 4.5rem;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.65rem 0.8rem;
+  border-left: 3px solid #94a3b8;
+  border-radius: 0.3rem;
+  background: #f8fafc;
+}
+
+.dato-valor {
+  color: #1e293b;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.dato-etiqueta {
+  margin-top: 0.25rem;
+  color: #64748b;
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+
+.dato-exito { border-left-color: #198754; }
+.dato-pendiente { border-left-color: #d99a00; }
+.dato-neutro { border-left-color: #64748b; }
+.dato-porcentaje { border-left-color: #1976d2; }
 
 // ============================================
 // CARD
@@ -85,7 +225,7 @@ Description: Estilos para la vista de informes del supervisor por país
 // FORMULARIOS Y FILTROS
 // ============================================
 .form-label {
-  font-weight: 500;
+  font-weight: 600;
   color: $headingtext;
   margin-bottom: 0.5rem;
 }
@@ -105,31 +245,175 @@ Description: Estilos para la vista de informes del supervisor por país
 // TABLA
 // ============================================
 .tabla-informes {
-  font-size: 0.9rem;
+  --bs-table-bg: #fff;
+  --bs-table-color: #334155;
+  --bs-table-border-color: #e5eaf0;
+  --bs-table-hover-bg: #eff6ff;
+  --bs-table-hover-color: #1e293b;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 0;
+  border-color: var(--bs-table-border-color);
 
   thead {
     th {
-      background-color: $light;
-      color: $headingtext;
+      padding: 0.9rem 1rem;
+      background-color: #eef3f9;
+      color: #334155;
       font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-      border-bottom: 2px solid $border-color;
+      font-size: 1.0625rem;
+      border-bottom: 1px solid #d8e2ee;
       white-space: nowrap;
+      vertical-align: middle;
     }
   }
 
   tbody {
     tr {
-      @include smooth-transition;
-
-      &:hover {
-        background-color: $extra-light;
-      }
+      transition: background-color 0.15s ease;
 
       td {
         vertical-align: middle;
-        padding: 1rem 0.75rem;
+        padding: 1rem;
+        color: #334155;
+        font-weight: 400;
+        border-bottom-color: #e5eaf0;
+      }
+    }
+
+    tr:last-child td {
+      border-bottom-width: 0;
+    }
+
+    td:first-child > span {
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-block;
+      max-width: 100%;
+      padding: 0.35rem 0.65rem;
+      border: 1px solid transparent;
+      border-radius: 0.35rem;
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.4;
+      white-space: normal;
+      vertical-align: middle;
+    }
+
+    .badge-info {
+      background-color: #e8f1ff;
+      color: #2458a6;
+    }
+
+    .badge-warning {
+      background-color: #fff4d6;
+      color: #805b00;
+    }
+
+    .badge-success {
+      background-color: #e4f5eb;
+      color: #176b3a;
+    }
+
+    .badge-secondary {
+      background-color: #eef1f4;
+      color: #526170;
+    }
+
+    .btn-group .btn {
+      min-width: 2.25rem;
+      border-radius: 0.4rem;
+    }
+
+    .btn {
+      padding: 0.45rem 0.75rem;
+      font-size: 1rem;
+      white-space: nowrap;
+
+      &:hover:not(:disabled) {
+        transform: none;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.card-lista-informes {
+  overflow: hidden;
+  border: 1px solid #e5eaf0;
+  border-radius: 0.75rem;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .cabecera-lista-informes {
+    min-height: 2.5rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid #edf1f5;
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: #26364a;
+      font-size: 1rem;
+
+      i {
+        color: #2563a6;
+      }
+    }
+  }
+
+  .table-responsive {
+    border: 1px solid #e8edf3;
+    border-radius: 0.55rem;
+  }
+
+  .tabla-informes thead .btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #334155;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    text-decoration: none;
+    text-transform: none;
+
+    &:hover,
+    &:focus {
+      color: #1d5d9b;
+      box-shadow: none;
+      transform: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #0d6efd;
+      outline-offset: 4px;
+    }
+  }
+
+  .paginacion-informes {
+    color: #64748b;
+    font-size: 0.85rem;
+
+    select {
+      width: auto;
+      min-width: 4.25rem;
+    }
+
+    .btn {
+      box-shadow: none;
+
+      &:hover:not(:disabled) {
+        transform: none;
+        box-shadow: 0 2px 5px rgba(15, 23, 42, 0.12);
       }
     }
   }
@@ -213,34 +497,47 @@ Description: Estilos para la vista de informes del supervisor por país
 // RESPONSIVE
 // ============================================
 @media (max-width: 768px) {
-  .estadistica-box {
-    margin-bottom: 1rem;
+  .resumen-informes {
+    padding: 0.75rem;
+  }
 
-    .numero {
-      font-size: 2rem;
-    }
+  .dato-resumen {
+    min-height: 4rem;
+    padding: 0.55rem 0.65rem;
+  }
 
-    .etiqueta {
-      font-size: 0.8rem;
-    }
+  .dato-valor {
+    font-size: 1.2rem;
   }
 
   .tabla-informes {
-    font-size: 0.8rem;
+    font-size: 1.0625rem;
 
     thead th {
-      font-size: 0.75rem;
+      font-size: 1rem;
       padding: 0.5rem;
     }
 
     tbody td {
-      padding: 0.5rem;
+      padding: 0.75rem;
     }
   }
 
   .btn-sm {
     padding: 0.3rem 0.6rem;
     font-size: 0.75rem;
+  }
+
+  .card-lista-informes .card-body {
+    padding: 0.9rem;
+  }
+
+  .tabla-informes {
+    min-width: 680px;
+  }
+
+  .tabla-pendientes {
+    min-width: 560px;
   }
 }
 
@@ -282,24 +579,35 @@ Description: Estilos para la vista de informes del supervisor por país
   position: relative;
   display: flex;
   align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
 
 .toggle-icons {
   margin-left: 5px;
-  font-size: 30px;
+  color: #64748b;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: #1d5d9b;
+  }
 }
 
 .contact-icons {
   display: none;
   position: absolute;
-  top: 10px;
-  left: 5px;
-  background-color: #333;
-  border-radius: 5px;
-  padding: 5px;
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  font-size: 20px;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.55rem;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.14);
   z-index: 10;
 }
 
@@ -308,8 +616,18 @@ Description: Estilos para la vista de informes del supervisor por país
 }
 
 .contact-icons a {
-  margin-right: 5px;
-  color: #000;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  margin: 0;
+  border-radius: 0.4rem;
+  color: #475569;
+  text-decoration: none;
+
+  &:hover {
+    background: #f1f5f9;
+  }
 }
 
 .fa-whatsapp {
@@ -321,7 +639,7 @@ Description: Estilos para la vista de informes del supervisor por país
 }
 
 .fa-phone {
-  color: #ffffff;
+  color: #64748b;
 }
 
 .fa-chevron-circle-down {
@@ -331,106 +649,6 @@ Description: Estilos para la vista de informes del supervisor por país
 
 .gap-2 {
   gap: 0.5rem;
-}
-
-// ============================================
-// INFORMACIÓN EXPANDIBLE DEL OBRERO
-// ============================================
-.info-expandida {
-  background-color: #f8f9fa;
-  animation: slideDown 0.3s ease-in-out;
-
-  td {
-    padding: 0 !important;
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.info-obrero-card {
-  padding: 1.5rem;
-  background: #ffffff;
-  border-radius: 8px;
-  margin: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-left: 4px solid #1976d2;
-
-  .info-title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #e0e0e0;
-    color: #333333;
-
-    i {
-      margin-right: 0.5rem;
-      color: #1976d2;
-    }
-  }
-
-  .info-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #f0f0f0;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    strong {
-      font-weight: 500;
-      color: #555555;
-      font-size: 0.9rem;
-    }
-
-    span {
-      color: #333333;
-      font-weight: 400;
-    }
-
-    .badge {
-      font-size: 0.85rem;
-      padding: 0.35rem 0.65rem;
-    }
-  }
-
-  .actividades-resumen {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1rem;
-
-    .actividad-badge {
-      .badge {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        font-weight: 500;
-
-        i {
-          margin-right: 0.5rem;
-        }
-      }
-
-      .badge-lg {
-        font-size: 1rem;
-        padding: 0.6rem 1.2rem;
-      }
-    }
-  }
 }
 
 .btn-group {

@@ -120,6 +120,7 @@ export interface Cobertura {
   enElaboracion: number;
   pendientes: number;
   sinObrero: number;
+  /** Porcentaje calculado entre las Congregaciones Ciudad con responsable asignado. */
   porcentajeConInforme: number | null;
   informesPeriodo: number;
   unidadesComparadas: number;
@@ -141,12 +142,24 @@ export interface CategoriaEspiritual {
   variacion: Variacion;
 }
 
+export interface EntregaPais {
+  pais_id: number | null;
+  pais: string;
+  total: number;
+  entregados: number;
+  enElaboracion: number;
+  pendientes: number;
+  sinObrero: number;
+  porcentajeConInforme: number | null;
+}
+
 export interface ResumenDashboard {
   contexto: ContextoDashboard;
   cobertura: Cobertura;
   indicadores: Indicador[];
   asistenciaPorServicio: AsistenciaServicio[];
   variacionPorServicio: VariacionServicio[];
+  entregaPorPais?: EntregaPais[];
   actividadesEspiritualesPorCategoria: CategoriaEspiritual[];
   actividadEconomica: { disponible: boolean; montoRecaudado: number | null; mensaje: string };
   alertas: { total: number; porTipo: Record<string, number> };
@@ -219,7 +232,14 @@ export interface DetalleUnidad {
   contexto: ContextoDashboard;
   unidad: UnidadRef;
   obreros: { id: number; nombre: string; email: string | null }[];
-  estadoEntrega: EstadoEntrega;
+  estadoEntrega: EstadoEntrega | null;
+  entregaAgregada?: {
+    ciudades: number;
+    entregados: number;
+    enElaboracion: number;
+    pendientes: number;
+    sinObrero: number;
+  };
   informes: { id: number; periodo: string; estado: string; obrero: string; creado: string | null }[];
   indicadores: Indicador[];
   asistenciaPorServicio: AsistenciaServicio[];

@@ -18,6 +18,7 @@ export class FiltrosSupervisionComponent {
   disponibles = input.required<FiltrosDisponibles>();
   filtros = input.required<FiltrosDashboard>();
   cargando = input(false);
+  paisFijo = input(false);
   aplicar = output<FiltrosDashboard>();
 
   anio = signal<number>(0);
@@ -56,6 +57,7 @@ export class FiltrosSupervisionComponent {
   }
 
   cambiarPais(valor: number | null): void {
+    if (this.paisFijo()) return;
     this.paisId.set(valor);
     this.congregacionId.set(null);
     this.campoId.set(null);
@@ -81,7 +83,12 @@ export class FiltrosSupervisionComponent {
     const activo = this.disponibles().periodoActivo;
     this.anio.set(activo.anio);
     this.trimestre.set(activo.trimestre);
-    this.cambiarPais(null);
+    if (!this.paisFijo()) {
+      this.cambiarPais(null);
+    } else {
+      this.congregacionId.set(null);
+      this.campoId.set(null);
+    }
     this.comparacion.set('TRIMESTRE_ANTERIOR');
     this.enviar();
   }

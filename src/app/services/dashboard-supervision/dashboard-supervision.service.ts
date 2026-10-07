@@ -16,12 +16,22 @@ import {
 } from 'src/app/core/interfaces/dashboard-supervision.interface';
 
 const base_url = `${environment.base_url}/dashboard-supervision`;
+const base_url_pais = `${environment.base_url}/supervision-pais`;
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardSupervisionService {
   private httpClient = inject(HttpClient);
+  private supervisionPais = false;
+
+  setSupervisionPais(activado: boolean): void {
+    this.supervisionPais = activado;
+  }
+
+  private get endpoint(): string {
+    return this.supervisionPais ? base_url_pais : base_url;
+  }
 
   get token(): string {
     return localStorage.getItem('token') || '';
@@ -50,14 +60,14 @@ export class DashboardSupervisionService {
 
   getFiltros(): Observable<FiltrosDisponibles> {
     return this.httpClient
-      .get<{ ok: boolean; filtros: FiltrosDisponibles }>(`${base_url}/filtros`, this.opciones())
+      .get<{ ok: boolean; filtros: FiltrosDisponibles }>(`${this.endpoint}/filtros`, this.opciones())
       .pipe(map((r) => r.filtros));
   }
 
   getResumen(filtros: FiltrosDashboard): Observable<ResumenDashboard> {
     return this.httpClient
       .get<{ ok: boolean; resumen: ResumenDashboard }>(
-        `${base_url}/resumen`,
+        `${this.endpoint}/resumen`,
         this.opciones(this.parametrosFiltros(filtros)),
       )
       .pipe(map((r) => r.resumen));
@@ -66,7 +76,7 @@ export class DashboardSupervisionService {
   getTendencias(filtros: FiltrosDashboard): Observable<TendenciasDashboard> {
     return this.httpClient
       .get<{ ok: boolean; tendencias: TendenciasDashboard }>(
-        `${base_url}/tendencias`,
+        `${this.endpoint}/tendencias`,
         this.opciones(this.parametrosFiltros(filtros)),
       )
       .pipe(map((r) => r.tendencias));
@@ -75,7 +85,7 @@ export class DashboardSupervisionService {
   getAlertas(filtros: FiltrosDashboard, tipo?: string, nivel?: string): Observable<AlertasDashboard> {
     return this.httpClient
       .get<{ ok: boolean; alertas: AlertasDashboard }>(
-        `${base_url}/alertas`,
+        `${this.endpoint}/alertas`,
         this.opciones({ ...this.parametrosFiltros(filtros), tipo, nivel }),
       )
       .pipe(map((r) => r.alertas));
@@ -84,7 +94,7 @@ export class DashboardSupervisionService {
   getUnidades(filtros: FiltrosDashboard, consulta: ConsultaUnidades = {}): Observable<UnidadesDashboard> {
     return this.httpClient
       .get<{ ok: boolean; unidades: UnidadesDashboard }>(
-        `${base_url}/unidades`,
+        `${this.endpoint}/unidades`,
         this.opciones({ ...this.parametrosFiltros(filtros), ...consulta }),
       )
       .pipe(map((r) => r.unidades));
@@ -93,7 +103,7 @@ export class DashboardSupervisionService {
   getDetalleUnidad(filtros: FiltrosDashboard, tipo: TipoUnidad, id: number): Observable<DetalleUnidad> {
     return this.httpClient
       .get<{ ok: boolean; detalle: DetalleUnidad }>(
-        `${base_url}/unidades/${tipo}/${id}`,
+        `${this.endpoint}/unidades/${tipo}/${id}`,
         this.opciones({
           anio: filtros.anio,
           trimestre: filtros.trimestre,

@@ -1,52 +1,110 @@
+@if (esObreroPais) {
+  <header class="container-fluid d-flex flex-wrap justify-content-between align-items-center gap-3 py-3">
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <h1 class="h4 mb-0">Supervisión de Informes</h1>
+      @if (paisesDisponibles[0]; as pais) {
+        <span class="badge rounded-pill text-bg-primary">{{ pais.pais }}</span>
+      }
+    </div>
+  </header>
+  <nav class="container-fluid mb-3" aria-label="Secciones de supervisión">
+    <div class="nav nav-tabs">
+      <button
+        type="button"
+        class="nav-link"
+        [class.active]="vistaActiva === 'dashboard'"
+        [attr.aria-current]="vistaActiva === 'dashboard' ? 'page' : null"
+        (click)="seleccionarVista('dashboard')"
+      >
+        Dashboard
+      </button>
+      <button
+        type="button"
+        class="nav-link"
+        [class.active]="vistaActiva === 'informes'"
+        [attr.aria-current]="vistaActiva === 'informes' ? 'page' : null"
+        (click)="seleccionarVista('informes')"
+      >
+        Informes
+      </button>
+    </div>
+  </nav>
+}
+
+@if (esObreroPais && vistaActiva === 'dashboard') {
+  <app-dashboard-supervision />
+} @else {
 <div class="container-fluid">
-  <!-- Título y estadísticas -->
-  <div class="row mb-4">
+  <div class="busqueda-informes mb-3">
+    <label for="busqueda" class="form-label">Buscar obrero, o unidad pendiente</label>
+    <div class="input-group">
+      <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+      <input
+        type="search"
+        id="busqueda"
+        class="form-control"
+        placeholder="Escriba un nombre para buscar..."
+        [(ngModel)]="busqueda"
+        (input)="aplicarFiltros()"
+      />
+    </div>
+  </div>
+  <!-- Resumen del periodo -->
+  <div class="row mb-3">
     <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <!-- Estadísticas -->
-          @if (estadisticas && !cargando) {
-            <div class="row">
-              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-                <div class="estadistica-box bg-info">
-                  <div class="numero">{{ estadisticas.totalInformes }}</div>
-                  <div class="etiqueta">Informes Recibidos</div>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-                <div class="estadistica-box bg-success">
-                  <div class="numero">{{ estadisticas.totalObreros }}</div>
-                  <div class="etiqueta">Obreros</div>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-                <div class="estadistica-box bg-warning">
-                  <div class="numero">{{ estadisticas.totalCongregaciones }}</div>
-                  <div class="etiqueta">Congregaciones</div>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-                <div class="estadistica-box bg-primary">
-                  <div class="numero">{{ estadisticas.totalCampos }}</div>
-                  <div class="etiqueta">Campos</div>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-                <div class="estadistica-box bg-purple">
-                  <div class="numero">{{ getTotalActividadesEclesiasticas() }}</div>
-                  <div class="etiqueta">Act. Eclesiásticas</div>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-3 col-sm-6 mb-3">
-                <div class="estadistica-box bg-teal">
-                  <div class="numero">{{ getTotalActividadesEconomicasGlobal() }}</div>
-                  <div class="etiqueta">Act. Económicas</div>
-                </div>
+      @if (estadisticas && !cargando) {
+        <div class="resumen-informes">
+          <div class="resumen-periodo">
+            <span class="resumen-periodo-icono"><i class="fa fa-clipboard-check text-white" aria-hidden="true"></i></span>
+            <div>
+              <h2 class="resumen-periodo-titulo">Estado de entregas</h2>
+              <p class="resumen-periodo-descripcion">
+                {{ trimestres[trimestre - 1]?.label }} · {{ anio }}
+                @if (esObreroPais && paisesDisponibles[0]; as pais) {
+                  · {{ pais.pais }}
+                }
+              </p>
+              @if (todosPeriodos) {
+                <p class="text-muted small mb-0">El resumen y los pendientes corresponden al periodo activo. La lista incluye todo el historial.</p>
+              }
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-6 col-md">
+              <div class="dato-resumen">
+                <span class="dato-valor">{{ estadisticas.totalInformes }}</span>
+                <span class="dato-etiqueta">Informes recibidos</span>
               </div>
             </div>
-          }
+            <div class="col-6 col-md">
+              <div class="dato-resumen dato-exito">
+                <span class="dato-valor">{{ estadisticas.unidadesConInforme }}</span>
+                <span class="dato-etiqueta">Unidades con informe</span>
+              </div>
+            </div>
+            <div class="col-6 col-md">
+              <div class="dato-resumen dato-pendiente">
+                <span class="dato-valor">{{ estadisticas.unidadesPendientes }}</span>
+                <span class="dato-etiqueta">Pendientes</span>
+              </div>
+            </div>
+            <div class="col-6 col-md">
+              <div class="dato-resumen dato-neutro">
+                <span class="dato-valor">{{ estadisticas.unidadesSinObrero }}</span>
+                <span class="dato-etiqueta">Sin responsable</span>
+              </div>
+            </div>
+            <div class="col-12 col-md">
+              <div class="dato-resumen dato-porcentaje">
+                <span class="dato-valor">
+                  {{ estadisticas.porcentajeEntregado === null ? '—' : (estadisticas.porcentajeEntregado + '%') }}
+                </span>
+                <span class="dato-etiqueta">Entrega de unidades con responsable</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      }
     </div>
   </div>
 
@@ -61,7 +119,10 @@
               Filtros de Búsqueda
             </h5>
             <button
-              class="btn btn-sm btn-outline-primary"
+              type="button"
+              class="btn btn-sm btn-primary"
+              [attr.aria-expanded]="mostrarFiltros"
+              aria-controls="filtros-lista-informes"
               (click)="toggleFiltros()"
               title="{{ mostrarFiltros ? 'Ocultar filtros' : 'Mostrar filtros' }}"
             >
@@ -71,13 +132,19 @@
           </div>
 
           @if (mostrarFiltros) {
-            <div class="row">
+            <div class="row" id="filtros-lista-informes">
+              <div class="col-12 mb-3">
+                <div class="form-check">
+                  <input id="todos-periodos" type="checkbox" class="form-check-input" [(ngModel)]="todosPeriodos" (change)="cambiarConsultaPeriodo()" />
+                  <label for="todos-periodos" class="form-check-label">Todos los periodos</label>
+                </div>
+              </div>
               <!-- Selección de Trimestre -->
               <div class="col-md-3 mb-3">
                 <label for="trimestre" class="form-label">Trimestre</label>
-                <select id="trimestre" class="form-control" [(ngModel)]="trimestre" (change)="cargarInformes()">
+                <select id="trimestre" class="form-select" [(ngModel)]="trimestre" (change)="cargarInformes()" [disabled]="todosPeriodos">
                   @for (t of trimestres; track t.value) {
-                    <option [value]="t.value">
+                    <option [ngValue]="t.value">
                       {{ t.label }}
                     </option>
                   }
@@ -87,13 +154,21 @@
               <!-- Selección de Año -->
               <div class="col-md-3 mb-3">
                 <label for="anio" class="form-label">Año</label>
-                <select id="anio" class="form-control" [(ngModel)]="anio" (change)="cargarInformes()">
+                <select id="anio" class="form-select" [(ngModel)]="anio" (change)="cargarInformes()" [disabled]="todosPeriodos">
                   @for (a of anios; track a) {
-                    <option [value]="a">{{ a }}</option>
+                    <option [ngValue]="a">{{ a }}</option>
                   }
                 </select>
               </div>
 
+              @if (esObreroPais) {
+              <div class="col-md-3 mb-3">
+                <label class="form-label">País asignado</label>
+                <div class="form-control bg-light">
+                  {{ paisesDisponibles[0]?.pais ?? 'País asignado' }}
+                </div>
+              </div>
+              } @else {
               <!-- Selección de País -->
               <div class="col-md-3 mb-3">
                 <label for="pais" class="form-label">País</label>
@@ -104,27 +179,15 @@
                   (change)="onPaisChange()"
                   [disabled]="paisesDisponibles.length === 0"
                 >
-                  <option value="0" disabled>Seleccione un país</option>
+                  <option [ngValue]="0" disabled>Seleccione un país</option>
                   @for (p of paisesDisponibles; track p.id) {
-                    <option [value]="p.id">
+                    <option [ngValue]="p.id">
                       {{ p.pais }}
                     </option>
                   }
                 </select>
               </div>
-
-              <!-- Búsqueda por nombre -->
-              <div class="col-md-3 mb-3">
-                <label for="busqueda" class="form-label">Buscar por Nombre del Obrero</label>
-                <input
-                  type="text"
-                  id="busqueda"
-                  class="form-control"
-                  placeholder="Nombre del obrero..."
-                  [(ngModel)]="busqueda"
-                  (input)="aplicarFiltros()"
-                />
-              </div>
+              }
 
               <!-- Búsqueda por congregación -->
               <div class="col-md-6 mb-3">
@@ -136,9 +199,9 @@
                   (change)="onCongregacionChange()"
                   [disabled]="congregaciones.length === 0"
                 >
-                  <option value="0">Todas las congregaciones</option>
+                  <option [ngValue]="0">Todas las congregaciones</option>
                   @for (c of congregaciones; track c.id) {
-                    <option [value]="c.id">
+                    <option [ngValue]="c.id">
                       {{ c.nombre }}
                     </option>
                   }
@@ -155,9 +218,9 @@
                   (change)="aplicarFiltros()"
                   [disabled]="campos.length === 0"
                 >
-                  <option value="0">Todos los campos</option>
+                  <option [ngValue]="0">Todos los campos</option>
                   @for (ca of campos; track ca.id) {
-                    <option [value]="ca.id">
+                    <option [ngValue]="ca.id">
                       {{ ca.nombre }}
                     </option>
                   }
@@ -174,11 +237,14 @@
           }
 
           <!-- Información de resultados -->
-          @if (!cargando && informes.length > 0) {
-            <div class="alert alert-info mb-0">
+          @if (!cargando && !errorCarga && listaActiva === 'recibidos' && informes.length > 0) {
+            <div class="resultados-informes mb-0">
               <i class="fa fa-info-circle"></i>
               Mostrando <strong>{{ informesFiltrados.length }}</strong> de
               <strong>{{ informes.length }}</strong> informes
+              @if (informesFiltrados.length > 0) {
+                <span>· Página {{ paginaInformes }} de {{ totalPaginasInformes }}</span>
+              }
             </div>
           }
         </div>
@@ -186,22 +252,95 @@
     </div>
   </div>
 
-  <!-- Tabla de informes -->
   <div class="row">
     <div class="col-12">
-      <div class="card">
+      <div class="card card-lista-informes">
         <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="card-title mb-0">
-              <i class="fa fa-list mr-2"></i>
-              Lista de Informes
-            </h5>
-            <div>
-              <button class="btn btn-info btn-sm mr-2 text-white" (click)="recargar()" [disabled]="cargando">
-                <i class="fa fa-refresh"></i> Recargar
-              </button>
-            </div>
+          <div class="cabecera-lista-informes d-flex justify-content-between align-items-center mb-3">
+            <h2 class="card-title mb-0">
+              <i class="fa fa-list mr-2" aria-hidden="true"></i>
+              {{ listaActiva === 'recibidos' ? 'Informes recibidos' : 'Unidades pendientes' }}
+            </h2>
+            <button type="button" class="btn btn-primary btn-sm" (click)="recargar()" [disabled]="cargando">
+              <i class="fa fa-refresh" aria-hidden="true"></i> Recargar
+            </button>
           </div>
+  <div class="nav nav-pills listas-informes mb-3" aria-label="Listas de supervisión">
+    <button type="button" class="nav-link" [class.active]="listaActiva === 'recibidos'" [attr.aria-pressed]="listaActiva === 'recibidos'" (click)="listaActiva = 'recibidos'">
+      Informes recibidos <span class="ms-1">({{ informesFiltrados.length }})</span>
+    </button>
+    <button type="button" class="nav-link" [class.active]="listaActiva === 'pendientes'" [attr.aria-pressed]="listaActiva === 'pendientes'" (click)="listaActiva = 'pendientes'">
+      Pendientes <span class="ms-1">({{ pendientesFiltrados.length }})</span>
+    </button>
+  </div>
+
+  @if (!cargando && !errorCarga && listaActiva === 'pendientes') {
+    <div class="encabezado-pendientes">
+      <span class="periodo-pendientes"><i class="fa fa-calendar" aria-hidden="true"></i> T{{ trimestre }} · {{ anio }}</span>
+      <p class="mb-0">Unidades con responsable que aún no tienen informe.</p>
+    </div>
+    @if (pendientesFiltrados.length === 0) {
+      <div class="alert alert-info">No hay pendientes para los filtros seleccionados.</div>
+    } @else {
+      <div class="table-responsive">
+        <table class="table table-hover tabla-informes tabla-pendientes">
+          <thead>
+            <tr><th scope="col">Congregación</th><th scope="col">Responsable</th><th scope="col">Contactar</th></tr>
+          </thead>
+          <tbody>
+            @for (unidad of pendientesFiltrados; track unidad.tipo + unidad.id) {
+              @for (responsable of unidad.responsables; track responsable.id; let primero = $first) {
+                <tr>
+                  @if (primero) {
+                    <td [attr.rowspan]="unidad.responsables.length">
+                      <div class="datos-responsable">
+                        <span>{{ obtenerCongregacionPorId(unidad.congregacion_id)?.nombre ?? unidad.nombre }}</span>
+                        @if (unidad.tipo === 'CAMPO') {
+                          <span class="celular-responsable">Campo: {{ unidad.nombre }}</span>
+                        }
+                      </div>
+                    </td>
+                  }
+                  <td>
+                      <div class="datos-responsable">
+                        <span>{{ obtenerNombreCompleto(responsable) }}</span>
+                        @if (responsable.numeroCelular) {
+                          <span class="celular-responsable">{{ responsable.numeroCelular }}</span>
+                        } @else {
+                          <span class="celular-responsable">Sin celular registrado</span>
+                        }
+                      </div>
+                  </td>
+                  <td class="contacto-pendiente">
+                      @if (responsable.numeroCelular) {
+                        <a class="btn btn-success btn-sm" href="https://api.whatsapp.com/send?phone={{ responsable.numeroCelular | whatsapp }}" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Contactar por WhatsApp a ' + obtenerNombreCompleto(responsable)">
+                          <i class="fab fa-whatsapp" aria-hidden="true"></i> Contactar
+                        </a>
+                      } @else {
+                        <span class="text-muted small">Sin contacto</span>
+                      }
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td>
+                    {{ obtenerCongregacionPorId(unidad.congregacion_id)?.nombre ?? unidad.nombre }}
+                    @if (unidad.tipo === 'CAMPO') {
+                      <div class="celular-responsable">Campo: {{ unidad.nombre }}</div>
+                    }
+                  </td>
+                  <td>
+                    <span class="text-muted">Responsable no disponible</span>
+                  </td>
+                  <td><span class="text-muted small">Sin contacto</span></td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
 
           <!-- Loading -->
           @if (cargando) {
@@ -222,7 +361,7 @@
           }
 
           <!-- Sin resultados -->
-          @if (!cargando && !errorCarga && informesFiltrados.length === 0) {
+          @if (!cargando && !errorCarga && listaActiva === 'recibidos' && informesFiltrados.length === 0) {
             <div class="alert alert-warning">
               <i class="fa fa-search"></i>
               No se encontraron informes con los filtros aplicados.
@@ -230,31 +369,55 @@
           }
 
           <!-- Tabla -->
-          @if (!cargando && !errorCarga && informesFiltrados.length > 0) {
+          @if (!cargando && !errorCarga && listaActiva === 'recibidos' && informesFiltrados.length > 0) {
             <div class="table-responsive">
               <table class="table table-hover tabla-informes">
                 <thead class="thead-light">
                   <tr>
-                    <th>#</th>
-                    <th>Obrero</th>
+                    <th>
+                      <button type="button" class="btn btn-link p-0" (click)="ordenarInformesPor('obrero')">
+                        Obrero
+                        @if (ordenInformes === 'obrero') {
+                          <i class="fa" [ngClass]="ordenInformesAscendente ? 'fa-sort-up' : 'fa-sort-down'"></i>
+                        }
+                      </button>
+                    </th>
                     <th>Celular</th>
-                    <th>Congregación</th>
-                    <th>Campo</th>
-                    <th class="text-center">Estado</th>
-                    <th class="text-center">Act. Eclesiásticas</th>
-                    <th class="text-center">Act. Económicas</th>
-                    <th class="text-center">Visitas</th>
-                    <th class="text-center">Logros</th>
-                    <th class="text-center">Metas</th>
+                    <th>
+                      <button type="button" class="btn btn-link p-0" (click)="ordenarInformesPor('congregacion')">
+                        Congregación
+                        @if (ordenInformes === 'congregacion') {
+                          <i class="fa" [ngClass]="ordenInformesAscendente ? 'fa-sort-up' : 'fa-sort-down'"></i>
+                        }
+                      </button>
+                    </th>
+                    <th>
+                      <button type="button" class="btn btn-link p-0" (click)="ordenarInformesPor('campo')">
+                        Campo
+                        @if (ordenInformes === 'campo') {
+                          <i class="fa" [ngClass]="ordenInformesAscendente ? 'fa-sort-up' : 'fa-sort-down'"></i>
+                        }
+                      </button>
+                    </th>
+                    <th class="text-center">
+                      <button type="button" class="btn btn-link p-0" (click)="ordenarInformesPor('estado')">
+                        Estado
+                        @if (ordenInformes === 'estado') {
+                          <i class="fa" [ngClass]="ordenInformesAscendente ? 'fa-sort-up' : 'fa-sort-down'"></i>
+                        }
+                      </button>
+                    </th>
                     <th class="text-center">Acciones</th>
+                    @if (todosPeriodos) {
+                      <th>Periodo</th>
+                    }
                   </tr>
                 </thead>
                 <tbody>
-                  @for (informe of informesFiltrados; track informe.id; let i = $index) {
+                  @for (informe of informesPaginados; track informe.id; let i = $index) {
                     <tr>
-                      <td>{{ i + 1 }}</td>
                       <td>
-                        <strong>{{ obtenerNombreCompleto(informe.usuario) }}</strong>
+                        <span>{{ obtenerNombreCompleto(informe.usuario) }}</span>
                       </td>
                       <td>
                         @if (informe.usuario.numeroCelular) {
@@ -300,127 +463,60 @@
                         </span>
                       </td>
                       <td class="text-center">
-                        <span class="badge badge-pill badge-primary">{{ getTotalActividades(informe) }}</span>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge badge-pill badge-danger">{{ getTotalActividadesEconomicas(informe) }}</span>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge badge-pill badge-info">{{ getTotalVisitas(informe) }}</span>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge badge-pill badge-success">{{ getTotalLogros(informe) }}</span>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge badge-pill badge-warning">{{ getTotalMetas(informe) }}</span>
-                      </td>
-                      <td class="text-center">
                         <div class="btn-group btn-group-sm" role="group">
                           <button
-                            class="btn btn-info"
-                            (click)="toggleInfoObrero(informe.id)"
-                            title="Ver información del obrero"
-                          >
-                            <i
-                              class="fa"
-                              [ngClass]="informeInfoExpandido === informe.id ? 'fa-minus-circle' : 'fa-info-circle'"
-                            ></i>
-                          </button>
-                          <button
+                            type="button"
                             class="btn btn-primary"
                             (click)="verDetalleInforme(informe.id)"
                             title="Ver detalle del informe"
                           >
-                            <i class="fa fa-eye"></i>
+                            <i class="fa fa-eye" aria-hidden="true"></i> Ver informe
                           </button>
                         </div>
                       </td>
+                      @if (todosPeriodos) {
+                        <td class="text-nowrap">{{ obtenerPeriodoListado(informe) }}</td>
+                      }
                     </tr>
-                    <!-- Fila expandible con información del obrero -->
-                    @if (informeInfoExpandido === informe.id) {
-                      <tr class="info-expandida">
-                        <td colspan="12">
-                          <div class="info-obrero-card">
-                            <div class="row">
-                              <div class="col-md-6">
-                                <h6 class="info-title"><i class="fa fa-user"></i> Información del Obrero</h6>
-                                <div class="info-item">
-                                  <strong>Nombre Completo:</strong>
-                                  <span>{{ obtenerNombreCompleto(informe.usuario) }}</span>
-                                </div>
-                                <div class="info-item">
-                                  <strong>Email:</strong>
-                                  <span>{{ informe.usuario.email }}</span>
-                                </div>
-                                <div class="info-item">
-                                  <strong>Teléfono:</strong>
-                                  <span>{{ informe.usuario.numeroCelular || 'N/A' }}</span>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <h6 class="info-title"><i class="fa fa-map-marker"></i> Ubicación</h6>
-                                <div class="info-item">
-                                  <strong>Congregación:</strong>
-                                  <span>{{ obtenerCongregacion(informe.usuario) }}</span>
-                                </div>
-                                <div class="info-item">
-                                  <strong>Campo:</strong>
-                                  <span>{{ obtenerCampo(informe.usuario) }}</span>
-                                </div>
-                                <div class="info-item">
-                                  <strong>Estado del Informe:</strong>
-                                  <span
-                                    class="badge"
-                                    [ngClass]="{
-                                      'badge-success': informe.estado === 'Abierto',
-                                      'badge-secondary': informe.estado === 'Cerrado',
-                                    }"
-                                  >
-                                    {{ informe.estado }}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row mt-3">
-                              <div class="col-12">
-                                <h6 class="info-title"><i class="fa fa-bar-chart"></i> Resumen de Actividades</h6>
-                                <div class="actividades-resumen">
-                                  <div class="actividad-badge">
-                                    <span class="badge badge-primary badge-lg">
-                                      <i class="fa fa-church"></i> {{ getTotalActividades(informe) }} Eclesiásticas
-                                    </span>
-                                  </div>
-                                  <div class="actividad-badge">
-                                    <span class="badge badge-danger badge-lg">
-                                      <i class="fa fa-dollar"></i>
-                                      {{ getTotalActividadesEconomicas(informe) }} Económicas
-                                    </span>
-                                  </div>
-                                  <div class="actividad-badge">
-                                    <span class="badge badge-info badge-lg">
-                                      <i class="fa fa-users"></i> {{ getTotalVisitas(informe) }} Visitas
-                                    </span>
-                                  </div>
-                                  <div class="actividad-badge">
-                                    <span class="badge badge-success badge-lg">
-                                      <i class="fa fa-trophy"></i> {{ getTotalLogros(informe) }} Logros
-                                    </span>
-                                  </div>
-                                  <div class="actividad-badge">
-                                    <span class="badge badge-warning badge-lg">
-                                      <i class="fa fa-target"></i> {{ getTotalMetas(informe) }} Metas
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    }
                   }
                 </tbody>
               </table>
+            </div>
+            <div class="paginacion-informes d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+              <label class="d-flex align-items-center gap-2 mb-0">
+                <span>Informes por página</span>
+                <select
+                  class="form-control form-control-sm"
+                  [ngModel]="informesPorPagina"
+                  (ngModelChange)="cambiarTamanoPaginaInformes($event)"
+                  aria-label="Informes por página"
+                >
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="25">25</option>
+                  <option [ngValue]="50">50</option>
+                </select>
+              </label>
+              <div class="btn-group btn-group-sm" role="group" aria-label="Paginación de informes">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  [disabled]="paginaInformes <= 1"
+                  (click)="cambiarPaginaInformes(paginaInformes - 1)"
+                >
+                  Anterior
+                </button>
+                <span class="btn btn-primary disabled opacity-100" aria-current="page">
+                  {{ paginaInformes }} / {{ totalPaginasInformes }}
+                </span>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  [disabled]="paginaInformes >= totalPaginasInformes"
+                  (click)="cambiarPaginaInformes(paginaInformes + 1)"
+                >
+                  Siguiente
+                </button>
+              </div>
             </div>
           }
         </div>
@@ -428,3 +524,4 @@
     </div>
   </div>
 </div>
+}

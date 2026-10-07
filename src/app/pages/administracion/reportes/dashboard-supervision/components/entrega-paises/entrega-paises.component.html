@@ -1,0 +1,52 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <ul class="leyenda list-unstyled d-flex flex-wrap gap-3 mb-0 small">
+    @for (s of segmentos; track s.clave) {
+      <li><span class="muestra {{ s.clase }}" aria-hidden="true"></span>{{ s.etiqueta }}</li>
+    }
+  </ul>
+  <div class="d-flex align-items-center gap-2">
+    <label class="form-label small fw-semibold mb-0" for="ordenEntregaPais">Ordenar por</label>
+    <select id="ordenEntregaPais" class="form-select form-select-sm w-auto" [ngModel]="orden()" (ngModelChange)="orden.set($event)">
+      @for (o of ordenes; track o.valor) {
+        <option [value]="o.valor">{{ o.etiqueta }}</option>
+      }
+    </select>
+  </div>
+</div>
+
+<ng-template #barra let-p>
+  <div class="d-flex justify-content-between align-items-baseline gap-2 mb-1">
+    <span class="pais">{{ p.pais }}</span>
+    <span class="resumen">
+      <strong>{{ p.porcentajeConInforme === null ? '—' : (p.porcentajeConInforme | number: '1.0-1') + ' %' }}</strong>
+      <span class="text-muted"> · {{ conInforme(p) }} de {{ esperadas(p) }} esperadas</span>
+    </span>
+  </div>
+  <div class="progress-stacked barra" role="img" [attr.aria-label]="descripcion(p)">
+    @for (s of segmentos; track s.clave) {
+      @if (p[s.clave]) {
+        <div class="progress" [style.width.%]="ancho(p, s)" [attr.title]="s.etiqueta + ': ' + p[s.clave]">
+          <div class="progress-bar {{ s.clase }}">{{ p[s.clave] }}</div>
+        </div>
+      }
+    }
+  </div>
+</ng-template>
+
+@if (filas().length) {
+  <ul class="list-unstyled mb-0 lista">
+    @for (p of filas(); track p.pais_id) {
+      <li class="fila">
+        <ng-container *ngTemplateOutlet="barra; context: { $implicit: p }" />
+      </li>
+    }
+  </ul>
+
+  @if (filas().length > 1) {
+    <div class="total mt-3 pt-3">
+      <ng-container *ngTemplateOutlet="barra; context: { $implicit: totales() }" />
+    </div>
+  }
+} @else {
+  <p class="text-muted text-center my-3">No hay Congregaciones Ciudad en el alcance seleccionado.</p>
+}

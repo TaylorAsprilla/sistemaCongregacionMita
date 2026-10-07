@@ -42,8 +42,34 @@ export interface ResumenInformeResponseInterface {
 export interface InformeTrimestrePaisResponse {
   ok: boolean;
   informes: InformeCompletoPais[];
+  pendientes: UnidadInformePendiente[];
   msg: string;
   estadisticas: EstadisticasPais;
+}
+
+export interface UnidadInformePendiente {
+  id: number;
+  nombre: string;
+  tipo: 'CONGREGACION' | 'CAMPO';
+  congregacion_id: number;
+  campo_id: number | null;
+  responsables: Pick<UsuarioInforme, 'id' | 'primerNombre' | 'segundoNombre' | 'primerApellido' | 'segundoApellido' | 'numeroCelular'>[];
+}
+
+export interface EstadoListaInformesPais {
+  usuarioId: number;
+  paisId: number;
+  trimestre: number;
+  anio: number;
+  todosPeriodos: boolean;
+  busqueda: string;
+  congregacionSeleccionada: number;
+  campoSeleccionado: number;
+  paginaInformes: number;
+  informesPorPagina: number;
+  ordenInformes: 'obrero' | 'congregacion' | 'campo' | 'estado';
+  ordenInformesAscendente: boolean;
+  mostrarFiltros: boolean;
 }
 
 export interface InformeCompletoPais {
@@ -72,9 +98,12 @@ export interface UsuarioInforme {
   email: string;
   numeroCelular?: string;
   congregacion?: {
+    id?: number;
     nombre: string;
   };
   campo?: {
+    id?: number;
+    congregacion_id?: number;
     nombre: string;
   };
 }
@@ -177,4 +206,8 @@ export interface EstadisticasPais {
   totalCampos: number;
   totalObreros: number;
   totalInformes: number;
+  unidadesConInforme: number;
+  unidadesPendientes: number;
+  unidadesSinObrero: number;
+  porcentajeEntregado: number | null;
 }
