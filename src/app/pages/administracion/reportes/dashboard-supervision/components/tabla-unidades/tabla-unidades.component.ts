@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, input, output, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +24,7 @@ import { IndicadorVariacionComponent } from '../indicador-variacion/indicador-va
 @Component({
   selector: 'app-tabla-unidades',
   standalone: true,
-  imports: [FormsModule, IndicadorVariacionComponent],
+  imports: [DecimalPipe, FormsModule, IndicadorVariacionComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './tabla-unidades.component.html',
   styleUrls: ['./tabla-unidades.component.scss'],
@@ -35,6 +36,8 @@ export class TablaUnidadesComponent {
   filtros = input.required<FiltrosDashboard>();
   /** Filtro de variación solicitado desde el resumen (clic en un conteo). */
   solicitudVariacion = input<{ servicio: ClaveServicio; variacion: FiltroVariacion } | null>(null);
+  solicitudEstado = input<{ estado: EstadoEntrega; consecutivo: number } | null>(null);
+  mostrarComparacion = input(true);
   verUnidad = output<UnidadRef>();
 
   readonly etiquetasEstado = ETIQUETAS_ESTADO_ENTREGA;
@@ -82,6 +85,22 @@ export class TablaUnidadesComponent {
         this.servicioVariacion.set(solicitud.servicio);
         this.variacion.set(solicitud.variacion);
       });
+    });
+
+    effect(() => {
+      const solicitud = this.solicitudEstado();
+      if (!solicitud) return;
+      untracked(() => {
+        this.pagina.set(1);
+        this.estado.set(solicitud.estado);
+        this.servicioVariacion.set('');
+        this.variacion.set('');
+      });
+    });
+
+    effect(() => {
+      if (this.mostrarComparacion()) return;
+      untracked(() => this.variacion.set(''));
     });
 
     this.busquedaEntrada
@@ -156,7 +175,7 @@ export class TablaUnidadesComponent {
       case 'ENTREGADO':
         return 'bg-success';
       case 'EN_ELABORACION':
-        return 'bg-info text-dark';
+        return 'bg-info text-white';
       case 'PENDIENTE':
         return 'bg-warning text-dark';
       default:

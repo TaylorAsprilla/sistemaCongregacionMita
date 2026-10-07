@@ -120,6 +120,7 @@ export interface Cobertura {
   enElaboracion: number;
   pendientes: number;
   sinObrero: number;
+  /** Porcentaje calculado entre las Congregaciones Ciudad con responsable asignado. */
   porcentajeConInforme: number | null;
   informesPeriodo: number;
   unidadesComparadas: number;
@@ -231,7 +232,14 @@ export interface DetalleUnidad {
   contexto: ContextoDashboard;
   unidad: UnidadRef;
   obreros: { id: number; nombre: string; email: string | null }[];
-  estadoEntrega: EstadoEntrega;
+  estadoEntrega: EstadoEntrega | null;
+  entregaAgregada?: {
+    ciudades: number;
+    entregados: number;
+    enElaboracion: number;
+    pendientes: number;
+    sinObrero: number;
+  };
   informes: { id: number; periodo: string; estado: string; obrero: string; creado: string | null }[];
   indicadores: Indicador[];
   asistenciaPorServicio: AsistenciaServicio[];

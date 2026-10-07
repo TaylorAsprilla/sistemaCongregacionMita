@@ -75,7 +75,8 @@ export class EntregaPaisesComponent {
       t.pendientes += p.pendientes;
       t.sinObrero += p.sinObrero;
     }
-    t.porcentajeConInforme = t.total > 0 ? Math.round((this.conInforme(t) / t.total) * 1000) / 10 : null;
+    t.porcentajeConInforme =
+      this.esperadas(t) > 0 ? Math.round((this.conInforme(t) / this.esperadas(t)) * 1000) / 10 : null;
     return t;
   });
 
@@ -87,9 +88,13 @@ export class EntregaPaisesComponent {
     return p.entregados + p.enElaboracion;
   }
 
+  esperadas(p: EntregaPais): number {
+    return p.total - p.sinObrero;
+  }
+
   descripcion(p: EntregaPais): string {
     return (
-      `${p.pais}: ${this.conInforme(p)} de ${p.total} congregaciones con informe. ` +
+      `${p.pais}: ${this.conInforme(p)} de ${this.esperadas(p)} Congregaciones Ciudad con responsable tienen informe. ` +
       this.segmentos.map((s) => `${s.etiqueta}: ${p[s.clave]}`).join(', ')
     );
   }

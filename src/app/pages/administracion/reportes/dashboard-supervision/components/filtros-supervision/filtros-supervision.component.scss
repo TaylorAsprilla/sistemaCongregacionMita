@@ -1,15 +1,74 @@
 .filtros {
-  border: 0;
-  border-radius: 0.75rem;
+  display: block;
 
   .form-label {
     font-size: 0.8rem;
     font-weight: 600;
-    color: #4b5563;
-    margin-bottom: 0.25rem;
+    color: #475569;
+    margin-bottom: 0.35rem;
   }
 
   .acciones .btn {
     white-space: nowrap;
+  }
+}
+
+.grupo-filtros {
+  padding: 0.25rem 0 1.1rem;
+}
+
+.grupo-alcance {
+  padding-top: 1rem;
+  border-top: 1px solid #e5eaf0;
+}
+
+.encabezado-grupo {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin-bottom: 0.85rem;
+
+  h3 {
+    margin: 0;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0.15rem 0 0;
+    color: #64748b;
+    font-size: 0.78rem;
+  }
+}
+
+.numero-grupo {
+  display: grid;
+  flex: 0 0 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  border: 1px solid #d8e0e9;
+  border-radius: 50%;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+@media (max-width: 991.98px) {
+  .acciones {
+    justify-content: flex-start;
+
+    .btn-primary {
+      flex: 0 0 auto !important;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .acciones {
+    .btn-primary {
+      flex: 1 1 auto !important;
+    }
   }
 }

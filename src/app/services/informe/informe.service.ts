@@ -7,6 +7,7 @@ import {
   VerificarInformeAbiertoResponseInterface,
   InformeTrimestrePaisResponse,
   ResumenInformeResponseInterface,
+  EstadoListaInformesPais,
 } from 'src/app/core/interfaces/informe.interface';
 
 const base_url = environment.base_url;
@@ -19,6 +20,7 @@ export class InformeService {
 
   // Informe activo del usuario
   public informeActivo: any = null;
+  estadoListaPais: EstadoListaInformesPais | null = null;
 
   get token(): string {
     return localStorage.getItem('token') || '';
@@ -127,9 +129,9 @@ export class InformeService {
    * @param anio Año del informe
    * @param paisId ID del país
    */
-  getInformesTrimestrePais(trimestre: number, anio: number, paisId: number) {
+  getInformesTrimestrePais(trimestre: number, anio: number, paisId: number, todosPeriodos = false) {
     return this.httpClient.get<InformeTrimestrePaisResponse>(
-      `${base_url}/informe/trimestre-pais?trimestre=${trimestre}&año=${anio}&pais_id=${paisId}`,
+      `${base_url}/informe/trimestre-pais?trimestre=${trimestre}&año=${anio}&pais_id=${paisId}${todosPeriodos ? '&todos_periodos=true' : ''}`,
       this.headers,
     );
   }

@@ -19,7 +19,7 @@
     <span class="pais">{{ p.pais }}</span>
     <span class="resumen">
       <strong>{{ p.porcentajeConInforme === null ? '—' : (p.porcentajeConInforme | number: '1.0-1') + ' %' }}</strong>
-      <span class="text-muted"> · {{ conInforme(p) }} de {{ p.total }} con informe</span>
+      <span class="text-muted"> · {{ conInforme(p) }} de {{ esperadas(p) }} esperadas</span>
     </span>
   </div>
   <div class="progress-stacked barra" role="img" [attr.aria-label]="descripcion(p)">

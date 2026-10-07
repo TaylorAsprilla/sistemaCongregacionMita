@@ -31,7 +31,7 @@
       <section class="mb-4">
         <h3 class="seccion-titulo"><i class="fas fa-id-card" aria-hidden="true"></i> Información general</h3>
         <dl class="row small mb-0">
-          <dt class="col-5 text-muted fw-normal">Obrero(s)</dt>
+          <dt class="col-5 text-muted fw-normal">{{ d.entregaAgregada ? 'Responsables de las ciudades' : 'Obrero(s)' }}</dt>
           <dd class="col-7">
             @for (o of d.obreros; track o.id) {
               <div>{{ o.nombre }} @if (o.email) { <small class="text-muted d-block">{{ o.email }}</small> }</div>
@@ -39,9 +39,19 @@
               <span class="fst-italic text-muted">Sin obrero asignado</span>
             }
           </dd>
-          <dt class="col-5 text-muted fw-normal">Estado del informe</dt>
-          <dd class="col-7">{{ etiquetasEstado[d.estadoEntrega] }}</dd>
-          <dt class="col-5 text-muted fw-normal">Informes del periodo</dt>
+          @if (d.entregaAgregada; as entrega) {
+            <dt class="col-5 text-muted fw-normal">Ciudades incluidas</dt>
+            <dd class="col-7">{{ entrega.ciudades }}</dd>
+            <dt class="col-5 text-muted fw-normal">Entrega del periodo</dt>
+            <dd class="col-7">
+              {{ entrega.entregados }} entregados · {{ entrega.enElaboracion }} en elaboración ·
+              {{ entrega.pendientes }} pendientes · {{ entrega.sinObrero }} sin obrero
+            </dd>
+          } @else {
+            <dt class="col-5 text-muted fw-normal">Estado del informe</dt>
+            <dd class="col-7">{{ etiquetasEstado[d.estadoEntrega!] }}</dd>
+          }
+          <dt class="col-5 text-muted fw-normal">Informes incluidos</dt>
           <dd class="col-7 mb-0">
             @for (i of d.informes; track i.id) {
               <div>#{{ i.id }} · {{ i.estado }} · {{ i.obrero }}</div>

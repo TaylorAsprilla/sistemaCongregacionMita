@@ -569,6 +569,7 @@ export const childRoutes: Routes = [
     },
     data: {
       titulo: 'Ver Informes del País',
+      supervisionPais: true,
       role: [ROLES.ADMINISTRADOR, ROLES.SUPERVISOR, ROLES.SUPERVISOR_LOCAL, ROLES.OBRERO_PAIS],
     },
   },

@@ -2,11 +2,15 @@
   <!-- Encabezado -->
   <header class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
     <div>
-      <h1 class="h4 mb-1 titulo">Dashboard de Supervisión</h1>
       @if (resumen(); as r) {
         <p class="subtitulo-periodo mb-0 small">
-          <strong>{{ r.contexto.periodo.etiqueta }}</strong> · Comparado con el
-          {{ r.contexto.descripcionComparacion }} · {{ alcance() }}
+          <strong>{{ r.contexto.periodo.etiqueta }}</strong>
+          @if (hayComparacion()) {
+            · Comparado con el {{ r.contexto.descripcionComparacion }}
+          } @else {
+            · Inicio de informes, sin periodos anteriores para comparar
+          }
+          · {{ alcance() }}
         </p>
       }
     </div>
@@ -50,14 +54,6 @@
       <p class="mt-3">Cargando dashboard…</p>
     </div>
   } @else if (disponibles() && filtros()) {
-    <app-filtros-supervision
-      class="d-block mb-3"
-      [disponibles]="disponibles()!"
-      [filtros]="filtros()!"
-      [cargando]="cargando()"
-      (aplicar)="aplicarFiltros($event)"
-    />
-
     @if (error()) {
       <div class="alert alert-warning d-flex align-items-center gap-2" role="alert">
         <i class="fas fa-triangle-exclamation" aria-hidden="true"></i> {{ error() }}
@@ -72,27 +68,18 @@
       }
 
       @if (resumen(); as r) {
-        <!-- Cobertura -->
+        <!-- Resumen ejecutivo -->
         <section class="mb-3" aria-labelledby="tituloCobertura">
           <h2 id="tituloCobertura" class="visually-hidden">Cobertura de informes</h2>
-          <div class="row g-3">
-            @for (t of coberturaTarjetas(); track t.etiqueta) {
-              <div class="col-6 col-md-4 col-xl">
-                <div class="tarjeta-cobertura {{ t.clase }}">
-                  <i class="fas {{ t.icono }} icono" aria-hidden="true"></i>
-                  <div>
-                    <div class="valor">{{ t.valor | number }}</div>
-                    <div class="etiqueta">{{ t.etiqueta }}</div>
-                    <small class="ayuda">{{ t.ayuda }}</small>
-                  </div>
-                </div>
-              </div>
-            }
-            <div class="col-6 col-md-4 col-xl">
-              <div class="tarjeta-cobertura progreso">
+          <div class="row g-2">
+            <div class="col-12 col-xl-4">
+              <div class="tarjeta-cobertura progreso h-100">
                 <div class="w-100">
-                  <div class="d-flex justify-content-between align-items-baseline">
-                    <span class="etiqueta">Con informe</span>
+                  <div class="d-flex justify-content-between align-items-start gap-2">
+                    <div>
+                      <div class="etiqueta">Avance de entrega</div>
+                      <small class="ayuda">{{ r.contexto.periodo.etiqueta }} · Congregaciones Ciudad con responsable</small>
+                    </div>
                     <span class="valor">
                       {{
                         r.cobertura.porcentajeConInforme === null
@@ -111,22 +98,84 @@
                   >
                     <div class="progress-bar" [style.width.%]="r.cobertura.porcentajeConInforme ?? 0"></div>
                   </div>
-                  <small class="ayuda d-block mt-1">{{ r.cobertura.informesPeriodo }} informe(s) en el periodo</small>
+                  <small class="ayuda d-block mt-2">
+                    {{ r.cobertura.entregados + r.cobertura.enElaboracion }} de {{ r.cobertura.conObrero }} con informe
+                    · {{ r.cobertura.informesPeriodo }} informe(s)
+                  </small>
                 </div>
               </div>
             </div>
+            <div class="col-12 col-xl-8">
+              <div class="row g-2 h-100">
+                @for (t of coberturaTarjetas(); track t.etiqueta) {
+                  <div class="col-6 col-md-3">
+                    <div class="tarjeta-cobertura {{ t.clase }} estado-rapido">
+                      <i class="fas {{ t.icono }} icono" aria-hidden="true"></i>
+                      <div>
+                        <div class="valor">{{ t.valor | number }}</div>
+                        <div class="etiqueta">{{ t.etiqueta }}</div>
+                        <small class="ayuda">{{ t.ayuda }}</small>
+                        @if (t.etiqueta === 'Pendientes' && t.valor > 0) {
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-link p-0 mt-1 accion-pendientes"
+                            (click)="verPendientes()"
+                          >
+                            Ver pendientes <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+                </div>
+              </div>
           </div>
         </section>
 
-        @if (r.entregaPorPais) {
+        <details class="filtros-rapidos mb-3">
+          <summary>
+            <span class="filtros-resumen-icono" aria-hidden="true"><i class="fas fa-sliders"></i></span>
+            <span class="filtros-resumen-texto">
+              <strong>Filtros</strong>
+              <span class="filtros-seleccionados">
+                <span class="filtro-activo">
+                  <i class="fas fa-calendar-days" aria-hidden="true"></i>
+                  {{ r.contexto.periodo.etiqueta }}
+                </span>
+                <span class="filtro-activo">
+                  <i class="fas fa-location-dot" aria-hidden="true"></i>
+                  {{ alcance() }}
+                </span>
+              </span>
+            </span>
+            <span class="filtros-resumen-accion btn btn-primary btn-sm">
+              <span class="texto-abrir">Cambiar filtros</span>
+              <span class="texto-cerrar">Cerrar</span>
+              <i class="fas fa-chevron-down indicador-filtros" aria-hidden="true"></i>
+            </span>
+          </summary>
+          <div class="contenido-filtros">
+            <app-filtros-supervision
+              [disponibles]="disponibles()!"
+              [filtros]="filtros()!"
+              [cargando]="cargando()"
+              [paisFijo]="supervisionPais"
+              (aplicar)="aplicarFiltros($event)"
+            />
+          </div>
+        </details>
+
+        @if (r.entregaPorPais && !supervisionPais) {
           <section class="card tarjeta mb-3" aria-labelledby="tituloEntregaPais">
             <div class="card-body">
               <h2 id="tituloEntregaPais" class="seccion-titulo">
                 <i class="fas fa-earth-americas" aria-hidden="true"></i> Informe trimestral por país
               </h2>
               <p class="small text-muted mb-3">
-                Porcentaje de <strong>Congregaciones Ciudad</strong> de cada país que ya entregaron o están realizando el
-                informe de {{ r.contexto.periodo.etiqueta }}.
+                Porcentaje de <strong>Congregaciones Ciudad con responsable asignado</strong> de cada país que ya
+                entregaron o están realizando el informe de {{ r.contexto.periodo.etiqueta }}. Las unidades país y
+                campo se muestran como contexto organizativo; no se espera que entreguen informes.
               </p>
               <app-entrega-paises [paises]="r.entregaPorPais" />
             </div>
@@ -167,7 +216,8 @@
                 </li>
                 <li>
                   <strong>Tendencia de disminución:</strong> un indicador bajó en
-                  <strong>{{ rg.trimestresTendencia }} trimestres consecutivos</strong> (dentro de los últimos
+                  <strong>{{ rg.trimestresTendencia }} cambios trimestrales consecutivos</strong> (requieren datos de
+                  {{ rg.trimestresTendencia + 1 }} trimestres, dentro de los últimos
                   {{ rg.trimestresHistorico }}). Un trimestre sin informe interrumpe la secuencia.
                 </li>
                 <li>
@@ -193,12 +243,22 @@
       </section>
 
       @if (resumen(); as r) {
-        <div class="nota-neutral mb-3">
-          <i class="fas fa-circle-info" aria-hidden="true"></i>
-          Las variaciones comparan únicamente las <strong>{{ r.cobertura.unidadesComparadas }}</strong> congregación(es)
-          con informe en ambos periodos. Los indicadores describen la información registrada; su interpretación
-          corresponde al administrador.
-        </div>
+        @if (!hayComparacion()) {
+          <div class="nota-neutral mb-3">
+            <i class="fas fa-circle-info" aria-hidden="true"></i>
+            Etapa inicial de informes: se muestran los datos del periodo actual. Las comparaciones se habilitarán
+            cuando haya informes de periodos anteriores.
+          </div>
+        }
+
+        @if (hayComparacion()) {
+          <div class="nota-neutral mb-3">
+            <i class="fas fa-circle-info" aria-hidden="true"></i>
+            Las variaciones comparan únicamente las <strong>{{ r.cobertura.unidadesComparadas }}</strong>
+            congregación(es) con informe en ambos periodos. Los indicadores describen la información registrada; su
+            interpretación corresponde al administrador.
+          </div>
+        }
 
         <!-- Indicadores clave -->
         <section class="mb-3" aria-labelledby="tituloIndicadores">
@@ -220,7 +280,9 @@
                         : (i.valorPeriodo | number: (i.formato === 'DECIMAL' ? '1.0-1' : '1.0-0'))
                     }}
                   </div>
-                  <app-indicador-variacion [variacion]="i.variacion" [mostrarDetalle]="true" />
+                  @if (hayComparacion()) {
+                    <app-indicador-variacion [variacion]="i.variacion" [mostrarDetalle]="true" />
+                  }
                 </div>
               </div>
             }
@@ -229,7 +291,11 @@
 
         <!-- Asistencia por servicio + variación por servicio -->
         <div class="row g-3 mb-3">
-          <section class="col-12" [class.col-xl-5]="r.variacionPorServicio?.length" aria-labelledby="tituloServicios">
+          <section
+            class="col-12"
+            [class.col-xl-5]="r.variacionPorServicio?.length && hayComparacion()"
+            aria-labelledby="tituloServicios"
+          >
             <div class="card tarjeta h-100">
               <div class="card-body">
                 <h2 id="tituloServicios" class="seccion-titulo">
@@ -243,7 +309,9 @@
                           <th scope="col">Servicio</th>
                           <th scope="col" class="text-end">Servicios</th>
                           <th scope="col" class="text-end">Promedio</th>
-                          <th scope="col" class="text-end">Variación</th>
+                          @if (hayComparacion()) {
+                            <th scope="col" class="text-end">Variación</th>
+                          }
                         </tr>
                       </thead>
                       <tbody>
@@ -252,7 +320,9 @@
                             <td>{{ s.etiqueta }}</td>
                             <td class="text-end">{{ s.cantidad ?? '—' }}</td>
                             <td class="text-end">{{ s.promedio === null ? '—' : (s.promedio | number: '1.0-1') }}</td>
-                            <td class="text-end"><app-indicador-variacion [variacion]="s.variacionPromedio" /></td>
+                            @if (hayComparacion()) {
+                              <td class="text-end"><app-indicador-variacion [variacion]="s.variacionPromedio" /></td>
+                            }
                           </tr>
                         }
                       </tbody>
@@ -265,7 +335,7 @@
             </div>
           </section>
 
-        @if (r.variacionPorServicio?.length) {
+        @if (r.variacionPorServicio?.length && hayComparacion()) {
           <section class="col-12 col-xl-7" aria-labelledby="tituloVariacionServicio">
             <div class="card tarjeta h-100">
             <div class="card-body">
@@ -325,20 +395,22 @@
         </div>
 
         <!-- Tendencias -->
-        <div class="row g-3 mb-3">
-          <section class="col-12" aria-labelledby="tituloTendencias">
-            <div class="card tarjeta h-100">
-              <div class="card-body">
-                <h2 id="tituloTendencias" class="seccion-titulo">
-                  <i class="fas fa-chart-line" aria-hidden="true"></i> Tendencias
-                </h2>
-                @if (tendencias(); as t) {
-                  <app-grafica-tendencias [series]="t.series" [informesPorPeriodo]="t.informesPorPeriodo" />
-                }
+        @if (hayHistorial()) {
+          <div class="row g-3 mb-3">
+            <section class="col-12" aria-labelledby="tituloTendencias">
+              <div class="card tarjeta h-100">
+                <div class="card-body">
+                  <h2 id="tituloTendencias" class="seccion-titulo">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> Tendencias
+                  </h2>
+                  @if (tendencias(); as t) {
+                    <app-grafica-tendencias [series]="t.series" [informesPorPeriodo]="t.informesPorPeriodo" />
+                  }
+                </div>
               </div>
-            </div>
-          </section>
-        </div>
+            </section>
+          </div>
+        }
 
         <!-- Vida espiritual + trabajo pastoral -->
         <div class="row g-3 mb-3">
@@ -358,7 +430,9 @@
                           <tr>
                             <td>{{ c.nombre }}</td>
                             <td class="text-end">{{ c.valorPeriodo ?? '—' }}</td>
-                            <td class="text-end"><app-indicador-variacion [variacion]="c.variacion" /></td>
+                            @if (hayComparacion()) {
+                              <td class="text-end"><app-indicador-variacion [variacion]="c.variacion" /></td>
+                            }
                           </tr>
                         }
                       </tbody>
@@ -399,13 +473,15 @@
       <section class="card tarjeta mb-3" aria-labelledby="tituloUnidades">
         <div class="card-body" id="seccionCongregaciones">
           <h2 id="tituloUnidades" class="seccion-titulo">
-            <i class="fas fa-table" aria-hidden="true"></i> Congregaciones
+            <i class="fas fa-table" aria-hidden="true"></i> Congregaciones Ciudad
           </h2>
-          <app-tabla-unidades
+            <app-tabla-unidades
             [filtros]="filtros()!"
             [solicitudVariacion]="solicitudVariacion()"
-            (verUnidad)="unidadSeleccionada.set($event)"
-          />
+              [solicitudEstado]="solicitudEstado()"
+              [mostrarComparacion]="hayComparacion()"
+              (verUnidad)="unidadSeleccionada.set($event)"
+            />
         </div>
       </section>
     </div>
@@ -426,7 +502,9 @@
           <tr>
             <th scope="col">Indicador</th>
             <th scope="col" class="text-end">Actual</th>
-            <th scope="col" class="text-end">Variación</th>
+            @if (hayComparacion()) {
+              <th scope="col" class="text-end">Variación</th>
+            }
           </tr>
         </thead>
         <tbody>
@@ -440,7 +518,9 @@
                     : (i.valorPeriodo | number: (i.formato === 'DECIMAL' ? '1.0-1' : '1.0-0'))
                 }}
               </td>
-              <td class="text-end"><app-indicador-variacion [variacion]="i.variacion" /></td>
+              @if (hayComparacion()) {
+                <td class="text-end"><app-indicador-variacion [variacion]="i.variacion" /></td>
+              }
             </tr>
           }
         </tbody>

@@ -1,10 +1,12 @@
 import { DecimalPipe, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
 import {
   ClaveServicio,
+  EstadoEntrega,
   FiltroVariacion,
   FiltrosDashboard,
   FiltrosDisponibles,
@@ -55,6 +57,8 @@ export class DashboardSupervisionComponent {
   private servicio = inject(DashboardSupervisionService);
   private exportador = inject(DashboardSupervisionExportService);
   private destroyRef = inject(DestroyRef);
+  private route = inject(ActivatedRoute);
+  readonly supervisionPais = this.route.snapshot.data['supervisionPais'] === true;
 
   disponibles = signal<FiltrosDisponibles | null>(null);
   filtros = signal<FiltrosDashboard | null>(null);
@@ -67,8 +71,17 @@ export class DashboardSupervisionComponent {
   error = signal<string | null>(null);
   unidadSeleccionada = signal<UnidadRef | null>(null);
   solicitudVariacion = signal<{ servicio: ClaveServicio; variacion: FiltroVariacion } | null>(null);
+  solicitudEstado = signal<{ estado: EstadoEntrega; consecutivo: number } | null>(null);
 
   readonly gruposVariacion = GRUPOS_VARIACION;
+  readonly hayComparacion = computed(() => (this.resumen()?.cobertura.unidadesComparadas ?? 0) > 0);
+  readonly hayHistorial = computed(() => {
+    const tendencias = this.tendencias();
+    const periodoActual = this.resumen()?.contexto.periodo.etiqueta;
+    return !!tendencias?.informesPorPeriodo.some(
+      (punto) => punto.periodo !== periodoActual && (punto.valor ?? 0) > 0,
+    );
+  });
 
   /** Reglas de alertas mostradas en la nota explicativa (con valores por defecto si el backend no las envía). */
   readonly reglas = computed(() => {
@@ -90,13 +103,22 @@ export class DashboardSupervisionComponent {
     );
   }
 
+  verPendientes(): void {
+    this.solicitudEstado.update((actual) => ({
+      estado: 'PENDIENTE',
+      consecutivo: (actual?.consecutivo ?? 0) + 1,
+    }));
+    setTimeout(() =>
+      document.getElementById('seccionCongregaciones')?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    );
+  }
+
   private suscripcion?: Subscription;
 
   readonly coberturaTarjetas = computed(() => {
     const c = this.resumen()?.cobertura;
     if (!c) return [];
     return [
-      { etiqueta: 'Congregaciones', valor: c.unidades, icono: 'fa-sitemap', clase: 'primario', ayuda: `País ${c.porTipo.PAIS} · Ciudad ${c.porTipo.CONGREGACION} · Campo ${c.porTipo.CAMPO}` },
       { etiqueta: 'Entregados', valor: c.entregados, icono: 'fa-circle-check', clase: 'exito', ayuda: 'Informes cerrados' },
       { etiqueta: 'En elaboración', valor: c.enElaboracion, icono: 'fa-pen-to-square', clase: 'info', ayuda: 'Informes abiertos' },
       { etiqueta: 'Pendientes', valor: c.pendientes, icono: 'fa-clock', clase: 'aviso', ayuda: 'Sin informe del periodo' },
@@ -127,6 +149,7 @@ export class DashboardSupervisionComponent {
   });
 
   constructor() {
+    this.servicio.setSupervisionPais(this.supervisionPais);
     this.servicio
       .getFiltros()
       .pipe(takeUntilDestroyed())
@@ -136,7 +159,7 @@ export class DashboardSupervisionComponent {
           this.filtros.set({
             anio: d.periodoActivo.anio,
             trimestre: d.periodoActivo.trimestre,
-            pais_id: null,
+            pais_id: this.supervisionPais && d.paises.length === 1 ? d.paises[0].id : null,
             congregacion_id: null,
             campo_id: null,
             comparacion: 'TRIMESTRE_ANTERIOR',
@@ -153,6 +176,10 @@ export class DashboardSupervisionComponent {
       const filtros = this.filtros();
       if (filtros) untracked(() => this.cargar(filtros));
     });
+  }
+
+  ngOnDestroy(): void {
+    this.servicio.setSupervisionPais(false);
   }
 
   private porGrupo(grupo: GrupoIndicador): Indicador[] {

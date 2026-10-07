@@ -34,6 +34,7 @@
       }
     </select>
   </div>
+  @if (mostrarComparacion()) {
   <div class="col-6 col-md-4 col-lg-3">
     <label class="form-label small fw-semibold mb-1" for="variacionAsistencia">Variación de asistencia</label>
     <select id="variacionAsistencia" class="form-select form-select-sm" [ngModel]="variacion()"
@@ -45,6 +46,7 @@
       }
     </select>
   </div>
+  }
 </div>
 
 @if (error()) {
@@ -97,10 +99,34 @@
                 {{ etiquetasEstado[f.estadoEntrega] }}
               </span>
             </td>
-            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['asistenciaGeneral']" [mostrarDetalle]="true" /></td>
-            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores[servicioColumna().indicador]" [mostrarDetalle]="true" /></td>
-            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['visitasTotales']" [mostrarDetalle]="true" /></td>
-            <td class="text-center"><app-indicador-variacion [variacion]="f.indicadores['actividadesEspirituales']" [mostrarDetalle]="true" /></td>
+            <td class="text-center">
+              @if (mostrarComparacion()) {
+                <app-indicador-variacion [variacion]="f.indicadores['asistenciaGeneral']" [mostrarDetalle]="true" />
+              } @else {
+                {{ f.indicadores['asistenciaGeneral']?.actual === null ? '—' : (f.indicadores['asistenciaGeneral']?.actual | number: '1.0-1') }}
+              }
+            </td>
+            <td class="text-center">
+              @if (mostrarComparacion()) {
+                <app-indicador-variacion [variacion]="f.indicadores[servicioColumna().indicador]" [mostrarDetalle]="true" />
+              } @else {
+                {{ f.indicadores[servicioColumna().indicador]?.actual === null ? '—' : (f.indicadores[servicioColumna().indicador]?.actual | number: '1.0-1') }}
+              }
+            </td>
+            <td class="text-center">
+              @if (mostrarComparacion()) {
+                <app-indicador-variacion [variacion]="f.indicadores['visitasTotales']" [mostrarDetalle]="true" />
+              } @else {
+                {{ f.indicadores['visitasTotales']?.actual === null ? '—' : (f.indicadores['visitasTotales']?.actual | number: '1.0-1') }}
+              }
+            </td>
+            <td class="text-center">
+              @if (mostrarComparacion()) {
+                <app-indicador-variacion [variacion]="f.indicadores['actividadesEspirituales']" [mostrarDetalle]="true" />
+              } @else {
+                {{ f.indicadores['actividadesEspirituales']?.actual === null ? '—' : (f.indicadores['actividadesEspirituales']?.actual | number: '1.0-1') }}
+              }
+            </td>
             <td class="text-center">
               @if (f.alertas) {
                 <span class="badge rounded-pill bg-warning text-dark">{{ f.alertas }}</span>
@@ -149,13 +175,37 @@
         </div>
         <dl class="row small mb-0">
           <dt class="col-6 fw-normal text-muted">Asistencia general</dt>
-          <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores['asistenciaGeneral']" /></dd>
+          <dd class="col-6 text-end">
+            @if (mostrarComparacion()) {
+              <app-indicador-variacion [variacion]="f.indicadores['asistenciaGeneral']" />
+            } @else {
+              {{ f.indicadores['asistenciaGeneral']?.actual === null ? '—' : (f.indicadores['asistenciaGeneral']?.actual | number: '1.0-1') }}
+            }
+          </dd>
           <dt class="col-6 fw-normal text-muted">{{ servicioVariacion() ? 'Prom. ' + servicioColumna().etiqueta.toLowerCase() : 'Prom. por servicio' }}</dt>
-          <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores[servicioColumna().indicador]" /></dd>
+          <dd class="col-6 text-end">
+            @if (mostrarComparacion()) {
+              <app-indicador-variacion [variacion]="f.indicadores[servicioColumna().indicador]" />
+            } @else {
+              {{ f.indicadores[servicioColumna().indicador]?.actual === null ? '—' : (f.indicadores[servicioColumna().indicador]?.actual | number: '1.0-1') }}
+            }
+          </dd>
           <dt class="col-6 fw-normal text-muted">Visitas</dt>
-          <dd class="col-6 text-end"><app-indicador-variacion [variacion]="f.indicadores['visitasTotales']" /></dd>
+          <dd class="col-6 text-end">
+            @if (mostrarComparacion()) {
+              <app-indicador-variacion [variacion]="f.indicadores['visitasTotales']" />
+            } @else {
+              {{ f.indicadores['visitasTotales']?.actual === null ? '—' : (f.indicadores['visitasTotales']?.actual | number: '1.0-1') }}
+            }
+          </dd>
           <dt class="col-6 fw-normal text-muted">Act. espirituales</dt>
-          <dd class="col-6 text-end mb-0"><app-indicador-variacion [variacion]="f.indicadores['actividadesEspirituales']" /></dd>
+          <dd class="col-6 text-end mb-0">
+            @if (mostrarComparacion()) {
+              <app-indicador-variacion [variacion]="f.indicadores['actividadesEspirituales']" />
+            } @else {
+              {{ f.indicadores['actividadesEspirituales']?.actual === null ? '—' : (f.indicadores['actividadesEspirituales']?.actual | number: '1.0-1') }}
+            }
+          </dd>
         </dl>
       </div>
     } @empty {
