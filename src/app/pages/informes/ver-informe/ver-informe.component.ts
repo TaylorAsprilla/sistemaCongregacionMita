@@ -17,7 +17,6 @@ import { DiezmoService } from 'src/app/services/diezmo/diezmo.service';
 import { AspectoEspiritualService } from 'src/app/services/aspecto-espiritual/aspecto-espiritual.service';
 import { AsuntoPendienteService } from 'src/app/services/asunto-pendiente/asunto-pendiente.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
-import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
 import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-actividad.service';
 import { TipoActividadEconomicaService } from 'src/app/services/tipo-actividad-economica/tipo-actividad-economica.service';
 import { VisitaModel } from 'src/app/core/models/visita.model';
@@ -29,7 +28,6 @@ import { ActividadEconomicaModel } from 'src/app/core/models/actividad-economica
 import { DiezmoModel } from 'src/app/core/models/diezmo.model';
 import { AspectoEspiritualModel } from 'src/app/core/models/aspecto-espiritual.model';
 import { AsuntoPendienteModel, obtenerEtiquetaTipoAsunto } from 'src/app/core/models/asunto-pendiente.model';
-import { CongregacionModel } from 'src/app/core/models/congregacion.model';
 import { TipoActividadModel } from 'src/app/core/models/tipo-actividad.model';
 import { TipoActividadEconomicaModel } from 'src/app/core/models/tipo-actividad-economica.model';
 import Swal from 'sweetalert2';
@@ -50,7 +48,6 @@ import {
 export class VerInformeComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private usuarioService = inject(UsuarioService);
-  private congregacionService = inject(CongregacionService);
   private tipoActividadService = inject(TipoActividadService);
   private tipoActividadEconomicaService = inject(TipoActividadEconomicaService);
   private informeService = inject(InformeService);
@@ -104,61 +101,13 @@ export class VerInformeComponent implements OnInit {
       }
     });
 
-    this.nombreUsuario = this.usuarioService.usuarioNombre || '';
-    this.cargarInformacionCongregacion();
+    if (!this.informeIdParam) {
+      this.cargarInformacionUsuarioInforme(this.usuarioService.usuarioId);
+    }
     this.cargarTiposActividad();
     this.cargarTiposActividadEconomica();
     this.calcularTrimestre();
     this.verificarYCargarInforme();
-  }
-
-  /**
-   * Carga la información de congregación del usuario
-   */
-  private cargarInformacionCongregacion(usuarioIdParam?: number): void {
-    const usuarioId = usuarioIdParam || this.usuarioService.usuarioId;
-
-    // Cargar congregaciones y buscar donde el usuario es obrero encargado
-    this.congregacionService
-      .getCongregaciones()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (congregaciones: CongregacionModel[]) => {
-          // Buscar congregaciones donde el usuario es obrero encargado o obrero encargado dos
-          const congregacionesDelUsuario = congregaciones.filter(
-            (cong) => cong.idObreroEncargado === usuarioId || cong.idObreroEncargadoDos === usuarioId,
-          );
-
-          if (congregacionesDelUsuario.length > 0) {
-            // Tomar la primera congregación encontrada
-            const congregacion = congregacionesDelUsuario[0];
-
-            // Obtener información adicional de país, ciudad y campo desde el usuario
-            try {
-              // País
-              if (this.usuarioService.usuario?.usuarioCongregacionPais?.[0]?.pais) {
-                this.congregacionPais = this.usuarioService.usuario.usuarioCongregacionPais[0].pais;
-              }
-
-              // Ciudad/Congregación - usar el nombre de la congregación donde es obrero encargado
-              this.congregacionCiudad = congregacion.congregacion;
-
-              // Campo
-              if (this.usuarioService.usuario?.usuarioCongregacionCampo?.[0]?.campo) {
-                this.congregacionCampo = this.usuarioService.usuario.usuarioCongregacionCampo[0].campo;
-              }
-            } catch (error) {
-              console.warn('Error al cargar información adicional de congregación:', error);
-            }
-          } else {
-            // Si no es obrero encargado, mantener valores por defecto 'N/A'
-            console.warn('El usuario no es obrero encargado de ninguna congregación');
-          }
-        },
-        error: (error) => {
-          console.error('Error al cargar congregaciones:', error);
-        },
-      });
   }
 
   /**
@@ -375,33 +324,48 @@ export class VerInformeComponent implements OnInit {
    * Carga información del usuario propietario del informe
    */
   private cargarInformacionUsuarioInforme(usuarioId: number): void {
+    this.nombreUsuario = '';
+    this.congregacionPais = 'N/A';
+    this.congregacionCiudad = 'N/A';
+    this.congregacionCampo = 'N/A';
+
     this.usuarioService
       .getUsuario(usuarioId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (response: any) => {
+        next: (response) => {
           if (response.ok && response.usuario) {
             const usuario = response.usuario;
             // Actualizar nombre del usuario
-            this.nombreUsuario =
-              `${usuario.primerNombre || ''} ${usuario.segundoNombre || ''} ${usuario.primerApellido || ''} ${usuario.segundoApellido || ''}`.trim();
+            this.nombreUsuario = [
+              usuario.primerNombre, usuario.segundoNombre, usuario.primerApellido, usuario.segundoApellido,
+            ].filter(Boolean).join(' ');
 
-            // Actualizar información de congregación
-            if (usuario.usuarioCongregacionPais?.[0]) {
-              this.congregacionPais = usuario.usuarioCongregacionPais[0].pais || 'N/A';
-            }
-            if (usuario.usuarioCongregacion?.[0]?.UsuarioCongregacion?.CongregacionModel) {
-              this.congregacionCiudad =
-                usuario.usuarioCongregacion[0].UsuarioCongregacion.CongregacionModel.congregacion || 'N/A';
-            }
-            if (usuario.usuarioCampo?.[0]?.UsuarioCampo?.CampoModel) {
-              this.congregacionCampo = usuario.usuarioCampo[0].UsuarioCampo.CampoModel.campo || 'N/A';
-            }
+            this.congregacionPais = Array.isArray(usuario.usuarioCongregacionPais)
+              ? usuario.usuarioCongregacionPais[0]?.pais || 'N/A'
+              : 'N/A';
+            this.congregacionCiudad = Array.isArray(usuario.usuarioCongregacionCongregacion)
+              ? usuario.usuarioCongregacionCongregacion[0]?.congregacion || 'N/A'
+              : 'N/A';
+            this.congregacionCampo = Array.isArray(usuario.usuarioCongregacionCampo)
+              ? usuario.usuarioCongregacionCampo[0]?.campo || 'N/A'
+              : 'N/A';
+          } else {
+            console.error('No se encontró el usuario propietario del informe:', usuarioId);
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo cargar la información del obrero del informe.',
+              icon: 'error',
+            });
           }
         },
         error: (error) => {
           console.error('Error al cargar usuario del informe:', error);
-          // Continuar con valores por defecto
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo cargar la información del obrero del informe.',
+            icon: 'error',
+          });
         },
       });
   }
@@ -696,6 +660,7 @@ export class VerInformeComponent implements OnInit {
    * Crea la tabla de actividades eclesiásticas para el PDF
    */
   private crearTablaActividades(): any {
+    const fechaLocal = new LocalDatePipe();
     return {
       table: {
         headerRows: 1,
@@ -709,7 +674,19 @@ export class VerInformeComponent implements OnInit {
             { text: 'Observaciones', style: 'tableHeader' },
           ],
           ...this.actividadesEclesiasticas.map((act) => [
-            { text: new Date(act.fecha).toLocaleDateString(), style: 'tableCell' },
+            {
+              stack: [
+                { text: fechaLocal.transform(act.fecha), bold: true },
+                {
+                  text: fechaLocal.transform(act.fecha, 'weekday'),
+                  fontSize: 8,
+                  color: '#607D8B',
+                  margin: [0, 3, 0, 0],
+                },
+              ],
+              style: 'tableCell',
+              alignment: 'center',
+            },
             { text: this.buscarNombreTipoActividad(act.tipoActividad_id), style: 'tableCell' },
             { text: act.responsable || '-', style: 'tableCell' },
             { text: act.asistencia?.toString() || '0', style: 'tableCell', alignment: 'center' },

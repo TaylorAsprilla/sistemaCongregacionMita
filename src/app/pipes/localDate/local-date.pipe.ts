@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class LocalDatePipe implements PipeTransform {
-  transform(value: Date | string | null | undefined): string {
+  transform(value: Date | string | null | undefined, format: 'short' | 'weekday' = 'short'): string {
     if (value === null || value === undefined || value === '') return '';
 
     let date: Date;
@@ -26,6 +26,8 @@ export class LocalDatePipe implements PipeTransform {
 
     if (isNaN(date.getTime())) return '';
 
-    return new Intl.DateTimeFormat(navigator.language, { dateStyle: 'short' }).format(date);
+    return format === 'weekday'
+      ? new Intl.DateTimeFormat('es', { weekday: 'long' }).format(date)
+      : new Intl.DateTimeFormat(navigator.language, { dateStyle: 'short' }).format(date);
   }
 }

@@ -8,6 +8,7 @@ import {
   DatosQrLogin,
   ListarUsuario,
   NumeroMitaResponse,
+  ResponsabilidadesObreroResponse,
   UsuarioInterface,
   UsuariosPorCongregacionRespuesta,
 } from 'src/app/core/interfaces/usuario.interface';
@@ -481,6 +482,12 @@ export class UsuarioService {
 
   listarTodosLosUsuarios() {
     return this.httpClient.get<ListarUsuario>(`${base_url}/usuarios`, this.headers);
+  }
+
+  getResponsabilidadesObrero(id: number) {
+    return this.httpClient.get<ResponsabilidadesObreroResponse>(
+      `${base_url}/usuarios/${id}/responsabilidades-obrero`, this.headers,
+    );
   }
 
   getUsuario(id: number) {

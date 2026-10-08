@@ -87,6 +87,27 @@ Description: Estilos para visualización e impresión de informes
   border-bottom: 2px solid $border-color;
 }
 
+.actividad-fecha {
+  text-align: center;
+  white-space: nowrap;
+
+  &-valor {
+    display: block;
+    font-weight: 600;
+  }
+
+  &-dia {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    border-radius: $radius;
+    background-color: $informe-bg-light;
+    color: $informe-text-secondary;
+    font-size: 0.8em;
+    text-transform: capitalize;
+  }
+}
+
 tfoot tr {
   font-weight: 600;
   background-color: $informe-bg-light;

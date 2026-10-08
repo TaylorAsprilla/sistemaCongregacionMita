@@ -86,10 +86,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6 mb-4">
+          <div class="mb-4" [ngClass]="mostrarInfoAdicional ? 'col-md-6 col-xl-4' : 'col-md-6'">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Congregación</h4>
+                <h4 class="card-title titulo-informacion">Congregación</h4>
                 <p class="card-text text-start">
                   <b><i class="fa fa-globe-americas"></i> País:</b>
                   {{ usuario.usuarioCongregacionPais[0].pais }}
@@ -112,10 +112,10 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 mb-4">
+          <div class="mb-4" [ngClass]="mostrarInfoAdicional ? 'col-md-6 col-xl-4' : 'col-md-6'">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Contacto</h4>
+                <h4 class="card-title titulo-informacion">Contacto</h4>
                 <p class="card-text text-start">
                   <b><i class="fa fa-mobile-alt"></i> Celular: </b>
                   @if (!!usuario.numeroCelular) {
@@ -157,6 +157,7 @@
               </div>
             </div>
           </div>
+          <ng-content select="[infoAdicionalUsuario]"></ng-content>
         </div>
       </div>
     </div>

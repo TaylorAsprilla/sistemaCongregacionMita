@@ -33,6 +33,7 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() crearAccesoBoton: boolean = false;
   @Input() ocultarBusqueda: boolean = false;
+  @Input() mostrarInfoAdicional: boolean = false;
 
   @Output() usuarioEncontrado: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();
   @Output() actualizarUsuario: EventEmitter<UsuarioModel> = new EventEmitter<UsuarioModel>();

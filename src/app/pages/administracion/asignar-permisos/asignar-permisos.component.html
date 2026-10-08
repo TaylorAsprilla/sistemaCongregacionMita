@@ -8,11 +8,45 @@
 
         <app-buscar-usuario
           [crearAccesoBoton]="true"
+          [mostrarInfoAdicional]="cargandoResponsabilidades || !!errorResponsabilidades || responsabilidadesObrero.length > 0"
           (usuarioEncontrado)="buscarFeligres($event)"
           (actualizarUsuario)="actualizarUsuario($event)"
           (crearAcceso)="crearAcceso($event)"
           (scrollToSection)="scrollToSection()"
-        ></app-buscar-usuario>
+        >
+          @if (!!usuarioEncontrado && (cargandoResponsabilidades || !!errorResponsabilidades || responsabilidadesObrero.length > 0)) {
+            <section infoAdicionalUsuario class="col-md-6 col-xl-4 mb-4" aria-labelledby="titulo-responsabilidades" aria-live="polite">
+                <div class="card">
+                  <div class="card-body">
+              <h4 id="titulo-responsabilidades" class="card-title titulo-responsabilidades">Congregación a cargo</h4>
+              @if (cargandoResponsabilidades) {
+                <p role="status">Consultando asignaciones de obrero…</p>
+              } @else if (errorResponsabilidades) {
+                <div class="alert alert-danger" role="alert">
+                  {{ errorResponsabilidades }}
+                  <button type="button" class="btn btn-outline-danger ms-2" (click)="cargarResponsabilidadesObrero()">
+                    Reintentar
+                  </button>
+                </div>
+              } @else {
+                <p class="card-text text-start">
+                  <b><i class="fa fa-globe-americas" aria-hidden="true"></i> Congregación País:</b>
+                  {{ congregacionesACargo('PAIS') }}
+                </p>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-city" aria-hidden="true"></i> Congregación Ciudad:</b>
+                  {{ congregacionesACargo('CIUDAD') }}
+                </p>
+                <p class="card-text text-start">
+                  <b><i class="fa fa-map-marker" aria-hidden="true"></i> Congregación Campo:</b>
+                  {{ congregacionesACargo('CAMPO') }}
+                </p>
+              }
+                  </div>
+                </div>
+            </section>
+          }
+        </app-buscar-usuario>
 
         <div #verPermisos>
           @if (!!usuarioEncontrado) {

@@ -12,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
+import { ResponsabilidadObrero } from 'src/app/core/interfaces/usuario.interface';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { PermisoService } from 'src/app/services/permiso/permiso.service';
 import { PermisoModel } from 'src/app/core/models/permisos.model';
@@ -49,6 +50,10 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
   mostrarPasswordDos: boolean = false;
 
   permisoSubscription: Subscription;
+  private responsabilidadesSubscription?: Subscription;
+  responsabilidadesObrero: ResponsabilidadObrero[] = [];
+  cargandoResponsabilidades = false;
+  errorResponsabilidades = '';
 
   @ViewChild('verPermisos') verPermisos: ElementRef;
 
@@ -63,6 +68,7 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.permisoSubscription?.unsubscribe();
+    this.responsabilidadesSubscription?.unsubscribe();
   }
 
   get permisosArr() {
@@ -159,13 +165,50 @@ export default class AsignarPermisosComponent implements OnInit, OnDestroy {
   }
 
   buscarFeligres(usuario: UsuarioModel) {
+    this.responsabilidadesSubscription?.unsubscribe();
+    this.responsabilidadesObrero = [];
+    this.errorResponsabilidades = '';
+    this.cargandoResponsabilidades = false;
     this.asignarPermisos = false;
     this.usuarioEncontrado = usuario;
 
     if (this.usuarioEncontrado) {
       this.crearFormularioPermisos();
       this.patchValuePermisos();
+      this.cargarResponsabilidadesObrero();
     }
+  }
+
+  congregacionesACargo(tipo: ResponsabilidadObrero['tipo']): string {
+    const nombres = this.responsabilidadesObrero
+      .filter((responsabilidad) => responsabilidad.tipo === tipo)
+      .map((responsabilidad) => responsabilidad.nombre);
+    return [...new Set(nombres)].join(', ') || 'Sin asignación';
+  }
+
+  cargarResponsabilidadesObrero(): void {
+    this.responsabilidadesSubscription?.unsubscribe();
+    this.responsabilidadesObrero = [];
+    this.errorResponsabilidades = '';
+    this.cargandoResponsabilidades = true;
+    this.responsabilidadesSubscription = this.usuarioService
+      .getResponsabilidadesObrero(this.usuarioEncontrado.id)
+      .subscribe({
+        next: (response) => {
+          this.cargandoResponsabilidades = false;
+          if (!response.ok) {
+            this.errorResponsabilidades = 'No se pudieron consultar las congregaciones a cargo del usuario.';
+            console.error(this.errorResponsabilidades);
+            return;
+          }
+          this.responsabilidadesObrero = response.responsabilidades;
+        },
+        error: (error) => {
+          this.cargandoResponsabilidades = false;
+          this.errorResponsabilidades = 'No se pudieron consultar las congregaciones a cargo del usuario.';
+          console.error(this.errorResponsabilidades, error);
+        },
+      });
   }
 
   arrayUsuarioData() {

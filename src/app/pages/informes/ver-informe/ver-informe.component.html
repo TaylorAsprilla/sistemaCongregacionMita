@@ -78,7 +78,10 @@
               <tbody>
                 @for (actividad of actividadesEclesiasticas; track actividad.id) {
                   <tr>
-                    <td>{{ actividad.fecha | localDate }}</td>
+                    <td class="actividad-fecha">
+                      <span class="actividad-fecha-valor">{{ actividad.fecha | localDate }}</span>
+                      <small class="actividad-fecha-dia">{{ actividad.fecha | localDate: 'weekday' }}</small>
+                    </td>
                     <td>{{ buscarNombreTipoActividad(actividad.tipoActividad_id) }}</td>
                     <td>{{ actividad.responsable }}</td>
                     <td>{{ actividad.asistencia || 0 }}</td>
