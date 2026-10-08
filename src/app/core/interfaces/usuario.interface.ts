@@ -21,6 +21,19 @@ export interface UsuarioInterface {
   usuarioCongregacion: UsuarioCongregacionModel;
 }
 
+export interface ResponsabilidadObrero {
+  id: number;
+  nombre: string;
+  tipo: 'PAIS' | 'CIUDAD' | 'CAMPO';
+  rol: 'PRINCIPAL' | 'SEGUNDO';
+  activo: boolean;
+}
+
+export interface ResponsabilidadesObreroResponse {
+  ok: boolean;
+  responsabilidades: ResponsabilidadObrero[];
+}
+
 export interface UsuarioCongregacionCiudadInterface {
   id: number;
   congregacion: string;
