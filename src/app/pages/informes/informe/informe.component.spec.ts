@@ -34,14 +34,19 @@ describe('InformeComponent', () => {
   it('muestra el aviso durante la gracia del tercer trimestre y lo oculta al cerrar', () => {
     jasmine.clock().install();
     try {
-      jasmine.clock().mockDate(new Date(2026, 9, 1, 0, 0));
+      jasmine.clock().mockDate(new Date('2026-10-01T05:00:00Z'));
       component['calcularFechasClave']();
       expect(component.informeProximoACerrar).toBeTrue();
       expect(component.formatearTrimestre(component.getTrimestresActual())).toBe('3er');
 
-      jasmine.clock().mockDate(new Date(2026, 9, 9, 0, 5));
+      jasmine.clock().mockDate(new Date('2026-10-10T05:04:59Z'));
+      component['calcularFechasClave']();
+      expect(component.informeProximoACerrar).toBeTrue();
+
+      jasmine.clock().mockDate(new Date('2026-10-10T05:05:00Z'));
       component['calcularFechasClave']();
       expect(component.informeProximoACerrar).toBeFalse();
+      expect(component.formatearTrimestre(component.getTrimestresActual())).toBe('4to');
     } finally {
       jasmine.clock().uninstall();
     }
@@ -50,7 +55,7 @@ describe('InformeComponent', () => {
   it('aplica la misma regla al cuarto trimestre al cambiar de año', () => {
     jasmine.clock().install();
     try {
-      jasmine.clock().mockDate(new Date(2027, 0, 1, 0, 0));
+      jasmine.clock().mockDate(new Date('2027-01-01T05:00:00Z'));
       component['calcularFechasClave']();
       expect(component.informeProximoACerrar).toBeTrue();
       expect(component.getAnioInforme()).toBe(2026);

@@ -17,8 +17,9 @@ import Swal from 'sweetalert2';
 
 import { SeccionInformeComponent } from '../../../components/seccion-informe/seccion-informe.component';
 import {
-  DIAS_GRACIA_CIERRE_INFORME,
+  obtenerFechaCierreInforme,
   obtenerFechasPeriodoInforme,
+  obtenerHorariosCierrePorPais,
   obtenerPeriodoInforme,
 } from 'src/app/core/utils/periodo-informe';
 
@@ -45,6 +46,8 @@ export class InformeComponent implements OnInit {
   fechaFinTrimestre: Date;
   fechaCierreInforme: Date;
   fechaInicioTrimestre: Date;
+  horariosCierrePorPais: { pais: string; hora: string }[] = [];
+  fechaCierreInformeTexto = '';
 
   informeProximoACerrar: boolean = false;
 
@@ -84,7 +87,7 @@ export class InformeComponent implements OnInit {
    */
   private calcularFechasClave(): void {
     const { trimestre, anio } = this.getPeriodoTrimestreActual();
-    const finTrimestreMs = new Date(anio, trimestre * 3, 1).getTime();
+    const inicioSiguienteTrimestre = new Date(Date.UTC(anio, trimestre * 3, 1, 5));
 
     // El último día real del trimestre (para mostrar al usuario) es el mismo que se envía al backend
     // en obtenerFechasTrimestreActual(); finTrimestreMs es el instante de inicio del SIGUIENTE trimestre
@@ -92,19 +95,19 @@ export class InformeComponent implements OnInit {
     const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
     this.fechaInicioTrimestre = new Date(fechaInicio + 'T00:00:00');
     this.fechaFinTrimestre = new Date(fechaFin + 'T23:59:59');
-    this.fechaCierreInforme = this.calcularFechaCierre(finTrimestreMs);
+    this.fechaCierreInforme = obtenerFechaCierreInforme(trimestre, anio);
+    this.fechaCierreInformeTexto = new Intl.DateTimeFormat('es-CO', {
+      timeZone: 'America/Bogota',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hourCycle: 'h12',
+    }).format(this.fechaCierreInforme);
+    this.horariosCierrePorPais = obtenerHorariosCierrePorPais(this.fechaCierreInforme);
     const ahora = new Date();
-    this.informeProximoACerrar = ahora.getTime() >= finTrimestreMs && ahora < this.fechaCierreInforme;
-  }
-
-  /**
-   * Devuelve la siguiente ejecución del cron tras vencer la gracia del trimestre.
-   */
-  private calcularFechaCierre(finTrimestreMs: number): Date {
-    const fechaCierre = new Date(finTrimestreMs);
-    fechaCierre.setDate(fechaCierre.getDate() + DIAS_GRACIA_CIERRE_INFORME);
-    fechaCierre.setHours(0, 5, 0, 0);
-    return fechaCierre;
+    this.informeProximoACerrar = ahora >= inicioSiguienteTrimestre && ahora < this.fechaCierreInforme;
   }
 
   /**
@@ -207,16 +210,9 @@ export class InformeComponent implements OnInit {
           });
         } else {
           // No existe informe, mostrar confirmación para crear uno nuevo
-          const fechaCierreTexto = this.fechaCierreInforme.toLocaleDateString('es-ES', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-          });
           Swal.fire({
             title: 'Generar Informe',
-            text: `¿Desea generar un nuevo informe para el ${this.getTrimestresActual()}${this.getTrimestresActual() === 1 ? 'er' : this.getTrimestresActual() === 3 ? 'er' : 'do'} trimestre? Tendrá hasta el ${fechaCierreTexto} para completarlo antes de que se cierre automáticamente.`,
+            text: `¿Desea generar un nuevo informe para el ${this.getTrimestresActual()}${this.getTrimestresActual() === 1 ? 'er' : this.getTrimestresActual() === 3 ? 'er' : 'do'} trimestre? Tendrá hasta el ${this.fechaCierreInformeTexto}, hora de Colombia (UTC-5), para completarlo antes de que se cierre automáticamente.`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Sí, generar',
