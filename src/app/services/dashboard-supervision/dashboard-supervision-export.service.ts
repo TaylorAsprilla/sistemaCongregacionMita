@@ -170,10 +170,13 @@ export class DashboardSupervisionExportService {
       { header: 'Estado del informe', key: 'estado', width: 20 },
       { header: 'Asistencia general', key: 'asistencia', width: 26 },
       { header: 'Prom. por servicio', key: 'promedio', width: 26 },
+      { header: 'Prom. lunes', key: 'lunes', width: 22 },
       { header: 'Prom. martes', key: 'martes', width: 22 },
+      { header: 'Prom. miércoles', key: 'miercoles', width: 22 },
       { header: 'Prom. jueves', key: 'jueves', width: 22 },
+      { header: 'Prom. viernes', key: 'viernes', width: 22 },
+      { header: 'Prom. sábado', key: 'sabado', width: 22 },
       { header: 'Prom. domingo', key: 'domingo', width: 22 },
-      { header: 'Prom. otros días', key: 'otros', width: 22 },
       { header: 'Visitas', key: 'visitas', width: 26 },
       { header: 'Act. espirituales', key: 'espirituales', width: 26 },
       { header: 'Alertas', key: 'alertas', width: 10 },
@@ -188,16 +191,19 @@ export class DashboardSupervisionExportService {
         estado: ETIQUETAS_ESTADO_ENTREGA[f.estadoEntrega],
         asistencia: this.textoVariacion(f.indicadores['asistenciaGeneral']),
         promedio: this.textoVariacion(f.indicadores['promedioAsistenciaServicio']),
+        lunes: this.textoVariacion(f.indicadores['promedioServicioLunes']),
         martes: this.textoVariacion(f.indicadores['promedioServicioMartes']),
+        miercoles: this.textoVariacion(f.indicadores['promedioServicioMiercoles']),
         jueves: this.textoVariacion(f.indicadores['promedioServicioJueves']),
+        viernes: this.textoVariacion(f.indicadores['promedioServicioViernes']),
+        sabado: this.textoVariacion(f.indicadores['promedioServicioSabado']),
         domingo: this.textoVariacion(f.indicadores['promedioServicioDomingo']),
-        otros: this.textoVariacion(f.indicadores['promedioServicioOtrosDias']),
         visitas: this.textoVariacion(f.indicadores['visitasTotales']),
         espirituales: this.textoVariacion(f.indicadores['actividadesEspirituales']),
         alertas: f.alertas,
       });
     }
-    hoja.autoFilter = { from: 'A1', to: 'O1' };
+    hoja.autoFilter = { from: 'A1', to: 'R1' };
   }
 
   private hojaAlertas(hoja: Worksheet, alertas: AlertaDashboard[]): void {
