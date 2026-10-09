@@ -1,13 +1,70 @@
-export const DIAS_GRACIA_CIERRE_INFORME = 8;
+export const ZONA_HORARIA_COLOMBIA = 'America/Bogota';
 
 function formatearFechaLocal(fecha: Date): string {
-  return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
+  const partes = new Intl.DateTimeFormat('en-CA', {
+    timeZone: ZONA_HORARIA_COLOMBIA,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(fecha);
+  const valores = Object.fromEntries(partes.map(({ type, value }) => [type, value]));
+  return `${valores['year']}-${valores['month']}-${valores['day']}`;
+}
+
+function obtenerPartesFechaColombia(fecha: Date): { anio: number; mes: number } {
+  const partes = new Intl.DateTimeFormat('en-US', {
+    timeZone: ZONA_HORARIA_COLOMBIA,
+    year: 'numeric',
+    month: 'numeric',
+  }).formatToParts(fecha);
+
+  return {
+    anio: Number(partes.find((parte) => parte.type === 'year')?.value),
+    mes: Number(partes.find((parte) => parte.type === 'month')?.value) - 1,
+  };
+}
+
+export function obtenerFechaCierreInforme(trimestre: number, anio: number): Date {
+  return new Date(Date.UTC(anio, trimestre * 3, 10, 5, 5));
+}
+
+export function obtenerHorariosCierrePorPais(fechaCierre: Date): { pais: string; hora: string }[] {
+  const paises = [
+    { pais: 'Canadá (hora de Toronto)', zona: 'America/Toronto' },
+    { pais: 'Chile (hora de Santiago)', zona: 'America/Santiago' },
+    { pais: 'Colombia', zona: 'America/Bogota' },
+    { pais: 'Costa Rica', zona: 'America/Costa_Rica' },
+    { pais: 'Ecuador (continental)', zona: 'America/Guayaquil' },
+    { pais: 'El Salvador', zona: 'America/El_Salvador' },
+    { pais: 'España (hora de Madrid)', zona: 'Europe/Madrid' },
+    { pais: 'Estados Unidos (hora del Este)', zona: 'America/New_York' },
+    { pais: 'Italia', zona: 'Europe/Rome' },
+    { pais: 'México (hora de Ciudad de México)', zona: 'America/Mexico_City' },
+    { pais: 'Panamá', zona: 'America/Panama' },
+    { pais: 'Puerto Rico', zona: 'America/Puerto_Rico' },
+    { pais: 'República Dominicana', zona: 'America/Santo_Domingo' },
+    { pais: 'Venezuela', zona: 'America/Caracas' },
+  ];
+
+  return paises.map(({ pais, zona }) => ({
+    pais,
+    hora: new Intl.DateTimeFormat('es-CO', {
+      timeZone: zona,
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hourCycle: 'h12',
+    }).format(fechaCierre),
+  }));
 }
 
 export function obtenerPeriodoInforme(fecha: Date = new Date()): { trimestre: number; anio: number } {
-  let trimestre = Math.floor(fecha.getMonth() / 3) + 1;
-  let anio = fecha.getFullYear();
-  const fechaCierre = new Date(anio, (trimestre - 1) * 3, 1 + DIAS_GRACIA_CIERRE_INFORME, 0, 5);
+  const { anio: anioColombia, mes } = obtenerPartesFechaColombia(fecha);
+  let trimestre = Math.floor(mes / 3) + 1;
+  let anio = anioColombia;
+  const fechaCierre = obtenerFechaCierreInforme(trimestre, anio);
 
   if (fecha < fechaCierre) {
     trimestre -= 1;
