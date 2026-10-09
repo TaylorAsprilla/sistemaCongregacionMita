@@ -59,6 +59,7 @@ export class DashboardSupervisionComponent implements OnDestroy {
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   readonly supervisionPais = this.route.snapshot.data['supervisionPais'] === true;
+  readonly supervisionObrero = this.route.snapshot.data['supervisionObrero'] === true;
 
   disponibles = signal<FiltrosDisponibles | null>(null);
   filtros = signal<FiltrosDashboard | null>(null);
@@ -150,6 +151,7 @@ export class DashboardSupervisionComponent implements OnDestroy {
 
   constructor() {
     this.servicio.setSupervisionPais(this.supervisionPais);
+    this.servicio.setSupervisionObrero(this.supervisionObrero);
     this.servicio
       .getFiltros()
       .pipe(takeUntilDestroyed())
@@ -160,8 +162,11 @@ export class DashboardSupervisionComponent implements OnDestroy {
             anio: d.periodoActivo.anio,
             trimestre: d.periodoActivo.trimestre,
             pais_id: this.supervisionPais && d.paises.length === 1 ? d.paises[0].id : null,
-            congregacion_id: null,
-            campo_id: null,
+            congregacion_id: this.supervisionObrero ? d.congregaciones[0]?.id ?? null : null,
+            campo_id:
+              this.supervisionObrero && d.congregaciones.length === 0
+                ? d.campos[0]?.id ?? null
+                : null,
             comparacion: 'TRIMESTRE_ANTERIOR',
           });
           this.cargandoInicial.set(false);
@@ -180,6 +185,7 @@ export class DashboardSupervisionComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.servicio.setSupervisionPais(false);
+    this.servicio.setSupervisionObrero(false);
   }
 
   private porGrupo(grupo: GrupoIndicador): Indicador[] {

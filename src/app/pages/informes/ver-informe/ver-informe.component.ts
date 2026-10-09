@@ -941,7 +941,9 @@ export class VerInformeComponent implements OnInit {
   volverAlInforme(): void {
     // Si viene de ver-informes-pais (tiene informeIdParam), volver ahí
     if (this.informeIdParam) {
-      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.VER_INFORMES_PAIS}`);
+      const origen = this.route.snapshot.queryParamMap.get('origen');
+      const destino = origen === RUTAS.MIS_INFORMES ? RUTAS.MIS_INFORMES : RUTAS.VER_INFORMES_PAIS;
+      this.router.navigateByUrl(`${RUTAS.SISTEMA}/${destino}`);
     } else {
       // Si es el informe del usuario actual, volver a la página de informe normal
       this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);

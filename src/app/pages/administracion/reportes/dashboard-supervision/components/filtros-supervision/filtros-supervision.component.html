@@ -44,11 +44,38 @@
       <span class="numero-grupo">2</span>
       <div>
         <h3>Alcance organizativo</h3>
-        <p>Limite los resultados por país, ciudad o campo.</p>
+        @if (unidadObrero()) {
+          <p>Selecciona una de tus unidades asignadas.</p>
+        } @else {
+          <p>Limite los resultados por país, ciudad o campo.</p>
+        }
       </div>
     </div>
     <div class="row g-3 align-items-end">
-      @if (!paisFijo()) {
+      @if (unidadObrero()) {
+        @if (congregaciones().length > 0) {
+          <div class="col-12 col-md-4 col-lg-4">
+            <label class="form-label" for="filtroCongregacion">Congregación Ciudad asignada</label>
+            <select id="filtroCongregacion" class="form-select" name="congregacion" [ngModel]="congregacionId()"
+              (ngModelChange)="cambiarCongregacion($event)">
+              @for (c of congregaciones(); track c.id) {
+                <option [ngValue]="c.id">{{ c.nombre }}</option>
+              }
+            </select>
+          </div>
+        }
+        @if (disponibles().campos.length > 0) {
+          <div class="col-12 col-md-4 col-lg-4">
+            <label class="form-label" for="filtroCampo">Congregación Campo asignada</label>
+            <select id="filtroCampo" class="form-select" name="campo" [ngModel]="campoId()"
+              (ngModelChange)="cambiarCampo($event)">
+              @for (c of disponibles().campos; track c.id) {
+                <option [ngValue]="c.id">{{ c.nombre }}</option>
+              }
+            </select>
+          </div>
+        }
+      } @else if (!paisFijo()) {
         <div class="col-12 col-md-4 col-lg-3">
           <label class="form-label" for="filtroPais">Congregación País</label>
           <select id="filtroPais" class="form-select" name="pais" [ngModel]="paisId()" (ngModelChange)="cambiarPais($event)">
@@ -67,26 +94,28 @@
         </div>
       }
 
-      <div class="col-12 col-md-4 col-lg-3">
-        <label class="form-label" for="filtroCongregacion">Congregación Ciudad</label>
-        <select id="filtroCongregacion" class="form-select" name="congregacion" [ngModel]="congregacionId()"
-          (ngModelChange)="cambiarCongregacion($event)">
-          <option [ngValue]="null">Todas las ciudades</option>
-          @for (c of congregaciones(); track c.id) {
-            <option [ngValue]="c.id">{{ c.nombre }}</option>
-          }
-        </select>
-      </div>
+      @if (!unidadObrero()) {
+        <div class="col-12 col-md-4 col-lg-3">
+          <label class="form-label" for="filtroCongregacion">Congregación Ciudad</label>
+          <select id="filtroCongregacion" class="form-select" name="congregacion" [ngModel]="congregacionId()"
+            (ngModelChange)="cambiarCongregacion($event)">
+            <option [ngValue]="null">Todas las ciudades</option>
+            @for (c of congregaciones(); track c.id) {
+              <option [ngValue]="c.id">{{ c.nombre }}</option>
+            }
+          </select>
+        </div>
 
-      <div class="col-12 col-md-4 col-lg-3">
-        <label class="form-label" for="filtroCampo">Congregación Campo</label>
-        <select id="filtroCampo" class="form-select" name="campo" [ngModel]="campoId()" (ngModelChange)="campoId.set($event)">
-          <option [ngValue]="null">Todos los campos</option>
-          @for (c of campos(); track c.id) {
-            <option [ngValue]="c.id">{{ c.nombre }}</option>
-          }
-        </select>
-      </div>
+        <div class="col-12 col-md-4 col-lg-3">
+          <label class="form-label" for="filtroCampo">Congregación Campo</label>
+          <select id="filtroCampo" class="form-select" name="campo" [ngModel]="campoId()" (ngModelChange)="cambiarCampo($event)">
+            <option [ngValue]="null">Todos los campos</option>
+            @for (c of campos(); track c.id) {
+              <option [ngValue]="c.id">{{ c.nombre }}</option>
+            }
+          </select>
+        </div>
+      }
 
       <div class="col-12 col-lg-3 d-flex gap-2 acciones">
         <button type="submit" class="btn btn-primary btn-sm flex-fill" [disabled]="cargando()" title="Aplicar filtros">

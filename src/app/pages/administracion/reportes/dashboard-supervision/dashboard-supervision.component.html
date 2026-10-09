@@ -2,6 +2,9 @@
   <!-- Encabezado -->
   <header class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
     <div>
+      @if (supervisionObrero) {
+        <h1 class="h3 mb-2">Comportamiento trimestral de tu congregación</h1>
+      }
       @if (resumen(); as r) {
         <p class="subtitulo-periodo mb-0 small">
           <strong>{{ r.contexto.periodo.etiqueta }}</strong>
@@ -161,6 +164,7 @@
               [filtros]="filtros()!"
               [cargando]="cargando()"
               [paisFijo]="supervisionPais"
+              [unidadObrero]="supervisionObrero"
               (aplicar)="aplicarFiltros($event)"
             />
           </div>

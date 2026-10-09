@@ -55,6 +55,15 @@ export class InformeService {
       .pipe(map((informe: { ok: boolean; informes: InformeModel[] }) => informe.informes));
   }
 
+  getMisInformes() {
+    return this.httpClient
+      .get<{ ok: boolean; informes: { id: number; estado: string; periodo: string | null; createdAt: string }[] }>(
+        `${base_url}/mios`,
+        this.headers,
+      )
+      .pipe(map((respuesta) => respuesta.informes));
+  }
+
   getInforme(id: number) {
     return this.httpClient
       .get(`${base_url}/informe/${id}`, this.headers)
