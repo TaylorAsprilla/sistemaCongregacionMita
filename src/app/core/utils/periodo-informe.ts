@@ -28,36 +28,20 @@ export function obtenerFechaCierreInforme(trimestre: number, anio: number): Date
   return new Date(Date.UTC(anio, trimestre * 3, 10, 5, 5));
 }
 
-export function obtenerHorariosCierrePorPais(fechaCierre: Date): { pais: string; hora: string }[] {
-  const paises = [
-    { pais: 'Canadá (hora de Toronto)', zona: 'America/Toronto' },
-    { pais: 'Chile (hora de Santiago)', zona: 'America/Santiago' },
-    { pais: 'Colombia', zona: 'America/Bogota' },
-    { pais: 'Costa Rica', zona: 'America/Costa_Rica' },
-    { pais: 'Ecuador (continental)', zona: 'America/Guayaquil' },
-    { pais: 'El Salvador', zona: 'America/El_Salvador' },
-    { pais: 'España (hora de Madrid)', zona: 'Europe/Madrid' },
-    { pais: 'Estados Unidos (hora del Este)', zona: 'America/New_York' },
-    { pais: 'Italia', zona: 'Europe/Rome' },
-    { pais: 'México (hora de Ciudad de México)', zona: 'America/Mexico_City' },
-    { pais: 'Panamá', zona: 'America/Panama' },
-    { pais: 'Puerto Rico', zona: 'America/Puerto_Rico' },
-    { pais: 'República Dominicana', zona: 'America/Santo_Domingo' },
-    { pais: 'Venezuela', zona: 'America/Caracas' },
-  ];
-
-  return paises.map(({ pais, zona }) => ({
-    pais,
-    hora: new Intl.DateTimeFormat('es-CO', {
-      timeZone: zona,
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hourCycle: 'h12',
-    }).format(fechaCierre),
-  }));
+export function formatearFechaCierreLocal(
+  fechaCierre: Date,
+  zonaHoraria: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+): string {
+  return new Intl.DateTimeFormat('es-CO', {
+    timeZone: zonaHoraria,
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hourCycle: 'h12',
+    timeZoneName: 'long',
+  }).format(fechaCierre);
 }
 
 export function obtenerPeriodoInforme(fecha: Date = new Date()): { trimestre: number; anio: number } {

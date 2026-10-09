@@ -16,8 +16,10 @@
             <p class="cierre-informe-banner__texto mb-0">
               No llenes todavía el informe del {{ formatearTrimestre((getTrimestresActual() % 4) + 1) }} trimestre.
               Completa el informe del {{ formatearTrimestre(getTrimestresActual()) }} trimestre antes de que cierre el
-              <strong>{{ fechaCierreInformeTexto }} (hora de Colombia, UTC-5)</strong
-              >.
+              <strong>
+                <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
+              </strong>
+              (hora local según la zona horaria de tu dispositivo).
             </p>
           </div>
         </div>
@@ -28,8 +30,10 @@
             <p class="cierre-informe-banner__texto mb-0">
               El trimestre finaliza el <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
               >. El informe se cerrará automáticamente el
-              <strong>{{ fechaCierreInformeTexto }} (hora de Colombia, UTC-5)</strong
-              >, por lo que tendrás hasta esa fecha para completarlo.
+              <strong>
+                <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
+              </strong>
+              (hora local según la zona horaria de tu dispositivo), por lo que tendrás hasta esa fecha para completarlo.
             </p>
           </div>
         </div>
@@ -39,14 +43,6 @@
           <i class="fa fa-file-alt"></i> Ver Informe Completo
         </button>
       }
-      <section class="cierre-horarios" aria-labelledby="cierre-horarios-titulo">
-        <h5 id="cierre-horarios-titulo">Hora local de cierre del informe (base: Colombia, UTC-5)</h5>
-        <ul class="cierre-horarios__lista">
-          @for (horario of horariosCierrePorPais; track horario.pais) {
-            <li><strong>{{ horario.pais }}:</strong> {{ horario.hora }}</li>
-          }
-        </ul>
-      </section>
     </div>
   }
 </div>
@@ -85,7 +81,10 @@
         El trimestre actual va del <strong>{{ fechaInicioTrimestre | date: "d 'de' MMMM" }}</strong> al
         <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
         >. Una vez generado, tendrás hasta el
-        <strong>{{ fechaCierreInformeTexto }} (hora de Colombia, UTC-5)</strong>
+        <strong>
+          <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
+        </strong>
+        (hora local según la zona horaria de tu dispositivo)
         para completarlo antes de que se cierre automáticamente.
       </p>
       <button class="btn btn-primary btn-lg" (click)="generarInforme()">

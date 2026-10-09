@@ -19,7 +19,7 @@ import { SeccionInformeComponent } from '../../../components/seccion-informe/sec
 import {
   obtenerFechaCierreInforme,
   obtenerFechasPeriodoInforme,
-  obtenerHorariosCierrePorPais,
+  formatearFechaCierreLocal,
   obtenerPeriodoInforme,
 } from 'src/app/core/utils/periodo-informe';
 
@@ -46,7 +46,6 @@ export class InformeComponent implements OnInit {
   fechaFinTrimestre: Date;
   fechaCierreInforme: Date;
   fechaInicioTrimestre: Date;
-  horariosCierrePorPais: { pais: string; hora: string }[] = [];
   fechaCierreInformeTexto = '';
 
   informeProximoACerrar: boolean = false;
@@ -96,16 +95,7 @@ export class InformeComponent implements OnInit {
     this.fechaInicioTrimestre = new Date(fechaInicio + 'T00:00:00');
     this.fechaFinTrimestre = new Date(fechaFin + 'T23:59:59');
     this.fechaCierreInforme = obtenerFechaCierreInforme(trimestre, anio);
-    this.fechaCierreInformeTexto = new Intl.DateTimeFormat('es-CO', {
-      timeZone: 'America/Bogota',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hourCycle: 'h12',
-    }).format(this.fechaCierreInforme);
-    this.horariosCierrePorPais = obtenerHorariosCierrePorPais(this.fechaCierreInforme);
+    this.fechaCierreInformeTexto = formatearFechaCierreLocal(this.fechaCierreInforme);
     const ahora = new Date();
     this.informeProximoACerrar = ahora >= inicioSiguienteTrimestre && ahora < this.fechaCierreInforme;
   }
