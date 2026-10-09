@@ -14,28 +14,6 @@
     font-size: 2rem;
   }
 
-  .cierre-horarios {
-    margin-top: 1rem;
-    padding: 1rem 1.25rem;
-    border: 1px solid #dee2e6;
-    border-radius: 0.5rem;
-    background-color: #f8f9fa;
-
-    h5 {
-      margin-bottom: 0.75rem;
-      font-size: 1rem;
-    }
-
-    &__lista {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 0.35rem 1rem;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-  }
-
   &__contenido {
     flex: 1;
   }

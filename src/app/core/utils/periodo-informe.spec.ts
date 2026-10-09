@@ -2,7 +2,7 @@ import {
   obtenerFechaInicialPeriodoInforme,
   obtenerFechaCierreInforme,
   obtenerFechasPeriodoInforme,
-  obtenerHorariosCierrePorPais,
+  formatearFechaCierreLocal,
   obtenerPeriodoInforme,
   obtenerPeriodoInformeDesdeFecha,
 } from './periodo-informe';
@@ -37,13 +37,12 @@ describe('período de informe', () => {
     expect(obtenerPeriodoInformeDesdeFecha('fecha-invalida')).toBeNull();
   });
 
-  it('fija el cierre del tercer trimestre a las 12:05 a. m. de Colombia y muestra conversiones locales', () => {
+  it('fija el cierre del tercer trimestre a las 12:05 a. m. de Colombia y formatea en la zona indicada', () => {
     const cierre = obtenerFechaCierreInforme(3, 2026);
 
     expect(cierre.toISOString()).toBe('2026-10-10T05:05:00.000Z');
-    const horarios = obtenerHorariosCierrePorPais(cierre);
-    expect(horarios).toContain(jasmine.objectContaining({ pais: 'Colombia' }));
-    expect(horarios.find((horario) => horario.pais === 'Colombia')?.hora).toContain('12:05 a. m.');
-    expect(horarios).toHaveSize(14);
+    expect(formatearFechaCierreLocal(cierre, 'America/Bogota')).toContain('12:05 a. m.');
+    expect(formatearFechaCierreLocal(cierre, 'America/Toronto')).toContain('1:05 a. m.');
+    expect(formatearFechaCierreLocal(cierre, 'America/Costa_Rica')).toContain('11:05 p. m.');
   });
 });

@@ -556,6 +556,16 @@ export const childRoutes: Routes = [
     component: VerInformeComponent,
   },
   {
+    path: RUTAS.MIS_INFORMES,
+    loadComponent: () =>
+      import('src/app/pages/informes/mis-informes/mis-informes.component').then((m) => m.MisInformesComponent),
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Mis informes anteriores',
+      role: [ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
+    },
+  },
+  {
     path: `${RUTAS.VER_INFORME}/:id`,
     component: VerInformeComponent,
   },
@@ -672,6 +682,19 @@ export const childRoutes: Routes = [
         ROLES.OBRERO_CIUDAD,
         ROLES.OBRERO_CAMPO,
       ],
+    },
+  },
+  {
+    path: RUTAS.DASHBOARD_INFORMES_OBRERO,
+    loadComponent: () =>
+      import(
+        'src/app/pages/administracion/reportes/dashboard-supervision/dashboard-supervision.component'
+      ).then((m) => m.DashboardSupervisionComponent),
+    canActivate: [RolesGuard],
+    data: {
+      titulo: 'Dashboard de informes de la congregación',
+      supervisionObrero: true,
+      role: [ROLES.OBRERO_CIUDAD, ROLES.OBRERO_CAMPO],
     },
   },
 ];

@@ -17,6 +17,7 @@ import {
 
 const base_url = `${environment.base_url}/dashboard-supervision`;
 const base_url_pais = `${environment.base_url}/supervision-pais`;
+const base_url_obrero = `${environment.base_url}/supervision-obrero`;
 
 @Injectable({
   providedIn: 'root',
@@ -24,12 +25,18 @@ const base_url_pais = `${environment.base_url}/supervision-pais`;
 export class DashboardSupervisionService {
   private httpClient = inject(HttpClient);
   private supervisionPais = false;
+  private supervisionObrero = false;
 
   setSupervisionPais(activado: boolean): void {
     this.supervisionPais = activado;
   }
 
+  setSupervisionObrero(activado: boolean): void {
+    this.supervisionObrero = activado;
+  }
+
   private get endpoint(): string {
+    if (this.supervisionObrero) return base_url_obrero;
     return this.supervisionPais ? base_url_pais : base_url;
   }
 
@@ -107,6 +114,9 @@ export class DashboardSupervisionService {
         this.opciones({
           anio: filtros.anio,
           trimestre: filtros.trimestre,
+          pais_id: filtros.pais_id,
+          congregacion_id: tipo === 'CONGREGACION' ? id : filtros.congregacion_id,
+          campo_id: tipo === 'CAMPO' ? id : filtros.campo_id,
           comparacion: filtros.comparacion,
         }),
       )
