@@ -105,6 +105,11 @@
               </thead>
               <tbody>
                 @for (s of d.asistenciaPorServicio; track s.categoria) {
+                  @if (s.categoria === 'SERVICIO_LUNES') {
+                    <tr class="table-light">
+                      <th colspan="4" scope="rowgroup">Otros días: lunes, miércoles y viernes</th>
+                    </tr>
+                  }
                   <tr>
                     <td>{{ s.etiqueta }}</td>
                     <td class="text-end">{{ s.cantidad ?? '—' }}</td>

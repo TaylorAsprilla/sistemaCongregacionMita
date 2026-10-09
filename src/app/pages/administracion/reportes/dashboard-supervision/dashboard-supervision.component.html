@@ -320,6 +320,13 @@
                       </thead>
                       <tbody>
                         @for (s of r.asistenciaPorServicio; track s.categoria) {
+                          @if (s.categoria === 'SERVICIO_LUNES') {
+                            <tr class="table-light">
+                              <th [attr.colspan]="hayComparacion() ? 4 : 3" scope="rowgroup">
+                                Otros días: lunes, miércoles y viernes
+                              </th>
+                            </tr>
+                          }
                           <tr>
                             <td>{{ s.etiqueta }}</td>
                             <td class="text-end">{{ s.cantidad ?? '—' }}</td>
@@ -362,6 +369,13 @@
                   </thead>
                   <tbody>
                     @for (s of r.variacionPorServicio; track s.clave) {
+                      @if (s.clave === 'lunes') {
+                        <tr class="table-light">
+                          <th [attr.colspan]="gruposVariacion.length + 1" scope="rowgroup">
+                            Otros días: lunes, miércoles y viernes
+                          </th>
+                        </tr>
+                      }
                       <tr>
                         <th scope="row" class="text-start fw-semibold">{{ s.etiqueta }}</th>
                         @for (g of gruposVariacion; track g.valor) {

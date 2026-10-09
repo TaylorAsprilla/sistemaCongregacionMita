@@ -280,7 +280,7 @@ export interface ConsultaUnidades {
   variacion?: FiltroVariacion | '';
 }
 
-export type ClaveServicio = 'general' | 'martes' | 'jueves' | 'domingo' | 'otros';
+export type ClaveServicio = 'general' | 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado' | 'domingo';
 export type GrupoVariacion = TendenciaVariacion | 'SIN_COMPARACION';
 export type FiltroVariacion = GrupoVariacion | 'DISMINUYO' | 'AUMENTO';
 
@@ -308,10 +308,13 @@ export const FILTROS_VARIACION: { valor: FiltroVariacion; etiqueta: string }[] =
 
 export const SERVICIOS_VARIACION: { valor: ClaveServicio; etiqueta: string; indicador: string }[] = [
   { valor: 'general', etiqueta: 'Todos los servicios', indicador: 'promedioAsistenciaServicio' },
-  { valor: 'martes', etiqueta: 'Servicio martes', indicador: 'promedioServicioMartes' },
-  { valor: 'jueves', etiqueta: 'Servicio jueves', indicador: 'promedioServicioJueves' },
-  { valor: 'domingo', etiqueta: 'Servicio domingo', indicador: 'promedioServicioDomingo' },
-  { valor: 'otros', etiqueta: 'Servicios otros días', indicador: 'promedioServicioOtrosDias' },
+  { valor: 'martes', etiqueta: 'Servicio del martes', indicador: 'promedioServicioMartes' },
+  { valor: 'jueves', etiqueta: 'Servicio del jueves', indicador: 'promedioServicioJueves' },
+  { valor: 'sabado', etiqueta: 'Servicio del sábado', indicador: 'promedioServicioSabado' },
+  { valor: 'domingo', etiqueta: 'Servicio del domingo', indicador: 'promedioServicioDomingo' },
+  { valor: 'lunes', etiqueta: 'Servicio del lunes', indicador: 'promedioServicioLunes' },
+  { valor: 'miercoles', etiqueta: 'Servicio del miércoles', indicador: 'promedioServicioMiercoles' },
+  { valor: 'viernes', etiqueta: 'Servicio del viernes', indicador: 'promedioServicioViernes' },
 ];
 
 export const ETIQUETAS_ESTADO_ENTREGA: Record<EstadoEntrega, string> = {
