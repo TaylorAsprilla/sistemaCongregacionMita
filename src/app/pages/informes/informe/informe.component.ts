@@ -81,10 +81,10 @@ export class InformeComponent implements OnInit {
 
   obtenerMensajeDisponibilidadInforme(): string {
     if (this.esPeriodoEspecialTercerTrimestre2026()) {
-      return 'El informe del 3er trimestre de 2026 (julio, agosto y septiembre) estará disponible hasta el martes 13 de octubre de 2026. El informe del 4to trimestre (octubre, noviembre y diciembre) podrá abrirse a partir del miércoles 14 de octubre de 2026.';
+      return `El informe del 3er trimestre de 2026 (julio, agosto y septiembre) puede completarse hasta su cierre automático: ${this.fechaCierreInformeTexto}. Desde ese momento podrás abrir el informe del 4to trimestre (octubre, noviembre y diciembre).`;
     }
 
-    return `Tendrá hasta el ${this.fechaCierreInformeTexto}, hora de Colombia (UTC-5), para completarlo antes de que se cierre automáticamente.`;
+    return `Tendrá hasta el ${this.fechaCierreInformeTexto} para completarlo antes de que se cierre automáticamente. La fecha y hora corresponden a la zona horaria local de su dispositivo.`;
   }
 
   private getPeriodoTrimestreActual(): { trimestre: number; anio: number } {
@@ -93,7 +93,7 @@ export class InformeComponent implements OnInit {
 
   /**
    * Calcula la fecha de fin del trimestre actual, la fecha en que el sistema
-   * cerrará automáticamente el informe (8 días después, a las 00:00:05) y
+   * cerrará automáticamente el informe según el plazo configurado a las 05:05 UTC y
    * verifica si el informe del trimestre anterior sigue en su periodo de gracia.
    */
   private calcularFechasClave(): void {

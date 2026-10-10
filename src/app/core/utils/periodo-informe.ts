@@ -25,7 +25,7 @@ function obtenerPartesFechaColombia(fecha: Date): { anio: number; mes: number } 
 }
 
 export function obtenerFechaCierreInforme(trimestre: number, anio: number): Date {
-  const diaCierre = trimestre === 3 && anio === 2026 ? 14 : 10;
+  const diaCierre = trimestre === 3 && anio === 2026 ? 14 : 8;
   return new Date(Date.UTC(anio, trimestre * 3, diaCierre, 5, 5));
 }
 
@@ -38,6 +38,7 @@ export function formatearFechaCierreLocal(
     day: 'numeric',
     month: 'long',
     year: 'numeric',
+    weekday: 'long',
     hour: 'numeric',
     minute: '2-digit',
     hourCycle: 'h12',
@@ -49,7 +50,9 @@ export function obtenerPeriodoInforme(fecha: Date = new Date()): { trimestre: nu
   const { anio: anioColombia, mes } = obtenerPartesFechaColombia(fecha);
   let trimestre = Math.floor(mes / 3) + 1;
   let anio = anioColombia;
-  const fechaCierre = obtenerFechaCierreInforme(trimestre, anio);
+  const trimestreAnterior = trimestre === 1 ? 4 : trimestre - 1;
+  const anioAnterior = trimestre === 1 ? anio - 1 : anio;
+  const fechaCierre = obtenerFechaCierreInforme(trimestreAnterior, anioAnterior);
 
   if (fecha < fechaCierre) {
     trimestre -= 1;
