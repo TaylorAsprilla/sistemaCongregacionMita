@@ -33,7 +33,15 @@ describe('período de informe', () => {
 
     expect(obtenerPeriodoInforme(fecha)).toEqual({ trimestre: 4, anio: 2026 });
     expect(obtenerFechasPeriodoInforme(fecha)).toEqual({ min: '2026-10-01', max: '2026-12-31' });
-    expect(obtenerFechaCierreInforme(4, 2026).toISOString()).toBe('2027-01-10T05:05:00.000Z');
+    expect(obtenerFechaCierreInforme(4, 2026).toISOString()).toBe('2027-01-08T05:05:00.000Z');
+  });
+
+  it('cierra los trimestres habituales el día 8 del mes siguiente a las 05:05 UTC', () => {
+    expect(obtenerFechaCierreInforme(1, 2026).toISOString()).toBe('2026-04-08T05:05:00.000Z');
+    expect(obtenerFechaCierreInforme(2, 2026).toISOString()).toBe('2026-07-08T05:05:00.000Z');
+    expect(obtenerFechaCierreInforme(3, 2027).toISOString()).toBe('2027-10-08T05:05:00.000Z');
+    expect(obtenerPeriodoInforme(new Date('2027-01-08T05:04:59Z'))).toEqual({ trimestre: 4, anio: 2026 });
+    expect(obtenerPeriodoInforme(new Date('2027-01-08T05:05:00Z'))).toEqual({ trimestre: 1, anio: 2027 });
   });
 
   it('obtiene el trimestre y año de la fecha del informe', () => {
@@ -42,12 +50,19 @@ describe('período de informe', () => {
     expect(obtenerPeriodoInformeDesdeFecha('fecha-invalida')).toBeNull();
   });
 
-  it('fija el cierre del tercer trimestre a las 12:05 a. m. de Colombia y formatea en la zona indicada', () => {
+  it('fija el cierre del tercer trimestre y lo presenta en la zona horaria local indicada', () => {
     const cierre = obtenerFechaCierreInforme(3, 2026);
 
     expect(cierre.toISOString()).toBe('2026-10-14T05:05:00.000Z');
-    expect(formatearFechaCierreLocal(cierre, 'America/Bogota')).toContain('12:05 a. m.');
-    expect(formatearFechaCierreLocal(cierre, 'America/Toronto')).toContain('1:05 a. m.');
-    expect(formatearFechaCierreLocal(cierre, 'America/Costa_Rica')).toContain('11:05 p. m.');
+    const colombia = formatearFechaCierreLocal(cierre, 'America/Bogota');
+    const toronto = formatearFechaCierreLocal(cierre, 'America/Toronto');
+    const ciudadMexico = formatearFechaCierreLocal(cierre, 'America/Mexico_City');
+
+    expect(colombia).toContain('miércoles, 14 de octubre de 2026, 12:05 a. m.');
+    expect(colombia).toContain('hora estándar de Colombia');
+    expect(toronto).toContain('miércoles, 14 de octubre de 2026, 1:05 a. m.');
+    expect(toronto).toContain('hora de verano oriental');
+    expect(ciudadMexico).toContain('martes, 13 de octubre de 2026, 11:05 p. m.');
+    expect(ciudadMexico).toContain('hora estándar central');
   });
 });

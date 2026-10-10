@@ -42,8 +42,8 @@ describe('InformeComponent', () => {
       jasmine.clock().mockDate(new Date('2026-10-14T04:59:59Z'));
       component['calcularFechasClave']();
       expect(component.informeProximoACerrar).toBeTrue();
-      expect(component.obtenerMensajeDisponibilidadInforme()).toContain('martes 13 de octubre de 2026');
-      expect(component.obtenerMensajeDisponibilidadInforme()).toContain('miércoles 14 de octubre de 2026');
+      expect(component.obtenerMensajeDisponibilidadInforme()).toContain('cierre automático');
+      expect(component.obtenerMensajeDisponibilidadInforme()).toContain('14 de octubre de 2026');
 
       jasmine.clock().mockDate(new Date('2026-10-14T05:05:00Z'));
       component['calcularFechasClave']();

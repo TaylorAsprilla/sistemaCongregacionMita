@@ -15,9 +15,9 @@
             </strong>
             <p class="cierre-informe-banner__texto mb-0">
               @if (esPeriodoEspecialTercerTrimestre2026()) {
-                El informe de julio, agosto y septiembre estará disponible hasta el
-                <strong>martes 13 de octubre de 2026</strong>. Podrás abrir el informe de octubre, noviembre y diciembre
-                a partir del <strong>miércoles 14 de octubre de 2026</strong>.
+                El informe de julio, agosto y septiembre puede completarse hasta su cierre automático:
+                <strong>{{ fechaCierreInformeTexto }}</strong
+                >. Desde ese momento podrás abrir el informe de octubre, noviembre y diciembre.
               } @else {
                 No llenes todavía el informe del {{ formatearTrimestre((getTrimestresActual() % 4) + 1) }} trimestre.
                 Completa el informe del {{ formatearTrimestre(getTrimestresActual()) }} trimestre antes de que cierre
