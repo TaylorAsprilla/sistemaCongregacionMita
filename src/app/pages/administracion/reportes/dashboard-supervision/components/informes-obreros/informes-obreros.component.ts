@@ -44,13 +44,26 @@ import { DashboardSupervisionService } from 'src/app/services/dashboard-supervis
           <p class="small text-muted">{{ d.total }} informe(s)</p>
           <div class="table-responsive">
             <table class="table table-striped align-middle">
-              <thead><tr><th>Informe</th><th>Obrero</th><th>Estado</th><th>Acción</th></tr></thead>
+              <thead>
+                <tr>
+                  <th scope="col">Informe</th>
+                  <th scope="col">Nombre del obrero</th>
+                  <th scope="col">Estado del informe</th>
+                  <th scope="col">Congregación país</th>
+                  <th scope="col">Congregación ciudad</th>
+                  <th scope="col">Congregación campo</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
               <tbody>
                 @for (informe of d.informes; track informe.id) {
                   <tr>
                     <td>#{{ informe.id }}</td>
                     <td>{{ informe.obrero || 'Usuario #' + informe.usuario_id }}</td>
                     <td>{{ informe.estado }}</td>
+                    <td>{{ informe.pais }}</td>
+                    <td>{{ informe.ciudad }}</td>
+                    <td>{{ informe.campo }}</td>
                     <td>
                       <a class="btn btn-sm btn-outline-primary"
                         [routerLink]="['/sistema', rutas.VER_INFORME, informe.id]"
@@ -61,7 +74,7 @@ import { DashboardSupervisionService } from 'src/app/services/dashboard-supervis
                     </td>
                   </tr>
                 } @empty {
-                  <tr><td colspan="4" class="text-center text-muted">No hay informes para esta consulta.</td></tr>
+                  <tr><td colspan="7" class="text-center text-muted">No hay informes para esta consulta.</td></tr>
                 }
               </tbody>
             </table>
