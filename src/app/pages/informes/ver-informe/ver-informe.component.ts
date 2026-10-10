@@ -942,6 +942,17 @@ export class VerInformeComponent implements OnInit {
     // Si viene de ver-informes-pais (tiene informeIdParam), volver ahí
     if (this.informeIdParam) {
       const origen = this.route.snapshot.queryParamMap.get('origen');
+      if (origen === RUTAS.DASHBOARD_SUPERVISION) {
+        this.router.navigate(['/sistema', RUTAS.DASHBOARD_SUPERVISION], {
+          queryParams: {
+            anio: this.anioTrimestre, trimestre: this.numeroTrimestre,
+            pais_id: this.route.snapshot.queryParamMap.get('pais_id'),
+            congregacion_id: this.route.snapshot.queryParamMap.get('congregacion_id'),
+            campo_id: this.route.snapshot.queryParamMap.get('campo_id'),
+          },
+        });
+        return;
+      }
       const destino = origen === RUTAS.MIS_INFORMES ? RUTAS.MIS_INFORMES : RUTAS.VER_INFORMES_PAIS;
       this.router.navigateByUrl(`${RUTAS.SISTEMA}/${destino}`);
     } else {
