@@ -17,7 +17,7 @@
         </p>
       }
     </div>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2" [class.d-none]="pestana() === 'informes'">
       <button
         type="button"
         class="btn btn-success btn-sm"
@@ -57,6 +57,20 @@
       <p class="mt-3">Cargando dashboard…</p>
     </div>
   } @else if (disponibles() && filtros()) {
+    @if (!supervisionPais && !supervisionObrero) {
+      <nav class="nav nav-tabs mb-3" aria-label="Secciones del Dashboard">
+        <button type="button" class="nav-link" [class.active]="pestana() === 'resumen'"
+          [attr.aria-pressed]="pestana() === 'resumen'" aria-controls="panelResumenSupervision"
+          (click)="pestana.set('resumen')">
+          <i class="fas fa-chart-line me-2" aria-hidden="true"></i>Resumen de supervisión
+        </button>
+        <button type="button" class="nav-link" [class.active]="pestana() === 'informes'"
+          [attr.aria-pressed]="pestana() === 'informes'" aria-controls="panelInformesObreros"
+          (click)="pestana.set('informes')">
+          <i class="fas fa-file-lines me-2" aria-hidden="true"></i>Informes de todos los obreros
+        </button>
+      </nav>
+    }
     @if (error()) {
       <div class="alert alert-warning d-flex align-items-center gap-2" role="alert">
         <i class="fas fa-triangle-exclamation" aria-hidden="true"></i> {{ error() }}
@@ -72,7 +86,7 @@
 
       @if (resumen(); as r) {
         <!-- Resumen ejecutivo -->
-        <section class="mb-3" aria-labelledby="tituloCobertura">
+        <section class="mb-3" aria-labelledby="tituloCobertura" [hidden]="pestana() === 'informes'">
           <h2 id="tituloCobertura" class="visually-hidden">Cobertura de informes</h2>
           <div class="row g-2">
             <div class="col-12 col-xl-4">
@@ -170,7 +184,7 @@
           </div>
         </details>
 
-        @if (r.entregaPorPais && !supervisionPais) {
+        @if (r.entregaPorPais && !supervisionPais && pestana() === 'resumen') {
           <section class="card tarjeta mb-3" aria-labelledby="tituloEntregaPais">
             <div class="card-body">
               <h2 id="tituloEntregaPais" class="seccion-titulo">
@@ -189,10 +203,13 @@
       }
 
       <!-- Alertas -->
-      @if (!supervisionPais && !supervisionObrero && filtros()) {
-        <app-informes-obreros [filtros]="filtros()!" />
+      @if (!supervisionPais && !supervisionObrero && filtros() && pestana() === 'informes') {
+        <div id="panelInformesObreros">
+          <app-informes-obreros [filtros]="filtros()!" />
+        </div>
       }
 
+      <div id="panelResumenSupervision" [hidden]="pestana() === 'informes'">
       <section class="card tarjeta mb-3" aria-labelledby="tituloAlertas">
         <div class="card-body">
           <h2 id="tituloAlertas" class="seccion-titulo">
@@ -506,6 +523,7 @@
             />
         </div>
       </section>
+      </div>
     </div>
   } @else if (error()) {
     <div class="alert alert-danger" role="alert">{{ error() }}</div>
