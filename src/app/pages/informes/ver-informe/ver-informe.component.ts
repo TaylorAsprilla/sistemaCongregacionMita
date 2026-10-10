@@ -945,6 +945,7 @@ export class VerInformeComponent implements OnInit {
       if (origen === RUTAS.DASHBOARD_SUPERVISION) {
         this.router.navigate(['/sistema', RUTAS.DASHBOARD_SUPERVISION], {
           queryParams: {
+            pestana: 'informes',
             anio: this.anioTrimestre, trimestre: this.numeroTrimestre,
             pais_id: this.route.snapshot.queryParamMap.get('pais_id'),
             congregacion_id: this.route.snapshot.queryParamMap.get('congregacion_id'),

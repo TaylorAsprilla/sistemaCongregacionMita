@@ -62,6 +62,10 @@ export class DashboardSupervisionComponent implements OnDestroy {
   private route = inject(ActivatedRoute);
   readonly supervisionPais = this.route.snapshot.data['supervisionPais'] === true;
   readonly supervisionObrero = this.route.snapshot.data['supervisionObrero'] === true;
+  pestana = signal<'resumen' | 'informes'>(
+    this.route.snapshot.queryParamMap.get('pestana') === 'informes' &&
+    !this.supervisionPais && !this.supervisionObrero ? 'informes' : 'resumen',
+  );
 
   disponibles = signal<FiltrosDisponibles | null>(null);
   filtros = signal<FiltrosDashboard | null>(null);
