@@ -14,12 +14,19 @@
               {{ getAnioInforme() }}
             </strong>
             <p class="cierre-informe-banner__texto mb-0">
-              No llenes todavía el informe del {{ formatearTrimestre((getTrimestresActual() % 4) + 1) }} trimestre.
-              Completa el informe del {{ formatearTrimestre(getTrimestresActual()) }} trimestre antes de que cierre el
-              <strong>
-                <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
-              </strong>
-              (hora local según la zona horaria de tu dispositivo).
+              @if (esPeriodoEspecialTercerTrimestre2026()) {
+                El informe de julio, agosto y septiembre estará disponible hasta el
+                <strong>martes 13 de octubre de 2026</strong>. Podrás abrir el informe de octubre, noviembre y diciembre
+                a partir del <strong>miércoles 14 de octubre de 2026</strong>.
+              } @else {
+                No llenes todavía el informe del {{ formatearTrimestre((getTrimestresActual() % 4) + 1) }} trimestre.
+                Completa el informe del {{ formatearTrimestre(getTrimestresActual()) }} trimestre antes de que cierre
+                el
+                <strong>
+                  <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
+                </strong>
+                (hora local según la zona horaria de tu dispositivo).
+              }
             </p>
           </div>
         </div>
@@ -78,14 +85,18 @@
       <h4 class="mb-3">No hay informe abierto</h4>
       <p class="mb-4">Por favor, genera un informe para comenzar a trabajar.</p>
       <p class="mb-4">
-        El trimestre actual va del <strong>{{ fechaInicioTrimestre | date: "d 'de' MMMM" }}</strong> al
-        <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
-        >. Una vez generado, tendrás hasta el
-        <strong>
-          <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
-        </strong>
-        (hora local según la zona horaria de tu dispositivo)
-        para completarlo antes de que se cierre automáticamente.
+        @if (esPeriodoEspecialTercerTrimestre2026()) {
+          {{ obtenerMensajeDisponibilidadInforme() }}
+        } @else {
+          El trimestre actual va del <strong>{{ fechaInicioTrimestre | date: "d 'de' MMMM" }}</strong> al
+          <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
+          >. Una vez generado, tendrás hasta el
+          <strong>
+            <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
+          </strong>
+          (hora local según la zona horaria de tu dispositivo)
+          para completarlo antes de que se cierre automáticamente.
+        }
       </p>
       <button class="btn btn-primary btn-lg" (click)="generarInforme()">
         <i class="fa fa-plus"></i> Generar Informe

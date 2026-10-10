@@ -39,11 +39,13 @@ describe('InformeComponent', () => {
       expect(component.informeProximoACerrar).toBeTrue();
       expect(component.formatearTrimestre(component.getTrimestresActual())).toBe('3er');
 
-      jasmine.clock().mockDate(new Date('2026-10-10T05:04:59Z'));
+      jasmine.clock().mockDate(new Date('2026-10-14T04:59:59Z'));
       component['calcularFechasClave']();
       expect(component.informeProximoACerrar).toBeTrue();
+      expect(component.obtenerMensajeDisponibilidadInforme()).toContain('martes 13 de octubre de 2026');
+      expect(component.obtenerMensajeDisponibilidadInforme()).toContain('miércoles 14 de octubre de 2026');
 
-      jasmine.clock().mockDate(new Date('2026-10-10T05:05:00Z'));
+      jasmine.clock().mockDate(new Date('2026-10-14T05:05:00Z'));
       component['calcularFechasClave']();
       expect(component.informeProximoACerrar).toBeFalse();
       expect(component.formatearTrimestre(component.getTrimestresActual())).toBe('4to');

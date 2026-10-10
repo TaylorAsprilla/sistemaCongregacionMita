@@ -75,6 +75,18 @@ export class InformeComponent implements OnInit {
     return ['1er', '2do', '3er', '4to'][trimestre - 1];
   }
 
+  esPeriodoEspecialTercerTrimestre2026(): boolean {
+    return this.getTrimestresActual() === 3 && this.getAnioInforme() === 2026;
+  }
+
+  obtenerMensajeDisponibilidadInforme(): string {
+    if (this.esPeriodoEspecialTercerTrimestre2026()) {
+      return 'El informe del 3er trimestre de 2026 (julio, agosto y septiembre) estará disponible hasta el martes 13 de octubre de 2026. El informe del 4to trimestre (octubre, noviembre y diciembre) podrá abrirse a partir del miércoles 14 de octubre de 2026.';
+    }
+
+    return `Tendrá hasta el ${this.fechaCierreInformeTexto}, hora de Colombia (UTC-5), para completarlo antes de que se cierre automáticamente.`;
+  }
+
   private getPeriodoTrimestreActual(): { trimestre: number; anio: number } {
     return obtenerPeriodoInforme();
   }
@@ -202,7 +214,7 @@ export class InformeComponent implements OnInit {
           // No existe informe, mostrar confirmación para crear uno nuevo
           Swal.fire({
             title: 'Generar Informe',
-            text: `¿Desea generar un nuevo informe para el ${this.getTrimestresActual()}${this.getTrimestresActual() === 1 ? 'er' : this.getTrimestresActual() === 3 ? 'er' : 'do'} trimestre? Tendrá hasta el ${this.fechaCierreInformeTexto}, hora de Colombia (UTC-5), para completarlo antes de que se cierre automáticamente.`,
+            text: `¿Desea generar un nuevo informe para el ${this.getTrimestresActual()}${this.getTrimestresActual() === 1 ? 'er' : this.getTrimestresActual() === 3 ? 'er' : 'do'} trimestre? ${this.obtenerMensajeDisponibilidadInforme()}`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Sí, generar',
