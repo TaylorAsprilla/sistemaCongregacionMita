@@ -26,6 +26,7 @@ import { FiltrosSupervisionComponent } from './components/filtros-supervision/fi
 import { GraficaTendenciasComponent } from './components/grafica-tendencias/grafica-tendencias.component';
 import { IndicadorVariacionComponent } from './components/indicador-variacion/indicador-variacion.component';
 import { TablaUnidadesComponent } from './components/tabla-unidades/tabla-unidades.component';
+import { InformesObrerosComponent } from './components/informes-obreros/informes-obreros.component';
 
 const ICONOS_INDICADOR: Record<string, string> = {
   asistenciaGeneral: 'fa-users',
@@ -48,6 +49,7 @@ const ICONOS_INDICADOR: Record<string, string> = {
     TablaUnidadesComponent,
     DetalleUnidadComponent,
     EntregaPaisesComponent,
+    InformesObrerosComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard-supervision.component.html',
@@ -158,15 +160,19 @@ export class DashboardSupervisionComponent implements OnDestroy {
       .subscribe({
         next: (d) => {
           this.disponibles.set(d);
+          const anio = Number(this.route.snapshot.queryParamMap.get('anio'));
+          const trimestre = Number(this.route.snapshot.queryParamMap.get('trimestre'));
           this.filtros.set({
-            anio: d.periodoActivo.anio,
-            trimestre: d.periodoActivo.trimestre,
-            pais_id: this.supervisionPais && d.paises.length === 1 ? d.paises[0].id : null,
-            congregacion_id: this.supervisionObrero ? d.congregaciones[0]?.id ?? null : null,
+            anio: d.anios.includes(anio) ? anio : d.periodoActivo.anio,
+            trimestre: d.trimestres.some((t) => t.valor === trimestre) ? trimestre : d.periodoActivo.trimestre,
+            pais_id: this.supervisionPais && d.paises.length === 1 ? d.paises[0].id :
+              d.paises.find((p) => p.id === Number(this.route.snapshot.queryParamMap.get('pais_id')))?.id ?? null,
+            congregacion_id: this.supervisionObrero ? d.congregaciones[0]?.id ?? null :
+              d.congregaciones.find((c) => c.id === Number(this.route.snapshot.queryParamMap.get('congregacion_id')))?.id ?? null,
             campo_id:
               this.supervisionObrero && d.congregaciones.length === 0
                 ? d.campos[0]?.id ?? null
-                : null,
+                : d.campos.find((c) => c.id === Number(this.route.snapshot.queryParamMap.get('campo_id')))?.id ?? null,
             comparacion: 'TRIMESTRE_ANTERIOR',
           });
           this.cargandoInicial.set(false);

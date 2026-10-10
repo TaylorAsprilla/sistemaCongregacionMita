@@ -13,6 +13,7 @@ import {
   TendenciasDashboard,
   TipoUnidad,
   UnidadesDashboard,
+  InformesSupervision,
 } from 'src/app/core/interfaces/dashboard-supervision.interface';
 
 const base_url = `${environment.base_url}/dashboard-supervision`;
@@ -42,6 +43,18 @@ export class DashboardSupervisionService {
 
   get token(): string {
     return localStorage.getItem('token') || '';
+  }
+
+  getInformes(
+    filtros: FiltrosDashboard,
+    consulta: { busqueda: string; pagina: number; porPagina: number },
+  ): Observable<InformesSupervision> {
+    return this.httpClient
+      .get<{ ok: boolean; informes: InformesSupervision }>(
+        `${base_url}/informes`,
+        this.opciones({ ...this.parametrosFiltros(filtros), ...consulta }),
+      )
+      .pipe(map((r) => r.informes));
   }
 
   private opciones(parametros: Record<string, unknown> = {}) {

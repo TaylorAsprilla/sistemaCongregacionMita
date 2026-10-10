@@ -22,6 +22,22 @@ export const ubicacionUnidad = (u: {
     .filter(Boolean)
     .join(' · ');
 export type EstadoEntrega = 'ENTREGADO' | 'EN_ELABORACION' | 'PENDIENTE' | 'SIN_OBRERO';
+
+export interface InformeSupervision {
+  id: number;
+  usuario_id: number;
+  obrero: string;
+  estado: string;
+  periodo: string;
+}
+
+export interface InformesSupervision {
+  informes: InformeSupervision[];
+  total: number;
+  pagina: number;
+  porPagina: number;
+  totalPaginas: number;
+}
 export type OrdenUnidades =
   | 'NOMBRE'
   | 'PAIS'

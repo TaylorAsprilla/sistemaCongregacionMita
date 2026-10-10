@@ -189,6 +189,10 @@
       }
 
       <!-- Alertas -->
+      @if (!supervisionPais && !supervisionObrero && filtros()) {
+        <app-informes-obreros [filtros]="filtros()!" />
+      }
+
       <section class="card tarjeta mb-3" aria-labelledby="tituloAlertas">
         <div class="card-body">
           <h2 id="tituloAlertas" class="seccion-titulo">
