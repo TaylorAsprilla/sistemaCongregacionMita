@@ -58,7 +58,7 @@ export class InformeService {
   getMisInformes() {
     return this.httpClient
       .get<{ ok: boolean; informes: { id: number; estado: string; periodo: string | null; createdAt: string }[] }>(
-        `${base_url}/mios`,
+        `${base_url}/informe/mios`,
         this.headers,
       )
       .pipe(map((respuesta) => respuesta.informes));

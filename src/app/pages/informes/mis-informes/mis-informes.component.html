@@ -1,8 +1,8 @@
 <section class="container-fluid mis-informes">
   <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
     <div>
-      <h1 class="mb-1">Mis informes</h1>
-      <p class="text-muted mb-0">Consulta los informes trimestrales que has realizado.</p>
+      <h1 class="mb-1">Mis informes anteriores</h1>
+      <p class="text-muted mb-0">Consulta en modo de solo lectura los informes trimestrales que has realizado.</p>
     </div>
     <a class="btn btn-outline-primary" [routerLink]="'/sistema/dashboard-informes-obrero'">
       <i class="fa fa-chart-line me-1" aria-hidden="true"></i>
@@ -22,9 +22,13 @@
     </div>
   } @else if (informes.length === 0) {
     <div class="alert alert-info" role="status">
-      Aún no tienes informes registrados.
+      Aún no tienes informes anteriores.
     </div>
   } @else {
+    <div class="alert alert-secondary" role="status">
+      <i class="fa fa-lock me-1" aria-hidden="true"></i>
+      Estos informes están cerrados y no se pueden editar.
+    </div>
     <div class="table-responsive bg-white rounded shadow-sm">
       <table class="table table-hover align-middle mb-0">
         <thead class="table-light">
@@ -40,11 +44,7 @@
             <tr>
               <td class="fw-semibold">{{ periodo(informe) }}</td>
               <td>
-                @if (estadoCerrado(informe.estado)) {
-                  <span class="badge text-bg-secondary">Cerrado · solo lectura</span>
-                } @else {
-                  <span class="badge text-bg-success">{{ informe.estado }}</span>
-                }
+                <span class="badge text-bg-secondary">Cerrado · solo lectura</span>
               </td>
               <td>{{ informe.createdAt | date: 'd MMM y' }}</td>
               <td class="text-end">

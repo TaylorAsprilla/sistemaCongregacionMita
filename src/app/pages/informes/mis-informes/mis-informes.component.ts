@@ -58,8 +58,4 @@ export class MisInformesComponent implements OnInit {
       `${RUTAS.SISTEMA}/${RUTAS.VER_INFORME}/${informe.id}?origen=${RUTAS.MIS_INFORMES}`,
     );
   }
-
-  estadoCerrado(estado: string): boolean {
-    return estado.trim().toLocaleLowerCase() === 'cerrado';
-  }
 }
