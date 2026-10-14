@@ -84,8 +84,8 @@ export function obtenerFechasPeriodoInforme(fecha: Date = new Date()): { min: st
   const { trimestre, anio } = obtenerPeriodoInforme(fecha);
   const primerMes = (trimestre - 1) * 3;
   return {
-    min: formatearFechaLocal(new Date(anio, primerMes, 1)),
-    max: formatearFechaLocal(new Date(anio, primerMes + 3, 0)),
+    min: `${anio}-${String(primerMes + 1).padStart(2, '0')}-01`,
+    max: new Date(Date.UTC(anio, primerMes + 3, 0)).toISOString().slice(0, 10),
   };
 }
 

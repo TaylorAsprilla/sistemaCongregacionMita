@@ -8,6 +8,17 @@ import {
 } from './periodo-informe';
 
 describe('período de informe', () => {
+  it('mantiene los limites del trimestre al recibir instantes con distintos offsets', () => {
+    for (const instante of [
+      '2026-10-14T14:00:00-04:00',
+      '2026-10-14T13:00:00-05:00',
+      '2026-10-15T03:00:00+09:00',
+    ]) {
+      expect(obtenerFechasPeriodoInforme(new Date(instante)))
+        .toEqual({ min: '2026-10-01', max: '2026-12-31' });
+    }
+  });
+
   it('conserva el tercer trimestre hasta el 13 de octubre', () => {
     const fecha = new Date('2026-10-01T17:00:00Z');
 
