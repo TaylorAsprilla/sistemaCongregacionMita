@@ -4,11 +4,29 @@
     <button class="btn btn-secondary" (click)="volverAlInforme()">
       <i class="fa fa-arrow-left"></i> Volver al Informe
     </button>
-    <button class="btn btn-primary" (click)="descargarPDF()" [disabled]="descargandoPDF || cargando">
+    <button class="btn btn-primary" (click)="descargarPDF()" [disabled]="descargandoPDF || cargando || !informeCargado">
       <i class="fa" [ngClass]="descargandoPDF ? 'fa-spinner fa-spin' : 'fa-download'"></i>
       {{ descargandoPDF ? 'Generando PDF...' : 'Descargar PDF' }}
     </button>
   </div>
+
+  @if (!informeIdParam && informesDisponibles.length) {
+    <div class="mb-3">
+      <label for="congregacion-informe-consulta" class="form-label">Informe de Congregación</label>
+      <select
+        #selectorInforme
+        id="congregacion-informe-consulta"
+        class="form-select"
+        [value]="informeConsultaId"
+        [disabled]="cargando || descargandoPDF"
+        (change)="seleccionarInformeConsulta(selectorInforme.value)"
+      >
+        @for (informe of informesDisponibles; track informe.id) {
+          <option [value]="informe.id">{{ informe.etiqueta }}</option>
+        }
+      </select>
+    </div>
+  }
 
   <!-- Spinner de carga -->
   @if (cargando) {
@@ -21,7 +39,7 @@
   }
 
   <!-- Contenido del informe -->
-  @if (!cargando) {
+  @if (!cargando && informeCargado) {
     <div #content class="informe-content bg-white p-5 shadow-sm">
       <!-- Encabezado -->
       <div class="text-center mb-4">
@@ -35,8 +53,20 @@
               <td>{{ getOrdinalTrimestre() }} - {{ trimestre }}</td>
             </tr>
             <tr>
-              <td class="font-weight-bold bg-light">Obrero/a:</td>
-              <td>{{ nombreUsuario }}</td>
+              <td class="font-weight-bold bg-light">Responsables:</td>
+              <td>
+                @if (responsablesInforme.length) {
+                  <ul class="responsables-informe">
+                    @for (responsable of responsablesInforme; track $index) {
+                      <li>
+                        <strong>{{ responsable.nombre_responsable }}</strong>
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  {{ nombreUsuario }}
+                }
+              </td>
             </tr>
             <tr>
               <td class="font-weight-bold bg-light">Congregación País:</td>

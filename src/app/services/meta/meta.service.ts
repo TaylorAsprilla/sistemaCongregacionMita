@@ -60,11 +60,19 @@ export class MetaService {
       .pipe(map((res: { ok: boolean; metas: MetaModel[] }) => res.metas));
   }
 
+  getMetasPendientesByInforme(informeId: number) {
+    return this.httpClient
+      .get<{ ok: boolean; metas: MetaModel[] }>(
+        `${base_url}/meta/informe/${informeId}/pendientes`, this.headers,
+      )
+      .pipe(map((respuesta) => respuesta.metas || []));
+  }
+
   cumplirMeta(id: number, comentarios: string) {
     return this.httpClient.put(`${base_url}/meta/${id}/cumplir`, { comentarios }, this.headers);
   }
 
   copiarMeta(payload: { meta_id_original: number; nuevo_informe_id: number; actualizacion: string }) {
-    return this.httpClient.post(`${base_url}/meta/copiar`, payload, this.headers);
+    return this.httpClient.post<{ ok: boolean; meta: MetaModel }>(`${base_url}/meta/copiar`, payload, this.headers);
   }
 }

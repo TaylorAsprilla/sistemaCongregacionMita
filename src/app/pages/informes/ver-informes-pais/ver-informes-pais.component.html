@@ -36,7 +36,7 @@
 } @else {
 <div class="container-fluid">
   <div class="busqueda-informes mb-3">
-    <label for="busqueda" class="form-label">Buscar obrero, o unidad pendiente</label>
+    <label for="busqueda" class="form-label">Buscar obrero o Congregación pendiente</label>
     <div class="input-group">
       <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
       <input
@@ -79,7 +79,7 @@
             <div class="col-6 col-md">
               <div class="dato-resumen dato-exito">
                 <span class="dato-valor">{{ estadisticas.unidadesConInforme }}</span>
-                <span class="dato-etiqueta">Unidades con informe</span>
+                <span class="dato-etiqueta">Congregaciones con informe</span>
               </div>
             </div>
             <div class="col-6 col-md">
@@ -99,7 +99,7 @@
                 <span class="dato-valor">
                   {{ estadisticas.porcentajeEntregado === null ? '—' : (estadisticas.porcentajeEntregado + '%') }}
                 </span>
-                <span class="dato-etiqueta">Entrega de unidades con responsable</span>
+                <span class="dato-etiqueta">Entrega de Congregaciones con responsable</span>
               </div>
             </div>
           </div>
@@ -259,7 +259,7 @@
           <div class="cabecera-lista-informes d-flex justify-content-between align-items-center mb-3">
             <h2 class="card-title mb-0">
               <i class="fa fa-list mr-2" aria-hidden="true"></i>
-              {{ listaActiva === 'recibidos' ? 'Informes recibidos' : 'Unidades pendientes' }}
+              {{ listaActiva === 'recibidos' ? 'Informes recibidos' : 'Congregaciones pendientes' }}
             </h2>
             <button type="button" class="btn btn-primary btn-sm" (click)="recargar()" [disabled]="cargando">
               <i class="fa fa-refresh" aria-hidden="true"></i> Recargar
@@ -277,7 +277,7 @@
   @if (!cargando && !errorCarga && listaActiva === 'pendientes') {
     <div class="encabezado-pendientes">
       <span class="periodo-pendientes"><i class="fa fa-calendar" aria-hidden="true"></i> T{{ trimestre }} · {{ anio }}</span>
-      <p class="mb-0">Unidades con responsable que aún no tienen informe.</p>
+      <p class="mb-0">Congregaciones con responsable que aún no tienen informe.</p>
     </div>
     @if (pendientesFiltrados.length === 0) {
       <div class="alert alert-info">No hay pendientes para los filtros seleccionados.</div>
@@ -296,7 +296,7 @@
                       <div class="datos-responsable">
                         <span>{{ obtenerCongregacionPorId(unidad.congregacion_id)?.nombre ?? unidad.nombre }}</span>
                         @if (unidad.tipo === 'CAMPO') {
-                          <span class="celular-responsable">Campo: {{ unidad.nombre }}</span>
+                          <span class="celular-responsable">Congregación Campo: {{ unidad.nombre }}</span>
                         }
                       </div>
                     </td>
@@ -326,7 +326,7 @@
                   <td>
                     {{ obtenerCongregacionPorId(unidad.congregacion_id)?.nombre ?? unidad.nombre }}
                     @if (unidad.tipo === 'CAMPO') {
-                      <div class="celular-responsable">Campo: {{ unidad.nombre }}</div>
+                      <div class="celular-responsable">Congregación Campo: {{ unidad.nombre }}</div>
                     }
                   </td>
                   <td>

@@ -66,6 +66,9 @@ export class VerInformeComponent implements OnInit {
   cargando: boolean = false;
   descargandoPDF: boolean = false;
   informeIdParam: number | null = null;
+  informesDisponibles: { id: number; etiqueta: string }[] = [];
+  informeConsultaId: number | null = null;
+  informeCargado = false;
 
   // Información del usuario
   nombreUsuario: string = '';
@@ -73,6 +76,11 @@ export class VerInformeComponent implements OnInit {
   congregacionPais: string = 'N/A';
   congregacionCiudad: string = 'N/A';
   congregacionCampo: string = 'N/A';
+  responsablesInforme: {
+    usuario_id: number | null;
+    nombre_responsable: string;
+    tipo_responsabilidad: string;
+  }[] = [];
 
   // Información del trimestre
   trimestre: string = '';
@@ -102,7 +110,7 @@ export class VerInformeComponent implements OnInit {
     });
 
     if (!this.informeIdParam) {
-      this.cargarInformacionUsuarioInforme(this.usuarioService.usuarioId);
+      this.nombreUsuario = 'Información histórica no disponible';
     }
     this.cargarTiposActividad();
     this.cargarTiposActividadEconomica();
@@ -185,57 +193,53 @@ export class VerInformeComponent implements OnInit {
   private verificarYCargarInforme(): void {
     const informeId = this.informeIdParam;
     if (!informeId) {
-      this.informeService.limpiarInformeActivo();
       this.intentarCargarInformeActivo();
       return;
     }
 
-    // Si viene por parámetro, primero cargar info básica del informe para obtener el usuario
-    if (this.informeIdParam) {
-      // Intentar obtener datos del state (si viene desde la lista)
-      const navigation = this.router.getCurrentNavigation();
-      const informeState = navigation?.extras?.state || history.state;
+    this.cargarInformePorId(informeId);
+  }
 
-      if (informeState?.informeData && informeState?.fromListaPais) {
-        const informeData = informeState.informeData;
+  seleccionarInformeConsulta(id: string): void {
+    const informe = this.informesDisponibles.find((opcion) => opcion.id === Number(id));
+    if (!informe || this.cargando) return;
+    this.cargarInformePorId(informe.id);
+  }
 
-        this.actualizarPeriodoDesdeInforme(informeData);
-        // Cargar información del usuario del informe
-        this.cargarInformacionUsuarioInforme(informeData.usuario_id);
-        this.cargarDatosInforme(informeId);
-      } else {
-        // Fallback: intentar cargar desde API
-        this.informeService
-          .getInforme(informeId)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: (informe: any) => {
-              const informeData = informe?.informacioninforme || informe?.[0];
-              if (informeData) {
-                this.actualizarPeriodoDesdeInforme(informeData);
-                // Cargar información del usuario del informe
-                this.cargarInformacionUsuarioInforme(informeData.usuario_id);
-                this.cargarDatosInforme(informeId);
-              } else {
-                console.error('❌ No se encontró el informe');
-                Swal.fire({
-                  title: 'Error',
-                  text: 'No se encontró el informe solicitado.',
-                  icon: 'error',
-                });
-              }
-            },
-            error: (error) => {
-              console.error('❌ Error al cargar informe:', error);
-              Swal.fire({
-                title: 'Error',
-                text: 'No se pudo cargar el informe.',
-                icon: 'error',
-              });
-            },
+  private cargarInformePorId(informeId: number): void {
+    this.informeConsultaId = informeId;
+    this.informeCargado = false;
+    this.cargando = true;
+    this.informeService
+      .getInforme(informeId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (informe: any) => {
+          const informeData = informe?.informacioninforme || informe?.[0];
+          if (informeData) {
+            this.actualizarPeriodoDesdeInforme(informeData);
+            this.cargarInformacionUnidadInforme(informeData);
+            this.cargarDatosInforme(informeId);
+          } else {
+            this.cargando = false;
+            console.error('No se encontró el informe solicitado:', informeId);
+            Swal.fire({
+              title: 'Error',
+              text: 'No se encontró el informe solicitado.',
+              icon: 'error',
+            });
+          }
+        },
+        error: (error) => {
+          this.cargando = false;
+          console.error('Error al cargar el informe solicitado:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo cargar el informe.',
+            icon: 'error',
           });
-      }
-    }
+        },
+      });
   }
 
   private actualizarPeriodoDesdeInforme(informe: { periodo?: string | null; createdAt?: string } | null): void {
@@ -256,7 +260,7 @@ export class VerInformeComponent implements OnInit {
   }
 
   /**
-   * Intenta cargar el informe activo del usuario desde la API
+   * Ofrece los informes abiertos de las Congregaciones asignadas para consulta.
    */
   private intentarCargarInformeActivo(): void {
     const usuarioId = this.usuarioService.usuario?.id;
@@ -267,21 +271,40 @@ export class VerInformeComponent implements OnInit {
       return;
     }
 
-    const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
+    const { fechaInicio } = this.obtenerFechasTrimestreActual();
 
     this.cargando = true;
     this.informeService
-      .cargarInformeActivo(usuarioId, fechaInicio, fechaFin)
+      .getMisResponsabilidades(fechaInicio)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          this.cargando = false;
-
-          if (response.tieneInformeAbierto && this.informeService.informeActivo) {
-            // Ahora sí cargar los datos del informe
-            this.actualizarPeriodoDesdeInforme(this.informeService.informeActivo);
-            this.cargarDatosInforme(this.informeService.informeActivo.id);
+          const tipos = {
+            PAIS: 'Congregación País',
+            CONGREGACION: 'Congregación Ciudad',
+            CAMPO: 'Congregación Campo',
+          };
+          this.informesDisponibles = response.ambitos.flatMap((ambito) =>
+            ambito.informe?.estado === 'Abierto'
+              ? [{
+                  id: ambito.informe.id,
+                  etiqueta: `${ambito.nombre_unidad} — ${tipos[ambito.tipo_congregacion]}${ambito.nombre_pais && ambito.tipo_congregacion !== 'PAIS' ? ` · ${ambito.nombre_pais}` : ''}`,
+                }]
+              : [],
+          );
+          this.informesDisponibles.push(
+            ...response.legados.map((informe) => ({
+              id: informe.id,
+              etiqueta: `Informe anterior #${informe.id} — Congregación no identificada`,
+            })),
+          );
+          const seleccionado = this.informesDisponibles.find(
+            (informe) => informe.id === this.informeService.informeActivoId,
+          ) ?? this.informesDisponibles[0];
+          if (seleccionado) {
+            this.cargarInformePorId(seleccionado.id);
           } else {
+            this.cargando = false;
             console.warn('⚠️ No se encontró informe activo');
             this.mostrarErrorSinInforme();
           }
@@ -320,54 +343,24 @@ export class VerInformeComponent implements OnInit {
     };
   }
 
-  /**
-   * Carga información del usuario propietario del informe
-   */
-  private cargarInformacionUsuarioInforme(usuarioId: number): void {
-    this.nombreUsuario = '';
-    this.congregacionPais = 'N/A';
-    this.congregacionCiudad = 'N/A';
-    this.congregacionCampo = 'N/A';
-
-    this.usuarioService
-      .getUsuario(usuarioId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          if (response.ok && response.usuario) {
-            const usuario = response.usuario;
-            // Actualizar nombre del usuario
-            this.nombreUsuario = [
-              usuario.primerNombre, usuario.segundoNombre, usuario.primerApellido, usuario.segundoApellido,
-            ].filter(Boolean).join(' ');
-
-            this.congregacionPais = Array.isArray(usuario.usuarioCongregacionPais)
-              ? usuario.usuarioCongregacionPais[0]?.pais || 'N/A'
-              : 'N/A';
-            this.congregacionCiudad = Array.isArray(usuario.usuarioCongregacionCongregacion)
-              ? usuario.usuarioCongregacionCongregacion[0]?.congregacion || 'N/A'
-              : 'N/A';
-            this.congregacionCampo = Array.isArray(usuario.usuarioCongregacionCampo)
-              ? usuario.usuarioCongregacionCampo[0]?.campo || 'N/A'
-              : 'N/A';
-          } else {
-            console.error('No se encontró el usuario propietario del informe:', usuarioId);
-            Swal.fire({
-              title: 'Error',
-              text: 'No se pudo cargar la información del obrero del informe.',
-              icon: 'error',
-            });
-          }
-        },
-        error: (error) => {
-          console.error('Error al cargar usuario del informe:', error);
-          Swal.fire({
-            title: 'Error',
-            text: 'No se pudo cargar la información del obrero del informe.',
-            icon: 'error',
-          });
-        },
-      });
+  private cargarInformacionUnidadInforme(informe: any): void {
+    const unidad = informe.unidad ?? informe;
+    const sinSnapshot = 'Información histórica no disponible';
+    this.responsablesInforme = Array.isArray(informe.responsables)
+      ? informe.responsables
+      : [];
+    const responsablePrincipal = this.responsablesInforme.find(
+      (responsable) =>
+        responsable.tipo_responsabilidad === 'PRINCIPAL' ||
+        responsable.tipo_responsabilidad === 'OBRERO_PAIS',
+    );
+    this.nombreUsuario =
+      responsablePrincipal?.nombre_responsable ??
+      this.responsablesInforme[0]?.nombre_responsable ??
+      sinSnapshot;
+    this.congregacionPais = unidad.nombre_pais ?? sinSnapshot;
+    this.congregacionCiudad = unidad.nombre_congregacion ?? sinSnapshot;
+    this.congregacionCampo = unidad.nombre_campo ?? sinSnapshot;
   }
 
   /**
@@ -404,6 +397,7 @@ export class VerInformeComponent implements OnInit {
           this.aspectosEspirituales = (datos.aspectosEspirituales || []).filter((a: any) => a.estado !== false);
           this.asuntosPendientes = (datos.asuntosPendientes || []).filter((a: any) => a.estado !== false);
 
+          this.informeCargado = true;
           this.cargando = false;
         },
         error: (error) => {
@@ -488,8 +482,14 @@ export class VerInformeComponent implements OnInit {
               widths: ['*', '*'],
               body: [
                 [
-                  { text: 'Obrero:', style: 'infoLabel', border: [false, false, false, false] },
-                  { text: this.nombreUsuario, style: 'infoValue', border: [false, false, false, false] },
+                  { text: 'Responsables:', style: 'infoLabel', border: [false, false, false, false] },
+                  {
+                    stack: this.obtenerNombresResponsables().map((nombre) => ({
+                      text: nombre,
+                      style: 'infoValue',
+                    })),
+                    border: [false, false, false, false],
+                  },
                 ],
                 [
                   { text: 'Fecha:', style: 'infoLabel', border: [false, false, false, false] },
@@ -938,10 +938,20 @@ export class VerInformeComponent implements OnInit {
   /**
    * Navega de regreso a la página de informe
    */
+  obtenerNombresResponsables(): string[] {
+    return this.responsablesInforme.length
+      ? this.responsablesInforme.map((responsable) => responsable.nombre_responsable)
+      : [this.nombreUsuario];
+  }
+
   volverAlInforme(): void {
     // Si viene de ver-informes-pais (tiene informeIdParam), volver ahí
     if (this.informeIdParam) {
       const origen = this.route.snapshot.queryParamMap.get('origen');
+      if (origen === RUTAS.INFORME) {
+        this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INFORME}`);
+        return;
+      }
       if (origen === RUTAS.DASHBOARD_SUPERVISION) {
         this.router.navigate(['/sistema', RUTAS.DASHBOARD_SUPERVISION], {
           queryParams: {

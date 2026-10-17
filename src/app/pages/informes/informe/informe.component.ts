@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
@@ -8,8 +9,11 @@ import {
   ColorEstatus,
   NombreSeccion,
 } from 'src/app/core/interfaces/seccion-informe.interface';
-import { EstatusSeccionesInforme } from 'src/app/core/interfaces/informe.interface';
-import { InformeModel } from 'src/app/core/models/informe.model';
+import {
+  AmbitoInformeInterface,
+  EstatusSeccionesInforme,
+} from 'src/app/core/interfaces/informe.interface';
+import { ESTADO_INFORME_ENUM, InformeModel } from 'src/app/core/models/informe.model';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -23,6 +27,16 @@ import {
   obtenerPeriodoInforme,
 } from 'src/app/core/utils/periodo-informe';
 
+function escaparHtml(valor: string): string {
+  return valor.replace(/[&<>"']/g, (caracter) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  })[caracter] ?? caracter);
+}
+
 @Component({
   selector: 'app-informe',
   templateUrl: './informe.component.html',
@@ -30,12 +44,29 @@ import {
   standalone: true,
   imports: [CommonModule, SeccionInformeComponent],
 })
-export class InformeComponent implements OnInit {
+export class InformeComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private informeService = inject(InformeService);
   private usuarioService = inject(UsuarioService);
+  private resumenSubscription?: Subscription;
+  cerrando = false;
+
+  ngOnDestroy(): void {
+    this.resumenSubscription?.unsubscribe();
+  }
 
   informes: InformeModel[] = [];
+  ambitos: AmbitoInformeInterface[] = [];
+  ambitoSeleccionado: AmbitoInformeInterface | null = null;
+  informesLegados: {
+    id: number;
+    usuario_id: number;
+    estado: string;
+    periodo: string | null;
+    createdAt: string;
+    updatedAt: string;
+  }[] = [];
+  informeLegadoSeleccionado: { id: number; usuario_id: number; estado: string } | null = null;
   generarSeccioninforme: Seccion[] = [];
 
   diasFinTrimestre: number;
@@ -143,28 +174,234 @@ export class InformeComponent implements OnInit {
    * obtiene el estatus de todas las secciones (endpoint consolidado /informe/resumen)
    */
   verificarInformeAbierto(): void {
-    const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
-    const usuarioId = this.usuarioService.usuarioId;
-
+    const { fechaInicio } = this.obtenerFechasTrimestreActual();
     this.cargando = true;
-
-    this.informeService.cargarResumenInforme(usuarioId, fechaInicio, fechaFin).subscribe(
-      (respuesta) => {
-        this.hayInformeAbierto = respuesta.tieneInformeAbierto;
-
-        if (respuesta.tieneInformeAbierto && respuesta.secciones) {
-          this.aplicarEstatusSecciones(respuesta.secciones);
+    this.informeService.getMisResponsabilidades(fechaInicio).subscribe({
+      next: (respuesta) => {
+        this.ambitos = respuesta.ambitos;
+        this.informesLegados = respuesta.legados ?? [];
+        const activoId = this.informeService.informeActivoId;
+        const seleccionado = this.ambitos.find(
+          (ambito) =>
+            ambito.informe?.id === activoId &&
+            ambito.informe.estado === ESTADO_INFORME_ENUM.ABIERTO,
+        );
+        if (seleccionado) {
+          this.seleccionarInforme(seleccionado);
         } else {
-          this.generarSeccioninforme = [...generarSeccioninforme];
+          const legado = this.informesLegados.find(
+            (informe) => informe.id === activoId,
+          );
+          if (legado) {
+            this.seleccionarInformeLegado(legado);
+          } else {
+            this.informeService.limpiarInformeActivo();
+            this.ambitoSeleccionado = null;
+            this.informeLegadoSeleccionado = null;
+            this.hayInformeAbierto = false;
+            this.generarSeccioninforme = [...generarSeccioninforme];
+          }
         }
-        this.cargando = false;
+        if (!this.ambitoSeleccionado && !this.informeLegadoSeleccionado) this.cargando = false;
       },
-      (error) => {
+      error: (error) => {
+        console.error('Error al cargar responsabilidades de informes:', error);
         this.hayInformeAbierto = false;
+        this.ambitos = [];
         this.generarSeccioninforme = [...generarSeccioninforme];
         this.cargando = false;
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudieron cargar las congregaciones asignadas. Intenta nuevamente.',
+          icon: 'error',
+        });
       },
+    });
+  }
+
+  tipoUnidadTexto(ambito: AmbitoInformeInterface): string {
+    return {
+      PAIS: 'Congregación País',
+      CONGREGACION: 'Congregación Ciudad',
+      CAMPO: 'Congregación Campo',
+    }[ambito.tipo_congregacion];
+  }
+
+  generarInforme(ambito: AmbitoInformeInterface): void {
+    if (ambito.informe) {
+      if (ambito.informe.estado === ESTADO_INFORME_ENUM.ABIERTO) {
+        this.seleccionarInforme(ambito);
+      } else {
+        this.verInforme(ambito.informe.id);
+      }
+      return;
+    }
+
+    Swal.fire({
+      title: 'Generar informe',
+      text: `¿Desea generar el informe para ${ambito.nombre_unidad} (${this.tipoUnidadTexto(ambito)}) del ${this.formatearTrimestre(this.getTrimestresActual())} trimestre de ${this.getAnioInforme()}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, generar',
+      cancelButtonText: 'Cancelar',
+    }).then((resultado) => {
+      if (resultado.isConfirmed) this.crearNuevoInforme(ambito);
+    });
+  }
+
+  seleccionarInforme(ambito: AmbitoInformeInterface): void {
+    const informe = ambito.informe;
+    if (!informe || informe.estado !== ESTADO_INFORME_ENUM.ABIERTO) return;
+
+    this.ambitoSeleccionado = ambito;
+    this.informeLegadoSeleccionado = null;
+    this.informeService.informeActivo = {
+      ...informe,
+      tipo_congregacion: ambito.tipo_congregacion,
+      nombre_unidad: ambito.nombre_unidad,
+      nombre_pais: ambito.nombre_pais,
+      nombre_congregacion: ambito.nombre_congregacion,
+      nombre_campo: ambito.nombre_campo,
+    };
+    this.cargarResumenSeleccionado(informe.id);
+  }
+
+  seleccionarInformeLegado(
+    informe: NonNullable<InformeService['informeActivo']>,
+  ): void {
+    this.ambitoSeleccionado = null;
+    this.informeLegadoSeleccionado = informe;
+    this.informeService.informeActivo = informe;
+    this.cargarResumenSeleccionado(informe.id);
+  }
+
+  private cargarResumenSeleccionado(informeId: number): void {
+    this.resumenSubscription?.unsubscribe();
+    this.hayInformeAbierto = false;
+    this.generarSeccioninforme = [];
+    const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
+    this.cargando = true;
+    this.resumenSubscription = this.informeService
+      .cargarResumenInforme(
+        this.usuarioService.usuarioId,
+        fechaInicio,
+        fechaFin,
+        informeId,
+      )
+      .subscribe({
+        next: (respuesta) => {
+          this.hayInformeAbierto = respuesta.tieneInformeAbierto;
+          if (respuesta.secciones) {
+            this.aplicarEstatusSecciones(respuesta.secciones);
+          } else {
+            this.generarSeccioninforme = [...generarSeccioninforme];
+          }
+          this.cargando = false;
+        },
+        error: (error) => {
+          console.error('Error al cargar el informe seleccionado:', error);
+          this.hayInformeAbierto = false;
+          this.cargando = false;
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo abrir el informe seleccionado.',
+            icon: 'error',
+          });
+        },
+      });
+  }
+
+  verInforme(id: number): void {
+    this.router.navigateByUrl(
+      `${RUTAS.SISTEMA}/${RUTAS.VER_INFORME}/${id}?origen=${RUTAS.INFORME}`,
     );
+  }
+
+  cerrarInforme(): void {
+    const informeId = this.informeService.informeActivoId;
+    if (!informeId || !this.ambitoSeleccionado || this.cerrando || this.cargando) return;
+    this.cerrando = true;
+    const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
+    this.informeService.obtenerResumenInforme(
+      this.usuarioService.usuarioId, fechaInicio, fechaFin, informeId,
+    ).subscribe({
+      next: (respuesta) => {
+        this.cerrando = false;
+        if (this.informeService.informeActivoId !== informeId) return;
+        if (respuesta.secciones) this.aplicarEstatusSecciones(respuesta.secciones);
+        this.confirmarCierre(informeId);
+      },
+      error: () => {
+        this.cerrando = false;
+        Swal.fire('Error', 'No se pudo cargar el resumen del informe. Intenta nuevamente.', 'error');
+      },
+    });
+  }
+
+  private confirmarCierre(informeId: number): void {
+    const ambito = this.ambitoSeleccionado;
+    if (!ambito) return;
+    const conDatos = this.generarSeccioninforme
+      .filter((seccion) => seccion.estatus === EstatusSeccion.COMPLETADO)
+      .map((seccion) => seccion.nombre);
+    const periodo = ambito.informe?.periodo;
+    const [anio, mes] = periodo?.slice(0, 10).split('-').map(Number) ?? [];
+    const trimestre = mes && anio
+      ? `${this.formatearTrimestre(Math.ceil(mes / 3))} trimestre de ${anio}`
+      : `${this.formatearTrimestre(this.getTrimestresActual())} trimestre de ${this.getAnioInforme()}`;
+    const responsables = ambito.responsables.map((responsable) =>
+      responsable.nombre_responsable,
+    );
+    const campos = [
+      [this.tipoUnidadTexto(ambito), ambito.nombre_unidad],
+      ['Período', trimestre],
+      ['Responsables', responsables.join(', ') || 'Sin responsables disponibles'],
+      ['Secciones con datos', conDatos.join(', ') || 'Ninguna'],
+    ];
+    const resumen = `
+      <div class="informe-cierre-resumen">
+        ${campos.map(([etiqueta, valor]) => `
+          <div class="informe-cierre-resumen__campo">
+            <span class="informe-cierre-resumen__etiqueta">${escaparHtml(etiqueta)}</span>
+            <strong class="informe-cierre-resumen__valor">${escaparHtml(valor)}</strong>
+          </div>
+        `).join('')}
+        <p class="informe-cierre-resumen__advertencia">
+          <i class="fa fa-lock" aria-hidden="true"></i>
+          Al cerrarlo, estos responsables y la información del informe quedarán como registro histórico y ya no podrá editarse.
+        </p>
+      </div>
+    `;
+    Swal.fire({
+      title: 'Cerrar informe',
+      html: resumen,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Cerrar informe',
+      cancelButtonText: 'Seguir editando',
+      customClass: { popup: 'informe-cierre-modal' },
+    }).then((resultado) => {
+      if (!resultado.isConfirmed || this.informeService.informeActivoId !== informeId) return;
+      this.informeService.cerrarInforme(informeId).subscribe({
+        next: () => {
+          if (this.informeService.informeActivoId === informeId) {
+            this.informeService.limpiarInformeActivo();
+            this.ambitoSeleccionado = null;
+            this.informeLegadoSeleccionado = null;
+            this.hayInformeAbierto = false;
+          }
+          this.verificarInformeAbierto();
+        },
+        error: (error) => {
+          console.error('Error al cerrar el informe:', error);
+          Swal.fire({
+            title: 'Error',
+            text: error.error?.msg ?? 'No se pudo cerrar el informe.',
+            icon: 'error',
+          });
+        },
+      });
+    });
   }
 
   /**
@@ -196,54 +433,14 @@ export class InformeComponent implements OnInit {
    * Verifica si existe un informe abierto para el trimestre actual
    * antes de permitir generar un nuevo informe
    */
-  generarInforme() {
-    const { fechaInicio, fechaFin } = this.obtenerFechasTrimestreActual();
-    const usuarioId = this.usuarioService.usuarioId;
-
-    this.informeService.verificarInformeAbierto(usuarioId, fechaInicio, fechaFin).subscribe(
-      (respuesta) => {
-        if (respuesta.tieneInformeAbierto) {
-          // Ya existe un informe abierto
-          Swal.fire({
-            title: 'Informe ya existe',
-            text: `Ya existe un informe abierto para el ${this.getTrimestresActual()}${this.getTrimestresActual() === 1 ? 'er' : this.getTrimestresActual() === 3 ? 'er' : 'do'} trimestre.`,
-            icon: 'info',
-            confirmButtonText: 'Entendido',
-          });
-        } else {
-          // No existe informe, mostrar confirmación para crear uno nuevo
-          Swal.fire({
-            title: 'Generar Informe',
-            text: `¿Desea generar un nuevo informe para el ${this.getTrimestresActual()}${this.getTrimestresActual() === 1 ? 'er' : this.getTrimestresActual() === 3 ? 'er' : 'do'} trimestre? ${this.obtenerMensajeDisponibilidadInforme()}`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, generar',
-            cancelButtonText: 'Cancelar',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.crearNuevoInforme(fechaInicio, fechaFin);
-            }
-          });
-        }
-      },
-      (error) => {
-        Swal.fire({
-          title: 'Error',
-          text: 'No se pudo verificar el estado del informe. Intente nuevamente.',
-          icon: 'error',
-        });
-      },
-    );
-  }
-
   /**
    * Crea un nuevo informe para el trimestre actual
    */
-  private crearNuevoInforme(fechaInicio: string, fechaFin: string) {
-    const nuevoInforme = {
-      usuario_id: this.usuarioService.usuarioId,
-      periodo: fechaInicio,
-    };
+  private crearNuevoInforme(ambito: AmbitoInformeInterface) {
+    const nuevoInforme = new InformeModel();
+    nuevoInforme.periodo = this.obtenerFechasTrimestreActual().fechaInicio;
+    nuevoInforme.tipo_congregacion = ambito.tipo_congregacion;
+    nuevoInforme.congregacion_id = ambito.congregacion_id;
 
     this.informeService.crearInforme(nuevoInforme).subscribe(
       (respuesta: any) => {
@@ -252,10 +449,23 @@ export class InformeComponent implements OnInit {
           text: 'El informe se ha generado correctamente.',
           icon: 'success',
         });
-        // Volver a verificar si el informe está abierto y actualizar la vista (ya recarga las secciones internamente)
-        this.verificarInformeAbierto();
+        const nuevoAmbito = {
+          ...ambito,
+          informe: respuesta.informe,
+        };
+        this.ambitos = this.ambitos.map((actual) =>
+          actual.tipo_congregacion === ambito.tipo_congregacion &&
+          actual.congregacion_id === ambito.congregacion_id
+            ? nuevoAmbito
+            : actual,
+        );
+        this.seleccionarInforme(nuevoAmbito);
       },
       (error) => {
+        if (error.status === 409) {
+          this.verificarInformeAbierto();
+          return;
+        }
         Swal.fire({
           title: 'Error',
           text: 'No se pudo generar el informe. Intente nuevamente.',
@@ -269,6 +479,7 @@ export class InformeComponent implements OnInit {
    * Navega a la página de ver informe completo
    */
   verInformeCompleto(): void {
-    this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.VER_INFORME}`);
+    const informeId = this.informeService.informeActivoId;
+    if (informeId) this.verInforme(informeId);
   }
 }

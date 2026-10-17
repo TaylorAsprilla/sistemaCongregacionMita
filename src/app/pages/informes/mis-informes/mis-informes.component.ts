@@ -10,6 +10,16 @@ interface InformePropio {
   estado: string;
   periodo: string | null;
   createdAt: string;
+  tipo_congregacion?: 'PAIS' | 'CONGREGACION' | 'CAMPO' | null;
+  nombre_unidad?: string | null;
+  nombre_pais?: string | null;
+  nombre_congregacion?: string | null;
+  nombre_campo?: string | null;
+  responsablesHistoricos?: {
+    usuario_id: number | null;
+    nombre_responsable: string;
+    tipo_responsabilidad: string;
+  }[];
 }
 
 @Component({
@@ -51,6 +61,15 @@ export class MisInformesComponent implements OnInit {
     if (Number.isNaN(fecha.getTime())) return 'Período no disponible';
     const trimestre = Math.floor(fecha.getUTCMonth() / 3) + 1;
     return `${trimestre}° trimestre de ${fecha.getUTCFullYear()}`;
+  }
+
+  tipoUnidad(informe: InformePropio): string {
+    if (!informe.tipo_congregacion) return 'Tipo histórico no disponible';
+    return {
+      PAIS: 'Congregación País',
+      CONGREGACION: 'Congregación Ciudad',
+      CAMPO: 'Congregación Campo',
+    }[informe.tipo_congregacion];
   }
 
   verInforme(informe: InformePropio): void {

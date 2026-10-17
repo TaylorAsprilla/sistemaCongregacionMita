@@ -13,13 +13,14 @@ import { AsuntoPendienteService } from 'src/app/services/asunto-pendiente/asunto
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 
 @Component({
   selector: 'app-informe-asunto-pendiente',
   templateUrl: './informe-asunto-pendiente.component.html',
   styleUrls: ['./informe-asunto-pendiente.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, ContextoInformeComponent],
 })
 export class InformeAsuntoPendienteComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);

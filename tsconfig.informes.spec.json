@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.spec.json",
+  "include": [
+    "src/app/pages/informes/informe/informe.component.spec.ts",
+    "src/app/pages/informes/ver-informe/ver-informe.component.spec.ts",
+    "src/app/pages/informes/informe-metas/informe-metas.component.spec.ts",
+    "src/app/components/*informe*/**/*.spec.ts",
+    "src/app/services/informe/**/*.spec.ts",
+    "src/app/core/utils/periodo-informe.spec.ts",
+    "src/**/*.d.ts"
+  ]
+}

@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs/operators';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EstatusModel } from 'src/app/core/models/estatus.model';
@@ -11,13 +12,14 @@ import { MetaService } from 'src/app/services/meta/meta.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 
 @Component({
   selector: 'app-informe-metas',
   templateUrl: './informe-metas.component.html',
   styleUrls: ['./informe-metas.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, DatePipe],
+  imports: [FormsModule, ReactiveFormsModule, DatePipe, ContextoInformeComponent],
 })
 export class InformeMetasComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);
@@ -71,12 +73,12 @@ export class InformeMetasComponent implements OnInit {
   }
 
   private cargarMetasPendientes(): void {
-    const usuarioId = this.usuarioService.usuarioId;
-    if (!usuarioId) return;
+    const informeId = this.informeService.informeActivoId;
+    if (!informeId) return;
 
     this.cargandoPendientes = true;
     this.metaService
-      .getMetasPendientesByUsuario(usuarioId)
+      .getMetasPendientesByInforme(informeId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (metas) => {
@@ -115,6 +117,8 @@ export class InformeMetasComponent implements OnInit {
   }
 
   cumplirMeta(meta: MetaModel): void {
+    const informeId = this.informeService.informeActivoId;
+    if (!informeId) return;
     Swal.fire({
       title: 'Marcar como Cumplida',
       text: `Meta: "${meta.meta}"`,
@@ -132,8 +136,16 @@ export class InformeMetasComponent implements OnInit {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        this.metaService
-          .cumplirMeta(meta.id, result.value)
+        const completar = meta.informe_id === informeId
+          ? this.metaService.cumplirMeta(meta.id, result.value)
+          : this.metaService.copiarMeta({
+              meta_id_original: meta.id,
+              nuevo_informe_id: informeId,
+              actualizacion: result.value,
+            }).pipe(switchMap((respuesta) =>
+              this.metaService.cumplirMeta(respuesta.meta.id, result.value),
+            ));
+        completar
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: () => {
@@ -153,7 +165,7 @@ export class InformeMetasComponent implements OnInit {
 
     Swal.fire({
       title: 'Copiar Meta al Informe Actual',
-      html: `<p class="text-left"><strong>Meta:</strong> ${meta.meta}</p>`,
+      text: `Meta: ${meta.meta}`,
       input: 'textarea',
       inputLabel: 'Actualización del avance',
       inputPlaceholder: 'Continuamos. Avance: 70%. Esperamos cumplirla en el próximo trimestre.',
@@ -179,6 +191,7 @@ export class InformeMetasComponent implements OnInit {
             next: () => {
               Swal.fire('Meta Copiada', 'La meta fue copiada al informe actual', 'success');
               this.cargarMetas();
+              this.cargarMetasPendientes();
             },
             error: (error) => this.mostrarErrores('Error', error, 'No se pudo copiar la meta'),
           });

@@ -1,11 +1,13 @@
 export enum ESTADO_INFORME_ENUM {
-  ABIERTO = 'ABIERTO',
-  CERRADO = 'CERRADO',
+  ABIERTO = 'Abierto',
+  CERRADO = 'Cerrado',
   EN_REVISION = 'EN_REVISION',
 }
 
 export class InformeModel {
   public periodo?: string;
+  public tipo_congregacion?: 'PAIS' | 'CONGREGACION' | 'CAMPO';
+  public congregacion_id?: number;
 
   constructor(
     public id?: number,

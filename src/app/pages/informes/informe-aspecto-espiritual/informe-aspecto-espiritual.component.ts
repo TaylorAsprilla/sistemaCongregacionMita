@@ -11,13 +11,14 @@ import { CategoriaActividadEspiritualService } from 'src/app/services/categoria-
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 
 @Component({
   selector: 'app-informe-aspecto-espiritual',
   templateUrl: './informe-aspecto-espiritual.component.html',
   styleUrls: ['./informe-aspecto-espiritual.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, DatePipe],
+  imports: [FormsModule, ReactiveFormsModule, DatePipe, ContextoInformeComponent],
 })
 export class InformeAspectoEspiritualComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);

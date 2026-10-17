@@ -33,7 +33,9 @@
       <table class="table table-hover align-middle mb-0">
         <thead class="table-light">
           <tr>
+            <th scope="col">Congregación</th>
             <th scope="col">Período</th>
+            <th scope="col">Responsables</th>
             <th scope="col">Estado</th>
             <th scope="col">Fecha de creación</th>
             <th scope="col" class="text-end">Acción</th>
@@ -42,7 +44,30 @@
         <tbody>
           @for (informe of informes; track informe.id) {
             <tr>
+              <td>
+                <strong>{{ informe.nombre_unidad || 'Congregación histórica no disponible' }}</strong>
+                @if (informe.tipo_congregacion) {
+                  <div class="small text-muted">{{ tipoUnidad(informe) }}</div>
+                }
+                @if (informe.nombre_pais && informe.tipo_congregacion !== 'PAIS') {
+                  <div class="small text-muted">País: {{ informe.nombre_pais }}</div>
+                }
+              </td>
               <td class="fw-semibold">{{ periodo(informe) }}</td>
+              <td>
+                @if (informe.responsablesHistoricos?.length) {
+                  <ul class="mb-0 ps-3">
+                    @for (responsable of informe.responsablesHistoricos; track $index) {
+                      <li>
+                        {{ responsable.nombre_responsable }} —
+                        {{ responsable.tipo_responsabilidad }}
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  <span class="small text-muted">Información histórica no disponible</span>
+                }
+              </td>
               <td>
                 <span class="badge text-bg-secondary">Cerrado · solo lectura</span>
               </td>

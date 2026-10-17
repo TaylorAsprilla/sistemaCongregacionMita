@@ -23,6 +23,22 @@ Description: Estilos para visualización e impresión de informes
 // ============================================
 // ENCABEZADO DEL INFORME
 // ============================================
+.responsables-informe {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+
+  li + li {
+    margin-top: 0.5rem;
+  }
+
+  strong {
+    display: block;
+    font-weight: 600;
+  }
+}
+
 .info-box {
   margin: $informe-spacing-xl auto;
 
