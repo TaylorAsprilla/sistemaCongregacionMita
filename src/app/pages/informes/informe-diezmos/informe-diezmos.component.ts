@@ -9,13 +9,14 @@ import { InformeService } from 'src/app/services/informe/informe.service';
 import { CurrencyPipe } from '@angular/common';
 import { MESES, MesItem, getNombreMes, obtenerMesesTrimestreActual } from 'src/app/core/constants/meses.constant';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 
 @Component({
   selector: 'app-informe-diezmos',
   templateUrl: './informe-diezmos.component.html',
   styleUrls: ['./informe-diezmos.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CurrencyPipe],
+  imports: [FormsModule, ReactiveFormsModule, CurrencyPipe, ContextoInformeComponent],
 })
 export class InformeDiezmosComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);

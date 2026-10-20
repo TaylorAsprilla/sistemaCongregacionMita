@@ -10,13 +10,14 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
 import { obtenerFechaInicialPeriodoInforme, obtenerFechasPeriodoInforme } from 'src/app/core/utils/periodo-informe';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 
 @Component({
   selector: 'app-informe-logros',
   templateUrl: './informe-logros.component.html',
   styleUrls: ['./informe-logros.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe],
+  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe, ContextoInformeComponent],
 })
 export class InformeLogrosComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);

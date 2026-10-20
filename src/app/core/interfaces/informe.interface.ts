@@ -1,3 +1,4 @@
+
 export interface VerificarInformeAbiertoResponseInterface {
   tieneInformeAbierto: boolean;
   informe?: {
@@ -39,6 +40,44 @@ export interface ResumenInformeResponseInterface {
 }
 
 // Interfaces para informes del trimestre por país
+export interface ResponsableInformeInterface {
+  usuario_id: number;
+  nombre_responsable: string;
+  tipo_responsabilidad: string;
+}
+
+export interface AmbitoInformeInterface {
+  tipo_congregacion: 'PAIS' | 'CONGREGACION' | 'CAMPO';
+  congregacion_id: number;
+  nombre_unidad: string;
+  nombre_pais: string | null;
+  nombre_congregacion: string | null;
+  nombre_campo: string | null;
+  responsables: ResponsableInformeInterface[];
+  informe: {
+    id: number;
+    usuario_id: number;
+    estado: string;
+    periodo: string | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+}
+
+export interface MisResponsabilidadesInformeResponse {
+  ok: boolean;
+  periodo: string;
+  ambitos: AmbitoInformeInterface[];
+  legados: {
+    id: number;
+    usuario_id: number;
+    estado: string;
+    periodo: string | null;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+}
+
 export interface InformeTrimestrePaisResponse {
   ok: boolean;
   informes: InformeCompletoPais[];

@@ -1,8 +1,12 @@
 <div class="titulo">
-  <h1>Informe:</h1>
-  <h4>{{ formatearTrimestre(getTrimestresActual()) }} Trimestre del año</h4>
+  <h1 class="h3 mb-1">Informes trimestrales</h1>
+  <h2 class="h5 text-muted mb-0">
+    {{ formatearTrimestre(getTrimestresActual()) }} trimestre de {{ getAnioInforme() }}
+  </h2>
   <hr />
+</div>
 
+<div class="informes-alertas">
   @if (informeProximoACerrar || hayInformeAbierto) {
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
       @if (informeProximoACerrar) {
@@ -10,22 +14,17 @@
           <i class="fa fa-exclamation-triangle cierre-informe-banner__icono"></i>
           <div class="cierre-informe-banner__contenido">
             <strong class="cierre-informe-banner__titulo">
-              El informe actual corresponde al {{ formatearTrimestre(getTrimestresActual()) }} trimestre de
-              {{ getAnioInforme() }}
+              Informe del {{ formatearTrimestre(getTrimestresActual()) }} trimestre de {{ getAnioInforme() }}
             </strong>
             <p class="cierre-informe-banner__texto mb-0">
               @if (esPeriodoEspecialTercerTrimestre2026()) {
-                El informe de julio, agosto y septiembre puede completarse hasta su cierre automático:
-                <strong>{{ fechaCierreInformeTexto }}</strong
-                >. Desde ese momento podrás abrir el informe de octubre, noviembre y diciembre.
+                Puede completarse hasta su cierre automático: <strong>{{ fechaCierreInformeTexto }}</strong>.
               } @else {
-                No llenes todavía el informe del {{ formatearTrimestre((getTrimestresActual() % 4) + 1) }} trimestre.
-                Completa el informe del {{ formatearTrimestre(getTrimestresActual()) }} trimestre antes de que cierre
-                el
+                Completa el informe antes del
                 <strong>
                   <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
                 </strong>
-                (hora local según la zona horaria de tu dispositivo).
+                (hora local según tu dispositivo).
               }
             </p>
           </div>
@@ -35,72 +34,231 @@
           <i class="fa fa-info-circle cierre-informe-banner__icono"></i>
           <div class="cierre-informe-banner__contenido">
             <p class="cierre-informe-banner__texto mb-0">
-              El trimestre finaliza el <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
-              >. El informe se cerrará automáticamente el
-              <strong>
-                <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
-              </strong>
-              (hora local según la zona horaria de tu dispositivo), por lo que tendrás hasta esa fecha para completarlo.
+              El informe de <strong>{{ ambitoSeleccionado?.nombre_unidad }}</strong> se cerrará automáticamente el
+              <strong>{{ fechaCierreInformeTexto }}</strong>.
             </p>
           </div>
         </div>
       }
       @if (hayInformeAbierto) {
-        <button class="btn btn-primary flex-shrink-0 ms-auto" (click)="verInformeCompleto()">
-          <i class="fa fa-file-alt"></i> Ver Informe Completo
-        </button>
+        <div class="d-flex gap-2">
+          @if (ambitoSeleccionado) {
+            <button class="btn btn-outline-danger" type="button" (click)="cerrarInforme()" [disabled]="cargando || cerrando">
+              <i class="fa fa-lock" aria-hidden="true"></i> Cerrar informe
+            </button>
+          }
+          <button class="btn btn-primary" type="button" (click)="verInformeCompleto()">
+            <i class="fa fa-file-alt" aria-hidden="true"></i> Ver informe completo
+          </button>
+        </div>
       }
     </div>
   }
 </div>
 
-<div class="container mt-4">
-  @if (cargando) {
-    <div class="d-flex justify-content-center align-items-center" style="min-height: 300px">
-      <div class="text-center">
-        <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem">
-          <span class="sr-only">Cargando...</span>
-        </div>
-        <p class="mt-3 h5 text-muted">Cargando información del informe...</p>
-      </div>
+<main class="container-fluid informes-contenido">
+  @if (cargando && (ambitoSeleccionado || informeLegadoSeleccionado)) {
+    <p class="text-muted py-3" role="status">Cargando el informe seleccionado...</p>
+  }
+  @if (cargando && ambitos.length === 0) {
+    <div class="text-center py-5" role="status">
+      <span class="spinner-border text-primary" aria-hidden="true"></span>
+      <p class="text-muted mt-3 mb-0">Cargando tus Congregaciones...</p>
     </div>
-  } @else if (hayInformeAbierto) {
-    <div class="row">
-      @for (seccionInforme of generarSeccioninforme; track seccionInforme) {
-        <div class="col-md-6">
-          <app-seccion-informe
-            [nombre]="seccionInforme.nombre"
-            [ruta]="seccionInforme.ruta"
-            [icono]="seccionInforme.icono"
-            [descripcion]="seccionInforme.descripcion"
-            [estatus]="seccionInforme.estatus"
-            [color]="seccionInforme.color"
-          ></app-seccion-informe>
-        </div>
-      }
+  } @else if (ambitos.length === 0 && informesLegados.length === 0) {
+    <div class="alert alert-info text-center" role="status">
+      No hay Congregaciones País, Ciudad o Campo asignadas para diligenciar informes trimestrales.
     </div>
   } @else {
-    <div class="alert alert-warning text-center py-5" role="alert">
-      <i class="fa fa-exclamation-triangle fa-3x mb-3"></i>
-      <h4 class="mb-3">No hay informe abierto</h4>
-      <p class="mb-4">Por favor, genera un informe para comenzar a trabajar.</p>
-      <p class="mb-4">
-        @if (esPeriodoEspecialTercerTrimestre2026()) {
-          {{ obtenerMensajeDisponibilidadInforme() }}
-        } @else {
-          El trimestre actual va del <strong>{{ fechaInicioTrimestre | date: "d 'de' MMMM" }}</strong> al
-          <strong>{{ fechaFinTrimestre | date: "d 'de' MMMM 'de' y" }}</strong
-          >. Una vez generado, tendrás hasta el
-          <strong>
-            <time [attr.datetime]="fechaCierreInforme.toISOString()">{{ fechaCierreInformeTexto }}</time>
-          </strong>
-          (hora local según la zona horaria de tu dispositivo)
-          para completarlo antes de que se cierre automáticamente.
+    @if (ambitos.length) {
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 text-dark">
+        @if (ambitos.length > 1) {
+          <p class="small mb-0">
+            Selecciona la Congregación para la que deseas hacer el informe usando el botón
+            <strong>Generar</strong> o <strong>Diligenciar</strong>.
+            Verifica que quede marcada como <strong>Seleccionado</strong> antes de continuar.
+          </p>
         }
-      </p>
-      <button class="btn btn-primary btn-lg" (click)="generarInforme()">
-        <i class="fa fa-plus"></i> Generar Informe
-      </button>
-    </div>
+        <span class="small">
+          {{ ambitos.length }} {{ ambitos.length === 1 ? 'Congregación' : 'Congregaciones' }}
+        </span>
+      </div>
+      <div class="informe-congregaciones-list">
+        @for (ambito of ambitos; track ambito.tipo_congregacion + ':' + ambito.congregacion_id) {
+          <article
+            class="informe-congregacion-fila"
+            [class.informe-congregacion-fila--seleccionada]="
+              ambitoSeleccionado?.tipo_congregacion === ambito.tipo_congregacion &&
+              ambitoSeleccionado?.congregacion_id === ambito.congregacion_id
+            "
+            [attr.aria-current]="
+              ambitoSeleccionado?.tipo_congregacion === ambito.tipo_congregacion &&
+              ambitoSeleccionado?.congregacion_id === ambito.congregacion_id
+                ? 'true'
+                : null
+            "
+          >
+            <div class="informe-congregacion-fila__info">
+              <div class="informe-congregacion-fila__identidad">
+                <h3 class="informe-congregacion-fila__nombre">{{ ambito.nombre_unidad }}</h3>
+                <span class="informe-congregacion-fila__tipo">{{ tipoUnidadTexto(ambito) }}</span>
+                @if (ambito.nombre_pais && ambito.tipo_congregacion !== 'PAIS') {
+                  <span class="text-muted"> · {{ ambito.nombre_pais }}</span>
+                }
+                @if (ambito.nombre_congregacion && ambito.tipo_congregacion === 'CAMPO') {
+                  <span class="text-muted"> · {{ ambito.nombre_congregacion }}</span>
+                }
+              </div>
+
+              <div class="informe-congregacion-fila__responsables">
+                @if (ambito.responsables.length) {
+                  @for (responsable of ambito.responsables; track responsable.usuario_id; let primero = $first) {
+                    @if (!primero) {
+                      <span class="text-muted"> · </span>
+                    }
+                    <span>
+                      {{ responsable.nombre_responsable }}
+                    </span>
+                  }
+                } @else if (ambito.informe?.estado === 'Cerrado') {
+                  <span class="text-muted">Responsables históricos no disponibles</span>
+                } @else {
+                  <span class="text-muted">Sin responsables disponibles</span>
+                }
+              </div>
+            </div>
+
+            <div class="informe-congregacion-fila__estado">
+              @if (ambito.informe?.estado === 'Abierto') {
+                <span
+                  class="badge"
+                  [ngClass]="
+                    ambitoSeleccionado?.tipo_congregacion === ambito.tipo_congregacion &&
+                    ambitoSeleccionado?.congregacion_id === ambito.congregacion_id
+                      ? 'text-bg-warning'
+                      : 'text-bg-primary'
+                  "
+                >
+                  @if (
+                    ambitoSeleccionado?.tipo_congregacion === ambito.tipo_congregacion &&
+                    ambitoSeleccionado?.congregacion_id === ambito.congregacion_id
+                  ) {
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> Seleccionado
+                  } @else {
+                    En proceso
+                  }
+                </span>
+              } @else if (ambito.informe?.estado === 'Cerrado') {
+                <span class="badge text-bg-secondary">Cerrado</span>
+              } @else {
+                <span class="badge text-bg-danger">Pendiente</span>
+              }
+            </div>
+
+            <div class="informe-congregacion-fila__accion">
+              @if (!ambito.informe || ambito.informe.estado === 'Abierto') {
+                <button class="btn btn-primary btn-sm" type="button" (click)="generarInforme(ambito)">
+                  <i class="fa" [ngClass]="ambito.informe ? 'fa-edit' : 'fa-plus'" aria-hidden="true"></i>
+                  {{ ambito.informe ? 'Diligenciar' : 'Generar' }}
+                </button>
+              } @else {
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  type="button"
+                  (click)="verInforme(ambito.informe!.id)"
+                >
+                  <i class="fa fa-eye" aria-hidden="true"></i> Ver informe
+                </button>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+
+    @if (informesLegados.length) {
+      <section class="mt-4" aria-labelledby="informes-legados">
+        <h2 id="informes-legados" class="h5">Informe anterior sin tipo de Congregación identificado</h2>
+        <p class="text-muted">
+          Este informe fue creado antes de registrar si corresponde a Congregación País, Congregación Ciudad o Congregación Campo. Se conserva sin inferir ese dato.
+        </p>
+        @for (informe of informesLegados; track informe.id) {
+          <div class="alert alert-warning d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span>Informe abierto creado el {{ informe.createdAt | date: 'd MMM y' }}</span>
+            <button
+              class="btn btn-outline-primary"
+              type="button"
+              (click)="seleccionarInformeLegado(informe)"
+            >
+              Continuar informe
+            </button>
+          </div>
+        }
+      </section>
+    }
+
+    @if (hayInformeAbierto && ambitoSeleccionado) {
+      <section class="mt-5" aria-labelledby="informe-seleccionado">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <div>
+            <h2 id="informe-seleccionado" class="h4 mb-1 informe-titulo-seccion">
+              {{ ambitoSeleccionado.nombre_unidad }} — {{ tipoUnidadTexto(ambitoSeleccionado) }}
+            </h2>
+            <p class="text-muted mb-0">
+              {{ formatearTrimestre(getTrimestresActual()) }} trimestre de {{ getAnioInforme() }}
+            </p>
+          </div>
+        </div>
+        @if (cargando) {
+          <div class="text-center py-3" role="status">
+            <div class="spinner-border text-primary" aria-hidden="true"></div>
+            <p class="mt-2">Cargando el estado de las secciones...</p>
+          </div>
+        } @else {
+          <div class="row g-3">
+            @for (seccionInforme of generarSeccioninforme; track seccionInforme.nombre) {
+              <div class="col-md-6">
+                <app-seccion-informe
+                  [nombre]="seccionInforme.nombre"
+                  [ruta]="seccionInforme.ruta"
+                  [icono]="seccionInforme.icono"
+                  [descripcion]="seccionInforme.descripcion"
+                  [estatus]="seccionInforme.estatus"
+                  [color]="seccionInforme.color"
+                ></app-seccion-informe>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    }
+    @if (hayInformeAbierto && informeLegadoSeleccionado) {
+      <section class="mt-5" aria-labelledby="informe-legado-seleccionado">
+        <h2 id="informe-legado-seleccionado" class="h4">
+          Informe abierto sin tipo de Congregación identificado
+        </h2>
+        @if (cargando) {
+          <div class="text-center py-3" role="status">
+            <div class="spinner-border text-primary" aria-hidden="true"></div>
+            <p class="mt-2">Cargando el estado de las secciones...</p>
+          </div>
+        } @else {
+          <div class="row g-3">
+            @for (seccionInforme of generarSeccioninforme; track seccionInforme.nombre) {
+              <div class="col-md-6">
+                <app-seccion-informe
+                  [nombre]="seccionInforme.nombre"
+                  [ruta]="seccionInforme.ruta"
+                  [icono]="seccionInforme.icono"
+                  [descripcion]="seccionInforme.descripcion"
+                  [estatus]="seccionInforme.estatus"
+                  [color]="seccionInforme.color"
+                ></app-seccion-informe>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    }
   }
-</div>
+</main>

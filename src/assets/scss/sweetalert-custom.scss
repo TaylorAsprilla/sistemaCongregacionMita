@@ -12,32 +12,103 @@
 
 .swal2-popup {
   font-family: $bodyfont !important;
-  border-radius: 8px !important;
+  width: min(30rem, calc(100vw - 2rem)) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 20px !important;
+  background: #fff !important;
   box-shadow:
-    0 14px 26px -12px rgba(0, 0, 0, 0.42),
-    0 4px 23px 0 rgba(0, 0, 0, 0.12),
-    0 8px 10px -5px rgba(0, 0, 0, 0.2) !important;
-  padding: 2rem !important;
+    0 24px 60px -24px rgba(15, 23, 42, 0.42),
+    0 8px 24px rgba(15, 23, 42, 0.1) !important;
+  padding: 2rem 2.25rem !important;
+}
+
+.swal2-container.swal2-backdrop-show {
+  background: rgba(15, 23, 42, 0.48) !important;
+  backdrop-filter: blur(3px);
 }
 
 .swal2-title {
   font-family: $headingfont !important;
   color: $headingtext !important;
-  font-size: 1.5rem !important;
-  font-weight: 600 !important;
-  padding: 0 0 1rem 0 !important;
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  padding: 0 !important;
 }
 
 .swal2-html-container {
   font-family: $bodyfont !important;
   color: $bodytext !important;
-  font-size: 0.95rem !important;
-  line-height: 1.6 !important;
-  margin: 1rem 0 !important;
+  font-size: 0.96rem !important;
+  line-height: 1.65 !important;
+  margin: 0.65rem auto 0 !important;
+  max-width: 26rem;
 }
 
 .swal2-icon {
-  margin: 1.5rem auto 1rem !important;
+  margin: 0.25rem auto 1.1rem !important;
+}
+
+.swal2-actions {
+  gap: 0.65rem !important;
+  margin: 1.6rem auto 0 !important;
+}
+
+.informe-cierre-modal {
+  .swal2-html-container {
+    max-width: 100% !important;
+    text-align: left !important;
+  }
+
+  .informe-cierre-resumen {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 0.3rem;
+  }
+
+  .informe-cierre-resumen__campo {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid #e6eaf0;
+    border-radius: 10px;
+    background: #f8fafc;
+  }
+
+  .informe-cierre-resumen__etiqueta {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+  }
+
+  .informe-cierre-resumen__valor {
+    color: #1e293b;
+    font-size: 0.95rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .informe-cierre-resumen__advertencia {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin: 0.35rem 0 0 !important;
+    padding: 0.85rem 0.95rem;
+    border: 1px solid #f1d08a;
+    border-radius: 10px;
+    background: #fff8e6;
+    color: #684d0b;
+    font-size: 0.87rem;
+    font-weight: 500;
+    line-height: 1.5;
+
+    .fa {
+      margin-top: 0.15rem;
+      color: #a56b00;
+    }
+  }
 }
 
 // ==========================================
@@ -95,12 +166,16 @@
 .swal2-deny {
   font-family: $bodyfont !important;
   font-size: 0.9rem !important;
-  font-weight: 500 !important;
-  padding: 0.6rem 1.5rem !important;
-  border-radius: 4px !important;
+  font-weight: 600 !important;
+  min-height: 2.75rem !important;
+  padding: 0.65rem 1.35rem !important;
+  border-radius: 10px !important;
   border: none !important;
-  transition: all 0.3s ease !important;
-  box-shadow: $default-shadow !important;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease !important;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12) !important;
 
   i,
   .fas,
@@ -124,6 +199,11 @@
   &:focus {
     box-shadow: 0 0 0 3px rgba($primary, 0.3) !important;
   }
+
+  &:focus-visible {
+    outline: 3px solid rgba($primary, 0.35) !important;
+    outline-offset: 2px;
+  }
 }
 
 // Botón de cancelar
@@ -140,6 +220,11 @@
   &:focus {
     box-shadow: 0 0 0 3px rgba($secondary, 0.3) !important;
   }
+
+  &:focus-visible {
+    outline: 3px solid rgba($secondary, 0.35) !important;
+    outline-offset: 2px;
+  }
 }
 
 // Botón de denegar
@@ -155,6 +240,11 @@
 
   &:focus {
     box-shadow: 0 0 0 3px rgba($danger, 0.3) !important;
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba($danger, 0.35) !important;
+    outline-offset: 2px;
   }
 }
 
@@ -337,23 +427,29 @@
 
 @media (max-width: 768px) {
   .swal2-popup {
-    width: 90% !important;
-    padding: 1.5rem !important;
+    width: calc(100vw - 2rem) !important;
+    padding: 1.5rem 1.25rem !important;
   }
 
   .swal2-title {
-    font-size: 1.25rem !important;
+    font-size: 1.2rem !important;
   }
 
   .swal2-html-container {
     font-size: 0.9rem !important;
   }
 
+  .swal2-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
   .swal2-confirm,
   .swal2-cancel,
   .swal2-deny {
+    flex: 1 1 auto;
     font-size: 0.85rem !important;
-    padding: 0.5rem 1.2rem !important;
+    padding: 0.55rem 1rem !important;
   }
 }
 

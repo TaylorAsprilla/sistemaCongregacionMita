@@ -9,13 +9,14 @@ import { SituacionVisitaService } from 'src/app/services/situacion-visita/situac
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { obtenerFechaInicialPeriodoInforme, obtenerFechasPeriodoInforme } from 'src/app/core/utils/periodo-informe';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 
 @Component({
   selector: 'app-informe-situacion-visita',
   templateUrl: './informe-situacion-visita.component.html',
   styleUrls: ['./informe-situacion-visita.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe],
+  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe, ContextoInformeComponent],
 })
 export class InformeSituacionVisitaComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);

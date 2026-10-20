@@ -13,13 +13,14 @@ import { DecimalPipe } from '@angular/common';
 import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
 import { obtenerFechaInicialPeriodoInforme, obtenerFechasPeriodoInforme } from 'src/app/core/utils/periodo-informe';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 
 @Component({
   selector: 'app-actividad-economica',
   templateUrl: './actividad-economica.component.html',
   styleUrls: ['./actividad-economica.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe, DecimalPipe],
+  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe, DecimalPipe, ContextoInformeComponent],
 })
 export class ActividadEconomicaComponent implements OnInit, OnDestroy {
   private formBuilder = inject(FormBuilder);

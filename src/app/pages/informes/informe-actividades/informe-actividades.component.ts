@@ -10,6 +10,7 @@ import { TipoActividadService } from 'src/app/services/tipo-actividad/tipo-activ
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 import { LocalDatePipe } from 'src/app/pipes/localDate/local-date.pipe';
 import { obtenerFechaInicialPeriodoInforme, obtenerFechasPeriodoInforme } from 'src/app/core/utils/periodo-informe';
 
@@ -18,7 +19,7 @@ import { obtenerFechaInicialPeriodoInforme, obtenerFechasPeriodoInforme } from '
   templateUrl: './informe-actividades.component.html',
   styleUrls: ['./informe-actividades.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe],
+  imports: [FormsModule, ReactiveFormsModule, LocalDatePipe, ContextoInformeComponent],
 })
 export class InformeActividadesComponent implements OnInit, OnDestroy {
   private formBuilder = inject(UntypedFormBuilder);

@@ -8,13 +8,14 @@ import { VisitaService } from 'src/app/services/visita/visita.service';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { MESES, MesItem, getNombreMes, obtenerMesesTrimestreActual } from 'src/app/core/constants/meses.constant';
 import Swal from 'sweetalert2';
+import { ContextoInformeComponent } from 'src/app/components/contexto-informe/contexto-informe.component';
 
 @Component({
   selector: 'app-informe-visitas',
   templateUrl: './informe-visitas.component.html',
   styleUrls: ['./informe-visitas.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, ContextoInformeComponent],
 })
 export class InformeVisitasComponent implements OnInit {
   private formBuilder = inject(UntypedFormBuilder);
