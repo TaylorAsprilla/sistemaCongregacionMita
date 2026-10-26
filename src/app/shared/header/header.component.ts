@@ -9,6 +9,7 @@ import { GENERO } from 'src/app/core/enums/genero.enum';
 import { FormsModule } from '@angular/forms';
 import { configuracion } from 'src/environments/config/configuration';
 import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
+import { RolUsuarioComponent } from '../rol-usuario/rol-usuario.component';
 
 declare var $: any;
 
@@ -17,7 +18,7 @@ declare var $: any;
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink, PermisosDirective],
+  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink, PermisosDirective, RolUsuarioComponent],
 })
 export class HeaderComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
