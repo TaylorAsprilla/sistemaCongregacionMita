@@ -27,7 +27,7 @@
         <button
           class="btn btn-outline-primary mx-1 d-flex align-items-center"
           (click)="exportarDatosFiltrados()"
-          title="Exportar a Excel"
+          title="Exportar el historial completo de los usuarios filtrados para auditoría interna"
         >
           <i class="fa fa-download" aria-hidden="true"></i>
           <span class="d-none d-md-inline-block ms-2">Exportar</span>
@@ -38,6 +38,10 @@
 
   <div class="alert alert-danger" role="alert">
     <b>Nota:</b> No se puede crear el acceso hasta que el feligrés verifique su correo electrónico.
+  </div>
+  <div class="alert alert-info" role="note">
+    El Excel incluye todas las solicitudes de los usuarios filtrados, con una fila por solicitud, incluso las
+    de otras páginas y estados anteriores. Contiene datos personales y de salud: úselo solo para auditoría interna.
   </div>
   <!-- /.card-header -->
   <div class="card-body">

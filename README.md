@@ -41,6 +41,20 @@ El `tsconfig.informes.spec.json` delimita la compilación de pruebas del flujo d
 - **Ver historial de cambios** permite consultar actor, fecha, sección y detalle de los cambios autorizados del informe seleccionado.
 - Las metas pendientes se consultan por el ámbito del informe actual, no por su creador. Completar una meta de un informe anterior primero crea su continuación en el informe abierto y luego completa esa continuación; no modifica la meta del informe histórico.
 
+## Excel de solicitudes multimedia
+
+El botón **Exportar** descarga una fila por cada solicitud del historial de los usuarios que coinciden con los filtros actuales, incluyendo usuarios de todas las páginas. El filtro de estado selecciona usuarios por su última solicitud; el Excel conserva también sus solicitudes de estados anteriores.
+
+Incluye identificadores de usuario y solicitud, contacto y domicilio, ubicación congregacional y obreros responsables, motivos y detalles de transporte, salud, cuidador, estudios y base militar, observaciones, motivo de negación, verificación de correo, aceptación de términos, fechas y usuarios que registraron o aprobaron. Los datos personales y congregacionales corresponden a la información actual del usuario, no a una copia histórica al momento de la solicitud.
+
+Los campos sin información quedan vacíos; los booleanos se muestran como **Sí/No**. Las fechas conservan el formato de la API (las marcas de tiempo ISO incluyen zona horaria); el tiempo sugerido se expresa en días. La fecha de aprobación exportada es el **vencimiento del acceso**, no la fecha en que se tomó la decisión, y la última actualización no equivale a un historial de cambios. No se exportan contraseñas. El archivo contiene información personal y de salud y debe manejarse exclusivamente por personal autorizado para auditoría interna.
+
+Pruebas enfocadas:
+
+```powershell
+npm test -- --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.multimedia.spec.json --include=src\app\components\solicitudes-multimedia\solicitudes-multimedia.component.spec.ts
+```
+
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.

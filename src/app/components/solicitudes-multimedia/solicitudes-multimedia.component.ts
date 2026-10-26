@@ -13,7 +13,10 @@ import {
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
-import { UsuarioSolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
+import {
+  UsuarioQueRegistraInterface,
+  UsuarioSolicitudInterface,
+} from 'src/app/core/interfaces/solicitud-multimedia.interface';
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
 import { CommonModule, DecimalPipe } from '@angular/common';
@@ -367,16 +370,75 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
   }
 
   exportarDatosFiltrados(): void {
-    const datosParaExportar = this.filteredSolicitudes.map((solicitud) => ({
-      Numero_mita: solicitud.id,
-      Nombre: solicitud.nombreCompleto,
-      Email: solicitud.email,
-      Celular: solicitud.numeroCelular,
-      Congregacion: solicitud.congregacion,
-      Campo: solicitud.campo,
-      Estado: solicitud.estadoUltimaSolicitud,
-    }));
-    this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo);
+    const nombreCompleto = (usuario: UsuarioQueRegistraInterface | null | undefined): string =>
+      [usuario?.primerNombre, usuario?.segundoNombre, usuario?.primerApellido, usuario?.segundoApellido]
+        .filter(Boolean)
+        .join(' ');
+    const booleano = (valor: boolean | null | undefined): string =>
+      valor == null ? '' : valor ? 'Sí' : 'No';
+    const fecha = (valor: string | Date | null | undefined): string =>
+      valor instanceof Date ? valor.toISOString() : valor ?? '';
+
+    const datosParaExportar = this.filteredSolicitudes.flatMap((usuario) =>
+      usuario.solicitudes.map((solicitud) => ({
+        Numero_mita: usuario.id,
+        Nombre: nombreCompleto(usuario),
+        Email: usuario.email,
+        Celular: usuario.numeroCelular ?? '',
+        Fecha_nacimiento: fecha(usuario.fechaNacimiento),
+        Tipo_miembro: usuario.tipoMiembro?.miembro ?? '',
+        Direccion: usuario.direccion ?? '',
+        Ciudad_direccion: usuario.ciudadDireccion ?? '',
+        Departamento_direccion: usuario.departamentoDireccion ?? '',
+        Pais_direccion: usuario.paisDireccion ?? '',
+        Login: usuario.login ?? '',
+        Pais: usuario.pais,
+        Congregacion: usuario.congregacion,
+        Campo: usuario.campo,
+        ID_obrero_pais: usuario.usuarioCongregacion?.pais?.obreroEncargado?.id ?? '',
+        Obrero_pais: nombreCompleto(usuario.usuarioCongregacion?.pais?.obreroEncargado),
+        ID_obrero_congregacion: usuario.usuarioCongregacion?.congregacion?.obreroEncargado?.id ?? '',
+        Obrero_congregacion: nombreCompleto(usuario.usuarioCongregacion?.congregacion?.obreroEncargado),
+        ID_obrero_campo: usuario.usuarioCongregacion?.campo?.obreroEncargado?.id ?? '',
+        Obrero_campo: nombreCompleto(usuario.usuarioCongregacion?.campo?.obreroEncargado),
+        ID_solicitud: solicitud.id,
+        Estado: solicitud.estado,
+        Fecha_creacion: fecha(solicitud.createdAt),
+        Fecha_ultima_actualizacion: fecha(solicitud.updatedAt),
+        Email_verificado: booleano(solicitud.emailVerificado),
+        Terminos_aceptados: booleano(solicitud.terminos),
+        Razon_solicitud: solicitud.razonSolicitud?.solicitud ?? '',
+        Otra_razon: solicitud.otraRazon ?? '',
+        Tiempo_distancia: solicitud.tiempoDistancia ?? '',
+        Congregacion_cercana: solicitud.congregacionCercana ?? '',
+        Hora_templo_mas_cercano: solicitud.horaTemploMasCercano ?? '',
+        Tipo_transporte: solicitud.opcionTransporte?.tipoTransporte ?? '',
+        Persona_encamada: booleano(solicitud.personaEncamada),
+        Persona_encargada: solicitud.personaEncargada ?? '',
+        Celular_persona_encargada: solicitud.celularPersonaEncargada ?? '',
+        Parentesco: solicitud.parentesco?.nombre ?? '',
+        Enfermedad_cronica: booleano(solicitud.enfermedadCronica),
+        Enfermedad_que_padece: solicitud.enfermedadQuePadece ?? '',
+        Tipo_estudio: solicitud.tipoEstudio?.estudio ?? '',
+        Pais_donde_estudia: solicitud.paisDondeEstudia ?? '',
+        Ciudad_donde_estudia: solicitud.ciudadDondeEstudia ?? '',
+        Fin_periodo_estudio: fecha(solicitud.duracionDelPeriodoDeEstudio),
+        Base_militar: solicitud.baseMilitar ?? '',
+        Tiempo_sugerido_dias: solicitud.tiempoSugerido ?? '',
+        Fecha_vencimiento_aprobacion: fecha(solicitud.tiempoAprobacion),
+        Observaciones: solicitud.observaciones ?? '',
+        Motivo_negacion: solicitud.motivoDeNegacion ?? '',
+        ID_usuario_registra: solicitud.usuarioQueRegistra?.id ?? '',
+        Usuario_registra: nombreCompleto(solicitud.usuarioQueRegistra),
+        ID_usuario_aprobo: solicitud.usuarioQueAprobo?.id ?? '',
+        Usuario_aprobo: nombreCompleto(solicitud.usuarioQueAprobo),
+      })),
+    );
+    if (datosParaExportar.length === 0) {
+      Swal.fire('Sin solicitudes', 'No hay solicitudes para exportar con los filtros actuales.', 'info');
+      return;
+    }
+    this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo || 'Solicitudes_multimedia');
   }
 
   /**

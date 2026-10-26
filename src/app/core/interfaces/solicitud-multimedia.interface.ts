@@ -20,17 +20,17 @@ export interface UsuarioSolicitudInterface {
 
 export interface SolicitudInterface {
   id: number;
-  emailVerificado: boolean;
+  emailVerificado: boolean | null;
   otraRazon: string;
   tiempoDistancia: string;
-  personaEncamada: boolean;
+  personaEncamada: boolean | null;
   personaEncargada: string;
   celularPersonaEncargada: string;
-  enfermedadCronica: boolean;
+  enfermedadCronica: boolean | null;
   enfermedadQuePadece: string;
   paisDondeEstudia: string;
   ciudadDondeEstudia: string;
-  duracionDelPeriodoDeEstudio: number | null;
+  duracionDelPeriodoDeEstudio: string | Date | null;
   baseMilitar: string;
   horaTemploMasCercano: string;
   tiempoSugerido: number;
@@ -43,9 +43,11 @@ export interface SolicitudInterface {
   tipoEstudio: TipoEstudioInterface | null;
   opcionTransporte: OpcionTransporteInterface | null;
   usuarioQueRegistra: UsuarioQueRegistraInterface;
-  usuarioQueAprobo: UsuarioQueAproboInterface;
+  usuarioQueAprobo: UsuarioQueAproboInterface | null;
   estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
-  createdAt: Date;
+  createdAt: Date | string;
+  updatedAt?: Date | string | null;
+  terminos?: boolean | null;
 }
 
 export interface RazonSolicitudInterface {
