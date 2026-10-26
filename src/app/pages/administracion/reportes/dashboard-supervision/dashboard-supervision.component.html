@@ -11,7 +11,7 @@
           @if (hayComparacion()) {
             · Comparado con el {{ r.contexto.descripcionComparacion }}
           } @else {
-            · Inicio de informes, sin periodos anteriores para comparar
+            · Sin comparación válida entre informes cerrados
           }
           · {{ alcance() }}
         </p>
@@ -21,7 +21,7 @@
       <button
         type="button"
         class="btn btn-success btn-sm"
-        [disabled]="!resumen() || !!exportando()"
+        [disabled]="!resumen() || !!exportando() || resumen()?.contexto?.coberturaTemporal?.sinCobertura"
         (click)="exportar('excel')"
       >
         <i
@@ -36,7 +36,7 @@
       <button
         type="button"
         class="btn btn-danger btn-sm"
-        [disabled]="!resumen() || !!exportando()"
+        [disabled]="!resumen() || !!exportando() || resumen()?.contexto?.coberturaTemporal?.sinCobertura"
         (click)="exportar('pdf')"
       >
         <i
@@ -85,8 +85,29 @@
       }
 
       @if (resumen(); as r) {
+        @if (r.contexto.coberturaTemporal; as cobertura) {
+          <div class="alert alert-info" role="status">
+            <strong>Cobertura desde el tercer trimestre de 2026 (julio–septiembre).</strong>
+            {{ cobertura.mensaje }}
+            Los informes abiertos contienen datos provisionales. “—” significa sin información registrada,
+            no cero actividad. La asistencia acumulada cuenta participaciones, no personas únicas.
+          </div>
+        }
+        @if (r.contexto.integridad; as integridad) {
+          @if (integridad.informesSinAmbitoHistorico || integridad.informesSinAmbitoComparacion) {
+            <div class="alert alert-warning" role="status">
+              <strong>Histórico pendiente de conciliación.</strong>
+              Hay {{ integridad.informesSinAmbitoPeriodo }} informe(s) sin Congregación identificada en el periodo seleccionado,
+              {{ integridad.informesSinAmbitoComparacion }} en el de comparación y
+              {{ integridad.informesSinAmbitoHistorico }} en el rango histórico mostrado.
+              Son conteos globales: no se pueden asignar al filtro geográfico sin revisar cada informe.
+              Esos registros no se incluyen en los indicadores ni en las gráficas; los datos mostrados pueden ser parciales.
+              Una Congregación sin informe identificado no necesariamente tiene una entrega pendiente.
+            </div>
+          }
+        }
         <!-- Resumen ejecutivo -->
-        <section class="mb-3" aria-labelledby="tituloCobertura" [hidden]="pestana() === 'informes'">
+        <section class="mb-3" aria-labelledby="tituloCobertura" [hidden]="pestana() === 'informes' || r.contexto.coberturaTemporal?.sinCobertura || r.contexto.integridad?.informesSinAmbitoPeriodo">
           <h2 id="tituloCobertura" class="visually-hidden">Cobertura de informes</h2>
           <div class="row g-2">
             <div class="col-12 col-xl-4">
@@ -94,7 +115,7 @@
                 <div class="w-100">
                   <div class="d-flex justify-content-between align-items-start gap-2">
                     <div>
-                      <div class="etiqueta">Avance de entrega</div>
+                      <div class="etiqueta">Informes iniciados</div>
                       <small class="ayuda">{{ r.contexto.periodo.etiqueta }} · Congregaciones Ciudad con responsable</small>
                     </div>
                     <span class="valor">
@@ -118,6 +139,13 @@
                   <small class="ayuda d-block mt-2">
                     {{ r.cobertura.entregados + r.cobertura.enElaboracion }} de {{ r.cobertura.conObrero }} con informe
                     · {{ r.cobertura.informesPeriodo }} informe(s)
+                  </small>
+                  <small class="ayuda d-block mt-2">
+                    <strong>Entregados:</strong> {{ r.cobertura.entregados }} de {{ r.cobertura.conObrero }}
+                    @if (r.cobertura.porcentajeEntregado != null) {
+                      ({{ r.cobertura.porcentajeEntregado | number: '1.0-1' }} %)
+                    }
+                    · Solo informes cerrados
                   </small>
                 </div>
               </div>
@@ -184,7 +212,7 @@
           </div>
         </details>
 
-        @if (r.entregaPorPais && !supervisionPais && pestana() === 'resumen') {
+        @if (r.entregaPorPais && !supervisionPais && pestana() === 'resumen' && !r.contexto.coberturaTemporal?.sinCobertura && !r.contexto.integridad?.informesSinAmbitoPeriodo) {
           <section class="card tarjeta mb-3" aria-labelledby="tituloEntregaPais">
             <div class="card-body">
               <h2 id="tituloEntregaPais" class="seccion-titulo">
@@ -209,7 +237,7 @@
         </div>
       }
 
-      <div id="panelResumenSupervision" [hidden]="pestana() === 'informes'">
+      <div id="panelResumenSupervision" [hidden]="pestana() === 'informes' || resumen()?.contexto?.coberturaTemporal?.sinCobertura">
       <section class="card tarjeta mb-3" aria-labelledby="tituloAlertas">
         <div class="card-body">
           <h2 id="tituloAlertas" class="seccion-titulo">
@@ -271,8 +299,9 @@
         @if (!hayComparacion()) {
           <div class="nota-neutral mb-3">
             <i class="fas fa-circle-info" aria-hidden="true"></i>
-            Etapa inicial de informes: se muestran los datos del periodo actual. Las comparaciones se habilitarán
-            cuando haya informes de periodos anteriores.
+            Se muestran los datos registrados del periodo seleccionado.
+            Las comparaciones requieren trimestres completos con cobertura, sin informes pendientes de conciliación,
+            e informes cerrados de la misma Congregación en ambos periodos.
           </div>
         }
 
@@ -280,7 +309,8 @@
           <div class="nota-neutral mb-3">
             <i class="fas fa-circle-info" aria-hidden="true"></i>
             Las variaciones comparan únicamente las <strong>{{ r.cobertura.unidadesComparadas }}</strong>
-            congregación(es) con informe en ambos periodos. Los indicadores describen la información registrada; su
+            congregación(es) con informes cerrados en ambos periodos, usando para cada indicador solo las que tienen datos
+            de esa métrica en ambos periodos. Los indicadores describen la información registrada; su
             interpretación corresponde al administrador.
           </div>
         }
@@ -434,6 +464,18 @@
         </div>
 
         <!-- Tendencias -->
+        @if (tendencias()?.seriesMensuales; as mensuales) {
+          <section class="card tarjeta mb-3" aria-labelledby="tituloMensual">
+            <div class="card-body">
+              <h2 id="tituloMensual" class="seccion-titulo">Actividad mensual registrada</h2>
+              <p class="small text-muted">
+                Servicios según la fecha de la actividad, no la fecha de captura.
+                El mes actual es provisional. Los meses sin registros se muestran sin información.
+              </p>
+              <app-grafica-tendencias [series]="mensuales" claveInicial="asistenciaMensual" />
+            </div>
+          </section>
+        }
         @if (hayHistorial()) {
           <div class="row g-3 mb-3">
             <section class="col-12" aria-labelledby="tituloTendencias">
