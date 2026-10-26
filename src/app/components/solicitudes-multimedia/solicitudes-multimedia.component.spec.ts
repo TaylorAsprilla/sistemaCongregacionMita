@@ -1,15 +1,19 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM as Estado } from 'src/app/core/enums/solicitudMultimendia.enum';
 import { SolicitudInterface } from 'src/app/core/interfaces/solicitud-multimedia.interface';
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { ROLES } from 'src/app/routes/menu-items';
 import { SolicitudesMultimediaComponent } from './solicitudes-multimedia.component';
 
 describe('SolicitudesMultimediaComponent', () => {
   let component: SolicitudesMultimediaComponent;
+  let fixture: ComponentFixture<SolicitudesMultimediaComponent>;
   let exportador: jasmine.SpyObj<ExportarExcelService>;
+  let sesion: { usuario?: { usuarioPermiso?: { id: number; permiso: string }[] } };
 
   const responsable = {
     id: 50,
@@ -37,6 +41,8 @@ describe('SolicitudesMultimediaComponent', () => {
       horaTemploMasCercano: '10:00',
       tiempoSugerido: 30,
       tiempoAprobacion: '2027-01-01T12:34:56.000Z',
+      fechaAprobacion: '2026-10-02T13:34:56.789Z',
+      duracionAprobadaDias: '90.958324',
       congregacionCercana: 'Templo cercano',
       observaciones: 'Primera linea\nSegunda linea',
       motivoDeNegacion: 'Motivo de prueba',
@@ -70,18 +76,18 @@ describe('SolicitudesMultimediaComponent', () => {
   }
 
   beforeEach(async () => {
+    sesion = { usuario: { usuarioPermiso: [{ id: 1, permiso: ROLES.ADMINISTRADOR }] } };
     exportador = jasmine.createSpyObj<ExportarExcelService>('ExportarExcelService', ['exportToExcel']);
     await TestBed.configureTestingModule({
       imports: [SolicitudesMultimediaComponent],
       providers: [
         provideRouter([]),
         { provide: ExportarExcelService, useValue: exportador },
+        { provide: UsuarioService, useValue: sesion },
       ],
-    })
-      .overrideComponent(SolicitudesMultimediaComponent, { set: { template: '', imports: [] } })
-      .compileComponents();
+    }).compileComponents();
 
-    const fixture = TestBed.createComponent(SolicitudesMultimediaComponent);
+    fixture = TestBed.createComponent(SolicitudesMultimediaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -138,6 +144,8 @@ describe('SolicitudesMultimediaComponent', () => {
       Base_militar: 'Base de prueba',
       Tiempo_sugerido_dias: 30,
       Fecha_vencimiento_aprobacion: '2027-01-01T12:34:56.000Z',
+      Fecha_aprobacion: '2026-10-02T13:34:56.789Z',
+      Duracion_aprobada_dias: '90.958324',
       Observaciones: 'Primera linea\nSegunda linea',
       Motivo_negacion: 'Motivo de prueba',
       ID_usuario_registra: 50,
@@ -218,5 +226,146 @@ describe('SolicitudesMultimediaComponent', () => {
     expect(aviso).toHaveBeenCalledWith(
       'Sin solicitudes', 'No hay solicitudes para exportar con los filtros actuales.', 'info',
     );
+  });
+
+  [
+    ROLES.OBRERO_PAIS,
+    ROLES.OBRERO_CIUDAD,
+    ROLES.OBRERO_CAMPO,
+    ROLES.ADMINISTRADOR_PAIS,
+    ROLES.ADMINISTRADOR_MULTIMEDIA,
+    ROLES.APROBADOR_MULTIMEDIA,
+  ].forEach((permiso) => {
+    it(`exporta datos basicos y de registro y aprobacion para ${permiso}, sin aprobador ni historial`, () => {
+      sesion.usuario = { usuarioPermiso: [{ id: 1, permiso }] };
+      const seleccionado = usuario(10, [
+        solicitud({ id: 101, estado: Estado.DENEGADA }),
+        solicitud({ id: 102, estado: Estado.APROBADA }),
+      ]);
+      const otroSeleccionado = usuario(20, [solicitud({ id: 103 })]);
+      const excluido = usuario(30, [solicitud({ id: 104, estado: Estado.PENDIENTE })]);
+      component.solicitudes = [seleccionado, otroSeleccionado, excluido];
+      component.filterForm.patchValue({ estados: Estado.APROBADA });
+      component.pageSize = 1;
+      component.pagina = 2;
+      component.nombreArchivo = 'Basico';
+
+      component.exportarDatosFiltrados();
+
+      expect(component.puedeExportarAuditoria).toBeFalse();
+      expect(exportador.exportToExcel).toHaveBeenCalledOnceWith(
+        [seleccionado, otroSeleccionado].map((item) => ({
+          Numero_mita: item.id,
+          Nombre: item.nombreCompleto,
+          Email: item.email,
+          Celular: item.numeroCelular,
+          Congregacion: item.congregacion,
+          Campo: item.campo,
+          Estado: Estado.APROBADA,
+          Razon_solicitud: 'Salud',
+          Otra_razon: 'Otra justificacion',
+          Usuario_registra: 'Ana Perez',
+          Fecha_registro: '2026-10-01T12:34:56.789Z',
+          Fecha_aprobacion: '2026-10-02T13:34:56.789Z',
+          Duracion_aprobada_dias: '90.958324',
+          Aprobado_hasta: '2027-01-01T12:34:56.000Z',
+        })),
+        'Basico',
+      );
+    });
+  });
+
+  it('habilita auditoria con ADMINISTRADOR entre varios permisos y normaliza espacios y mayusculas', () => {
+    sesion.usuario = {
+      usuarioPermiso: [
+        { id: 1, permiso: ROLES.OBRERO_PAIS },
+        { id: 2, permiso: ' administrador ' },
+      ],
+    };
+    component.filteredSolicitudes = [usuario(10, [solicitud(), solicitud({ id: 102 })])];
+
+    component.exportarDatosFiltrados();
+
+    expect(component.puedeExportarAuditoria).toBeTrue();
+    const filas = exportador.exportToExcel.calls.mostRecent().args[0];
+    expect(filas.map((fila) => fila.ID_solicitud)).toEqual([101, 102]);
+  });
+
+  it('no habilita auditoria si faltan usuario o permisos', () => {
+    for (const usuarioSesion of [undefined, {}, { usuarioPermiso: [] }]) {
+      sesion.usuario = usuarioSesion;
+      component.filteredSolicitudes = [usuario(10, [solicitud(), solicitud({ id: 102 })])];
+      exportador.exportToExcel.calls.reset();
+
+      component.exportarDatosFiltrados();
+
+      expect(component.puedeExportarAuditoria).toBeFalse();
+      const filas = exportador.exportToExcel.calls.mostRecent().args[0];
+      expect(filas.length).toBe(1);
+      expect(Object.keys(filas[0])).toEqual([
+        'Numero_mita', 'Nombre', 'Email', 'Celular', 'Congregacion', 'Campo', 'Estado',
+        'Razon_solicitud', 'Otra_razon', 'Usuario_registra', 'Fecha_registro',
+        'Fecha_aprobacion', 'Duracion_aprobada_dias', 'Aprobado_hasta',
+      ]);
+    }
+  });
+
+  it('muestra un aviso si la exportacion basica no tiene usuarios filtrados', () => {
+    sesion.usuario = { usuarioPermiso: [{ id: 1, permiso: ROLES.OBRERO_CIUDAD }] };
+    const aviso = spyOn(Swal, 'fire');
+
+    component.exportarDatosFiltrados();
+
+    expect(exportador.exportToExcel).not.toHaveBeenCalled();
+    expect(aviso).toHaveBeenCalledWith(
+      'Sin solicitudes', 'No hay solicitudes para exportar con los filtros actuales.', 'info',
+    );
+  });
+
+  it('no infiere la aprobacion historica desde updatedAt ni desde el tiempo sugerido', () => {
+    sesion.usuario = { usuarioPermiso: [{ id: 1, permiso: ROLES.OBRERO_CIUDAD }] };
+    component.filteredSolicitudes = [usuario(10, [solicitud({
+      fechaAprobacion: undefined,
+      duracionAprobadaDias: null,
+      tiempoSugerido: 365,
+      updatedAt: '2026-12-01T00:00:00.000Z',
+    })])];
+
+    component.exportarDatosFiltrados();
+
+    const fila = exportador.exportToExcel.calls.mostRecent().args[0][0];
+    expect(fila.Fecha_aprobacion).toBe('');
+    expect(fila.Duracion_aprobada_dias).toBe('');
+    expect(fila.Aprobado_hasta).toBe('2027-01-01T12:34:56.000Z');
+    expect(fila.Usuario_aprobo).toBeUndefined();
+    expect(fila.ID_usuario_aprobo).toBeUndefined();
+  });
+
+  it('exporta registro y aprobacion Date y duracion numerica sin perder precision', () => {
+    sesion.usuario = { usuarioPermiso: [{ id: 1, permiso: ROLES.OBRERO_PAIS }] };
+    component.filteredSolicitudes = [usuario(10, [solicitud({
+      createdAt: new Date('2026-10-01T12:34:56.789Z'),
+      fechaAprobacion: new Date('2026-10-02T13:34:56.789Z'),
+      duracionAprobadaDias: 1.5,
+    })])];
+
+    component.exportarDatosFiltrados();
+
+    const fila = exportador.exportToExcel.calls.mostRecent().args[0][0];
+    expect(fila.Fecha_registro).toBe('2026-10-01T12:34:56.789Z');
+    expect(fila.Fecha_aprobacion).toBe('2026-10-02T13:34:56.789Z');
+    expect(fila.Duracion_aprobada_dias).toBe(1.5);
+  });
+
+  it('muestra advertencia y titulo de auditoria solo con ADMINISTRADOR', () => {
+    const elemento: HTMLElement = fixture.nativeElement;
+    expect(elemento.querySelector('[role="note"]')?.textContent).toContain('datos personales y de salud');
+    expect(elemento.querySelector('button[title]')?.getAttribute('title')).toContain('historial completo');
+
+    sesion.usuario = { usuarioPermiso: [{ id: 1, permiso: ROLES.OBRERO_PAIS }] };
+    fixture.detectChanges();
+
+    expect(elemento.querySelector('[role="note"]')).toBeNull();
+    expect(elemento.querySelector('button[title]')?.getAttribute('title')).toContain('información básica');
   });
 });

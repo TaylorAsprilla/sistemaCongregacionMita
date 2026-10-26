@@ -26,6 +26,7 @@ import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
 import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
 import { CalcularEdadPipe } from 'src/app/pipes/calcularEdad/calcular-edad.pipe';
 import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
+import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 
 @Component({
   selector: 'app-solicitudes-multimedia',
@@ -49,6 +50,7 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
   private formBuilder = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
   private exportarExcelService = inject(ExportarExcelService);
+  private usuarioService = inject(UsuarioService);
 
   @Input() solicitudes: UsuarioSolicitudMultimediaModel[] = [];
   @Input() usuarioId: number;
@@ -369,17 +371,57 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
     this.mostrarFiltros = !this.mostrarFiltros;
   }
 
+  get puedeExportarAuditoria(): boolean {
+    return this.usuarioService.usuario?.usuarioPermiso?.some(
+      ({ permiso }) => permiso?.toUpperCase().trim() === ROLES.ADMINISTRADOR,
+    ) ?? false;
+  }
+
   exportarDatosFiltrados(): void {
+    const datosParaExportar = this.puedeExportarAuditoria
+      ? this.datosAuditoria()
+      : this.filteredSolicitudes.map((solicitud) => ({
+          Numero_mita: solicitud.id,
+          Nombre: solicitud.nombreCompleto,
+          Email: solicitud.email,
+          Celular: solicitud.numeroCelular,
+          Congregacion: solicitud.congregacion,
+          Campo: solicitud.campo,
+          Estado: solicitud.estadoUltimaSolicitud,
+          Razon_solicitud: solicitud.ultimaSolicitud?.razonSolicitud?.solicitud ?? '',
+          Otra_razon: solicitud.ultimaSolicitud?.otraRazon ?? '',
+          Usuario_registra: this.nombreResponsable(solicitud.ultimaSolicitud?.usuarioQueRegistra),
+          Fecha_registro: this.fechaExportacion(solicitud.ultimaSolicitud?.createdAt),
+          Fecha_aprobacion: this.fechaExportacion(solicitud.ultimaSolicitud?.fechaAprobacion),
+          Duracion_aprobada_dias: solicitud.ultimaSolicitud?.duracionAprobadaDias ?? '',
+          Aprobado_hasta: this.fechaExportacion(solicitud.ultimaSolicitud?.tiempoAprobacion),
+        }));
+    if (datosParaExportar.length === 0) {
+      Swal.fire('Sin solicitudes', 'No hay solicitudes para exportar con los filtros actuales.', 'info');
+      return;
+    }
+    this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo || 'Solicitudes_multimedia');
+  }
+
+  private nombreResponsable(usuario: UsuarioQueRegistraInterface | null | undefined): string {
+    return [usuario?.primerNombre, usuario?.segundoNombre, usuario?.primerApellido, usuario?.segundoApellido]
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  private fechaExportacion(valor: string | Date | null | undefined): string {
+    return valor instanceof Date ? valor.toISOString() : valor ?? '';
+  }
+
+  private datosAuditoria() {
     const nombreCompleto = (usuario: UsuarioQueRegistraInterface | null | undefined): string =>
-      [usuario?.primerNombre, usuario?.segundoNombre, usuario?.primerApellido, usuario?.segundoApellido]
-        .filter(Boolean)
-        .join(' ');
+      this.nombreResponsable(usuario);
     const booleano = (valor: boolean | null | undefined): string =>
       valor == null ? '' : valor ? 'Sí' : 'No';
     const fecha = (valor: string | Date | null | undefined): string =>
-      valor instanceof Date ? valor.toISOString() : valor ?? '';
+      this.fechaExportacion(valor);
 
-    const datosParaExportar = this.filteredSolicitudes.flatMap((usuario) =>
+    return this.filteredSolicitudes.flatMap((usuario) =>
       usuario.solicitudes.map((solicitud) => ({
         Numero_mita: usuario.id,
         Nombre: nombreCompleto(usuario),
@@ -426,6 +468,8 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
         Base_militar: solicitud.baseMilitar ?? '',
         Tiempo_sugerido_dias: solicitud.tiempoSugerido ?? '',
         Fecha_vencimiento_aprobacion: fecha(solicitud.tiempoAprobacion),
+        Fecha_aprobacion: fecha(solicitud.fechaAprobacion),
+        Duracion_aprobada_dias: solicitud.duracionAprobadaDias ?? '',
         Observaciones: solicitud.observaciones ?? '',
         Motivo_negacion: solicitud.motivoDeNegacion ?? '',
         ID_usuario_registra: solicitud.usuarioQueRegistra?.id ?? '',
@@ -434,11 +478,6 @@ export class SolicitudesMultimediaComponent implements OnInit, OnChanges {
         Usuario_aprobo: nombreCompleto(solicitud.usuarioQueAprobo),
       })),
     );
-    if (datosParaExportar.length === 0) {
-      Swal.fire('Sin solicitudes', 'No hay solicitudes para exportar con los filtros actuales.', 'info');
-      return;
-    }
-    this.exportarExcelService.exportToExcel(datosParaExportar, this.nombreArchivo || 'Solicitudes_multimedia');
   }
 
   /**

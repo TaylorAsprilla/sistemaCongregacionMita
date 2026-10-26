@@ -43,11 +43,18 @@ El `tsconfig.informes.spec.json` delimita la compilación de pruebas del flujo d
 
 ## Excel de solicitudes multimedia
 
-El botón **Exportar** descarga una fila por cada solicitud del historial de los usuarios que coinciden con los filtros actuales, incluyendo usuarios de todas las páginas. El filtro de estado selecciona usuarios por su última solicitud; el Excel conserva también sus solicitudes de estados anteriores.
+El botón **Exportar** utiliza los permisos del usuario conectado:
 
-Incluye identificadores de usuario y solicitud, contacto y domicilio, ubicación congregacional y obreros responsables, motivos y detalles de transporte, salud, cuidador, estudios y base militar, observaciones, motivo de negación, verificación de correo, aceptación de términos, fechas y usuarios que registraron o aprobaron. Los datos personales y congregacionales corresponden a la información actual del usuario, no a una copia histórica al momento de la solicitud.
+- Solo el permiso exacto **ADMINISTRADOR** permite exportar el Excel completo de auditoría y ver su advertencia de datos sensibles. Se descarga una fila por cada solicitud del historial de los usuarios filtrados, incluyendo todas las páginas y estados anteriores.
+- Los demás permisos, incluidos **OBRERO PAÍS**, **OBRERO CIUDAD**, **ADMINISTRADOR PAÍS** y **ADMINISTRADOR MULTIMEDIA**, descargan el Excel básico: `Numero_mita`, `Nombre`, `Email`, `Celular`, `Congregacion`, `Campo` y `Estado`, más `Razon_solicitud`, `Otra_razon`, `Usuario_registra`, `Fecha_registro`, `Fecha_aprobacion`, `Duracion_aprobada_dias` y `Aprobado_hasta`. Se descarga una fila por usuario filtrado, con los datos de su última solicitud. No incluye quién aprobó (ni su identificador), detalles adicionales de salud ni historial. El motivo y la otra razón son textos registrados en la solicitud y pueden contener información personal.
 
-Los campos sin información quedan vacíos; los booleanos se muestran como **Sí/No**. Las fechas conservan el formato de la API (las marcas de tiempo ISO incluyen zona horaria); el tiempo sugerido se expresa en días. La fecha de aprobación exportada es el **vencimiento del acceso**, no la fecha en que se tomó la decisión, y la última actualización no equivale a un historial de cambios. No se exportan contraseñas. El archivo contiene información personal y de salud y debe manejarse exclusivamente por personal autorizado para auditoría interna.
+Ambas exportaciones respetan los filtros actuales e incluyen todas las páginas. El filtro de estado selecciona usuarios por su última solicitud. Si un usuario tiene varios permisos, basta con que uno sea **ADMINISTRADOR** para habilitar la exportación completa. Este cambio limita el contenido del Excel, no los permisos existentes de consulta de solicitudes en pantalla o mediante la API.
+
+El Excel completo incluye identificadores de usuario y solicitud, contacto y domicilio, ubicación congregacional y obreros responsables, motivos y detalles de transporte, salud, cuidador, estudios y base militar, observaciones, motivo de negación, verificación de correo, aceptación de términos, fechas y usuarios que registraron o aprobaron. Los datos personales y congregacionales corresponden a la información actual del usuario, no a una copia histórica al momento de la solicitud.
+
+Los campos sin información quedan vacíos; los booleanos se muestran como **Sí/No**. Las fechas conservan el formato de la API (las marcas de tiempo ISO incluyen zona horaria). `Fecha_aprobacion` registra el instante de la última aprobación o renovación y `Duracion_aprobada_dias` el intervalo entre ese instante y el vencimiento, con hasta seis decimales; no es el tiempo sugerido. `Aprobado_hasta` (o `Fecha_vencimiento_aprobacion` en auditoría) es el vencimiento del acceso. Los históricos sin fecha y duración verificables quedan vacíos: nunca se calculan desde la última actualización. La última actualización no equivale a un historial de cambios. No se exportan contraseñas. El archivo completo contiene información personal y de salud y debe manejarse exclusivamente por personal autorizado para auditoría interna.
+
+Antes de desplegar el backend debe aplicarse la migración `011-solicitud-multimedia-fecha-aprobacion.sql` de ese proyecto. Agrega dos columnas nulas y no modifica ni infiere datos históricos.
 
 Pruebas enfocadas:
 

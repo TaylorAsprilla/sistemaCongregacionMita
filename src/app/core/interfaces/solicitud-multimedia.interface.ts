@@ -35,6 +35,8 @@ export interface SolicitudInterface {
   horaTemploMasCercano: string;
   tiempoSugerido: number;
   tiempoAprobacion: string | null;
+  fechaAprobacion?: string | Date | null;
+  duracionAprobadaDias?: number | string | null;
   congregacionCercana: string;
   observaciones: string;
   motivoDeNegacion: string | null;
