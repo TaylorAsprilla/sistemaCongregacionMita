@@ -41,6 +41,16 @@ El `tsconfig.informes.spec.json` delimita la compilación de pruebas del flujo d
 - **Ver historial de cambios** permite consultar actor, fecha, sección y detalle de los cambios autorizados del informe seleccionado.
 - Las metas pendientes se consultan por el ámbito del informe actual, no por su creador. Completar una meta de un informe anterior primero crea su continuación en el informe abierto y luego completa esa continuación; no modifica la meta del informe histórico.
 
+## Rol principal del usuario conectado
+
+El menú de perfil del encabezado y el panel lateral muestran una única insignia debajo del nombre del usuario. Se selecciona el primer permiso presente en este orden: **ADMINISTRADOR > ADMINISTRADOR PAÍS > ADMINISTRADOR MULTIMEDIA > COMITE RECTOR > SUPERVISOR > SUPERVISOR LOCAL > ASISTENTE OOTS > APROBADOR MULTIMEDIA > OBRERO PAÍS > OBRERO CIUDAD > OBRERO CAMPO > AYUDANTE > MULTIMEDIA > USUARIO > PRUEBA INFORMES**.
+
+La selección ignora diferencias de mayúsculas, acentos y espacios externos. Sin un rol reconocido no se muestra la insignia, incluidas las sesiones QR o multimedia que no tengan un usuario con permisos. Esta prioridad es solo visual: no agrega, quita ni cambia permisos de acceso.
+
+```powershell
+npm test -- --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.perfil.spec.json --include=src\app\shared\rol-usuario\rol-usuario.component.spec.ts
+```
+
 ## Excel de solicitudes multimedia
 
 El botón **Exportar** utiliza los permisos del usuario conectado:

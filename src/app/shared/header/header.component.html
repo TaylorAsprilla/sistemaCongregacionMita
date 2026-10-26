@@ -79,6 +79,7 @@
                   </div>
                   <div class="u-text mt-2">
                     <h4>{{ nombre }}</h4>
+                    <app-rol-usuario [permisos]="usuario?.usuarioPermiso" />
                     <a class="informacion" href="mailto:{{ email }}">
                       <p class="text-muted">{{ email }}</p></a
                     >

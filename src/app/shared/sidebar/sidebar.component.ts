@@ -14,6 +14,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { InformeService } from 'src/app/services/informe/informe.service';
 import { obtenerFechasPeriodoInforme } from 'src/app/core/utils/periodo-informe';
 import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
+import { RolUsuarioComponent } from '../rol-usuario/rol-usuario.component';
 declare var $: any;
 
 @Component({
@@ -21,7 +22,7 @@ declare var $: any;
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   standalone: true,
-  imports: [RouterLink, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule],
+  imports: [RouterLink, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule, RolUsuarioComponent],
 })
 export class SidebarComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

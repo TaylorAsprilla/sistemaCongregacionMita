@@ -8,6 +8,7 @@
     <!-- User profile text-->
     <div class="profile-text">
       <h5>{{ nombre }}</h5>
+      <app-rol-usuario [permisos]="usuario?.usuarioPermiso" />
       @if (usuario) {
         <div>
           <h5>Número Mita {{ usuario?.id }}</h5>
