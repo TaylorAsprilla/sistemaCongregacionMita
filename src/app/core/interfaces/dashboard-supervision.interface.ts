@@ -110,6 +110,18 @@ export interface ContextoDashboard {
   periodoComparacion: PeriodoDashboard;
   descripcionComparacion: string;
   generadoEn: string;
+  integridad?: {
+    informesSinAmbitoPeriodo: number;
+    informesSinAmbitoComparacion: number;
+    informesSinAmbitoHistorico: number;
+  };
+  coberturaTemporal?: {
+    inicioCobertura: string;
+    sinCobertura: boolean;
+    enCurso: boolean;
+    comparable: boolean;
+    mensaje: string;
+  };
 }
 
 export interface UnidadRef {
@@ -141,6 +153,7 @@ export interface Cobertura {
   sinObrero: number;
   /** Porcentaje calculado entre las Congregaciones Ciudad con responsable asignado. */
   porcentajeConInforme: number | null;
+  porcentajeEntregado?: number | null;
   informesPeriodo: number;
   unidadesComparadas: number;
 }
@@ -201,6 +214,7 @@ export interface TendenciasDashboard {
   periodos: PeriodoDashboard[];
   informesPorPeriodo: PuntoSerie[];
   series: Serie[];
+  seriesMensuales?: Serie[];
 }
 
 export interface AlertaDashboard {

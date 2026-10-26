@@ -4,8 +4,8 @@ import { NgxChartsModule, Color, ScaleType } from '@swimlane/ngx-charts';
 import { PuntoSerie, Serie } from 'src/app/core/interfaces/dashboard-supervision.interface';
 
 /**
- * Gráfica de líneas de un indicador a lo largo de los últimos trimestres.
- * Los trimestres sin información no se dibujan como cero: se omiten y se avisa debajo.
+ * Gráfica de líneas de un indicador por periodo (trimestre o mes).
+ * Los periodos sin información no se dibujan como cero: se omiten y se avisa debajo.
  */
 @Component({
   selector: 'app-grafica-tendencias',

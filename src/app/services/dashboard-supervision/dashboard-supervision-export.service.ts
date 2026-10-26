@@ -12,13 +12,15 @@ import {
   FiltrosDashboard,
   GRUPOS_VARIACION,
   ResumenDashboard,
+  Serie,
   UnidadFila,
   Variacion,
 } from 'src/app/core/interfaces/dashboard-supervision.interface';
 import { DashboardSupervisionService } from './dashboard-supervision.service';
 
 const NOTA_COMPARACION =
-  'Las variaciones se calculan únicamente con las congregaciones que tienen informe en ambos periodos. ' +
+  'Las variaciones se calculan únicamente entre periodos completos con cobertura y congregaciones con informes cerrados en ambos periodos. ' +
+  'Los informes abiertos son provisionales. Ausencia de registros no equivale a cero actividad. La asistencia acumulada no representa personas únicas. ' +
   'Los indicadores describen la información registrada; la interpretación corresponde al administrador.';
 
 /** Exporta el estado actual del dashboard (mismos filtros) a Excel y PDF. */
@@ -29,12 +31,13 @@ export class DashboardSupervisionExportService {
   private servicio = inject(DashboardSupervisionService);
 
   private async obtenerDatos(filtros: FiltrosDashboard, conUnidades = true) {
-    const [resumen, alertas, unidades] = await Promise.all([
+    const [resumen, alertas, unidades, tendencias] = await Promise.all([
       firstValueFrom(this.servicio.getResumen(filtros)),
       firstValueFrom(this.servicio.getAlertas(filtros)),
       conUnidades ? this.obtenerTodasLasUnidades(filtros) : Promise.resolve([] as UnidadFila[]),
+      firstValueFrom(this.servicio.getTendencias(filtros)),
     ]);
-    return { resumen, alertas: alertas.alertas, unidades };
+    return { resumen, alertas: alertas.alertas, unidades, seriesMensuales: tendencias.seriesMensuales ?? [] };
   }
 
   private async obtenerTodasLasUnidades(filtros: FiltrosDashboard): Promise<UnidadFila[]> {
@@ -60,10 +63,19 @@ export class DashboardSupervisionExportService {
     return `${signo}${v.porcentaje.toLocaleString('es', { maximumFractionDigits: 1 })} %`;
   }
 
+  private notaIntegridad(r: ResumenDashboard): string {
+    const i = r.contexto.integridad;
+    if (!i || (!i.informesSinAmbitoHistorico && !i.informesSinAmbitoComparacion)) return '';
+    return `Histórico pendiente de conciliación. Informes sin Congregación identificada: ${i.informesSinAmbitoPeriodo} en el periodo, ` +
+      `${i.informesSinAmbitoComparacion} en la comparación y ${i.informesSinAmbitoHistorico} en el rango histórico. ` +
+      'Conteos globales, no atribuibles al filtro geográfico. Registros excluidos de los indicadores y series; resultados parciales. ' +
+      'Sin informe identificado no necesariamente significa entrega pendiente.';
+  }
+
   // ---------------------------------------------------------------- Excel
 
   async exportarExcel(filtros: FiltrosDashboard, alcance: string): Promise<void> {
-    const { resumen, alertas, unidades } = await this.obtenerDatos(filtros);
+    const { resumen, alertas, unidades, seriesMensuales } = await this.obtenerDatos(filtros);
     const libro = new Workbook();
     libro.creator = 'Sistema CMI';
     libro.created = new Date();
@@ -72,6 +84,7 @@ export class DashboardSupervisionExportService {
     this.hojaAsistencia(libro.addWorksheet('Asistencia por servicio'), resumen);
     this.hojaUnidades(libro.addWorksheet('Congregaciones'), unidades);
     this.hojaAlertas(libro.addWorksheet('Alertas'), alertas);
+    this.hojaMensual(libro.addWorksheet('Servicios mensuales'), seriesMensuales);
 
     const buffer = await libro.xlsx.writeBuffer();
     saveAs(
@@ -101,6 +114,11 @@ export class DashboardSupervisionExportService {
     hoja.addRow(['Comparado con el', r.contexto.descripcionComparacion]);
     hoja.addRow(['Alcance', alcance]);
     hoja.addRow(['Generado', new Date(r.contexto.generadoEn).toLocaleString('es')]);
+    if (r.contexto.coberturaTemporal) {
+      hoja.addRow(['Inicio de cobertura', r.contexto.coberturaTemporal.inicioCobertura]);
+      hoja.addRow(['Cobertura temporal', r.contexto.coberturaTemporal.mensaje]);
+    }
+    if (this.notaIntegridad(r)) hoja.addRow([this.notaIntegridad(r)]);
     hoja.addRow([]);
 
     hoja.addRow(['Cobertura']).font = { bold: true };
@@ -112,10 +130,11 @@ export class DashboardSupervisionExportService {
     hoja.addRow(['Congregaciones con obrero asignado', c.conObrero]);
     hoja.addRow(['Informes entregados (cerrados)', c.entregados]);
     hoja.addRow(['Informes en elaboración', c.enElaboracion]);
-    hoja.addRow(['Informes pendientes', c.pendientes]);
+    hoja.addRow([r.contexto.integridad?.informesSinAmbitoPeriodo ? 'Ciudades sin informe identificado (conciliación pendiente)' : 'Informes pendientes', c.pendientes]);
     hoja.addRow(['Congregaciones sin obrero', c.sinObrero]);
     hoja.addRow(['% de congregaciones con informe', c.porcentajeConInforme === null ? '' : c.porcentajeConInforme / 100]).getCell(2).numFmt = '0.0%';
-    hoja.addRow(['Congregaciones comparadas (con informe en ambos periodos)', c.unidadesComparadas]);
+    hoja.addRow(['% de informes entregados (cerrados)', c.porcentajeEntregado == null ? '' : c.porcentajeEntregado / 100]).getCell(2).numFmt = '0.0%';
+    hoja.addRow(['Congregaciones comparadas (con informes cerrados en ambos periodos)', c.unidadesComparadas]);
     hoja.addRow([]);
 
     const titulo = hoja.addRow(['Indicador', 'Periodo anterior', 'Periodo actual', 'Variación']);
@@ -128,6 +147,20 @@ export class DashboardSupervisionExportService {
     hoja.addRow(['Actividad económica', r.actividadEconomica.disponible ? r.actividadEconomica.montoRecaudado : r.actividadEconomica.mensaje]);
     hoja.addRow([]);
     hoja.addRow([NOTA_COMPARACION]).font = { italic: true, color: { argb: 'FF6B7280' } };
+  }
+
+  private hojaMensual(hoja: Worksheet, series: Serie[]): void {
+    this.encabezado(hoja, [
+      { header: 'Mes', key: 'mes', width: 16 },
+      ...series.map((s) => ({ header: s.etiqueta, key: s.clave, width: 34 })),
+    ]);
+    for (const punto of series[0]?.puntos ?? []) {
+      hoja.addRow([
+        punto.periodo,
+        ...series.map((s) => s.puntos.find((p) => p.periodo === punto.periodo)?.valor ?? null),
+      ]);
+    }
+    hoja.addRow(['Mes en curso provisional; celdas vacías = sin información. Asistencia = participaciones, no personas únicas.']);
   }
 
   private hojaAsistencia(hoja: Worksheet, r: ResumenDashboard): void {
@@ -233,7 +266,7 @@ export class DashboardSupervisionExportService {
   // ---------------------------------------------------------------- PDF
 
   async exportarPdf(filtros: FiltrosDashboard, alcance: string): Promise<void> {
-    const { resumen: r, alertas } = await this.obtenerDatos(filtros, false);
+    const { resumen: r, alertas, seriesMensuales } = await this.obtenerDatos(filtros, false);
     const c = r.cobertura;
     const encabezadoTabla = (textos: string[]) => textos.map((t) => ({ text: t, style: 'th' }));
     const numero = (v: number | null) => (v === null ? '—' : v.toLocaleString('es', { maximumFractionDigits: 1 }));
@@ -249,11 +282,17 @@ export class DashboardSupervisionExportService {
         margin: [0, 0, 0, 10],
       },
       { text: 'Cobertura', style: 'subtitulo' },
+      ...(r.contexto.coberturaTemporal
+        ? [{ text: `Cobertura desde ${r.contexto.coberturaTemporal.inicioCobertura}. ${r.contexto.coberturaTemporal.mensaje}`, style: 'nota' }]
+        : []),
+      ...(this.notaIntegridad(r) ? [{ text: this.notaIntegridad(r), style: 'nota' }] : []),
+      { text: `Entregados: ${c.entregados} de ${c.conObrero} (${numero(c.porcentajeEntregado ?? null)} %). Iniciados: ${numero(c.porcentajeConInforme)} %.`, style: 'nota' },
       {
         table: {
           widths: ['*', '*', '*', '*', '*', '*'],
           body: [
-            encabezadoTabla(['Congregaciones', 'Con obrero', 'Entregados', 'En elaboración', 'Pendientes', '% con informe']),
+            encabezadoTabla(['Congregaciones', 'Con obrero', 'Entregados', 'En elaboración',
+              r.contexto.integridad?.informesSinAmbitoPeriodo ? 'Sin informe identificado' : 'Pendientes', '% con informe']),
             [c.unidades, c.conObrero, c.entregados, c.enElaboracion, c.pendientes,
               c.porcentajeConInforme === null ? '—' : `${numero(c.porcentajeConInforme)} %`].map((t) => ({ text: String(t), alignment: 'center' })),
           ],
@@ -286,6 +325,30 @@ export class DashboardSupervisionExportService {
         margin: [0, 0, 0, 10],
       },
     ];
+
+    if (seriesMensuales[0]?.puntos.length) {
+      contenido.push(
+        { text: 'Servicios mensuales (mes en curso provisional)', style: 'subtitulo' },
+        {
+          table: {
+            headerRows: 1,
+            widths: [60, ...seriesMensuales.map(() => '*')],
+            body: [
+              encabezadoTabla(['Mes', ...seriesMensuales.map((s) => s.etiqueta)]),
+              ...seriesMensuales[0].puntos.map((p) => [
+                p.periodo,
+                ...seriesMensuales.map((s) => ({
+                  text: numero(s.puntos.find((v) => v.periodo === p.periodo)?.valor ?? null),
+                  alignment: 'right',
+                })),
+              ]),
+            ],
+          },
+          layout: 'lightHorizontalLines',
+          margin: [0, 0, 0, 10],
+        },
+      );
+    }
 
     if (r.asistenciaPorServicio.length) {
       contenido.push(
