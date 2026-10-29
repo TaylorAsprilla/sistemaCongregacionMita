@@ -140,7 +140,10 @@ export class InformeActividadesComponent implements OnInit, OnDestroy {
     this.editando = true;
     this.actividadSeleccionada = actividad;
     this.actividadForm.patchValue({
-      fecha: actividad.fecha,
+      fecha:
+        actividad.fecha instanceof Date
+          ? actividad.fecha.toISOString().slice(0, 10)
+          : actividad.fecha.slice(0, 10),
       tipoActividad_id: actividad.tipoActividad_id,
       asistencia: actividad.asistencia,
       responsable: actividad.responsable,

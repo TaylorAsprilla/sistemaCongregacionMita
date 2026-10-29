@@ -1,7 +1,7 @@
 export class ActividadModel {
   constructor(
     public id: number,
-    public fecha: Date,
+    public fecha: Date | string,
     public responsable: string,
     public asistencia: number,
     public informe_id: number,
