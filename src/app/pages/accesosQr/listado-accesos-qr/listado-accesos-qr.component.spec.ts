@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListadoAccesosQRComponent } from './listado-accesos-qr.component';
+import ListadoAccesosQRComponent from './listado-accesos-qr.component';
 
 describe('ListadoAccesosQRComponent', () => {
   let component: ListadoAccesosQRComponent;

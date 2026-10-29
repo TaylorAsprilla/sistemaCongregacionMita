@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RecuperarCuentaComponent } from './recuperar-cuenta.component';
+import RecuperarCuentaComponent from './recuperar-cuenta.component';
 
 describe('RecuperarCuentaComponent', () => {
   let component: RecuperarCuentaComponent;
