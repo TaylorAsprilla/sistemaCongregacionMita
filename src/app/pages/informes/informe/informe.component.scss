@@ -3,6 +3,14 @@
 .titulo {
   padding: 15px;
 
+  &-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+
   h1 {
     color: $headingtext;
   }
@@ -10,6 +18,19 @@
   h1,
   h2 {
     font-weight: 400;
+  }
+}
+
+.titulo-contexto {
+  color: #212529;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: right;
+}
+
+@media (max-width: 575.98px) {
+  .titulo-contexto {
+    text-align: left;
   }
 }
 

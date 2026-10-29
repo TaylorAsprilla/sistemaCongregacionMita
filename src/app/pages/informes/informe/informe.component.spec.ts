@@ -76,6 +76,13 @@ describe('InformeComponent', () => {
     component.seleccionarInforme(ambito(20));
     fixture.detectChanges();
     const pantalla: HTMLElement = fixture.nativeElement;
+    expect(pantalla.querySelector('.titulo-contexto')?.textContent).toContain(
+      'Ciudad 20 — Congregación Ciudad',
+    );
+    expect(pantalla.querySelector('.titulo-contexto')?.textContent).not.toContain(
+      `${component.formatearTrimestre(component.getTrimestresActual())} trimestre de ${component.getAnioInforme()}`,
+    );
+    expect(pantalla.querySelector('.informe-titulo-seccion')).toBeNull();
     expect(pantalla.querySelector('app-seccion-informe')).not.toBeNull();
     expect(pantalla.textContent).not.toContain('Ver historial de cambios');
     expect(pantalla.textContent).not.toContain('Ocultar historial de cambios');
