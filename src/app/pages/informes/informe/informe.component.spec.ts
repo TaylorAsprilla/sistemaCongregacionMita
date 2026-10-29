@@ -76,6 +76,13 @@ describe('InformeComponent', () => {
     component.seleccionarInforme(ambito(20));
     fixture.detectChanges();
     const pantalla: HTMLElement = fixture.nativeElement;
+    expect(pantalla.querySelector('.titulo-contexto')?.textContent).toContain(
+      'Ciudad 20 — Congregación Ciudad',
+    );
+    expect(pantalla.querySelector('.titulo-contexto')?.textContent).not.toContain(
+      `${component.formatearTrimestre(component.getTrimestresActual())} trimestre de ${component.getAnioInforme()}`,
+    );
+    expect(pantalla.querySelector('.informe-titulo-seccion')).toBeNull();
     expect(pantalla.querySelector('app-seccion-informe')).not.toBeNull();
     expect(pantalla.textContent).not.toContain('Ver historial de cambios');
     expect(pantalla.textContent).not.toContain('Ocultar historial de cambios');
@@ -134,11 +141,14 @@ describe('InformeComponent', () => {
     const texto = (confirmar.calls.first().args[0] as any).html;
     expect(texto).toContain('Congregación Ciudad');
     expect(texto).toContain('Ciudad 20');
-    expect(texto).toContain('Período: 3er trimestre de 2026');
-    expect(texto).toContain('Responsables: Ana Pérez');
+    expect(texto).toContain('Período');
+    expect(texto).toContain('3er trimestre de 2026');
+    expect(texto).toContain('Responsables');
+    expect(texto).toContain('Ana Pérez');
     expect(texto).not.toContain('Obrero principal');
     expect(texto).not.toContain('Obrero auxiliar');
-    expect(texto).toContain('Con datos: Metas');
+    expect(texto).toContain('Secciones con datos');
+    expect(texto).toContain('Metas');
     expect(texto).not.toContain('Sin novedades:');
     expect(texto).not.toContain('Pendientes de revisión:');
     expect(informeServiceMock.cerrarInforme).not.toHaveBeenCalled();

@@ -2,6 +2,10 @@
 
 import 'zone.js/testing';
 import { getTestBed } from '@angular/core/testing';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { of } from 'rxjs';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
@@ -12,3 +16,39 @@ getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting(),
 );
+
+beforeEach(() => {
+  getTestBed().configureTestingModule({
+    providers: [
+      provideHttpClient(),
+      provideHttpClientTesting(),
+      {
+        provide: ActivatedRoute,
+        useValue: {
+          snapshot: {
+            params: {},
+            queryParams: {},
+            paramMap: convertToParamMap({}),
+            queryParamMap: convertToParamMap({}),
+          },
+          params: of({}),
+          queryParams: of({}),
+          paramMap: of(convertToParamMap({})),
+          queryParamMap: of(convertToParamMap({})),
+          data: of({
+            divisas: [],
+            obrero: [],
+            nacionalidad: [],
+            congregacion: [],
+            pais: [],
+            razonSolicitud: [],
+            tipoEstudio: [],
+            opcionTransporte: [],
+            parentesco: [],
+            perfilData: null,
+          }),
+        },
+      },
+    ],
+  });
+});

@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InicioComponent } from './inicio.component';
+import InicioComponent from './inicio.component';
 
 describe('DashboardComponent', () => {
   let component: InicioComponent;
   let fixture: ComponentFixture<InicioComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-    imports: [InicioComponent],
-}).compileComponents();
-  }));
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [InicioComponent],
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InicioComponent);

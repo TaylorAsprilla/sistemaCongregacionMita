@@ -5,15 +5,15 @@ import { ROLES } from 'src/app/routes/menu-items';
 const ROLES_PRIORIZADOS = [
   { rol: ROLES.ADMINISTRADOR, etiqueta: 'Administrador' },
   { rol: ROLES.ADMINISTRADOR_PAIS, etiqueta: 'Administrador país' },
-  { rol: ROLES.ADMINISTRADOR_MULTIMEDIA, etiqueta: 'Administrador multimedia' },
-  { rol: ROLES.COMITE_RECTOR, etiqueta: 'Comité rector' },
   { rol: ROLES.SUPERVISOR, etiqueta: 'Supervisor' },
   { rol: ROLES.SUPERVISOR_LOCAL, etiqueta: 'Supervisor local' },
-  { rol: ROLES.ASISTENTE_OOTS, etiqueta: 'Asistente OOTS' },
-  { rol: ROLES.APROBADOR_MULTIMEDIA, etiqueta: 'Aprobador multimedia' },
   { rol: ROLES.OBRERO_PAIS, etiqueta: 'Obrero país' },
   { rol: ROLES.OBRERO_CIUDAD, etiqueta: 'Obrero ciudad' },
   { rol: ROLES.OBRERO_CAMPO, etiqueta: 'Obrero campo' },
+  { rol: ROLES.ASISTENTE_OOTS, etiqueta: 'Asistente OOTS' },
+  { rol: ROLES.APROBADOR_MULTIMEDIA, etiqueta: 'Aprobador multimedia' },
+  { rol: ROLES.ADMINISTRADOR_MULTIMEDIA, etiqueta: 'Administrador multimedia' },
+  { rol: ROLES.COMITE_RECTOR, etiqueta: 'Comité rector' },
   { rol: ROLES.AYUDANTE, etiqueta: 'Ayudante' },
   { rol: ROLES.MULTIMEDIA, etiqueta: 'Multimedia' },
   { rol: ROLES.USUARIO, etiqueta: 'Usuario' },
@@ -50,7 +50,7 @@ const normalizarRol = (rol: string): string =>
       background: #edf4fc;
       color: #245580;
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 400;
       line-height: 1.4;
       text-align: left;
       overflow-wrap: anywhere;

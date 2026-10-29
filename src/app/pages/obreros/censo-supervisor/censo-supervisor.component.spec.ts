@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CensoSupervisorComponent } from './censo-supervisor.component';
+import CensoSupervisorComponent from './censo-supervisor.component';
 
 describe('CensoSupervisorComponent', () => {
   let component: CensoSupervisorComponent;

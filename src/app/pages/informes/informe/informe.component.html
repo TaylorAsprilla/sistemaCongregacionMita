@@ -1,8 +1,17 @@
 <div class="titulo">
-  <h1 class="h3 mb-1">Informes trimestrales</h1>
-  <h2 class="h5 text-muted mb-0">
-    {{ formatearTrimestre(getTrimestresActual()) }} trimestre de {{ getAnioInforme() }}
-  </h2>
+  <div class="titulo-cabecera">
+    <div>
+      <h1 class="h3 mb-1">Informes trimestrales</h1>
+      <h2 class="h5 text-muted mb-0">
+        {{ formatearTrimestre(getTrimestresActual()) }} trimestre de {{ getAnioInforme() }}
+      </h2>
+    </div>
+    @if (hayInformeAbierto && ambitoSeleccionado) {
+      <p class="titulo-contexto mb-0">
+        {{ ambitoSeleccionado.nombre_unidad }} — {{ tipoUnidadTexto(ambitoSeleccionado) }}
+      </p>
+    }
+  </div>
   <hr />
 </div>
 
@@ -198,17 +207,7 @@
     }
 
     @if (hayInformeAbierto && ambitoSeleccionado) {
-      <section class="mt-5" aria-labelledby="informe-seleccionado">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-          <div>
-            <h2 id="informe-seleccionado" class="h4 mb-1 informe-titulo-seccion">
-              {{ ambitoSeleccionado.nombre_unidad }} — {{ tipoUnidadTexto(ambitoSeleccionado) }}
-            </h2>
-            <p class="text-muted mb-0">
-              {{ formatearTrimestre(getTrimestresActual()) }} trimestre de {{ getAnioInforme() }}
-            </p>
-          </div>
-        </div>
+      <section class="mt-5" aria-label="Secciones del informe seleccionado">
         @if (cargando) {
           <div class="text-center py-3" role="status">
             <div class="spinner-border text-primary" aria-hidden="true"></div>

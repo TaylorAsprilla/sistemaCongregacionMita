@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VerGrupoDeGemelosComponent } from './ver-grupo-de-gemelos.component';
+import VerGrupoDeGemelosComponent from './ver-grupo-de-gemelos.component';
 
 describe('VerGrupoDeGemelosComponent', () => {
   let component: VerGrupoDeGemelosComponent;
