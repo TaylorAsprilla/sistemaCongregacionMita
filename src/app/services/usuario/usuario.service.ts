@@ -22,6 +22,7 @@ import { MultimediaCongregacionModel } from 'src/app/core/models/acceso-multimed
 import { configuracion } from 'src/environments/config/configuration';
 import { CongregacionTransferirFeligresInterface } from 'src/app/core/interfaces/congregacion.interface';
 import { SessionMonitorService } from 'src/app/core/services/session-monitor.service';
+import { ROLES } from 'src/app/routes/menu-items';
 
 const base_url = environment.base_url;
 @Injectable({
@@ -91,7 +92,7 @@ export class UsuarioService {
    * @returns true si el usuario tiene el rol ADMINISTRADOR_PAIS, false en caso contrario
    */
   get isAdministradorPais(): boolean {
-    return this.role.includes('ADMINISTRADOR PAIS');
+    return this.role.includes(ROLES.ADMINISTRADOR_PAIS);
   }
 
   get isQRLogin() {
