@@ -36,6 +36,9 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
   currentPage: number = 1;
   itemsPerPage: number = 10;
   pagination: PaginationMetadata | null = null;
+  filtroGuarda = '';
+  filtroPuesto = '';
+  readonly puestosQr = ['Puesto 1', 'Casa Nueva', 'Finca de Arecibo', 'Finca de Bayamón'];
 
   private accesosQrSubscription: Subscription | null = null;
 
@@ -55,7 +58,7 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
     this.cargando = true;
 
     this.accesosQrSubscription = this.qrCodeService
-      .obtenerListadoAccesos(this.currentPage, this.itemsPerPage)
+      .obtenerListadoAccesos(this.currentPage, this.itemsPerPage, this.filtroGuarda, this.filtroPuesto)
       .subscribe({
         next: (response: AccesosQrResponseInterface) => {
           this.cargando = false;
@@ -73,6 +76,11 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
           console.error(err);
         },
       });
+  }
+
+  aplicarFiltros(): void {
+    this.currentPage = 1;
+    this.obtenerAccesosQr();
   }
 
   // Métodos de paginación

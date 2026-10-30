@@ -172,7 +172,23 @@ export interface NumeroMita {
 
 export interface DatosQrLogin {
   qrCode: string;
-  numeroMita: string;
+  desafio_id: string;
+  codigo: string;
+  esGuarda: boolean;
+  enTurnoGuarda: boolean;
+  puesto: string | null;
+}
+
+export interface CodigoQrRespuesta {
+  ok: boolean;
+  desafio_id: string;
+  msg: string;
+}
+
+export interface LoginQrRespuesta {
+  ok: boolean;
+  token: string;
   nombre: string;
-  tipoPuesto: string;
+  congregacion: { id: number; congregacion: string };
+  sessionInfo: { sessionId: string; sessionType: 'QR'; isLoginCodeQr: boolean; expiresAt: string };
 }

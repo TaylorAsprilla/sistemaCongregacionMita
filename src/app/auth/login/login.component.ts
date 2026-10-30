@@ -10,7 +10,7 @@ import { UserSessionService } from 'src/app/services/user-session/user-session.s
 import { SessionMonitorService } from 'src/app/core/services/session-monitor.service';
 import Swal from 'sweetalert2';
 import { NgClass } from '@angular/common';
-import { NumeroMitaResponse, DatosQrLogin } from 'src/app/core/interfaces/usuario.interface';
+import { DatosQrLogin } from 'src/app/core/interfaces/usuario.interface';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +29,7 @@ export default class LoginComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
 
   usuariosSubscription: Subscription;
+  private parametrosSubscription?: Subscription;
   loginForm: FormGroup;
   qrLoginForm!: FormGroup;
   isLoginFormSubmitted: Boolean;
@@ -37,8 +38,9 @@ export default class LoginComponent implements OnInit, OnDestroy {
   loading = false;
 
   ticketQr: string | null = null;
-  nombreUsuarioQr: string = '';
-
+  desafioQr: string | null = null;
+  mensajeCodigoQr = '';
+  readonly puestosQr = ['Puesto 1', 'Casa Nueva', 'Finca de Arecibo', 'Finca de Bayamón'];
   showPassword: boolean = false;
 
   get Rutas() {
@@ -46,18 +48,20 @@ export default class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe((params) => {
+    this.crearFormularioLogin();
+    this.parametrosSubscription = this.activatedRoute.queryParams.subscribe((params) => {
       const ticket = params['ticket'];
-      if (ticket) {
-        this.ticketQr = ticket;
+      const nuevoTicket = typeof ticket === 'string' ? ticket : null;
+      if (this.ticketQr !== nuevoTicket) {
+        this.ticketQr = nuevoTicket;
+        this.limpiarQr();
       }
     });
-
-    this.crearFormularioLogin();
   }
 
   ngOnDestroy(): void {
     this.usuariosSubscription?.unsubscribe();
+    this.parametrosSubscription?.unsubscribe();
   }
 
   crearFormularioLogin() {
@@ -68,9 +72,56 @@ export default class LoginComponent implements OnInit, OnDestroy {
     });
 
     this.qrLoginForm = this.formBuilder.group({
-      numeroMita: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      tipoPuesto: ['', [Validators.required]],
+      numeroMita: ['', [Validators.required, Validators.pattern(/^[1-9]\d{0,9}$/)]],
+      codigo: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
+      esGuarda: [null, Validators.required],
+      enTurnoGuarda: [null, Validators.required],
+      puesto: [''],
+    });
+  }
+
+  actualizarGuarda() {
+    this.qrLoginForm.get('enTurnoGuarda')?.setValue(this.qrLoginForm.get('esGuarda')?.value ? null : false);
+    this.actualizarPuesto();
+  }
+
+  actualizarPuesto() {
+    const puesto = this.qrLoginForm.get('puesto');
+    const requierePuesto = this.qrLoginForm.get('esGuarda')?.value === true &&
+      this.qrLoginForm.get('enTurnoGuarda')?.value === true;
+    puesto?.setValue('');
+    puesto?.setValidators(requierePuesto ? [Validators.required] : []);
+    puesto?.updateValueAndValidity();
+  }
+
+  limpiarQr() {
+    this.usuariosSubscription?.unsubscribe();
+    this.loading = false;
+    this.desafioQr = null;
+    this.mensajeCodigoQr = '';
+    this.submitted = false;
+    this.qrLoginForm.reset();
+    this.actualizarPuesto();
+  }
+
+  solicitarCodigoQr() {
+    const numero = this.qrLoginForm.get('numeroMita');
+    numero?.setValue(String(numero.value || '').trim());
+    if (!this.ticketQr || numero?.invalid || this.loading) {
+      numero?.markAsTouched();
+      return;
+    }
+    this.loading = true;
+    this.usuariosSubscription = this.usuarioService.solicitarCodigoQr(this.ticketQr, numero?.value).subscribe({
+      next: (respuesta) => {
+        this.desafioQr = respuesta.desafio_id;
+        this.mensajeCodigoQr = respuesta.msg;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        Swal.fire({ icon: 'error', text: err.error?.msg || err.error?.message || 'No fue posible solicitar el código.' });
+      },
     });
   }
 
@@ -199,42 +250,37 @@ export default class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
+  get guardaFueraDeTurno(): boolean {
+    return this.qrLoginForm.get('esGuarda')?.value === true &&
+      this.qrLoginForm.get('enTurnoGuarda')?.value === false;
+  }
+
   loginConQr() {
     this.submitted = true;
-    this.loading = true;
-
-    // Limpieza y validación robusta
-    this.qrLoginForm.patchValue({
-      numeroMita: (this.qrLoginForm.value.numeroMita || '').toString().trim(),
-      nombre: (this.qrLoginForm.value.nombre || '').trim(),
-      tipoPuesto: (this.qrLoginForm.value.tipoPuesto || '').trim(),
-    });
-
-    if (this.qrLoginForm.invalid) {
+    if (this.qrLoginForm.invalid || this.guardaFueraDeTurno || !this.desafioQr || !this.ticketQr || this.loading) {
       this.qrLoginForm.markAllAsTouched();
-      this.loading = false;
       return;
     }
+    this.loading = true;
 
     const datos: DatosQrLogin = {
-      qrCode: this.ticketQr!,
-      numeroMita: this.qrLoginForm.value.numeroMita,
-      nombre: this.qrLoginForm.value.nombre,
-      tipoPuesto: this.qrLoginForm.value.tipoPuesto,
+      qrCode: this.ticketQr,
+      desafio_id: this.desafioQr,
+      codigo: this.qrLoginForm.value.codigo,
+      esGuarda: this.qrLoginForm.value.esGuarda,
+      enTurnoGuarda: this.qrLoginForm.value.enTurnoGuarda,
+      puesto: this.qrLoginForm.value.puesto || null,
     };
 
-    this.nombreUsuarioQr = datos.nombre;
-
-    this.usuarioService.loginPorQr(datos).subscribe({
-      next: (resp: any) => {
+    this.usuariosSubscription = this.usuarioService.loginPorQr(datos).subscribe({
+      next: (resp) => {
         Swal.fire({
           position: 'bottom-end',
-          html: `Bienvenido ${this.nombreUsuarioQr}`,
+          text: `Bienvenido ${resp.nombre}`,
           showConfirmButton: false,
           timer: 1500,
         }).then(() => {
-          this.qrLoginForm.reset();
-          this.submitted = false;
+          this.limpiarQr();
           this.loading = false;
           this.ngZone.run(() => {
             this.router.navigateByUrl(`${RUTAS.SISTEMA}/${RUTAS.INICIO}`).catch((err) => {
@@ -246,7 +292,7 @@ export default class LoginComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.loading = false;
         this.submitted = false;
-        Swal.fire({ icon: 'error', html: `${err?.error?.msg || 'Error al iniciar sesión con QR.'}` });
+        Swal.fire({ icon: 'error', text: err?.error?.msg || err?.error?.message || 'Error al iniciar sesión con QR.' });
       },
     });
   }
@@ -258,32 +304,6 @@ export default class LoginComponent implements OnInit, OnDestroy {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
-  }
-
-  usuarioPorNumeroMita() {
-    const numeroMita = Number(this.qrLoginForm.get('numeroMita')?.value);
-
-    this.usuarioService.buscarPorNumeroMita(numeroMita).subscribe({
-      next: (respuesta: NumeroMitaResponse) => {
-        // Solo mostrar los campos que existan y no estén vacíos
-        const partes = [
-          respuesta.usuario.primerNombre,
-          respuesta.usuario.segundoNombre,
-          respuesta.usuario.primerApellido,
-          respuesta.usuario.segundoApellido,
-        ].filter(Boolean);
-        const nombre = partes.join(' ');
-        this.qrLoginForm.patchValue({
-          nombre: nombre,
-        });
-      },
-      error: (err) => {
-        Swal.fire({
-          icon: 'error',
-          html: `No se encuentra el feligres con el número Mita ${numeroMita}`,
-        });
-      },
-    });
   }
 
   /**
