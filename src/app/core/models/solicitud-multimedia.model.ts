@@ -108,6 +108,8 @@ export interface SolicitudMultimediaInterface {
 }
 
 export interface crearSolicitudMultimediaInterface {
+  personaInmunosuprimida?: boolean | null;
+  impedimentoSalirCasa?: boolean | null;
   estado: ESTADO_SOLICITUD_MULTIMEDIA_ENUM;
   razonSolicitud_id: number;
   usuarioQueRegistra_id: number;

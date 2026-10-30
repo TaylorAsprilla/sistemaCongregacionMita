@@ -18,6 +18,14 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
+### Solicitudes por enfermedad
+
+Se deben responder las cuatro preguntas: persona encamada, enfermedad
+discapacitante, inmunosupresión e impedimento total para salir de casa.
+Al menos una respuesta debe ser Sí; cuatro respuestas No bloquean el envío.
+Los datos del encargado se solicitan solo si la persona está encamada.
+El backend requiere la migración `013-solicitud-enfermedad.sql` antes del despliegue.
+
 ### Formato del número Mita
 
 Las vistas muestran el número Mita con punto como separador de miles (`1.234`),
