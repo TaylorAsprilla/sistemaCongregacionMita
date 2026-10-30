@@ -74,11 +74,13 @@ import { SesionesActivasComponent } from 'src/app/pages/sesiones-activas/sesione
 export const childRoutes: Routes = [
   {
     path: 'inicio',
+    title: 'Inicio',
     component: InicioComponent,
     data: { titulo: 'Censo' },
   },
   {
     path: RUTAS.SESIONES_ACTIVAS,
+    title: 'Sesiones activas',
     component: SesionesActivasComponent,
     canActivate: [RolesGuard],
     data: {
@@ -90,6 +92,7 @@ export const childRoutes: Routes = [
   // Administración
   {
     path: RUTAS.USUARIOS,
+    title: 'Usuarios registrados',
     loadComponent: () => import('src/app/pages/administracion/usuario/usuarios/usuarios.component'),
     canActivate: [RolesGuard],
     data: {
@@ -99,6 +102,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.AYUDA,
+    title: 'Ayuda',
     loadComponent: () => import('src/app/pages/ayuda/ayuda.component'),
     canActivate: [RolesGuard],
     data: {
@@ -118,6 +122,7 @@ export const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.USUARIOS}/:id`,
+    title: 'Registro de usuario',
     loadComponent: () => import('src/app/pages/administracion/usuario/registrar-usuario/registrar-usuario.component'),
     canActivate: [RolesGuard],
     data: {
@@ -151,6 +156,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.USUARIOS_AYUDANTE,
+    title: 'Censo de ayudante',
     loadComponent: () => import('src/app/pages/ayudantes/censo-ayudante/censo-ayudante.component'),
     canActivate: [RolesGuard],
     data: {
@@ -160,6 +166,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.CENSO,
+    title: 'Censo',
     loadComponent: () => import('src/app/pages/obreros/censo-obrero/censo-obrero.component'),
     canActivate: [RolesGuard],
     data: {
@@ -177,16 +184,19 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.PERMISOS,
+    title: 'Asignar permisos',
     loadComponent: () => import('src/app/pages/administracion/asignar-permisos/asignar-permisos.component'),
   },
   {
     path: RUTAS.RESET_PASSWORD_USUARIO,
+    title: 'Cambiar contraseña de usuario',
     loadComponent: () =>
       import('src/app/pages/administracion/usuario/cambiar-password-usuario/cambiar-password-usuario.component'),
   },
 
   {
     path: RUTAS.USUARIOS_SUPERVISOR,
+    title: 'Censo de supervisión',
     loadComponent: () => import('src/app/pages/obreros/censo-supervisor/censo-supervisor.component'),
     canActivate: [RolesGuard],
     data: {
@@ -196,6 +206,7 @@ export const childRoutes: Routes = [
 
   {
     path: `${RUTAS.CONFIRMAR_REGISTRO}/:id`,
+    title: 'Confirmar registro',
     loadComponent: () =>
       import('src/app/pages/administracion/usuario/confirmacion-de-registro/confirmacion-de-registro.component'),
   },
@@ -204,6 +215,7 @@ export const childRoutes: Routes = [
     loadComponent: () => import('src/app/pages/administracion/reportes/reporte-general/reporte-general.component'),
     canActivate: [RolesGuard],
     path: RUTAS.REPORTE_GENERAL,
+    title: 'Reporte general del censo',
     data: {
       role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
     },
@@ -214,6 +226,7 @@ export const childRoutes: Routes = [
       import('src/app/pages/administracion/reportes/reporte-congregacion/reporte-congregacion.component'),
     canActivate: [RolesGuard],
     path: RUTAS.REPORTE_CONGREGACION,
+    title: 'Reporte por congregación',
     data: {
       role: [ROLES.ADMINISTRADOR, ROLES.ASISTENTE_OOTS],
     },
@@ -226,16 +239,19 @@ export const childRoutes: Routes = [
       ),
     canActivate: [RolesGuard],
     path: RUTAS.DASHBOARD_SUPERVISION,
+    title: 'Panel de supervisión',
     data: {
       role: [ROLES.ADMINISTRADOR],
     },
   },
   {
     path: RUTAS.MINISTERIOS,
+    title: 'Ministerios',
     component: MinisteriosComponent,
   },
   {
     path: `${RUTAS.MINISTERIOS}/:id`,
+    title: 'Configurar ministerio',
     component: CrearMinisterioComponent,
     resolve: { ministerio: MinisterioResolver },
     data: { titulo: 'Crear Ministerio' },
@@ -243,6 +259,7 @@ export const childRoutes: Routes = [
 
   {
     path: RUTAS.PAISES,
+    title: 'Países',
     component: PaisesComponent,
     canActivate: [RolesGuard],
     data: {
@@ -259,6 +276,7 @@ export const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.PAISES}/:id`,
+    title: 'Configurar país',
     component: CrearPaisComponent,
     canActivate: [RolesGuard],
     resolve: { divisas: DivisasResolver, obrero: ObreroResolver },
@@ -275,6 +293,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.CONGREGACIONES,
+    title: 'Congregaciones',
     component: CongregacionesComponent,
     canActivate: [RolesGuard],
     data: {
@@ -293,6 +312,7 @@ export const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.CONGREGACIONES}/:id`,
+    title: 'Configurar congregación',
     component: CrearCongregacionComponent,
     canActivate: [RolesGuard],
     data: {
@@ -311,6 +331,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.CAMPOS,
+    title: 'Campos',
     component: CamposComponent,
     canActivate: [RolesGuard],
     data: {
@@ -329,6 +350,7 @@ export const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.CAMPOS}/:id`,
+    title: 'Configurar campo',
     component: CrearCampoComponent,
     data: {
       titulo: 'Campos',
@@ -346,6 +368,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.MENSAJES_INFORMATIVOS,
+    title: 'Mensajes informativos',
     component: MensajesInformativosComponent,
     canActivate: [RolesGuard],
     data: {
@@ -355,6 +378,7 @@ export const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.MENSAJES_INFORMATIVOS}/:id`,
+    title: 'Configurar mensaje informativo',
     component: CrearMensajeInformativoComponent,
     canActivate: [RolesGuard],
     data: {
@@ -364,16 +388,19 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.TIPO_DE_DOCUMENTO,
+    title: 'Tipos de documento',
     component: TiposDeDocumentosComponent,
     resolve: { pais: PaisResolver },
   },
   {
     path: `${RUTAS.TIPO_DE_DOCUMENTO}/:id`,
+    title: 'Configurar tipo de documento',
     component: CrearTipoDocumentoComponent,
     resolve: { pais: PaisResolver },
   },
   {
     path: RUTAS.CREAR_TIPO_ACTIVIDAD_ECONOMICA,
+    title: 'Tipos de actividad económica',
     component: TipoActividadEconomicaComponent,
     canActivate: [RolesGuard],
     data: {
@@ -392,6 +419,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.INFORME_ACTIVIDAD_ECONOMICA,
+    title: 'Actividades económicas',
     component: ActividadEconomicaComponent,
     canActivate: [RolesGuard],
     data: {
@@ -411,47 +439,58 @@ export const childRoutes: Routes = [
   // Configuracion
   {
     path: RUTAS.OPCION_DE_TRANSPORTE,
+    title: 'Opciones de transporte',
     component: OpcionDeTransporteComponent,
   },
   {
     path: RUTAS.GENERO,
+    title: 'Géneros',
     component: GeneroComponent,
   },
   {
     path: RUTAS.ESTADO_CIVIL,
+    title: 'Estados civiles',
     component: EstadoCivilComponent,
   },
   {
     path: RUTAS.GRADO_ALCANZADO,
+    title: 'Grados académicos',
     component: GradoAlcanzadoComponent,
   },
   {
     path: RUTAS.ROL_EN_CASA,
+    title: 'Roles en el hogar',
     component: RolEnCasaComponent,
   },
   {
     path: RUTAS.CATEGORIA_PROFESION,
+    title: 'Categorías de profesión',
     component: CategoriaProfesionComponent,
   },
   {
     path: RUTAS.VOLUNTARIO,
+    title: 'Voluntariado',
     component: VoluntarioComponent,
   },
   {
     path: RUTAS.TIPO_DE_ESTUDIO,
+    title: 'Tipos de estudio',
     component: TipoDeEstudioComponent,
   },
   {
     path: RUTAS.RAZON_DE_SOLICITUD,
+    title: 'Razones de solicitud',
     component: RazonDeSolicitudComponent,
   },
   {
     path: RUTAS.PARENTESCO,
+    title: 'Parentescos',
     component: ParentescoComponent,
   },
 
   {
     path: RUTAS.GENERAR_QR,
+    title: 'Generar código QR',
     loadComponent: () => import('src/app/pages/accesosQr/qr-code-generator/qr-code-generator.component'),
     canActivate: [RolesGuard],
     data: {
@@ -461,6 +500,7 @@ export const childRoutes: Routes = [
 
   {
     path: RUTAS.LISTAR_ACCESOS_QR,
+    title: 'Historial de accesos QR',
     loadComponent: () => import('src/app/pages/accesosQr/listado-accesos-qr/listado-accesos-qr.component'),
     canActivate: [RolesGuard],
     data: {
@@ -470,6 +510,7 @@ export const childRoutes: Routes = [
 
   {
     path: RUTAS.GRUPO_GEMELOS,
+    title: 'Grupos de gemelos',
     loadComponent: () => import('src/app/pages/administracion/grupoDeGemelos/grupo-gemelos/grupo-gemelos.component'),
     canActivate: [RolesGuard],
     data: {
@@ -479,6 +520,7 @@ export const childRoutes: Routes = [
 
   {
     path: RUTAS.VER_GRUPO_DE_GEMELOS,
+    title: 'Detalle del grupo de gemelos',
     loadComponent: () =>
       import('src/app/pages/administracion/grupoDeGemelos/ver-grupo-de-gemelos/ver-grupo-de-gemelos.component'),
     canActivate: [RolesGuard],
@@ -490,6 +532,7 @@ export const childRoutes: Routes = [
   // Perfil - OPTIMIZADO: Usa un único resolver con caché en lugar de 13 resolvers individuales
   {
     path: `${RUTAS.PERFIL}/:id`,
+    title: 'Perfil de usuario',
     component: PerfilComponent,
     resolve: {
       perfilData: PerfilOptimizadoResolver,
@@ -498,65 +541,80 @@ export const childRoutes: Routes = [
   // Informes
   {
     path: RUTAS.CREAR_TIPO_ACTIVIDAD,
+    title: 'Tipos de actividad eclesiástica',
     component: CrearActividadComponent,
     resolve: { seccionInforme: SeccionInformeResolver },
   },
   {
     path: RUTAS.CREAR_CAMPO,
+    title: 'Crear campo',
     component: CrearCampoComponent,
   },
 
   {
     path: RUTAS.CREAR_PAIS,
+    title: 'Crear país',
     component: CrearPaisComponent,
   },
   {
     path: RUTAS.CREAR_ESTATUS,
+    title: 'Estados de informe',
     component: CrearStatusComponent,
   },
   {
     path: RUTAS.INFORME_ACTIVIDADES_ECLESIASTICAS,
+    title: 'Informe de actividades eclesiásticas',
     component: InformeActividadesComponent,
   },
   {
     path: RUTAS.INFORME_DIEZMOS,
+    title: 'Informe de diezmos',
     component: InformeDiezmosComponent,
   },
   {
     path: RUTAS.INFORME_LOGROS,
+    title: 'Informe de logros',
     component: InformeLogrosComponent,
   },
   {
     path: RUTAS.METAS,
+    title: 'Informe de metas',
     component: InformeMetasComponent,
   },
   {
     path: RUTAS.INFORME_VISITAS,
+    title: 'Informe de visitas',
     component: InformeVisitasComponent,
   },
   {
     path: RUTAS.SITUACION_VISITA,
+    title: 'Situaciones de visita',
     component: InformeSituacionVisitaComponent,
   },
   {
     path: RUTAS.INFORME_ASPECTO_ESPIRITUAL,
+    title: 'Informe del aspecto espiritual',
     component: InformeAspectoEspiritualComponent,
   },
   {
     path: RUTAS.ASUNTO_PENDIENTE,
+    title: 'Asuntos pendientes',
     component: InformeAsuntoPendienteComponent,
   },
   // informes pagina principal
   {
     path: RUTAS.INFORME,
+    title: 'Informe de congregación',
     component: InformeComponent,
   },
   {
     path: RUTAS.VER_INFORME,
+    title: 'Consultar informe',
     component: VerInformeComponent,
   },
   {
     path: RUTAS.MIS_INFORMES,
+    title: 'Mis informes anteriores',
     loadComponent: () =>
       import('src/app/pages/informes/mis-informes/mis-informes.component').then((m) => m.MisInformesComponent),
     canActivate: [RolesGuard],
@@ -567,10 +625,12 @@ export const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.VER_INFORME}/:id`,
+    title: 'Detalle del informe',
     component: VerInformeComponent,
   },
   {
     path: RUTAS.VER_INFORMES_PAIS,
+    title: 'Informes del país',
     component: VerInformesPaisComponent,
     canActivate: [RolesGuard],
     resolve: {
@@ -585,6 +645,7 @@ export const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.SOLICITUD_MULTIMEDIA}/:id`,
+    title: 'Solicitud de acceso a servicios en línea',
     component: CrearSolicitudMultimediaComponent,
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -598,6 +659,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.SOLICITUDES_MULTIMEDIA,
+    title: 'Solicitudes de acceso',
     component: SolicitudMultimediaComponent,
     resolve: {
       tipoMiembro: TipoMiembroResolver,
@@ -606,6 +668,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.SOLICITUDES_MULTIMEDIA_PENDIENTES,
+    title: 'Solicitudes de acceso pendientes',
     component: SolicitudesPendienteComponent,
     resolve: {
       tipoMiembro: TipoMiembroResolver,
@@ -614,14 +677,17 @@ export const childRoutes: Routes = [
   },
   {
     path: `${RUTAS.EVENTOS}/:id`,
+    title: 'Configurar evento multimedia',
     component: ConfigurarEventosComponent,
   },
   {
     path: RUTAS.EVENTOS,
+    title: 'Eventos multimedia',
     component: EventosBibliotecaComponent,
   },
   {
     path: `${RUTAS.CONFIGURAR_SERVICIOS_Y_VIGILIAS}/:id`,
+    title: 'Editar servicio o vigilia',
     component: ConfigurarEventosComponent,
     canActivate: [RolesGuard],
     data: {
@@ -630,6 +696,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.CONFIGURAR_SERVICIOS_Y_VIGILIAS,
+    title: 'Configurar servicios y vigilias',
     component: ConfigurarEventosComponent,
     canActivate: [RolesGuard],
     data: {
@@ -638,10 +705,12 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.BIBLIOTECA_SERVICIOS,
+    title: 'Biblioteca de servicios',
     component: ServiciosComponent,
   },
   {
     path: RUTAS.AGREGAR_BIBLIOTECA,
+    title: 'Agregar a la biblioteca',
     component: AgregarBibliotecaComponent,
     canActivate: [RolesGuard],
     data: {
@@ -652,6 +721,7 @@ export const childRoutes: Routes = [
 
   {
     path: RUTAS.EVENTOS_EN_VIVO,
+    title: 'Eventos en vivo',
     component: EventosEnVivoComponent,
     canActivate: [RolesGuard],
     data: {
@@ -668,6 +738,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.DASHBOARD_OBRERO,
+    title: 'Panel del obrero',
     loadComponent: () =>
       import('src/app/pages/dashboard-obrero/dashboard-obrero.component').then((m) => m.DashboardObreroComponent),
     canActivate: [RolesGuard],
@@ -686,6 +757,7 @@ export const childRoutes: Routes = [
   },
   {
     path: RUTAS.DASHBOARD_INFORMES_OBRERO,
+    title: 'Panel de informes de la congregación',
     loadComponent: () =>
       import(
         'src/app/pages/administracion/reportes/dashboard-supervision/dashboard-supervision.component'

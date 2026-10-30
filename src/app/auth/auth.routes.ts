@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { CONFIGURACION } from '../core/enums/config.enum';
 import LoginComponent from './login/login.component';
 import RecuperarCuentaComponent from './recuperar-cuenta/recuperar-cuenta.component';
 import CambiarPasswordComponent from './cambiar-password/cambiar-password.component';
@@ -8,17 +7,19 @@ import CambiarPasswordComponent from './cambiar-password/cambiar-password.compon
 const routes: Routes = [
   {
     path: 'login',
+    title: (route) => route.queryParamMap.get('ticket') ? 'Acceso QR' : 'Iniciar sesión',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     component: LoginComponent,
   },
   {
     path: 'recuperar-cuenta',
     component: RecuperarCuentaComponent,
-    title: CONFIGURACION.TITLE,
+    title: 'Recuperar cuenta',
   },
   {
     path: 'nueva-contrasena/:token',
     component: CambiarPasswordComponent,
-    title: CONFIGURACION.TITLE,
+    title: 'Crear nueva contraseña',
   },
 ];
 

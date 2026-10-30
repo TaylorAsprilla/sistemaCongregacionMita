@@ -18,6 +18,20 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
+### Títulos de las páginas
+
+Las rutas definen `title` con el nombre de cada página. `PageTitleStrategy`
+aplica el formato `Página | CMAR LIVE` y antepone `PRUEBAS · ` cuando
+`environment.production` es falso. El login distingue `Acceso QR` si recibe
+un ticket e `Iniciar sesión` en caso contrario. Los títulos no incluyen
+nombres de usuarios, identificadores, tickets ni tokens.
+Las migas de navegación conservan sus datos visuales y no modifican el título
+de la pestaña. Al añadir una página, definir su `title` en la ruta.
+
+```powershell
+npm test -- --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.titles.spec.json --include=src/app/core/services/page-title.strategy.spec.ts
+```
+
 ### Pruebas enfocadas de informes
 
 Desde este directorio, con Chrome instalado, ejecute:

@@ -6,11 +6,11 @@ import { RazonSolicitudResolver } from 'src/app/resolvers/razon-solicitud/razon-
 import { RUTAS } from 'src/app/routes/menu-items';
 import { CrearSolicitudMultimediaComponent } from './solicitudes-multimedia/crear-solicitud-multimedia/crear-solicitud-multimedia.component';
 import { ValidarEmailComponent } from './solicitudes-multimedia/validar-email/validar-email.component';
-import { CONFIGURACION } from 'src/app/core/enums/config.enum';
 
 const routes: Routes = [
   {
     path: RUTAS.SOLICITUD,
+    title: 'Solicitar acceso a servicios en línea',
     component: CrearSolicitudMultimediaComponent,
     resolve: {
       nacionalidad: NacionalidadResolver,
@@ -22,7 +22,7 @@ const routes: Routes = [
   {
     path: 'validaremail/:id',
     component: ValidarEmailComponent,
-    title: CONFIGURACION.TITLE,
+    title: 'Verificar correo electrónico',
   },
 ];
 

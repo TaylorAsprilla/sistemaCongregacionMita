@@ -1,13 +1,11 @@
 import { Routes } from '@angular/router';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
-import { CONFIGURACION } from './core/enums/config.enum';
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: '/sistema/inicio',
     pathMatch: 'full',
-    title: CONFIGURACION.TITLE,
   },
   {
     path: '',
@@ -23,6 +21,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
+    title: 'Página no encontrada',
     component: NopagefoundComponent,
   },
 ];
