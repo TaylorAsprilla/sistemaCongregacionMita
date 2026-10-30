@@ -1,4 +1,4 @@
-<section class="vh-100">
+<section class="login-page" [class.qr-page]="!!ticketQr">
   <div class="container-fluid h-custom">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-md-9 col-lg-6 col-xl-5 d-none d-sm-none d-md-none d-lg-block">
@@ -8,44 +8,35 @@
           alt="Sample image"
         />
       </div>
-      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1" [class.qr-card]="!!ticketQr">
         <div class="text-center">
           <img
+            class="img-fluid login-emblem"
             src="assets/images/escudo-congregacion-mita.png"
             width="30%"
             alt="Congregación Mita INC"
-            class="img-fluid"
           />
         </div>
 
         @if (ticketQr && qrLoginForm) {
-          <div class="alert alert-primary mt-4" role="alert">
-            <div class="text-center"><b>Has escaneado un código QR.</b></div>
-            <p>
-              Para continuar, por favor ingresa tu número Mita, selecciona el tipo de puesto y da clic en el botón
-              <strong>“Iniciar sesión con QR”</strong>.
-            </p>
-          </div>
-
-          <form [formGroup]="qrLoginForm" (ngSubmit)="loginConQr()" autocomplete="off">
+          <form class="qr-form mt-4" [formGroup]="qrLoginForm" (ngSubmit)="loginConQr()" autocomplete="off">
             <div class="form-outline mb-4">
+              <label for="numeroMitaQr">Número Mita</label>
               <div class="input-group">
                 <input
-                  type="number"
+                  id="numeroMitaQr"
+                  type="text"
+                  inputmode="numeric"
                   formControlName="numeroMita"
                   class="form-control form-control-lg"
                   placeholder="Ingresa tu número Mita"
+                  [readOnly]="!!desafioQr || loading"
                   [ngClass]="{
                     'is-invalid':
                       (qrLoginForm.get('numeroMita')?.invalid && qrLoginForm.get('numeroMita')?.touched) ||
                       (submitted && qrLoginForm.get('numeroMita')?.invalid),
                   }"
-                  (blur)="usuarioPorNumeroMita()"
-                  (keydown.enter)="usuarioPorNumeroMita()"
                 />
-                <button type="button" class="btn btn-outline-secondary" (click)="usuarioPorNumeroMita()" tabindex="-1">
-                  <i class="fa fa-search"></i>
-                </button>
               </div>
 
               @if (
@@ -53,79 +44,96 @@
                 (submitted && qrLoginForm.get('numeroMita')?.invalid)
               ) {
                 <div class="invalid-feedback d-block mt-1">
-                  @if (qrLoginForm.get('numeroMita')?.errors?.['required']) {
-                    <small>El número Mita es obligatorio.</small>
-                  }
-                  @if (qrLoginForm.get('numeroMita')?.errors?.['minlength']) {
-                    <small>Debe tener al menos 2 caracteres.</small>
-                  }
-                  @if (qrLoginForm.get('numeroMita')?.errors?.['maxlength']) {
-                    <small>Debe tener menos de 50 caracteres.</small>
-                  }
+                  <small>Ingrese un número Mita válido.</small>
                 </div>
               }
             </div>
 
-            <div class="form-outline mb-4">
-              <input
-                type="text"
-                formControlName="nombre"
-                class="form-control form-control-lg"
-                placeholder="Tu nombre completo"
-                [ngClass]="{
-                  'is-invalid':
-                    (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) ||
-                    (submitted && qrLoginForm.get('nombre')?.invalid),
-                }"
-              />
-
-              @if (
-                (qrLoginForm.get('nombre')?.invalid && qrLoginForm.get('nombre')?.touched) ||
-                (submitted && qrLoginForm.get('nombre')?.invalid)
-              ) {
-                <div class="invalid-feedback d-block mt-1">
-                  @if (qrLoginForm.get('nombre')?.errors?.['required']) {
-                    <small>El nombre es obligatorio.</small>
-                  }
-                  @if (qrLoginForm.get('nombre')?.errors?.['minlength']) {
-                    <small>Debe tener al menos 2 caracteres.</small>
-                  }
-                  @if (qrLoginForm.get('nombre')?.errors?.['maxlength']) {
-                    <small>Debe tener menos de 50 caracteres.</small>
-                  }
-                </div>
-              }
-            </div>
-
-            <div class="form-outline mb-4">
-              <select class="form-select form-control-lg" formControlName="tipoPuesto">
-                <option value="" disabled selected>Seleccione el tipo de acceso</option>
-                <option value="guarda">Guarda de Mita</option>
-                <option value="casita">Miembro de la Casita</option>
-                <!-- <option value="Acceso Retiro Juventud">Acceso Retiro Juventud</option> -->
-              </select>
-              @if (qrLoginForm.get('tipoPuesto')?.invalid && (qrLoginForm.get('tipoPuesto')?.touched || submitted)) {
-                <div class="invalid-feedback d-block mt-1">
-                  <small>Seleccione el tipo de acceso</small>
-                </div>
-              }
-            </div>
-
-            <div class="text-lg-start mt-4 pt-2 d-flex gap-2">
-              <button
-                type="submit"
-                class="btn btn-primary btn-lg flex-fill d-flex justify-content-center align-items-center"
-                [disabled]="qrLoginForm.invalid"
-              >
-                Iniciar sesión con QR
+            @if (!desafioQr) {
+              <button type="button" class="btn btn-primary w-100" [disabled]="loading" (click)="solicitarCodigoQr()">
+                {{ loading ? 'Procesando...' : 'Solicitar código por correo' }}
               </button>
+            } @else {
+              <p class="qr-notice" role="status">{{ mensajeCodigoQr }}</p>
+              <div class="form-outline mb-4">
+                <label for="codigoQr" class="qr-code-label">Código recibido por correo</label>
+                <div class="qr-code">
+                  <input id="codigoQr" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6"
+                    aria-describedby="codigoQrAyuda" formControlName="codigo" class="qr-code-input" />
+                  <div class="qr-code-boxes" aria-hidden="true">
+                    @for (indice of [0, 1, 2, 3, 4, 5]; track indice) {
+                      <span class="qr-code-digit">{{ qrLoginForm.get('codigo')?.value?.[indice] || '' }}</span>
+                    }
+                  </div>
+                </div>
+                <small id="codigoQrAyuda" class="qr-help">Válido por 10 minutos. Utilice el correo de esta solicitud.</small>
+                @if (qrLoginForm.get('codigo')?.invalid && (submitted || qrLoginForm.get('codigo')?.touched)) {
+                  <small class="text-danger">Ingrese el código de 6 dígitos. Caduca en 10 minutos.</small>
+                }
+              </div>
+              <fieldset class="qr-question mb-4">
+                <legend class="fs-6">¿Es guarda?</legend>
+                <div class="qr-choice">
+                  <input id="esGuardaSi" type="radio" class="form-check-input" formControlName="esGuarda"
+                    [value]="true" (change)="actualizarGuarda()" />
+                  <label for="esGuardaSi" class="form-check-label">Sí</label>
+                </div>
+                <div class="qr-choice">
+                  <input id="esGuardaNo" type="radio" class="form-check-input" formControlName="esGuarda"
+                    [value]="false" (change)="actualizarGuarda()" />
+                  <label for="esGuardaNo" class="form-check-label">No</label>
+                </div>
+              </fieldset>
+              @if (qrLoginForm.get('esGuarda')?.value === true) {
+                <fieldset class="qr-question mb-4">
+                  <legend class="fs-6">¿Está actualmente en turno de guarda?</legend>
+                  <div class="qr-choice">
+                    <input id="enTurnoSi" type="radio" class="form-check-input" formControlName="enTurnoGuarda"
+                      [value]="true" (change)="actualizarPuesto()" />
+                    <label for="enTurnoSi" class="form-check-label">Sí</label>
+                  </div>
+                  <div class="qr-choice">
+                    <input id="enTurnoNo" type="radio" class="form-check-input" formControlName="enTurnoGuarda"
+                      [value]="false" (change)="actualizarPuesto()" />
+                    <label for="enTurnoNo" class="form-check-label">No</label>
+                  </div>
+                </fieldset>
+                @if (qrLoginForm.get('enTurnoGuarda')?.value === true) {
+                  <div class="mb-4">
+                    <label for="puestoQr">Puesto donde presta servicio</label>
+                    <select id="puestoQr" formControlName="puesto" class="form-select form-control-lg">
+                      <option value="">Seleccione un puesto</option>
+                      @for (puesto of puestosQr; track puesto) {
+                        <option [value]="puesto">{{ puesto }}</option>
+                      }
+                    </select>
+                    @if (submitted && qrLoginForm.get('puesto')?.invalid) {
+                      <small class="text-danger">Seleccione el puesto.</small>
+                    }
+                  </div>
+                }
+              }
+              @if (guardaFueraDeTurno) {
+                <p class="qr-notice" role="alert">Si es guarda, debe estar actualmente en turno para ingresar mediante QR.</p>
+              }
+              <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="loading || qrLoginForm.invalid || guardaFueraDeTurno">
+                {{ loading ? 'Verificando...' : 'Iniciar sesión con QR' }}
+              </button>
+            }
+            <ul class="qr-help qr-access-info mt-3 mb-0">
+              <li>Puedes solicitar hasta <strong>3 códigos cada 15 minutos</strong>.</li>
+              <li>Una vez ingresas correctamente, la sesión QR dura <strong>4 horas</strong>.</li>
+            </ul>
+            <div class="qr-actions mt-3 d-flex gap-2 flex-wrap">
               <button
                 type="button"
-                class="btn btn-secondary btn-lg flex-fill d-flex justify-content-center align-items-center"
-                (click)="qrLoginForm.reset()"
+                class="btn btn-secondary flex-fill"
+                [disabled]="loading"
+                (click)="limpiarQr()"
               >
-                Limpiar
+                {{ desafioQr ? 'Solicitar otro código / cambiar número' : 'Limpiar' }}
               </button>
+              <a [routerLink]="[Rutas.LOGIN]" class="btn btn-outline-secondary flex-fill">Ingreso con contraseña</a>
             </div>
           </form>
         } @else {
@@ -187,7 +195,7 @@
       </div>
     </div>
   </div>
-  <div class="text-center py-4 px-4 px-xl-5 bg-primary">
+  <div class="login-footer text-center py-4 px-4 px-xl-5 bg-primary">
     <div class="text-white mb-3 mb-md-0">
       Congregación Mita Inc. Copyright © {{ obtenerAnioActual() }} Derechos Reservados. Términos y Condiciones
     </div>

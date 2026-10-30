@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
-import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +12,6 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 export class BredcrumbsComponent {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-  private titleService = inject(Title);
 
   @Input() layout: string = '';
   public pageInfo: any;
@@ -33,7 +31,6 @@ export class BredcrumbsComponent {
         mergeMap((route) => route.data)
       )
       .subscribe((event) => {
-        this.titleService.setTitle(event['title']);
         this.pageInfo = event;
       });
   }

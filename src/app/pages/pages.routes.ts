@@ -1,14 +1,13 @@
 import { AuthGuard } from '../core/guards/auth.guard';
 import { PermisosResolver } from '../resolvers/permisos/permisos.resolver';
 import { PagesComponent } from './pages.component';
-import { CONFIGURACION } from '../core/enums/config.enum';
 import { Routes } from '@angular/router';
 
 const routes: Routes = [
   {
     path: 'sistema',
     component: PagesComponent,
-    title: CONFIGURACION.TITLE,
+    title: 'Inicio',
     canActivate: [AuthGuard],
     canMatch: [AuthGuard],
     resolve: { permisos: PermisosResolver },

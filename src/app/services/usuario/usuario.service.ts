@@ -6,6 +6,8 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import {
   DatosQrLogin,
+  CodigoQrRespuesta,
+  LoginQrRespuesta,
   ListarUsuario,
   NumeroMitaResponse,
   ResponsabilidadesObreroResponse,
@@ -419,11 +421,11 @@ export class UsuarioService {
   }
 
   loginPorQr(datos: DatosQrLogin) {
-    return this.httpClient.post(`${base_url}/accesoqr/loginQr`, datos).pipe(
-      tap((resp: any) => {
+    return this.httpClient.post<LoginQrRespuesta>(`${base_url}/accesoqr/loginQr`, datos).pipe(
+      tap((resp) => {
         localStorage.setItem('token', resp.token);
         sessionStorage.setItem('isQRLogin', 'isQRLogin');
-        sessionStorage.setItem('nombre', datos.nombre);
+        sessionStorage.setItem('nombre', resp.nombre);
         sessionStorage.setItem('congregacion', resp.congregacion.congregacion);
         this.idUsuario = resp.congregacion.id;
         this.nombreQR = resp.nombre;
@@ -432,6 +434,10 @@ export class UsuarioService {
         this.sessionMonitor.startMonitoring();
       }),
     );
+  }
+
+  solicitarCodigoQr(qrCode: string, numeroMita: string) {
+    return this.httpClient.post<CodigoQrRespuesta>(`${base_url}/accesoqr/solicitarCodigo`, { qrCode, numeroMita });
   }
 
   forgotPassword(login: string) {

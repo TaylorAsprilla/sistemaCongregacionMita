@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { Observable } from 'rxjs';
@@ -32,10 +32,13 @@ export class QrCodeService {
     return this.httpClient.get<any>(`${base_url}/accesoqr/ultimoQr`, this.headers);
   }
 
-  obtenerListadoAccesos(page: number = 1, limit: number = 10): Observable<AccesosQrResponseInterface> {
+  obtenerListadoAccesos(page: number = 1, limit: number = 10, esGuarda = '', puesto = ''): Observable<AccesosQrResponseInterface> {
+    let params = new HttpParams().set('page', page).set('limit', limit);
+    if (esGuarda) params = params.set('esGuarda', esGuarda);
+    if (puesto) params = params.set('puesto', puesto);
     return this.httpClient.get<AccesosQrResponseInterface>(
-      `${base_url}/accesoqr/listadoAccesos?page=${page}&limit=${limit}`,
-      this.headers,
+      `${base_url}/accesoqr/listadoAccesos`,
+      { ...this.headers, params },
     );
   }
 }

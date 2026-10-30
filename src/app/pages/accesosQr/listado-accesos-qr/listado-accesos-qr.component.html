@@ -1,4 +1,23 @@
 <section class="content">
+  <div class="d-flex flex-wrap gap-3 mb-3">
+    <div>
+      <label for="filtroGuarda">Guarda</label>
+      <select id="filtroGuarda" class="form-select" [(ngModel)]="filtroGuarda" (change)="aplicarFiltros()" [disabled]="cargando">
+        <option value="">Todos, incluidos históricos</option>
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    <div>
+      <label for="filtroPuesto">Puesto</label>
+      <select id="filtroPuesto" class="form-select" [(ngModel)]="filtroPuesto" (change)="aplicarFiltros()" [disabled]="cargando">
+        <option value="">Todos</option>
+        @for (puesto of puestosQr; track puesto) {
+          <option [value]="puesto">{{ puesto }}</option>
+        }
+      </select>
+    </div>
+  </div>
   <!-- Cargando información -->
   @if (cargando) {
     <app-cargando-informacion></app-cargando-informacion>
@@ -26,18 +45,28 @@
               <tr>
                 <th>Usuario</th>
                 <th>Dispositivo</th>
-                <th>País</th>
-                <th>Ciudad</th>
+                <th>QR</th>
+                <th>Guarda</th>
+                <th>En turno</th>
+                <th>Puesto</th>
+                <th>Resultado</th>
+                <th>Identidad</th>
+                <th>Motivo de rechazo</th>
                 <th>Fecha</th>
               </tr>
             </thead>
             <tbody>
               @for (acceso of accesosQr; track $index) {
                 <tr>
-                  <td class="text-nowrap">{{ acceso.qrAcceso?.nombre }}</td>
+                  <td class="text-nowrap">{{ acceso.nombre || 'No verificada' }} @if (acceso.idUsuario) { (#{{ acceso.idUsuario }}) }</td>
                   <td class="text-nowrap">{{ acceso.dispositivo }}</td>
-                  <td class="text-nowrap">{{ acceso.pais }}</td>
-                  <td class="text-nowrap">{{ acceso.ciudad }}</td>
+                  <td>{{ acceso.idQrCode || '—' }}</td>
+                  <td>{{ acceso.esGuarda === null ? 'Sin registro' : (acceso.esGuarda ? 'Sí' : 'No') }}</td>
+                  <td>{{ acceso.enTurnoGuarda === null ? 'Sin registro' : (acceso.enTurnoGuarda ? 'Sí' : 'No') }}</td>
+                  <td>{{ acceso.puesto || acceso.tipoPuesto || '—' }}</td>
+                  <td>{{ acceso.resultado || 'Histórico' }}</td>
+                  <td>{{ acceso.resultadoIdentidad || 'Sin registro' }}</td>
+                  <td>{{ acceso.motivoRechazo || '—' }}</td>
                   <td class="text-nowrap">{{ acceso.createdAt | date: 'short' }}</td>
                 </tr>
               }

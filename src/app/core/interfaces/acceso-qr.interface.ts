@@ -1,21 +1,18 @@
-interface Congregacion {
-  congregacion: string;
-}
-
-interface QrAcceso {
-  nombre: string;
-}
-
 export interface AccesoQrInterface {
+  id: number;
+  idQrCode: number | null;
+  idUsuario: number | null;
+  nombre: string | null;
   ip: string;
   dispositivo: string;
   createdAt: string;
-  isLoginCodeQr: boolean;
-  idCongregacion: number;
-  pais: string;
-  ciudad: string;
-  qrAcceso: QrAcceso;
-  congregacion: Congregacion;
+  tipoPuesto: string | null;
+  esGuarda: boolean | null;
+  enTurnoGuarda: boolean | null;
+  puesto: string | null;
+  resultado: string | null;
+  resultadoIdentidad: string | null;
+  motivoRechazo: string | null;
 }
 
 export interface PaginationMetadata {
