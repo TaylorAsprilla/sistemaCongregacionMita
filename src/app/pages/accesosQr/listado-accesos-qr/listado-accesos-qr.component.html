@@ -1,8 +1,30 @@
 <section class="content">
-  <div class="d-flex flex-wrap gap-3 mb-3">
+  <form class="d-flex flex-wrap gap-3 mb-3 align-items-end" (ngSubmit)="aplicarFiltros()">
+    <div>
+      <label for="filtroUsuario">Usuario</label>
+      <input id="filtroUsuario" name="usuario" class="form-control" [(ngModel)]="filtros.usuario" placeholder="Nombre o número Mita" maxlength="150" [disabled]="cargando">
+    </div>
+    <div>
+      <label for="filtroDispositivo">Dispositivo</label>
+      <input id="filtroDispositivo" name="dispositivo" class="form-control" [(ngModel)]="filtros.dispositivo" placeholder="Buscar dispositivo" maxlength="150" [disabled]="cargando">
+    </div>
+    <div>
+      <label for="filtroUbicacion">Ubicación</label>
+      <input id="filtroUbicacion" name="ubicacion" class="form-control" [(ngModel)]="filtros.ubicacion" placeholder="Ciudad, país o Sin registro" maxlength="150" [disabled]="cargando">
+    </div>
+    <div>
+      <label for="filtroAccesoDe">Acceso de</label>
+      <select id="filtroAccesoDe" name="accesoDe" class="form-select" [(ngModel)]="filtros.accesoDe" [disabled]="cargando">
+        <option [ngValue]="undefined">Todos</option>
+        <option value="guarda">Guarda</option>
+        <option value="cuidadora">Cuidadora</option>
+        <option value="otro">Otro</option>
+        <option value="sin_registro">Sin registro</option>
+      </select>
+    </div>
     <div>
       <label for="filtroGuarda">Guarda</label>
-      <select id="filtroGuarda" class="form-select" [(ngModel)]="filtroGuarda" (change)="aplicarFiltros()" [disabled]="cargando">
+      <select id="filtroGuarda" name="guarda" class="form-select" [(ngModel)]="filtroGuarda" [disabled]="cargando">
         <option value="">Todos, incluidos históricos</option>
         <option value="true">Sí</option>
         <option value="false">No</option>
@@ -10,7 +32,7 @@
     </div>
     <div>
       <label for="filtroCuidadora">Cuidadora</label>
-      <select id="filtroCuidadora" class="form-select" [(ngModel)]="filtroCuidadora" (change)="aplicarFiltros()" [disabled]="cargando">
+      <select id="filtroCuidadora" name="cuidadora" class="form-select" [(ngModel)]="filtroCuidadora" [disabled]="cargando">
         <option value="">Todas, incluidos históricos</option>
         <option value="true">Sí</option>
         <option value="false">No</option>
@@ -18,24 +40,59 @@
     </div>
     <div>
       <label for="filtroPuesto">Puesto</label>
-      <select id="filtroPuesto" class="form-select" [(ngModel)]="filtroPuesto" (change)="aplicarFiltros()" [disabled]="cargando">
-        <option value="">Todos</option>
+      <input id="filtroPuesto" name="puesto" class="form-control" [(ngModel)]="filtroPuesto" list="puestosQr" placeholder="Todos / buscar puesto" maxlength="150" [disabled]="cargando">
+      <datalist id="puestosQr">
         @for (puesto of puestosQr; track puesto) {
-          <option [value]="puesto">{{ puesto }}</option>
+          <option [value]="puesto"></option>
         }
+        <option value="Sin registro"></option>
+      </datalist>
+    </div>
+    <div>
+      <label for="filtroResultado">Resultado</label>
+      <select id="filtroResultado" name="resultado" class="form-select" [(ngModel)]="filtros.resultado" [disabled]="cargando">
+        <option [ngValue]="undefined">Todos</option>
+        <option value="EXITOSO">EXITOSO</option>
+        <option value="RECHAZADO">RECHAZADO</option>
+        <option value="CODIGO_SOLICITADO">CODIGO_SOLICITADO</option>
+        <option value="HISTORICO">Histórico</option>
       </select>
     </div>
-  </div>
+    <div>
+      <label for="filtroIdentidad">Identidad</label>
+      <select id="filtroIdentidad" name="identidad" class="form-select" [(ngModel)]="filtros.identidad" [disabled]="cargando">
+        <option [ngValue]="undefined">Todas</option>
+        <option value="VERIFICADA">VERIFICADA</option>
+        <option value="NO_VERIFICADA">NO_VERIFICADA</option>
+        <option value="PENDIENTE">PENDIENTE</option>
+        <option value="SIN_REGISTRO">Sin registro</option>
+      </select>
+    </div>
+    <div>
+      <label for="filtroMotivoRechazo">Motivo de rechazo</label>
+      <input id="filtroMotivoRechazo" name="motivoRechazo" class="form-control" [(ngModel)]="filtros.motivoRechazo" placeholder="Buscar motivo o Sin registro" maxlength="150" [disabled]="cargando">
+    </div>
+    <div>
+      <label for="filtroFechaDesde">Fecha desde</label>
+      <input id="filtroFechaDesde" name="fechaDesde" type="date" class="form-control" [(ngModel)]="filtros.fechaDesde" [max]="filtros.fechaHasta || ''" [disabled]="cargando">
+    </div>
+    <div>
+      <label for="filtroFechaHasta">Fecha hasta</label>
+      <input id="filtroFechaHasta" name="fechaHasta" type="date" class="form-control" [(ngModel)]="filtros.fechaHasta" [min]="filtros.fechaDesde || ''" [disabled]="cargando">
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="cargando">Aplicar filtros</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="limpiarFiltros()" [disabled]="cargando">Limpiar filtros</button>
+  </form>
   <!-- Cargando información -->
   @if (cargando) {
     <app-cargando-informacion></app-cargando-informacion>
   }
-  @if (!cargando && accesosQr.length > 0) {
+  @if (!cargando) {
     <div class="card">
       <!-- Card Header -->
       <div class="card-header d-flex justify-content-between align-items-center bg-white text-dark">
         <div class="col-lg-8 col-md-7 col-12 px-4 pt-4">
-          <h3 class="card-title">Total de Accesos QR ({{ pagination?.total || accesosQr.length }})</h3>
+          <h3 class="card-title">Total de Accesos QR ({{ pagination?.total ?? accesosQr.length }})</h3>
           <p>Accesos registrados mediante código QR</p>
         </div>
         <div class="d-flex align-items-center flex-wrap">
@@ -53,10 +110,8 @@
               <tr>
                 <th>Usuario</th>
                 <th>Dispositivo</th>
-                <th>QR</th>
-                <th>Guarda</th>
-                <th>Cuidadora</th>
-                <th>En turno</th>
+                <th title="Ubicación aproximada: última ciudad y país registrados para la IP">Ubicación</th>
+                <th>Acceso de</th>
                 <th>Puesto</th>
                 <th>Resultado</th>
                 <th>Identidad</th>
@@ -68,11 +123,9 @@
               @for (acceso of accesosQr; track $index) {
                 <tr>
                   <td class="text-nowrap">{{ acceso.nombre || 'No verificada' }} @if (acceso.idUsuario) { (#{{ acceso.idUsuario | numeroMita }}) }</td>
-                  <td class="text-nowrap">{{ acceso.dispositivo }}</td>
-                  <td>{{ acceso.idQrCode || '—' }}</td>
-                  <td>{{ acceso.esGuarda === null ? 'Sin registro' : (acceso.esGuarda ? 'Sí' : 'No') }}</td>
-                  <td>{{ acceso.esCuidadora === null ? 'Sin registro' : (acceso.esCuidadora ? 'Sí' : 'No') }}</td>
-                  <td>{{ acceso.enTurnoGuarda === null ? 'Sin registro' : (acceso.enTurnoGuarda ? 'Sí' : 'No') }}</td>
+                  <td class="text-nowrap">{{ acceso.dispositivo || 'Sin registro' }}</td>
+                  <td>{{ acceso.ubicacion?.ciudad || '' }}{{ acceso.ubicacion?.ciudad && acceso.ubicacion?.pais ? ', ' : '' }}{{ acceso.ubicacion?.pais || '' }}{{ !acceso.ubicacion?.ciudad && !acceso.ubicacion?.pais ? 'Sin registro' : '' }}</td>
+                  <td>{{ acceso.esGuarda ? 'Guarda' : (acceso.esCuidadora ? 'Cuidadora' : (acceso.esGuarda === false && acceso.esCuidadora === false ? 'Otro' : 'Sin registro')) }}</td>
                   <td>{{ acceso.puesto || acceso.tipoPuesto || '—' }}</td>
                   <td>{{ acceso.resultado || 'Histórico' }}</td>
                   <td>{{ acceso.resultadoIdentidad || 'Sin registro' }}</td>
@@ -80,12 +133,17 @@
                   <td class="text-nowrap">{{ acceso.createdAt | date: 'short' }}</td>
                 </tr>
               }
+              @if (accesosQr.length === 0) {
+                <tr>
+                  <td colspan="9" class="text-center">No se encontraron accesos con los filtros seleccionados.</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>
 
         <!-- Controles de paginación -->
-        @if (pagination) {
+        @if (pagination && pagination.total > 0) {
           <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
             <div class="mb-2 mb-md-0">
               <span class="text-muted">
@@ -135,11 +193,6 @@
           </div>
         }
       </div>
-    </div>
-  }
-  @if (!cargando && accesosQr.length === 0) {
-    <div class="text-center text-gray-500 mt-6">
-      <p>No se encontraron accesos registrados.</p>
     </div>
   }
 </section>

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from 'environment';
 import { Observable } from 'rxjs';
-import { AccesosQrResponseInterface } from 'src/app/core/interfaces/acceso-qr.interface';
+import { AccesosQrResponseInterface, FiltrosAccesosQr } from 'src/app/core/interfaces/acceso-qr.interface';
 
 const base_url = environment.base_url;
 
@@ -38,11 +38,15 @@ export class QrCodeService {
     esGuarda = '',
     puesto = '',
     esCuidadora = '',
+    filtros: FiltrosAccesosQr = {},
   ): Observable<AccesosQrResponseInterface> {
     let params = new HttpParams().set('page', page).set('limit', limit);
     if (esGuarda) params = params.set('esGuarda', esGuarda);
-    if (puesto) params = params.set('puesto', puesto);
+    if (puesto.trim()) params = params.set('puesto', puesto.trim());
     if (esCuidadora) params = params.set('esCuidadora', esCuidadora);
+    for (const [campo, valor] of Object.entries(filtros)) {
+      if (valor?.trim()) params = params.set(campo, valor.trim());
+    }
     return this.httpClient.get<AccesosQrResponseInterface>(
       `${base_url}/accesoqr/listadoAccesos`,
       { ...this.headers, params },

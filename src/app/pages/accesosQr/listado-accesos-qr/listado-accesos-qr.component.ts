@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@ang
 import {
   AccesoQrInterface,
   AccesosQrResponseInterface,
+  FiltrosAccesosQr,
   PaginationMetadata,
 } from 'src/app/core/interfaces/acceso-qr.interface';
 import { QrCodeService } from 'src/app/services/qrCode/qr-code.service';
@@ -40,6 +41,11 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
   filtroGuarda = '';
   filtroCuidadora = '';
   filtroPuesto = '';
+  filtros: FiltrosAccesosQr = {};
+  private filtrosAplicados: FiltrosAccesosQr = {};
+  private guardaAplicado = '';
+  private cuidadoraAplicada = '';
+  private puestoAplicado = '';
   readonly puestosQr = ['Puesto 1', 'Casa Nueva', 'Finca de Arecibo', 'Finca de Bayamón'];
 
   private accesosQrSubscription: Subscription | null = null;
@@ -57,15 +63,17 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
   }
 
   obtenerAccesosQr(): void {
+    this.accesosQrSubscription?.unsubscribe();
     this.cargando = true;
 
     this.accesosQrSubscription = this.qrCodeService
       .obtenerListadoAccesos(
         this.currentPage,
         this.itemsPerPage,
-        this.filtroGuarda,
-        this.filtroPuesto,
-        this.filtroCuidadora,
+        this.guardaAplicado,
+        this.puestoAplicado,
+        this.cuidadoraAplicada,
+        this.filtrosAplicados,
       )
       .subscribe({
         next: (response: AccesosQrResponseInterface) => {
@@ -87,8 +95,32 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
   }
 
   aplicarFiltros(): void {
+    if (this.filtros.fechaDesde && this.filtros.fechaHasta && this.filtros.fechaDesde > this.filtros.fechaHasta) {
+      this.mostrarError('La fecha inicial no puede ser posterior a la fecha final.');
+      return;
+    }
+    this.filtrosAplicados = { ...this.filtros };
+    if (this.filtros.fechaDesde) {
+      this.filtrosAplicados.fechaDesde = new Date(`${this.filtros.fechaDesde}T00:00:00`).toISOString();
+    }
+    if (this.filtros.fechaHasta) {
+      const hasta = new Date(`${this.filtros.fechaHasta}T00:00:00`);
+      hasta.setDate(hasta.getDate() + 1);
+      this.filtrosAplicados.fechaHasta = hasta.toISOString();
+    }
+    this.guardaAplicado = this.filtroGuarda;
+    this.cuidadoraAplicada = this.filtroCuidadora;
+    this.puestoAplicado = this.filtroPuesto;
     this.currentPage = 1;
     this.obtenerAccesosQr();
+  }
+
+  limpiarFiltros(): void {
+    this.filtros = {};
+    this.filtroGuarda = '';
+    this.filtroCuidadora = '';
+    this.filtroPuesto = '';
+    this.aplicarFiltros();
   }
 
   // Métodos de paginación
