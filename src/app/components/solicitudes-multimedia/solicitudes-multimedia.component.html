@@ -410,6 +410,16 @@
                                   {{ solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadCronica }}
                                 </p>
                               }
+                              @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.personaInmunosuprimida != null) {
+                                <p><strong>Persona inmunosuprimida:</strong>
+                                  {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].personaInmunosuprimida ? 'Sí' : 'No' }}
+                                </p>
+                              }
+                              @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.impedimentoSalirCasa != null) {
+                                <p><strong>Condición de salud que impide totalmente salir de casa:</strong>
+                                  {{ solicitud.solicitudes[solicitud.solicitudes.length - 1].impedimentoSalirCasa ? 'Sí' : 'No' }}
+                                </p>
+                              }
                               @if (solicitud?.solicitudes[solicitud.solicitudes.length - 1]?.enfermedadQuePadece) {
                                 <p>
                                   <i class="fas fa-procedures icon-black"></i> <strong>Enfermedad Que padece:</strong>

@@ -19,6 +19,8 @@ export interface UsuarioSolicitudInterface {
 }
 
 export interface SolicitudInterface {
+  personaInmunosuprimida?: boolean | null;
+  impedimentoSalirCasa?: boolean | null;
   id: number;
   emailVerificado: boolean | null;
   otraRazon: string;

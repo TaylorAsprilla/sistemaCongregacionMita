@@ -23,6 +23,7 @@ import { AsyncPipe } from '@angular/common';
 import { MatAutocompleteTrigger, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOption } from '@angular/material/core';
 import { ESTADO_SOLICITUD_MULTIMEDIA_ENUM } from 'src/app/core/enums/solicitudMultimendia.enum';
+import { preguntasEnfermedad, validarSolicitudEnfermedad } from 'src/app/core/utils/solicitud-enfermedad';
 
 @Component({
   selector: 'app-crear-solicitud-multimedia',
@@ -65,6 +66,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   usuarioQueRegistra: UsuarioModel;
 
   loading: boolean = false;
+  preguntasEnfermedad = preguntasEnfermedad;
 
   tiempoSugerido = configuracion.tiempoSugerido;
 
@@ -265,8 +267,13 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudForm = this.formBuilder.group({
       ...this.solicitudForm.controls,
       personaEncamada: ['', [Validators.required]],
+      enfermedadCronica: [null, [Validators.required]],
+      personaInmunosuprimida: [null, [Validators.required]],
+      impedimentoSalirCasa: [null, [Validators.required]],
       enfermedadQuePadece: ['', [Validators.minLength(3)]],
     });
+    this.solicitudForm.addValidators(validarSolicitudEnfermedad);
+    this.solicitudForm.updateValueAndValidity();
     return true;
   }
 
@@ -276,15 +283,21 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       personaEncargada: ['', [Validators.minLength(3), Validators.required]],
       parentesco_id: ['', [Validators.required]],
       celularPersonaEncargada: ['', [Validators.minLength(3), Validators.required]],
-      enfermedadCronica: ['', [Validators.required]],
       enfermedadQuePadece: ['', [Validators.minLength(3)]],
     });
+    this.solicitudForm.addValidators(validarSolicitudEnfermedad);
+    this.solicitudForm.updateValueAndValidity();
     return true;
   }
 
   eliminarControlEnfermedad() {
     this.solicitudForm.removeControl('personaEncamada');
     this.solicitudForm.removeControl('enfermedadQuePadece');
+    this.solicitudForm.removeControl('enfermedadCronica');
+    this.solicitudForm.removeControl('personaInmunosuprimida');
+    this.solicitudForm.removeControl('impedimentoSalirCasa');
+    this.solicitudForm.removeValidators(validarSolicitudEnfermedad);
+    this.solicitudForm.updateValueAndValidity();
 
     return true;
   }
@@ -293,7 +306,6 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
     this.solicitudForm.removeControl('personaEncargada');
     this.solicitudForm.removeControl('parentesco_id');
     this.solicitudForm.removeControl('celularPersonaEncargada');
-    this.solicitudForm.removeControl('enfermedadCronica');
 
     return true;
   }
@@ -307,6 +319,7 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
   }
 
   crearSolicitud() {
+    this.solicitudForm.markAllAsTouched();
     if (this.solicitudForm.valid) {
       this.solicitudMultimediaService.obtenerSolicitudPorUsuario(this.usuario.id).subscribe({
         next: (respuesta: { ok: boolean; msg: string; usuario_id: string }) => {
@@ -365,9 +378,11 @@ export class CrearSolicitudMultimediaComponent implements OnInit, OnDestroy {
       parentesco_id: formSolicitud.parentesco_id ? formSolicitud.parentesco_id : null,
       tiempoDistancia: formSolicitud.tiempoDistancia ? formSolicitud.tiempoDistancia : '',
       horaTemploMasCercano: formSolicitud.horaTemploMasCercano ? formSolicitud.horaTemploMasCercano : '',
-      personaEncamada: formSolicitud.personaEncamada ? formSolicitud.personaEncamada : 0,
+      personaEncamada: formSolicitud.personaEncamada ?? false,
       personaEncargada: formSolicitud.personaEncargada ? formSolicitud.personaEncargada : '',
-      enfermedadCronica: formSolicitud.enfermedadCronica ? formSolicitud.enfermedadCronica : '',
+      enfermedadCronica: formSolicitud.enfermedadCronica ?? null,
+      personaInmunosuprimida: formSolicitud.personaInmunosuprimida ?? null,
+      impedimentoSalirCasa: formSolicitud.impedimentoSalirCasa ?? null,
       enfermedadQuePadece: formSolicitud.enfermedadQuePadece ? formSolicitud.enfermedadQuePadece : '',
       paisDondeEstudia: formSolicitud.paisDondeEstudia ? formSolicitud.paisDondeEstudia : '',
       ciudadDondeEstudia: formSolicitud.ciudadDondeEstudia ? formSolicitud.ciudadDondeEstudia : '',
