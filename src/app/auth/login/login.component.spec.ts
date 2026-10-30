@@ -53,10 +53,10 @@ describe('LoginComponent QR', () => {
     expect(fixture.nativeElement.querySelector('[formControlName="codigo"]')).not.toBeNull();
   });
 
-  it('no guarda puede ingresar sin seleccionar puesto', () => {
+  it('ninguno de los dos puede ingresar sin seleccionar puesto', () => {
     solicitar();
-    component.qrLoginForm.get('esGuarda')?.setValue(false);
-    component.actualizarGuarda();
+    component.qrLoginForm.get('tipoPersonalQr')?.setValue('ninguno');
+    component.actualizarTipoPersonal();
     expect(component.qrLoginForm.get('enTurnoGuarda')?.value).toBeFalse();
     expect(component.qrLoginForm.valid).toBeTrue();
     fixture.detectChanges();
@@ -91,8 +91,8 @@ describe('LoginComponent QR', () => {
 
   it('guarda en turno requiere uno de los cuatro puestos', () => {
     solicitar();
-    component.qrLoginForm.get('esGuarda')?.setValue(true);
-    component.actualizarGuarda();
+    component.qrLoginForm.get('tipoPersonalQr')?.setValue('guarda');
+    component.actualizarTipoPersonal();
     expect(component.qrLoginForm.valid).toBeFalse();
     component.qrLoginForm.get('enTurnoGuarda')?.setValue(true);
     component.actualizarPuesto();
@@ -105,7 +105,7 @@ describe('LoginComponent QR', () => {
 
   it('salir del turno elimina el puesto y bloquea el ingreso del guarda', () => {
     solicitar();
-    component.qrLoginForm.patchValue({ esGuarda: true, enTurnoGuarda: true, puesto: 'Casa Nueva' });
+    component.qrLoginForm.patchValue({ tipoPersonalQr: 'guarda', enTurnoGuarda: true, puesto: 'Casa Nueva' });
     component.qrLoginForm.get('enTurnoGuarda')?.setValue(false);
     component.actualizarPuesto();
     expect(component.qrLoginForm.get('puesto')?.value).toBe('');
@@ -116,8 +116,8 @@ describe('LoginComponent QR', () => {
     expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain('debe estar actualmente en turno');
     component.loginConQr();
     expect(usuario.loginPorQr).not.toHaveBeenCalled();
-    component.qrLoginForm.get('esGuarda')?.setValue(false);
-    component.actualizarGuarda();
+    component.qrLoginForm.get('tipoPersonalQr')?.setValue('ninguno');
+    component.actualizarTipoPersonal();
     expect(component.guardaFueraDeTurno).toBeFalse();
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('button[type="submit"]').disabled).toBeFalse();
@@ -125,16 +125,27 @@ describe('LoginComponent QR', () => {
 
   it('envia el desafio y codigo, nunca nombre libre ni correo', () => {
     solicitar();
-    component.qrLoginForm.get('esGuarda')?.setValue(false);
-    component.actualizarGuarda();
+    component.qrLoginForm.get('tipoPersonalQr')?.setValue('ninguno');
+    component.actualizarTipoPersonal();
     usuario.loginPorQr.and.returnValue(throwError(() => ({ error: { msg: 'Código inválido' } })));
     component.loginConQr();
     expect(usuario.loginPorQr).toHaveBeenCalledOnceWith({
       qrCode: 'QR-PRUEBA', desafio_id: 'desafio-prueba', codigo: '012345',
-      esGuarda: false, enTurnoGuarda: false, puesto: null,
+      esGuarda: false, esCuidadora: false, enTurnoGuarda: false, puesto: null,
     });
     expect(component.loading).toBeFalse();
     expect(Swal.fire).toHaveBeenCalledWith(jasmine.objectContaining({ icon: 'error', text: 'Código inválido' }));
+  });
+
+  it('permite seleccionar cuidadora sin preguntas ni puesto de guarda', () => {
+    solicitar();
+    component.qrLoginForm.get('tipoPersonalQr')?.setValue('cuidadora');
+    component.actualizarTipoPersonal();
+    expect(component.qrLoginForm.get('enTurnoGuarda')?.value).toBeFalse();
+    expect(component.qrLoginForm.valid).toBeTrue();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('#puestoQr')).toBeNull();
+    expect(fixture.nativeElement.querySelector('#enTurnoSi')).toBeNull();
   });
 
   it('no permite doble solicitud mientras espera al servidor', () => {
@@ -146,8 +157,8 @@ describe('LoginComponent QR', () => {
 
   it('muestra la indicacion del backend cuando el codigo vencio o ya fue utilizado', () => {
     solicitar();
-    component.qrLoginForm.get('esGuarda')?.setValue(false);
-    component.actualizarGuarda();
+    component.qrLoginForm.get('tipoPersonalQr')?.setValue('ninguno');
+    component.actualizarTipoPersonal();
     for (const msg of [
       'Este código venció. Solicite otro código.',
       'Este código ya fue utilizado y no puede volver a usarse.',
@@ -184,7 +195,7 @@ describe('LoginComponent QR', () => {
   it('un cambio de ticket cancela la solicitud pendiente y restablece los validadores', () => {
     const respuesta = new Subject<CodigoQrRespuesta>();
     usuario.solicitarCodigoQr.and.returnValue(respuesta);
-    component.qrLoginForm.patchValue({ numeroMita: '7', esGuarda: true, enTurnoGuarda: true });
+    component.qrLoginForm.patchValue({ numeroMita: '7', tipoPersonalQr: 'guarda', enTurnoGuarda: true });
     component.actualizarPuesto();
     component.solicitarCodigoQr();
     expect(component.loading).toBeTrue();

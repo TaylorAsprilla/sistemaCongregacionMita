@@ -8,6 +8,7 @@ export interface AccesoQrInterface {
   createdAt: string;
   tipoPuesto: string | null;
   esGuarda: boolean | null;
+  esCuidadora: boolean | null;
   enTurnoGuarda: boolean | null;
   puesto: string | null;
   resultado: string | null;

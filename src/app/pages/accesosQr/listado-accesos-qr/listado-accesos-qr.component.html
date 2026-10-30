@@ -47,6 +47,7 @@
                 <th>Dispositivo</th>
                 <th>QR</th>
                 <th>Guarda</th>
+                <th>Cuidadora</th>
                 <th>En turno</th>
                 <th>Puesto</th>
                 <th>Resultado</th>
@@ -62,6 +63,7 @@
                   <td class="text-nowrap">{{ acceso.dispositivo }}</td>
                   <td>{{ acceso.idQrCode || '—' }}</td>
                   <td>{{ acceso.esGuarda === null ? 'Sin registro' : (acceso.esGuarda ? 'Sí' : 'No') }}</td>
+                  <td>{{ acceso.esCuidadora === null ? 'Sin registro' : (acceso.esCuidadora ? 'Sí' : 'No') }}</td>
                   <td>{{ acceso.enTurnoGuarda === null ? 'Sin registro' : (acceso.enTurnoGuarda ? 'Sí' : 'No') }}</td>
                   <td>{{ acceso.puesto || acceso.tipoPuesto || '—' }}</td>
                   <td>{{ acceso.resultado || 'Histórico' }}</td>
