@@ -33,6 +33,41 @@ describe('ListadoAccesosQRComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('oculta inicialmente los filtros y permite mostrarlos y ocultarlos desde el boton', () => {
+    const panel = fixture.nativeElement.querySelector('#filtros-listado-qr') as HTMLElement;
+    const boton = fixture.nativeElement.querySelector('[aria-controls="filtros-listado-qr"]') as HTMLButtonElement;
+    expect(panel.hidden).toBeTrue();
+    expect(boton.getAttribute('aria-expanded')).toBe('false');
+    expect(boton.textContent).toContain('Mostrar');
+    boton.click();
+    fixture.detectChanges();
+    expect(panel.hidden).toBeFalse();
+    expect(boton.getAttribute('aria-expanded')).toBe('true');
+    expect(boton.textContent).toContain('Ocultar');
+    boton.click();
+    fixture.detectChanges();
+    expect(panel.hidden).toBeTrue();
+  });
+
+  it('conserva los filtros escritos y aplicados al ocultar sin volver a consultar', () => {
+    component.mostrarFiltros = true;
+    component.filtros = { usuario: 'Prueba', accesoDe: 'cuidadora' };
+    component.aplicarFiltros();
+    component.filtros.usuario = 'Pendiente de aplicar';
+    servicio.obtenerListadoAccesos.calls.reset();
+    component.toggleFiltros();
+    fixture.detectChanges();
+    component.toggleFiltros();
+    fixture.detectChanges();
+    expect(component.filtros.usuario).toBe('Pendiente de aplicar');
+    expect(component.filtros.accesoDe).toBe('cuidadora');
+    expect(servicio.obtenerListadoAccesos).not.toHaveBeenCalled();
+    component.goToPage(2);
+    expect(servicio.obtenerListadoAccesos).toHaveBeenCalledWith(
+      2, 10, '', '', '', { usuario: 'Prueba', accesoDe: 'cuidadora' },
+    );
+  });
+
   it('mantiene visibles los historicos sin inventar respuestas de guarda', () => {
     expect(fixture.nativeElement.textContent).toContain('Histórico');
     expect(fixture.nativeElement.textContent).toContain('Sin registro');
