@@ -19,6 +19,7 @@ import { CalcularEdadPipe } from '../../pipes/calcularEdad/calcular-edad.pipe';
 import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from '../../pipes/whatsapp/whatsapp.pipe';
 import { NgClass } from '@angular/common';
+import { formatearNumeroMita } from 'src/app/core/utils/numero-mita';
 
 @Component({
   selector: 'app-buscar-usuario',
@@ -79,7 +80,7 @@ export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
             position: 'top-end',
             text: `${this.usuario.primerNombre} ${this.usuario.segundoNombre}
                 ${this.usuario.primerApellido} ${this.usuario.segundoApellido},
-                Número Mita ${this.usuario.id}`,
+                Número Mita ${formatearNumeroMita(this.usuario.id)}`,
             timer: 1000,
             showConfirmButton: false,
           });

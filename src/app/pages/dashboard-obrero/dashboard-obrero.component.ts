@@ -11,6 +11,7 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -58,6 +59,7 @@ import {
   selector: 'app-dashboard-obrero',
   standalone: true,
   imports: [
+    NumeroMitaPipe,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

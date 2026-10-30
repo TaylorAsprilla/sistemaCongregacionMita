@@ -58,7 +58,7 @@
             <tbody>
               @for (acceso of accesosQr; track $index) {
                 <tr>
-                  <td class="text-nowrap">{{ acceso.nombre || 'No verificada' }} @if (acceso.idUsuario) { (#{{ acceso.idUsuario }}) }</td>
+                  <td class="text-nowrap">{{ acceso.nombre || 'No verificada' }} @if (acceso.idUsuario) { (#{{ acceso.idUsuario | numeroMita }}) }</td>
                   <td class="text-nowrap">{{ acceso.dispositivo }}</td>
                   <td>{{ acceso.idQrCode || '—' }}</td>
                   <td>{{ acceso.esGuarda === null ? 'Sin registro' : (acceso.esGuarda ? 'Sí' : 'No') }}</td>

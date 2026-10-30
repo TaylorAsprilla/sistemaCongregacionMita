@@ -18,6 +18,13 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
+### Formato del número Mita
+
+Las vistas muestran el número Mita con punto como separador de miles (`1.234`),
+mediante el pipe `numeroMita`. Los mensajes generados en el frontend usan
+`formatearNumeroMita`. Este formato es solo visual: no se aplica a entradas,
+búsquedas, enlaces, datos enviados a la API ni correos del backend.
+
 ### Títulos de las páginas
 
 Las rutas definen `title` con el nombre de cada página. `PageTitleStrategy`
@@ -56,6 +63,16 @@ El `tsconfig.informes.spec.json` delimita la compilación de pruebas del flujo d
 - Las metas pendientes se consultan por el ámbito del informe actual, no por su creador. Completar una meta de un informe anterior primero crea su continuación en el informe abierto y luego completa esa continuación; no modifica la meta del informe histórico.
 
 ## Rol principal del usuario conectado
+
+El menú del encabezado enlaza Perfil y Cambiar contraseña mediante rutas absolutas
+bajo `/sistema`, independientemente de la página actual. Mis informes enlaza
+`/sistema/mis-informes` y solo se ofrece a obrero de ciudad o de campo, conforme
+al guard existente. Configuración no se muestra mientras no exista una pantalla
+para esa función. Cerrar sesión conserva el cierre gestionado por UsuarioService.
+
+```powershell
+npm test -- --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.header.spec.json --include=src/app/shared/header/header.component.spec.ts
+```
 
 El menú de perfil del encabezado y el panel lateral muestran una única insignia debajo del nombre del usuario. Se selecciona el primer permiso presente en este orden: **ADMINISTRADOR > ADMINISTRADOR PAÍS > ADMINISTRADOR MULTIMEDIA > COMITE RECTOR > SUPERVISOR > SUPERVISOR LOCAL > ASISTENTE OOTS > APROBADOR MULTIMEDIA > OBRERO PAÍS > OBRERO CIUDAD > OBRERO CAMPO > AYUDANTE > MULTIMEDIA > USUARIO > PRUEBA INFORMES**.
 

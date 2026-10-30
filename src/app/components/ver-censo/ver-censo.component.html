@@ -309,7 +309,7 @@
         ) {
           <tr>
             <td class="pointer text-center" (click)="masInformacion(usuario.id)">
-              {{ usuario.id }}
+              {{ usuario.id | numeroMita }}
             </td>
             <td>
               {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}

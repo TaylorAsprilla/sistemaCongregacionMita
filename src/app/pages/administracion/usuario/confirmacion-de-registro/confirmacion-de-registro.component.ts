@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
 import { delay } from 'rxjs/operators';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
@@ -10,6 +11,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
   templateUrl: './confirmacion-de-registro.component.html',
   styleUrls: ['./confirmacion-de-registro.component.scss'],
   standalone: true,
+  imports: [NumeroMitaPipe],
 })
 export default class ConfirmacionDeRegistroComponent implements OnInit {
   private router = inject(Router);

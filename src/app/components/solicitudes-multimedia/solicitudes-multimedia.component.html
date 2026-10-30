@@ -136,7 +136,7 @@
             let i = $index
           ) {
             <tr>
-              <td>{{ solicitud.id }}</td>
+              <td>{{ solicitud.id | numeroMita }}</td>
               <td>{{ solicitud.nombreCompleto }}</td>
               <td>
                 @if (solicitud?.email) {
