@@ -38,11 +38,12 @@ describe('ListadoAccesosQRComponent', () => {
     expect(fixture.nativeElement.textContent).toContain('Sin registro');
   });
 
-  it('filtra por guarda y puesto y vuelve a la primera pagina', () => {
+  it('combina filtros de guarda, cuidadora y puesto y vuelve a la primera pagina', () => {
     component.currentPage = 3;
     component.filtroGuarda = 'true';
+    component.filtroCuidadora = 'false';
     component.filtroPuesto = 'Casa Nueva';
     component.aplicarFiltros();
-    expect(servicio.obtenerListadoAccesos).toHaveBeenCalledWith(1, 10, 'true', 'Casa Nueva');
+    expect(servicio.obtenerListadoAccesos).toHaveBeenCalledWith(1, 10, 'true', 'Casa Nueva', 'false');
   });
 });

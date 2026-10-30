@@ -9,6 +9,14 @@
       </select>
     </div>
     <div>
+      <label for="filtroCuidadora">Cuidadora</label>
+      <select id="filtroCuidadora" class="form-select" [(ngModel)]="filtroCuidadora" (change)="aplicarFiltros()" [disabled]="cargando">
+        <option value="">Todas, incluidos históricos</option>
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    <div>
       <label for="filtroPuesto">Puesto</label>
       <select id="filtroPuesto" class="form-select" [(ngModel)]="filtroPuesto" (change)="aplicarFiltros()" [disabled]="cargando">
         <option value="">Todos</option>
