@@ -100,25 +100,21 @@
                 <div>
                   <li role="separator" class="divider"></li>
                   <li>
-                    <a [routerLink]="[Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
+                    <a [routerLink]="['/', Rutas.SISTEMA, Rutas.PERFIL, usuario.id]"> <i class="ti-user"></i> Perfil</a>
                   </li>
                 </div>
               }
               @if (!isQrLogin) {
                 <li role="separator" class="divider"></li>
                 <li>
-                  <a [routerLink]="[Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
+                  <a [routerLink]="['/', Rutas.SISTEMA, Rutas.RESET_PASSWORD_USUARIO]"> <i class="fa fa-lock"></i> Cambiar Contraseña</a>
                 </li>
                 <li role="separator" class="divider"></li>
               }
               @if (usuario) {
                 <div>
-                  <li>
-                    <a href="#"> <i class="ti-wallet"></i> Mis Informes</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <a href="#"> <i class="ti-settings"></i> Configuración</a>
+                  <li *appPermisos="[Roles.OBRERO_CIUDAD, Roles.OBRERO_CAMPO]">
+                    <a [routerLink]="['/', Rutas.SISTEMA, Rutas.MIS_INFORMES]"> <i class="ti-wallet"></i> Mis informes</a>
                   </li>
                   <li role="separator" class="divider"></li>
                 </div>
