@@ -72,19 +72,24 @@
                 }
               </div>
               <fieldset class="qr-question mb-4">
-                <legend class="fs-6">¿Es guarda?</legend>
+                <legend class="fs-6">Seleccione una opción</legend>
                 <div class="qr-choice">
-                  <input id="esGuardaSi" type="radio" class="form-check-input" formControlName="esGuarda"
-                    [value]="true" (change)="actualizarGuarda()" />
-                  <label for="esGuardaSi" class="form-check-label">Sí</label>
+                  <input id="tipoPersonalGuarda" type="radio" class="form-check-input" formControlName="tipoPersonalQr"
+                    value="guarda" (change)="actualizarTipoPersonal()" />
+                  <label for="tipoPersonalGuarda" class="form-check-label">Guarda</label>
                 </div>
                 <div class="qr-choice">
-                  <input id="esGuardaNo" type="radio" class="form-check-input" formControlName="esGuarda"
-                    [value]="false" (change)="actualizarGuarda()" />
-                  <label for="esGuardaNo" class="form-check-label">No</label>
+                  <input id="tipoPersonalCuidadora" type="radio" class="form-check-input" formControlName="tipoPersonalQr"
+                    value="cuidadora" (change)="actualizarTipoPersonal()" />
+                  <label for="tipoPersonalCuidadora" class="form-check-label">Cuidadora</label>
+                </div>
+                <div class="qr-choice">
+                  <input id="tipoPersonalNinguno" type="radio" class="form-check-input" formControlName="tipoPersonalQr"
+                    value="ninguno" (change)="actualizarTipoPersonal()" />
+                  <label for="tipoPersonalNinguno" class="form-check-label">Ninguno de los dos</label>
                 </div>
               </fieldset>
-              @if (qrLoginForm.get('esGuarda')?.value === true) {
+              @if (qrLoginForm.get('tipoPersonalQr')?.value === 'guarda') {
                 <fieldset class="qr-question mb-4">
                   <legend class="fs-6">¿Está actualmente en turno de guarda?</legend>
                   <div class="qr-choice">

@@ -175,6 +175,7 @@ export interface DatosQrLogin {
   desafio_id: string;
   codigo: string;
   esGuarda: boolean;
+  esCuidadora: boolean;
   enTurnoGuarda: boolean;
   puesto: string | null;
 }

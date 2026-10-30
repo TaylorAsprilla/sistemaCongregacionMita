@@ -74,20 +74,21 @@ export default class LoginComponent implements OnInit, OnDestroy {
     this.qrLoginForm = this.formBuilder.group({
       numeroMita: ['', [Validators.required, Validators.pattern(/^[1-9]\d{0,9}$/)]],
       codigo: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
-      esGuarda: [null, Validators.required],
+      tipoPersonalQr: ['', Validators.required],
       enTurnoGuarda: [null, Validators.required],
       puesto: [''],
     });
   }
 
-  actualizarGuarda() {
-    this.qrLoginForm.get('enTurnoGuarda')?.setValue(this.qrLoginForm.get('esGuarda')?.value ? null : false);
+  actualizarTipoPersonal() {
+    const esGuarda = this.qrLoginForm.get('tipoPersonalQr')?.value === 'guarda';
+    this.qrLoginForm.get('enTurnoGuarda')?.setValue(esGuarda ? null : false);
     this.actualizarPuesto();
   }
 
   actualizarPuesto() {
     const puesto = this.qrLoginForm.get('puesto');
-    const requierePuesto = this.qrLoginForm.get('esGuarda')?.value === true &&
+    const requierePuesto = this.qrLoginForm.get('tipoPersonalQr')?.value === 'guarda' &&
       this.qrLoginForm.get('enTurnoGuarda')?.value === true;
     puesto?.setValue('');
     puesto?.setValidators(requierePuesto ? [Validators.required] : []);
@@ -251,7 +252,7 @@ export default class LoginComponent implements OnInit, OnDestroy {
   }
 
   get guardaFueraDeTurno(): boolean {
-    return this.qrLoginForm.get('esGuarda')?.value === true &&
+    return this.qrLoginForm.get('tipoPersonalQr')?.value === 'guarda' &&
       this.qrLoginForm.get('enTurnoGuarda')?.value === false;
   }
 
@@ -267,7 +268,8 @@ export default class LoginComponent implements OnInit, OnDestroy {
       qrCode: this.ticketQr,
       desafio_id: this.desafioQr,
       codigo: this.qrLoginForm.value.codigo,
-      esGuarda: this.qrLoginForm.value.esGuarda,
+      esGuarda: this.qrLoginForm.value.tipoPersonalQr === 'guarda',
+      esCuidadora: this.qrLoginForm.value.tipoPersonalQr === 'cuidadora',
       enTurnoGuarda: this.qrLoginForm.value.enTurnoGuarda,
       puesto: this.qrLoginForm.value.puesto || null,
     };

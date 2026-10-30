@@ -14,7 +14,7 @@ describe('ListadoAccesosQRComponent', () => {
     servicio.obtenerListadoAccesos.and.returnValue(of({
       ok: true, msg: '', data: [{
         id: 1, idQrCode: 2, idUsuario: 7, nombre: 'Histórico', ip: '', dispositivo: '',
-        createdAt: '2026-01-01', tipoPuesto: 'guarda', esGuarda: null, enTurnoGuarda: null,
+        createdAt: '2026-01-01', tipoPuesto: 'guarda', esGuarda: null, esCuidadora: null, enTurnoGuarda: null,
         puesto: null, resultado: null, resultadoIdentidad: null, motivoRechazo: null,
       }],
     }));
