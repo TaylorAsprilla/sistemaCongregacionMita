@@ -20,6 +20,7 @@ import {
 import { UsuarioSolicitudMultimediaModel } from 'src/app/core/models/usuario-solicitud.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from 'src/app/pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from 'src/app/pipes/whatsapp/whatsapp.pipe';
@@ -32,6 +33,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
   selector: 'app-solicitudes-multimedia',
   standalone: true,
   imports: [
+    NumeroMitaPipe,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

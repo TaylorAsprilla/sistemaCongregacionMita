@@ -9,6 +9,7 @@ import { GENERO } from 'src/app/core/enums/genero.enum';
 import { configuracion } from 'src/environments/config/configuration';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
 import { PermisosDirective } from '../../directive/permisos/permisos.directive';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { InformeService } from 'src/app/services/informe/informe.service';
@@ -22,7 +23,7 @@ declare var $: any;
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   standalone: true,
-  imports: [RouterLink, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule, RolUsuarioComponent],
+  imports: [RouterLink, PermisosDirective, NgClass, RouterLinkActive, NgScrollbarModule, RolUsuarioComponent, NumeroMitaPipe],
 })
 export class SidebarComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

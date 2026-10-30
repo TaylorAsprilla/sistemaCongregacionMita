@@ -9,6 +9,7 @@ import { QrCodeService } from 'src/app/services/qrCode/qr-code.service';
 import { CargandoInformacionComponent } from '../../../components/cargando-informacion/cargando-informacion.component';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RUTAS } from 'src/app/routes/menu-items';
@@ -16,7 +17,7 @@ import { RUTAS } from 'src/app/routes/menu-items';
 @Component({
   selector: 'app-listado-accesos-qr',
   standalone: true,
-  imports: [CargandoInformacionComponent, CommonModule, FormsModule],
+  imports: [CargandoInformacionComponent, CommonModule, FormsModule, NumeroMitaPipe],
   templateUrl: './listado-accesos-qr.component.html',
   styleUrl: './listado-accesos-qr.component.scss',
 })

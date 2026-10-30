@@ -18,6 +18,13 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
+### Formato del número Mita
+
+Las vistas muestran el número Mita con punto como separador de miles (`1.234`),
+mediante el pipe `numeroMita`. Los mensajes generados en el frontend usan
+`formatearNumeroMita`. Este formato es solo visual: no se aplica a entradas,
+búsquedas, enlaces, datos enviados a la API ni correos del backend.
+
 ### Títulos de las páginas
 
 Las rutas definen `title` con el nombre de cada página. `PageTitleStrategy`

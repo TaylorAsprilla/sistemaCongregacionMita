@@ -585,7 +585,7 @@
               <!-- Columna # Mita -->
               <ng-container matColumnDef="idMita">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header># Mita</th>
-                <td mat-cell *matCellDef="let usuario">{{ usuario.id }}</td>
+                <td mat-cell *matCellDef="let usuario">{{ usuario.id | numeroMita }}</td>
               </ng-container>
 
               <!-- Columna Nombre -->

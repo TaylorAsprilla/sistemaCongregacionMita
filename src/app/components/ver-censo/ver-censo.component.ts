@@ -25,6 +25,8 @@ import { PaisService } from 'src/app/services/pais/pais.service';
 import { CampoService } from 'src/app/services/campo/campo.service';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { DecimalPipe, NgClass } from '@angular/common';
+import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
+import { formatearNumeroMita } from 'src/app/core/utils/numero-mita';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
@@ -40,7 +42,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './ver-censo.component.html',
   styleUrls: ['./ver-censo.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgClass, NgxPaginationModule, TelegramPipe, WhatsappPipe, CalcularEdadPipe, DecimalPipe],
+  imports: [FormsModule, NgClass, NgxPaginationModule, TelegramPipe, WhatsappPipe, CalcularEdadPipe, DecimalPipe, NumeroMitaPipe],
 })
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   private usuarioService = inject(UsuarioService);
@@ -591,7 +593,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
     this.usuarioSubscription = this.usuarioService.getUsuario(idusuario).subscribe((respuesta: UsuarioInterface) => {
       const usuario = respuesta.usuario;
 
-      const numeroMita = usuario.id;
+      const numeroMita = formatearNumeroMita(usuario.id);
       const fechaDeNacimiento = usuario.fechaNacimiento;
       const nombre = `${usuario?.primerNombre} ${usuario?.segundoNombre} ${usuario?.primerApellido} ${usuario?.segundoApellido}`;
       const apodo = usuario.apodo ? usuario.apodo : '';
