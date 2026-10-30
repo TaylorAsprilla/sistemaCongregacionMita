@@ -5,6 +5,10 @@ export interface AccesoQrInterface {
   nombre: string | null;
   ip: string;
   dispositivo: string;
+  ubicacion?: {
+    ciudad: string | null;
+    pais: string | null;
+  } | null;
   createdAt: string;
   tipoPuesto: string | null;
   esGuarda: boolean | null;
@@ -30,4 +34,16 @@ export interface AccesosQrResponseInterface {
   msg: string;
   data: AccesoQrInterface[];
   pagination?: PaginationMetadata;
+}
+
+export interface FiltrosAccesosQr {
+  usuario?: string;
+  dispositivo?: string;
+  ubicacion?: string;
+  accesoDe?: string;
+  resultado?: string;
+  identidad?: string;
+  motivoRechazo?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
 }
