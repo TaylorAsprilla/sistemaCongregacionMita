@@ -33,3 +33,5 @@ jobs:
           role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           aws-region: us-east-2
       - run: aws s3 sync dist s3://sistemacmi --acl public-read
+      - name: Invalidar caché de CloudFront
+        run: aws cloudfront create-invalidation --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*"
