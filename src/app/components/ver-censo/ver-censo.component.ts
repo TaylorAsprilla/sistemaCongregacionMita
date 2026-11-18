@@ -36,13 +36,14 @@ import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-e
 import { configuracion } from 'src/environments/config/configuration';
 import { obtenerBanderaPais, obtenerCodigoIsoPais } from 'src/app/core/utils/banderas-paises.utils';
 import { environment } from 'src/environments/environment';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-ver-censo',
   templateUrl: './ver-censo.component.html',
   styleUrls: ['./ver-censo.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgClass, NgxPaginationModule, TelegramPipe, WhatsappPipe, CalcularEdadPipe, DecimalPipe, NumeroMitaPipe],
+  imports: [FormsModule, NgClass, NgxPaginationModule, TelegramPipe, WhatsappPipe, CalcularEdadPipe, DecimalPipe, NumeroMitaPipe, AvatarUsuarioComponent],
 })
 export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   private usuarioService = inject(UsuarioService);

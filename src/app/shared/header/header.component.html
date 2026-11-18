@@ -65,7 +65,11 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <img [src]="fotoPerfil" [alt]="nombre" class="profile-pic" />
+            @if (usuario) {
+              <app-avatar-usuario [usuarioId]="usuario.id" [foto]="usuario.foto" [nombre]="nombre" [tamano]="50" />
+            } @else {
+              <img [src]="fotoPerfil" [alt]="nombre" class="profile-pic" />
+            }
           </a>
 
           <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
@@ -74,7 +78,11 @@
                 <div class="dw-user-box">
                   <div class="text-center">
                     <div class="u-img">
-                      <img [src]="fotoPerfil" [alt]="nombre" />
+                      @if (usuario) {
+                        <app-avatar-usuario [usuarioId]="usuario.id" [foto]="usuario.foto" [nombre]="nombre" [tamano]="70" />
+                      } @else {
+                        <img [src]="fotoPerfil" [alt]="nombre" />
+                      }
                     </div>
                   </div>
                   <div class="u-text mt-2">

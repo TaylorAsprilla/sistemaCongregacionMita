@@ -33,6 +33,7 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
 
   accesosQr: AccesoQrInterface[] = [];
   cargando = false;
+  mostrarFiltros = false;
 
   // Propiedades de paginación
   currentPage: number = 1;
@@ -92,6 +93,10 @@ export default class ListadoAccesosQRComponent implements OnInit, OnDestroy {
           console.error(err);
         },
       });
+  }
+
+  toggleFiltros(): void {
+    this.mostrarFiltros = !this.mostrarFiltros;
   }
 
   aplicarFiltros(): void {

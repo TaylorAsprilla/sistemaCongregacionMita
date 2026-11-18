@@ -111,6 +111,19 @@ Pruebas enfocadas:
 npm test -- --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.multimedia.spec.json --include=src\app\components\solicitudes-multimedia\solicitudes-multimedia.component.spec.ts
 ```
 
+## Fotografía de perfil
+
+El perfil propio permite subir, recortar (1:1, vista circular), cambiar y eliminar la fotografía
+(`FotoPerfilEditorComponent`). `AvatarUsuarioComponent` (`<app-avatar-usuario>`) es el único
+lugar que dibuja avatares: muestra la foto o las iniciales y se actualiza al instante cuando
+`FotoPerfilService.cambio` emite. Las URLs firmadas se piden en lote y se cachean en
+`FotoPerfilService`. Requiere el backend con `FOTOS_PERFIL_BUCKET` configurado
+(ver `docs/FOTO-PERFIL.md` del backend).
+
+```powershell
+npm test -- --watch=false --browsers=ChromeHeadless --ts-config=tsconfig.foto-perfil.spec.json --include=src/app/core/utils/foto-perfil.spec.ts --include=src/app/core/services/foto-perfil.service.spec.ts --include=src/app/shared/avatar-usuario/avatar-usuario.component.spec.ts --include=src/app/components/foto-perfil-editor/foto-perfil-editor.component.spec.ts --include=src/app/shared/header/header.component.spec.ts
+```
+
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.

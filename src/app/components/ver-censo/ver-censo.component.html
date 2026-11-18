@@ -312,8 +312,17 @@
               {{ usuario.id | numeroMita }}
             </td>
             <td>
-              {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
-              {{ usuario?.segundoApellido }}
+              <div class="d-flex align-items-center gap-2">
+                <app-avatar-usuario
+                  [usuarioId]="usuario.id"
+                  [nombre]="usuario.primerNombre + ' ' + usuario.primerApellido"
+                  [tamano]="32"
+                />
+                <span>
+                  {{ usuario.primerNombre }} {{ usuario?.segundoNombre }} {{ usuario.primerApellido }}
+                  {{ usuario?.segundoApellido }}
+                </span>
+              </div>
             </td>
             <td>
               @if (usuario?.email) {

@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
@@ -17,6 +19,8 @@ describe('HeaderComponent enlaces de usuario', () => {
       imports: [HeaderComponent],
       providers: [
         provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: UsuarioService, useValue: { usuario, isQRLogin: false, logout } },
       ],
     }).compileComponents();

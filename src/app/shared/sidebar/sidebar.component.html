@@ -3,7 +3,13 @@
   <div class="user-profile mt-4">
     <!-- User profile image -->
     <div class="profile-img">
-      <a [routerLink]="[Rutas.PERFIL, usuario?.id]"> <img [src]="fotoPerfil" [alt]="nombre" class="profile-pic" /></a>
+      @if (usuario) {
+        <a [routerLink]="[Rutas.PERFIL, usuario.id]">
+          <app-avatar-usuario [usuarioId]="usuario.id" [foto]="usuario.foto" [nombre]="nombre" [tamano]="50" />
+        </a>
+      } @else {
+        <a [routerLink]="[Rutas.PERFIL, usuario?.id]"> <img [src]="fotoPerfil" [alt]="nombre" class="profile-pic" /></a>
+      }
     </div>
     <!-- User profile text-->
     <div class="profile-text">

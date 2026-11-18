@@ -1,5 +1,25 @@
 <section class="content">
-  <form class="d-flex flex-wrap gap-3 mb-3 align-items-end" (ngSubmit)="aplicarFiltros()">
+  <div class="card mb-4 filtros-qr">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center gap-3">
+        <h5 class="card-title mb-0">
+          <i class="fas fa-filter me-2" aria-hidden="true"></i>Filtros de búsqueda
+        </h5>
+        <button
+          type="button"
+          class="btn btn-sm btn-primary flex-shrink-0"
+          [attr.aria-expanded]="mostrarFiltros"
+          aria-controls="filtros-listado-qr"
+          (click)="toggleFiltros()"
+          [title]="mostrarFiltros ? 'Ocultar filtros' : 'Mostrar filtros'"
+        >
+          <i class="fas me-1" [ngClass]="mostrarFiltros ? 'fa-chevron-up' : 'fa-chevron-down'" aria-hidden="true"></i>
+          {{ mostrarFiltros ? 'Ocultar' : 'Mostrar' }}
+        </button>
+      </div>
+      <div id="filtros-listado-qr" [hidden]="!mostrarFiltros">
+        <p class="text-muted small mt-3 mb-3">Combina los criterios y pulsa Aplicar filtros para actualizar el listado.</p>
+        <form class="filtros-qr-grid" (ngSubmit)="aplicarFiltros()">
     <div>
       <label for="filtroUsuario">Usuario</label>
       <input id="filtroUsuario" name="usuario" class="form-control" [(ngModel)]="filtros.usuario" placeholder="Nombre o número Mita" maxlength="150" [disabled]="cargando">
@@ -80,9 +100,18 @@
       <label for="filtroFechaHasta">Fecha hasta</label>
       <input id="filtroFechaHasta" name="fechaHasta" type="date" class="form-control" [(ngModel)]="filtros.fechaHasta" [min]="filtros.fechaDesde || ''" [disabled]="cargando">
     </div>
-    <button type="submit" class="btn btn-primary" [disabled]="cargando">Aplicar filtros</button>
-    <button type="button" class="btn btn-outline-secondary" (click)="limpiarFiltros()" [disabled]="cargando">Limpiar filtros</button>
-  </form>
+          <div class="filtros-qr-acciones d-flex flex-wrap justify-content-end gap-2 pt-3">
+            <button type="button" class="btn btn-outline-secondary" (click)="limpiarFiltros()" [disabled]="cargando">
+              <i class="fas fa-eraser me-2" aria-hidden="true"></i>Limpiar filtros
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="cargando">
+              <i class="fas fa-search me-2" aria-hidden="true"></i>Aplicar filtros
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   <!-- Cargando información -->
   @if (cargando) {
     <app-cargando-informacion></app-cargando-informacion>

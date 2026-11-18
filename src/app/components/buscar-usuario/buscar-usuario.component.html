@@ -69,7 +69,11 @@
         </div>
         <div class="d-flex justify-content-center align-items-center mb-3">
           <div class="me-3">
-            <i class="fa fa-user-circle fa-5x"></i>
+            <app-avatar-usuario
+              [usuarioId]="usuario.id"
+              [nombre]="usuario.primerNombre + ' ' + usuario.primerApellido"
+              [tamano]="80"
+            />
           </div>
           <div class="text-center">
             <h4 class="card-title">
