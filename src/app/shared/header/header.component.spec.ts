@@ -6,6 +6,7 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { UsuarioModel } from 'src/app/core/models/usuario.model';
 import { ROLES, RUTAS } from 'src/app/routes/menu-items';
 import { HeaderComponent } from './header.component';
+import { FotoPerfilDialogoService } from 'src/app/core/services/foto-perfil-dialogo.service';
 
 describe('HeaderComponent enlaces de usuario', () => {
   let fixture: ComponentFixture<HeaderComponent>;
@@ -56,6 +57,17 @@ describe('HeaderComponent enlaces de usuario', () => {
     usuario.usuarioPermiso = [{ id: 1, permiso: ROLES.ADMINISTRADOR }];
     renderizar();
     expect(enlace('Mis informes')).toBeUndefined();
+  });
+
+  it('al hacer clic en la foto abre el selector sin navegar al perfil', () => {
+    const abrirSelector = jasmine.createSpy('abrirSelector').and.returnValue(true);
+    TestBed.overrideProvider(FotoPerfilDialogoService, { useValue: { abrirSelector } });
+    renderizar();
+    const boton = fixture.nativeElement.querySelector('button.avatar-cambiar') as HTMLButtonElement;
+    expect(boton).not.toBeNull();
+    expect(boton.closest('a')).toBeNull();
+    boton.click();
+    expect(abrirSelector).toHaveBeenCalledTimes(1);
   });
 
   it('Cerrar sesion ejecuta el cierre existente', () => {

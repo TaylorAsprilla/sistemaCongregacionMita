@@ -9,6 +9,8 @@ import { HeaderComponent } from '../shared/header/header.component';
 import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 import { BredcrumbsComponent } from '../shared/bredcrumbs/bredcrumbs.component';
 import { FooterComponent } from '../shared/footer/footer.component';
+import { FotoPerfilDialogoComponent } from '../shared/foto-perfil-dialogo/foto-perfil-dialogo.component';
+import { FotoPerfilAvisoService } from '../core/services/foto-perfil-aviso.service';
 
 @Component({
   selector: 'app-pages',
@@ -23,11 +25,18 @@ import { FooterComponent } from '../shared/footer/footer.component';
     BredcrumbsComponent,
     RouterOutlet,
     FooterComponent,
+    FotoPerfilDialogoComponent,
   ],
 })
 export class PagesComponent implements OnInit {
   private router = inject(Router);
   private usuarioService = inject(UsuarioService);
+  private avisoFoto = inject(FotoPerfilAvisoService);
+
+  /** Solo los usuarios con cuenta propia administran su fotografía (no QR ni multimedia). */
+  get esUsuario(): boolean {
+    return !!this.usuarioService.usuario && !this.usuarioService.isQRLogin;
+  }
 
   color = 'blue';
   showSettings = false;
@@ -53,6 +62,11 @@ export class PagesComponent implements OnInit {
 
     if (this.usuarioService.isQRLogin) {
       this.showMinisidebar = !this.showMinisidebar;
+    }
+
+    // Invitación de bienvenida (una sola vez); se espera un momento para no chocar con otros avisos al ingresar.
+    if (this.esUsuario) {
+      setTimeout(() => this.avisoFoto.mostrarSiCorresponde(), 2000);
     }
   }
 
