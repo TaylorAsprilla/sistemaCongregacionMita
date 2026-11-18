@@ -12,6 +12,7 @@ import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive
 import { RolUsuarioComponent } from '../rol-usuario/rol-usuario.component';
 import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
 import { AvatarUsuarioComponent } from '../avatar-usuario/avatar-usuario.component';
+import { FotoPerfilDialogoService } from 'src/app/core/services/foto-perfil-dialogo.service';
 
 declare var $: any;
 
@@ -26,6 +27,7 @@ export class HeaderComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
   private modalService = inject(NgbModal);
+  private fotoDialogo = inject(FotoPerfilDialogoService);
 
   @Output() toggleSidebar = new EventEmitter<void>();
 
@@ -77,6 +79,11 @@ export class HeaderComponent implements OnInit {
       this.nombre = congregacion;
       this.email = email;
     }
+  }
+
+  /** Abre el selector de fotografía sin salir de la página actual. */
+  cambiarFoto(): void {
+    this.fotoDialogo.abrirSelector();
   }
 
   logout() {

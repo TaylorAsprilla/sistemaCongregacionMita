@@ -1,0 +1,63 @@
+<input #entradaArchivo type="file" class="d-none" [accept]="aceptar" (change)="alSeleccionar($event)" />
+
+@if (editando()) {
+  <div class="foto-dialogo__fondo" (click)="cancelar()">
+    <div
+      class="foto-dialogo__dialogo"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="foto-dialogo-titulo"
+      (click)="$event.stopPropagation()"
+    >
+      <h5 id="foto-dialogo-titulo" class="mb-2">Ajustar fotografía</h5>
+      <p class="text-muted small mb-2">Arrastre para mover la imagen y use el control para acercarla.</p>
+
+      <canvas
+        #lienzo
+        class="foto-dialogo__lienzo"
+        [width]="visor"
+        [height]="visor"
+        tabindex="0"
+        aria-label="Área de recorte. Use las flechas para mover y más o menos para acercar."
+        (pointerdown)="alPresionar($event)"
+        (pointermove)="alMover($event)"
+        (pointerup)="alSoltar()"
+        (pointercancel)="alSoltar()"
+        (wheel)="alRodar($event)"
+        (keydown)="alTeclear($event)"
+      ></canvas>
+
+      <label class="d-flex align-items-center gap-2 mt-3 mb-0">
+        <i class="fa fa-search-minus" aria-hidden="true"></i>
+        <input
+          type="range"
+          class="form-range flex-grow-1"
+          min="1"
+          [max]="zoomMax"
+          step="0.01"
+          [value]="zoom()"
+          [disabled]="subiendo()"
+          aria-label="Zoom"
+          (input)="alCambiarZoom($event)"
+        />
+        <i class="fa fa-search-plus" aria-hidden="true"></i>
+      </label>
+
+      @if (subiendo()) {
+        <div class="progress mt-3" role="progressbar" [attr.aria-valuenow]="progreso()" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar" [style.width.%]="progreso()">{{ progreso() }}%</div>
+        </div>
+      }
+      @if (errorEdicion(); as mensaje) {
+        <div class="alert alert-danger mt-3 mb-0 py-2" role="alert">{{ mensaje }}</div>
+      }
+
+      <div class="d-flex justify-content-end gap-2 mt-3">
+        <button type="button" class="btn btn-light" [disabled]="subiendo()" (click)="cancelar()">Cancelar</button>
+        <button type="button" class="btn btn-primary" [disabled]="subiendo()" (click)="confirmar()">
+          {{ errorEdicion() ? 'Reintentar' : 'Guardar fotografía' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

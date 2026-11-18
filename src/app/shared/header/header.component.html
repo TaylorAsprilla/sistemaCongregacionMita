@@ -78,7 +78,18 @@
                 <div class="dw-user-box">
                   <div class="text-center">
                     <div class="u-img">
-                      @if (usuario) {
+                      @if (usuario && !isQrLogin) {
+                        <button
+                          type="button"
+                          class="avatar-cambiar"
+                          title="Cambiar fotografía"
+                          aria-label="Cambiar fotografía"
+                          (click)="cambiarFoto()"
+                        >
+                          <app-avatar-usuario [usuarioId]="usuario.id" [foto]="usuario.foto" [nombre]="nombre" [tamano]="70" />
+                          <span class="avatar-cambiar__camara" aria-hidden="true"><i class="fa fa-camera"></i></span>
+                        </button>
+                      } @else if (usuario) {
                         <app-avatar-usuario [usuarioId]="usuario.id" [foto]="usuario.foto" [nombre]="nombre" [tamano]="70" />
                       } @else {
                         <img [src]="fotoPerfil" [alt]="nombre" />

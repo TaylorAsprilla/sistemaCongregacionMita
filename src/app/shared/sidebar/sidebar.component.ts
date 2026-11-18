@@ -17,6 +17,7 @@ import { obtenerFechasPeriodoInforme } from 'src/app/core/utils/periodo-informe'
 import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 import { RolUsuarioComponent } from '../rol-usuario/rol-usuario.component';
 import { AvatarUsuarioComponent } from '../avatar-usuario/avatar-usuario.component';
+import { FotoPerfilDialogoService } from 'src/app/core/services/foto-perfil-dialogo.service';
 declare var $: any;
 
 @Component({
@@ -31,6 +32,12 @@ export class SidebarComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
   private informeService = inject(InformeService);
   private modalService = inject(NgbModal);
+  private fotoDialogo = inject(FotoPerfilDialogoService);
+
+  /** Abre el selector de fotografía sin navegar al perfil. */
+  cambiarFoto(): void {
+    this.fotoDialogo.abrirSelector();
+  }
 
   menuItems: any[] = [];
   usuario: UsuarioModel | undefined;

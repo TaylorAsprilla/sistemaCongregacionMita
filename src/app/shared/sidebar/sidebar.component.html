@@ -4,9 +4,16 @@
     <!-- User profile image -->
     <div class="profile-img">
       @if (usuario) {
-        <a [routerLink]="[Rutas.PERFIL, usuario.id]">
+        <button
+          type="button"
+          class="avatar-cambiar"
+          title="Cambiar fotografía"
+          aria-label="Cambiar fotografía"
+          (click)="cambiarFoto()"
+        >
           <app-avatar-usuario [usuarioId]="usuario.id" [foto]="usuario.foto" [nombre]="nombre" [tamano]="50" />
-        </a>
+          <span class="avatar-cambiar__camara" aria-hidden="true"><i class="fa fa-camera"></i></span>
+        </button>
       } @else {
         <a [routerLink]="[Rutas.PERFIL, usuario?.id]"> <img [src]="fotoPerfil" [alt]="nombre" class="profile-pic" /></a>
       }

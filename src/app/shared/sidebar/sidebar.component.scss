@@ -47,3 +47,46 @@ a {
 .color {
   background-color: red;
 }
+
+/* Avatar clicable que abre el selector de fotografía sin salir de la página. */
+.avatar-cambiar {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  line-height: 0;
+  cursor: pointer;
+
+  /* Sin anillo azul de foco sobre la foto. */
+  &,
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:active {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &__camara {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #1976d2;
+    color: #fff;
+    font-size: 10px;
+    line-height: 18px;
+    text-align: center;
+    opacity: 0.95;
+    transition: transform 0.15s ease;
+  }
+
+  &:hover &__camara {
+    transform: scale(1.12);
+  }
+}
