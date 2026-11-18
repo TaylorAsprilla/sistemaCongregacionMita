@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { FotoPerfilService } from 'src/app/core/services/foto-perfil.service';
-import { iniciales } from 'src/app/core/utils/foto-perfil';
+import { esFotoGestionada, iniciales } from 'src/app/core/utils/foto-perfil';
 
 /**
  * Avatar circular de un usuario: muestra su fotografía o, si no tiene o falla la carga, sus iniciales.
@@ -44,7 +44,8 @@ import { iniciales } from 'src/app/core/utils/foto-perfil';
         overflow: hidden;
         background: #1976d2;
         color: #fff;
-        font-weight: 600;
+        font-weight: 300;
+        letter-spacing: 0.5px;
         line-height: 1;
         flex-shrink: 0;
         user-select: none;
@@ -111,7 +112,8 @@ export class AvatarUsuarioComponent {
   private cargar(id: number | undefined, foto: string | null | undefined): void {
     const actual = ++this.solicitud;
     this.fallo.set(false);
-    if (!id || foto === null) {
+    // Sin id, sin foto o con un valor heredado que no es una clave de nuestro bucket: solo iniciales.
+    if (!id || foto === null || (typeof foto === 'string' && !esFotoGestionada(foto))) {
       this.url.set(null);
       return;
     }

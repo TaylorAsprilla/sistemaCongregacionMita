@@ -111,3 +111,14 @@ export function calcularRecorte(estado: EstadoRecorte): RecorteOrigen {
   const centroY = estado.altoImagen / 2 - y / escala;
   return { sx: centroX - lado / 2, sy: centroY - lado / 2, lado };
 }
+
+/** Prefijo de las claves S3 gestionadas por esta funcionalidad. */
+export const PREFIJO_FOTO_PERFIL = 'usuarios/fotos-perfil/';
+
+/**
+ * Solo una clave de nuestro bucket cuenta como fotografía.
+ * Valores antiguos de la columna `foto` (nombres de archivo heredados) se ignoran.
+ */
+export function esFotoGestionada(foto: string | null | undefined): foto is string {
+  return typeof foto === 'string' && foto.startsWith(PREFIJO_FOTO_PERFIL);
+}
