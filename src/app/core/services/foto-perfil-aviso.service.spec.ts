@@ -97,3 +97,21 @@ describe('FotoPerfilAvisoService', () => {
     expect(fire).not.toHaveBeenCalled();
   });
 });
+
+describe('FotoPerfilAvisoService con valor heredado en la columna foto', () => {
+  it('un nombre de archivo antiguo NO cuenta como fotografía: se muestra el aviso', async () => {
+    localStorage.removeItem('fotoPerfilAviso:7');
+    const fire = spyOn(Swal, 'fire').and.resolveTo({ isConfirmed: false } as any);
+    spyOn(Swal, 'isVisible').and.returnValue(false);
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: UsuarioService, useValue: { usuario: { id: 7, primerNombre: 'Ana', foto: 'no-image.jpg' }, isQRLogin: false } },
+        { provide: FotoPerfilService, useValue: { consultarPropia: () => of({ foto: null }) } },
+        { provide: FotoPerfilDialogoService, useValue: { abrirSelector: () => true } },
+      ],
+    });
+    expect(await TestBed.inject(FotoPerfilAvisoService).mostrarSiCorresponde()).toBeTrue();
+    expect(fire).toHaveBeenCalledTimes(1);
+    localStorage.removeItem('fotoPerfilAviso:7');
+  });
+});

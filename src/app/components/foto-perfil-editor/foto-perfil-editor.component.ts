@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, signal } f
 import Swal from 'sweetalert2';
 import { FotoPerfilDialogoService } from 'src/app/core/services/foto-perfil-dialogo.service';
 import { FotoPerfilService } from 'src/app/core/services/foto-perfil.service';
-import { MENSAJES_FOTO } from 'src/app/core/utils/foto-perfil';
+import { MENSAJES_FOTO, esFotoGestionada } from 'src/app/core/utils/foto-perfil';
 import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 /**
@@ -31,7 +31,7 @@ export class FotoPerfilEditorComponent {
   protected tieneFoto = computed(() => {
     const cambio = this.fotoService.cambio();
     const foto = cambio.id === this.usuarioId() ? cambio.foto : this.foto();
-    return foto === undefined ? true : !!foto;
+    return foto === undefined ? true : esFotoGestionada(foto);
   });
 
   protected abrirSelector(): void {

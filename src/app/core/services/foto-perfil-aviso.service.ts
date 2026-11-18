@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { FotoPerfilDialogoService } from './foto-perfil-dialogo.service';
 import { FotoPerfilService } from './foto-perfil.service';
+import { esFotoGestionada } from '../utils/foto-perfil';
 
 const CLAVE = (usuarioId: number) => `fotoPerfilAviso:${usuarioId}`;
 
@@ -48,7 +49,7 @@ export class FotoPerfilAvisoService {
         return false; // Sin certeza de que no tenga foto, no se molesta al usuario.
       }
     }
-    if (foto) {
+    if (esFotoGestionada(foto)) {
       this.marcarVisto(usuario.id); // Ya tiene foto: no hace falta invitarle nunca.
       return false;
     }
