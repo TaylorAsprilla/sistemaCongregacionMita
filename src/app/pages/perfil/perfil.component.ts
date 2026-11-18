@@ -21,13 +21,14 @@ import Swal from 'sweetalert2';
 import { CategoriaProfesionModel } from 'src/app/core/models/categoria-profesion.model';
 import { InformacionUsuarioComponent } from '../../components/informacion-usuario/informacion-usuario.component';
 import { PerfilData } from 'src/app/resolvers/perfil-optimizado/perfil-optimizado.resolver';
+import { FotoPerfilEditorComponent } from '../../components/foto-perfil-editor/foto-perfil-editor.component';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css'],
   standalone: true,
-  imports: [InformacionUsuarioComponent],
+  imports: [InformacionUsuarioComponent, FotoPerfilEditorComponent],
 })
 export class PerfilComponent implements OnInit, OnDestroy {
   private router = inject(Router);
@@ -51,6 +52,21 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   //Subscription
   public usuarioSubscription: Subscription;
+
+  /** Solo el propietario del perfil puede cambiar su fotografía (el backend lo valida con el JWT). */
+  get esPerfilPropio(): boolean {
+    return !!this.usuario && this.usuario.id === this.usuarioService.usuarioId;
+  }
+
+  get nombreCompleto(): string {
+    const u = this.usuario;
+    return u ? [u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido].filter(Boolean).join(' ') : '';
+  }
+
+  /** Para el perfil propio se usa el usuario en sesión, que se mantiene al día al cambiar la foto. */
+  get fotoMostrada(): string | null | undefined {
+    return this.esPerfilPropio ? this.usuarioService.usuario?.foto : this.usuario?.foto;
+  }
 
   get OPERACION() {
     return OPERACION;

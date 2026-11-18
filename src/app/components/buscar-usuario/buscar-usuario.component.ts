@@ -20,13 +20,14 @@ import { TelegramPipe } from '../../pipes/telegram/telegram.pipe';
 import { WhatsappPipe } from '../../pipes/whatsapp/whatsapp.pipe';
 import { NgClass } from '@angular/common';
 import { formatearNumeroMita } from 'src/app/core/utils/numero-mita';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-buscar-usuario',
   templateUrl: './buscar-usuario.component.html',
   styleUrls: ['./buscar-usuario.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CalcularEdadPipe, TelegramPipe, WhatsappPipe, NgClass],
+  imports: [FormsModule, ReactiveFormsModule, CalcularEdadPipe, TelegramPipe, WhatsappPipe, NgClass, AvatarUsuarioComponent],
 })
 export class BuscarUsuarioComponent implements OnInit, OnDestroy, OnChanges {
   private formBuilder = inject(FormBuilder);

@@ -45,7 +45,7 @@ export class UsuarioModel {
     public apodo?: string,
     public email?: string,
     public login?: string,
-    public foto?: string,
+    public foto?: string | null,
     public telefonoCasa?: string,
     public direccion?: string,
     public ciudadDireccion?: string,
@@ -72,16 +72,6 @@ export class UsuarioModel {
     public usuarioCongregacionCongregacion?: usuarioCongregacionCongregacionInterface,
     public usuarioCongregacionCampo?: usuarioCongregacionCampoInterface,
   ) {}
-
-  get fotoUrl() {
-    if (!this.foto) {
-      return `${base_url}/uploads/usuarios/no-image.jpg`;
-    } else if (this.foto) {
-      return `${base_url}/uploads/usuarios/${this.foto}`;
-    } else {
-      return `${base_url}/uploads/usuarios/no-image.jpg`;
-    }
-  }
 
   get paisId(): number | undefined {
     return Array.isArray(this.usuarioCongregacion) && this.usuarioCongregacion.length > 0

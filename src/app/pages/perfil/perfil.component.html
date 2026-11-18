@@ -1,3 +1,11 @@
+@if (usuario) {
+  <app-foto-perfil-editor
+    [usuarioId]="usuario.id"
+    [nombre]="nombreCompleto"
+    [foto]="fotoMostrada"
+    [editable]="esPerfilPropio"
+  />
+}
 <app-informacion-usuario
   [campos]="campos"
   [codigoDeMarcadoSeparado]="false"

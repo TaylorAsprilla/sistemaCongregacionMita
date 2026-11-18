@@ -11,6 +11,7 @@ import { configuracion } from 'src/environments/config/configuration';
 import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive';
 import { RolUsuarioComponent } from '../rol-usuario/rol-usuario.component';
 import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
+import { AvatarUsuarioComponent } from '../avatar-usuario/avatar-usuario.component';
 
 declare var $: any;
 
@@ -19,7 +20,7 @@ declare var $: any;
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink, PermisosDirective, RolUsuarioComponent, NumeroMitaPipe],
+  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink, PermisosDirective, RolUsuarioComponent, NumeroMitaPipe, AvatarUsuarioComponent],
 })
 export class HeaderComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
