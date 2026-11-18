@@ -1,0 +1,35 @@
+name: Deploy frontend
+
+# Solo producción: master -> bucket sistemacmi (con aprobación manual).
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-front-produccion
+  cancel-in-progress: false
+
+jobs:
+  produccion:
+    # workflow_dispatch podría lanzarse desde otra rama: solo se despliega master.
+    if: github.ref_name == 'master'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx ng build --configuration production --base-href
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-2
+      - run: aws s3 sync dist s3://sistemacmi --acl public-read
