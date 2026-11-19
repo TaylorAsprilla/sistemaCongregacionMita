@@ -18,7 +18,6 @@ import { RouteInfo } from 'src/app/core/interfaces/route-info.interfase';
 import { RolUsuarioComponent } from '../rol-usuario/rol-usuario.component';
 import { AvatarUsuarioComponent } from '../avatar-usuario/avatar-usuario.component';
 import { FotoPerfilDialogoService } from 'src/app/core/services/foto-perfil-dialogo.service';
-import { FotoPerfilTourService } from 'src/app/core/services/foto-perfil-tour.service';
 declare var $: any;
 
 @Component({
@@ -34,16 +33,10 @@ export class SidebarComponent implements OnInit {
   private informeService = inject(InformeService);
   private modalService = inject(NgbModal);
   private fotoDialogo = inject(FotoPerfilDialogoService);
-  private fotoTour = inject(FotoPerfilTourService);
 
   /** Abre el selector de fotografía sin navegar al perfil. */
   cambiarFoto(): void {
     this.fotoDialogo.abrirSelector();
-  }
-
-  /** Repite el tour guiado de la fotografía. */
-  verTourFoto(): void {
-    this.fotoTour.iniciar();
   }
 
   menuItems: any[] = [];
