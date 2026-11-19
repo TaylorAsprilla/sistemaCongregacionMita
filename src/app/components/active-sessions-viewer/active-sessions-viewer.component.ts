@@ -10,6 +10,7 @@ import {
   ActiveSessionCongregacion,
 } from 'src/app/core/interfaces/active-sessions.interface';
 import { SessionsStatisticsComponent } from '../sessions-statistics/sessions-statistics.component';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 /**
  * Componente para mostrar sesiones activas en tiempo real
@@ -22,7 +23,7 @@ import { SessionsStatisticsComponent } from '../sessions-statistics/sessions-sta
 @Component({
   selector: 'app-active-sessions-viewer',
   standalone: true,
-  imports: [CommonModule, SessionsStatisticsComponent],
+  imports: [CommonModule, SessionsStatisticsComponent, AvatarUsuarioComponent],
   templateUrl: './active-sessions-viewer.component.html',
   styleUrls: ['./active-sessions-viewer.component.scss'],
 })
@@ -264,6 +265,11 @@ export class ActiveSessionsViewerComponent implements OnInit, OnDestroy {
    */
   isUsuario(session: ActiveSession): session is ActiveSession & { entidad: ActiveSessionUsuario } {
     return session?.entidad?.tipo === 'usuario';
+  }
+
+  /** Id del usuario cuando la sesión es de una persona (para mostrar su fotografía); undefined si es congregación. */
+  getUsuarioId(session: ActiveSession): number | undefined {
+    return this.isUsuario(session) ? session.entidad.id : undefined;
   }
 
   /**

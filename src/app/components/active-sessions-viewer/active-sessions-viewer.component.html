@@ -52,9 +52,13 @@
         <!-- Header de la card -->
         <div class="card-header">
           <div class="user-section">
-            <div class="user-avatar" [ngClass]="isUsuario(session) ? 'avatar-usuario' : 'avatar-congregacion'">
-              <i class="fas" [ngClass]="getEntidadIcon(session)"></i>
-            </div>
+            @if (getUsuarioId(session); as usuarioId) {
+              <app-avatar-usuario [usuarioId]="usuarioId" [nombre]="getNombreEntidad(session)" [tamano]="48" />
+            } @else {
+              <div class="user-avatar" [ngClass]="isUsuario(session) ? 'avatar-usuario' : 'avatar-congregacion'">
+                <i class="fas" [ngClass]="getEntidadIcon(session)"></i>
+              </div>
+            }
             <div class="user-details">
               <h5>{{ getNombreEntidad(session) }}</h5>
               <p class="email"><i class="fas fa-envelope"></i> {{ getEmailEntidad(session) }}</p>
@@ -192,12 +196,16 @@
             <!-- Usuario o Congregación -->
             <td>
               <div class="user-cell">
-                <div
-                  class="user-avatar-small"
-                  [ngClass]="isUsuario(session) ? 'avatar-usuario' : 'avatar-congregacion'"
-                >
-                  <i class="fas" [ngClass]="getEntidadIcon(session)"></i>
-                </div>
+                @if (getUsuarioId(session); as usuarioId) {
+                  <app-avatar-usuario [usuarioId]="usuarioId" [nombre]="getNombreEntidad(session)" [tamano]="40" />
+                } @else {
+                  <div
+                    class="user-avatar-small"
+                    [ngClass]="isUsuario(session) ? 'avatar-usuario' : 'avatar-congregacion'"
+                  >
+                    <i class="fas" [ngClass]="getEntidadIcon(session)"></i>
+                  </div>
+                }
                 <div class="user-info-compact">
                   <strong class="d-block">{{ getNombreEntidad(session) }}</strong>
                   <small class="text-muted"> <i class="fas fa-envelope"></i> {{ getEmailEntidad(session) }} </small>

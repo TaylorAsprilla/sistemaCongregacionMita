@@ -6,6 +6,7 @@
     "src/app/shared/notificaciones-campana/notificaciones-campana.component.spec.ts",
     "src/app/pages/notificaciones/notificaciones.component.spec.ts",
     "src/app/shared/header/header.component.spec.ts",
+    "src/app/components/active-sessions-viewer/active-sessions-viewer-foto.spec.ts",
     "src/**/*.d.ts"
   ]
 }
