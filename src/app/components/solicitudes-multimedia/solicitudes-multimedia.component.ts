@@ -28,12 +28,14 @@ import { PermisosDirective } from 'src/app/directive/permisos/permisos.directive
 import { CalcularEdadPipe } from 'src/app/pipes/calcularEdad/calcular-edad.pipe';
 import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-solicitudes-multimedia',
   standalone: true,
   imports: [
     NumeroMitaPipe,
+    AvatarUsuarioComponent,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

@@ -137,7 +137,12 @@
           ) {
             <tr>
               <td>{{ solicitud.id | numeroMita }}</td>
-              <td>{{ solicitud.nombreCompleto }}</td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-avatar-usuario [usuarioId]="solicitud.id" [nombre]="solicitud.nombreCompleto" [tamano]="32" />
+                  <span>{{ solicitud.nombreCompleto }}</span>
+                </div>
+              </td>
               <td>
                 @if (solicitud?.email) {
                   <a class="email" [href]="'mailto:' + solicitud.email">{{ solicitud.email }}</a>
