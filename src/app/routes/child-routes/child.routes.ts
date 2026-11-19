@@ -245,6 +245,12 @@ export const childRoutes: Routes = [
     },
   },
   {
+    path: RUTAS.NOTIFICACIONES,
+    title: 'Mis notificaciones',
+    loadComponent: () =>
+      import('src/app/pages/notificaciones/notificaciones.component').then((m) => m.NotificacionesComponent),
+  },
+  {
     path: RUTAS.MINISTERIOS,
     title: 'Ministerios',
     component: MinisteriosComponent,

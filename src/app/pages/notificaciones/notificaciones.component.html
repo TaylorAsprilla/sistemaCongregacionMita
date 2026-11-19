@@ -1,0 +1,72 @@
+<section class="notificaciones-pagina">
+  <header class="notificaciones-pagina__encabezado">
+    <div>
+      <h2 class="notificaciones-pagina__titulo">Mis notificaciones</h2>
+      <p class="text-muted mb-0">
+        @if (noLeidas() > 0) {
+          Tiene {{ noLeidas() }} sin leer.
+        } @else {
+          Está al día: no tiene notificaciones sin leer.
+        }
+      </p>
+    </div>
+    <button type="button" class="btn btn-outline-primary btn-sm" [disabled]="noLeidas() === 0" (click)="marcarTodas()">
+      <i class="fa-solid fa-check-double"></i> Marcar todas como leídas
+    </button>
+  </header>
+
+  <div class="notificaciones-pagina__filtros">
+    <div class="btn-group" role="group" aria-label="Filtrar por estado">
+      <button type="button" class="btn btn-sm" [class.btn-primary]="estado() === 'todas'" [class.btn-outline-primary]="estado() !== 'todas'" (click)="cambiarEstado('todas')">Todas</button>
+      <button type="button" class="btn btn-sm" [class.btn-primary]="estado() === 'no-leidas'" [class.btn-outline-primary]="estado() !== 'no-leidas'" (click)="cambiarEstado('no-leidas')">No leídas</button>
+      <button type="button" class="btn btn-sm" [class.btn-primary]="estado() === 'leidas'" [class.btn-outline-primary]="estado() !== 'leidas'" (click)="cambiarEstado('leidas')">Leídas</button>
+    </div>
+
+    <label class="visually-hidden" for="filtro-categoria">Categoría</label>
+    <select id="filtro-categoria" class="form-select form-select-sm filtro-categoria" [value]="categoria()" (change)="cambiarCategoria($any($event.target).value)">
+      <option value="">Todas las categorías</option>
+      @for (c of categorias; track c.valor) {
+        <option [value]="c.valor">{{ c.etiqueta }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="notificaciones-pagina__lista" [attr.aria-busy]="cargando()">
+    @if (error()) {
+      <div class="notificaciones-pagina__estado">
+        <p>No fue posible cargar sus notificaciones.</p>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="cargar()">Reintentar</button>
+      </div>
+    } @else if (lista(); as datos) {
+      @for (notificacion of datos.notificaciones; track notificacion.id) {
+        <app-notificacion-item
+          [notificacion]="notificacion"
+          [permitirEliminar]="true"
+          (abrir)="abrir($event)"
+          (marcarLeida)="marcarLeida($event)"
+          (eliminar)="eliminar($event)"
+        />
+      } @empty {
+        <div class="notificaciones-pagina__estado">
+          <i class="fa-regular fa-bell-slash" aria-hidden="true"></i>
+          <p>No hay notificaciones para mostrar con estos filtros.</p>
+        </div>
+      }
+    } @else if (cargando()) {
+      <div class="notificaciones-pagina__estado"><p>Cargando…</p></div>
+    }
+  </div>
+
+  @if (lista(); as datos) {
+    @if (datos.totalPaginas > 1) {
+      <nav class="notificaciones-pagina__paginacion" aria-label="Paginación de notificaciones">
+        <button type="button" class="btn btn-sm btn-outline-secondary" [disabled]="pagina() === 1" (click)="irAPagina(pagina() - 1)">Anterior</button>
+        @for (p of paginas(); track p) {
+          <button type="button" class="btn btn-sm" [class.btn-primary]="p === pagina()" [class.btn-outline-secondary]="p !== pagina()" [attr.aria-current]="p === pagina() ? 'page' : null" (click)="irAPagina(p)">{{ p }}</button>
+        }
+        <button type="button" class="btn btn-sm btn-outline-secondary" [disabled]="pagina() === datos.totalPaginas" (click)="irAPagina(pagina() + 1)">Siguiente</button>
+        <span class="text-muted small ms-2">{{ datos.total }} en total</span>
+      </nav>
+    }
+  }
+</section>

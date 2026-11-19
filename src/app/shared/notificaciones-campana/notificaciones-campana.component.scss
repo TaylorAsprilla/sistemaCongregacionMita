@@ -1,0 +1,184 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+
+.campana-boton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 0.9rem;
+
+  &::after {
+    display: none; // sin flecha del dropdown
+  }
+}
+
+.campana-icono {
+  font-size: 1.15rem;
+  transform-origin: 50% 0;
+}
+
+.campana-contador {
+  position: absolute;
+  top: 12px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #e53935;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+/* Movimiento breve y discreto al llegar una notificación nueva. */
+.campana-animada {
+  animation: campana-sonar 1.4s ease-in-out 1;
+}
+
+@keyframes campana-sonar {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(14deg); }
+  30% { transform: rotate(-12deg); }
+  45% { transform: rotate(8deg); }
+  60% { transform: rotate(-6deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campana-animada {
+    animation: none;
+  }
+}
+
+.panel-notificaciones {
+  width: 400px;
+  max-width: calc(100vw - 16px);
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.18);
+}
+
+.panel__encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid #eef0f3;
+}
+
+.panel__titulo {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.panel__marcar-todas {
+  border: 0;
+  background: transparent;
+  color: #1976d2;
+  font-size: 0.78rem;
+  cursor: pointer;
+
+  &:disabled {
+    color: #9aa5b1;
+    cursor: default;
+  }
+  &:not(:disabled):hover {
+    text-decoration: underline;
+  }
+}
+
+.panel__pestanas {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid #eef0f3;
+  background: #fafbfc;
+
+  button {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+    background: transparent;
+    color: #52606d;
+    font-size: 0.78rem;
+    cursor: pointer;
+
+    &.activa {
+      background: #e3f2fd;
+      color: #1565c0;
+      font-weight: 600;
+    }
+  }
+}
+
+.panel__cuenta {
+  margin-left: 0.2rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: #1976d2;
+  color: #fff;
+  font-size: 0.65rem;
+}
+
+.panel__lista {
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
+}
+
+.panel__vacio {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #7b8794;
+
+  i {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+  }
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+}
+
+.panel__pie {
+  border-top: 1px solid #eef0f3;
+  text-align: center;
+}
+
+.panel__ver-todas {
+  width: 100%;
+  padding: 0.65rem;
+  border: 0;
+  background: #fff;
+  color: #1976d2;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: #f1f7ff;
+  }
+}
+
+/* Móvil: el panel ocupa el ancho disponible y se ancla al borde de la pantalla. */
+@media (max-width: 576px) {
+  .panel-notificaciones {
+    position: fixed !important;
+    top: 60px !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto;
+    max-width: none;
+    transform: none !important;
+  }
+}
