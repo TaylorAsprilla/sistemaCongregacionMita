@@ -28,9 +28,6 @@
           <a [routerLink]="[Rutas.PERFIL, usuario.id]" data-toggle="tooltip" title="Perfil">
             <i class="fa fa-user"></i> Mi Perfil
           </a>
-          <a (click)="verTourFoto()" class="pointer d-block" title="Guía para cambiar la fotografía">
-            <i class="fa fa-camera"></i> ¿Cómo cambio mi foto?
-          </a>
         </div>
       }
       <div>
@@ -53,7 +50,7 @@
             class="fondo pointer"
             [class.active]="showMenu === sidebarnavItem.title"
             *appPermisos="sidebarnavItem.role"
-            >
+          >
             @if (sidebarnavItem.extralink === true) {
               <div class="nav-small-cap pointer">{{ sidebarnavItem.title }}</div>
             }
@@ -63,7 +60,7 @@
                 [ngClass]="sidebarnavItem.submenu.length === 0 ? '' : [sidebarnavItem.class]"
                 class="pointer"
                 (click)="addExpandClass(sidebarnavItem.title)"
-                >
+              >
                 <i [ngClass]="[sidebarnavItem.icon]"></i>
                 <!-- Nombre -->
                 <span class="hide-menu">
@@ -79,17 +76,14 @@
             }
             <!-- Second level menu -->
             @if (sidebarnavItem.submenu.length > 0) {
-              <ul
-                class="collapse"
-                [ngClass]="{ in: showMenu === sidebarnavItem.title }"
-                >
+              <ul class="collapse" [ngClass]="{ in: showMenu === sidebarnavItem.title }">
                 @for (sidebarnavSubItem of sidebarnavItem.submenu; track sidebarnavSubItem) {
                   @if (!sidebarnavSubItem.requiresActiveReport || tieneInformeActivo) {
                     <li
                       class=""
                       [class.active]="showSubMenu === sidebarnavSubItem.title"
                       [routerLinkActive]="sidebarnavSubItem.submenu.length > 0 ? '' : 'active'"
-                      >
+                    >
                       <ng-container *appPermisos="sidebarnavSubItem.role">
                         @if (!sidebarnavSubItem.extralink) {
                           <a
@@ -98,7 +92,7 @@
                             [ngClass]="[sidebarnavSubItem.class]"
                             class="pointer"
                             (click)="addActiveClass(sidebarnavSubItem.title)"
-                            >
+                          >
                             <i [ngClass]="[sidebarnavSubItem.icon]"></i>
                             {{ sidebarnavSubItem.title }}
                           </a>
@@ -106,20 +100,16 @@
                       </ng-container>
                       <!-- Third level menu -->
                       @if (sidebarnavSubItem.submenu.length > 0) {
-                        <ul
-                          class="collapse"
-                          [ngClass]="{ in: showSubMenu === sidebarnavSubItem.title }"
-                          >
+                        <ul class="collapse" [ngClass]="{ in: showSubMenu === sidebarnavSubItem.title }">
                           @for (sidebarnavSubsubItem of sidebarnavSubItem.submenu; track sidebarnavSubsubItem) {
-                            <li
-                              routerLinkActive="active"
-                              [ngClass]="[sidebarnavSubsubItem.class]"
-                              >
+                            <li routerLinkActive="active" [ngClass]="[sidebarnavSubsubItem.class]">
                               @if (!sidebarnavSubsubItem.extralink) {
                                 <a
                                   [routerLink]="[sidebarnavSubsubItem.path]"
-                                  [routerLinkActive]="sidebarnavSubsubItem.submenu.length > 0 ? '' : 'router-link-active'"
-                                  >
+                                  [routerLinkActive]="
+                                    sidebarnavSubsubItem.submenu.length > 0 ? '' : 'router-link-active'
+                                  "
+                                >
                                   <i [ngClass]="[sidebarnavSubsubItem.icon]"></i>
                                   {{ sidebarnavSubsubItem.title }}
                                 </a>
