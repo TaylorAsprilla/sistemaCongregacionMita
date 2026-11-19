@@ -7,6 +7,7 @@
     "src/app/components/foto-perfil-editor/foto-perfil-editor.component.spec.ts",
     "src/app/shared/foto-perfil-dialogo/foto-perfil-dialogo.component.spec.ts",
     "src/app/core/services/foto-perfil-aviso.service.spec.ts",
+    "src/app/core/services/foto-perfil-tour.service.spec.ts",
     "src/app/shared/header/header.component.spec.ts",
     "src/**/*.d.ts"
   ]
