@@ -69,3 +69,19 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   overflow: auto;
 }
+
+/* Tour guiado de la fotografía de perfil (driver.js) */
+.driver-popover.tour-foto-perfil {
+  border-radius: 12px;
+  max-width: 320px;
+}
+.driver-popover.tour-foto-perfil .driver-popover-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.driver-popover.tour-foto-perfil .driver-popover-next-btn {
+  background-color: #1976d2;
+  border-color: #1976d2;
+  color: #fff;
+  text-shadow: none;
+}
