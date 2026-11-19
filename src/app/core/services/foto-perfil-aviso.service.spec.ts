@@ -9,13 +9,16 @@ import { FotoPerfilService } from './foto-perfil.service';
 describe('FotoPerfilAvisoService', () => {
   let servicio: FotoPerfilAvisoService;
   let usuarioService: { usuario: any; isQRLogin: boolean };
-  let fotoService: { consultarPropia: jasmine.Spy };
+  let fotoService: { consultarPropia: jasmine.Spy; marcarTourVisto: jasmine.Spy };
   let tour: { iniciar: jasmine.Spy };
 
   beforeEach(() => {
     localStorage.removeItem('fotoPerfilAviso:7');
     usuarioService = { usuario: { id: 7, primerNombre: 'Ana', foto: null }, isQRLogin: false };
-    fotoService = { consultarPropia: jasmine.createSpy().and.returnValue(of({ foto: null })) };
+    fotoService = {
+      consultarPropia: jasmine.createSpy().and.returnValue(of({ foto: null, tourVisto: false })),
+      marcarTourVisto: jasmine.createSpy().and.returnValue(of({ ok: true, guardado: true })),
+    };
     tour = { iniciar: jasmine.createSpy() };
     spyOn(Swal, 'isVisible').and.returnValue(false);
     TestBed.configureTestingModule({
@@ -43,18 +46,37 @@ describe('FotoPerfilAvisoService', () => {
     expect(tour.iniciar).not.toHaveBeenCalled();
   });
 
-  it('no molesta a quien ya tiene fotografía', async () => {
-    usuarioService.usuario.foto = 'usuarios/fotos-perfil/7/a.webp';
+  it('registra en el servidor que ya lo vio al iniciarlo', async () => {
+    await servicio.mostrarSiCorresponde();
+    expect(fotoService.marcarTourVisto).toHaveBeenCalledTimes(1);
+  });
+
+  it('si el servidor dice que ya lo vio (otro navegador), no lo muestra y lo recuerda localmente', async () => {
+    fotoService.consultarPropia.and.returnValue(of({ foto: null, tourVisto: true }));
     expect(await servicio.mostrarSiCorresponde()).toBeFalse();
     expect(tour.iniciar).not.toHaveBeenCalled();
     expect(servicio.yaVisto(7)).toBeTrue();
   });
 
-  it('si no conoce la foto la consulta al servidor antes de decidir', async () => {
-    usuarioService.usuario.foto = undefined;
-    fotoService.consultarPropia.and.returnValue(of({ foto: 'usuarios/fotos-perfil/7/a.webp' }));
+  it('si el servidor no sabe (migración pendiente), se apoya en el respaldo local', async () => {
+    fotoService.consultarPropia.and.returnValue(of({ foto: null, tourVisto: null }));
+    expect(await servicio.mostrarSiCorresponde()).toBeTrue();
+    tour.iniciar.calls.reset();
     expect(await servicio.mostrarSiCorresponde()).toBeFalse();
-    expect(fotoService.consultarPropia).toHaveBeenCalledTimes(1);
+  });
+
+  it('no molesta a quien ya tiene fotografía y lo deja registrado', async () => {
+    fotoService.consultarPropia.and.returnValue(of({ foto: 'usuarios/fotos-perfil/7/a.webp', tourVisto: false }));
+    expect(await servicio.mostrarSiCorresponde()).toBeFalse();
+    expect(tour.iniciar).not.toHaveBeenCalled();
+    expect(servicio.yaVisto(7)).toBeTrue();
+    expect(fotoService.marcarTourVisto).toHaveBeenCalledTimes(1);
+  });
+
+  it('si falla el registro en el servidor, el tour igualmente se muestra', async () => {
+    fotoService.marcarTourVisto.and.returnValue(throwError(() => new Error('red')));
+    expect(await servicio.mostrarSiCorresponde()).toBeTrue();
+    expect(tour.iniciar).toHaveBeenCalledTimes(1);
   });
 
   it('si la consulta falla no muestra nada y lo reintenta en el próximo ingreso', async () => {
@@ -81,6 +103,7 @@ describe('FotoPerfilAvisoService', () => {
 
   it('un nombre de archivo heredado NO cuenta como fotografía: se inicia el tour', async () => {
     usuarioService.usuario.foto = 'no-image.jpg';
+    fotoService.consultarPropia.and.returnValue(of({ foto: 'no-image.jpg', tourVisto: false }));
     expect(await servicio.mostrarSiCorresponde()).toBeTrue();
     expect(tour.iniciar).toHaveBeenCalledTimes(1);
   });

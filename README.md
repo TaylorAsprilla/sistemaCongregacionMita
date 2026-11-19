@@ -26,6 +26,10 @@ Al menos una respuesta debe ser Sí; cuatro respuestas No bloquean el envío.
 Los datos del encargado se solicitan solo si la persona está encamada.
 El backend requiere la migración `013-solicitud-enfermedad.sql` antes del despliegue.
 
+### Tour guiado de la fotografía
+
+El tour se muestra una sola vez por usuario. Que ya lo vio se guarda en `usuario.fotoTourVisto`, por lo que el backend requiere la migración `016-usuario-foto-tour-visto.sql` antes del despliegue (sin ella el tour usa solo el respaldo del navegador y se repetiría entre navegadores).
+
 ### Formato del número Mita
 
 Las vistas muestran el número Mita con punto como separador de miles (`1.234`),

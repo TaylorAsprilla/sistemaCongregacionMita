@@ -27,6 +27,8 @@ interface RespuestaFoto {
   foto: string | null;
   url: string | null;
   expiraEn: number | null;
+  /** true/false si el servidor lo sabe; null/undefined si no (migración pendiente o backend antiguo). */
+  tourVisto?: boolean | null;
   message?: string;
 }
 
@@ -122,6 +124,11 @@ export class FotoPerfilService {
 
   consultarPropia(): Observable<RespuestaFoto> {
     return this.http.get<RespuestaFoto>(url_api, this.opciones);
+  }
+
+  /** Registra en el servidor que el usuario ya vio el tour guiado (así no se repite en otros navegadores). */
+  marcarTourVisto(): Observable<{ ok: boolean; guardado: boolean }> {
+    return this.http.post<{ ok: boolean; guardado: boolean }>(`${url_api}/tour-visto`, {}, this.opciones);
   }
 
   /** Sube la imagen ya recortada. Emite el progreso (0-100) y, al final, el resultado. */

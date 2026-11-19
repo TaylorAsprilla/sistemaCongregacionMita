@@ -114,4 +114,14 @@ describe('FotoPerfilService', () => {
     expect(servicio.mensajeDeError(new HttpErrorResponse({ status: 0 }))).toContain('conexión');
     expect(servicio.mensajeDeError(error('ALMACENAMIENTO_ERROR', 502))).toBe(MENSAJES_FOTO.subida);
   });
+
+  it('marcarTourVisto envía POST a /tour-visto con el token', () => {
+    let resultado: any;
+    servicio.marcarTourVisto().subscribe((r) => (resultado = r));
+    const peticion = http.expectOne(`${api}/tour-visto`);
+    expect(peticion.request.method).toBe('POST');
+    expect(peticion.request.headers.has('x-token')).toBeTrue();
+    peticion.flush({ ok: true, guardado: true });
+    expect(resultado.guardado).toBeTrue();
+  });
 });
