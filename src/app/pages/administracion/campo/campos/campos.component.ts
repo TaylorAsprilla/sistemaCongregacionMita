@@ -18,13 +18,14 @@ import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-e
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CongregacionService } from 'src/app/services/congregacion/congregacion.service';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-campos',
   templateUrl: './campos.component.html',
   styleUrls: ['./campos.component.css'],
   standalone: true,
-  imports: [CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
+  imports: [AvatarUsuarioComponent, CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
 })
 export class CamposComponent implements OnInit {
   private router = inject(Router);

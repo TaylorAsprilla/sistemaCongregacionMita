@@ -25,11 +25,12 @@ import {
 import { DashboardSupervisionService } from 'src/app/services/dashboard-supervision/dashboard-supervision.service';
 import { GraficaTendenciasComponent } from '../grafica-tendencias/grafica-tendencias.component';
 import { IndicadorVariacionComponent } from '../indicador-variacion/indicador-variacion.component';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-detalle-unidad',
   standalone: true,
-  imports: [DecimalPipe, DatePipe, IndicadorVariacionComponent, GraficaTendenciasComponent],
+  imports: [DecimalPipe, DatePipe, IndicadorVariacionComponent, GraficaTendenciasComponent, AvatarUsuarioComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './detalle-unidad.component.html',
   styleUrls: ['./detalle-unidad.component.scss'],

@@ -88,7 +88,14 @@
             </td>
             <td class="obreros">
               @if (f.obreros.length) {
-                @for (o of f.obreros; track o) { <div>{{ o }}</div> }
+                @for (o of f.obreros; track $index) {
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    @if (f.obrerosIds?.[$index]; as obreroId) {
+                      <app-avatar-usuario [usuarioId]="obreroId" [nombre]="o" [tamano]="28" />
+                    }
+                    <span>{{ o }}</span>
+                  </div>
+                }
               } @else {
                 <span class="text-muted fst-italic">Sin asignar</span>
               }

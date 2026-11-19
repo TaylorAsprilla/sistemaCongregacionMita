@@ -18,13 +18,14 @@ import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-e
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-paises',
   templateUrl: './paises.component.html',
   styleUrls: ['./paises.component.css'],
   standalone: true,
-  imports: [CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
+  imports: [AvatarUsuarioComponent, CargandoInformacionComponent, FilterByNombrePipePipe, CommonModule, FormsModule],
 })
 export class PaisesComponent implements OnInit, OnDestroy {
   private router = inject(Router);

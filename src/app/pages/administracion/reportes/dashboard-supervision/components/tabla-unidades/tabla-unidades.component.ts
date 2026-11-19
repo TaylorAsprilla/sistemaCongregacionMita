@@ -20,11 +20,12 @@ import {
 } from 'src/app/core/interfaces/dashboard-supervision.interface';
 import { DashboardSupervisionService } from 'src/app/services/dashboard-supervision/dashboard-supervision.service';
 import { IndicadorVariacionComponent } from '../indicador-variacion/indicador-variacion.component';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-tabla-unidades',
   standalone: true,
-  imports: [DecimalPipe, FormsModule, IndicadorVariacionComponent],
+  imports: [DecimalPipe, FormsModule, IndicadorVariacionComponent, AvatarUsuarioComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './tabla-unidades.component.html',
   styleUrls: ['./tabla-unidades.component.scss'],

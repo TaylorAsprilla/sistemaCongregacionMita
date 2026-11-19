@@ -99,9 +99,15 @@
                   <td>{{ i + 1 }}</td>
                   <td>{{ pais.pais }}</td>
                   <td>
-                    {{ buscarObrero(pais.idObreroEncargado) }}
-
-                    <span class="badge text-bg-primary">{{ pais.idObreroEncargado }}</span>
+                    <div class="d-flex align-items-center gap-2">
+                      @if (pais.idObreroEncargado) {
+                        <app-avatar-usuario [usuarioId]="pais.idObreroEncargado" [nombre]="buscarObrero(pais.idObreroEncargado)" [tamano]="32" />
+                      }
+                      <span>
+                        {{ buscarObrero(pais.idObreroEncargado) }}
+                        <span class="badge text-bg-primary">{{ pais.idObreroEncargado }}</span>
+                      </span>
+                    </div>
                   </td>
                   <td>
                     {{ buscarAdministrador(pais.idAdministrador) }}
