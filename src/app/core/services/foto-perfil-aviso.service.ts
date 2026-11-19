@@ -9,7 +9,10 @@ import { esFotoGestionada } from '../utils/foto-perfil';
 const CLAVE = (usuarioId: number) => `fotoPerfilAviso:${usuarioId}`;
 
 /**
- * Lanza el tour guiado que invita, una sola vez por usuario y navegador, a subir su fotografía.
+ * Lanza el tour guiado que invita, una sola vez por usuario, a subir su fotografía.
+ *
+ * "Ya visto" se guarda en el servidor (así no se repite en otro navegador o equipo) y, como
+ * respaldo y para evitar consultas, también en el navegador.
  * No se muestra a quien ya tiene foto, en sesiones QR/multimedia ni si hay otro aviso abierto.
  */
 @Injectable({ providedIn: 'root' })
@@ -30,8 +33,13 @@ export class FotoPerfilAvisoService {
     try {
       localStorage.setItem(CLAVE(usuarioId), '1');
     } catch {
-      // Sin almacenamiento disponible: el aviso podría repetirse, pero no rompe nada.
+      // Sin almacenamiento disponible: se apoya solo en el servidor.
     }
+  }
+
+  /** Aviso al servidor sin bloquear: si falla, queda el respaldo local. */
+  private registrarEnServidor(): void {
+    this.fotoService.marcarTourVisto().subscribe({ error: () => undefined });
   }
 
   /** @returns true si el tour se inició. */
@@ -41,16 +49,20 @@ export class FotoPerfilAvisoService {
       return false;
     }
 
-    let foto = usuario.foto;
-    if (foto === undefined) {
-      try {
-        foto = (await firstValueFrom(this.fotoService.consultarPropia())).foto;
-      } catch {
-        return false; // Sin certeza de que no tenga foto, no se molesta al usuario.
-      }
+    let respuesta;
+    try {
+      respuesta = await firstValueFrom(this.fotoService.consultarPropia());
+    } catch {
+      return false; // Sin certeza de lo que sabe el servidor, no se molesta al usuario.
     }
-    if (esFotoGestionada(foto)) {
+
+    if (respuesta.tourVisto === true) {
+      this.marcarVisto(usuario.id); // Ya lo vio en otro navegador o equipo.
+      return false;
+    }
+    if (esFotoGestionada(respuesta.foto)) {
       this.marcarVisto(usuario.id); // Ya tiene foto: no hace falta invitarle nunca.
+      this.registrarEnServidor();
       return false;
     }
 
@@ -60,6 +72,7 @@ export class FotoPerfilAvisoService {
     }
 
     this.marcarVisto(usuario.id);
+    this.registrarEnServidor();
     this.tour.iniciar();
     return true;
   }
