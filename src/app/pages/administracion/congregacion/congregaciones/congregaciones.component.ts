@@ -17,13 +17,14 @@ import { CampoModel } from 'src/app/core/models/campo.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ExportarExcelService } from 'src/app/services/exportar-excel/exportar-excel.service';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-congregaciones',
   templateUrl: './congregaciones.component.html',
   styleUrls: ['./congregaciones.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, CargandoInformacionComponent, FilterByNombrePipePipe],
+  imports: [AvatarUsuarioComponent, CommonModule, FormsModule, CargandoInformacionComponent, FilterByNombrePipePipe],
 })
 export class CongregacionesComponent implements OnInit, OnDestroy, OnChanges {
   private router = inject(Router);

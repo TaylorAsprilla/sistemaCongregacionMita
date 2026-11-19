@@ -21,13 +21,14 @@ import { UsuarioInterface } from 'src/app/core/interfaces/usuario.interface';
 import { CategoriaProfesionModel } from 'src/app/core/models/categoria-profesion.model';
 import { CategoriaProfesionService } from 'src/app/services/categoria-profesion/categoria-profesion.service';
 import { InformacionUsuarioComponent } from '../../../../components/informacion-usuario/informacion-usuario.component';
+import { FotoPerfilEditorComponent } from 'src/app/components/foto-perfil-editor/foto-perfil-editor.component';
 
 @Component({
   selector: 'app-registrar-usuario',
   templateUrl: './registrar-usuario.component.html',
   styleUrls: ['./registrar-usuario.component.scss'],
   standalone: true,
-  imports: [InformacionUsuarioComponent],
+  imports: [InformacionUsuarioComponent, FotoPerfilEditorComponent],
 })
 export default class RegistrarUsuarioComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
@@ -36,6 +37,11 @@ export default class RegistrarUsuarioComponent implements OnInit {
   private categoriaProfesionService = inject(CategoriaProfesionService);
 
   usuario: UsuarioModel;
+
+  get nombreCompleto(): string {
+    const { primerNombre, segundoNombre, primerApellido, segundoApellido } = this.usuario ?? ({} as UsuarioModel);
+    return [primerNombre, segundoNombre, primerApellido, segundoApellido].filter(Boolean).join(' ');
+  }
   generos: GeneroModel[] = [];
   estadoCivil: EstadoCivilModel[] = [];
   rolCasa: RolCasaModel[] = [];

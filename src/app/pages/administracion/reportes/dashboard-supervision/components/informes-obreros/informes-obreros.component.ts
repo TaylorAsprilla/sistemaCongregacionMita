@@ -6,11 +6,12 @@ import { Subject, Subscription, debounceTime, distinctUntilChanged } from 'rxjs'
 import { FiltrosDashboard, InformesSupervision } from 'src/app/core/interfaces/dashboard-supervision.interface';
 import { RUTAS } from 'src/app/routes/menu-items';
 import { DashboardSupervisionService } from 'src/app/services/dashboard-supervision/dashboard-supervision.service';
+import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
 
 @Component({
   selector: 'app-informes-obreros',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, AvatarUsuarioComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="card mb-3" aria-labelledby="tituloInformesObreros">
@@ -59,7 +60,12 @@ import { DashboardSupervisionService } from 'src/app/services/dashboard-supervis
                 @for (informe of d.informes; track informe.id) {
                   <tr>
                     <td>#{{ informe.id }}</td>
-                    <td>{{ informe.obrero || 'Usuario #' + informe.usuario_id }}</td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <app-avatar-usuario [usuarioId]="informe.usuario_id" [nombre]="informe.obrero" [tamano]="28" />
+                        <span>{{ informe.obrero || 'Usuario #' + informe.usuario_id }}</span>
+                      </div>
+                    </td>
                     <td>{{ informe.estado }}</td>
                     <td>{{ informe.pais }}</td>
                     <td>{{ informe.ciudad }}</td>

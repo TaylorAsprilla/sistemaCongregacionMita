@@ -119,12 +119,26 @@
               <td>{{ congregacion.congregacion }}</td>
 
               <td>
-                {{ buscarObrero(congregacion.idObreroEncargado) }}
-                <span class="badge text-bg-primary">{{ congregacion.idObreroEncargado }}</span>
+                <div class="d-flex align-items-center gap-2">
+                  @if (congregacion.idObreroEncargado) {
+                    <app-avatar-usuario [usuarioId]="congregacion.idObreroEncargado" [nombre]="buscarObrero(congregacion.idObreroEncargado)" [tamano]="32" />
+                  }
+                  <span>
+                    {{ buscarObrero(congregacion.idObreroEncargado) }}
+                    <span class="badge text-bg-primary">{{ congregacion.idObreroEncargado }}</span>
+                  </span>
+                </div>
               </td>
               <td>
-                {{ buscarObrero(congregacion?.idObreroEncargadoDos) }}
-                <span class="badge text-bg-primary">{{ congregacion?.idObreroEncargadoDos }}</span>
+                <div class="d-flex align-items-center gap-2">
+                  @if (congregacion?.idObreroEncargadoDos) {
+                    <app-avatar-usuario [usuarioId]="congregacion?.idObreroEncargadoDos" [nombre]="buscarObrero(congregacion?.idObreroEncargadoDos)" [tamano]="32" />
+                  }
+                  <span>
+                    {{ buscarObrero(congregacion?.idObreroEncargadoDos) }}
+                    <span class="badge text-bg-primary">{{ congregacion?.idObreroEncargadoDos }}</span>
+                  </span>
+                </div>
               </td>
               <td>{{ buscarPais(congregacion.pais_id) }}</td>
               <td>{{ congregacion.email }}</td>

@@ -246,6 +246,8 @@ export interface AlertasDashboard {
 export interface UnidadFila {
   unidad: UnidadRef;
   obreros: string[];
+  /** Ids en el mismo orden que `obreros`; pueden faltar si el backend es anterior. */
+  obrerosIds?: number[];
   estadoEntrega: EstadoEntrega;
   informes: number;
   indicadores: Record<string, Variacion>;

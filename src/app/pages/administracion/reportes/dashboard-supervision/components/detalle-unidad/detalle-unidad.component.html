@@ -34,7 +34,10 @@
           <dt class="col-5 text-muted fw-normal">{{ d.entregaAgregada ? 'Responsables de las ciudades' : 'Obrero(s)' }}</dt>
           <dd class="col-7">
             @for (o of d.obreros; track o.id) {
-              <div>{{ o.nombre }} @if (o.email) { <small class="text-muted d-block">{{ o.email }}</small> }</div>
+              <div class="d-flex align-items-start gap-2 mb-1">
+                <app-avatar-usuario [usuarioId]="o.id" [nombre]="o.nombre" [tamano]="32" />
+                <div>{{ o.nombre }} @if (o.email) { <small class="text-muted d-block">{{ o.email }}</small> }</div>
+              </div>
             } @empty {
               <span class="fst-italic text-muted">Sin obrero asignado</span>
             }

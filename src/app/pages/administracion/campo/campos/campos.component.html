@@ -129,12 +129,26 @@
               <td>{{ i + 1 }}</td>
               <td>{{ campo.campo }}</td>
               <td>
-                {{ buscarObrero(campo.idObreroEncargado) }}
-                <span class="badge text-bg-primary">{{ campo.idObreroEncargado }}</span>
+                <div class="d-flex align-items-center gap-2">
+                  @if (campo.idObreroEncargado) {
+                    <app-avatar-usuario [usuarioId]="campo.idObreroEncargado" [nombre]="buscarObrero(campo.idObreroEncargado)" [tamano]="32" />
+                  }
+                  <span>
+                    {{ buscarObrero(campo.idObreroEncargado) }}
+                    <span class="badge text-bg-primary">{{ campo.idObreroEncargado }}</span>
+                  </span>
+                </div>
               </td>
               <td>
-                {{ buscarObrero(campo?.idObreroEncargadoDos) }}
-                <span class="badge text-bg-primary">{{ campo?.idObreroEncargadoDos }}</span>
+                <div class="d-flex align-items-center gap-2">
+                  @if (campo?.idObreroEncargadoDos) {
+                    <app-avatar-usuario [usuarioId]="campo?.idObreroEncargadoDos" [nombre]="buscarObrero(campo?.idObreroEncargadoDos)" [tamano]="32" />
+                  }
+                  <span>
+                    {{ buscarObrero(campo?.idObreroEncargadoDos) }}
+                    <span class="badge text-bg-primary">{{ campo?.idObreroEncargadoDos }}</span>
+                  </span>
+                </div>
               </td>
               <td>
                 {{ buscarCongregacion(campo.congregacion_id)['congregacion'] }}
