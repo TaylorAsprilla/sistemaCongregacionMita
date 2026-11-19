@@ -1,0 +1,47 @@
+<div class="notificacion" [class.no-leida]="!notificacion().leida" [class.leida]="notificacion().leida">
+  <span class="notificacion__icono" [class]="categoria().clase" aria-hidden="true">
+    <i [class]="categoria().icono"></i>
+  </span>
+
+  <button type="button" class="notificacion__cuerpo" (click)="abrir.emit(notificacion())">
+    <span class="notificacion__encabezado">
+      <span class="notificacion__titulo">{{ notificacion().titulo }}</span>
+      @if (!notificacion().leida) {
+        <span class="notificacion__punto" aria-label="No leída"></span>
+      }
+    </span>
+    <span class="notificacion__mensaje">{{ notificacion().mensaje }}</span>
+    <span class="notificacion__meta">
+      <span class="notificacion__categoria" [class]="categoria().clase">{{ categoria().etiqueta }}</span>
+      <time [attr.datetime]="notificacion().fechaCreacion" [title]="fechaCompleta()">{{ tiempo() }}</time>
+      @if (tieneDestino()) {
+        <span class="notificacion__ir"><i class="fa-solid fa-arrow-right"></i> Ver</span>
+      }
+    </span>
+  </button>
+
+  <span class="notificacion__acciones">
+    @if (!notificacion().leida) {
+      <button
+        type="button"
+        class="btn-icono"
+        title="Marcar como leída"
+        aria-label="Marcar como leída"
+        (click)="marcarLeida.emit(notificacion())"
+      >
+        <i class="fa-solid fa-check"></i>
+      </button>
+    }
+    @if (permitirEliminar()) {
+      <button
+        type="button"
+        class="btn-icono btn-icono--peligro"
+        title="Eliminar"
+        aria-label="Eliminar notificación"
+        (click)="eliminar.emit(notificacion())"
+      >
+        <i class="fa-regular fa-trash-can"></i>
+      </button>
+    }
+  </span>
+</div>

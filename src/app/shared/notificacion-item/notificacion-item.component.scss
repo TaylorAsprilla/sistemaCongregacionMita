@@ -1,0 +1,159 @@
+:host {
+  display: block;
+}
+
+.notificacion {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid #eef0f3;
+  background: #fff;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: #f6f9fd;
+  }
+
+  &.no-leida {
+    background: #f1f7ff;
+    box-shadow: inset 3px 0 0 #1976d2;
+
+    .notificacion__titulo {
+      font-weight: 600;
+    }
+  }
+
+  &.leida {
+    .notificacion__titulo {
+      font-weight: 400;
+      color: #55606e;
+    }
+    .notificacion__mensaje {
+      color: #7b8794;
+    }
+  }
+}
+
+.notificacion__icono {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 0.95rem;
+}
+
+.cat-informativa {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+.cat-pendiente {
+  background: #fff3e0;
+  color: #b26a00;
+}
+.cat-administrativa {
+  background: #ede7f6;
+  color: #5e35b1;
+}
+.cat-solicitud {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.notificacion__cuerpo {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+
+  &:focus-visible {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+.notificacion__encabezado {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.notificacion__titulo {
+  font-size: 0.9rem;
+  color: #1f2933;
+}
+
+.notificacion__punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1976d2;
+  flex: 0 0 auto;
+}
+
+.notificacion__mensaje {
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: #3e4c59;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.notificacion__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  color: #7b8794;
+}
+
+.notificacion__categoria {
+  padding: 0 0.45rem;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.notificacion__ir {
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.notificacion__acciones {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 0.15rem;
+}
+
+.btn-icono {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #52606d;
+  cursor: pointer;
+
+  &:hover {
+    background: #e4e7eb;
+  }
+  &:focus-visible {
+    outline: 2px solid #1976d2;
+  }
+}
+
+.btn-icono--peligro:hover {
+  background: #fde8e8;
+  color: #c62828;
+}

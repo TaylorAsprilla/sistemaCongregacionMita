@@ -42,6 +42,7 @@ export enum RUTAS {
   METAS = 'metas',
   MENSAJES_INFORMATIVOS = 'mensajes-informativos',
   MINISTERIOS = 'ministerios',
+  NOTIFICACIONES = 'notificaciones',
   PAISES = 'paises',
   PERFIL = 'perfil',
   SESIONES_ACTIVAS = 'sesiones-activas',

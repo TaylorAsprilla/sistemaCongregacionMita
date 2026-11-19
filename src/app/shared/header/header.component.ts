@@ -13,6 +13,7 @@ import { RolUsuarioComponent } from '../rol-usuario/rol-usuario.component';
 import { NumeroMitaPipe } from 'src/app/pipes/numeroMita/numero-mita.pipe';
 import { AvatarUsuarioComponent } from '../avatar-usuario/avatar-usuario.component';
 import { FotoPerfilDialogoService } from 'src/app/core/services/foto-perfil-dialogo.service';
+import { NotificacionesCampanaComponent } from '../notificaciones-campana/notificaciones-campana.component';
 
 declare var $: any;
 
@@ -21,7 +22,7 @@ declare var $: any;
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink, PermisosDirective, RolUsuarioComponent, NumeroMitaPipe, AvatarUsuarioComponent],
+  imports: [FormsModule, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, RouterLink, PermisosDirective, RolUsuarioComponent, NumeroMitaPipe, AvatarUsuarioComponent, NotificacionesCampanaComponent],
 })
 export class HeaderComponent implements OnInit {
   private usuarioService = inject(UsuarioService);

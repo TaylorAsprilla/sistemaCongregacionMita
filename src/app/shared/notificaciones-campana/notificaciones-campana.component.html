@@ -1,0 +1,63 @@
+<div ngbDropdown #panel="ngbDropdown" placement="bottom-end" autoClose="outside" (openChange)="alAbrirPanel($event)">
+  <a
+    ngbDropdownToggle
+    class="nav-link campana-boton waves-effect waves-dark"
+    href="javascript:void(0)"
+    role="button"
+    [attr.aria-label]="etiquetaAria()"
+    title="Notificaciones"
+  >
+    <i class="fa-solid fa-bell campana-icono" [class.campana-animada]="animando()" aria-hidden="true"></i>
+    @if (noLeidas() > 0) {
+      <span class="campana-contador" aria-hidden="true">{{ etiquetaContador() }}</span>
+    }
+  </a>
+
+  <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end panel-notificaciones">
+    <div class="panel__encabezado">
+      <h6 class="panel__titulo">Notificaciones</h6>
+      <button
+        type="button"
+        class="panel__marcar-todas"
+        [disabled]="noLeidas() === 0"
+        (click)="marcarTodas()"
+      >
+        <i class="fa-solid fa-check-double"></i> Marcar todas como leídas
+      </button>
+    </div>
+
+    <div class="panel__pestanas" role="tablist" aria-label="Filtrar notificaciones">
+      <button type="button" role="tab" [class.activa]="pestana() === 'todas'" [attr.aria-selected]="pestana() === 'todas'" (click)="cambiarPestana('todas')">Todas</button>
+      <button type="button" role="tab" [class.activa]="pestana() === 'no-leidas'" [attr.aria-selected]="pestana() === 'no-leidas'" (click)="cambiarPestana('no-leidas')">
+        No leídas @if (noLeidas() > 0) { <span class="panel__cuenta">{{ etiquetaContador() }}</span> }
+      </button>
+      <button type="button" role="tab" [class.activa]="pestana() === 'leidas'" [attr.aria-selected]="pestana() === 'leidas'" (click)="cambiarPestana('leidas')">Leídas</button>
+    </div>
+
+    <div class="panel__lista" role="list">
+      @for (notificacion of visibles(); track notificacion.id) {
+        <app-notificacion-item
+          role="listitem"
+          [notificacion]="notificacion"
+          (abrir)="abrir($event, panel)"
+          (marcarLeida)="marcarLeida($event)"
+        />
+      } @empty {
+        <div class="panel__vacio">
+          <i class="fa-regular fa-bell-slash" aria-hidden="true"></i>
+          <p>
+            @switch (pestana()) {
+              @case ('no-leidas') { No tiene notificaciones sin leer. }
+              @case ('leidas') { Aún no hay notificaciones leídas. }
+              @default { No tiene notificaciones por ahora. }
+            }
+          </p>
+        </div>
+      }
+    </div>
+
+    <div class="panel__pie">
+      <button type="button" class="panel__ver-todas" (click)="verTodas(panel)">Ver todas las notificaciones</button>
+    </div>
+  </div>
+</div>
