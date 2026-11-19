@@ -9,6 +9,7 @@
     "src/app/core/services/foto-perfil-aviso.service.spec.ts",
     "src/app/core/services/foto-perfil-tour.service.spec.ts",
     "src/app/shared/header/header.component.spec.ts",
+    "src/app/components/ver-censo/ver-censo-foto-modal.spec.ts",
     "src/**/*.d.ts"
   ]
 }

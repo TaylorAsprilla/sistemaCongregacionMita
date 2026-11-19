@@ -37,6 +37,8 @@ import { configuracion } from 'src/environments/config/configuration';
 import { obtenerBanderaPais, obtenerCodigoIsoPais } from 'src/app/core/utils/banderas-paises.utils';
 import { environment } from 'src/environments/environment';
 import { AvatarUsuarioComponent } from 'src/app/shared/avatar-usuario/avatar-usuario.component';
+import { FotoPerfilService } from 'src/app/core/services/foto-perfil.service';
+import { esFotoGestionada, iniciales } from 'src/app/core/utils/foto-perfil';
 
 @Component({
   selector: 'app-ver-censo',
@@ -52,6 +54,7 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   private campoService = inject(CampoService);
   private breakpointService = inject(BreakpointObserver);
   private exportarExcelService = inject(ExportarExcelService);
+  private fotoPerfilService = inject(FotoPerfilService);
 
   @Input() usuarios: UsuariosPorCongregacionInterface[] = [];
   @Input() campos: CampoModel[] = [];
@@ -591,8 +594,9 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   masInformacion(idusuario: number) {
-    this.usuarioSubscription = this.usuarioService.getUsuario(idusuario).subscribe((respuesta: UsuarioInterface) => {
+    this.usuarioSubscription = this.usuarioService.getUsuario(idusuario).subscribe(async (respuesta: UsuarioInterface) => {
       const usuario = respuesta.usuario;
+      const fotoUrl = await this.obtenerUrlFoto(usuario.id, usuario.foto);
 
       const numeroMita = formatearNumeroMita(usuario.id);
       const fechaDeNacimiento = usuario.fechaNacimiento;
@@ -638,7 +642,11 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
       const anoConocimiento = usuario?.anoConocimiento ? usuario?.anoConocimiento : '';
 
       Swal.fire({
-        icon: 'info',
+        // Con foto se muestra la fotografía circular; sin ella, las iniciales (igual que el avatar global).
+        ...(fotoUrl
+          ? { imageUrl: fotoUrl, imageWidth: 110, imageHeight: 110, imageAlt: `Fotografía de ${nombre}` }
+          : { iconHtml: `<span class="swal-iniciales">${this.escaparHtml(iniciales(nombre))}</span>` }),
+        customClass: { image: 'swal-foto-usuario', icon: 'border-0' },
         text: `${nombre}`,
         html: ` <table class="table table-hover text-start">
                   <thead>
@@ -763,6 +771,18 @@ export class VerCensoComponent implements OnInit, OnChanges, OnDestroy {
         confirmButtonText: 'Cerrar',
       });
     });
+  }
+
+  /** URL firmada de la foto del usuario, o null si no tiene (o ya cuenta con un valor heredado ignorado). */
+  private async obtenerUrlFoto(id: number, foto: string | null | undefined): Promise<string | null> {
+    if (foto === null || (typeof foto === 'string' && !esFotoGestionada(foto))) {
+      return null;
+    }
+    return this.fotoPerfilService.resolverUrl(id, foto);
+  }
+
+  private escaparHtml(texto: string): string {
+    return texto.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
   }
 
   transferirUsuarioHandler(id: number): void {
